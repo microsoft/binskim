@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{494AC26C-9591-4137-A3D4-5CD9B8D169DB}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Microsoft.CodeAnalysis.BinSkim.Rules</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>BinSkim.Rules</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.props))\build.props" />
+  <ItemGroup>
+    <Reference Include="dia2lib">
+      <HintPath>..\..\refs\dia2lib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Driver.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Driver.Utilities.1.0.0\lib\net40\Driver.Utilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.AttributedModel, Version=1.0.30.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.30\lib\portable-net45+win8+wp8+wpa81\System.Composition.AttributedModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Convention, Version=1.0.30.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.30\lib\portable-net45+win8+wp8+wpa81\System.Composition.Convention.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Hosting, Version=1.0.30.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.30\lib\portable-net45+win8+wp8+wpa81\System.Composition.Hosting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Runtime, Version=1.0.30.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.30\lib\portable-net45+win8+wp8+wpa81\System.Composition.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.TypedParts, Version=1.0.30.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.30\lib\portable-net45+win8+wp8+wpa81\System.Composition.TypedParts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Reflection.Metadata, Version=1.0.22.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.0.22\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BuildWithSecureTools.cs" />
+    <Compile Include="DoNotDisableStackProtectionForFunctions.cs" />
+    <Compile Include="DoNotIncorporateVulnerableDependencies.cs" />
+    <Compile Include="DoNotMarkImportsSectionAsExecutable.cs" />
+    <Compile Include="DoNotMarkWritableSectionsAsExecutable.cs" />
+    <Compile Include="DoNotMarkWritableSectionsAsShared.cs" />
+    <Compile Include="DoNotModifyStackProtectionCookie.cs" />
+    <Compile Include="DoNotShipVulnerableBinaries.cs" />
+    <Compile Include="EnableAddressSpaceLayoutRandomization.cs" />
+    <Compile Include="EnableControlFlowGuard.cs" />
+    <Compile Include="EnableCriticalCompilerWarnings.cs" />
+    <Compile Include="EnableStackProtection.cs" />
+    <Compile Include="EnableHighEntropyVirtualAddresses.cs" />
+    <Compile Include="EnableSafeSEH.cs" />
+    <Compile Include="InitializeStackProtection.cs" />
+    <Compile Include="LoadImagesAboveFourGigabyteAddress.cs" />
+    <Compile Include="RuleConstants.cs" />
+    <Compile Include="MarkImageAsNXCompatible.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RulesResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RulesResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="StackProtectionUtilities.cs" />
+    <Compile Include="StringToVersionDictionary.cs" />
+    <Compile Include="VulnerableDependencyDescriptor.cs" />
+    <Compile Include="..\Shared\SharedAssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj">
+      <Project>{f17e6921-2504-4ae8-afd3-7aceed935fec}</Project>
+      <Name>BinaryParsers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj">
+      <Project>{d2ebe67e-6115-4825-9ead-3db54672c03e}</Project>
+      <Name>BinSkim.Sdk</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="RulesResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RulesResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,106 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
+using System.Composition;
+using System.Diagnostics;
+using System.Reflection.PortableExecutable;
+using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.BinSkim.Sdk;
+
+namespace Microsoft.CodeAnalysis.BinSkim.Rules
+{
+    [Export(typeof(IBinarySkimmer))]
+    public class EnableAddressSpaceLayoutRandomization : IBinarySkimmer, IRuleContext
+    {
+        public string Id { get { return RuleConstants.EnableAddressSpaceLayoutRandomizationId; } }
+
+        public string Name { get { return nameof(EnableAddressSpaceLayoutRandomization); } }
+
+        public void Initialize(BinaryAnalyzerContext context) { return; }
+
+        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        {
+            PE portableExecutable = context.PE;
+            AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
+
+            reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeBinary;
+            if (portableExecutable.IsKernelMode) { return result; }
+
+            reasonForNotAnalyzing = MetadataConditions.ImageIsXBoxBinary;
+            if (portableExecutable.IsXBox) { return result; }
+
+            reasonForNotAnalyzing = MetadataConditions.ImageIsPreVersion7WindowsCEBinary;
+            if (OSVersions.IsWindowsCEPriorToV7(portableExecutable)) { return result; }
+
+            return AnalysisApplicability.ApplicableToSpecifiedTarget;
+        }
+
+        public void Analyze(BinaryAnalyzerContext context)
+        {
+            PEHeader optionalHeader = context.PE.PEHeaders.PEHeader;
+
+            if ((optionalHeader.DllCharacteristics & DllCharacteristics.DynamicBase) != DllCharacteristics.DynamicBase)
+            {
+                // '{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation 
+                // by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it 
+                // more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this 
+                // issue, configure your tool chain to build with this feature enabled. For C and C++ binaries, 
+                // add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping 
+                // with Visual Studio 2008 or later.
+                context.Logger.Log(MessageKind.Fail, context,
+                    RuleUtilities.BuildMessage(context,
+                        RulesResources.EnableAddressSpaceLayoutRandomization_NotDynamicBase_Fail));
+                return;
+            }
+
+            CoffHeader coffHeader = context.PE.PEHeaders.CoffHeader;
+
+            if ((coffHeader.Characteristics & Characteristics.RelocsStripped) == Characteristics.RelocsStripped)
+            {
+                // '{0}' is marked as DYNAMICBASE but relocation data has been stripped
+                // from the image, preventing address space layout randomization. 
+                context.Logger.Log(MessageKind.Fail, context,
+                    RuleUtilities.BuildMessage(context,
+                        RulesResources.EnableAddressSpaceLayoutRandomization_NotDynamicBase_Fail));
+                return;
+            }
+
+            if (context.PE.Subsystem == Subsystem.WindowsCEGui)
+            {
+                Debug.Assert(context.PE.OSVersion >= OSVersions.WindowsCE7);
+
+                bool relocSectionFound = false;
+
+
+                // For WinCE 7+ ASLR is a machine-wide setting and binaries must
+                // have relocation info present in order to be dynamically rebased.
+                foreach (SectionHeader sectionHeader in context.PE.PEHeaders.SectionHeaders)
+                {
+                    if (sectionHeader.Name.Equals(".reloc", StringComparison.OrdinalIgnoreCase) &&
+                        sectionHeader.SizeOfRawData > 0)
+                    {
+                        relocSectionFound = true;
+                        break;
+                    }
+                }
+
+                if (!relocSectionFound)
+                {
+                    // EnableAddressSpaceLayoutRandomization_WinCENoRelocationSection_Fail	'{0}'
+                    // is a Windows CE image but does not contain any relocation data, preventing 
+                    // address space layout randomization.	
+                    context.Logger.Log(MessageKind.Fail, context,
+                        RuleUtilities.BuildMessage(context,
+                            RulesResources.EnableAddressSpaceLayoutRandomization_NotDynamicBase_Fail));
+                    return;
+                }
+            }
+
+            //'{0}' is properly compiled to enable address space layout randomization.
+            context.Logger.Log(MessageKind.Pass, context,
+                RuleUtilities.BuildMessage(context,
+                    RulesResources.EnableAddressSpaceLayoutRandomization_Pass));
+        }
+    }
+}
