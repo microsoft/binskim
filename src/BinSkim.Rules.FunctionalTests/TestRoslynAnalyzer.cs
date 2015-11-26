@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
     class TestRoslynAnalyzer : DiagnosticAnalyzer
     {
         internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(id: "T1001",
-                                                                             title: "Symbol named reporter",
+                                                                             title: "Symbol name reporter",
                                                                              messageFormat: "Symbol encountered in MSIL '{0}'",
                                                                              category: "Test",
                                                                              defaultSeverity: DiagnosticSeverity.Info,
