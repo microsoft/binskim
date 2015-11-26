@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.BinSkim
     {
         [Value(0,
                HelpText = "One or more specifiers to a file, directory, or filter pattern that resolves to one or more binaries to analyze.")]
-        public IEnumerable<string> BinaryFileSpecifiers { get; set; }
+        public IEnumerable<string> BinaryFileSpecifiers { get; internal set; }
 
         [Option(
             'o',
