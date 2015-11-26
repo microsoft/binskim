@@ -17,8 +17,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommandLine, Version=2.0.275.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\commandline\tests\CommandLine.Tests\bin\Debug\CommandLine.dll</HintPath>
+      <HintPath>..\packages\CommandLineParser.2.0.275-beta\lib\net45\CommandLine.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Driver.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Driver.Utilities.1.0.0\lib\net40\Driver.Utilities.dll</HintPath>
