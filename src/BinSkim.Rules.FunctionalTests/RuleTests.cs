@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinSkim.Sdk;
 using Microsoft.CodeAnalysis.Options;
+
 using Xunit;
 using Xunit.Abstractions;
 

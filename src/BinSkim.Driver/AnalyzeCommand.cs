@@ -175,7 +175,7 @@ namespace Microsoft.CodeAnalysis.BinSkim
                     (ex) =>
                     {
                         LogExceptionCreatingLogFile(filePath, context, ex);
-                        throw new ExitApplicationException<FailureReason>(DriverResources.UnexpectedApplicationExit, caught)
+                        throw new ExitApplicationException<FailureReason>(DriverResources.UnexpectedApplicationExit, ex)
                         {
                             FailureReason = FailureReason.ExceptionCreatingLogFile
                         };

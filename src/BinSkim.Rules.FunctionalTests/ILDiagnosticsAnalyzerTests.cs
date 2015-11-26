@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using Xunit.Abstractions;
+
 using FluentAssertions;
+
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Microsoft.CodeAnalysis.IL
 {
