@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.IL
     /// </summary>
     internal sealed class RoslynAnalysisContext : AnalysisContext
     {
-        public ActionsMap<SymbolAnalysisContext, SymbolKind> SymbolActions { get; } = new ActionsMap<SymbolAnalysisContext, SymbolKind>();
+        public ActionMap<SymbolAnalysisContext, SymbolKind> SymbolActions { get; } = new ActionMap<SymbolAnalysisContext, SymbolKind>();
         public Action<CompilationStartAnalysisContext> CompilationStartActions { get; private set; }
 
         public override void RegisterSymbolAction(Action<SymbolAnalysisContext> action, ImmutableArray<SymbolKind> symbolKinds)

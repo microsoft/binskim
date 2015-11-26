@@ -14,11 +14,11 @@ namespace Microsoft.CodeAnalysis.IL
     /// </summary>
     /// <typeparam name="TContext"></typeparam>
     /// <typeparam name="TKind"></typeparam>
-    internal sealed class ActionsMap<TContext, TKind>
+    internal sealed class ActionMap<TContext, TKind>
     {
         private SortedList<TKind, Action<TContext>> _map;
 
-        public ActionsMap()
+        public ActionMap()
         {
             _map = new SortedList<TKind, Action<TContext>>();
         }

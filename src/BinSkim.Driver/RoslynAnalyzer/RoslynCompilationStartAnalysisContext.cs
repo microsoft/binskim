@@ -16,13 +16,14 @@ namespace Microsoft.CodeAnalysis.IL
     /// </summary>
     internal sealed class RoslynCompilationStartAnalysisContext : CompilationStartAnalysisContext
     {
-        public ActionsMap<SymbolAnalysisContext, SymbolKind> SymbolActions { get; set; }
+        public ActionMap<SymbolAnalysisContext, SymbolKind> SymbolActions { get; set; }
 
-        public RoslynCompilationStartAnalysisContext(ActionsMap<SymbolAnalysisContext, SymbolKind> symbolActions, Compilation compilation, AnalyzerOptions options, CancellationToken cancellationToken)
+        public RoslynCompilationStartAnalysisContext(Compilation compilation, AnalyzerOptions options, CancellationToken cancellationToken)
             : base(compilation, options, cancellationToken)
         {
-            SymbolActions = symbolActions ?? new ActionsMap<SymbolAnalysisContext, SymbolKind>(); ;
+            SymbolActions = new ActionMap<SymbolAnalysisContext, SymbolKind>();
         }
+
         public override void RegisterSymbolAction(Action<SymbolAnalysisContext> action, ImmutableArray<SymbolKind> symbolKinds)
         {
             SymbolActions.Add(action, symbolKinds);

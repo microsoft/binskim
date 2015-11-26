@@ -8,7 +8,7 @@ using System.Composition.Hosting;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.BinSkim.Rules;
 using Microsoft.CodeAnalysis.BinSkim.Sdk;
@@ -26,6 +26,8 @@ namespace Microsoft.CodeAnalysis.BinSkim
         public static HashSet<string> ValidAnalysisFileExtensions = new HashSet<string>(
             new string[] { ".dll", ".exe", ".sys" }
             );
+
+        private RoslynAnalysisContext _globalRoslynAnalysisContext;
 
         internal Exception ExecutionException { get; set; }
 
@@ -342,20 +344,28 @@ namespace Microsoft.CodeAnalysis.BinSkim
         {
             ILDiagnosticsAnalyzer roslynAnalyzer = new ILDiagnosticsAnalyzer();
 
-            foreach (string analyzerFilePath in roslynAnalyzerFilePaths)
+            if (_globalRoslynAnalysisContext == null)
             {
-                InvokeCatchingRelevantIOExceptions
-                (
-                    action: () => { roslynAnalyzer.LoadAnalyzer(analyzerFilePath); },
-                    exceptionHandler: (ex) =>
-                    {
-                        LogExceptionLoadingRoslynAnalyzer(analyzerFilePath, context, ex);
-                        throw new ExitApplicationException<FailureReason>(DriverResources.UnexpectedApplicationExit, ex)
+                foreach (string analyzerFilePath in roslynAnalyzerFilePaths)
+                {
+                    InvokeCatchingRelevantIOExceptions
+                    (
+                        action: () => { roslynAnalyzer.LoadAnalyzer(analyzerFilePath); },
+                        exceptionHandler: (ex) =>
                         {
-                            FailureReason = FailureReason.ExceptionCreatingLogFile
-                        };
-                    }
-                );
+                            LogExceptionLoadingRoslynAnalyzer(analyzerFilePath, context, ex);
+                            throw new ExitApplicationException<FailureReason>(DriverResources.UnexpectedApplicationExit, ex)
+                            {
+                                FailureReason = FailureReason.ExceptionCreatingLogFile
+                            };
+                        }
+                    );
+                }
+                _globalRoslynAnalysisContext = roslynAnalyzer.GlobalRoslynAnalysisContext;
+            }
+            else
+            {
+                roslynAnalyzer.GlobalRoslynAnalysisContext = _globalRoslynAnalysisContext;
             }
 
             roslynAnalyzer.Analyze(assemblyFilePath, diagnostic =>

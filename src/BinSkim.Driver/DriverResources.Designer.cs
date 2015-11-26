@@ -90,6 +90,15 @@ namespace Microsoft.CodeAnalysis.BinSkim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No analyzer paths specified.
+        /// </summary>
+        internal static string NoAnalyzerPathsSpecified {
+            get {
+                return ResourceManager.GetString("NoAnalyzerPathsSpecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application exited unexpectedly..
         /// </summary>
         internal static string UnexpectedApplicationExit {

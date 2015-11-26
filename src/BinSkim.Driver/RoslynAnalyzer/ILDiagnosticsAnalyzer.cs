@@ -16,12 +16,17 @@ namespace Microsoft.CodeAnalysis.IL
     /// </summary>
     internal sealed class ILDiagnosticsAnalyzer
     {
-        private readonly RoslynAnalysisContext _roslynAnalysisContext = new RoslynAnalysisContext();
         private static readonly AnalyzerOptions _options = new AnalyzerOptions(ImmutableArray<AdditionalText>.Empty);
         private static readonly Func<Diagnostic, bool> _isSupportedDiagnostic = diagnostic => true;
 
+        private ActionMap<SymbolAnalysisContext, SymbolKind> _perCompilationSymbolsActions;
+
+        public RoslynAnalysisContext GlobalRoslynAnalysisContext { get; set; }
+
         public void LoadAnalyzer(string path)
         {
+            GlobalRoslynAnalysisContext = GlobalRoslynAnalysisContext ?? new RoslynAnalysisContext();
+
             Assembly assembly = Assembly.LoadFrom(path);
 
             foreach (Type type in assembly.GetTypes())
@@ -29,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL
                 if (typeof(DiagnosticAnalyzer).IsAssignableFrom(type) && !type.IsAbstract)
                 {
                     var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(type);
-                    analyzer.Initialize(_roslynAnalysisContext);
+                    analyzer.Initialize(GlobalRoslynAnalysisContext);
                 }
             }
         }
@@ -39,18 +44,24 @@ namespace Microsoft.CodeAnalysis.IL
             var reference = MetadataReference.CreateFromFile(targetPath);
             var compilation = CSharpCompilation.Create("_", references: new[] { reference });
             var target = compilation.GetAssemblyOrModuleSymbol(reference);
-            var compilationContext = new RoslynCompilationStartAnalysisContext(_roslynAnalysisContext.SymbolActions, compilation, _options, cancellationToken);
+            var compilationStartAnalysisContext = new RoslynCompilationStartAnalysisContext(compilation, _options, cancellationToken);
 
-            _roslynAnalysisContext.CompilationStartActions?.Invoke(compilationContext);
+            _perCompilationSymbolsActions = new ActionMap<SymbolAnalysisContext, SymbolKind>();
+            compilationStartAnalysisContext.SymbolActions = _perCompilationSymbolsActions;
+            GlobalRoslynAnalysisContext.CompilationStartActions?.Invoke(compilationStartAnalysisContext);
 
             var visitor = new RoslynSymbolVisitor(symbol => Analyze(symbol, compilation, reportDiagnostic, cancellationToken));
             visitor.Visit(target);
+
+            _perCompilationSymbolsActions = null;
         }
 
         private void Analyze(ISymbol symbol, Compilation compilation, Action<Diagnostic> reportDiagnostic, CancellationToken cancellationToken)
         {            
             var symbolContext = new SymbolAnalysisContext(symbol, compilation, _options, reportDiagnostic, _isSupportedDiagnostic, cancellationToken);
-            _roslynAnalysisContext.SymbolActions.Invoke(symbol.Kind, symbolContext);
+
+            GlobalRoslynAnalysisContext.SymbolActions.Invoke(symbol.Kind, symbolContext);
+            _perCompilationSymbolsActions.Invoke(symbol.Kind, symbolContext);
         }
     }
 }

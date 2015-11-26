@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public void CompilationStartAnalysisContext_Simple()
         {     
-            var context = new RoslynCompilationStartAnalysisContext(null, null, null, CancellationToken.None);
+            var context = new RoslynCompilationStartAnalysisContext(null, null, CancellationToken.None);
             int invocationCount = 0;
 
             // The relevant work

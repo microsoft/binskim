@@ -128,6 +128,9 @@
     <value>An exception was raised attempting to load analysis target '{0}'. Exception information:
 {1}</value>
   </data>
+  <data name="NoAnalyzerPathsSpecified" xml:space="preserve">
+    <value>No analyzer paths specified</value>
+  </data>
   <data name="UnexpectedApplicationExit" xml:space="preserve">
     <value>Application exited unexpectedly.</value>
   </data>

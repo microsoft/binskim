@@ -34,7 +34,6 @@ namespace Microsoft.CodeAnalysis.IL
         public override void VisitNamespace(INamespaceSymbol symbol)
         {
             foreach (var member in symbol.GetMembers()) { Visit(member); }
-
             base.VisitNamespace(symbol);
         }
 
