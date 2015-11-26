@@ -164,31 +164,28 @@ namespace Microsoft.CodeAnalysis.BinSkim
 
             if (!string.IsNullOrEmpty(filePath))
             {
-                Exception caught = InvokeCatchingRelevantIOExceptions
-                    (
-                        () => aggregatingLogger.Loggers.Add(
-                                new SarifLogger(
-                                    analyzeOptions.OutputFilePath,
-                                    analyzeOptions.Verbose,
-                                    targets,
-                                    analyzeOptions.ComputeTargetsHash)),
-                        (ex) => LogExceptionCreatingLogFile(filePath, context, ex)
-                    );
-
-                if (caught != null)
-                {
-                    throw new ExitApplicationException<FailureReason>(DriverResources.UnexpectedApplicationExit, caught)
+                InvokeCatchingRelevantIOExceptions
+                (
+                    () => aggregatingLogger.Loggers.Add(
+                            new SarifLogger(
+                                analyzeOptions.OutputFilePath,
+                                analyzeOptions.Verbose,
+                                targets,
+                                analyzeOptions.ComputeTargetsHash)),
+                    (ex) =>
                     {
-                        FailureReason = FailureReason.ExceptionCreatingLogFile
-                    };
-                }
+                        LogExceptionCreatingLogFile(filePath, context, ex);
+                        throw new ExitApplicationException<FailureReason>(DriverResources.UnexpectedApplicationExit, caught)
+                        {
+                            FailureReason = FailureReason.ExceptionCreatingLogFile
+                        };
+                    }
+                );
             }
         }
 
-        private Exception InvokeCatchingRelevantIOExceptions(Action action, Action<Exception> exceptionHandler)
+        private void InvokeCatchingRelevantIOExceptions(Action action, Action<Exception> exceptionHandler)
         {
-            Exception caught = null;
-
             try
             {
                 action();
@@ -196,15 +193,11 @@ namespace Microsoft.CodeAnalysis.BinSkim
             catch (UnauthorizedAccessException ex)
             {
                 exceptionHandler(ex);
-                caught = ex;
             }
             catch (IOException ex)
             {
                 exceptionHandler(ex);
-                caught = ex;
             }
-
-            return caught;
         }
 
         private HashSet<IBinarySkimmer> CreateSkimmers(IMessageLogger<BinaryAnalyzerContext> logger)
