@@ -119,6 +119,16 @@ namespace Microsoft.CodeAnalysis.BinSkim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An exception was raised attempting to load Roslyn analyzer &apos;{0}&apos;. Exception information:
+        ///{1}.
+        /// </summary>
+        internal static string UnhandledExceptionLoadingRoslynAnalyzer {
+            get {
+                return ResourceManager.GetString("UnhandledExceptionLoadingRoslynAnalyzer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An unhandled exception was raised analyzing &apos;{0}&apos; for check &apos;{1}&apos; (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing image metadata and not specific to the rule, however. Exception information:
         ///{2}.
         /// </summary>

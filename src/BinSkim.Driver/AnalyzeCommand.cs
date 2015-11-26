@@ -1,17 +1,20 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
-using Microsoft.CodeAnalysis.BinSkim.Rules;
-using Microsoft.CodeAnalysis.BinSkim.Sdk;
-using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.Options;
 using System;
 using System.Collections.Generic;
 using System.Composition.Convention;
 using System.Composition.Hosting;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
+using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
+using Microsoft.CodeAnalysis.BinSkim.Rules;
+using Microsoft.CodeAnalysis.BinSkim.Sdk;
+using Microsoft.CodeAnalysis.Driver;
+using Microsoft.CodeAnalysis.IL;
+using Microsoft.CodeAnalysis.Options;
 
 namespace Microsoft.CodeAnalysis.BinSkim
 {
@@ -91,8 +94,8 @@ namespace Microsoft.CodeAnalysis.BinSkim
             // 8. Initialize skimmers. Initialize occurs a single time only.
             skimmers = InitializeSkimmers(skimmers, context);
 
-            // 9. Analyze all targets
-            AnalyzeTargets(skimmers, targets, logger, policy);
+            // 9. Run all PE- and MSIL-based analysis
+            Analyze(skimmers, analyzeOptions.RoslynAnalyzerFilePaths, targets, logger, policy);
 
             // 10. For test purposes, raise an unhandled exception if indicated
             if (RaiseUnhandledExceptionInDriverCode)
@@ -138,8 +141,7 @@ namespace Microsoft.CodeAnalysis.BinSkim
         private HashSet<string> ValidateTargetsExist(IMessageLogger<BinaryAnalyzerContext> logger, HashSet<string> targets)
         {
             return targets;
-        }
-
+        }    
 
         internal static BinaryAnalyzerContext CreateContext(IMessageLogger<BinaryAnalyzerContext> logger, PropertyBag policy, string filePath = null)
         {
@@ -162,25 +164,17 @@ namespace Microsoft.CodeAnalysis.BinSkim
 
             if (!string.IsNullOrEmpty(filePath))
             {
-                Exception caught = null;
-                try
-                {
-                    aggregatingLogger.Loggers.Add(new SarifLogger(
-                        analyzeOptions.OutputFilePath,
-                        analyzeOptions.Verbose,
-                        targets,
-                        analyzeOptions.ComputeTargetsHash));
-                }
-                catch (UnauthorizedAccessException ex)
-                {
-                    LogExceptionCreatingLogFile(filePath, context, ex);
-                    caught = ex;
-                }
-                catch (IOException ex)
-                {
-                    LogExceptionCreatingLogFile(filePath, context, ex);
-                    caught = ex;
-                }
+                Exception caught = InvokeCatchingRelevantIOExceptions
+                    (
+                        () => aggregatingLogger.Loggers.Add(
+                                new SarifLogger(
+                                    analyzeOptions.OutputFilePath,
+                                    analyzeOptions.Verbose,
+                                    targets,
+                                    analyzeOptions.ComputeTargetsHash)),
+                        (ex) => LogExceptionCreatingLogFile(filePath, context, ex)
+                    );
+
                 if (caught != null)
                 {
                     throw new ExitApplicationException<FailureReason>(DriverResources.UnexpectedApplicationExit, caught)
@@ -191,6 +185,27 @@ namespace Microsoft.CodeAnalysis.BinSkim
             }
         }
 
+        private Exception InvokeCatchingRelevantIOExceptions(Action action, Action<Exception> exceptionHandler)
+        {
+            Exception caught = null;
+
+            try
+            {
+                action();
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                exceptionHandler(ex);
+                caught = ex;
+            }
+            catch (IOException ex)
+            {
+                exceptionHandler(ex);
+                caught = ex;
+            }
+
+            return caught;
+        }
 
         private HashSet<IBinarySkimmer> CreateSkimmers(IMessageLogger<BinaryAnalyzerContext> logger)
         {
@@ -211,8 +226,9 @@ namespace Microsoft.CodeAnalysis.BinSkim
             return skimmers;
         }
 
-        private void AnalyzeTargets(
+        private void Analyze(
             IEnumerable<IBinarySkimmer> skimmers,
+            IList<string> roslynAnalyzerFilePaths,
             IEnumerable<string> targets,
             AggregatingLogger logger,
             PropertyBag policy)
@@ -261,58 +277,114 @@ namespace Microsoft.CodeAnalysis.BinSkim
                     switch (applicability)
                     {
                         case AnalysisApplicability.NotApplicableToSpecifiedTarget:
-                            {
-                                // Image '{0}' was not evaluated for check '{1}' as the analysis
-                                // is not relevant based on observed binary metadata: {2}.
-                                context.Logger.Log(MessageKind.NotApplicable,
-                                    context,
-                                    RuleUtilities.BuildTargetNotAnalyzedMessage(
-                                        context.PE.FileName,
-                                        context.Rule.Name,
-                                        reasonForNotAnalyzing));
+                        {
+                            // Image '{0}' was not evaluated for check '{1}' as the analysis
+                            // is not relevant based on observed binary metadata: {2}.
+                            context.Logger.Log(MessageKind.NotApplicable,
+                                context,
+                                RuleUtilities.BuildTargetNotAnalyzedMessage(
+                                    context.PE.FileName,
+                                    context.Rule.Name,
+                                    reasonForNotAnalyzing));
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy:
-                            {
-                                // Check '{0}' was disabled for this run as the analysis was not 
-                                // configured with required policy ({1}). To resolve this, 
-                                // configure and provide a policy file on the BinSkim command-line 
-                                // using the --policy argument (recommended), or pass 
-                                // '--policy default' to invoke built-in settings. Invoke the 
-                                // BinSkim.exe 'export' command to produce an initial policy file 
-                                // that can be edited if required and passed back into the tool.
-                                context.Logger.Log(MessageKind.ConfigurationError, context,
-                                    RuleUtilities.BuildRuleDisabledDueToMissingPolicyMessage(
-                                        context.Rule.Name,
-                                        reasonForNotAnalyzing));
-                                disabledSkimmers.Add(skimmer.Id);
-                                break;
-                            }
+                        {
+                            // Check '{0}' was disabled for this run as the analysis was not 
+                            // configured with required policy ({1}). To resolve this, 
+                            // configure and provide a policy file on the BinSkim command-line 
+                            // using the --policy argument (recommended), or pass 
+                            // '--policy default' to invoke built-in settings. Invoke the 
+                            // BinSkim.exe 'export' command to produce an initial policy file 
+                            // that can be edited if required and passed back into the tool.
+                            context.Logger.Log(MessageKind.ConfigurationError, context,
+                                RuleUtilities.BuildRuleDisabledDueToMissingPolicyMessage(
+                                    context.Rule.Name,
+                                    reasonForNotAnalyzing));
+                            disabledSkimmers.Add(skimmer.Id);
+                            break;
+                        }
 
                         case AnalysisApplicability.ApplicableToSpecifiedTarget:
+                        {
+                            try
                             {
-                                try
-                                {
-                                    skimmer.Analyze(context);
-                                }
-                                catch (Exception ex)
-                                {
-                                    LogUnhandledRuleExceptionAnalyzingTarget(disabledSkimmers, context, skimmer, ex);
-                                }
-                                break;
+                                skimmer.Analyze(context);
                             }
+                            catch (Exception ex)
+                            {
+                                LogUnhandledRuleExceptionAnalyzingTarget(disabledSkimmers, context, skimmer, ex);
+                            }
+                            break;
+                        }
                     }
                 }
-                DisposeContext(context);
+
+                // Once we've processed all portable executable skimmers for a specific
+                // target, we'll proactively let go of the data associated with this 
+                // analysis phase. Follow-on analyses (such as the Roslyn integration)
+                // shouldn't attempt to rehydrate this data. The context implementation
+                // currently raises an exception if there is an attempt to rehydrate a
+                // previously nulled PE instance.
+                DisposePortableExecutableContextData(context);
+
+                // IsManagedAssembly is computed on intitializing the binary context
+                // object and is still valid after disposing the PE data. The Roslyn
+                // analysis is driven solely off the binary file path in the context.
+                if (context.IsManagedAssembly && roslynAnalyzerFilePaths?.Count > 0)
+                {
+                    AnalyzeManagedAssembly(context.Uri.LocalPath, roslynAnalyzerFilePaths, context);
+                }
             }
         }
 
-        private static void DisposeContext(BinaryAnalyzerContext context)
+        private static void DisposePortableExecutableContextData(BinaryAnalyzerContext context)
         {
-            if (context.PE != null) { context.PE.Dispose(); }
-            // TODO: handle pdb but we don't want to fault the PDB in a 2nd time           
+            context.DisposePortableExecutableData();
+        }
+
+        private void AnalyzeManagedAssembly(string assemblyFilePath, IEnumerable<string> roslynAnalyzerFilePaths, BinaryAnalyzerContext context)
+        {
+            ILDiagnosticsAnalyzer roslynAnalyzer = new ILDiagnosticsAnalyzer();
+
+            foreach (string analyzerFilePath in roslynAnalyzerFilePaths)
+            {
+                InvokeCatchingRelevantIOExceptions
+                (
+                    action: () => { roslynAnalyzer.LoadAnalyzer(analyzerFilePath); },
+                    exceptionHandler: (ex) =>
+                    {
+                        LogExceptionLoadingRoslynAnalyzer(analyzerFilePath, context, ex);
+                        throw new ExitApplicationException<FailureReason>(DriverResources.UnexpectedApplicationExit, ex)
+                        {
+                            FailureReason = FailureReason.ExceptionCreatingLogFile
+                        };
+                    }
+                );
+            }
+
+            roslynAnalyzer.Analyze(assemblyFilePath, diagnostic =>
+            {
+                MessageKind messageKind = diagnostic.Severity.ConvertToMessageKind();
+                context.Logger.Log(messageKind, context, diagnostic.GetMessage(CultureInfo.CurrentCulture));
+            });
+        }
+
+        private void LogExceptionLoadingRoslynAnalyzer(string analyzerFilePath, BinaryAnalyzerContext context, Exception ex)
+        {
+            context.Rule = ErrorRules.InvalidConfiguration;
+
+            // An exception was raised attempting to load analysis target '{0}'. Exception information:
+            // {1}
+            context.Logger.Log(MessageKind.ConfigurationError,
+                context,
+                string.Format(DriverResources.UnhandledExceptionLoadingRoslynAnalyzer,
+                    analyzerFilePath,
+                    context.PE.LoadException.ToString()));
+
+            RuntimeErrors |= RuntimeConditions.ExceptionLoadingRoslynAnalyzer;
         }
 
         private void LogExceptionInvalidPE(BinaryAnalyzerContext context)
@@ -327,7 +399,7 @@ namespace Microsoft.CodeAnalysis.BinSkim
                     SdkResources.TargetNotAnalyzed_NotAPortableExecutable,
                     context.Uri.LocalPath));
 
-            DisposeContext(context);
+            DisposePortableExecutableContextData(context);
             RuntimeErrors |= RuntimeConditions.OneOrMoreTargetsNotPortableExecutables;
         }
 
@@ -343,7 +415,7 @@ namespace Microsoft.CodeAnalysis.BinSkim
                     context.PE.FileName,
                     context.PE.LoadException.ToString()));
 
-            DisposeContext(context);
+            DisposePortableExecutableContextData(context);
             RuntimeErrors |= RuntimeConditions.ExceptionLoadingTargetFile;
         }
 

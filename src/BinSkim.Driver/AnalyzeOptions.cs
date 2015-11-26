@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.BinSkim
     {
         [Value(0,
                HelpText = "One or more specifiers to a file, directory, or filter pattern that resolves to one or more binaries to analyze.")]
-        public IEnumerable<string> BinaryFileSpecifiers { get; internal set; }
+        public IEnumerable<string> BinaryFileSpecifiers { get; set; }
 
         [Option(
             'o',
@@ -54,7 +54,12 @@ namespace Microsoft.CodeAnalysis.BinSkim
             "sympath",
             HelpText = "Symbols path value, e.g., SRV*http://msdl.microsoft.com/download/symbols or Cache*d:\\symbols;Srv**http://symweb")]
         public string SymbolsPath { get; internal set; }
+
+        [Option(
+            'r',
+            "roslyn-analyzer",
+            Separator = ';',
+            HelpText = "Path to Roslyn analyzer that will be invoked against all managed assemblies in the analysis set.")]
+        public IList<string> RoslynAnalyzerFilePaths { get; internal set; }
     }
 }
-
-
