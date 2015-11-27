@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 
 using FluentAssertions;
-
+using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,12 +19,15 @@ namespace Microsoft.CodeAnalysis.IL
             _testOutputHelper = output;
         }
 
-        private void Verify(string assemblyPath, string analyzerPath, IEnumerable<string> expectedMessages)
+        private void Verify(string analyzerPath, IEnumerable<string> expectedMessages, params string[] assemblyPaths)
         {
             var actualMessages = new List<string>();
-            var analyzer = new ILDiagnosticsAnalyzer();
-            analyzer.LoadAnalyzer(this.GetType().Assembly.Location);
-            analyzer.Analyze(assemblyPath, (d) => actualMessages.Add(d.GetMessage()));
+            var analyzer = ILDiagnosticsAnalyzer.Create(this.GetType().Assembly.Location);
+
+            foreach (string assemblyPath in assemblyPaths)
+            {
+                analyzer.Analyze(assemblyPath, (d) => actualMessages.Add(d.GetMessage()));
+            }
 
             try
             {
@@ -43,29 +46,72 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         [Fact]
-        public void RunSymbolNameReportingAnalyzer()
+        public void RunSymbolNameAndRoslynCallbackReportingsAnalyzers()
         {
+            // This is not a particularly desirable verification mechanism but for now it 
+            // ensures (in a fragile way) that analysis is visiting all expected symbols 
+            // and that we see an appropriate set of callbacks within the test analyzer.
+            // To update this test data (in the event that new types are added or removed
+            // from analysis targets), 1) click 'Output' in the failed test result, 
+            // 2) Right-click output and select 'Copy All', 3) copy test results into
+            // notepad and select the list of actually observed strings. Test output is
+            // formatted to permit it to easily be pasted into the declaration below.
             var expected = new List<string>(new string[] {
-                "Symbol encountered in MSIL '<Module>'",
-                "Symbol encountered in MSIL '<>c__DisplayClass11_0'",
-                "Symbol encountered in MSIL '<>c__DisplayClass12_0'",
-                "Symbol encountered in MSIL 'AnalyzeCommandTests'",
-                "Symbol encountered in MSIL 'ExceptionCondition'",
-                "Symbol encountered in MSIL 'ExceptionRaisingRule'",
-                "Symbol encountered in MSIL 'RuleTests'",
-                "Symbol encountered in MSIL 'SarifHelpers'",
-                "Symbol encountered in MSIL 'TestMessageLogger'",
-                "Symbol encountered in MSIL '<>c'",
-                "Symbol encountered in MSIL 'TestRoslynAnalyzer'",
-                "Symbol encountered in MSIL '<>c__DisplayClass2_0'",
-                "Symbol encountered in MSIL 'ILDiagnosticsAnalyzerTests'",
-                "Symbol encountered in MSIL '<>c__DisplayClass0_0'",
-                "Symbol encountered in MSIL 'RoslynAnalysisContextTests'",
-                "Symbol encountered in MSIL '<>c__DisplayClass0_0'",
-                "Symbol encountered in MSIL 'RoslynCompilationStartAnalysisContextTests'",
+                "Symbol encountered in MSIL 'global::<Module>'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinSkim.Rules.AnalyzeCommandTests.<>c__DisplayClass11_0'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinSkim.Rules.AnalyzeCommandTests.<>c__DisplayClass12_0'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinSkim.Rules.AnalyzeCommandTests'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinSkim.Rules.ExceptionCondition'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinSkim.Rules.ExceptionRaisingRule'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinSkim.Rules.RuleTests'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinSkim.Rules.SarifHelpers'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinSkim.Rules.TestMessageLogger'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinSkim.Rules.TestRoslynAnalyzer.<>c'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinSkim.Rules.TestRoslynAnalyzer'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.IL.ILDiagnosticsAnalyzerTests.<>c__DisplayClass2_0'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.IL.ILDiagnosticsAnalyzerTests'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.IL.RoslynAnalysisContextTests.<>c__DisplayClass0_0'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.IL.RoslynAnalysisContextTests'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.IL.RoslynCompilationStartAnalysisContextTests.<>c__DisplayClass0_0'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.IL.RoslynCompilationStartAnalysisContextTests'",
+                "Roslyn 'RegisterCompilationAction' callback invoked analyzing 'BinSkim.Rules.FunctionalTests.dll'",
+                "Roslyn 'RegisterCompilationEndAction' callback invoked analyzing 'BinSkim.Rules.FunctionalTests.dll'",
+                "Symbol encountered in MSIL 'global::<Module>'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryData.BinaryParsersResources'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PdbParseErrorCode'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.ImageLoadConfigDirectory64.Fields'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.ImageLoadConfigDirectory64'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.Type'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.ImageHeader'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.ImageFieldData'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.ImageLoadConfigDirectory32.Fields'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.ImageLoadConfigDirectory32'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PortableExecutableExtensionMethods'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PE'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.SafePointer'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.CompilandRecord'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.CompilerCommandLine.WarningState'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.CompilerCommandLine'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.<CreateSourceFileIteratorImpl>d__21'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.PdbParseException'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.ObjectModuleDetails'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Language'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.SourceFile'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.HashType'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Symbol.<CreateChildrenImpl>d__52'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Symbol'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.LocationType'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.DataKind'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.NameSearchOptions'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.TruncatedCompilandRecordList.<>c'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.TruncatedCompilandRecordList'",
+                "Roslyn 'RegisterCompilationAction' callback invoked analyzing 'BinaryParsers.dll'",
+                "Roslyn 'RegisterCompilationEndAction' callback invoked analyzing 'BinaryParsers.dll'",
             });
             string testAssemblyPath = this.GetType().Assembly.Location;
-            Verify(testAssemblyPath, testAssemblyPath, expected);
+            string binskimBinaryPath = typeof(PE).Assembly.Location;
+            Verify(testAssemblyPath, expected, testAssemblyPath, binskimBinaryPath);
         }
     }
 }

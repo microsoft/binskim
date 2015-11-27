@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Reflection;
 using System.Threading;
@@ -21,11 +22,38 @@ namespace Microsoft.CodeAnalysis.IL
 
         private ActionMap<SymbolAnalysisContext, SymbolKind> _perCompilationSymbolsActions;
 
-        public RoslynAnalysisContext GlobalRoslynAnalysisContext { get; set; }
-
-        public void LoadAnalyzer(string path)
+        private ILDiagnosticsAnalyzer(RoslynAnalysisContext analysisContext)
         {
-            GlobalRoslynAnalysisContext = GlobalRoslynAnalysisContext ?? new RoslynAnalysisContext();
+            GlobalRoslynAnalysisContext = analysisContext;
+        }
+
+        public RoslynAnalysisContext GlobalRoslynAnalysisContext { get; private set; }
+
+        public static ILDiagnosticsAnalyzer Create(params string[] analyzerFilePaths)
+        {
+            return Create((IEnumerable<string>)analyzerFilePaths);
+        }
+
+        public static ILDiagnosticsAnalyzer Create(IEnumerable<string> analyzerFilePaths)
+        {
+            var analysisContext = new RoslynAnalysisContext();
+
+            foreach(string analyzerFilePath in analyzerFilePaths)
+            {
+                LoadAnalyzer(analyzerFilePath, analysisContext);
+            }
+
+            return Create(analysisContext);
+        }
+
+        public static ILDiagnosticsAnalyzer Create(RoslynAnalysisContext analysisContext)
+        {
+            return new ILDiagnosticsAnalyzer(analysisContext);
+        }
+
+        public static RoslynAnalysisContext LoadAnalyzer(string path, RoslynAnalysisContext analysisContext = null)
+        {
+            analysisContext = analysisContext ?? new RoslynAnalysisContext();
 
             Assembly assembly = Assembly.LoadFrom(path);
 
@@ -34,24 +62,39 @@ namespace Microsoft.CodeAnalysis.IL
                 if (typeof(DiagnosticAnalyzer).IsAssignableFrom(type) && !type.IsAbstract)
                 {
                     var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(type);
-                    analyzer.Initialize(GlobalRoslynAnalysisContext);
+                    analyzer.Initialize(analysisContext);
                 }
             }
+            return analysisContext;
         }
 
         public void Analyze(string targetPath, Action<Diagnostic> reportDiagnostic, CancellationToken cancellationToken = default(CancellationToken))
         {
+            // Create a Roslyn representation of the IL by constructing a MetadataReference against
+            // the target path (as if we intended to reference this binary during compilation, instead
+            // of analyzing it). Using this mechanism, we can scan types/members contained in the 
+            // binary. We cannot currently retrieve IL from method bodies.
             var reference = MetadataReference.CreateFromFile(targetPath);
             var compilation = CSharpCompilation.Create("_", references: new[] { reference });
             var target = compilation.GetAssemblyOrModuleSymbol(reference);
-            var compilationStartAnalysisContext = new RoslynCompilationStartAnalysisContext(compilation, _options, cancellationToken);
 
-            _perCompilationSymbolsActions = new ActionMap<SymbolAnalysisContext, SymbolKind>();
-            compilationStartAnalysisContext.SymbolActions = _perCompilationSymbolsActions;
+            // For each analysis target, we create a compilation start context, which may result
+            // in symbol action registration. We need to capture and throw these registrations 
+            // away for each binary we inspect. 
+            var compilationStartAnalysisContext = new RoslynCompilationStartAnalysisContext(compilation, _options, cancellationToken);
+            _perCompilationSymbolsActions = compilationStartAnalysisContext.SymbolActions;
+
             GlobalRoslynAnalysisContext.CompilationStartActions?.Invoke(compilationStartAnalysisContext);
 
             var visitor = new RoslynSymbolVisitor(symbol => Analyze(symbol, compilation, reportDiagnostic, cancellationToken));
             visitor.Visit(target);
+
+            // Having finished analysis, we'll invoke any compilation end actions registered previously.
+            // We also discard the per-compilation symbol actions we collected.
+            var compilationAnalysisContext = new CompilationAnalysisContext(compilation, _options, reportDiagnostic, _isSupportedDiagnostic, cancellationToken);
+
+            GlobalRoslynAnalysisContext.CompilationActions?.Invoke(compilationAnalysisContext);
+            compilationStartAnalysisContext.CompilationEndActions?.Invoke(compilationAnalysisContext);
 
             _perCompilationSymbolsActions = null;
         }

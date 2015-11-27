@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Immutable;
+
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.IL
@@ -17,7 +18,10 @@ namespace Microsoft.CodeAnalysis.IL
     internal sealed class RoslynAnalysisContext : AnalysisContext
     {
         public ActionMap<SymbolAnalysisContext, SymbolKind> SymbolActions { get; } = new ActionMap<SymbolAnalysisContext, SymbolKind>();
+
         public Action<CompilationStartAnalysisContext> CompilationStartActions { get; private set; }
+
+        public Action<CompilationAnalysisContext> CompilationActions { get; private set; }
 
         public override void RegisterSymbolAction(Action<SymbolAnalysisContext> action, ImmutableArray<SymbolKind> symbolKinds)
         {
@@ -29,10 +33,14 @@ namespace Microsoft.CodeAnalysis.IL
             CompilationStartActions += action;
         }
 
+        public override void RegisterCompilationAction(Action<CompilationAnalysisContext> action)
+        {
+            CompilationActions += action;
+        }
+
         // These registration actions are currently unsupported or not relevant to an MSIL-driven analysis
         public override void RegisterCodeBlockAction(Action<CodeBlockAnalysisContext> action) { }
         public override void RegisterCodeBlockStartAction<TLanguageKindEnum>(Action<CodeBlockStartAnalysisContext<TLanguageKindEnum>> action) { }
-        public override void RegisterCompilationAction(Action<CompilationAnalysisContext> action) { }
         public override void RegisterSemanticModelAction(Action<SemanticModelAnalysisContext> action) { }
         public override void RegisterSyntaxNodeAction<TLanguageKindEnum>(Action<SyntaxNodeAnalysisContext> action, ImmutableArray<TLanguageKindEnum> syntaxKinds) { }
         public override void RegisterSyntaxTreeAction(Action<SyntaxTreeAnalysisContext> action) { }

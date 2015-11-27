@@ -342,31 +342,32 @@ namespace Microsoft.CodeAnalysis.BinSkim
 
         private void AnalyzeManagedAssembly(string assemblyFilePath, IEnumerable<string> roslynAnalyzerFilePaths, BinaryAnalyzerContext context)
         {
-            ILDiagnosticsAnalyzer roslynAnalyzer = new ILDiagnosticsAnalyzer();
-
             if (_globalRoslynAnalysisContext == null)
             {
+                _globalRoslynAnalysisContext = new RoslynAnalysisContext();
+
+                // We could use the ILDiagnosticsAnalyzer factory method that initializes
+                // an object instance from an enumerable collection of analyzer paths. We
+                // initialize a context object from each path one-by-one instead, in order
+                // to make an attempt to load each specified analyzer. We will therefore
+                // collect information on each analyzer that fails to load. We will also 
+                // proceed with performing as much analysis as possible. Ultimately, a 
+                // single analyzer load failure will return in BinSkim returning a non-zero
+                // failure code from the run.
                 foreach (string analyzerFilePath in roslynAnalyzerFilePaths)
                 {
                     InvokeCatchingRelevantIOExceptions
                     (
-                        action: () => { roslynAnalyzer.LoadAnalyzer(analyzerFilePath); },
+                        action: () => { ILDiagnosticsAnalyzer.LoadAnalyzer(analyzerFilePath, _globalRoslynAnalysisContext); },
                         exceptionHandler: (ex) =>
                         {
                             LogExceptionLoadingRoslynAnalyzer(analyzerFilePath, context, ex);
-                            throw new ExitApplicationException<FailureReason>(DriverResources.UnexpectedApplicationExit, ex)
-                            {
-                                FailureReason = FailureReason.ExceptionCreatingLogFile
-                            };
                         }
                     );
                 }
-                _globalRoslynAnalysisContext = roslynAnalyzer.GlobalRoslynAnalysisContext;
             }
-            else
-            {
-                roslynAnalyzer.GlobalRoslynAnalysisContext = _globalRoslynAnalysisContext;
-            }
+
+            ILDiagnosticsAnalyzer roslynAnalyzer = ILDiagnosticsAnalyzer.Create(_globalRoslynAnalysisContext);
 
             roslynAnalyzer.Analyze(assemblyFilePath, diagnostic =>
             {
@@ -379,7 +380,7 @@ namespace Microsoft.CodeAnalysis.BinSkim
         {
             context.Rule = ErrorRules.InvalidConfiguration;
 
-            // An exception was raised attempting to load analysis target '{0}'. Exception information:
+            // An exception was raised attempting to load Roslyn analyzer '{0}'. Exception information:
             // {1}
             context.Logger.Log(MessageKind.ConfigurationError,
                 context,

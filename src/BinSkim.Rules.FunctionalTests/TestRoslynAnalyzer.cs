@@ -3,6 +3,8 @@
 
 using System;
 using System.Collections.Immutable;
+using System.IO;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -11,17 +13,27 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     class TestRoslynAnalyzer : DiagnosticAnalyzer
     {
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(id: "T1001",
+        internal static DiagnosticDescriptor SymbolNameRule = new DiagnosticDescriptor(id: "T1001",
                                                                              title: "Symbol name reporter",
                                                                              messageFormat: "Symbol encountered in MSIL '{0}'",
                                                                              category: "Test",
                                                                              defaultSeverity: DiagnosticSeverity.Info,
                                                                              isEnabledByDefault: true,
-                                                                             description: "Symbol encountered in MSIL '{0}",
+                                                                             description: "Symbol name reporting rule",
                                                                              helpLinkUri: null,
                                                                              customTags: WellKnownDiagnosticTags.NotConfigurable);
 
-        private static readonly ImmutableArray<DiagnosticDescriptor> s_supportedDiagnostics = ImmutableArray.Create(Rule);
+        internal static DiagnosticDescriptor CallbackReportingRule = new DiagnosticDescriptor(id: "T1002",
+                                                                      title: "Roslyn callback reporter",
+                                                                      messageFormat: "Roslyn '{0}' callback invoked analyzing '{1}'",
+                                                                      category: "Test",
+                                                                      defaultSeverity: DiagnosticSeverity.Info,
+                                                                      isEnabledByDefault: true,
+                                                                      description: "Roslyn callback reporting rule",
+                                                                      helpLinkUri: null,
+                                                                      customTags: WellKnownDiagnosticTags.NotConfigurable);
+
+        private static readonly ImmutableArray<DiagnosticDescriptor> s_supportedDiagnostics = ImmutableArray.Create(SymbolNameRule, CallbackReportingRule);
 
         public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
         {
@@ -35,25 +47,41 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             analysisContext.RegisterCompilationStartAction(compilationContext =>
             {
-                compilationContext.RegisterSymbolAction(context =>
+                // The compilation start action cannot report a diagnostic,
+                // so we do not report T1002 here.
+
+                compilationContext.RegisterSymbolAction(context =>                
                 {
+                    // We do not report a callback here, as the analysis itself serves.
                     AnalyzeSymbol((INamedTypeSymbol)context.Symbol, context.ReportDiagnostic);
                 },
                 SymbolKind.NamedType);
+
+                compilationContext.RegisterCompilationEndAction(context =>
+                {
+                    string targetName = Path.GetFileName(context.Compilation.References.First().Display);
+                    context.ReportDiagnostic(
+                        CreateDiagnostic(CallbackReportingRule, "RegisterCompilationEndAction", targetName));
+                });
+            });
+
+            analysisContext.RegisterCompilationAction(context =>
+            {
+                string targetName = Path.GetFileName(context.Compilation.References.First().Display);
+                context.ReportDiagnostic(
+                    CreateDiagnostic(CallbackReportingRule, "RegisterCompilationAction", targetName));
             });
         }
 
         private static void AnalyzeSymbol(INamedTypeSymbol namedType, Action<Diagnostic> addDiagnostic)
         {
-
-            // Non-sealed non-abstract attribute type.
-            addDiagnostic(CreateDiagnostic(namedType.MetadataName));
+            string symbolName = namedType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            addDiagnostic(CreateDiagnostic(SymbolNameRule, symbolName));
         }
 
-        public static Diagnostic CreateDiagnostic(
-            params object[] args)
+        public static Diagnostic CreateDiagnostic(DiagnosticDescriptor descriptor, params object[] args)
         {
-            return Diagnostic.Create(Rule,
+            return Diagnostic.Create(descriptor,
                      location: null,
                      additionalLocations: null,
                      messageArgs: args);
