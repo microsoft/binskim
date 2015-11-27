@@ -33,6 +33,7 @@ namespace Microsoft.CodeAnalysis.BinSkim
         ExceptionCreatingLogfile = 0x10,
         ExceptionInEngine = 0x20,
         ExceptionLoadingTargetFile = 0x40,
+        ExceptionLoadingRoslynAnalyzer = 0x80,
         Fatal = (Int32.MaxValue ^ NonFatal),
 
         // Non-fatal conditions

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using Microsoft.CodeAnalysis.BinSkim.Sdk;
 
 namespace Microsoft.CodeAnalysis.BinSkim.Rules

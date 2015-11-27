@@ -90,6 +90,15 @@ namespace Microsoft.CodeAnalysis.BinSkim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No analyzer paths specified.
+        /// </summary>
+        internal static string NoAnalyzerPathsSpecified {
+            get {
+                return ResourceManager.GetString("NoAnalyzerPathsSpecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application exited unexpectedly..
         /// </summary>
         internal static string UnexpectedApplicationExit {
@@ -115,6 +124,16 @@ namespace Microsoft.CodeAnalysis.BinSkim {
         internal static string UnhandledExceptionInitializingRule {
             get {
                 return ResourceManager.GetString("UnhandledExceptionInitializingRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception was raised attempting to load Roslyn analyzer &apos;{0}&apos;. Exception information:
+        ///{1}.
+        /// </summary>
+        internal static string UnhandledExceptionLoadingRoslynAnalyzer {
+            get {
+                return ResourceManager.GetString("UnhandledExceptionLoadingRoslynAnalyzer", resourceCulture);
             }
         }
         

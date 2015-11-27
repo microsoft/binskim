@@ -12,6 +12,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Sdk
     {
         private PE _pe;
         private Uri _uri;
+        private Pdb _pdb;
+        private bool _pdbResolved;
+
+        public bool IsManagedAssembly { get; internal set; }
 
         public PE PE
         {
@@ -19,9 +23,18 @@ namespace Microsoft.CodeAnalysis.BinSkim.Sdk
             {
                 if (_pe == null)
                 {
-                    _pe = new PE(Uri.LocalPath);
+                    PE = new PE(Uri.LocalPath);
+                    IsManagedAssembly = _pe.IsManaged;
                 }
                 return _pe;
+            }
+            set
+            {
+                if (value != null && _pdbResolved)
+                {
+                    throw new InvalidOperationException("Attempt to access a previously disposed PE object.");
+                }
+                _pe = value;
             }
         }
 
@@ -41,25 +54,49 @@ namespace Microsoft.CodeAnalysis.BinSkim.Sdk
             }
         }
 
-        private Pdb _pdb;
-        private bool _pdbResolved;
-
         public Pdb Pdb
         {
             get
             {
-                if (_pdbResolved) { return _pdb; }
+                if (_pdbResolved)
+                {
+                    return _pdb;
+                }
 
-                _pdbResolved = true;
                 try
                 {
-                    _pdb = new Pdb(PE.FileName, Pdb.SymbolPath);
+                    Pdb = new Pdb(PE.FileName, Pdb.SymbolPath);
                 }
                 catch (PdbParseException ex)
                 {
                     PdbParseException = ex;
                 }
+
+                _pdbResolved = true;
                 return _pdb;
+            }
+            set
+            {
+                if (value != null && _pdbResolved)
+                {
+                    throw new InvalidOperationException("Attempt to access a previously disposed PE object.");
+                }
+                _pdb = value;
+            }
+        }
+
+        public void DisposePortableExecutableData()
+        {
+            if (_pdb != null)
+            {
+                _pdb.Dispose();
+                _pdb = null;
+            }
+
+            if (_pe != null)
+            {
+                _pe.Dispose();
+                _pe = null;
             }
         }
 

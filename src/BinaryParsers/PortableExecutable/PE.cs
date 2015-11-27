@@ -321,7 +321,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                return PEHeaders.CorHeader != null;
+                return PEHeaders != null && PEHeaders.CorHeader != null;
             }
         }
 

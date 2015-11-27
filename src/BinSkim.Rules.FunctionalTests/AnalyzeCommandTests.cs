@@ -1,17 +1,17 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Reflection;
-using Microsoft.CodeAnalysis.Driver;
-using Xunit;
-using Xunit.Abstractions;
-using System.IO;
 using System;
-using Newtonsoft.Json;
+using System.IO;
+using System.Reflection;
+
+using Microsoft.CodeAnalysis.Driver;
 using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat.DataContracts;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Linq;
 using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat.Readers;
+
+using Newtonsoft.Json;
+
+using Xunit;
 
 namespace Microsoft.CodeAnalysis.BinSkim.Rules
 {

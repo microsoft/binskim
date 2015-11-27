@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat;
 using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat.DataContracts;
 using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat.Writers;
 using Newtonsoft.Json;
+using Sarif = Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat;
 
 namespace Microsoft.CodeAnalysis.BinSkim
 {
@@ -150,12 +151,13 @@ namespace Microsoft.CodeAnalysis.BinSkim
         private void WriteJsonIssue(string binary, string ruleId, string message, IssueKind issueKind)
         {
             Issue issue = new Issue();
+
             issue.RuleId = ruleId;
             issue.FullMessage = message;
             issue.Properties = new Dictionary<string, string>();
             issue.Properties["issueKind"] = issueKind.ToString().ToLowerInvariant()[0] + issueKind.ToString().Substring(1);
             issue.Locations = new[]{
-                new Location {
+                new Sarif.DataContracts.Location {  
                     AnalysisTarget = new[]
                     {
                         new PhysicalLocationComponent

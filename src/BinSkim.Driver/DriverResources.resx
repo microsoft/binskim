@@ -128,6 +128,9 @@
     <value>An exception was raised attempting to load analysis target '{0}'. Exception information:
 {1}</value>
   </data>
+  <data name="NoAnalyzerPathsSpecified" xml:space="preserve">
+    <value>No analyzer paths specified</value>
+  </data>
   <data name="UnexpectedApplicationExit" xml:space="preserve">
     <value>Application exited unexpectedly.</value>
   </data>
@@ -137,6 +140,10 @@
   </data>
   <data name="UnhandledExceptionInitializingRule" xml:space="preserve">
     <value>An unhandled exception was raised initializing check '{0}' (which has been disabled for the remainder of the analysis). Exception information:
+{1}</value>
+  </data>
+  <data name="UnhandledExceptionLoadingRoslynAnalyzer" xml:space="preserve">
+    <value>An exception was raised attempting to load Roslyn analyzer '{0}'. Exception information:
 {1}</value>
   </data>
   <data name="UnhandledRuleExceptionAnalyzingTarget" xml:space="preserve">
