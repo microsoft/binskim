@@ -16,9 +16,9 @@ namespace Microsoft.CodeAnalysis.IL
     /// </summary>
     internal sealed class RoslynCompilationStartAnalysisContext : CompilationStartAnalysisContext
     {
-        public ActionMap<SymbolAnalysisContext, SymbolKind> SymbolActions { get; set; }
+        public ActionMap<SymbolAnalysisContext, SymbolKind> SymbolActions { get; private set; }
 
-        public Action<CompilationAnalysisContext> CompilationEndActions { get; set; }
+        public Action<CompilationAnalysisContext> CompilationEndActions { get; private set; }
 
         public RoslynCompilationStartAnalysisContext(Compilation compilation, AnalyzerOptions options, CancellationToken cancellationToken)
             : base(compilation, options, cancellationToken)
