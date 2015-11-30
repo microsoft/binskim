@@ -20,8 +20,6 @@ namespace Microsoft.CodeAnalysis.IL
         private static readonly AnalyzerOptions _options = new AnalyzerOptions(ImmutableArray<AdditionalText>.Empty);
         private static readonly Func<Diagnostic, bool> _isSupportedDiagnostic = diagnostic => true;
 
-        private ActionMap<SymbolAnalysisContext, SymbolKind> _perCompilationSymbolsActions;
-
         private ILDiagnosticsAnalyzer(RoslynAnalysisContext analysisContext)
         {
             GlobalRoslynAnalysisContext = analysisContext;
@@ -68,7 +66,10 @@ namespace Microsoft.CodeAnalysis.IL
             return analysisContext;
         }
 
-        public void Analyze(string targetPath, Action<Diagnostic> reportDiagnostic, CancellationToken cancellationToken = default(CancellationToken))
+        public void Analyze(
+            string targetPath, 
+            Action<Diagnostic> reportDiagnostic, 
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             // Create a Roslyn representation of the IL by constructing a MetadataReference against
             // the target path (as if we intended to reference this binary during compilation, instead
@@ -82,11 +83,16 @@ namespace Microsoft.CodeAnalysis.IL
             // in symbol action registration. We need to capture and throw these registrations 
             // away for each binary we inspect. 
             var compilationStartAnalysisContext = new RoslynCompilationStartAnalysisContext(compilation, _options, cancellationToken);
-            _perCompilationSymbolsActions = compilationStartAnalysisContext.SymbolActions;
 
             GlobalRoslynAnalysisContext.CompilationStartActions?.Invoke(compilationStartAnalysisContext);
 
-            var visitor = new RoslynSymbolVisitor(symbol => Analyze(symbol, compilation, reportDiagnostic, cancellationToken));
+            var visitor = new RoslynSymbolVisitor(symbol => Analyze(
+                symbol,
+                compilation,
+                compilationStartAnalysisContext.SymbolActions,
+                reportDiagnostic, 
+                cancellationToken));
+
             visitor.Visit(target);
 
             // Having finished analysis, we'll invoke any compilation end actions registered previously.
@@ -95,16 +101,19 @@ namespace Microsoft.CodeAnalysis.IL
 
             GlobalRoslynAnalysisContext.CompilationActions?.Invoke(compilationAnalysisContext);
             compilationStartAnalysisContext.CompilationEndActions?.Invoke(compilationAnalysisContext);
-
-            _perCompilationSymbolsActions = null;
         }
 
-        private void Analyze(ISymbol symbol, Compilation compilation, Action<Diagnostic> reportDiagnostic, CancellationToken cancellationToken)
+        private void Analyze(
+            ISymbol symbol, 
+            Compilation compilation,
+            ActionMap<SymbolAnalysisContext, SymbolKind> perCompilationSymbolActions,
+            Action<Diagnostic> reportDiagnostic, 
+            CancellationToken cancellationToken)
         {            
             var symbolContext = new SymbolAnalysisContext(symbol, compilation, _options, reportDiagnostic, _isSupportedDiagnostic, cancellationToken);
 
             GlobalRoslynAnalysisContext.SymbolActions.Invoke(symbol.Kind, symbolContext);
-            _perCompilationSymbolsActions.Invoke(symbol.Kind, symbolContext);
+            perCompilationSymbolActions.Invoke(symbol.Kind, symbolContext);
         }
     }
 }
