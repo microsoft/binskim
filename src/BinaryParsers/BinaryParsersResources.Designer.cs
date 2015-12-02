@@ -223,7 +223,7 @@ namespace Microsoft.CodeAnalysis.BinaryData {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pdbis stripped of cv info.
+        ///   Looks up a localized string similar to Pdb is stripped of cv info.
         /// </summary>
         internal static string PdbStripped {
             get {

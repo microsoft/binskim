@@ -19,4 +19,3 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("BinSkim.Rules.FunctionalTests")]
 [assembly: InternalsVisibleTo("BinSkim")]
-[assembly: AssemblyVersion("1.2.*")]

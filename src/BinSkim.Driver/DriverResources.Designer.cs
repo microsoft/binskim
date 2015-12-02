@@ -108,6 +108,16 @@ namespace Microsoft.CodeAnalysis.BinSkim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An unhandled exception was raised during analysis:
+        ///{0}.
+        /// </summary>
+        internal static string UnhandledEngineException {
+            get {
+                return ResourceManager.GetString("UnhandledEngineException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An unhandled exception was raised attempting to determine whether &apos;{0}&apos; is a valid analysis target for check &apos;{1}&apos; (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing image metadata and not specific to the rule, however. Exception information:
         ///{2}.
         /// </summary>
