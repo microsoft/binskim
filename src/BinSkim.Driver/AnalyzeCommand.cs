@@ -47,12 +47,17 @@ namespace Microsoft.CodeAnalysis.BinSkim
                 }
                 catch (ExitApplicationException<FailureReason> ex)
                 {
+                    // These exceptions have already been logged
                     ExecutionException = ex;
                     return FAILURE;
                 }
                 catch (Exception ex)
                 {
-                    RuntimeErrors |= RuntimeConditions.ExceptionInEngine;
+                    // These exceptions escaped our net and must be logged here
+                    BinaryAnalyzerContext context = new BinaryAnalyzerContext();
+                    context.Rule = ErrorRules.UnhandledEngineException;
+                    context.Logger = logger;
+                    LogUnhandledEngineException(ex, context);
                     ExecutionException = ex;
                     return FAILURE;
                 }
@@ -375,6 +380,19 @@ namespace Microsoft.CodeAnalysis.BinSkim
                 context.Logger.Log(messageKind, context, diagnostic.GetMessage(CultureInfo.CurrentCulture));
             });
         }
+
+        private void LogUnhandledEngineException(Exception ex, BinaryAnalyzerContext context)
+        {
+            // An unhandled exception was raised during analysis:
+            // {1}
+            context.Logger.Log(MessageKind.InternalError,
+                context,
+                string.Format(DriverResources.UnhandledEngineException,
+                    ex.ToString()));
+
+            RuntimeErrors |= RuntimeConditions.ExceptionInEngine;
+        }
+
 
         private void LogExceptionLoadingRoslynAnalyzer(string analyzerFilePath, BinaryAnalyzerContext context, Exception ex)
         {

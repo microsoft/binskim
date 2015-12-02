@@ -4,12 +4,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinSkim.Sdk;
 using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat;
 using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat.DataContracts;
 using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat.Writers;
+
 using Newtonsoft.Json;
+
 using Sarif = Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat;
 
 namespace Microsoft.CodeAnalysis.BinSkim
@@ -19,7 +22,7 @@ namespace Microsoft.CodeAnalysis.BinSkim
         private FileStream _fileStream;
         private TextWriter _textWriter;
         private JsonTextWriter _jsonTextWriter;
-        private IssueLogJsonWriter _issueLogJsonWriter;
+        private ResultLogJsonWriter _issueLogJsonWriter;
 
         public SarifLogger(
             string outputFilePath,
@@ -36,14 +39,15 @@ namespace Microsoft.CodeAnalysis.BinSkim
             // for debugging it is nice to have the following line added.
             _jsonTextWriter.Formatting = Newtonsoft.Json.Formatting.Indented;
 
-            _issueLogJsonWriter = new IssueLogJsonWriter(_jsonTextWriter);
+            _issueLogJsonWriter = new ResultLogJsonWriter(_jsonTextWriter);
 
-            Version version = this.GetType().Assembly.GetName().Version;
+            Assembly binskimAssembly = this.GetType().Assembly;
+
+            Version version = binskimAssembly.GetName().Version;
             ToolInfo toolInfo = new ToolInfo();
-            toolInfo.ToolName = "BinSkim";
-            toolInfo.ProductVersion = version.Major.ToString() + "." + version.Minor.ToString();
-            toolInfo.FileVersion = version.ToString();
-            toolInfo.FullVersion = toolInfo.ProductVersion + " beta pre-release";
+            toolInfo.Name = "BinSkim";
+            toolInfo.Version = version.Major.ToString() + "." + version.Minor.ToString() + "." + version.Build.ToString();
+            toolInfo.FullName = "BinSkim " + toolInfo.Version + "-beta";
 
             RunInfo runInfo = new RunInfo();
             runInfo.AnalysisTargets = new List<FileReference>();
@@ -69,6 +73,8 @@ namespace Microsoft.CodeAnalysis.BinSkim
                 }
                 runInfo.AnalysisTargets.Add(fileReference);
             }
+            runInfo.InvocationInfo = Environment.CommandLine;
+
             _issueLogJsonWriter.WriteToolAndRunInfo(toolInfo, runInfo);
         }
 
@@ -95,7 +101,7 @@ namespace Microsoft.CodeAnalysis.BinSkim
                     {
                         if (Verbose)
                         {
-                            WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, IssueKind.NoError);
+                            WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, IssueKind.Pass);
                         }
                         break;
                     }
@@ -130,15 +136,15 @@ namespace Microsoft.CodeAnalysis.BinSkim
                         break;
                     }
 
+                case MessageKind.ConfigurationError:
+                {
+                    WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, IssueKind.ConfigurationError);
+                    break;
+                }
+
                 case MessageKind.InternalError:
                     {
                         WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, IssueKind.InternalError);
-                        break;
-                    }
-
-                case MessageKind.ConfigurationError:
-                    {
-                        WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, IssueKind.ConfigurationError);
                         break;
                     }
 
@@ -150,13 +156,12 @@ namespace Microsoft.CodeAnalysis.BinSkim
         }
         private void WriteJsonIssue(string binary, string ruleId, string message, IssueKind issueKind)
         {
-            Issue issue = new Issue();
+            Result result = new Result();
 
-            issue.RuleId = ruleId;
-            issue.FullMessage = message;
-            issue.Properties = new Dictionary<string, string>();
-            issue.Properties["issueKind"] = issueKind.ToString().ToLowerInvariant()[0] + issueKind.ToString().Substring(1);
-            issue.Locations = new[]{
+            result.RuleId = ruleId;
+            result.FullMessage = message;
+            result.Kind = issueKind.ToString().ToLowerInvariant()[0] + issueKind.ToString().Substring(1);
+            result.Locations = new[]{
                 new Sarif.DataContracts.Location {  
                     AnalysisTarget = new[]
                     {
@@ -173,7 +178,7 @@ namespace Microsoft.CodeAnalysis.BinSkim
                 }
             };
 
-            _issueLogJsonWriter.WriteIssue(issue);
+            _issueLogJsonWriter.WriteResult(result);
         }
     }
 }

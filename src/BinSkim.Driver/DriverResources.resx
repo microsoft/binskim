@@ -134,6 +134,10 @@
   <data name="UnexpectedApplicationExit" xml:space="preserve">
     <value>Application exited unexpectedly.</value>
   </data>
+  <data name="UnhandledEngineException" xml:space="preserve">
+    <value>An unhandled exception was raised during analysis:
+{0}</value>
+  </data>
   <data name="UnhandledExceptionCheckingApplicability" xml:space="preserve">
     <value>An unhandled exception was raised attempting to determine whether '{0}' is a valid analysis target for check '{1}' (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing image metadata and not specific to the rule, however. Exception information:
 {2}</value>

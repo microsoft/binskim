@@ -262,7 +262,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                     ContractResolver = SarifContractResolver.Instance
                 };
 
-                IssueLog log = JsonConvert.DeserializeObject<IssueLog>(File.ReadAllText(path), settings);
+                ResultLog log = JsonConvert.DeserializeObject<ResultLog>(File.ReadAllText(path), settings);
                 Assert.NotNull(log);
                 Assert.Equal<int>(1, log.RunLogs.Count);
 
@@ -294,9 +294,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             AnalyzeCommand.DefaultRuleAssemblies = null;
             RunLog runLog = AnalyzeFile(this.GetType().Assembly.Location);
 
-            int issueCount = 0;
-            SarifHelpers.ValidateRunLog(runLog, (issue) => { issueCount++; });
-            Assert.Equal(17, issueCount);
+            int resultCount = 0;
+            SarifHelpers.ValidateRunLog(runLog, (result) => { resultCount++; });
+            Assert.Equal(17, resultCount);
         }
     }
 }

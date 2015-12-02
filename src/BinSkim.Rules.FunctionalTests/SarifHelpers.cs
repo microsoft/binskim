@@ -11,16 +11,16 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 {
     internal static class SarifHelpers
     {
-        public static void ValidateRunLog(RunLog runLog, Action<Issue> issueAction)
+        public static void ValidateRunLog(RunLog runLog, Action<Result> resultAction)
         {
             ValidateToolInfo(runLog.ToolInfo);
 
-            foreach (Issue issue in runLog.Issues) { issueAction(issue); }
+            foreach (Result result in runLog.Results) { resultAction(result); }
         }
 
         public static void ValidateToolInfo(ToolInfo toolInfo)
         {
-            Assert.Equal("BinSkim", toolInfo.ToolName);
+            Assert.Equal("BinSkim", toolInfo.Name);
             // TODO version, etc
         }
     }

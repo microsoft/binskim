@@ -8,13 +8,13 @@ namespace Microsoft.CodeAnalysis.BinSkim
     public enum IssueKind
     {
         Unknown,
-        NoError,
+        Pass,
         Error,
         Warning,
         Note,
         NotApplicable,
         Pending,
         InternalError,
-        ConfigurationError
+        ConfigurationError,
     }
 }

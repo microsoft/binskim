@@ -172,7 +172,7 @@
     <value>Pdb has no symbols</value>
   </data>
   <data name="PdbStripped" xml:space="preserve">
-    <value>Pdbis stripped of cv info</value>
+    <value>Pdb is stripped of cv info</value>
   </data>
   <data name="UnexpectedHashLength" xml:space="preserve">
     <value>Unexpected hash length for file: </value>
