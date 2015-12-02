@@ -8,12 +8,12 @@ using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
-using Microsoft.CodeAnalysis.BinSkim.Sdk;
+using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Driver;
 
 using Dia2Lib;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Rules
+namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(IBinarySkimmer))]
     public class EnableStackProtection : IBinarySkimmer, IRuleContext

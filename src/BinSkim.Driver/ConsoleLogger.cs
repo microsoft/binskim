@@ -2,9 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using Microsoft.CodeAnalysis.BinSkim.Sdk;
+using Microsoft.CodeAnalysis.IL.Sdk;
 
-namespace Microsoft.CodeAnalysis.BinSkim
+namespace Microsoft.CodeAnalysis.IL
 {
     internal class ConsoleLogger : IMessageLogger<BinaryAnalyzerContext>
     {

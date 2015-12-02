@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Options;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Rules
+namespace Microsoft.CodeAnalysis.IL.Rules
 {
     internal class VulnerableDependencyDescriptor : PropertyBag
     {

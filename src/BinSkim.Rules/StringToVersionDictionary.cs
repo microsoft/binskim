@@ -4,7 +4,7 @@
 using System;
 using Microsoft.CodeAnalysis.Options;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Rules
+namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public class StringToVersionMap : TypedPropertyBag<Version>
     {

@@ -3,12 +3,12 @@
 
 using System.Reflection;
 
-using Microsoft.CodeAnalysis.BinSkim.Rules;
+using Microsoft.CodeAnalysis.IL.Rules;
 
 using CommandLine;
 
 
-namespace Microsoft.CodeAnalysis.BinSkim
+namespace Microsoft.CodeAnalysis.IL
 {
     internal class Program
     {

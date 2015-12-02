@@ -3,7 +3,7 @@
 
 using System;
 
-using Microsoft.CodeAnalysis.BinSkim.Sdk;
+using Microsoft.CodeAnalysis.IL.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL
 {

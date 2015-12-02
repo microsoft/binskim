@@ -8,7 +8,7 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Rules
+namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     class TestRoslynAnalyzer : DiagnosticAnalyzer

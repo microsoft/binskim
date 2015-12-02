@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.BinSkim.Sdk;
+using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat;
 using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat.DataContracts;
 using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat.Writers;
@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 
 using Sarif = Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat;
 
-namespace Microsoft.CodeAnalysis.BinSkim
+namespace Microsoft.CodeAnalysis.IL
 {
     public class SarifLogger : IBinaryMessageLogger, IDisposable
     {

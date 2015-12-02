@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.CodeAnalysis.BinSkim.Sdk {
+namespace Microsoft.CodeAnalysis.IL.Sdk {
     using System;
     
     

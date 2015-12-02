@@ -10,13 +10,13 @@ using System.IO;
 using System.Reflection;
 
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
-using Microsoft.CodeAnalysis.BinSkim.Rules;
-using Microsoft.CodeAnalysis.BinSkim.Sdk;
+using Microsoft.CodeAnalysis.IL.Rules;
+using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Driver;
 using Microsoft.CodeAnalysis.IL;
 using Microsoft.CodeAnalysis.Options;
 
-namespace Microsoft.CodeAnalysis.BinSkim
+namespace Microsoft.CodeAnalysis.IL
 {
     internal class AnalyzeCommand : DriverCommand<AnalyzeOptions>
     {

@@ -7,13 +7,13 @@ using System.IO;
 using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.BinSkim.Sdk;
+using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Options;
 
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Rules
+namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public class RuleTests
     {

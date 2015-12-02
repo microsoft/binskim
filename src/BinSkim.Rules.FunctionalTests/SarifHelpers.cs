@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat.DataContract
 
 using Xunit;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Rules
+namespace Microsoft.CodeAnalysis.IL.Rules
 {
     internal static class SarifHelpers
     {
