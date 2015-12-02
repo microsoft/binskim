@@ -3,9 +3,9 @@
 
 using System;
 
-using Microsoft.CodeAnalysis.BinSkim.Sdk;
+using Microsoft.CodeAnalysis.IL.Sdk;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Rules
+namespace Microsoft.CodeAnalysis.IL.Rules
 {
     internal class ExceptionRaisingRule : IRuleContext, IBinarySkimmer
     {

@@ -5,7 +5,7 @@ using System;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Sdk
+namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public static class OSVersions
     {

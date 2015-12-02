@@ -4,9 +4,9 @@
 using System;
 using System.Collections.Generic;
 
-using Microsoft.CodeAnalysis.BinSkim.Sdk;
+using Microsoft.CodeAnalysis.IL.Sdk;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Rules
+namespace Microsoft.CodeAnalysis.IL.Rules
 {
     internal class TestMessageLogger : IMessageLogger<BinaryAnalyzerContext>
     {

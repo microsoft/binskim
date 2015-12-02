@@ -3,10 +3,10 @@
 
 using System.Reflection;
 
-[assembly: AssemblyVersion(Microsoft.CodeAnalysis.BinSkim.VersionConstants.AssemblyVersion)]
-[assembly: AssemblyFileVersion(Microsoft.CodeAnalysis.BinSkim.VersionConstants.FileVersion)]
+[assembly: AssemblyVersion(Microsoft.CodeAnalysis.IL.VersionConstants.AssemblyVersion)]
+[assembly: AssemblyFileVersion(Microsoft.CodeAnalysis.IL.VersionConstants.FileVersion)]
 
-namespace Microsoft.CodeAnalysis.BinSkim
+namespace Microsoft.CodeAnalysis.IL
 {
     public static class VersionConstants
     {

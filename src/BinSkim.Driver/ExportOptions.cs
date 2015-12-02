@@ -3,7 +3,7 @@
 
 using CommandLine;
 
-namespace Microsoft.CodeAnalysis.BinSkim
+namespace Microsoft.CodeAnalysis.IL
 {
     [Verb("export", HelpText = "Export rule options to an XML file that can be edited and used to configure subsequent analysis.")]
     internal class ExportOptions

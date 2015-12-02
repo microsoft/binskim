@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Sdk
+namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public enum AnalysisApplicability
     {

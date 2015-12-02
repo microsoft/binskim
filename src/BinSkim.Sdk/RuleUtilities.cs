@@ -7,7 +7,7 @@ using System.Globalization;
 using System.IO;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Sdk
+namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public static class RuleUtilities
     {

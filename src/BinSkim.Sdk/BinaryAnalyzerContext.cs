@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.Options;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Sdk
+namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class BinaryAnalyzerContext
     {

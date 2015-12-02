@@ -8,10 +8,10 @@ using System.Composition.Convention;
 using System.Composition.Hosting;
 using System.IO;
 using System.Reflection;
-using Microsoft.CodeAnalysis.BinSkim.Rules;
+using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.Options;
 
-namespace Microsoft.CodeAnalysis.BinSkim
+namespace Microsoft.CodeAnalysis.IL
 {
     internal class ExportCommand : DriverCommand<ExportOptions>
     {

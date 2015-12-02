@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 using Xunit;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Rules
+namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public class AnalyzeCommandTests
     {

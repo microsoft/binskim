@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using CommandLine;
 
-namespace Microsoft.CodeAnalysis.BinSkim
+namespace Microsoft.CodeAnalysis.IL
 {
     [Verb("dump", HelpText = "Dump metadata for one or more binary files.")]
     internal class DumpOptions

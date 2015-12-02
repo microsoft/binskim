@@ -3,7 +3,7 @@
 
 using System;
  
-namespace Microsoft.CodeAnalysis.BinSkim
+namespace Microsoft.CodeAnalysis.IL
 {
     public enum IssueKind
     {

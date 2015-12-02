@@ -10,10 +10,10 @@ using System.IO;
 using System.Reflection.PortableExecutable;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.BinSkim.Sdk;
+using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Options;
 
-namespace Microsoft.CodeAnalysis.BinSkim.Rules
+namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(IBinarySkimmer)), Export(typeof(IOptionsProvider))]
     public class DoNotShipVulnerableBinaries : IBinarySkimmer, IRuleContext, IOptionsProvider

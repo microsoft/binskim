@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.CodeAnalysis.BinSkim
+namespace Microsoft.CodeAnalysis.IL
 {
     // This enum is used to identify specific runtime conditions 
     // encountered during execution. This mechanism is used by
