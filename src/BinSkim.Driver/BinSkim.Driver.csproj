@@ -10,6 +10,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <RootNamespace>Microsoft.CodeAnalysis.BinSkim</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.props))\build.props" />
   <PropertyGroup>
@@ -75,6 +76,10 @@
     <Compile Include="AnalyzeOptions.cs" />
     <Compile Include="AnalyzeStatistics.cs" />
     <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="RoslynAnalyzer\ILImporter.Driver.cs" />
+    <Compile Include="RoslynAnalyzer\ILImporter.cs" />
+    <Compile Include="RoslynAnalyzer\ILOpcode.cs" />
+    <Compile Include="RoslynAnalyzer\ILOperations.cs" />
     <Compile Include="VersionConstants.cs" />
     <Compile Include="DriverCommand.cs" />
     <Compile Include="DriverResources.Designer.cs">
