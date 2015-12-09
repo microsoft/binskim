@@ -1,0 +1,3 @@
+[submodule "src/Roslyn"]
+	path = src/Roslyn
+	url = https://github.com/nguerrera/Roslyn

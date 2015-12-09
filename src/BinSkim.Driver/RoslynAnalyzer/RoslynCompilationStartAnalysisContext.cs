@@ -6,6 +6,7 @@ using System.Collections.Immutable;
 using System.Threading;
 
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Semantics;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -53,5 +54,8 @@ namespace Microsoft.CodeAnalysis.IL
         public override void RegisterSemanticModelAction(Action<SemanticModelAnalysisContext> action) { }
         public override void RegisterSyntaxNodeAction<TLanguageKindEnum>(Action<SyntaxNodeAnalysisContext> action, ImmutableArray<TLanguageKindEnum> syntaxKinds) { }
         public override void RegisterSyntaxTreeAction(Action<SyntaxTreeAnalysisContext> action) { }
+        public override void RegisterOperationBlockStartAction(Action<OperationBlockStartAnalysisContext> action) { }
+        public override void RegisterOperationBlockAction(Action<OperationBlockAnalysisContext> action) { }
+        public override void RegisterOperationAction(Action<OperationAnalysisContext> action, ImmutableArray<OperationKind> operationKinds) { }
     }
 }

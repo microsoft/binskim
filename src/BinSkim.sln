@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinSkim.Driver", "BinSkim.Driver\BinSkim.Driver.csproj", "{7B4552DC-901C-4569-BFBD-9EA129D53288}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B501A547-C911-4A05-AC6E-274A50DFF30E} = {B501A547-C911-4A05-AC6E-274A50DFF30E}
+		{1EE8CAD3-55F9-4D91-96B2-084641DA9A6C} = {1EE8CAD3-55F9-4D91-96B2-084641DA9A6C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinSkim.Sdk", "BinSkim.Sdk\BinSkim.Sdk.csproj", "{D2EBE67E-6115-4825-9EAD-3DB54672C03E}"
 EndProject
@@ -18,7 +22,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Nuget\BinSkim.Driver.nuspec = Nuget\BinSkim.Driver.nuspec
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Roslyn", "Roslyn", "{E8EFBBD3-0C93-4695-ABDD-223CC99B6A11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis", "Roslyn\src\Compilers\Core\Portable\CodeAnalysis.csproj", "{1EE8CAD3-55F9-4D91-96B2-084641DA9A6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpCodeAnalysis", "Roslyn\src\Compilers\CSharp\Portable\CSharpCodeAnalysis.csproj", "{B501A547-C911-4A05-AC6E-274A50DFF30E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompilersBoundTreeGenerator", "Roslyn\src\Tools\Source\CompilerGeneratorTools\Source\BoundTreeGenerator\CompilersBoundTreeGenerator.csproj", "{02459936-CD2C-4F61-B671-5C518F2A3DDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpErrorFactsGenerator", "Roslyn\src\Tools\Source\CompilerGeneratorTools\Source\CSharpErrorFactsGenerator\CSharpErrorFactsGenerator.csproj", "{288089C5-8721-458E-BE3E-78990DAB5E2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpSyntaxGenerator", "Roslyn\src\Tools\Source\CompilerGeneratorTools\Source\CSharpSyntaxGenerator\CSharpSyntaxGenerator.csproj", "{288089C5-8721-458E-BE3E-78990DAB5E2D}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Roslyn\src\Compilers\Core\SharedCollections\SharedCollections.projitems*{1ee8cad3-55f9-4d91-96b2-084641da9a6c}*SharedItemsImports = 4
+		Roslyn\src\Compilers\Core\AnalyzerDriver\AnalyzerDriver.projitems*{1ee8cad3-55f9-4d91-96b2-084641da9a6c}*SharedItemsImports = 4
+		Roslyn\src\Compilers\CSharp\CSharpAnalyzerDriver\CSharpAnalyzerDriver.projitems*{b501a547-c911-4a05-ac6e-274a50dff30e}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
@@ -65,8 +86,56 @@ Global
 		{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}.Release|x64.Build.0 = Release|x64
 		{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}.Release|x86.ActiveCfg = Release|x86
 		{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}.Release|x86.Build.0 = Release|x86
+		{1EE8CAD3-55F9-4D91-96B2-084641DA9A6C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1EE8CAD3-55F9-4D91-96B2-084641DA9A6C}.Debug|x64.Build.0 = Debug|Any CPU
+		{1EE8CAD3-55F9-4D91-96B2-084641DA9A6C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1EE8CAD3-55F9-4D91-96B2-084641DA9A6C}.Debug|x86.Build.0 = Debug|Any CPU
+		{1EE8CAD3-55F9-4D91-96B2-084641DA9A6C}.Release|x64.ActiveCfg = Release|x64
+		{1EE8CAD3-55F9-4D91-96B2-084641DA9A6C}.Release|x64.Build.0 = Release|x64
+		{1EE8CAD3-55F9-4D91-96B2-084641DA9A6C}.Release|x86.ActiveCfg = Release|Any CPU
+		{1EE8CAD3-55F9-4D91-96B2-084641DA9A6C}.Release|x86.Build.0 = Release|Any CPU
+		{B501A547-C911-4A05-AC6E-274A50DFF30E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B501A547-C911-4A05-AC6E-274A50DFF30E}.Debug|x64.Build.0 = Debug|Any CPU
+		{B501A547-C911-4A05-AC6E-274A50DFF30E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B501A547-C911-4A05-AC6E-274A50DFF30E}.Debug|x86.Build.0 = Debug|Any CPU
+		{B501A547-C911-4A05-AC6E-274A50DFF30E}.Release|x64.ActiveCfg = Release|x64
+		{B501A547-C911-4A05-AC6E-274A50DFF30E}.Release|x64.Build.0 = Release|x64
+		{B501A547-C911-4A05-AC6E-274A50DFF30E}.Release|x86.ActiveCfg = Release|Any CPU
+		{B501A547-C911-4A05-AC6E-274A50DFF30E}.Release|x86.Build.0 = Release|Any CPU
+		{02459936-CD2C-4F61-B671-5C518F2A3DDC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{02459936-CD2C-4F61-B671-5C518F2A3DDC}.Debug|x64.Build.0 = Debug|Any CPU
+		{02459936-CD2C-4F61-B671-5C518F2A3DDC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{02459936-CD2C-4F61-B671-5C518F2A3DDC}.Debug|x86.Build.0 = Debug|Any CPU
+		{02459936-CD2C-4F61-B671-5C518F2A3DDC}.Release|x64.ActiveCfg = Release|Any CPU
+		{02459936-CD2C-4F61-B671-5C518F2A3DDC}.Release|x64.Build.0 = Release|Any CPU
+		{02459936-CD2C-4F61-B671-5C518F2A3DDC}.Release|x86.ActiveCfg = Release|Any CPU
+		{02459936-CD2C-4F61-B671-5C518F2A3DDC}.Release|x86.Build.0 = Release|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2E}.Debug|x64.Build.0 = Debug|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2E}.Debug|x86.Build.0 = Debug|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2E}.Release|x64.ActiveCfg = Release|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2E}.Release|x64.Build.0 = Release|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2E}.Release|x86.ActiveCfg = Release|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2E}.Release|x86.Build.0 = Release|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2D}.Debug|x64.Build.0 = Debug|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2D}.Debug|x86.Build.0 = Debug|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2D}.Release|x64.ActiveCfg = Release|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2D}.Release|x64.Build.0 = Release|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2D}.Release|x86.ActiveCfg = Release|Any CPU
+		{288089C5-8721-458E-BE3E-78990DAB5E2D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E8EFBBD3-0C93-4695-ABDD-223CC99B6A11} = {F2BF7A74-5B8B-4428-92E1-897F1BDFA663}
+		{1EE8CAD3-55F9-4D91-96B2-084641DA9A6C} = {E8EFBBD3-0C93-4695-ABDD-223CC99B6A11}
+		{B501A547-C911-4A05-AC6E-274A50DFF30E} = {E8EFBBD3-0C93-4695-ABDD-223CC99B6A11}
+		{02459936-CD2C-4F61-B671-5C518F2A3DDC} = {E8EFBBD3-0C93-4695-ABDD-223CC99B6A11}
+		{288089C5-8721-458E-BE3E-78990DAB5E2E} = {E8EFBBD3-0C93-4695-ABDD-223CC99B6A11}
+		{288089C5-8721-458E-BE3E-78990DAB5E2D} = {E8EFBBD3-0C93-4695-ABDD-223CC99B6A11}
 	EndGlobalSection
 EndGlobal
