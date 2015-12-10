@@ -67,7 +67,7 @@ namespace Microsoft.CodeAnalysis.IL
                             new Hash()
                             {
                                 Value = sha256Hash,
-                                Algorithm = "SHA-256",
+                                Algorithm = AlgorithmKind.Sha256,
                             }
                     });
                 }
@@ -101,14 +101,14 @@ namespace Microsoft.CodeAnalysis.IL
                     {
                         if (Verbose)
                         {
-                            WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, IssueKind.Pass);
+                            WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, ResultKind.Pass);
                         }
                         break;
                     }
 
                 case MessageKind.Fail:
                     {
-                        WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, IssueKind.Error);
+                        WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, ResultKind.Error);
                         break;
                     }
 
@@ -116,7 +116,7 @@ namespace Microsoft.CodeAnalysis.IL
                     {
                         if (Verbose)
                         {
-                            WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, IssueKind.NotApplicable);
+                            WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, ResultKind.NotApplicable);
                         }
                         break;
                     }
@@ -125,26 +125,20 @@ namespace Microsoft.CodeAnalysis.IL
                     {
                         if (Verbose)
                         {
-                            WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, IssueKind.Note);
+                            WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, ResultKind.Note);
                         }
-                        break;
-                    }
-
-                case MessageKind.Pending:
-                    {
-                        WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, IssueKind.Pending);
                         break;
                     }
 
                 case MessageKind.ConfigurationError:
                 {
-                    WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, IssueKind.ConfigurationError);
+                    WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, ResultKind.ConfigurationError);
                     break;
                 }
 
                 case MessageKind.InternalError:
                     {
-                        WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, IssueKind.InternalError);
+                        WriteJsonIssue(context.PE.FileName, context.Rule.Id, message, ResultKind.InternalError);
                         break;
                     }
 
@@ -154,13 +148,13 @@ namespace Microsoft.CodeAnalysis.IL
                     }
             }
         }
-        private void WriteJsonIssue(string binary, string ruleId, string message, IssueKind issueKind)
+        private void WriteJsonIssue(string binary, string ruleId, string message, ResultKind issueKind)
         {
             Result result = new Result();
 
             result.RuleId = ruleId;
             result.FullMessage = message;
-            result.Kind = issueKind.ToString().ToLowerInvariant()[0] + issueKind.ToString().Substring(1);
+            result.Kind = issueKind;
             result.Locations = new[]{
                 new Sarif.DataContracts.Location {  
                     AnalysisTarget = new[]
