@@ -36,8 +36,8 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StaticAnalysisResultsInterchangeFormat, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Sdk.1.4.1-beta\lib\net40\StaticAnalysisResultsInterchangeFormat.dll</HintPath>
+    <Reference Include="StaticAnalysisResultsInterchangeFormat, Version=1.4.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Sdk.1.4.3-beta\lib\net40\StaticAnalysisResultsInterchangeFormat.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -96,7 +96,6 @@
     <Compile Include="FailureReason.cs" />
     <Compile Include="ExportCommand.cs" />
     <Compile Include="ExportOptions.cs" />
-    <Compile Include="IssueKind.cs" />
     <Compile Include="PrivateErrorCode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
