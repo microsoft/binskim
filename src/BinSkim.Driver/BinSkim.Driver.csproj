@@ -100,10 +100,10 @@
     <Compile Include="PrivateErrorCode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoslynAnalyzer\ActionsMap.cs" />
+    <Compile Include="RoslynAnalyzer\ActionMap.cs" />
     <Compile Include="RoslynAnalyzer\RoslynCompilationStartAnalysisContext.cs" />
     <Compile Include="RoslynAnalyzer\RoslynExtensionMethods.cs" />
-    <Compile Include="RoslynAnalyzer\RosylynAnalysisContext.cs" />
+    <Compile Include="RoslynAnalyzer\RoslynAnalysisContext.cs" />
     <Compile Include="RoslynAnalyzer\ILDiagnosticsAnalyzer.cs" />
     <Compile Include="RoslynAnalyzer\RoslynSymbolVisitor.cs" />
     <Compile Include="SarifLogger.cs" />
