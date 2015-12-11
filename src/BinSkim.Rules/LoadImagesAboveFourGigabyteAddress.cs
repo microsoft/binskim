@@ -16,6 +16,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public string Name { get { return nameof(LoadImageAboveFourGigabyteAddress); } }
 
+        public string FullDescription
+        {
+            get { return RulesResources.LoadImageAboveFourGigabyteAddress_Description; }
+        }
+
         public void Initialize(BinaryAnalyzerContext context) { return; }
 
         private static readonly Version s_winCeVersion70 = new Version(7, 0);

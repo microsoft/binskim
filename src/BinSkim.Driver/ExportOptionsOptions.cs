@@ -5,10 +5,10 @@ using CommandLine;
 
 namespace Microsoft.CodeAnalysis.IL
 {
-    [Verb("export", HelpText = "Export rule options to an XML file that can be edited and used to configure subsequent analysis.")]
-    internal class ExportOptions
+    [Verb("exportOptions", HelpText = "Export rule options to an XML file that can be edited and used to configure subsequent analysis.")]
+    internal class ExportOptionsOptions
     {
         [Value(0, HelpText = "Output path for exported analysis options", Required = true)]
-        public string OutputPath { get; set; }
+        public string OutputFilePath { get; set; }
     }
 }

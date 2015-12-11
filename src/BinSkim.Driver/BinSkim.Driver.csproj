@@ -9,7 +9,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
-    <RootNamespace>Microsoft.CodeAnalysis.BinSkim</RootNamespace>
+    <RootNamespace>Microsoft.CodeAnalysis.IL</RootNamespace>
   </PropertyGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.props))\build.props" />
   <PropertyGroup>
@@ -36,8 +36,8 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StaticAnalysisResultsInterchangeFormat, Version=1.4.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Sdk.1.4.3-beta\lib\net40\StaticAnalysisResultsInterchangeFormat.dll</HintPath>
+    <Reference Include="StaticAnalysisResultsInterchangeFormat, Version=1.4.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Sdk.1.4.6-beta\lib\net40\StaticAnalysisResultsInterchangeFormat.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -66,10 +66,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Reflection.Metadata, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Reflection.Metadata.1.1.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -83,7 +85,9 @@
     <Compile Include="AnalyzeOptions.cs" />
     <Compile Include="AnalyzeStatistics.cs" />
     <Compile Include="ConsoleLogger.cs" />
-    <Compile Include="VersionConstants.cs" />
+    <Compile Include="DriverUtilities.cs" />
+    <Compile Include="ExportRulesCommand.cs" />
+    <Compile Include="ExportRulesOptions.cs" />
     <Compile Include="DriverCommand.cs" />
     <Compile Include="DriverResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -94,8 +98,8 @@
     <Compile Include="DumpOptions.cs" />
     <Compile Include="ErrorRules.cs" />
     <Compile Include="FailureReason.cs" />
-    <Compile Include="ExportCommand.cs" />
-    <Compile Include="ExportOptions.cs" />
+    <Compile Include="ExportOptionsCommand.cs" />
+    <Compile Include="ExportOptionsOptions.cs" />
     <Compile Include="PrivateErrorCode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -108,7 +112,6 @@
     <Compile Include="SarifLogger.cs" />
     <Compile Include="StatisticsLogger.cs" />
     <Compile Include="..\Shared\SharedAssemblyInfo.cs" />
-    <Compile Include="UnhandledExceptionAnalyzingTarget.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

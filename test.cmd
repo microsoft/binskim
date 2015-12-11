@@ -6,7 +6,7 @@ SETLOCAL
 
 set MAJOR=1
 set MINOR=2
-set PATCH=5
+set PATCH=6
 set PRERELEASE=-beta
 
 rd /s /q bld
@@ -17,6 +17,6 @@ msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Rele
 
 md bld\bin\nuget
 
-.nuget\NuGet.exe pack .\src\Nuget\BinSkim.Driver.nuspec -Symbols -Properties id=BinSkim;major=%MAJOR%;minor=%MINOR%;patch=%PATCH%;prerelease=%PRERELEASE% -Verbosity Quiet -BasePath .\bld\bin\BinSkim.Driver -OutputDirectory .\bld\bin\Nuget
+.nuget\NuGet.exe pack .\src\Nuget\BinSkim.nuspec -Symbols -Properties id=BinSkim;major=%MAJOR%;minor=%MINOR%;patch=%PATCH%;prerelease=%PRERELEASE% -Verbosity Quiet -BasePath .\bld\bin\BinSkim.Driver -OutputDirectory .\bld\bin\Nuget
 
 src\packages\xunit.runner.console.2.1.0\tools\xunit.console.x86.exe bld\bin\BinSkim.Rules.FunctionalTests\x86_Release\BinSkim.Rules.FunctionalTests.dll

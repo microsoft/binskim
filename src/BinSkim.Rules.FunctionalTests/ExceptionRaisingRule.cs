@@ -49,6 +49,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
+        public string FullDescription
+        {
+            get { return "Test Rule Description"; }
+        }
+
         public void Analyze(BinaryAnalyzerContext context)
         {
             if (_exceptionCondition == ExceptionCondition.InvokingAnalyze)

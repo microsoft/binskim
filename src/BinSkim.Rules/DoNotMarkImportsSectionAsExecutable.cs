@@ -15,6 +15,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public string Name { get { return nameof(DoNotMarkImportsSectionAsExecutable); } }
 
+        public string FullDescription
+        {
+            get { return RulesResources.DoNotMarkImportsSectionAsExecutable_Description; }
+        }
+
         public void Initialize(BinaryAnalyzerContext context) { return; }
 
         public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)

@@ -22,6 +22,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public string Name { get { return nameof(EnableStackProtection); } }
 
+        public string FullDescription
+        {
+            get { return RulesResources.EnableStackProtection_Description; }
+        }
+
         public void Initialize(BinaryAnalyzerContext context) { return; }
 
         public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)

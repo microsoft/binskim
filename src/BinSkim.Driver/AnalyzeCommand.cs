@@ -178,7 +178,8 @@ namespace Microsoft.CodeAnalysis.IL
                                 analyzeOptions.OutputFilePath,
                                 analyzeOptions.Verbose,
                                 targets,
-                                analyzeOptions.ComputeTargetsHash)),
+                                analyzeOptions.ComputeTargetsHash,
+                                VersionConstants.Prerelease)),
                     (ex) =>
                     {
                         LogExceptionCreatingLogFile(filePath, context, ex);

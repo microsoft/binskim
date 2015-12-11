@@ -16,6 +16,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public string Name { get { return nameof(EnableControlFlowGuard); } }
 
+        public string FullDescription
+        {
+            get { return RulesResources.EnableControlFlowGuard_Description; }
+        }
+
         public const UInt32 IMAGE_DLLCHARACTERISTICS_CONTROLFLOWGUARD = 0x4000;
         public const UInt32 IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG = 10;
         public const UInt32 IMAGE_GUARD_CF_INSTRUMENTED = 0x0100;

@@ -128,6 +128,12 @@
     <value>An exception was raised attempting to load analysis target '{0}'. Exception information:
 {1}</value>
   </data>
+  <data name="InvalidConfiguration_Description" xml:space="preserve">
+    <value>An unhandled exception was raised while configuring analysis for execution.</value>
+  </data>
+  <data name="InvalidPE_Description" xml:space="preserve">
+    <value>A binary was not analyzed as the it does not appear to be a valid portable executable.</value>
+  </data>
   <data name="NoAnalyzerPathsSpecified" xml:space="preserve">
     <value>No analyzer paths specified</value>
   </data>
@@ -137,6 +143,9 @@
   <data name="UnhandledEngineException" xml:space="preserve">
     <value>An unhandled exception was raised during analysis:
 {0}</value>
+  </data>
+  <data name="UnhandledEngineException_Description" xml:space="preserve">
+    <value>An unhandled exception was raised in the analysis engine.</value>
   </data>
   <data name="UnhandledExceptionCheckingApplicability" xml:space="preserve">
     <value>An unhandled exception was raised attempting to determine whether '{0}' is a valid analysis target for check '{1}' (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing image metadata and not specific to the rule, however. Exception information:
@@ -153,5 +162,8 @@
   <data name="UnhandledRuleExceptionAnalyzingTarget" xml:space="preserve">
     <value>An unhandled exception was raised analyzing '{0}' for check '{1}' (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing image metadata and not specific to the rule, however. Exception information:
 {2}</value>
+  </data>
+  <data name="UnhandledRuleException_Description" xml:space="preserve">
+    <value>An unhandled exception was raised in an analysis rule, indicating an issue with the rule itself or a problem inspecting the binary being analyzed.</value>
   </data>
 </root>

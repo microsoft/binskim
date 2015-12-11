@@ -21,11 +21,13 @@ namespace Microsoft.CodeAnalysis.IL
         {
             return Parser.Default.ParseArguments<
                 AnalyzeOptions,
-                ExportOptions,
+                ExportRulesOptions,
+                ExportOptionsOptions,
                 DumpOptions>(args)
               .MapResult(
                 (AnalyzeOptions analyzeOptions) => new AnalyzeCommand().Run(analyzeOptions),
-                (ExportOptions exportOptions) => new ExportCommand().Run(exportOptions),
+                (ExportRulesOptions exportRulesOptions) => new ExportRulesCommand().Run(exportRulesOptions),
+                (ExportOptionsOptions exportOptionsOptions) => new ExportOptionsCommand().Run(exportOptionsOptions),
                 (DumpOptions dumpOptions) => new DumpCommand().Run(dumpOptions),
                 errs => 1);
         }

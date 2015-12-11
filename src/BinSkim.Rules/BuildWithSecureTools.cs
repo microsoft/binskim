@@ -22,6 +22,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public string Name { get { return nameof(BuildWithSecureTools); } }
 
+        public string FullDescription
+        {
+            get { return RulesResources.BuildWithSecureTools_Description; }
+        }
+
         public IEnumerable<IOption> GetOptions()
         {
             return new List<IOption>

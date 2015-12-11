@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.IL {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.CodeAnalysis.BinSkim.DriverResources", typeof(DriverResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.CodeAnalysis.IL.DriverResources", typeof(DriverResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -90,6 +90,24 @@ namespace Microsoft.CodeAnalysis.IL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An unhandled exception was raised while configuring analysis for execution..
+        /// </summary>
+        internal static string InvalidConfiguration_Description {
+            get {
+                return ResourceManager.GetString("InvalidConfiguration_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A binary was not analyzed as the it does not appear to be a valid portable executable..
+        /// </summary>
+        internal static string InvalidPE_Description {
+            get {
+                return ResourceManager.GetString("InvalidPE_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No analyzer paths specified.
         /// </summary>
         internal static string NoAnalyzerPathsSpecified {
@@ -114,6 +132,15 @@ namespace Microsoft.CodeAnalysis.IL {
         internal static string UnhandledEngineException {
             get {
                 return ResourceManager.GetString("UnhandledEngineException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unhandled exception was raised in the analysis engine..
+        /// </summary>
+        internal static string UnhandledEngineException_Description {
+            get {
+                return ResourceManager.GetString("UnhandledEngineException_Description", resourceCulture);
             }
         }
         
@@ -144,6 +171,15 @@ namespace Microsoft.CodeAnalysis.IL {
         internal static string UnhandledExceptionLoadingRoslynAnalyzer {
             get {
                 return ResourceManager.GetString("UnhandledExceptionLoadingRoslynAnalyzer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unhandled exception was raised in an analysis rule, indicating an issue with the rule itself or a problem inspecting the binary being analyzed..
+        /// </summary>
+        internal static string UnhandledRuleException_Description {
+            get {
+                return ResourceManager.GetString("UnhandledRuleException_Description", resourceCulture);
             }
         }
         

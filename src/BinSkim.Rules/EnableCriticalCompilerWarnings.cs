@@ -25,6 +25,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public string Name { get { return nameof(EnableCriticalCompilerWarnings); } }
 
+        public string FullDescription
+        {
+            get { return RulesResources.EnableCriticalCompilerWarnings_Description; }
+        }
+
         public void Initialize(BinaryAnalyzerContext context) { return; }
 
         public IEnumerable<IOption> GetOptions()

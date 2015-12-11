@@ -10,20 +10,38 @@ namespace Microsoft.CodeAnalysis.IL
     {
         public string Id { get; set; }
         public string Name { get; set; }
+
+        public string FullDescription { get; set; }
     }
 
     internal static class ErrorRules
     {
         public static IRuleContext UnhandledRuleException = new ErrorRuleContext()
-        { Id = "BA0998", Name = nameof(UnhandledRuleException) };
+        {
+            Id = "BA0998",
+            Name = nameof(UnhandledRuleException),
+            FullDescription = DriverResources.UnhandledRuleException_Description
+        };
 
         public static IRuleContext UnhandledEngineException = new ErrorRuleContext()
-        { Id = "BA0999", Name = nameof(UnhandledEngineException) };
+        {
+            Id = "BA0999",
+            Name = nameof(UnhandledEngineException),
+            FullDescription = DriverResources.UnhandledEngineException_Description
+        };
 
         public static IRuleContext InvalidPE = new ErrorRuleContext()
-        { Id = "BA1001", Name = nameof(InvalidPE) };
+        {
+            Id = "BA1001",
+            Name = nameof(InvalidPE),
+            FullDescription = DriverResources.InvalidPE_Description
+        };
 
         public static IRuleContext InvalidConfiguration = new ErrorRuleContext()
-        { Id = "BA1002", Name = nameof(InvalidConfiguration) };
+        {
+            Id = "BA1002",
+            Name = nameof(InvalidConfiguration),
+            FullDescription = DriverResources.InvalidConfiguration_Description
+        };
     }
 }
