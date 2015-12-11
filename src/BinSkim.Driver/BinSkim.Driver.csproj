@@ -76,6 +76,7 @@
     <Compile Include="AnalyzeOptions.cs" />
     <Compile Include="AnalyzeStatistics.cs" />
     <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="RoslynAnalyzer\ILSymbols.cs" />
     <Compile Include="RoslynAnalyzer\ILImporter.Driver.cs" />
     <Compile Include="RoslynAnalyzer\ILImporter.cs" />
     <Compile Include="RoslynAnalyzer\ILOpcode.cs" />
