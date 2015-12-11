@@ -22,6 +22,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public string Name { get { return nameof(DoNotShipVulnerableBinaries); } }
 
+        public string FullDescription
+        {
+            get { return RulesResources.DoNotShipVulnerableBinaries_Description; }
+        }
+
         public void Initialize(BinaryAnalyzerContext context) { return; }
 
         public IEnumerable<IOption> GetOptions()

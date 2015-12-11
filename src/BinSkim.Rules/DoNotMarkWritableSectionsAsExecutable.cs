@@ -17,6 +17,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public string Name { get { return nameof(DoNotMarkWritableSectionsAsShared); } }
 
+        public string FullDescription
+        {
+            get { return RulesResources.DoNotMarkWritableSectionsAsShared_Description; }
+        }
+
         private const int PAGE_SIZE = 0x1000;
 
         public void Initialize(BinaryAnalyzerContext context) { return; }

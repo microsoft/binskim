@@ -66,6 +66,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BinaryParsersResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="VersionConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

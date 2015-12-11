@@ -4,7 +4,7 @@
     <ProjectGuid>{494AC26C-9591-4137-A3D4-5CD9B8D169DB}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup>
-    <RootNamespace>Microsoft.CodeAnalysis.BinSkim.Rules</RootNamespace>
+    <RootNamespace>Microsoft.CodeAnalysis.IL.Rules</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyName>BinSkim.Rules</AssemblyName>

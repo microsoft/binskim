@@ -16,6 +16,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public string Name { get { return nameof(EnableSafeSEH); } }
 
+        public string FullDescription
+        {
+            get { return RulesResources.EnableSafeSEH_Description; }
+        }
+
         public void Initialize(BinaryAnalyzerContext context) { return; }
 
         public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)

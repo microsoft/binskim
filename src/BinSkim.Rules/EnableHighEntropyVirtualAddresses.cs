@@ -16,6 +16,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public string Name { get { return nameof(EnableHighEntropyVirtualAddresses); } }
 
+        public string FullDescription
+        {
+            get { return RulesResources.EnableHighEntropyVirtualAddresses_Description; }
+        }
+
         private static readonly Version s_minHighEntropyVersion = new Version(17, 0, 0, 0);
 
         public void Initialize(BinaryAnalyzerContext context) { return; }

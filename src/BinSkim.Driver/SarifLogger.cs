@@ -7,13 +7,13 @@ using System.IO;
 using System.Reflection;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat;
-using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat.DataContracts;
-using Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat.Writers;
+using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.DataContracts;
+using Microsoft.CodeAnalysis.Sarif.Writers;
 
 using Newtonsoft.Json;
 
-using Sarif = Microsoft.CodeAnalysis.StaticAnalysisResultsInterchangeFormat;
+using Sarif = Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -24,11 +24,26 @@ namespace Microsoft.CodeAnalysis.IL
         private JsonTextWriter _jsonTextWriter;
         private ResultLogJsonWriter _issueLogJsonWriter;
 
+        public static ToolInfo CreateDefaultToolInfo(string prereleaseInfo = null)
+        {
+            Assembly assembly = typeof(SarifLogger).Assembly;
+            string name = Path.GetFileNameWithoutExtension(assembly.Location);
+            Version version = assembly.GetName().Version;
+
+            ToolInfo toolInfo = new ToolInfo();
+            toolInfo.Name = name;
+            toolInfo.Version = version.Major.ToString() + "." + version.Minor.ToString() + "." + version.Build.ToString();
+            toolInfo.FullName = name + " " + toolInfo.Version + (prereleaseInfo ?? "");
+
+            return toolInfo;
+        }
+
         public SarifLogger(
             string outputFilePath,
             bool verbose,
             IEnumerable<string> analysisTargets,
-            bool computeTargetsHash)
+            bool computeTargetsHash,
+            string prereleaseInfo)
         {
             Verbose = verbose;
 
@@ -41,13 +56,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             _issueLogJsonWriter = new ResultLogJsonWriter(_jsonTextWriter);
 
-            Assembly binskimAssembly = this.GetType().Assembly;
-
-            Version version = binskimAssembly.GetName().Version;
-            ToolInfo toolInfo = new ToolInfo();
-            toolInfo.Name = "BinSkim";
-            toolInfo.Version = version.Major.ToString() + "." + version.Minor.ToString() + "." + version.Build.ToString();
-            toolInfo.FullName = "BinSkim " + toolInfo.Version + "-beta";
+            var toolInfo = CreateDefaultToolInfo(prereleaseInfo);
 
             RunInfo runInfo = new RunInfo();
             runInfo.AnalysisTargets = new List<FileReference>();

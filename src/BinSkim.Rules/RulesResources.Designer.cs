@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.CodeAnalysis.BinSkim.Rules.RulesResources", typeof(RulesResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.CodeAnalysis.IL.Rules.RulesResources", typeof(RulesResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -70,6 +70,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application code should be compiled with the most up-to-date tool sets possible in order to take advantage of the most current compile-time security features..
+        /// </summary>
+        internal static string BuildWithSecureTools_Description {
+            get {
+                return ResourceManager.GetString("BuildWithSecureTools_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}, linker version {2}). More recent tool chains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warnin [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BuildWithSecureTools_Fail {
@@ -84,6 +93,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BuildWithSecureTools_Pass {
             get {
                 return ResourceManager.GetString("BuildWithSecureTools_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been s [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DoNotDisableStackProtectionForFunctions_Description {
+            get {
+                return ResourceManager.GetString("DoNotDisableStackProtectionForFunctions_Description", resourceCulture);
             }
         }
         
@@ -106,7 +124,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was built with a version of {1} which is subject to the following issues: {2}. To resolve this, {3}. The source files that triggered this were: {4}.
+        ///   Looks up a localized string similar to Binaries should not take dependencies on other code with known security vulnerabilities..
+        /// </summary>
+        internal static string DoNotIncorporateVulnerableBinaries_Description {
+            get {
+                return ResourceManager.GetString("DoNotIncorporateVulnerableBinaries_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was built with a dependency on version of {1}, which is subject to the following issues: {2}. To resolve this, {3}. The source files that triggered this were: {4}.
         /// </summary>
         internal static string DoNotIncorporateVulnerableBinaries_Fail {
             get {
@@ -120,6 +147,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string DoNotIncorporateVulnerableBinaries_Pass {
             get {
                 return ResourceManager.GetString("DoNotIncorporateVulnerableBinaries_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your toolchain to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both att [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DoNotMarkImportsSectionAsExecutable_Description {
+            get {
+                return ResourceManager.GetString("DoNotMarkImportsSectionAsExecutable_Description", resourceCulture);
             }
         }
         
@@ -169,6 +205,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process commu [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DoNotMarkWritableSectionsAsShared_Description {
+            get {
+                return ResourceManager.GetString("DoNotMarkWritableSectionsAsShared_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across proce [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DoNotMarkWritableSectionsAsShared_Fail {
@@ -192,6 +237,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string DoNotModifyStackProtectionCookie_CouldNotLocateCookie_Fail {
             get {
                 return ResourceManager.GetString("DoNotModifyStackProtectionCookie_CouldNotLocateCookie_Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the &quot;security cookie&quot;, to detect these buffer overflows. This &apos;cookie&apos; is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DoNotModifyStackProtectionCookie_Description {
+            get {
+                return ResourceManager.GetString("DoNotModifyStackProtectionCookie_Description", resourceCulture);
             }
         }
         
@@ -223,16 +277,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning..
-        /// </summary>
-        internal static string DoNotShipVulnerabilities_Fail {
-            get {
-                return ResourceManager.GetString("DoNotShipVulnerabilities_Fail", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to vulnerable binary name and version metadata .
+        ///   Looks up a localized string similar to vulnerable binary name and version metadata.
         /// </summary>
         internal static string DoNotShipVulnerabilities_MissingPolicy_InternalError {
             get {
@@ -250,11 +295,47 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do not ship obsolete libraries for which there are known security vulnerabilities..
+        /// </summary>
+        internal static string DoNotShipVulnerableBinaries_Description {
+            get {
+                return ResourceManager.GetString("DoNotShipVulnerableBinaries_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning..
+        /// </summary>
+        internal static string DoNotShipVulnerableBinaries_Fail {
+            get {
+                return ResourceManager.GetString("DoNotShipVulnerableBinaries_Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to vulnerable binary name and version metadata .
+        /// </summary>
+        internal static string DoNotShipVulnerableBinaries_MissingPolicy_InternalError {
+            get {
+                return ResourceManager.GetString("DoNotShipVulnerableBinaries_MissingPolicy_InternalError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is not known to be an obsolete binary that is vulnerable to one or more security problems..
         /// </summary>
         internal static string DoNotShipVulnerableBinaries_Pass {
             get {
                 return ResourceManager.GetString("DoNotShipVulnerableBinaries_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Binaries should linked as DYNAMICBASE in order to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later..
+        /// </summary>
+        internal static string EnableAddressSpaceLayoutRandomization_Description {
+            get {
+                return ResourceManager.GetString("EnableAddressSpaceLayoutRandomization_Description", resourceCulture);
             }
         }
         
@@ -295,7 +376,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the control flow guard mitigation..
+        ///   Looks up a localized string similar to Binaries should enable the compiler control guard feature (CFG) at build time in order to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program..
+        /// </summary>
+        internal static string EnableControlFlowGuard_Description {
+            get {
+                return ResourceManager.GetString("EnableControlFlowGuard_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /GUARD:CF on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG..
         /// </summary>
         internal static string EnableControlFlowGuard_Fail {
             get {
@@ -304,7 +394,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0} does not contain a load configuration table, indicating that it does not enable the control flow guard mitigation..
+        ///   Looks up a localized string similar to &apos;{0} does not contain a load configuration table, indicating that it does not enable the control flow guard mitigation. As a result, attackers that successfully exploit a program vulnerability may be able to redirect execution flow to unexpected, unsafe locations..
         /// </summary>
         internal static string EnableControlFlowGuard_NoLoadConfigTable_Fail {
             get {
@@ -313,11 +403,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; enables the control flow guard mitigation..
+        ///   Looks up a localized string similar to &apos;{0}&apos; enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location..
         /// </summary>
         internal static string EnableControlFlowGuard_Pass {
             get {
                 return ResourceManager.GetString("EnableControlFlowGuard_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted..
+        /// </summary>
+        internal static string EnableCriticalCompilerWarnings_Description {
+            get {
+                return ResourceManager.GetString("EnableCriticalCompilerWarnings_Description", resourceCulture);
             }
         }
         
@@ -360,6 +459,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR..
+        /// </summary>
+        internal static string EnableHighEntropyVirtualAddresses_Description {
+            get {
+                return ResourceManager.GetString("EnableHighEntropyVirtualAddresses_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy allows Address Space Layout Randomization to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line..
         /// </summary>
         internal static string EnableHighEntropyVirtualAddresses_NeitherHighEntropyVANorLargeAddressAware_FAIL {
@@ -392,6 +500,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string EnableHighEntropyVirtualAddresses_Pass {
             get {
                 return ResourceManager.GetString("EnableHighEntropyVirtualAddresses_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X86 binaries should enable the SafeSEH mitigation in order to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to su [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string EnableSafeSEH_Description {
+            get {
+                return ResourceManager.GetString("EnableSafeSEH_Description", resourceCulture);
             }
         }
         
@@ -459,6 +576,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Binaries should be built with the stack protector buffer security feature (/GS) enabled in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line..
+        /// </summary>
+        internal static string EnableStackProtection_Description {
+            get {
+                return ResourceManager.GetString("EnableStackProtection_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}.
         /// </summary>
         internal static string EnableStackProtection_Fail {
@@ -482,6 +608,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string EnableStackProtection_UnknownModuleLanguage_Fail {
             get {
                 return ResourceManager.GetString("EnableStackProtection_UnknownModuleLanguage_Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary&apos;s entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To re [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string InitializeStackProtection_Description {
+            get {
+                return ResourceManager.GetString("InitializeStackProtection_Description", resourceCulture);
             }
         }
         
@@ -522,6 +657,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A binary was not analyzed as the it does not appear to be a valid portable executable..
+        /// </summary>
+        internal static string InvalidPE_Description {
+            get {
+                return ResourceManager.GetString("InvalidPE_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 64-bit images should have a preferred base address above the 4GB boundary in order to prevent triggering an Address Space Layour Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE fro [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string LoadImageAboveFourGigabyteAddress_Description {
+            get {
+                return ResourceManager.GetString("LoadImageAboveFourGigabyteAddress_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from co [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string LoadImageAboveFourGigabyteAddress_Fail {
@@ -536,6 +689,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string LoadImageAboveFourGigabyteAddress_Pass {
             get {
                 return ResourceManager.GetString("LoadImageAboveFourGigabyteAddress_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Binaries should be marked as NX compatible in order to help prevent execution of untrusted data as code. The NXCompat bit, also known as &quot;Data Execution Prevention&quot; (DEP) or &quot;Execute Disable&quot; (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MarkImageAsNXCompatible_Description {
+            get {
+                return ResourceManager.GetString("MarkImageAsNXCompatible_Description", resourceCulture);
             }
         }
         
