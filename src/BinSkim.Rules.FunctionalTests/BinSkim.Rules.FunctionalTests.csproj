@@ -66,6 +66,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Reflection.Metadata, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.1.0\lib\dotnet5.2\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
@@ -90,6 +94,7 @@
     <Compile Include="AnalyzeCommandTests.cs" />
     <Compile Include="ExceptionCondition.cs" />
     <Compile Include="ExceptionRaisingRule.cs" />
+    <Compile Include="ILImporterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ILDiagnosticsAnalyzerTests.cs" />
     <Compile Include="RoslynAnalysisContextTests.cs" />
