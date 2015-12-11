@@ -6,7 +6,7 @@ SETLOCAL
 
 set MAJOR=1
 set MINOR=2
-set PATCH=6
+set PATCH=7
 set PRERELEASE=-beta
 
 rd /s /q bld
