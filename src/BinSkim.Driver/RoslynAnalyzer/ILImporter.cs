@@ -560,9 +560,9 @@ namespace Microsoft.CodeAnalysis.IL
                 case ILOpcode.beq:
                     return BinaryOperationKind.FloatingEquals;
                 case ILOpcode.bge:
-                    return BinaryOperationKind.FloatingGreaterThan;
-                case ILOpcode.bgt:
                     return BinaryOperationKind.FloatingGreaterThanOrEqual;
+                case ILOpcode.bgt:
+                    return BinaryOperationKind.FloatingGreaterThan;
                 case ILOpcode.ble:
                     return BinaryOperationKind.FloatingLessThanOrEqual;
                 case ILOpcode.blt:
