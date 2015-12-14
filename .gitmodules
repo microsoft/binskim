@@ -1,3 +1,6 @@
 [submodule "src/Roslyn"]
 	path = src/Roslyn
 	url = https://github.com/nguerrera/Roslyn
+[submodule "src/CoreFx"]
+	path = src/CoreFx
+	url = https://github.com/nguerrera/corefx
