@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+using System.Reflection.Metadata.Ecma335;
 
 using Microsoft.CodeAnalysis.Semantics;
 
@@ -21,8 +22,10 @@ namespace Microsoft.CodeAnalysis.IL
         private ExceptionRegion[] _exceptionRegions;
         private List<IStatement> _statements;
         private int _labelCount;
+        private IMetadataModuleSymbol _module;
+        private MetadataReader _reader;
 
-        public ILImporter(Compilation compilation, IMethodSymbol method, MethodBodyBlock body)
+        public ILImporter(Compilation compilation, MetadataReader reader, IMethodSymbol method, MethodBodyBlock body)
         {
             if (body.ExceptionRegions.Length != 0)
             {
@@ -30,7 +33,9 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             _compilation = compilation;
+            _reader = reader;
             _method = method;
+            _module = (IMetadataModuleSymbol)method.ContainingModule;
             _ilBytes = body.GetILBytes();
             _exceptionRegions = new ExceptionRegion[0];
             _statements = new List<IStatement>();
@@ -77,6 +82,11 @@ namespace Microsoft.CodeAnalysis.IL
             Push(new StackValue(kind, expression));
         }
 
+        private void Push(IExpression expression)
+        {
+            Push(GetStackKind(expression.ResultType), expression);
+        }
+
         private StackValue Pop()
         {
             if (_stackTop == 0)
@@ -89,11 +99,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void Append(IStatement statement)
         {
-            ReqireEmptyStackForNow();
+            RequireEmptyStackForNow();
             _statements.Add(statement);
         }
 
-        private void ReqireEmptyStackForNow()
+        private void RequireEmptyStackForNow()
         {
             if (_stackTop != 0)
             {
@@ -181,7 +191,58 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportCall(ILOpcode opcode, int token)
         {
-            throw new NotImplementedException();
+            var callee = (IMethodSymbol)GetSymbolFromToken(token);
+
+            if (callee.IsVararg)
+            {
+                throw new NotImplementedException();
+            }
+
+            var arguments = PopArguments(callee.Parameters);
+
+            switch (opcode)
+            {
+                case ILOpcode.call:
+                case ILOpcode.callvirt:
+                    var isVirtual = opcode == ILOpcode.callvirt;
+                    var instance = callee.IsStatic ? null : Pop().Expression;
+                    var invocation = new InvocationExpression(isVirtual, instance, callee, arguments);
+
+                    if (callee.ReturnsVoid)
+                    {
+                        Append(new ExpressionStatement(invocation));
+                    }
+                    else
+                    {
+                        Push(invocation);
+                    }
+                    break;
+
+                case ILOpcode.newobj:
+                    Push(new ObjectCreationExpression(callee, arguments));
+                    break;
+
+                case ILOpcode.calli:
+                    throw new NotImplementedException();
+
+                default:
+                    throw Unreachable();
+            }
+        }
+
+        private ImmutableArray<IArgument> PopArguments(ImmutableArray<IParameterSymbol> parameters)
+        {
+            int count = parameters.Length;
+
+            var args = ImmutableArray.CreateBuilder<IArgument>(count);
+            args.Count = count;
+
+            for (int i = count - 1; i >= 0; i--)
+            {
+                args[i] = new Argument(parameters[i], Pop().Expression);
+            }
+
+            return args.MoveToImmutable();
         }
 
         private void ImportLdFtn(int token, ILOpcode opCode)
@@ -226,7 +287,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportFallthrough(BasicBlock next)
         {
-            ReqireEmptyStackForNow();
+            RequireEmptyStackForNow();
             MarkBasicBlock(next);
         }
 
@@ -344,7 +405,9 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLoadString(int token)
         {
-            throw new NotImplementedException();
+            Push(
+                StackValueKind.ObjRef,
+                new LiteralExpression(_reader.GetUserString(MetadataTokens.UserStringHandle(token)), StringType));
         }
 
         private void ImportInitObj(int token)
@@ -628,6 +691,34 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
+        private StackValueKind GetStackKind(ITypeSymbol type)
+        {
+            switch (type.SpecialType)
+            {
+                case SpecialType.System_Byte:
+                case SpecialType.System_SByte:
+                case SpecialType.System_Char:
+                case SpecialType.System_Int16:
+                case SpecialType.System_UInt16:
+                case SpecialType.System_Int32:
+                case SpecialType.System_UInt32:
+                    return StackValueKind.Int32;
+                case SpecialType.System_Single:
+                case SpecialType.System_Double:
+                    return StackValueKind.Float;
+                case SpecialType.System_Int64:
+                case SpecialType.System_UInt64:
+                    return StackValueKind.Int64;
+                case SpecialType.System_IntPtr:
+                case SpecialType.System_UIntPtr:
+                    return StackValueKind.NativeInt;
+
+                default:
+                    // TODO: ByRef
+                    return type.IsValueType ? StackValueKind.ValueType : StackValueKind.ObjRef;
+            }
+        }
+
         private static StackValueKind GetStackKind(StackValueKind lhsKind, StackValueKind rhsKind)
         {
             // the ordering of StackValueKind is chosen to make this work (assuming valid IL)
@@ -659,7 +750,12 @@ namespace Microsoft.CodeAnalysis.IL
 
         private ITypeSymbol GetTypeFromToken(int token)
         {
-            throw new NotImplementedException();
+            return (ITypeSymbol)GetSymbolFromToken(token);
+        }
+
+        private ISymbol GetSymbolFromToken(int token)
+        {
+            return _module.GetSymbolForMetadataHandle(MetadataTokens.EntityHandle(token));
         }
 
         private ILabelSymbol GetOrCreateLabel(BasicBlock block)
@@ -679,6 +775,7 @@ namespace Microsoft.CodeAnalysis.IL
         private ITypeSymbol Int64Type => _compilation.GetSpecialType(SpecialType.System_Int64);
         private ITypeSymbol IntPtrType => _compilation.GetSpecialType(SpecialType.System_IntPtr);
         private ITypeSymbol ObjectType => _compilation.GetSpecialType(SpecialType.System_Object);
+        private ITypeSymbol StringType => _compilation.GetSpecialType(SpecialType.System_String);
 
         private enum WellKnownType
         {

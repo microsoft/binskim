@@ -28,18 +28,23 @@ namespace Microsoft.CodeAnalysis.IL
                 var compilation = CSharpCompilation.Create("_", references: new[] { reference });
                 var target = (IAssemblySymbol)compilation.GetAssemblyOrModuleSymbol(reference);
 
-                var type = target.GetTypeByMetadataName("Microsoft.CodeAnalysis.IL.ILImporterTests");
-                var method = (IMethodSymbol)type.GetMembers().Single(m => m.Name == "Scratch");
+                var type = target.GetTypeByMetadataName(typeof(ILImporterTests).FullName);
+                var method = (IMethodSymbol)type.GetMembers().Single(m => m.Name == nameof(Scratch));
                 var handle = (MethodDefinitionHandle)((IMetadataSymbol)method).MetadataHandle;
                 var methodDef = metadataReader.GetMethodDefinition(handle);
                 var methodBody = peReader.GetMethodBody(methodDef.RelativeVirtualAddress);
 
-                var importer = new ILImporter(compilation, method, methodBody);
+                var importer = new ILImporter(compilation, metadataReader, method, methodBody);
                 var body = importer.Import();
             }
         }
 
         public void Scratch()
+        {
+            StaticMethod("hello", 42);
+        }
+
+        public static void StaticMethod(string x, int y)
         {
         }
     }
