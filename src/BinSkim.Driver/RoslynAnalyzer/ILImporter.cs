@@ -519,9 +519,9 @@ namespace Microsoft.CodeAnalysis.IL
                     return GetFloatBranchKind(opcode);
                 case StackValueKind.ObjRef:
                     return GetObjectBranchKind(opcode);
+                default:
+                    throw new NotImplementedException(); // should byref compares be integer compares?
             }
-
-            throw new BadImageFormatException();
         }
 
         private static BinaryOperationKind GetIntegerBranchKind(ILOpcode opcode)
@@ -642,14 +642,12 @@ namespace Microsoft.CodeAnalysis.IL
                     return new LiteralExpression(0, Int32Type);
                 case StackValueKind.Int64:
                     return new LiteralExpression(0L, Int64Type);
-                case StackValueKind.Float:
-                    return new LiteralExpression(0.0, DoubleType);
                 case StackValueKind.ObjRef:
                     return new LiteralExpression(null, ObjectType);
                 case StackValueKind.NativeInt:
                     return new LiteralExpression(IntPtr.Zero, IntPtrType);
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(); // Only use of float here so far, via brfalse/brtrue would be invalid IL.
             }
         }
 
