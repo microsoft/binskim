@@ -678,7 +678,7 @@ namespace Microsoft.CodeAnalysis.IL
                 case ILOpcode.bne_un:
                     return BinaryOperationKind.FloatingNotEquals;
                 default:
-                    throw Unreachable();
+                    throw new NotImplementedException();
             }
         }
 
