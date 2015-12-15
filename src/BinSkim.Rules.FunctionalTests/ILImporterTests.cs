@@ -39,12 +39,18 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
-        public void Scratch()
+        public void Scratch(string x, int y)
         {
-            StaticMethod("hello", 42);
+            int tmp = StaticMethod("hello", 42);
+            InstanceMethod(x, y);
         }
 
-        public static void StaticMethod(string x, int y)
+        public static int StaticMethod(string x, int y)
+        {
+            return 42;
+        }
+
+        public void InstanceMethod(string x, int y)
         {
         }
     }

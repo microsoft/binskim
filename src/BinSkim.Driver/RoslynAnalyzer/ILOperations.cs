@@ -15,9 +15,6 @@ namespace Microsoft.CodeAnalysis.IL
         ITypeSymbol CreateArrayType(ITypeSymbol elementType, int rank);
 
         ITypeSymbol GetSpecialType(SpecialType specialType);
-
-        // FEEDBACK: There doesn't appear to be a public API to obtain this. Do we actually need InstanceReferenceExpression to be a ParameterReferenceExpression?
-        IParameterSymbol GetThisParameter(IMethodSymbol method);  
     }
 
     internal abstract class Operation : IOperation
@@ -173,11 +170,13 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class InstanceReferenceExpression : ParameterReferenceExpression, IInstanceReferenceExpression
     {
-        public InstanceReferenceExpression(ISymbolProvider symbolProvider, IMethodSymbol method)
-            : base(symbolProvider.GetThisParameter(method))
-        {
+        public InstanceReferenceExpression(IMethodSymbol method)
+            : base(null) // FEEDBACK: There no public API to get the this parameter. 
+        {                // Do we need IInstanceReferenceExpression to be IParameterReferenceExpresison?
+            ResultType = method.ContainingType;
         }
 
+        public override ITypeSymbol ResultType { get; }
         public override OperationKind Kind => OperationKind.InstanceReferenceExpression;
 
         bool IInstanceReferenceExpression.IsExplicit => true;

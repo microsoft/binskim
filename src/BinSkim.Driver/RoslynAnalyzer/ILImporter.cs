@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+using System.Reflection.Metadata.Decoding;
 using System.Reflection.Metadata.Ecma335;
 
 using Microsoft.CodeAnalysis.Semantics;
@@ -21,9 +22,11 @@ namespace Microsoft.CodeAnalysis.IL
         private byte[] _ilBytes;
         private ExceptionRegion[] _exceptionRegions;
         private List<IStatement> _statements;
+        private ImmutableArray<ILocalSymbol>.Builder _locals;
         private int _labelCount;
         private IMetadataModuleSymbol _module;
         private MetadataReader _reader;
+        private StandaloneSignatureHandle _localSignatureHandle;
 
         public ILImporter(Compilation compilation, MetadataReader reader, IMethodSymbol method, MethodBodyBlock body)
         {
@@ -37,12 +40,14 @@ namespace Microsoft.CodeAnalysis.IL
             _method = method;
             _module = (IMetadataModuleSymbol)method.ContainingModule;
             _ilBytes = body.GetILBytes();
+            _localSignatureHandle = body.LocalSignature;
             _exceptionRegions = new ExceptionRegion[0];
             _statements = new List<IStatement>();
         }
 
         public IBlockStatement Import()
         {
+            DecodeLocals();
             FindBasicBlocks();
             ImportBasicBlocks();
 
@@ -64,7 +69,23 @@ namespace Microsoft.CodeAnalysis.IL
                 }
             }
 
-            return new BlockStatement(ImmutableArray<ILocalSymbol>.Empty, statements.MoveToImmutable());
+            return new BlockStatement(_locals.MoveToImmutable(), statements.MoveToImmutable());
+        }
+
+        private void DecodeLocals()
+        {
+            var provider = new ILSignatureProvider(_compilation, _method);
+            var signature = _reader.GetStandaloneSignature(_localSignatureHandle);
+            var localTypes = signature.DecodeLocalSignature(provider);
+            var locals = ImmutableArray.CreateBuilder<ILocalSymbol>(localTypes.Length);
+
+            int i = 0;
+            foreach (var type in localTypes)
+            {
+                locals.Add(new LocalSymbol($"V_{i++}", _method, type));
+            }
+
+            _locals = locals;
         }
 
         private void Push(StackValue value)
@@ -156,12 +177,16 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLoadVar(int index, bool argument)
         {
-            throw new NotImplementedException();
+            Push(GetVariableReference(index, argument));
         }
 
         private void ImportStoreVar(int index, bool argument)
         {
-            throw new NotImplementedException();
+            Append(
+                new ExpressionStatement(
+                    new AssignmentExpression(
+                        GetVariableReference(index, argument),
+                        Pop().Expression)));
         }
 
         private void ImportAddressOfVar(int index, bool argument)
@@ -568,6 +593,26 @@ namespace Microsoft.CodeAnalysis.IL
         private void ImportReadOnlyPrefix()
         {
             throw new NotImplementedException();
+        }
+
+        private IReferenceExpression GetVariableReference(int index, bool argument)
+        {
+            if (!argument)
+            {
+                return new LocalReferenceExpression(_locals[index]);
+            }
+
+            if (!_method.IsStatic)
+            {
+                index--;
+            }
+
+            if (index == -1)
+            {
+                return new InstanceReferenceExpression(_method);
+            }
+
+            return new ParameterReferenceExpression(_method.Parameters[index]);
         }
 
         private static BinaryOperationKind GetBranchKind(ILOpcode opcode, StackValueKind kind)
