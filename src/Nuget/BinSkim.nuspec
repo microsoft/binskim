@@ -12,7 +12,7 @@
     <copyright>Copyright Microsoft 2015</copyright>    
     <licenseUrl>https://github.com/microsoft/binskim/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/microsoft/binskim</projectUrl>
-    <tags>Binary Analysis</tags>
+    <tags>Binary,Analysis,binskim,binscope</tags>
   </metadata>
   <files>
     <!-- tools\x64 -->
