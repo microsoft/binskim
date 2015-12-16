@@ -9,20 +9,19 @@ using System.Globalization;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
-using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IOptionsProvider))]
-    public class BuildWithSecureTools : IBinarySkimmer, IRuleContext, IOptionsProvider
+    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
+    public class BuildWithSecureTools : BinarySkimmerBase, IOptionsProvider
     {
-        public string Id { get { return RuleConstants.BuildWithSecureToolsId; } }
+        public override string Id { get { return RuleIds.BuildWithSecureToolsId; } }
 
-        public string Name { get { return nameof(BuildWithSecureTools); } }
-
-        public string FullDescription
+        public override string FullDescription
         {
             get { return RulesResources.BuildWithSecureTools_Description; }
         }
@@ -36,12 +35,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleConstants.BuildWithSecureToolsId + "." + nameof(BuildWithSecureTools);
+        private const string AnalyzerName = RuleIds.BuildWithSecureToolsId + "." + nameof(BuildWithSecureTools);
 
-        private const string MIN_COMPILER_VER = "MinimumCompilerVersion";
         private const string MIN_LINKER_VER = "MinimumLinkerVersion";
-        private const string MIN_XBOX_COMPILER_VER = "MinimumXboxCompilerVersion";
+        private const string MIN_COMPILER_VER = "MinimumCompilerVersion";
         private const string MIN_XBOX_LINKER_VER = "MinimumXboxLinkerVersion";
+        private const string MIN_XBOX_COMPILER_VER = "MinimumXboxCompilerVersion";
 
         public static PerLanguageOption<StringToVersionMap> MinimumToolVersions { get; } =
             new PerLanguageOption<StringToVersionMap>(
@@ -51,9 +50,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<StringToVersionMap>(
                 AnalyzerName, nameof(MinimumToolVersions), defaultValue: () => { return BuildAllowedLibraries(); });
 
-        public void Initialize(BinaryAnalyzerContext context) { return; }
-
-        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -72,7 +69,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
-        public void Analyze(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
 

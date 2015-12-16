@@ -5,24 +5,21 @@ using System.Composition;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer))]
-    public class DoNotMarkImportsSectionAsExecutable : IBinarySkimmer, IRuleContext
+    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor))]
+    public class DoNotMarkImportsSectionAsExecutable : BinarySkimmerBase
     {
-        public string Id { get { return RuleConstants.DoNotMarkImportsSectionAsExecutableId; } }
+        public override string Id { get { return RuleIds.DoNotMarkImportsSectionAsExecutableId; } }
 
-        public string Name { get { return nameof(DoNotMarkImportsSectionAsExecutable); } }
-
-        public string FullDescription
+        public override string FullDescription
         {
             get { return RulesResources.DoNotMarkImportsSectionAsExecutable_Description; }
         }
-
-        public void Initialize(BinaryAnalyzerContext context) { return; }
-
-        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -36,7 +33,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
-        public void Analyze(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             string executableImportSection = null;
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;

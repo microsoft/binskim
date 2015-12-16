@@ -3,7 +3,7 @@
 
 using System;
 
-using Microsoft.CodeAnalysis.Sarif.DataContracts;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 using Xunit;
 

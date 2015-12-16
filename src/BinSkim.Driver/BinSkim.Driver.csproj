@@ -21,7 +21,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Driver.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Driver.Utilities.1.0.0\lib\net40\Driver.Utilities.dll</HintPath>
+      <HintPath>..\packages\Driver.Utilities.1.0.3-beta\lib\net40\Driver.Utilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -36,8 +36,8 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StaticAnalysisResultsInterchangeFormat, Version=1.4.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Sdk.1.4.6-beta\lib\net40\StaticAnalysisResultsInterchangeFormat.dll</HintPath>
+    <Reference Include="StaticAnalysisResultsInterchangeFormat, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Sdk.1.4.8-beta\lib\net40\StaticAnalysisResultsInterchangeFormat.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -87,8 +87,6 @@
     <Compile Include="ConsoleLogger.cs" />
     <Compile Include="DriverUtilities.cs" />
     <Compile Include="ExportRulesCommand.cs" />
-    <Compile Include="ExportRulesOptions.cs" />
-    <Compile Include="DriverCommand.cs" />
     <Compile Include="DriverResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -99,9 +97,8 @@
     <Compile Include="ErrorRules.cs" />
     <Compile Include="FailureReason.cs" />
     <Compile Include="ExportOptionsCommand.cs" />
-    <Compile Include="ExportOptionsOptions.cs" />
     <Compile Include="PrivateErrorCode.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="BinSkim.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoslynAnalyzer\ActionMap.cs" />
     <Compile Include="RoslynAnalyzer\RoslynCompilationStartAnalysisContext.cs" />

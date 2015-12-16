@@ -22,7 +22,11 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Driver.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Driver.Utilities.1.0.0\lib\net40\Driver.Utilities.dll</HintPath>
+      <HintPath>..\packages\Driver.Utilities.1.0.3-beta\lib\net40\Driver.Utilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StaticAnalysisResultsInterchangeFormat, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Sdk.1.4.8-beta\lib\net40\StaticAnalysisResultsInterchangeFormat.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

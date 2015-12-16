@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
-    public interface IBinarySkimmer : ISkimmer<BinaryAnalyzerContext>, IRuleDescriptor
+    public abstract class BinarySkimmerBase : SkimmerBase<BinaryAnalyzerContext>, IBinarySkimmer
     {
     }
 }

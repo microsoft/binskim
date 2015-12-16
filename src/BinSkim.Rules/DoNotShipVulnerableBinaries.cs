@@ -7,28 +7,23 @@ using System.Collections.Immutable;
 using System.Composition;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection.PortableExecutable;
 using System.Text.RegularExpressions;
-using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IOptionsProvider))]
-    public class DoNotShipVulnerableBinaries : IBinarySkimmer, IRuleContext, IOptionsProvider
+    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
+    public class DoNotShipVulnerableBinaries : BinarySkimmerBase, IOptionsProvider
     {
-        public string Id { get { return RuleConstants.DoNotShipVulnerableBinariesId; } }
+        public override string Id { get { return RuleIds.DoNotShipVulnerableBinariesId; } }
 
-        public string Name { get { return nameof(DoNotShipVulnerableBinaries); } }
-
-        public string FullDescription
+        public override string FullDescription
         {
             get { return RulesResources.DoNotShipVulnerableBinaries_Description; }
         }
-
-        public void Initialize(BinaryAnalyzerContext context) { return; }
-
+        
         public IEnumerable<IOption> GetOptions()
         {
             return new List<IOption>
@@ -37,7 +32,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleConstants.DoNotShipVulnerableBinariesId + "." + nameof(DoNotShipVulnerableBinaries);
+        private const string AnalyzerName = RuleIds.DoNotShipVulnerableBinariesId + "." + nameof(DoNotShipVulnerableBinaries);
 
         private static StringToVersionMap BuildDefaultVulnerableBinariesMap()
         {
@@ -52,7 +47,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<StringToVersionMap>(
                 AnalyzerName, nameof(VulnerableBinaries), defaultValue: () => { return BuildDefaultVulnerableBinariesMap(); });
 
-        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             // Checks for missing policy should always be evaluated as the last action, so that 
             // we do not raise an error in cases where the analysis would not otherise be applied.
@@ -73,7 +68,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         //       Between one and unlimited times, as many times as possible, giving back as needed (greedy) «+»
         private static readonly Regex s_versionRegex = new Regex(@"\d+(\.\d+){0,3}", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
 
-        public void Analyze(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             string fileName = Path.GetFileName(context.PE.FileName);
 

@@ -5,7 +5,6 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {

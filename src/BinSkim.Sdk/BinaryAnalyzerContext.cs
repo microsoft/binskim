@@ -4,11 +4,12 @@
 using System;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
-using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
-    public class BinaryAnalyzerContext
+    public class BinaryAnalyzerContext : IAnalysisContext
     {
         private PE _pe;
         private Uri _uri;
@@ -104,7 +105,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public IMessageLogger<BinaryAnalyzerContext> Logger { get; internal set; }
 
-        public IRuleContext Rule { get; internal set; }
+        public IRuleDescriptor Rule { get; internal set; }
 
         public Version MinimumSupportedCompilerVersion { get; internal set; }
 

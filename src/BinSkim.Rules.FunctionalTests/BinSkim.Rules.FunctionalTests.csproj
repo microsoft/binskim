@@ -41,7 +41,7 @@
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.props))\build.props" />
   <ItemGroup>
     <Reference Include="Driver.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Driver.Utilities.1.0.0\lib\net40\Driver.Utilities.dll</HintPath>
+      <HintPath>..\packages\Driver.Utilities.1.0.3-beta\lib\net40\Driver.Utilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
@@ -64,8 +64,8 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StaticAnalysisResultsInterchangeFormat, Version=1.4.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Sdk.1.4.6-beta\lib\net40\StaticAnalysisResultsInterchangeFormat.dll</HintPath>
+    <Reference Include="StaticAnalysisResultsInterchangeFormat, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Sdk.1.4.8-beta\lib\net40\StaticAnalysisResultsInterchangeFormat.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
