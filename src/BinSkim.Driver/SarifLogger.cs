@@ -8,12 +8,10 @@ using System.Reflection;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
-using Microsoft.CodeAnalysis.Sarif.DataContracts;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Writers;
 
 using Newtonsoft.Json;
-
-using Sarif = Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -165,7 +163,7 @@ namespace Microsoft.CodeAnalysis.IL
             result.FullMessage = message;
             result.Kind = issueKind;
             result.Locations = new[]{
-                new Sarif.DataContracts.Location {  
+                new Sarif.Sdk.Location {  
                     AnalysisTarget = new[]
                     {
                         new PhysicalLocationComponent

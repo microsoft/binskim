@@ -5,27 +5,23 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Reflection.PortableExecutable;
-using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IOptionsProvider))]
-    public class DoNotDisableStackProtectionForFunctions : IBinarySkimmer, IRuleContext, IOptionsProvider
+    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
+    public class DoNotDisableStackProtectionForFunctions : BinarySkimmerBase, IOptionsProvider
     {
-        public string Id { get { return RuleConstants.DoNotDisableStackProtectionForFunctionsId; } }
+        public override string Id { get { return RuleIds.DoNotDisableStackProtectionForFunctionsId; } }
 
-        public string Name { get { return nameof(DoNotDisableStackProtectionForFunctions); } }
-
-        public string FullDescription
+        public override string FullDescription
         {
             get { return RulesResources.DoNotDisableStackProtectionForFunctions_Description; }
         }
-
-        public void Initialize(BinaryAnalyzerContext context) { return; }
 
         public IEnumerable<IOption> GetOptions()
         {
@@ -35,7 +31,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleConstants.DoNotDisableStackProtectionForFunctionsId + "." + nameof(DoNotDisableStackProtectionForFunctions);
+        private const string AnalyzerName = RuleIds.DoNotDisableStackProtectionForFunctionsId + "." + nameof(DoNotDisableStackProtectionForFunctions);
 
         private static StringSet BuildApprovedFunctionsStringSet()
         {
@@ -44,16 +40,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return result;
         }
 
-        /// <summary>
-        /// Enable namespace import optimization.
-        /// </summary>
         public static PerLanguageOption<StringSet> ApprovedFunctionsThatDisableStackProtection { get; } =
             new PerLanguageOption<StringSet>(
                 AnalyzerName, nameof(StringSet), defaultValue: () => { return BuildApprovedFunctionsStringSet(); });
 
-        public void Initialize() { return; }
-
-        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             AnalysisApplicability applicability = StackProtectionUtilities.CommonCanAnalyze(context, out reasonForNotAnalyzing);
 
@@ -67,7 +58,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return applicability;
         }
 
-        public void Analyze(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
             Pdb pdb = context.Pdb;

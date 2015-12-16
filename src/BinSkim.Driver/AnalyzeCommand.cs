@@ -13,16 +13,13 @@ using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.IL;
-using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL
 {
     internal class AnalyzeCommand : DriverCommand<AnalyzeOptions>
     {
-        internal const int SUCCESS = 0;
-        internal const int FAILURE = 1;
-
         public static HashSet<string> ValidAnalysisFileExtensions = new HashSet<string>(
             new string[] { ".dll", ".exe", ".sys" }
             );
@@ -55,7 +52,7 @@ namespace Microsoft.CodeAnalysis.IL
                 {
                     // These exceptions escaped our net and must be logged here
                     BinaryAnalyzerContext context = new BinaryAnalyzerContext();
-                    context.Rule = ErrorRules.UnhandledEngineException;
+                    context.Rule = ErrorDescriptors.UnhandledEngineException;
                     context.Logger = logger;
                     LogUnhandledEngineException(ex, context);
                     ExecutionException = ex;
@@ -397,17 +394,17 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void LogExceptionLoadingRoslynAnalyzer(string analyzerFilePath, BinaryAnalyzerContext context, Exception ex)
         {
-            context.Rule = ErrorRules.InvalidConfiguration;
+            context.Rule = ErrorDescriptors.InvalidConfiguration;
 
             // An exception was raised attempting to load Roslyn analyzer '{0}'. Exception information:
             // {1}
             context.Logger.Log(MessageKind.ConfigurationError,
                 context,
-                string.Format(DriverResources.UnhandledExceptionLoadingRoslynAnalyzer,
+                string.Format(DriverResources.ExceptionLoadingAnalysisPlugIn,
                     analyzerFilePath,
                     context.PE.LoadException.ToString()));
 
-            RuntimeErrors |= RuntimeConditions.ExceptionLoadingRoslynAnalyzer;
+            RuntimeErrors |= RuntimeConditions.ExceptionLoadingAnalysisPlugIn;
         }
 
         private void LogExceptionInvalidPE(BinaryAnalyzerContext context)
@@ -428,7 +425,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void LogExceptionLoadingTarget(BinaryAnalyzerContext context)
         {
-            context.Rule = ErrorRules.InvalidConfiguration;
+            context.Rule = ErrorDescriptors.InvalidConfiguration;
 
             // An exception was raised attempting to load analysis target '{0}'. Exception information:
             // {1}
@@ -446,7 +443,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             // An exception was raised attempting to create output file '{0}'. Exception information:
             // {1}
-            context.Rule = ErrorRules.InvalidConfiguration;
+            context.Rule = ErrorDescriptors.InvalidConfiguration;
             context.Logger.Log(MessageKind.ConfigurationError,
                 context,
                 string.Format(DriverResources.ExceptionCreatingLogFile,
@@ -462,10 +459,10 @@ namespace Microsoft.CodeAnalysis.IL
             // An unhandled exception was encountered initializing check '{0}', which 
             // has been disabled for the remainder of the analysis. Exception information:
             // {1}
-            context.Rule = ErrorRules.UnhandledRuleException;
+            context.Rule = ErrorDescriptors.UnhandledRuleException;
             context.Logger.Log(MessageKind.InternalError,
                 context,
-                string.Format(DriverResources.UnhandledExceptionInitializingRule,
+                string.Format(DriverResources.ExceptionInitializingRule,
                     ruleName,
                     ex.ToString()));
 
@@ -481,10 +478,10 @@ namespace Microsoft.CodeAnalysis.IL
             // from a problem related to parsing image metadata and not specific to 
             // the rule, however. Exception information:
             // {2}
-            context.Rule = ErrorRules.UnhandledRuleException;
+            context.Rule = ErrorDescriptors.UnhandledRuleException;
             context.Logger.Log(MessageKind.InternalError,
                 context,
-                string.Format(DriverResources.UnhandledExceptionCheckingApplicability,
+                string.Format(DriverResources.ExceptionCheckingApplicability,
                     context.Uri.LocalPath,
                     ruleName,
                     ex.ToString()));
@@ -503,10 +500,10 @@ namespace Microsoft.CodeAnalysis.IL
             // image metadata and not specific to the rule, however.
             // Exception information:
             // {2}
-            context.Rule = ErrorRules.UnhandledRuleException;
+            context.Rule = ErrorDescriptors.UnhandledRuleException;
             context.Logger.Log(MessageKind.InternalError,
                 context,
-                string.Format(DriverResources.UnhandledRuleExceptionAnalyzingTarget,
+                string.Format(DriverResources.ExceptionAnalyzingTarget,
                     context.Uri.LocalPath,
                     ruleName,
                     ex.ToString()));

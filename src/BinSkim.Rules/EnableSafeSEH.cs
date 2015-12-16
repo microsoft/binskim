@@ -6,24 +6,21 @@ using System.Composition;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer))]
-    public class EnableSafeSEH : IBinarySkimmer, IRuleContext
+    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor))]
+    public class EnableSafeSEH : BinarySkimmerBase
     {
-        public string Id { get { return RuleConstants.EnableSafeSEHId; } }
+        public override string Id { get { return RuleIds.EnableSafeSEHId; } }
 
-        public string Name { get { return nameof(EnableSafeSEH); } }
-
-        public string FullDescription
+        public override string FullDescription
         {
             get { return RulesResources.EnableSafeSEH_Description; }
         }
-
-        public void Initialize(BinaryAnalyzerContext context) { return; }
-
-        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -40,7 +37,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
-        public void Analyze(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
 

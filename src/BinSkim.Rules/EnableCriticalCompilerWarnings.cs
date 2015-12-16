@@ -14,24 +14,21 @@ using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IOptionsProvider))]
-    public class EnableCriticalCompilerWarnings : IBinarySkimmer, IRuleContext, IOptionsProvider
+    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
+    public class EnableCriticalCompilerWarnings : BinarySkimmerBase, IOptionsProvider
     {
-        public string Id { get { return RuleConstants.EnableCriticalCompilerWarningsId; } }
+        public override string Id { get { return RuleIds.EnableCriticalCompilerWarningsId; } }
 
-        public string Name { get { return nameof(EnableCriticalCompilerWarnings); } }
-
-        public string FullDescription
+        public override string FullDescription
         {
             get { return RulesResources.EnableCriticalCompilerWarnings_Description; }
         }
-
-        public void Initialize(BinaryAnalyzerContext context) { return; }
-
+       
         public IEnumerable<IOption> GetOptions()
         {
             return new List<IOption>
@@ -40,7 +37,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleConstants.EnableCriticalCompilerWarningsId + "." + nameof(EnableCriticalCompilerWarnings);
+        private const string AnalyzerName = RuleIds.EnableCriticalCompilerWarningsId + "." + nameof(EnableCriticalCompilerWarnings);
 
         /// <summary>
         /// Enable namespace import optimization.
@@ -49,7 +46,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<IntegerSet>(
                 AnalyzerName, nameof(RequiredCompilerWarnings), defaultValue: () => { return BuildRequiredCompilerWarningsSet(); });
 
-        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -68,7 +65,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
-        public void Analyze(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
             Pdb di = context.Pdb;

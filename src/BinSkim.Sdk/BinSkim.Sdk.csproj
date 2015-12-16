@@ -4,7 +4,7 @@
     <ProjectGuid>{D2EBE67E-6115-4825-9EAD-3DB54672C03E}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup>
-    <RootNamespace>Microsoft.CodeAnalysis.BinSkim.Sdk</RootNamespace>
+    <RootNamespace>Microsoft.CodeAnalysis.IL.Sdk</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyName>BinSkim.Sdk</AssemblyName>
@@ -17,6 +17,14 @@
   </PropertyGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.props))\build.props" />
   <ItemGroup>
+    <Reference Include="Driver.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Driver.Utilities.1.0.3-beta\lib\net40\Driver.Utilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StaticAnalysisResultsInterchangeFormat, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Sdk.1.4.8-beta\lib\net40\StaticAnalysisResultsInterchangeFormat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
@@ -32,30 +40,22 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalysisApplicability.cs" />
     <Compile Include="BinaryAnalyzerContext.cs" />
+    <Compile Include="BinarySkimmerBase.cs" />
     <Compile Include="IBinaryMessageLogger.cs" />
     <Compile Include="IBinarySkimmer.cs" />
     <Compile Include="IMessageLogger.cs" />
-    <Compile Include="IntegerSet.cs" />
-    <Compile Include="IOption.cs" />
-    <Compile Include="IOptionsProvider.cs" />
     <Compile Include="MessageKind.cs" />
     <Compile Include="MetadataConditions.cs" />
     <Compile Include="OSVersions.cs" />
-    <Compile Include="PerLanguageOption.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IRuleContext.cs" />
-    <Compile Include="PropertyBag.cs" />
-    <Compile Include="PropertyBagExtensionMethods.cs" />
     <Compile Include="RuleUtilities.cs" />
     <Compile Include="SdkResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SdkResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="StringSet.cs" />
-    <Compile Include="TypedPropertyBag.cs" />
     <Compile Include="..\Shared\SharedAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

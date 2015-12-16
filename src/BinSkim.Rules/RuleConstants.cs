@@ -3,12 +3,8 @@
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    internal static class RuleConstants
+    internal static class RuleIds
     {
-        // Internal errors
-        public const string UnhandledRuleException = "BA0998";
-        public const string UnhandledEngineException = "BA0999";
-
         // Analysis check ids
         public const string LoadImageAboveFourGigabyteAddressId = "BA2001";
         public const string DoNotIncorporateVulnerableDependenciesId = "BA2002";

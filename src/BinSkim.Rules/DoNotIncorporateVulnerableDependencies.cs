@@ -11,18 +11,17 @@ using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IOptionsProvider))]
-    public class DoNotIncorporateVulnerableDependencies : IBinarySkimmer, IRuleContext, IOptionsProvider
+    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
+    public class DoNotIncorporateVulnerableDependencies : BinarySkimmerBase, IOptionsProvider
     {
-        public string Id { get { return RuleConstants.DoNotIncorporateVulnerableDependenciesId; } }
+        public override string Id { get { return RuleIds.DoNotIncorporateVulnerableDependenciesId; } }
 
-        public string Name { get { return nameof(DoNotIncorporateVulnerableDependencies); } }
-
-        public string FullDescription
+        public override string FullDescription
         {
             get { return RulesResources.DoNotIncorporateVulnerableBinaries_Description; }
         }
@@ -35,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleConstants.DoNotIncorporateVulnerableDependenciesId + "." + nameof(DoNotIncorporateVulnerableDependencies);
+        private const string AnalyzerName = RuleIds.DoNotIncorporateVulnerableDependenciesId + "." + nameof(DoNotIncorporateVulnerableDependencies);
 
         public static PerLanguageOption<PropertyBag> VulnerableDependencies { get; } =
             new PerLanguageOption<PropertyBag>(
@@ -44,7 +43,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private HashSet<string> _files;
         private Dictionary<string, VulnerableDependencyDescriptor> _filesToVulnerabilitiesMap;
 
-        public void Initialize(BinaryAnalyzerContext context)
+        public override void Initialize(BinaryAnalyzerContext context)
         {
             if (context.Policy == null) { return; }
 
@@ -63,7 +62,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return;
         }
 
-        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -82,7 +81,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
-        public void Analyze(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
 

@@ -2,8 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -52,6 +53,38 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public string FullDescription
         {
             get { return "Test Rule Description"; }
+        }
+
+        public string ShortDescription
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Dictionary<string, string> Options
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Dictionary<string, string> FormatSpecifiers
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Dictionary<string, string> Properties
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public void Analyze(BinaryAnalyzerContext context)

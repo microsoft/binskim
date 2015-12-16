@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.Driver;
+using Microsoft.CodeAnalysis.Driver.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL
 {

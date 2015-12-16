@@ -6,7 +6,7 @@ using System.IO;
 using System.Reflection;
 
 using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.Sarif.DataContracts;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Readers;
 
 using Newtonsoft.Json;

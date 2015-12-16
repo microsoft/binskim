@@ -3,33 +3,29 @@
 
 using System;
 using System.Composition;
-using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer))]
-    public class DoNotModifyStackProtectionCookie : IBinarySkimmer, IRuleContext
+    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor))]
+    public class DoNotModifyStackProtectionCookie : BinarySkimmerBase
     {
-        public string Id { get { return RuleConstants.DoNotModifyStackProtectionCookieId; } }
+        public override string Id { get { return RuleIds.DoNotModifyStackProtectionCookieId; } }
 
-        public string Name { get { return nameof(DoNotModifyStackProtectionCookie); } }
-
-        public string FullDescription
+        public override string FullDescription
         {
             get { return RulesResources.DoNotModifyStackProtectionCookie_Description; }
         }
-
-        public void Initialize(BinaryAnalyzerContext context) { return; }
-
-        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             return StackProtectionUtilities.CommonCanAnalyze(context, out reasonForNotAnalyzing);
         }
 
-        public void Analyze(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
 
