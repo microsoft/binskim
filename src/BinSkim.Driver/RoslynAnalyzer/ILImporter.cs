@@ -2,16 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection.Metadata;
-using System.Reflection.Metadata.Decoding;
 using System.Reflection.Metadata.Ecma335;
 
 using Microsoft.CodeAnalysis.Semantics;
-
-using ILExceptionRegion = System.Reflection.Metadata.ExceptionRegion;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -21,59 +17,256 @@ namespace Microsoft.CodeAnalysis.IL
         private IMethodSymbol _method;
         private byte[] _ilBytes;
         private ExceptionRegion[] _exceptionRegions;
-        private List<IStatement> _statements;
+        private ImmutableArray<IStatement>.Builder _statements;
         private ImmutableArray<ILocalSymbol>.Builder _locals;
-        private int _labelCount;
         private IMetadataModuleSymbol _module;
         private MetadataReader _reader;
         private StandaloneSignatureHandle _localSignatureHandle;
 
         public ILImporter(Compilation compilation, MetadataReader reader, IMethodSymbol method, MethodBodyBlock body)
         {
-            if (body.ExceptionRegions.Length != 0)
-            {
-                throw new NotImplementedException();
-            }
-
             _compilation = compilation;
             _reader = reader;
             _method = method;
             _module = (IMetadataModuleSymbol)method.ContainingModule;
             _ilBytes = body.GetILBytes();
             _localSignatureHandle = body.LocalSignature;
-            _exceptionRegions = new ExceptionRegion[0];
-            _statements = new List<IStatement>();
+            _exceptionRegions = GetExceptionRegions(body);
+            _statements = ImmutableArray.CreateBuilder<IStatement>();
         }
 
         public IBlockStatement Import()
         {
             DecodeLocals();
             FindBasicBlocks();
+            FindExceptionRegions();
             ImportBasicBlocks();
+            return ImportBlockStatement(0, _ilBytes.Length, locals: _locals.ToImmutable());
+        }
 
-            var statements = ImmutableArray.CreateBuilder<IStatement>(_statements.Count + _labelCount);
-
-            foreach (var block in _basicBlocks)
+        private IBlockStatement ImportBlockStatement(
+            int ilStartOffset, 
+            int length,
+            ImmutableArray<ILocalSymbol> locals = default(ImmutableArray<ILocalSymbol>))
+        {
+            if (locals.IsDefault)
             {
-                if (block != null)
-                {
-                    if (block.Label != null)
-                    {
-                        statements.Add(new LabelStatement(block.Label));
-                    }
-
-                    for (int i = block.FirstStatementOffset; i <= block.LastStatementOffset; i++)
-                    {
-                        statements.Add(_statements[i]);
-                    }
-                }
+                locals = ImmutableArray<ILocalSymbol>.Empty;
             }
 
-            return new BlockStatement(_locals.MoveToImmutable(), statements.MoveToImmutable());
+            var statements = ImmutableArray.CreateBuilder<IStatement>();
+            ImportStatements(ilStartOffset, length, statements);
+            return new BlockStatement(locals, statements.ToImmutable());
+        }
+
+        private void ImportStatements(
+            int ilStartOffset,
+            int length,
+            ImmutableArray<IStatement>.Builder statements)
+        {
+            for (int i = ilStartOffset, endOffset = ilStartOffset + length; i < endOffset; )
+            {
+                var block = _basicBlocks[i];
+
+                if (block == null || block.EndOffset < 0)
+                {
+                    i++;
+                    continue;
+                }
+
+                if (block.Label != null)
+                {
+                    statements.Add(new LabelStatement(block.Label));
+                }
+
+                var tryRegion = block.OuterTry;
+                if (tryRegion != null)
+                {
+                    block.OuterTry = null; // next time we want to  get the statements
+                    Debug.Assert(block.TryStart);
+                    statements.Add(ImportTryStatement(tryRegion));
+                    i += tryRegion.TryLength;
+                    continue;
+                }
+
+                for (int j = block.StatementStartIndex; j <= block.StatementEndIndex; j++)
+                {
+                    statements.Add(_statements[j]);
+                }
+
+                i = block.EndOffset + 1;
+                block.EndOffset = -1;
+            }
+        }
+
+        private ITryStatement ImportTryStatement(ExceptionRegion tryRegion)
+        {
+            var statements = ImmutableArray.CreateBuilder<IStatement>();
+            int startOffset = tryRegion.TryOffset;
+            int length = tryRegion.TryLength;
+
+            var innerTry = tryRegion.InnerTry;
+            if (innerTry != null)
+            {
+                statements.Add(ImportTryStatement(innerTry));
+                startOffset += innerTry.TryLength;
+                length -= innerTry.TryLength;
+            }
+
+            ImportStatements(startOffset, length, statements);
+            var body = new BlockStatement(ImmutableArray<ILocalSymbol>.Empty, statements.ToImmutable());
+            var catches = ImmutableArray<ICatch>.Empty;
+            var finallyHandler = default(IBlockStatement);
+
+            switch (tryRegion.Kind)
+            {
+                case ExceptionRegionKind.Catch:
+                    catches = ImportCatches(tryRegion);
+                    break;
+
+                case ExceptionRegionKind.Finally:
+                    finallyHandler = ImportHandler(tryRegion);
+                    break;
+
+                case ExceptionRegionKind.Fault:
+                    // TODO: fault is not supported by C# / VB / IOperation, but semantics can be emulated.
+                    throw new NotImplementedException();
+
+                case ExceptionRegionKind.Filter:
+                    // TODO: no representation issue, just not done yet.
+                    throw new NotImplementedException();
+            }
+
+            return new TryStatement(body, catches, finallyHandler);
+        }
+
+        private ImmutableArray<ICatch> ImportCatches(ExceptionRegion region)
+        {
+            int n = region.CatchCount;
+            var catches = ImmutableArray.CreateBuilder<ICatch>(n);
+            catches.Count = n;
+
+            for (var r = region; r != null; r = r.PreviousCatch)
+            {
+                Debug.Assert(r.Kind == ExceptionRegionKind.Catch);
+                var type = GetTypeFromHandle(r.CatchType);
+                var local = GenerateLocal(type);
+                var handler = ImportHandler(r);
+                catches[--n] = new Catch(type, local, null, handler);
+            }
+
+            return catches.MoveToImmutable();
+        }
+
+        private IBlockStatement ImportHandler(ExceptionRegion region)
+        {
+            return ImportBlockStatement(region.HandlerOffset, region.HandlerLength);
+        }
+
+        private ILocalSymbol GenerateLocal(ITypeSymbol type)
+        {
+            var local = new LocalSymbol($"TMP_{_locals.Count}", _method, type);
+            _locals.Add(local);
+            return local;
+        }
+
+        //
+        // Associate exception regions with the first basic block they protect.
+        //
+        private void FindExceptionRegions()
+        {
+            //
+            // Note that there are several rules to a valid set of exception regions
+            // with respect to how they are ordered.
+            //
+            // See: 
+            //
+            //   * ECMA-335 CLI Specification: 
+            //     * I.12.4.2.5 - Overview of exception handling
+            //     * I.12.4.2.7 - Lexical nesting of protected blocks 
+            //
+            //   * "Expert .NET 2.0 IL Assembly" by Serge Lidin 
+            //     * Chapter 14 - Summary of EH Clause Structuring Rules
+            //
+            //  TODO:  At present, we just assume that they hold, but we'll need 
+            //  approriate error handling for when they don't.
+
+            foreach (var region in _exceptionRegions)
+            {
+                var block = _basicBlocks[region.TryOffset];
+
+                Debug.Assert(region.CatchCount == 0);
+                Debug.Assert(region.InnerTry == null);
+                Debug.Assert(region.PreviousCatch == null);
+
+                if (region.Kind == ExceptionRegionKind.Catch)
+                {
+                    region.CatchCount = 1;
+                }
+
+                var outerTry = block.OuterTry;
+                if (outerTry != null)
+                {
+                    Debug.Assert(region.TryOffset == outerTry.TryOffset);
+
+                    if (region.TryLength < outerTry.TryLength)
+                    {
+                        //
+                        // Error case - CLI spec I.12.4.2.5: 
+                        //
+                        //   "The ordering of the exception clauses  in the Exception Handler 
+                        //    Table is important. If handlers are nested, the most deeply nested 
+                        //    try blocks shall come before the try blocks that enclose them."
+                        //
+                        throw new NotImplementedException();
+                    }
+
+                    if (region.TryLength == outerTry.TryLength &&
+                        region.Kind == ExceptionRegionKind.Catch && 
+                        outerTry.Kind == ExceptionRegionKind.Catch)
+                    {
+                        region.PreviousCatch = outerTry;
+                        region.CatchCount = outerTry.CatchCount + 1;
+                    }
+                    else
+                    {
+                        region.InnerTry = outerTry;
+                    }
+                }
+                block.OuterTry = region;
+
+                ITypeSymbol localType = null;
+                switch (region.Kind)
+                {
+                    case ExceptionRegionKind.Filter:
+                        localType = ObjectType;
+                        break;
+                    case ExceptionRegionKind.Catch:
+                        localType = GetTypeFromHandle(region.CatchType);
+                        break;
+                }
+
+                if (localType != null)
+                {
+                    var local = GenerateLocal(localType);
+                    _basicBlocks[region.HandlerOffset].EntryStack = new[]
+                    {
+                        new StackValue(
+                            StackValueKind.ObjRef,
+                            new LocalReferenceExpression(local))
+                    };
+                }
+            }
         }
 
         private void DecodeLocals()
         {
+            if (_localSignatureHandle.IsNil)
+            {
+                _locals = ImmutableArray<ILocalSymbol>.Empty.ToBuilder();
+                return;
+            }
+
             var provider = new ILSignatureProvider(_compilation, _method);
             var signature = _reader.GetStandaloneSignature(_localSignatureHandle);
             var localTypes = signature.DecodeLocalSignature(provider);
@@ -158,12 +351,22 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void StartImportingBasicBlock(BasicBlock basicBlock)
         {
-            basicBlock.FirstStatementOffset = _statements.Count;
+            basicBlock.StatementStartIndex = _statements.Count;
         }
 
         private void EndImportingBasicBlock(BasicBlock basicBlock)
         {
-            basicBlock.LastStatementOffset = _statements.Count - 1;
+            basicBlock.StatementEndIndex = _statements.Count - 1;
+            basicBlock.EndOffset = _currentOffset - 1;
+
+            for (var t = basicBlock.OuterTry; t != null; t = t.InnerTry)
+            {
+                for (var c = t.PreviousCatch; c != null; c = c.PreviousCatch)
+                {
+                    MarkBasicBlock(_basicBlocks[c.HandlerOffset]);
+                }
+                MarkBasicBlock(_basicBlocks[t.HandlerOffset]);
+            }
         }
 
         private void ImportNop()
@@ -377,7 +580,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportConvert(WellKnownType wellKnownType, bool checkOverflow, bool unsigned)
         {
-            // unsigned argument deliberately unusued: it is captured in wellKnownType.
+            // unsigned argument deliberately unused: it is captured in wellKnownType.
             // FEEDBACK: How to represent checkOverflow = true?
 
             Push(
@@ -447,12 +650,13 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLeave(BasicBlock target)
         {
-            throw new NotImplementedException();
+            MarkBasicBlock(target);
+            Append(new GoToStatement(GetOrCreateLabel(target)));
         }
 
         private void ImportEndFinally()
         {
-            throw new NotImplementedException();
+            // TODO: We need to branch if we're not at the lexical end of finally block.
         }
 
         private void ImportNewArray(int token)
@@ -798,9 +1002,19 @@ namespace Microsoft.CodeAnalysis.IL
             return (ITypeSymbol)GetSymbolFromToken(token);
         }
 
+        private ITypeSymbol GetTypeFromHandle(EntityHandle handle)
+        {
+            return (ITypeSymbol)GetSymbolFromHandle(handle);
+        }
+
         private ISymbol GetSymbolFromToken(int token)
         {
-            return _module.GetSymbolForMetadataHandle(MetadataTokens.EntityHandle(token));
+            return GetSymbolFromHandle(MetadataTokens.EntityHandle(token));
+        }
+
+        private ISymbol GetSymbolFromHandle(EntityHandle handle)
+        {
+            return _module.GetSymbolForMetadataHandle(handle);
         }
 
         private ILabelSymbol GetOrCreateLabel(BasicBlock block)
@@ -808,10 +1022,22 @@ namespace Microsoft.CodeAnalysis.IL
             if (block.Label == null)
             {
                 block.Label = new LabelSymbol(block.StartOffset, _method);
-                _labelCount++;
             }
 
             return block.Label;
+        }
+
+        private static ExceptionRegion[] GetExceptionRegions(MethodBodyBlock block)
+        {
+            var ilRegions = block.ExceptionRegions;
+            var regions = new ExceptionRegion[ilRegions.Length];
+
+            for (int i = 0; i < ilRegions.Length; i++)
+            {
+                regions[i] = new ExceptionRegion(ilRegions[i]);
+            }
+
+            return regions;
         }
 
         private ITypeSymbol BooleanType => _compilation.GetSpecialType(SpecialType.System_Boolean);
@@ -839,14 +1065,35 @@ namespace Microsoft.CodeAnalysis.IL
             Double = SpecialType.System_Double,
         }
 
+        private sealed class ExceptionRegion
+        {
+            public ExceptionRegion(System.Reflection.Metadata.ExceptionRegion ilRegion)
+            {
+                ILRegion = ilRegion;
+            }
+
+            // required field
+            public readonly System.Reflection.Metadata.ExceptionRegion ILRegion;
+
+            // custom fields
+            public ExceptionRegion InnerTry;
+            public ExceptionRegion PreviousCatch;
+            public int CatchCount;
+
+            // shorthand for ILRegion.* for readability.
+            public ExceptionRegionKind Kind => ILRegion.Kind;
+            public int TryOffset => ILRegion.TryOffset;
+            public int TryLength => ILRegion.TryLength;
+            public int HandlerOffset => ILRegion.HandlerOffset;
+            public int HandlerLength => ILRegion.HandlerLength;
+            public EntityHandle CatchType => ILRegion.CatchType;
+
+        }
+
+        // for source compatibility with driver
         private static class ILExceptionRegionKind
         {
             public const ExceptionRegionKind Filter = ExceptionRegionKind.Filter;
-        }
-
-        private sealed class ExceptionRegion
-        {
-            public ILExceptionRegion ILRegion;
         }
 
         private struct StackValue
@@ -874,8 +1121,9 @@ namespace Microsoft.CodeAnalysis.IL
 
             // Custom fields
             public ILabelSymbol Label;
-            public int FirstStatementOffset;
-            public int LastStatementOffset;
+            public int StatementStartIndex;
+            public int StatementEndIndex;
+            public ExceptionRegion OuterTry;
         }
     }
 }

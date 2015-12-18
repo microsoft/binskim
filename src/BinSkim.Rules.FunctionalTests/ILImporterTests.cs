@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -41,8 +42,30 @@ namespace Microsoft.CodeAnalysis.IL
 
         public void Scratch(string x, int y)
         {
-            int tmp = StaticMethod("hello", 42);
-            InstanceMethod(x, y);
+            try
+            {
+                int tmp = StaticMethod("hello", 42);
+                InstanceMethod(x, y);
+            }
+            catch (OverflowException)
+            {
+                try
+                {
+                    StaticMethod("goodbye", 99);
+                }
+                catch (InvalidOperationException)
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                InstanceMethod(x, y);
+            }
         }
 
         public static int StaticMethod(string x, int y)
