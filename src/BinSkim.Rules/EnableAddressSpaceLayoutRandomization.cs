@@ -6,6 +6,7 @@ using System.Composition;
 using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
@@ -50,7 +51,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // issue, configure your tool chain to build with this feature enabled. For C and C++ binaries, 
                 // add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping 
                 // with Visual Studio 2008 or later.
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableAddressSpaceLayoutRandomization_NotDynamicBase_Fail));
                 return;
@@ -62,7 +63,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // '{0}' is marked as DYNAMICBASE but relocation data has been stripped
                 // from the image, preventing address space layout randomization. 
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableAddressSpaceLayoutRandomization_NotDynamicBase_Fail));
                 return;
@@ -92,7 +93,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // EnableAddressSpaceLayoutRandomization_WinCENoRelocationSection_Fail	'{0}'
                     // is a Windows CE image but does not contain any relocation data, preventing 
                     // address space layout randomization.	
-                    context.Logger.Log(MessageKind.Fail, context,
+                    context.Logger.Log(ResultKind.Error, context,
                         RuleUtilities.BuildMessage(context,
                             RulesResources.EnableAddressSpaceLayoutRandomization_NotDynamicBase_Fail));
                     return;
@@ -100,7 +101,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             //'{0}' is properly compiled to enable address space layout randomization.
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.EnableAddressSpaceLayoutRandomization_Pass));
         }

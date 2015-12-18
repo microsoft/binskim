@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
@@ -42,7 +43,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (peHeader.SectionAlignment < PAGE_SIZE)
             {
                 // '{0}' has a section alignment ({1}) that is less than page size ({2}).
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.DoNotMarkWritableSectionsAsExecutable_Fail,
                         context.PE.FileName,
@@ -71,7 +72,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (badSections.Count == 0)
             {
                 // '{0}' contains no data or code sections marked as both shared and executable.
-                context.Logger.Log(MessageKind.Pass, context,
+                context.Logger.Log(ResultKind.Pass, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.DoNotMarkWritableSectionsAsExecutable_Pass));
                 return;
@@ -87,7 +88,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // writable and executable.For example, look for uses of / SECTION on the 
             // linker command line for C and C++ programs, or  #pragma section in C and 
             // C++ source code, which mark a section with both attributes.
-            context.Logger.Log(MessageKind.Fail, context,
+            context.Logger.Log(ResultKind.Error, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.DoNotMarkWritableSectionsAsExecutable_Fail, badSectionsText));
         }

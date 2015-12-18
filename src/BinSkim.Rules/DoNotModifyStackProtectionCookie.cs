@@ -5,6 +5,7 @@ using System;
 using System.Composition;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
@@ -43,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // indicates either that it was compiled and linked with a version of the 
                 // compiler that precedes stack protection features or is a binary (such as 
                 // an ngen'ed assembly) that is not subject to relevant security issues.
-                context.Logger.Log(MessageKind.Pass, context,
+                context.Logger.Log(ResultKind.Pass, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.DoNotModifyStackProtectionCookie_NoLoadConfig_Pass));
                 return;
@@ -66,7 +67,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // effect of enabling a significant increase in entropy provided by 
             // the operating system over that produced by the C runtime start-up 
             // code.
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.DoNotModifyStackProtectionCookie_Pass));
         }
@@ -100,7 +101,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (!foundCookieSection)
             {
                 // '{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted.
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                         RuleUtilities.BuildMessage(context,
                             RulesResources.DoNotModifyStackProtectionCookie_CouldNotLocateCookie_Fail));
                 return false;
@@ -129,7 +130,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // resolve this issue, ensure that your code does not reference or create a 
                 // symbol named __security_cookie or __security_cookie_complement. NOTE: 
                 // the modified cookie value detected was: {1}
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                     RulesResources.DoNotModifyStackProtectionCookie_Fail, cookie.ToString("x")));
                 return false;
@@ -168,7 +169,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (!foundCookieSection)
             {
                 // '{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted.
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                         RuleUtilities.BuildMessage(context,
                             RulesResources.DoNotModifyStackProtectionCookie_CouldNotLocateCookie_Fail));
                 return false;
@@ -197,7 +198,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // resolve this issue, ensure that your code does not reference or create a 
                 // symbol named __security_cookie or __security_cookie_complement. NOTE: 
                 // the modified cookie value detected was: {1}
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                     RulesResources.DoNotModifyStackProtectionCookie_Fail, cookie.ToString("x")));
                 return false;

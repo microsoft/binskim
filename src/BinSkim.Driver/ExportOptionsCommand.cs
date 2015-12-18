@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System.Reflection;
 
 using Microsoft.CodeAnalysis.IL.Rules;
-using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
+using System;
 
 namespace Microsoft.CodeAnalysis.IL
 {
     internal class ExportConfigurationCommand : ExportConfigurationCommandBase
     {
-        public override IEnumerable<Assembly> DefaultExportAssemblies
+        public override IEnumerable<Assembly> DefaultPlugInAssemblies
         {
             get
             {
@@ -20,5 +21,7 @@ namespace Microsoft.CodeAnalysis.IL
                 }; 
             }
         }
+
+        public override string Prerelease { get { return VersionConstants.Prerelease; } }
     }
 }

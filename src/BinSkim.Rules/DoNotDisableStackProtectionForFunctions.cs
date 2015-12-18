@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -65,7 +66,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (pdb == null)
             {
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildCouldNotLoadPdbMessage(context));
                 return;
             }
@@ -102,7 +103,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // move stack buffer modifications out of the hot path of execution to allow the 
                 // compiler to avoid inserting stack protector checks in these locations rather 
                 // than disabling the stack protector altogether.
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.DoNotDisableStackProtectionForFunctions_Pass, functionNames));
                 return;
@@ -113,7 +114,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // any individual functions (via __declspec(safebuffers), making it 
             // more difficult for an attacker to exploit stack buffer overflow 
             // memory corruption vulnerabilities.
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.DoNotDisableStackProtectionForFunctions_Pass));
         }

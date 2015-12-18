@@ -5,6 +5,7 @@ using System;
 using System.Composition;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
@@ -60,7 +61,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // corruption vulnerabilities. To resolve this issue, configure your tool chain to 
                 // mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well
                 // as /LARGEADDRESSAWARE to the C or C++ linker command line.
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableHighEntropyVirtualAddresses_NeitherHighEntropyVANorLargeAddressAware_FAIL));
                 return;
@@ -74,7 +75,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the
                 // C or C++ linker command line. (This image was determined to have been properly 
                 // compiled as /LARGEADDRESSAWARE.)
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableHighEntropyVirtualAddresses_NoHighEntropyVA_FAIL));
                 return;
@@ -88,14 +89,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // mark the program high entropy compatible by supplying /LARGEADDRESSAWARE to the C 
                 // or C++ linker command line. (This image was determined to have been properly 
                 // compiled as /HIGHENTROPYVA.)
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableHighEntropyVirtualAddresses_NoLargeAddressAware_FAIL));
                 return;
             }
 
             //'{0}' is high entropy ASLR compatible.
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                  RuleUtilities.BuildMessage(context,
                     RulesResources.EnableHighEntropyVirtualAddresses_Pass));
         }

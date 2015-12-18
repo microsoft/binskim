@@ -8,7 +8,7 @@ using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 
 using Xunit;
 using Xunit.Abstractions;
@@ -86,7 +86,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 PE pe = new PE(target);
                 if (!pe.IsPEFile) { continue; }
 
-                context = AnalyzeCommand.CreateContext(logger, policy, target);
+                context = CreateContext(logger, policy, target);
 
                 context.Rule = skimmer;
 
@@ -135,6 +135,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Assert.Equal(0, other.Count);
         }
 
+        private BinaryAnalyzerContext CreateContext(TestMessageLogger logger, PropertyBag policy, string target)
+        {
+            var context = new BinaryAnalyzerContext();
+            context.Logger = logger;
+            context.Policy = policy;
+
+            if (target != null)
+            {
+                context.TargetUri = new Uri(target);
+            }
+
+            return context;
+        }
+
         private void VerifyNotApplicable(
             IBinarySkimmer skimmer,
             HashSet<string> notApplicableConditions,
@@ -173,7 +187,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Assert.True(false, "Test file with unexpected extension encountered: " + target);
                 }
 
-                context = AnalyzeCommand.CreateContext(logger, null, target);
+                context = CreateContext(logger, null, target);
                 if (!context.PE.IsPEFile) { continue; }
 
                 context.Rule = skimmer;

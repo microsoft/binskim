@@ -4,25 +4,30 @@
 using System;
 
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL
 {
     internal static class RoslynExtensionMethods
     {
-        public static MessageKind ConvertToMessageKind(this DiagnosticSeverity severity)
+        public static ResultKind ConvertToMessageKind(this DiagnosticSeverity severity)
         {
             switch (severity)
             {
                 case DiagnosticSeverity.Hidden:
                 case DiagnosticSeverity.Warning:
+                {
+                    return ResultKind.Error;
+                }
+
                 case DiagnosticSeverity.Error:
                 {
-                    return MessageKind.Fail;
+                    return ResultKind.Error;
                 }
 
                 case DiagnosticSeverity.Info:
                 {
-                    return MessageKind.Note;
+                    return ResultKind.Note;
                 }
 
                 default: 

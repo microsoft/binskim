@@ -4,7 +4,7 @@
 using System;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
-using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
@@ -18,13 +18,25 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public bool IsManagedAssembly { get; internal set; }
 
+        public Exception TargetLoadException
+        {
+            get { return PE.LoadException; }
+            set { throw new InvalidOperationException(); }
+        }
+
+        public bool IsValidAnalysisTarget
+        {
+            get { return PE.IsPEFile; }
+            set { throw new InvalidOperationException(); }
+        }
+
         public PE PE
         {
             get
             {
                 if (_pe == null)
                 {
-                    PE = new PE(Uri.LocalPath);
+                    PE = new PE(TargetUri.LocalPath);
                     IsManagedAssembly = _pe.IsManaged;
                 }
                 return _pe;
@@ -39,7 +51,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        public Uri Uri
+        public Uri TargetUri
         {
             get
             {
@@ -101,14 +113,19 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
+        public void Dispose()
+        {
+            DisposePortableExecutableData();
+        }
+
         public PdbParseException PdbParseException { get; internal set; }
 
-        public IMessageLogger<BinaryAnalyzerContext> Logger { get; internal set; }
+        public IResultLogger Logger { get; set; }
 
-        public IRuleDescriptor Rule { get; internal set; }
+        public IRuleDescriptor Rule { get; set; }
 
         public Version MinimumSupportedCompilerVersion { get; internal set; }
 
-        public PropertyBag Policy { get; internal set; }
+        public PropertyBag Policy { get; set; }
     }
 }

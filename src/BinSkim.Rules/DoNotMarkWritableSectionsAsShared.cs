@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
@@ -54,7 +56,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (badSections.Count == 0)
             {
                 // Image '{0}' contains no data or code sections marked as both shared and writable.
-                context.Logger.Log(MessageKind.Pass, context,
+                context.Logger.Log(ResultKind.Pass, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.DoNotMarkWritableSectionsAsShared_Pass));
                 return;
@@ -71,7 +73,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // required to share common data across processes (for IPC or other purposes) use
             // CreateFileMapping with proper security attributes or an actual IPC mechanism 
             // instead (COM, named pipes, LPC, etc.).
-            context.Logger.Log(MessageKind.Fail, context,
+            context.Logger.Log(ResultKind.Error, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.DoNotMarkWritableSectionsAsShared_Fail, badSectionsText));
         }
