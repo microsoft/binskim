@@ -6,7 +6,7 @@ SETLOCAL
 
 set MAJOR=1
 set MINOR=2
-set PATCH=9
+set PATCH=10
 set PRERELEASE=-beta
 
 set VERSION_CONSTANTS=src\BinaryParsers\VersionConstants.cs
