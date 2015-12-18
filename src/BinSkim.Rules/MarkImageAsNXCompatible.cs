@@ -4,6 +4,7 @@
 using System.Composition;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
@@ -55,14 +56,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // comes in the form of input data to the exploited program on a data segment, rather than on an
                 // executable code segment. To resolve this issue, ensure that your tool chain is configured to mark 
                 //your binaries as NX compatible, e.g. by passing / NXCOMPAT to the C / C++ linker.
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.MarkImageAsNXCompatible_Fail));
                 return;
             }
 
             // '{0}' is marked as NX compatible.
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.MarkImageAsNXCompatible_Pass));
         }

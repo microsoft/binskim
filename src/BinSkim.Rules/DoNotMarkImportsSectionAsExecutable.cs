@@ -4,6 +4,7 @@
 using System.Composition;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
@@ -72,14 +73,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // /MERGE on the linker command line, or #pragma segment in source code, which change the 
                 // imports section to be executable, or which merge the ".rdata" segment into an executable 
                 // section.
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                         RuleUtilities.BuildMessage(context,
                             RulesResources.DoNotMarkImportsSectionAsExecutable_Fail));
                 return;
             }
 
             // '{0}' does not have an imports section that is marked as executable.
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.DoNotMarkImportsSectionAsExecutable_Pass));
         }

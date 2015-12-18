@@ -6,15 +6,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
-using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL
 {
     internal class DumpCommand : DriverCommand<DumpOptions>
     {
+        public override string Prerelease {  get { return VersionConstants.Prerelease; } }
+
         public override int Run(DumpOptions dumpOptions)
         {
             var targets = new List<string>();

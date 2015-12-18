@@ -3,12 +3,13 @@
 
 using System;
 using System.Collections.Generic;
-
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    internal class TestMessageLogger : IMessageLogger<BinaryAnalyzerContext>
+    internal class TestMessageLogger : IResultLogger
     {
         public TestMessageLogger()
         {
@@ -23,36 +24,44 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public HashSet<string> NotApplicableTargets { get; set; }
 
-        public void Log(MessageKind messageKind, BinaryAnalyzerContext context, string message)
+        public void Log(ResultKind messageKind, IAnalysisContext context, string message)
         {
             switch (messageKind)
             {
-                case MessageKind.Pass:
-                    {
-                        PassTargets.Add(context.PE.FileName);
-                        break;
-                    }
+                case ResultKind.Pass:
+                {
+                    PassTargets.Add(context.TargetUri.LocalPath);
+                    break;
+                }
 
-                case MessageKind.Fail:
-                    {
-                        FailTargets.Add(context.PE.FileName);
-                        break;
-                    }
+                case ResultKind.Error:
+                {
+                    FailTargets.Add(context.TargetUri.LocalPath);
+                    break;
+                }
 
-                case MessageKind.NotApplicable:
-                    {
-                        NotApplicableTargets.Add(context.PE.FileName);
-                        break;
-                    }
+                case ResultKind.NotApplicable:
+                {
+                    NotApplicableTargets.Add(context.TargetUri.LocalPath);
+                    break;
+                }
 
-                case MessageKind.Note:
-                case MessageKind.Pending:
-                case MessageKind.InternalError:
-                case MessageKind.ConfigurationError:
-                    {
-                        throw new NotImplementedException();
-                    }
+                case ResultKind.Note:
+                case ResultKind.InternalError:
+                case ResultKind.ConfigurationError:
+                {
+                    throw new NotImplementedException();
+                }
+                default:
+                {
+                    throw new InvalidOperationException();
+                }
             }
+        }
+
+        public void Log(ResultKind messageKind, IAnalysisContext context, FormattedMessage message)
+        {
+            throw new NotImplementedException();
         }
     }
 }

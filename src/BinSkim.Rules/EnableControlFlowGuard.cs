@@ -5,6 +5,7 @@ using System;
 using System.Composition;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
@@ -60,14 +61,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!EnablesControlFlowGuard(context))
             {
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableControlFlowGuard_Fail));
                 return;
             }
 
             // '{0}' enables the control flow guard mitigation.
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.EnableControlFlowGuard_Pass));
         }

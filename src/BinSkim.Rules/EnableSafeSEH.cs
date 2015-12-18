@@ -5,6 +5,7 @@ using System;
 using System.Composition;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
@@ -47,7 +48,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' is an x86 binary that does not use SEH, making it an invalid
                 // target for exploits that attempt to replace SEH jump targets with 
                 // attacker-controlled shellcode.	
-                context.Logger.Log(MessageKind.Pass, context,
+                context.Logger.Log(ResultKind.Pass, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableSafeSEH_NoSEH_Pass));
                 return;
@@ -67,7 +68,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // this issue, supply the /SafeSEH flag on the linker command line. Note 
                 // that you will need to configure your build system to supply this flag for 
                 // x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableSafeSEH_NoLoadConfigurationTable_Fail));
                 return;
@@ -83,7 +84,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // contains an unexpectedly small load configuration table {size 0}
                 string seHandlerSizeText = String.Format(RulesResources.EnableSafeSEH_LoadConfigurationIsTooSmall_Fail, seHandlerSize.ToString());
 
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableSafeSEH_Formatted_Fail,
                         RulesResources.EnableSafeSEH_LoadConfigurationIsTooSmall_Fail,
@@ -116,7 +117,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // this issue, supply the /SafeSEH flag on the linker command line. Note that you 
                 // will need to configure your build system to supply this flag for x86 builds only, 
                 // as the /SafeSEH flag is invalid when linking for ARM and x64.
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableSafeSEH_Formatted_Fail, failureKind));
                 return;
@@ -124,7 +125,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // ''{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception 
             // jump targets are defined as exception handlers in the program (and not shellcode).
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.EnableSafeSEH_SafeSEHEnabled_Pass));
         }

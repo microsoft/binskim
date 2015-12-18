@@ -10,8 +10,8 @@ using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Pdb pdb = context.Pdb;
             if (pdb == null)
             {
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildCouldNotLoadPdbMessage(context));
                 return;
             }
@@ -143,7 +143,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     // '{0}' was built with a version of {1} which is subject to the following issues: {2}. 
                     // To resolve this, {3}. The source files that triggered this were: {4}
-                    context.Logger.Log(MessageKind.Fail, context,
+                    context.Logger.Log(ResultKind.Error, context,
                         RuleUtilities.BuildMessage(context,
                             RulesResources.DoNotIncorporateVulnerableBinaries_Fail,
                             descriptor.Name,
@@ -155,7 +155,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             // '{0}' does not incorporate any known vulnerable dependencies, as configured by current policy.
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.DoNotIncorporateVulnerableBinaries_Pass));
         }

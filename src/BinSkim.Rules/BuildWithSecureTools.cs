@@ -9,8 +9,8 @@ using System.Globalization;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
-using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Pdb pdb = context.Pdb;
             if (pdb == null)
             {
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildCouldNotLoadPdbMessage(context));
                 return;
             }
@@ -161,7 +161,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // product where the tool chain cannot be modified (e.g. producing a hotfix for 
                 // an already shipped version) ignore this warning.
                 // Modules built outside of policy: {3}
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.BuildWithSecureTools_Fail,
                         minCompilerVersion.ToString(),
@@ -172,7 +172,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // '{0}' was built with a tool chain that satisfies configured policy 
             // (compiler minimum version {1}, linker minimum version {2}).
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.BuildWithSecureTools_Pass,
                     minCompilerVersion.ToString(), minLinkVersion.ToString()));

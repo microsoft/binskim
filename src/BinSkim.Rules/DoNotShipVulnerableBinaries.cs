@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -81,7 +81,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (!sanitizedVersion.Success)
                 {
                     // Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems.
-                    context.Logger.Log(MessageKind.Fail, context,
+                    context.Logger.Log(ResultKind.Error, context,
                         RuleUtilities.BuildMessage(context,
                             RulesResources.DoNotShipVulnerableBinaries_CouldNotParseVersion_Fail));
                     return;
@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     //of {0} that is newer than version {2}. If this binary is not in fact {0}, 
                     // ignore this warning.
 
-                    context.Logger.Log(MessageKind.Fail, context,
+                    context.Logger.Log(ResultKind.Error, context,
                         RuleUtilities.BuildMessage(context,
                             RulesResources.DoNotShipVulnerableBinaries_CouldNotParseVersion_Fail,
                             minimumVersion.ToString()));
@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // '{0}' is not known to be an obsolete binary that is 
             //vulnerable to one or more security problems.
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.DoNotShipVulnerableBinaries_Pass));
         }

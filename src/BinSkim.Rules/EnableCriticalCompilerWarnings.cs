@@ -13,8 +13,8 @@ using Dia2Lib;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (di == null)
             {
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildCouldNotLoadPdbMessage(context));
                 return;
             }
@@ -164,7 +164,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // required by policy. As a result, there is a greater likelihood 
                 // that memory corruption, information disclosre, double-free and 
                 // other security-related vulnerabilities do not exist in code.
-                context.Logger.Log(MessageKind.Pass, context,
+                context.Logger.Log(ResultKind.Pass, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableCriticalCompilerWarnings_Pass, overallMinimumWarningLevel.ToString()));
                 return;
@@ -175,7 +175,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' contains code from an unknown language, preventing a 
                 // comprehensive analysis of the compiler warning settings. 
                 // The language could not be identified for the following modules: {1}
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableCriticalCompilerWarnings_UnknownModuleLanguage_Fail,
                         unknownLanguageModules.ToString()));
@@ -191,7 +191,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // the warnings emitted.
                 // An example compiler command line triggering this check: {1}
                 // Modules triggering this check: {2}
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableCriticalCompilerWarnings_InsufficientWarningLevel_Fail,
                         overallMinimumWarningLevel.ToString(),
@@ -210,7 +210,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // during compilation.
                 // An example compiler command line triggering this check was: {1}
                 // Modules triggering this check were: {2}
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableCriticalCompilerWarnings_WarningsDisabled_Fail,
                         exampleDisabledWarningCommandLine,

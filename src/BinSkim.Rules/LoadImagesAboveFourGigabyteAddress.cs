@@ -5,6 +5,7 @@ using System;
 using System.Composition;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
@@ -60,14 +61,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // to continue using a custom preferred base address, you will need to make this 
                 // modification only for 64-bit builds, as base addresses above 4GB are not valid 
                 // for 32-bit binaries.
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.LoadImageAboveFourGigabyteAddress_Fail));
                 return;
             }
 
             // '{0}' is marked as NX compatible.
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                 RuleUtilities.BuildMessage(context,
                     RulesResources.LoadImageAboveFourGigabyteAddress_Pass));
         }

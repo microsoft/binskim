@@ -6,10 +6,11 @@ using System.Linq;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Driver;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 using Dia2Lib;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -35,7 +36,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (pdb == null)
             {
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildCouldNotLoadPdbMessage(context));
                 return;
             }
@@ -77,7 +78,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' is a C or C++ binary built with the stack protector buffer security 
                 // feature enabled for all modules, making it more difficult for an attacker to 
                 // exploit stack buffer overflow memory corruption vulnerabilities. 
-                context.Logger.Log(MessageKind.Pass, context,
+                context.Logger.Log(ResultKind.Pass, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableStackProtection_Pass));
                 return;
@@ -88,7 +89,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' contains code from unknown language, preventing a comprehensive analysis of the 
                 // stack protector buffer security features. The language could not be identified for
                 // the following modules: {1}.
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableStackProtection_UnknownModuleLanguage_Fail,
                         unknownLanguageModules.ToString()));
@@ -102,7 +103,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // memory corruption vulnerabilities. To resolve this issue, ensure that your code 
                 // is compiled with the stack protector enabled by supplying /GS on the Visual C++ 
                 // compiler command line. The affected modules were: {1}
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.EnableStackProtection_Fail,
                         noGsModules.ToString()));

@@ -26,9 +26,9 @@
     <file src="x64_Release\BinSkim.Rules.dll" target="tools\x64" />
     <file src="x64_Release\BinSkim.Rules.pdb" target="tools\x64" />
     <file src="x64_Release\CommandLine.dll" target="tools\x64" />
-    <file src="x64_Release\Driver.Utilities.dll" target="tools\x64" />
+    <file src="x64_Release\Sarif.Driver.dll" target="tools\x64" />
     <file src="x64_Release\NewtonSoft.Json.dll" target="tools\x64" />
-    <file src="x64_Release\StaticAnalysisResultsInterchangeFormat.dll" target="tools\x64" />
+    <file src="x64_Release\Sarif.dll" target="tools\x64" />
     <file src="x64_Release\System.Collections.Immutable.dll" target="tools\x64" />
     <file src="x64_Release\System.Composition.AttributedModel.dll" target="tools\x64" />
     <file src="x64_Release\System.Composition.Convention.dll" target="tools\x64" />
@@ -51,9 +51,9 @@
     <file src="x86_Release\BinSkim.Rules.dll" target="tools\x86" />
     <file src="x86_Release\BinSkim.Rules.pdb" target="tools\x86" />
     <file src="x86_Release\CommandLine.dll" target="tools\x86" />
-    <file src="x86_Release\Driver.Utilities.dll" target="tools\x86" />
+    <file src="x86_Release\Sarif.Driver.dll" target="tools\x86" />
     <file src="x86_Release\NewtonSoft.Json.dll" target="tools\x86" />
-    <file src="x86_Release\StaticAnalysisResultsInterchangeFormat.dll" target="tools\x86" />
+    <file src="x86_Release\Sarif.dll" target="tools\x86" />
     <file src="x86_Release\System.Collections.Immutable.dll" target="tools\x86" />
     <file src="x86_Release\System.Composition.AttributedModel.dll" target="tools\x86" />
     <file src="x86_Release\System.Composition.Convention.dll" target="tools\x86" />

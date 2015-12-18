@@ -5,6 +5,7 @@ using System.Composition;
 using System.Linq;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
@@ -31,7 +32,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (context.Pdb == null)
             {
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildCouldNotLoadPdbMessage(context));
                 return;
             }
@@ -43,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (noCode)
             {
                 // '{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code.
-                context.Logger.Log(MessageKind.Pass, context,
+                context.Logger.Log(ResultKind.Pass, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.InitializeStackProtection_NoCode_Pass));
                 return;
@@ -60,7 +61,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // '{0}' is a C or C++ binary that does not make use of the stack protection 
                 // buffer security feature. It is therefore not required to initialize the feature.
-                context.Logger.Log(MessageKind.Pass, context,
+                context.Logger.Log(ResultKind.Pass, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.InitializeStackProtection_NoFeatureUse_Pass));
                 return;
@@ -79,7 +80,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // protector. To resolve this issue, use the default entry point provided 
                 // by the C runtime, which will make this call for you, or call 
                 // __security_init_cookie() manually in your custom entry point.
-                context.Logger.Log(MessageKind.Fail, context,
+                context.Logger.Log(ResultKind.Error, context,
                     RuleUtilities.BuildMessage(context,
                         RulesResources.InitializeStackProtection_Fail));
                 return;
@@ -89,7 +90,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // that properly initializes the stack protecter. This has the 
             //effect of increasing the effectiveness of the feature and reducing 
             // spurious detections.
-            context.Logger.Log(MessageKind.Pass, context,
+            context.Logger.Log(ResultKind.Pass, context,
                 RuleUtilities.BuildMessage(context,
                    RulesResources.InitializeStackProtection_Pass));
         }
