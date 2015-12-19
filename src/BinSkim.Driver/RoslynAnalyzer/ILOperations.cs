@@ -31,6 +31,22 @@ namespace Microsoft.CodeAnalysis.IL
         // TODO: Handle invalid IL gracefully
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool IOperation.IsInvalid => false;
+
+        public override string ToString()
+        {
+            var name = this.GetType().Name;
+
+            if (name.EndsWith(nameof(Expression), StringComparison.Ordinal))
+            {
+                name = name.Substring(0, name.Length - nameof(Expression).Length);
+            }
+            else if (name.EndsWith(nameof(Statement), StringComparison.Ordinal))
+            {
+                name = name.Substring(0, name.Length - nameof(Statement).Length);
+            }
+
+            return name;
+        }
     }
 
     internal abstract class Expression : Operation, IExpression
@@ -46,6 +62,7 @@ namespace Microsoft.CodeAnalysis.IL
             Arguments = arguments;
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public ImmutableArray<IArgument> Arguments { get; }
 
         public IArgument ArgumentMatchingParameter(IParameterSymbol parameter)
@@ -127,6 +144,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IExpression IArgument.OutConversion => null;
+
+        public override string ToString()
+        {
+            return $"Argument [{Parameter.Name}: {Value}]";
+        }
     }
 
     internal abstract class ReferenceExpression : Expression, IReferenceExpression
@@ -169,6 +191,11 @@ namespace Microsoft.CodeAnalysis.IL
         public ILocalSymbol Local { get; }
         public override ITypeSymbol ResultType => Local.Type;
         public override OperationKind Kind => OperationKind.LocalReferenceExpression;
+
+        public override string ToString()
+        {
+            return $"LocalReference [{Local.Name}]";
+        }
     }
 
     internal class ParameterReferenceExpression : ReferenceExpression, IParameterReferenceExpression
@@ -181,6 +208,11 @@ namespace Microsoft.CodeAnalysis.IL
         public IParameterSymbol Parameter { get; }
         public override ITypeSymbol ResultType => Parameter.Type;
         public override OperationKind Kind => OperationKind.ParameterReferenceExpression;
+
+        public override string ToString()
+        {
+            return $"ParameterReference [{Parameter.Name}]";
+        }
     }
 
     internal sealed class InstanceReferenceExpression : ParameterReferenceExpression, IInstanceReferenceExpression
@@ -196,6 +228,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool IInstanceReferenceExpression.IsExplicit => true;
+
+        public override string ToString()
+        {
+            return "InstanceReference";
+        }
     }
 
     internal abstract class MemberReferenceExpression : ReferenceExpression, IMemberReferenceExpression
@@ -331,6 +368,11 @@ namespace Microsoft.CodeAnalysis.IL
         // TODO: Proper IL/round-trippable syntax.
         // FEEDBACK: Does Spelling belong on ILiteralExpression? Why not get it from IOperation.Syntax?
         public string Spelling => ConstantValue.ToString();
+
+        public override string ToString()
+        {
+            return $"Literal [{ConstantValue}]";
+        }
     }
 
     internal sealed class AddressOfExpression : Expression, IAddressOfExpression
@@ -376,6 +418,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override OperationKind Kind => OperationKind.AssignmentExpression;
         public override ITypeSymbol ResultType => Target.ResultType;
+
+        public override string ToString()
+        {
+            return $"Assignment [{Target} = {Value}]";
+        }
     }
 
     internal abstract class Statement : Operation, IStatement
@@ -391,6 +438,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public IExpression Expression { get; }
         public override OperationKind Kind => OperationKind.ExpressionStatement;
+
+        public override string ToString()
+        {
+            return $"{Expression} (statement)";
+        }
     }
 
     internal class BlockStatement : Statement, IBlockStatement
@@ -402,6 +454,8 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public ImmutableArray<ILocalSymbol> Locals { get; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public ImmutableArray<IStatement> Statements { get; }
         public override OperationKind Kind => OperationKind.BlockStatement;
     }
@@ -416,6 +470,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public ILabelSymbol Label { get; }
         public override OperationKind Kind => OperationKind.LabelStatement;
+
+        public override string ToString()
+        {
+            return $"Label: {Label.Name}";
+        }
     }
 
     internal sealed class IfStatement : Statement, IIfStatement
@@ -443,7 +502,12 @@ namespace Microsoft.CodeAnalysis.IL
         public ILabelSymbol Target { get; }
 
         // FEEDBACK: first non 1:1 I see between interface name and kind, others have distinct subkinds. Should this be BranchKind.GoTo and OperationKind.BranchStatement?
-        public override OperationKind Kind => OperationKind.GoToStatement; 
+        public override OperationKind Kind => OperationKind.GoToStatement;
+
+        public override string ToString()
+        {
+            return $"GoTo {Target.Name}";
+        }
     }
 
     internal sealed class ThrowStatement : Statement, IThrowStatement
@@ -455,6 +519,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public IExpression Thrown { get; }
         public override OperationKind Kind => OperationKind.ThrowStatement;
+
+        public override string ToString()
+        {
+            return Thrown == null ? "Throw" : $"Throw [{Thrown}]";
+        }
     }
 
     internal sealed class ReturnStatement : Statement, IReturnStatement
@@ -466,6 +535,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public IExpression Returned { get; }
         public override OperationKind Kind => OperationKind.ReturnStatement;
+
+        public override string ToString()
+        {
+            return Returned == null ? "Return" : $"Return [{Returned}]";
+        }
     }
 
     internal sealed class TryStatement : Statement, ITryStatement
@@ -477,7 +551,10 @@ namespace Microsoft.CodeAnalysis.IL
             FinallyHandler = finallyHandler;
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public IBlockStatement Body { get; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public ImmutableArray<ICatch> Catches { get; }
         public IBlockStatement FinallyHandler { get; }
         public override OperationKind Kind => OperationKind.TryStatement;
@@ -499,6 +576,6 @@ namespace Microsoft.CodeAnalysis.IL
         public IBlockStatement Handler { get; }
 
         // FEEDBACK: inconsistently named vs. interface
-        public override OperationKind Kind => OperationKind.CatchHandler; 
+        public override OperationKind Kind => OperationKind.CatchHandler;
     }
 }

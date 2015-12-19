@@ -158,6 +158,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool ILocalSymbol.IsFunctionValue => false;
+
+        public override string ToString()
+        {
+            return $"Local: {Type.Name} {Name}";
+        }
     }
 
     internal sealed class LabelSymbol : LocalOrLabelSymbol, ILabelSymbol
@@ -182,6 +187,11 @@ namespace Microsoft.CodeAnalysis.IL
         public override TResult Accept<TResult>(SymbolVisitor<TResult> visitor)
         {
             return visitor.VisitLabel(this);
+        }
+
+        public override string ToString()
+        {
+            return $"Label: {Name}";
         }
     }
 }

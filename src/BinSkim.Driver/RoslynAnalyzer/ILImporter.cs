@@ -308,7 +308,9 @@ namespace Microsoft.CodeAnalysis.IL
                 throw new BadImageFormatException();
             }
 
-            return _stack[--_stackTop];
+            var value = _stack[--_stackTop];
+            _stack[_stackTop] = default(StackValue);
+            return value;
         }
 
         private void Append(IStatement statement)
@@ -1106,6 +1108,11 @@ namespace Microsoft.CodeAnalysis.IL
 
             public readonly IExpression Expression;
             public readonly StackValueKind Kind;
+
+            public override string ToString()
+            {
+                return Expression?.ToString() ?? "(null)";
+            }
         }
 
         private sealed class BasicBlock
@@ -1114,7 +1121,7 @@ namespace Microsoft.CodeAnalysis.IL
             public BasicBlock Next;
             public int StartOffset;
             public int EndOffset;
-            public StackValue[] EntryStack = null; // suppress warning in initial checkin
+            public StackValue[] EntryStack;
             public bool TryStart;
             public bool FilterStart;
             public bool HandlerStart;
