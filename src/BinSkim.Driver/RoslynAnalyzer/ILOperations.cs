@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.IL
     internal abstract class Expression : Operation, IExpression
     {
         public abstract ITypeSymbol ResultType { get; }
-        public virtual object ConstantValue => null;
+        public virtual Optional<object> ConstantValue => default(Optional<object>);
     }
 
     internal abstract class HasArgumentsExpression : Expression
@@ -306,7 +306,7 @@ namespace Microsoft.CodeAnalysis.IL
             ResultType = type;
         }
 
-        public override object ConstantValue { get; }
+        public override Optional<object> ConstantValue { get; }
         public override ITypeSymbol ResultType { get; }
         public override OperationKind Kind => OperationKind.LiteralExpression;
 
