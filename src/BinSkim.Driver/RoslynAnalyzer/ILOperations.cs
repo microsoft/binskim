@@ -4,6 +4,7 @@
 using Microsoft.CodeAnalysis.Semantics;
 using System.Collections.Immutable;
 using System;
+using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -24,9 +25,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         // TODO: Fake this out. 
         // FEEDBACK: Should this be optional, with separate location?
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         SyntaxNode IOperation.Syntax => null;
 
         // TODO: Handle invalid IL gracefully
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool IOperation.IsInvalid => false;
     }
 
@@ -79,7 +82,10 @@ namespace Microsoft.CodeAnalysis.IL
         public override ITypeSymbol ResultType => TargetMethod.ReturnType;
         public override OperationKind Kind => OperationKind.InvocationExpression;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ImmutableArray<IArgument> IInvocationExpression.ArgumentsInParameterOrder => Arguments;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ImmutableArray<IArgument> IInvocationExpression.ArgumentsInSourceOrder => Arguments;
     }
 
@@ -95,7 +101,10 @@ namespace Microsoft.CodeAnalysis.IL
         public override ITypeSymbol ResultType => Constructor.ContainingType;
         public override OperationKind Kind => OperationKind.ObjectCreationExpression;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ImmutableArray<IMemberInitializer> IObjectCreationExpression.MemberInitializers => ImmutableArray<IMemberInitializer>.Empty;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ImmutableArray<IArgument> IObjectCreationExpression.ConstructorArguments => Arguments;
     }
 
@@ -110,8 +119,13 @@ namespace Microsoft.CodeAnalysis.IL
         public IParameterSymbol Parameter { get; }
         public IExpression Value { get; }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ArgumentKind IArgument.Kind => ArgumentKind.Positional;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IExpression IArgument.InConversion => null;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IExpression IArgument.OutConversion => null;
     }
 
@@ -180,6 +194,7 @@ namespace Microsoft.CodeAnalysis.IL
         public override ITypeSymbol ResultType { get; }
         public override OperationKind Kind => OperationKind.InstanceReferenceExpression;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool IInstanceReferenceExpression.IsExplicit => true;
     }
 
@@ -226,7 +241,10 @@ namespace Microsoft.CodeAnalysis.IL
     internal abstract class HasOperatorExpression : Expression, IHasOperatorExpression
     {
         // operator method calls will be raised as regular invocations so this is always false/null.
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool IHasOperatorExpression.UsesOperatorMethod => false;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IMethodSymbol IHasOperatorExpression.Operator => null;
     }
 
@@ -411,7 +429,8 @@ namespace Microsoft.CodeAnalysis.IL
         public IStatement IfTrue { get; }
         public override OperationKind Kind => OperationKind.IfStatement;
 
-        IStatement IIfStatement.IfFalse => null; // we always goto on true and fallthrough on false. 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IStatement IIfStatement.IfFalse => null; // we always goto on true and fallthrough on false 
     }
 
     internal sealed class GoToStatement : Statement, IBranchStatement
@@ -425,7 +444,6 @@ namespace Microsoft.CodeAnalysis.IL
 
         // FEEDBACK: first non 1:1 I see between interface name and kind, others have distinct subkinds. Should this be BranchKind.GoTo and OperationKind.BranchStatement?
         public override OperationKind Kind => OperationKind.GoToStatement; 
-
     }
 
     internal sealed class ThrowStatement : Statement, IThrowStatement
