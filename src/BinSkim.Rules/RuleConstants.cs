@@ -20,8 +20,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string EnableAddressSpaceLayoutRandomizationId = "BA2009";
         public const string DoNotMarkImportsSectionAsExecutableId = "BA2010";
         public const string EnableStackProtectionId = "BA2011";
-        public const string InitializeStackProtectionId = "BA2012";
-        public const string DoNotModifyStackProtectionCookieId = "BA2013";
+        public const string DoNotModifyStackProtectionCookieId = "BA2012";
+        public const string InitializeStackProtectionId = "BA2013";
         public const string DoNotDisableStackProtectionForFunctionsId = "BA2014";
         public const string EnableHighEntropyVirtualAddressesId = "BA2015";
         public const string MarkImageAsNXCompatibleId = "BA2016";
