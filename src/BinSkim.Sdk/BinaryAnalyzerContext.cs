@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
@@ -120,12 +121,20 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public PdbParseException PdbParseException { get; internal set; }
 
-        public IResultLogger Logger { get; set; }
+        public IAnalysisLogger Logger { get; set; }
 
         public IRuleDescriptor Rule { get; set; }
 
         public Version MinimumSupportedCompilerVersion { get; internal set; }
 
         public PropertyBag Policy { get; set; }
+
+        public string MimeType
+        {
+            get { return Microsoft.CodeAnalysis.Sarif.Writers.MimeType.Binary; }
+            set { throw new InvalidOperationException(); }
+        }
+
+        public RuntimeConditions RuntimeErrors { get; set; }
     }
 }

@@ -100,6 +100,9 @@ namespace Microsoft.CodeAnalysis.IL
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.LocationType'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.DataKind'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.NameSearchOptions'",
+#if DEBUG
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.TruncatedCompilandRecordList.<>c'",
+#endif
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.TruncatedCompilandRecordList'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.IL.VersionConstants'",
                 "Roslyn 'RegisterCompilationAction' callback invoked analyzing 'BinaryParsers.dll'",

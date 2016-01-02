@@ -2,15 +2,15 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props')" />
   <PropertyGroup>
-    <ProjectGuid>{F380374A-7861-49C1-9643-B7CC5B0D58B0}</ProjectGuid>
+    <ProjectGuid>{8BD5CB5D-1A7C-4286-86D3-82D95524BE8B}</ProjectGuid>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
-    <RootNamespace>Microsoft.CodeAnalysis.BinSkim.Rules</RootNamespace>
+    <RootNamespace>Microsoft.CodeAnalysis.BinSkim.Driver</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyName>BinSkim.Rules.FunctionalTests</AssemblyName>
+    <AssemblyName>BinSkim.Driver.FunctionalTests</AssemblyName>
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -95,19 +95,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExceptionCondition.cs" />
+    <Compile Include="BaselineTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ILDiagnosticsAnalyzerTests.cs" />
-    <Compile Include="RoslynAnalysisContextTests.cs" />
-    <Compile Include="RoslynCompilationStartAnalysisContextTests.cs" />
-    <Compile Include="RuleTests.cs" />
-    <Compile Include="SarifHelpers.cs" />
-    <Compile Include="TestMessageLogger.cs" />
     <Compile Include="..\Shared\SharedAssemblyInfo.cs" />
-    <Compile Include="TestRoslynAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="BaselineTests.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -138,11 +131,9 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="CopyFunctionalTestsData" AfterTargets="Build">
     <ItemGroup>
-      <BaselineTestFiles Include="$(SolutionDir)BinSkim.Driver.FunctionalTests\BaselineTestsData\**\*" />
-      <FunctionalTestFiles Include="$(SolutionDir)BinSkim.Rules.FunctionalTests\FunctionalTestsData\**\*" />
+      <BaselineTestFiles Include="$(SolutionDir)BinSkim.Rules.FunctionalTests\BaselineTestsData\**\*" />
     </ItemGroup>
     <Copy SourceFiles="@(BaselineTestFiles)" DestinationFolder="$(OutputPath)\BaselineTestsData\%(RecursiveDir)" />
-    <Copy SourceFiles="@(FunctionalTestFiles)" DestinationFolder="$(OutputPath)\FunctionalTestsData\%(RecursiveDir)" />
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -7,24 +7,44 @@ using System.Collections.Immutable;
 using System.Composition;
 using System.Globalization;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
+using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
-using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
     public class BuildWithSecureTools : BinarySkimmerBase, IOptionsProvider
     {
+        /// <summary>
+        /// BA2006
+        /// </summary>
         public override string Id { get { return RuleIds.BuildWithSecureToolsId; } }
 
+        /// <summary>
+        /// Application code should be compiled with the most up-to-date tool sets possible
+        /// in order to take advantage of the most current compile-time security features.
+        /// </summary>
         public override string FullDescription
         {
-            get { return RulesResources.BuildWithSecureTools_Description; }
+            get { return RuleResources.BA2006_BuildWithSecureTools_Description; }
         }
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2006_Fail_BadModule),
+                    nameof(RuleResources.BA2006_Pass),
+                    nameof(RuleResources.BA2006_Fail)};
+            }
+        }
+
 
         public IEnumerable<IOption> GetOptions()
         {
@@ -62,9 +82,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (portableExecutable.IsResourceOnly) { return result; }
 
             // Checks for missing policy should always be evaluated as the last action, so that 
-            // we do not raise an error in cases where the analysis would not otherise be applied.
-            reasonForNotAnalyzing = RulesResources.DoNotShipVulnerabilities_MissingPolicy_InternalError;
-            if (context.Policy == null) { return AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy; }
+            // we do not raise an error in cases where the analysis would not otherwise be applied.
+            reasonForNotAnalyzing = RuleResources.BA2005_MissingRequiredConfiguration;
+            if (context.Policy == null) { return AnalysisApplicability.NotApplicableDueToMissingConfiguration; }
 
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
@@ -76,8 +96,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Pdb pdb = context.Pdb;
             if (pdb == null)
             {
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildCouldNotLoadPdbMessage(context));
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
                 return;
             }
 
@@ -146,7 +165,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     badModuleList.Add(
                         om.CreateCompilandRecordWithSuffix(
                             String.Format(CultureInfo.InvariantCulture,
-                            RulesResources.BuildWithSecureTools_BadModule,
+                            RuleResources.BA2006_Fail_BadModule,
                             omLanguage, omDetails.CompilerVersion, omDetails.CompilerFrontEndVersion)));
                 }
             }
@@ -161,9 +180,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // product where the tool chain cannot be modified (e.g. producing a hotfix for 
                 // an already shipped version) ignore this warning.
                 // Modules built outside of policy: {3}
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.BuildWithSecureTools_Fail,
+                context.Logger.Log(this, 
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    nameof(RuleResources.BA2006_Fail),
                         minCompilerVersion.ToString(),
                         minLinkVersion.ToString(),
                         badModuleList.CreateSortedObjectList()));
@@ -172,10 +191,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // '{0}' was built with a tool chain that satisfies configured policy 
             // (compiler minimum version {1}, linker minimum version {2}).
-            context.Logger.Log(ResultKind.Pass, context,
-                RuleUtilities.BuildMessage(context,
-                    RulesResources.BuildWithSecureTools_Pass,
-                    minCompilerVersion.ToString(), minLinkVersion.ToString()));
+            context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2006_Pass),
+                        minCompilerVersion.ToString(), minLinkVersion.ToString()));
         }
 
         public static Version Minimum(Version lhs, Version rhs)

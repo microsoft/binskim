@@ -7,6 +7,7 @@ using System.Collections.Immutable;
 using System.Composition;
 using System.IO;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -16,14 +17,30 @@ using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
     public class DoNotIncorporateVulnerableDependencies : BinarySkimmerBase, IOptionsProvider
     {
+        /// <summary>
+        /// BA2002
+        /// </summary>
         public override string Id { get { return RuleIds.DoNotIncorporateVulnerableDependenciesId; } }
 
+        /// <summary>
+        /// Binaries should not take dependencies on other code with known security vulnerabilities.
+        /// </summary>
         public override string FullDescription
         {
-            get { return RulesResources.DoNotIncorporateVulnerableBinaries_Description; }
+            get { return RuleResources.BA2002_DoNotIncorporateVulnerableBinaries_Description; }
+        }
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2002_Pass),
+                    nameof(RuleResources.BA2002_Fail)};
+            }
         }
 
         public IEnumerable<IOption> GetOptions()
@@ -74,9 +91,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (portableExecutable.IsResourceOnly) { return result; }
 
             // Checks for missing policy should always be evaluated as the last action, so that 
-            // we do not raise an error in cases where the analysis would not otherise be applied.
-            reasonForNotAnalyzing = RulesResources.DoNotShipVulnerabilities_MissingPolicy_InternalError;
-            if (context.Policy == null) { return AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy; }
+            // we do not raise an error in cases where the analysis would not otherwise be applied.
+            reasonForNotAnalyzing = RuleResources.BA2005_MissingRequiredConfiguration;
+            if (context.Policy == null) { return AnalysisApplicability.NotApplicableDueToMissingConfiguration; }
 
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
@@ -88,8 +105,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Pdb pdb = context.Pdb;
             if (pdb == null)
             {
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildCouldNotLoadPdbMessage(context));
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
                 return;
             }
 
@@ -143,9 +159,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     // '{0}' was built with a version of {1} which is subject to the following issues: {2}. 
                     // To resolve this, {3}. The source files that triggered this were: {4}
-                    context.Logger.Log(ResultKind.Error, context,
-                        RuleUtilities.BuildMessage(context,
-                            RulesResources.DoNotIncorporateVulnerableBinaries_Fail,
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                            nameof(RuleResources.BA2002_Fail),
                             descriptor.Name,
                             descriptor.VulnerabilityDescription,
                             descriptor.Resolution,
@@ -155,9 +171,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             // '{0}' does not incorporate any known vulnerable dependencies, as configured by current policy.
-            context.Logger.Log(ResultKind.Pass, context,
-                RuleUtilities.BuildMessage(context,
-                    RulesResources.DoNotIncorporateVulnerableBinaries_Pass));
+            context.Logger.Log(this, 
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2002_Pass)));
         }
 
         private static PropertyBag BuildDefaultVulnerableDependenciesMap()

@@ -1,25 +1,52 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor))]
     public class DoNotMarkImportsSectionAsExecutable : BinarySkimmerBase
     {
+        /// <summary>
+        /// BA2010
+        /// </summary>
         public override string Id { get { return RuleIds.DoNotMarkImportsSectionAsExecutableId; } }
+
+        /// <summary>
+        /// PE sections should not be marked as both writable and executable. This condition
+        /// makes it easier for an attacker to exploit memory corruption vulnerabilities,
+        /// as it may provide an attacker executable location(s) to inject shellcode.
+        /// Because the loader will always mark the imports section as writable, it is
+        /// therefore important to mark this section as non-executable. To resolve this
+        /// issue, ensure that your program does not mark the imports section executable.
+        /// Look for uses of /SECTION or /MERGE on the linker command line, or #pragma
+        /// segment in source code, which change the imports section to be executable, or
+        /// which merge the ".rdata" segment into an executable section.
+        /// </summary>
 
         public override string FullDescription
         {
-            get { return RulesResources.DoNotMarkImportsSectionAsExecutable_Description; }
+            get { return RuleResources.BA2010_DoNotMarkImportsSectionAsExecutable_Description; }
         }
-        
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2010_Pass),
+                    nameof(RuleResources.BA2010_Fail)};
+            }
+        }
+
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
@@ -73,16 +100,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // /MERGE on the linker command line, or #pragma segment in source code, which change the 
                 // imports section to be executable, or which merge the ".rdata" segment into an executable 
                 // section.
-                context.Logger.Log(ResultKind.Error, context,
-                        RuleUtilities.BuildMessage(context,
-                            RulesResources.DoNotMarkImportsSectionAsExecutable_Fail));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2010_Fail)));
                 return;
             }
 
             // '{0}' does not have an imports section that is marked as executable.
-            context.Logger.Log(ResultKind.Pass, context,
-                RuleUtilities.BuildMessage(context,
-                    RulesResources.DoNotMarkImportsSectionAsExecutable_Pass));
+            context.Logger.Log(this, 
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2010_Pass)));
         }
     }
 }

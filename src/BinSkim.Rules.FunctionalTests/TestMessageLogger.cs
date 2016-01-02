@@ -4,64 +4,91 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
-using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    internal class TestMessageLogger : IResultLogger
+    internal class TestMessageLogger : IAnalysisLogger
     {
         public TestMessageLogger()
         {
             FailTargets = new HashSet<string>();
             PassTargets = new HashSet<string>();
             NotApplicableTargets = new HashSet<string>();
+            ConfigurationErrorTargets = new HashSet<string>();
         }
+
+        public RuntimeConditions RuntimeErrors { get; set; }
 
         public HashSet<string> PassTargets { get; set; }
 
         public HashSet<string> FailTargets { get; set; }
 
+        public HashSet<string> ConfigurationErrorTargets { get; set; }
+
         public HashSet<string> NotApplicableTargets { get; set; }
 
-        public void Log(ResultKind messageKind, IAnalysisContext context, string message)
+        public void AnalysisStarted()
+        {
+        }
+
+        public void AnalysisStopped(RuntimeConditions runtimeConditions)
+        {
+            RuntimeErrors = runtimeConditions;
+        }
+
+        public void AnalyzingTarget(IAnalysisContext context)
+        {
+        }
+
+        public void LogMessage(bool verbose, string message)
+        {
+        }
+
+        public void Log(IRuleDescriptor rule, Result result)
+        {
+            NoteTestResult(result.Kind, result.Locations[0].AnalysisTarget[0].Uri.LocalPath);
+        }
+
+        public void NoteTestResult(ResultKind messageKind, string targetPath)
         {
             switch (messageKind)
             {
                 case ResultKind.Pass:
                 {
-                    PassTargets.Add(context.TargetUri.LocalPath);
+                    PassTargets.Add(targetPath);
+                    break;
+                }
+
+                case ResultKind.ConfigurationError:
+                {
+                    ConfigurationErrorTargets.Add(targetPath);
                     break;
                 }
 
                 case ResultKind.Error:
                 {
-                    FailTargets.Add(context.TargetUri.LocalPath);
+                    FailTargets.Add(targetPath);
                     break;
                 }
 
                 case ResultKind.NotApplicable:
                 {
-                    NotApplicableTargets.Add(context.TargetUri.LocalPath);
+                    NotApplicableTargets.Add(targetPath);
                     break;
                 }
 
                 case ResultKind.Note:
                 case ResultKind.InternalError:
-                case ResultKind.ConfigurationError:
                 {
                     throw new NotImplementedException();
                 }
+
                 default:
                 {
                     throw new InvalidOperationException();
                 }
             }
-        }
-
-        public void Log(ResultKind messageKind, IAnalysisContext context, FormattedMessage message)
-        {
-            throw new NotImplementedException();
         }
     }
 }

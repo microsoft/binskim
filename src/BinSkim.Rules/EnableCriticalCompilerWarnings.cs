@@ -9,7 +9,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection.PortableExecutable;
+
 using Dia2Lib;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -19,16 +21,41 @@ using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
     public class EnableCriticalCompilerWarnings : BinarySkimmerBase, IOptionsProvider
     {
+        /// <summary>
+        /// BA2007
+        /// </summary>
         public override string Id { get { return RuleIds.EnableCriticalCompilerWarningsId; } }
+
+        /// <summary>
+        /// Binaries should be compiled with a warning level that enables all critical
+        /// security-relevant checks. Enabling at least warning level 3 enables
+        /// important static analysis in the compiler that can identify bugs with a
+        /// potential to provoke memory corruption, information disclosure, or
+        /// double-free vulnerabilities. To resolve this issue, compile at warning
+        /// level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and
+        /// resolve the warnings emitted.
+        /// </summary>
 
         public override string FullDescription
         {
-            get { return RulesResources.EnableCriticalCompilerWarnings_Description; }
+            get { return RuleResources.BA2007_EnableCriticalCompilerWarnings_Description; }
         }
-       
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2007_Pass),
+                    nameof(RuleResources.BA2007_Fail_WarningsDisabled),
+                    nameof(RuleResources.BA2007_Fail_InsufficientWarningLevel),
+                    nameof(RuleResources.BA2007_Fail_UnknownModuleLanguage)};
+            }
+        }
+
         public IEnumerable<IOption> GetOptions()
         {
             return new List<IOption>
@@ -58,9 +85,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (portableExecutable.IsResourceOnly) { return result; }
 
             // Checks for missing policy should always be evaluated as the last action, so that 
-            // we do not raise an error in cases where the analysis would not otherise be applied.
-            reasonForNotAnalyzing = RulesResources.DoNotShipVulnerabilities_MissingPolicy_InternalError;
-            if (context.Policy == null) { return AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy; }
+            // we do not raise an error in cases where the analysis would not otherwise be applied.
+            reasonForNotAnalyzing = RuleResources.BA2005_MissingRequiredConfiguration;
+            if (context.Policy == null) { return AnalysisApplicability.NotApplicableDueToMissingConfiguration; }
 
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
@@ -68,14 +95,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override void Analyze(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
-            Pdb di = context.Pdb;
 
-            if (di == null)
+            if (context.Pdb == null)
             {
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildCouldNotLoadPdbMessage(context));
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
                 return;
             }
+
+            Pdb di = context.Pdb;
 
             TruncatedCompilandRecordList warningTooLowModules = new TruncatedCompilandRecordList();
             TruncatedCompilandRecordList disabledWarningModules = new TruncatedCompilandRecordList();
@@ -164,9 +191,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // required by policy. As a result, there is a greater likelihood 
                 // that memory corruption, information disclosre, double-free and 
                 // other security-related vulnerabilities do not exist in code.
-                context.Logger.Log(ResultKind.Pass, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableCriticalCompilerWarnings_Pass, overallMinimumWarningLevel.ToString()));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                        nameof(RuleResources.BA2007_Pass), 
+                        overallMinimumWarningLevel.ToString()));
                 return;
             }
 
@@ -175,9 +203,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' contains code from an unknown language, preventing a 
                 // comprehensive analysis of the compiler warning settings. 
                 // The language could not be identified for the following modules: {1}
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableCriticalCompilerWarnings_UnknownModuleLanguage_Fail,
+                context.Logger.Log(this, 
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2007_Fail_UnknownModuleLanguage),
                         unknownLanguageModules.ToString()));
             }
 
@@ -191,9 +219,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // the warnings emitted.
                 // An example compiler command line triggering this check: {1}
                 // Modules triggering this check: {2}
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableCriticalCompilerWarnings_InsufficientWarningLevel_Fail,
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2007_Fail_InsufficientWarningLevel),
                         overallMinimumWarningLevel.ToString(),
                         exampleTooLowWarningCommandLine,
                         warningTooLowModules.CreateTruncatedObjectList()));
@@ -210,9 +238,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // during compilation.
                 // An example compiler command line triggering this check was: {1}
                 // Modules triggering this check were: {2}
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableCriticalCompilerWarnings_WarningsDisabled_Fail,
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2007_Fail_WarningsDisabled),
                         exampleDisabledWarningCommandLine,
                         disabledWarningModules.CreateTruncatedObjectList()));
             }

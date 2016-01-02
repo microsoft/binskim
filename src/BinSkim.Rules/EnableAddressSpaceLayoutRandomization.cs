@@ -2,26 +2,53 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Diagnostics;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor))]
     public class EnableAddressSpaceLayoutRandomization : BinarySkimmerBase
     {
+        /// <summary>
+        /// BA2009
+        /// </summary>
         public override string Id { get { return RuleIds.EnableAddressSpaceLayoutRandomizationId; } }
+
+        /// <summary>
+        /// Binaries should linked as DYNAMICBASE in order to be eligible for relocation
+        /// by Address Space Layout Randomization (ASLR). ASLR is an important
+        /// mitigation that makes it more difficult for an attacker to exploit
+        /// memory corruption vulnerabilities. Configure your tool chain to build with
+        /// this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your
+        /// linker command line. For .NET applications, use a compiler shipping with
+        /// Visual Studio 2008 or later.
+        /// </summary>
 
         public override string FullDescription
         {
-            get { return RulesResources.EnableAddressSpaceLayoutRandomization_Description; }
+            get { return RuleResources.BA2009_EnableAddressSpaceLayoutRandomization_Description; }
         }
-        
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2009_Pass),
+                    nameof(RuleResources.BA2009_Fail_NotDynamicBase),
+                    nameof(RuleResources.BA2009_Fail_RelocsStripped),
+                    nameof(RuleResources.BA2009_Fail_WinCENoRelocationSection)};
+            }
+        }
+
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
@@ -51,9 +78,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // issue, configure your tool chain to build with this feature enabled. For C and C++ binaries, 
                 // add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping 
                 // with Visual Studio 2008 or later.
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableAddressSpaceLayoutRandomization_NotDynamicBase_Fail));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2009_Fail_NotDynamicBase)));
                 return;
             }
 
@@ -63,9 +90,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // '{0}' is marked as DYNAMICBASE but relocation data has been stripped
                 // from the image, preventing address space layout randomization. 
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableAddressSpaceLayoutRandomization_NotDynamicBase_Fail));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2009_Fail_RelocsStripped)));
                 return;
             }
 
@@ -93,17 +120,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // EnableAddressSpaceLayoutRandomization_WinCENoRelocationSection_Fail	'{0}'
                     // is a Windows CE image but does not contain any relocation data, preventing 
                     // address space layout randomization.	
-                    context.Logger.Log(ResultKind.Error, context,
-                        RuleUtilities.BuildMessage(context,
-                            RulesResources.EnableAddressSpaceLayoutRandomization_NotDynamicBase_Fail));
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                            nameof(RuleResources.BA2009_Fail_WinCENoRelocationSection)));
                     return;
                 }
             }
 
             //'{0}' is properly compiled to enable address space layout randomization.
-            context.Logger.Log(ResultKind.Pass, context,
-                RuleUtilities.BuildMessage(context,
-                    RulesResources.EnableAddressSpaceLayoutRandomization_Pass));
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2009_Pass)));
         }
     }
 }

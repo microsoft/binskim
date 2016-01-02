@@ -3,18 +3,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Composition.Convention;
-using System.Composition.Hosting;
-using System.Globalization;
-using System.IO;
 using System.Reflection;
 
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+using System.Diagnostics;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -37,6 +35,7 @@ namespace Microsoft.CodeAnalysis.IL
 
 
         private RoslynAnalysisContext _globalRoslynAnalysisContext;
+        private IEnumerable<string> _plugInFilePaths;
 
         protected override void InitializeFromOptions(AnalyzeOptions analyzeOptions)
         {
@@ -44,17 +43,22 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 Pdb.SymbolPath = analyzeOptions.SymbolsPath;
             }
+            _plugInFilePaths = analyzeOptions.PlugInFilePaths;
         }
 
-        protected override BinaryAnalyzerContext AnalyzeTarget(AnalyzeOptions options, IEnumerable<ISkimmer<BinaryAnalyzerContext>> skimmers, BinaryAnalyzerContext rootContext, string target, HashSet<string> disabledSkimmers)
+        protected override void AnalyzeTarget(IEnumerable<ISkimmer<BinaryAnalyzerContext>> skimmers, BinaryAnalyzerContext context, HashSet<string> disabledSkimmers)
         {
-            BinaryAnalyzerContext context = base.AnalyzeTarget(options, skimmers, rootContext, target, disabledSkimmers);
-            AnalyzeManagedAssembly(target, options.PlugInFilePaths, context);
-            return context;
+            base.AnalyzeTarget(skimmers, context, disabledSkimmers);
+            AnalyzeManagedAssembly(context.TargetUri.LocalPath, _plugInFilePaths, context);
         }
 
         private void AnalyzeManagedAssembly(string assemblyFilePath, IEnumerable<string> roslynAnalyzerFilePaths, BinaryAnalyzerContext context)
         {
+            if (roslynAnalyzerFilePaths == null)
+            {
+                return;
+            }
+
             if (_globalRoslynAnalysisContext == null)
             {
                 _globalRoslynAnalysisContext = new RoslynAnalysisContext();
@@ -74,35 +78,102 @@ namespace Microsoft.CodeAnalysis.IL
                         action: () => { ILDiagnosticsAnalyzer.LoadAnalyzer(analyzerFilePath, _globalRoslynAnalysisContext); },
                         exceptionHandler: (ex) =>
                         {
-                            LogExceptionLoadingRoslynAnalyzer(analyzerFilePath, context, ex);
+                            Errors.LogExceptionLoadingPlugIn(analyzerFilePath, context, ex);
                         }
                     );
                 }
             }
 
-            ILDiagnosticsAnalyzer roslynAnalyzer = ILDiagnosticsAnalyzer.Create(_globalRoslynAnalysisContext);
+            Debug.Assert(context.MimeType == Sarif.Writers.MimeType.Binary);
 
+            ILDiagnosticsAnalyzer roslynAnalyzer = ILDiagnosticsAnalyzer.Create(_globalRoslynAnalysisContext);
             roslynAnalyzer.Analyze(assemblyFilePath, diagnostic =>
             {
-                ResultKind messageKind = diagnostic.Severity.ConvertToMessageKind();
-                context.Logger.Log(messageKind, context, diagnostic.GetMessage(CultureInfo.CurrentCulture));
+                // 0. Populate various members
+                var result = new Result();
+                result.Kind = diagnostic.Severity.ConvertToMessageKind();
+                result.FullMessage = diagnostic.GetMessage();
+
+                // For Roslyn diagnostics, suppression information is always available (i.e., it 
+                // is not contingent on compilation with specific #define such as CODE_ANLAYSIS).
+                // As a result, we always populate IsSuppressedInSource with this information.
+                result.IsSuppressedInSource = diagnostic.IsSuppressed;
+
+                result.Properties = new Dictionary<string, string>();
+                result.Properties["Severity"] = diagnostic.Severity.ToString();
+                result.Properties["IsWarningAsError"] = diagnostic.IsWarningAsError.ToString();
+                result.Properties["WarningLevel"] = diagnostic.WarningLevel.ToString();
+
+                foreach (string key in diagnostic.Properties.Keys)
+                {
+                    result.Properties[key] = diagnostic.Properties[key];
+                }
+
+                // 1. Record the assembly under analysis
+                result.Locations = new[] {
+                new Sarif.Sdk.Location {
+                    AnalysisTarget = new[]
+                    {
+                        new PhysicalLocationComponent
+                        {
+                            Uri = assemblyFilePath.CreateUriForJsonSerialization(),
+                            MimeType = context.MimeType,
+                        }
+                    }
+               }};
+
+                // 2. Record the actual location associated with the result
+                var region = diagnostic.Location.ConvertToRegion();
+                string filePath;
+
+                if (diagnostic.Location != Location.None)
+                {
+                    filePath = diagnostic.Location.GetLineSpan().Path;
+
+                    result.Locations[0].ResultFile = new[]
+                    {
+                        new PhysicalLocationComponent
+                        {
+                            Uri = filePath.CreateUriForJsonSerialization(),
+                            MimeType = Sarif.Writers.MimeType.DetermineFromFileExtension(filePath),
+                            Region = region
+                        }
+                    };
+                }
+
+                // 3. If present, emit additional locations associated with diagnostic.\
+                //    According to docs, these locations typically reference related
+                //    locations (i.e., they are not locations that specify other 
+                //    occurrences of a problem).
+
+                if (diagnostic.AdditionalLocations != null && diagnostic.AdditionalLocations.Count > 0)
+                {
+                    result.RelatedLocations = new List<AnnotatedCodeLocation>(diagnostic.AdditionalLocations.Count);
+
+                    foreach(Location location in diagnostic.AdditionalLocations)
+                    {
+                        filePath = location.GetLineSpan().Path;
+                        region = location.ConvertToRegion();
+
+                        result.RelatedLocations.Add(new AnnotatedCodeLocation
+                        {
+                            Message = "Additional location",
+                            PhysicalLocation = new[]
+                            {
+                                new PhysicalLocationComponent
+                                {
+                                    Uri = filePath.CreateUriForJsonSerialization(),
+                                    MimeType = Sarif.Writers.MimeType.DetermineFromFileExtension(filePath),
+                                    Region = region
+                                }
+                            }
+                        });
+                    }
+                }
+
+                IRuleDescriptor rule = diagnostic.ConvertToRuleDescriptor();
+                context.Logger.Log(null, result);
             });
-        }
-      
-
-        private void LogExceptionLoadingRoslynAnalyzer(string analyzerFilePath, BinaryAnalyzerContext context, Exception ex)
-        {
-            context.Rule = ErrorDescriptors.InvalidConfiguration;
-
-            // An exception was raised attempting to load Roslyn analyzer '{0}'. Exception information:
-            // {1}
-            context.Logger.Log(ResultKind.ConfigurationError,
-                context,
-                string.Format(DriverResources.ExceptionLoadingAnalysisPlugIn,
-                    analyzerFilePath,
-                    context.PE.LoadException.ToString()));
-
-            RuntimeErrors |= RuntimeConditions.ExceptionLoadingAnalysisPlugIn;
-        }
+        }    
     }
 }

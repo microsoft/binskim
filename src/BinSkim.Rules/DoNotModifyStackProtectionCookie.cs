@@ -2,25 +2,61 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor))]
     public class DoNotModifyStackProtectionCookie : BinarySkimmerBase
     {
+        /// <summary>
+        /// BA2012
+        /// </summary>
         public override string Id { get { return RuleIds.DoNotModifyStackProtectionCookieId; } }
+
+        /// <summary>
+        /// Application code should not interfere with the stack protector. The stack
+        /// protector (/GS) is a security feature of the compiler which makes it more
+        /// difficult to exploit stack buffer overflow memory corruption
+        /// vulnerabilities. The stack protector relies on a random number, called
+        /// the "security cookie", to detect these buffer overflows. This 'cookie' is
+        /// statically linked with your binary from a Visual C++ library in the form
+        /// of the symbol __security_cookie. On recent Windows versions, the loader
+        /// looks for the magic statically linked value of this cookie, and
+        /// initializes the cookie with a far better source of entropy -- the
+        /// system's secure random number generator -- rather than the limited random
+        /// number generator available early in the C runtime startup code. When this
+        /// symbol is not the default value, the additional entropy is not injected
+        /// by the operating system, reducing the effectiveness of the stack
+        /// protector. To resolve this issue, ensure that your code does not
+        /// reference or create a symbol named __security_cookie or
+        /// __security_cookie_complement.
+        /// </summary>
 
         public override string FullDescription
         {
-            get { return RulesResources.DoNotModifyStackProtectionCookie_Description; }
+            get { return RuleResources.BA2012_DoNotModifyStackProtectionCookie_Description; }
         }
-        
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2012_Pass),
+                    nameof(RuleResources.BA2012_Pass_NoLoadConfig),
+                    nameof(RuleResources.BA2012_Fail),
+                    nameof(RuleResources.BA2012_Fail_CouldNotLocateCookie)};
+            }
+        }
+
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             return StackProtectionUtilities.CommonCanAnalyze(context, out reasonForNotAnalyzing);
@@ -44,9 +80,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // indicates either that it was compiled and linked with a version of the 
                 // compiler that precedes stack protection features or is a binary (such as 
                 // an ngen'ed assembly) that is not subject to relevant security issues.
-                context.Logger.Log(ResultKind.Pass, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.DoNotModifyStackProtectionCookie_NoLoadConfig_Pass));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                        nameof(RuleResources.BA2012_Pass_NoLoadConfig)));
                 return;
             }
 
@@ -67,9 +103,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // effect of enabling a significant increase in entropy provided by 
             // the operating system over that produced by the C runtime start-up 
             // code.
-            context.Logger.Log(ResultKind.Pass, context,
-                RuleUtilities.BuildMessage(context,
-                    RulesResources.DoNotModifyStackProtectionCookie_Pass));
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2012_Pass)));
         }
         private bool Validate64BitImage(BinaryAnalyzerContext context)
         {
@@ -100,10 +136,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!foundCookieSection)
             {
-                // '{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted.
-                context.Logger.Log(ResultKind.Error, context,
-                        RuleUtilities.BuildMessage(context,
-                            RulesResources.DoNotModifyStackProtectionCookie_CouldNotLocateCookie_Fail));
+                LogCouldNotLocateCookie(context);
                 return false;
             }
 
@@ -114,30 +147,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (cookie != StackProtectionUtilities.DefaultCookieX64)
             {
-                // '{0}' is a C or C++ binary that interferes with the stack protector. The 
-                // stack protector (/GS) is a security feature of the compiler which makes 
-                // it more difficult to exploit stack buffer overflow memory corruption 
-                // vulnerabilities. The stack protector relies on a random number, called 
-                // the "security cookie", to detect these buffer overflows. This 'cookie' 
-                // is statically linked with your binary from a Visual C++ library in the 
-                // form of the symbol __security_cookie. On recent Windows versions, the 
-                // loader looks for the magic statically linked value of this cookie, and 
-                // initializes the cookie with a far better source of entropy -- the system's 
-                // secure random number generator -- rather than the limited random number 
-                // generator available early in the C runtime startup code. When this symbol 
-                // is not the default value, the additional entropy is not injected by the 
-                // operating system, reducing the effectiveness of the stack protector. To 
-                // resolve this issue, ensure that your code does not reference or create a 
-                // symbol named __security_cookie or __security_cookie_complement. NOTE: 
-                // the modified cookie value detected was: {1}
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                    RulesResources.DoNotModifyStackProtectionCookie_Fail, cookie.ToString("x")));
+                LogFailure(context, cookie.ToString("x"));
                 return false;
             }
             return true;
         }
-
 
         private bool Validate32BitImage(BinaryAnalyzerContext context)
         {
@@ -168,10 +182,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!foundCookieSection)
             {
-                // '{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted.
-                context.Logger.Log(ResultKind.Error, context,
-                        RuleUtilities.BuildMessage(context,
-                            RulesResources.DoNotModifyStackProtectionCookie_CouldNotLocateCookie_Fail));
+                LogCouldNotLocateCookie(context);
                 return false;
             }
 
@@ -182,29 +193,44 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!StackProtectionUtilities.DefaultCookiesX86.Contains(cookie) && context.PE.Machine == Machine.I386)
             {
-                // '{0}' is a C or C++ binary that interferes with the stack protector. The 
-                // stack protector (/GS) is a security feature of the compiler which makes 
-                // it more difficult to exploit stack buffer overflow memory corruption 
-                // vulnerabilities. The stack protector relies on a random number, called 
-                // the "security cookie", to detect these buffer overflows. This 'cookie' 
-                // is statically linked with your binary from a Visual C++ library in the 
-                // form of the symbol __security_cookie. On recent Windows versions, the 
-                // loader looks for the magic statically linked value of this cookie, and 
-                // initializes the cookie with a far better source of entropy -- the system's 
-                // secure random number generator -- rather than the limited random number 
-                // generator available early in the C runtime startup code. When this symbol 
-                // is not the default value, the additional entropy is not injected by the 
-                // operating system, reducing the effectiveness of the stack protector. To 
-                // resolve this issue, ensure that your code does not reference or create a 
-                // symbol named __security_cookie or __security_cookie_complement. NOTE: 
-                // the modified cookie value detected was: {1}
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                    RulesResources.DoNotModifyStackProtectionCookie_Fail, cookie.ToString("x")));
+                LogFailure(context, cookie.ToString("x"));
                 return false;
             }
 
             return true;
+        }
+
+        private void LogCouldNotLocateCookie(BinaryAnalyzerContext context)
+        {
+            // '{0}' is a C or C++binary that enables the stack protection feature 
+            // but the security cookie could not be located. The binary may be corrupted.
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    nameof(RuleResources.BA2012_Fail_CouldNotLocateCookie)));
+        }
+
+        private void LogFailure(BinaryAnalyzerContext context, string cookie)
+        {
+            // '{0}' is a C or C++ binary that interferes with the stack protector. The 
+            // stack protector (/GS) is a security feature of the compiler which makes 
+            // it more difficult to exploit stack buffer overflow memory corruption 
+            // vulnerabilities. The stack protector relies on a random number, called 
+            // the "security cookie", to detect these buffer overflows. This 'cookie' 
+            // is statically linked with your binary from a Visual C++ library in the 
+            // form of the symbol __security_cookie. On recent Windows versions, the 
+            // loader looks for the magic statically linked value of this cookie, and 
+            // initializes the cookie with a far better source of entropy -- the system's 
+            // secure random number generator -- rather than the limited random number 
+            // generator available early in the C runtime startup code. When this symbol 
+            // is not the default value, the additional entropy is not injected by the 
+            // operating system, reducing the effectiveness of the stack protector. To 
+            // resolve this issue, ensure that your code does not reference or create a 
+            // symbol named __security_cookie or __security_cookie_complement. NOTE: 
+            // the modified cookie value detected was: {1}
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    nameof(RuleResources.BA2012_Fail),
+                    cookie));
         }
     }
 }

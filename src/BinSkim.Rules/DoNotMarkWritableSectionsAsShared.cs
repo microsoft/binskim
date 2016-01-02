@@ -7,22 +7,47 @@ using System.Composition;
 using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor))]
     public class DoNotMarkWritableSectionsAsShared : BinarySkimmerBase
     {
+        /// <summary>
+        /// BA2019
+        /// </summary>
         public override string Id { get { return RuleIds.DoNotMarkWritableSectionsAsSharedId; } }
+
+        /// <summary>
+        /// Code or data sections should not be marked as both shared and writable. Because
+        /// these sections are shared across processes, this condition might permit a
+        /// process with low privilege to mutate memory in a higher privilege process.
+        /// If you do not actually require that a section be both writable and shared,
+        /// remove one or both of these attributes (by modifying your .DEF file, the
+        /// appropriate linker /section switch arguments, etc.). If you are required to
+        /// share common data across processes (for inter-process communication (IPC) or
+        /// other purposes) use CreateFileMapping with proper security attributes or an
+        /// actual IPC mechanism instead (COM, named pipes, LPC, etc.).
+        /// </summary>
 
         public override string FullDescription
         {
-            get { return RulesResources.DoNotMarkWritableSectionsAsShared_Description; }
+            get { return RuleResources.BA2019_DoNotMarkWritableSectionsAsShared_Description; }
         }
-        
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2019_Pass),
+                    nameof(RuleResources.BA2019_Fail)};
+            }
+        }
+
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
@@ -56,9 +81,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (badSections.Count == 0)
             {
                 // Image '{0}' contains no data or code sections marked as both shared and writable.
-                context.Logger.Log(ResultKind.Pass, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.DoNotMarkWritableSectionsAsShared_Pass));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                        nameof(RuleResources.BA2019_Pass)));
                 return;
             }
 
@@ -73,9 +98,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // required to share common data across processes (for IPC or other purposes) use
             // CreateFileMapping with proper security attributes or an actual IPC mechanism 
             // instead (COM, named pipes, LPC, etc.).
-            context.Logger.Log(ResultKind.Error, context,
-                RuleUtilities.BuildMessage(context,
-                    RulesResources.DoNotMarkWritableSectionsAsShared_Fail, badSectionsText));
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    nameof(RuleResources.BA2019_Fail),
+                    badSectionsText));
         }
     }
 }

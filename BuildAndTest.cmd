@@ -1,3 +1,4 @@
+@echo off
 SETLOCAL
 @REM Uncomment this line to update nuget.exe
 @REM Doing so can break SLN build (which uses nuget.exe to
@@ -6,7 +7,7 @@ SETLOCAL
 
 set MAJOR=1
 set MINOR=2
-set PATCH=10
+set PATCH=11
 set PRERELEASE=-beta
 
 set VERSION_CONSTANTS=src\BinaryParsers\VersionConstants.cs
