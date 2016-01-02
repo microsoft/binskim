@@ -16,8 +16,6 @@ namespace Microsoft.CodeAnalysis.IL
 {
     internal class DumpCommand : DriverCommand<DumpOptions>
     {
-        public override string Prerelease {  get { return VersionConstants.Prerelease; } }
-
         public override int Run(DumpOptions dumpOptions)
         {
             var targets = new List<string>();

@@ -2,23 +2,48 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor))]
     public class EnableControlFlowGuard : BinarySkimmerBase
     {
+        /// <summary>
+        /// BA2008
+        /// </summary>
         public override string Id { get { return RuleIds.EnableControlFlowGuardId; } }
+
+        /// <summary>
+        /// Binaries should enable the compiler control guard feature (CFG) at build
+        /// time in order to prevent attackers from redirecting execution to
+        /// unexpected, unsafe locations. CFG analyzes and discovers all
+        /// indirect-call instructions at compilation and link time. It also injects
+        /// a check that precedes every indirect call in code that ensures the
+        /// target is an expected, safe location.  If that check fails at runtime,
+        /// the operating system will close the program.
+        /// </summary>
 
         public override string FullDescription
         {
-            get { return RulesResources.EnableControlFlowGuard_Description; }
+            get { return RuleResources.BA2008_EnableControlFlowGuard_Description; }
+        }
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2008_Pass),
+                    nameof(RuleResources.BA2008_Fail)};
+            }
         }
 
         public const UInt32 IMAGE_DLLCHARACTERISTICS_CONTROLFLOWGUARD = 0x4000;
@@ -47,8 +72,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (portableExecutable.LinkerVersion < MinimumSupportedLinkerVersion)
             {
-                reasonForNotAnalyzing = RuleUtilities.BuildObsoleteToolsMessage(
-                    portableExecutable.LinkerVersion, MinimumSupportedLinkerVersion);
+                reasonForNotAnalyzing = string.Format(
+                    MetadataConditions.ImageCompiledWithOutdatedTools,                    
+                    portableExecutable.LinkerVersion, 
+                    MinimumSupportedLinkerVersion);
+
                 return result;
             }
 
@@ -57,20 +85,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            // '{0} does not contain a load configuration table, indicating that it does not enable the control flow guard mitigation.PEHeader peHeader = context.PE.PEHeaders.PEHeader;
-
             if (!EnablesControlFlowGuard(context))
             {
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableControlFlowGuard_Fail));
+                // '{0}' does not enable the control flow guard (CFG) mitigation. 
+                // To resolve this issue, pass /GUARD:CF on both the compiler
+                // and linker command lines. Binaries also require the 
+                // /DYNAMICBASE linker option in order to enable CFG.
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2008_Fail)));
                 return;
             }
 
             // '{0}' enables the control flow guard mitigation.
-            context.Logger.Log(ResultKind.Pass, context,
-                RuleUtilities.BuildMessage(context,
-                    RulesResources.EnableControlFlowGuard_Pass));
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2008_Pass)));
         }
 
         private bool EnablesControlFlowGuard(BinaryAnalyzerContext context)

@@ -39,6 +39,8 @@
     <file src="x64_Release\msdia140.dll.manifest" target="tools\x64" />
     <file src="x64_Release\msdia140.dll" target="tools\x64" />
     <file src="x64_Release\symsrv.dll" target="tools\x64" />
+    <file src="x64_Release\Microsoft.CodeAnalysis.dll" target="tools\x64" />
+    <file src="x64_Release\Microsoft.CodeAnalysis.CSharp.dll" target="tools\x64" />
 
     <!-- tools\x86 -->
     <file src="x86_Release\BinSkim.exe" target="tools\x86" />
@@ -64,6 +66,8 @@
     <file src="x86_Release\msdia140.dll.manifest" target="tools\x86" />
     <file src="x86_Release\msdia140.dll" target="tools\x86" />
     <file src="x64_Release\symsrv.dll" target="tools\x86" />
+    <file src="x64_Release\Microsoft.CodeAnalysis.dll" target="tools\x86" />
+    <file src="x64_Release\Microsoft.CodeAnalysis.CSharp.dll" target="tools\x86" />
 
     <file src="..\..\..\src\BinaryParsers\**\*.cs" target="src\BinaryParsers" />
     <file src="..\..\..\src\BinSkim.Driver\**\*.cs" target="src\BinSkim.Driver" />

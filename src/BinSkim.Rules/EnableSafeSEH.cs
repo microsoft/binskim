@@ -2,25 +2,53 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor))]
     public class EnableSafeSEH : BinarySkimmerBase
     {
+        /// <summary>
+        /// BA2018
+        /// </summary>
         public override string Id { get { return RuleIds.EnableSafeSEHId; } }
+
+        /// <summary>
+        /// X86 binaries should enable the SafeSEH mitigation in order to minimize
+        /// exploitable memory corruption issues. SafeSEH makes it more difficult
+        /// to vulnerabilities that permit overwriting SEH control blocks on the
+        /// stack, by verifying that the location to which a thrown SEH exception
+        /// would jump is indeed defined as an exception handler in the source
+        /// program (and not shellcode). To resolve this issue, supply the
+        /// /SafeSEH flag on the linker command line. Note that you will need to
+        /// configure your build system to supply this flag for x86 builds only,
+        /// as the /SafeSEH flag is invalid when linking for ARM and x64.
+        /// </summary>
 
         public override string FullDescription
         {
-            get { return RulesResources.EnableSafeSEH_Description; }
+            get { return RuleResources.BA2018_EnableSafeSEH_Description; }
         }
-        
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2018_Pass),
+                    nameof(RuleResources.BA2018_Pass_NoSEH),
+                    nameof(RuleResources.BA2018_Fail)};
+            }
+        }
+
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
@@ -48,9 +76,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' is an x86 binary that does not use SEH, making it an invalid
                 // target for exploits that attempt to replace SEH jump targets with 
                 // attacker-controlled shellcode.	
-                context.Logger.Log(ResultKind.Pass, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableSafeSEH_NoSEH_Pass));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                        nameof(RuleResources.BA2018_Pass_NoSEH)));
                 return;
             }
 
@@ -68,9 +96,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // this issue, supply the /SafeSEH flag on the linker command line. Note 
                 // that you will need to configure your build system to supply this flag for 
                 // x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableSafeSEH_NoLoadConfigurationTable_Fail));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2018_Fail_NoLoadConfigurationTable)));
                 return;
             }
 
@@ -82,12 +110,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (seHandlerSize < 72)
             {
                 // contains an unexpectedly small load configuration table {size 0}
-                string seHandlerSizeText = String.Format(RulesResources.EnableSafeSEH_LoadConfigurationIsTooSmall_Fail, seHandlerSize.ToString());
+                string seHandlerSizeText = String.Format(RuleResources.BA2018_Fail_LoadConfigurationIsTooSmall, seHandlerSize.ToString());
 
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableSafeSEH_Formatted_Fail,
-                        RulesResources.EnableSafeSEH_LoadConfigurationIsTooSmall_Fail,
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2018_Fail),
+                        RuleResources.BA2018_Fail_LoadConfigurationIsTooSmall,
                         seHandlerSizeText));
                 return;
             }
@@ -101,12 +129,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (seHandlerTable == 0)
                 {
                     // has an empty SE handler table in the load configuration table
-                    failureKind = RulesResources.EnableSafeSEH_EmptySEHandlerTable_Fail;
+                    failureKind = RuleResources.BA2018_Fail_EmptySEHandlerTable;
                 }
                 else if (seHandlerCount == 0)
                 {
                     // has zero SE handlers in the load configuration table
-                    failureKind = RulesResources.EnableSafeSEH_ZeroCountSEHandlers_Fail;
+                    failureKind = RuleResources.BA2018_Fail_NoSEHandlers;
                 }
 
                 // '{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH 
@@ -117,17 +145,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // this issue, supply the /SafeSEH flag on the linker command line. Note that you 
                 // will need to configure your build system to supply this flag for x86 builds only, 
                 // as the /SafeSEH flag is invalid when linking for ARM and x64.
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableSafeSEH_Formatted_Fail, failureKind));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2018_Fail), 
+                        failureKind));
                 return;
             }
 
             // ''{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception 
             // jump targets are defined as exception handlers in the program (and not shellcode).
-            context.Logger.Log(ResultKind.Pass, context,
-                RuleUtilities.BuildMessage(context,
-                    RulesResources.EnableSafeSEH_SafeSEHEnabled_Pass));
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2018_Pass)));
         }
     }
 }

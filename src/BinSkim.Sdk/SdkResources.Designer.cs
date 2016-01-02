@@ -187,15 +187,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; as {2}: &apos;{3}&apos;.
-        /// </summary>
-        internal static string TargetNotAnalyzed_MissingPdb {
-            get {
-                return ResourceManager.GetString("TargetNotAnalyzed_MissingPdb", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not analyzed as it does not appear to be a valid portable executable..
         /// </summary>
         internal static string TargetNotAnalyzed_NotAPortableExecutable {

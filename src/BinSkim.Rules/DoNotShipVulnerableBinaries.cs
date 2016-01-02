@@ -8,22 +8,40 @@ using System.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
     public class DoNotShipVulnerableBinaries : BinarySkimmerBase, IOptionsProvider
     {
+        /// <summary>
+        /// BA2005
+        /// </summary>
         public override string Id { get { return RuleIds.DoNotShipVulnerableBinariesId; } }
 
+        /// <summary>
+        /// Do not ship obsolete libraries for which there are known security vulnerabilities.
+        /// </summary>
         public override string FullDescription
         {
-            get { return RulesResources.DoNotShipVulnerableBinaries_Description; }
+            get { return RuleResources.BA2005_DoNotShipVulnerableBinaries_Description; }
         }
-        
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2005_Pass),
+                    nameof(RuleResources.BA2005_Fail),
+                    nameof(RuleResources.BA2005_Fail_CouldNotParseVersion)};
+            }
+        }
+
         public IEnumerable<IOption> GetOptions()
         {
             return new List<IOption>
@@ -50,9 +68,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             // Checks for missing policy should always be evaluated as the last action, so that 
-            // we do not raise an error in cases where the analysis would not otherise be applied.
-            reasonForNotAnalyzing = RulesResources.DoNotShipVulnerabilities_MissingPolicy_InternalError;
-            if (context.Policy == null) { return AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy; }
+            // we do not raise an error in cases where the analysis would not otherwise be applied.
+
+            // Missing required configuration: 'vulnerable binary name and version metadata'
+            reasonForNotAnalyzing = RuleResources.BA2005_MissingRequiredConfiguration;
+            if (context.Policy == null) { return AnalysisApplicability.NotApplicableDueToMissingConfiguration; }
 
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
@@ -81,9 +101,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (!sanitizedVersion.Success)
                 {
                     // Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems.
-                    context.Logger.Log(ResultKind.Error, context,
-                        RuleUtilities.BuildMessage(context,
-                            RulesResources.DoNotShipVulnerableBinaries_CouldNotParseVersion_Fail));
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                            nameof(RuleResources.BA2005_Fail_CouldNotParseVersion)));
                     return;
                 }
 
@@ -94,10 +114,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // or more known security vulnerabilities. To resolve this issue, obtain a version 
                     //of {0} that is newer than version {2}. If this binary is not in fact {0}, 
                     // ignore this warning.
-
-                    context.Logger.Log(ResultKind.Error, context,
-                        RuleUtilities.BuildMessage(context,
-                            RulesResources.DoNotShipVulnerableBinaries_CouldNotParseVersion_Fail,
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                            nameof(RuleResources.BA2005_Fail),
                             minimumVersion.ToString()));
                     return;
                 }
@@ -105,9 +124,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // '{0}' is not known to be an obsolete binary that is 
             //vulnerable to one or more security problems.
-            context.Logger.Log(ResultKind.Pass, context,
-                RuleUtilities.BuildMessage(context,
-                    RulesResources.DoNotShipVulnerableBinaries_Pass));
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2005_Pass)));
         }
     }
 }

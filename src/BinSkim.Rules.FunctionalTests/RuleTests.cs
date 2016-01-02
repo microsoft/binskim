@@ -101,6 +101,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> expected = expectToPass ? logger.PassTargets : logger.FailTargets;
             HashSet<string> other = expectToPass ? logger.FailTargets : logger.PassTargets;
+            HashSet<string> configErrors = logger.ConfigurationErrorTargets;
+
             string expectedText = expectToPass ? "success" : "failure";
             string actualText = expectToPass ? "failed" : "succeeded";
             var sb = new StringBuilder();
@@ -113,6 +115,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
                 bool missingEntirely = !other.Contains(target);
+
+                if (missingEntirely && !expectToPass && target.Contains("Pdb"))
+                {
+                    // Missing pdbs provoke configuration errors;
+                    if (configErrors.Contains(target))
+                    {
+                        missingEntirely = false;
+                        configErrors.Remove(target);
+                        continue;
+                    }
+                }
 
                 if (missingEntirely)
                 {
@@ -215,7 +228,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
         {
             string testFilesDirectory;
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", "UsefulTestFiles");
+            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestsData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
             HashSet<string> result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -491,7 +504,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             notApplicableTo.Add(MetadataConditions.ImageIsResourceOnlyBinary);
             notApplicableTo.Add(MetadataConditions.ImageIsXBoxBinary);
 
-            VerifyNotApplicable(new DoNotShipVulnerableBinaries(), notApplicableTo, AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy);
+            VerifyNotApplicable(new DoNotShipVulnerableBinaries(), notApplicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
         }
 
         [Fact]
@@ -599,7 +612,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-            VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), applicableTo, AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy);
+            VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), applicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
         }
 
         [Fact]
@@ -630,7 +643,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-            VerifyNotApplicable(new EnableCriticalCompilerWarnings(), applicableTo, AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy);
+            VerifyNotApplicable(new EnableCriticalCompilerWarnings(), applicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
         }
 
         [Fact]
@@ -712,7 +725,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-            VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy);
+            VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
         }
     }
 }

@@ -2,23 +2,50 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IRuleDescriptor))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor))]
     public class EnableHighEntropyVirtualAddresses : BinarySkimmerBase
     {
+        /// <summary>
+        /// BA2015
+        /// </summary>
         public override string Id { get { return RuleIds.EnableHighEntropyVirtualAddressesId; } }
+
+        /// <summary>
+        /// Binaries should be marked as high entropy Address Space Layout Randomization
+        /// (ASLR) compatible. High entropy allows ASLR to be more effective in
+        /// mitigating memory corruption vulnerabilities. To resolve this issue,
+        /// configure your tool chain to mark the program high entropy compatible;
+        /// e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line.
+        /// Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable
+        /// high entropy ASLR.
+        /// </summary>
 
         public override string FullDescription
         {
-            get { return RulesResources.EnableHighEntropyVirtualAddresses_Description; }
+            get { return RuleResources.BA2015_EnableHighEntropyVirtualAddresses_Description; }
+        }
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2015_Pass),
+                    nameof(RuleResources.BA2015_Fail_NoHighEntropyVA),
+                    nameof(RuleResources.BA2015_Fail_NoLargeAddressAware),
+                    nameof(RuleResources.BA2015_Fail_NeitherHighEntropyVANorLargeAddressAware)};
+            }
         }
 
         private static readonly Version s_minHighEntropyVersion = new Version(17, 0, 0, 0);
@@ -61,9 +88,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // corruption vulnerabilities. To resolve this issue, configure your tool chain to 
                 // mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well
                 // as /LARGEADDRESSAWARE to the C or C++ linker command line.
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableHighEntropyVirtualAddresses_NeitherHighEntropyVANorLargeAddressAware_FAIL));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2015_Fail_NeitherHighEntropyVANorLargeAddressAware)));
                 return;
             }
 
@@ -75,9 +102,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the
                 // C or C++ linker command line. (This image was determined to have been properly 
                 // compiled as /LARGEADDRESSAWARE.)
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableHighEntropyVirtualAddresses_NoHighEntropyVA_FAIL));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2015_Fail_NoHighEntropyVA)));
                 return;
             }
 
@@ -89,16 +116,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // mark the program high entropy compatible by supplying /LARGEADDRESSAWARE to the C 
                 // or C++ linker command line. (This image was determined to have been properly 
                 // compiled as /HIGHENTROPYVA.)
-                context.Logger.Log(ResultKind.Error, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.EnableHighEntropyVirtualAddresses_NoLargeAddressAware_FAIL));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2015_Fail_NoLargeAddressAware)));
                 return;
             }
 
             //'{0}' is high entropy ASLR compatible.
-            context.Logger.Log(ResultKind.Pass, context,
-                 RuleUtilities.BuildMessage(context,
-                    RulesResources.EnableHighEntropyVirtualAddresses_Pass));
+            context.Logger.Log(this, 
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2015_Pass)));
         }
     }
 }
