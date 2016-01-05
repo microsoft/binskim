@@ -396,12 +396,20 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportAddressOfVar(int index, bool argument)
         {
-            throw new NotImplementedException();
+            Push(
+                new AddressOfExpression(
+                    _compilation, 
+                    GetVariableReference(index, argument)));
         }
 
         private void ImportDup()
         {
-            throw new NotImplementedException();
+            var expression = Pop().Expression;
+            var local = GenerateLocal(expression.ResultType);
+            var localReference = new LocalReferenceExpression(local);
+
+            Push(new AssignmentExpression(localReference, expression));
+            Push(localReference);
         }
 
         private void ImportPop()
