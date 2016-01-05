@@ -98,7 +98,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2018_Fail_NoLoadConfigurationTable)));
+                        nameof(RuleResources.BA2018_Fail),
+                        RuleResources.BA2018_Fail_NoLoadConfigurationTable));
                 return;
             }
 

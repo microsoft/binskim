@@ -64,7 +64,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (context.Pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
                 return;
             }
 

@@ -112,11 +112,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     // '{0}' appears to be an obsolete library (version {1}) for which there are one
                     // or more known security vulnerabilities. To resolve this issue, obtain a version 
-                    //of {0} that is newer than version {2}. If this binary is not in fact {0}, 
+                    //of {0} that is version {2} or greater. If this binary is not in fact {0}, 
                     // ignore this warning.
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultKind.Error, context, null,
                             nameof(RuleResources.BA2005_Fail),
+                            sanitizedVersion.Value,
                             minimumVersion.ToString()));
                     return;
                 }

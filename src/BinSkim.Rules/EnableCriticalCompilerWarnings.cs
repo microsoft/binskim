@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (context.Pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
                 return;
             }
 
@@ -189,7 +189,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' was compiled at a secure warning level ({1}) and does not 
                 // include any modules that disable specific warnings which are 
                 // required by policy. As a result, there is a greater likelihood 
-                // that memory corruption, information disclosre, double-free and 
+                // that memory corruption, information disclosure, double-free and 
                 // other security-related vulnerabilities do not exist in code.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
@@ -206,7 +206,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
                         nameof(RuleResources.BA2007_Fail_UnknownModuleLanguage),
-                        unknownLanguageModules.ToString()));
+                        unknownLanguageModules.CreateSortedObjectList()));
             }
 
             if (exampleTooLowWarningCommandLine != null)

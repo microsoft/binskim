@@ -234,7 +234,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled at a secure warning level ({1}) and does not include any modules that disable specific warnings that are required by policy. As a result, there is a greater likelihood that memory corruption, information disclosre, double-free and other security-related vulnerabilities do not exist in code..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled at a secure warning level ({1}) and does not include any modules that disable specific warnings that are required by policy. As a result, there is a greater likelihood that memory corruption, information disclosure, double-free and other security-related vulnerabilities do not exist in code..
         /// </summary>
         internal static string BA2007_Pass {
             get {

@@ -180,7 +180,7 @@ Modules triggering this check were:
 {2}</value>
   </data>
   <data name="BA2007_Pass" xml:space="preserve">
-    <value>'{0}' was compiled at a secure warning level ({1}) and does not include any modules that disable specific warnings that are required by policy. As a result, there is a greater likelihood that memory corruption, information disclosre, double-free and other security-related vulnerabilities do not exist in code.</value>
+    <value>'{0}' was compiled at a secure warning level ({1}) and does not include any modules that disable specific warnings that are required by policy. As a result, there is a greater likelihood that memory corruption, information disclosure, double-free and other security-related vulnerabilities do not exist in code.</value>
   </data>
   <data name="BA2008_EnableControlFlowGuard_Description" xml:space="preserve">
     <value>Binaries should enable the compiler control guard feature (CFG) at build time in order to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program.</value>
