@@ -1,0 +1,533 @@
+{
+  "version": "0.4",
+  "runLogs": [
+    {
+      "toolInfo": {
+        "name": "BinSkim",
+        "fullName": "BinSkim 1.2.14-beta",
+        "version": "1.2.14"
+      },
+      "runInfo": {
+        "invocationInfo": "\"D:\\src\\binskim-ms\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x64_VS2013_NoPdb.exe --output D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\MixedMode_x64_VS2013_NoPdb.exe.sarif.temp --verbose --config default",
+        "analysisTargets": [
+          {
+            "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"
+          }
+        ]
+      },
+      "results": [
+        {
+          "ruleId": "MSG1001",
+          "kind": "note",
+          "formattedMessage": {
+            "specifierId": "AnalyzingTarget",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe",
+              "BA2008",
+              "EnableControlFlowGuard",
+              "image was compiled with a toolset version (12.0) that is not sufficiently recent (14.0 or newer) to provide relevant settings."
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe",
+              "BA2018",
+              "EnableSafeSEH",
+              "image is not a 32-bit binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe",
+              "BA2016",
+              "MarkImageAsNXCompatible",
+              "image is a 64-bit binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "ERR0997",
+          "kind": "configurationError",
+          "formattedMessage": {
+            "specifierId": "ExceptionLoadingPdb",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe",
+              "BuildWithSecureTools",
+              "E_PDB_NOT_FOUND (File not found)"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "ERR0997",
+          "kind": "configurationError",
+          "formattedMessage": {
+            "specifierId": "ExceptionLoadingPdb",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe",
+              "DoNotDisableStackProtectionForFunctions",
+              "E_PDB_NOT_FOUND (File not found)"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "ERR0997",
+          "kind": "configurationError",
+          "formattedMessage": {
+            "specifierId": "ExceptionLoadingPdb",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe",
+              "DoNotIncorporateVulnerableDependencies",
+              "E_PDB_NOT_FOUND (File not found)"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2010",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2012",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2009",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "ERR0997",
+          "kind": "configurationError",
+          "formattedMessage": {
+            "specifierId": "ExceptionLoadingPdb",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe",
+              "EnableCriticalCompilerWarnings",
+              "E_PDB_NOT_FOUND (File not found)"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "ERR0997",
+          "kind": "configurationError",
+          "formattedMessage": {
+            "specifierId": "ExceptionLoadingPdb",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe",
+              "EnableStackProtection",
+              "E_PDB_NOT_FOUND (File not found)"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2015",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "ERR0997",
+          "kind": "configurationError",
+          "formattedMessage": {
+            "specifierId": "ExceptionLoadingPdb",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe",
+              "InitializeStackProtection",
+              "E_PDB_NOT_FOUND (File not found)"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2001",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ruleInfo": [
+        {
+          "id": "MSG1001",
+          "name": "AnalyzingTarget",
+          "fullDescription": "An analysis target was analyzed.",
+          "formatSpecifiers": {
+            "AnalyzingTarget": "Analyzing '{0}'..."
+          }
+        },
+        {
+          "id": "MSG1002",
+          "name": "InvalidTarget",
+          "fullDescription": "A file was skipped as it does not appear to be a valid target for analysis.",
+          "formatSpecifiers": {
+            "InvalidFileType": "'{0}' was not analyzed as it does not appear to be a valid file type for analysis.",
+            "InvalidMetadata": "'{0}' was not evaluated for check '{1}:{2}' as the analysis is not relevant based on observed metadata: {3}."
+          }
+        },
+        {
+          "id": "ERR0997",
+          "name": "InvalidConfiguration",
+          "fullDescription": "An unhandled exception was raised while configuring analysis for execution.",
+          "formatSpecifiers": {
+            "ExceptionLoadingPdb": "'{0}' was not evaluated for check '{1}' as an exception occurred loading its pdb: '{2}'",
+            "ExceptionLoadingPlugIn": "An exception was raised attempting to load plug-in '{0}'. Exception information:\r\n{1}",
+            "ExceptionCreatingLogFile": "An exception was raised attempting to create output file '{0}'. Exception information:\r\n{1}",
+            "ExceptionLoadingAnalysisTarget": "An exception was raised attempting to load analysis target '{0}'. Exception information:\r\n{1}",
+            "ExceptionInstantiatingSkimmers": "An exception was raised attempting to instantiate skimmers from the following plugins'{0}'. Exception information:\r\n{1}",
+            "MissingRuleConfiguration": "Check '{1}' was disabled while analyzing '{0}' because the analysis was not configured with required policy ({2}). To resolve this, configure and provide a policy file on the {3} command-line using the --policy argument (recommended), or pass '--config default' to invoke built-in settings. Invoke the {3} 'exportConfig' command to produce an initial configuration file that can be edited, if necessary, and passed back into the tool.",
+            "NoRulesLoaded": "No analysis rules could be instantiated.",
+            "NoValidAnalysisTargets": "No valid analysis targets were specified."
+          }
+        },
+        {
+          "id": "BA2010",
+          "name": "DoNotMarkImportsSectionAsExecutable",
+          "shortDescription": "PE sections should not be marked as both writable and executable.",
+          "fullDescription": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' does not have an imports section that is marked as executable, helping to prevent the exploitability of code vulnerabilities.",
+            "Fail": "'{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here. To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
+          }
+        },
+        {
+          "id": "BA2021",
+          "name": "DoNotMarkWritableSectionsAsExecutable",
+          "shortDescription": "Code or data sections should not be marked as both shared and writable.",
+          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitability of code vulnerabilities.",
+            "Fail": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your toolchain to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.",
+            "Fail_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2})."
+          }
+        },
+        {
+          "id": "BA2019",
+          "name": "DoNotMarkWritableSectionsAsShared",
+          "shortDescription": "Code or data sections should not be marked as both shared and writable.",
+          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitability of code vulnerabilities.",
+            "Fail": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+          }
+        },
+        {
+          "id": "BA2012",
+          "name": "DoNotModifyStackProtectionCookie",
+          "shortDescription": "Application code should not interfere with the stack protector.",
+          "fullDescription": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the magic statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' is a C or C++ binary built with the buffer security feature that properly preserves the stack protecter cookie. This has the effect of enabling a significant increase in entropy provided by the operating system over that produced by the C runtime start-up code.",
+            "Pass_NoLoadConfig": "'{0}' is  C or C++binary that does not contain a load config table, which indicates either that it was compiled and linked with a version of the compiler that precedes stack protection features or is a binary (such as an ngen'ed assembly) that is not subject to relevant security issues.",
+            "Fail": "'{0}' is a C or C++ binary that interferes with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the magic statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement. NOTE: the modified cookie value detected was: {1}",
+            "Fail_CouldNotLocateCookie": "'{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted."
+          }
+        },
+        {
+          "id": "BA2005",
+          "name": "DoNotShipVulnerableBinaries",
+          "shortDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
+          "fullDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems.",
+            "Fail": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.",
+            "Fail_CouldNotParseVersion": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems."
+          }
+        },
+        {
+          "id": "BA2009",
+          "name": "EnableAddressSpaceLayoutRandomization",
+          "shortDescription": "Binaries should linked as DYNAMICBASE in order to be eligible for relocation by Address Space Layout Randomization (ASLR).",
+          "fullDescription": "Binaries should linked as DYNAMICBASE in order to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' is properly compiled to enable address space layout randomization, reducing an attacker's ability to exploit code in well-known locations.",
+            "Fail_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
+            "Fail_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
+            "Fail_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing address space layout randomization."
+          }
+        },
+        {
+          "id": "BA2015",
+          "name": "EnableHighEntropyVirtualAddresses",
+          "shortDescription": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible.",
+          "fullDescription": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' is high entropy ASLR compatible, reducing an attacker's ability to exploit code in well-known locations.",
+            "Fail_NoHighEntropyVA": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy allows Address Space Layout Randomization to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.)",
+            "Fail_NoLargeAddressAware": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy allows Address Space Layout Randomization to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible by supplying /LARGEADDRESSAWARE to the C or C++ linker command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.)",
+            "Fail_NeitherHighEntropyVANorLargeAddressAware": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy allows Address Space Layout Randomization to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line."
+          }
+        },
+        {
+          "id": "BA2001",
+          "name": "LoadImageAboveFourGigabyteAddress",
+          "shortDescription": "64-bit images should have a preferred base address above the 4GB boundary in order to prevent triggering an Address Space Layour Randomization (ASLR) compatibility mode that decreases security.",
+          "fullDescription": "64-bit images should have a preferred base address above the 4GB boundary in order to prevent triggering an Address Space Layour Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress / /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' is a 64-bit image with a base address that is >= 4 gigabytes, increaseing the effectiveness of address space layout randomization (that helps prevent attackers from executing security-sensitive code in well-known locations).",
+            "Fail": "'{0}' is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress / /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
+          }
+        }
+      ]
+    }
+  ]
+}
