@@ -5,7 +5,7 @@ namespace Microsoft.CodeAnalysis.IL
     public static class VersionConstants                                      
     {                                                                         
         public const string Prerelease = "-beta";                      
-        public const string AssemblyVersion = "1.2.12";      
+        public const string AssemblyVersion = "1.2.14";      
         public const string FileVersion = AssemblyVersion + ".0";             
         public const string Version = AssemblyVersion + Prerelease;           
     }                                                                         

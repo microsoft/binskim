@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Pdb pdb = context.Pdb;
             if (pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
                 return;
             }
 
@@ -165,7 +165,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             descriptor.Name,
                             descriptor.VulnerabilityDescription,
                             descriptor.Resolution,
-                            moduleList.ToString()));
+                            moduleList.CreateSortedObjectList()));
                 }
                 return;
             }

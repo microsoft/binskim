@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
                 return;
             }
 
@@ -130,7 +130,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // than disabling the stack protector altogether.
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2014_Pass), 
+                        nameof(RuleResources.BA2014_Fail), 
                         functionNames));
                 return;
             }

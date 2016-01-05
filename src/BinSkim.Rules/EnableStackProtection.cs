@@ -60,7 +60,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
                 return;
             }
 
@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
                         nameof(RuleResources.BA2011_Fail_UnknownModuleLanguage),
-                        unknownLanguageModules.ToString()));
+                        unknownLanguageModules.CreateSortedObjectList()));
             }
 
             if (!noGsModules.Empty)

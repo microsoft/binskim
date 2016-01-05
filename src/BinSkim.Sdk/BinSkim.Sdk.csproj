@@ -21,12 +21,12 @@
       <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sarif, Version=1.4.24.0, Culture=neutral, PublicKeyToken=ac41962ee2e3a7cd, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Sdk.1.4.24-beta\lib\net40\Sarif.dll</HintPath>
+    <Reference Include="Sarif, Version=1.4.28.0, Culture=neutral, PublicKeyToken=ac41962ee2e3a7cd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Sdk.1.4.28-beta\lib\net40\Sarif.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sarif.Driver, Version=1.4.24.0, Culture=neutral, PublicKeyToken=ac41962ee2e3a7cd, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Driver.1.4.24-beta\lib\net40\Sarif.Driver.dll</HintPath>
+    <Reference Include="Sarif.Driver, Version=1.4.28.0, Culture=neutral, PublicKeyToken=ac41962ee2e3a7cd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Driver.1.4.28-beta\lib\net40\Sarif.Driver.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -59,12 +59,6 @@
     <Compile Include="..\Shared\SharedAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj">
-      <Project>{f17e6921-2504-4ae8-afd3-7aceed935fec}</Project>
-      <Name>BinaryParsers</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="SdkResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SdkResources.Designer.cs</LastGenOutput>
@@ -73,6 +67,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj">
+      <Project>{f17e6921-2504-4ae8-afd3-7aceed935fec}</Project>
+      <Name>BinaryParsers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
