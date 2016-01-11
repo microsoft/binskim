@@ -56,7 +56,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             var statements = ImmutableArray.CreateBuilder<IStatement>();
             ImportStatements(ilStartOffset, length, statements);
-            return new BlockStatement(locals, statements.ToImmutable());
+            return new BlockStatement(statements.ToImmutable(), locals);
         }
 
         private void ImportStatements(
@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             ImportStatements(startOffset, length, statements);
-            var body = new BlockStatement(ImmutableArray<ILocalSymbol>.Empty, statements.ToImmutable());
+            var body = new BlockStatement(statements.ToImmutable());
             var catches = ImmutableArray<ICatch>.Empty;
             var finallyHandler = default(IBlockStatement);
 
@@ -150,7 +150,7 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 Debug.Assert(r.Kind == ExceptionRegionKind.Catch);
                 var type = GetTypeFromHandle(r.CatchType);
-                var local = GenerateLocal(type);
+                var local = GenerateTemporaryAsSymbol(type);
                 var handler = ImportHandler(r);
                 catches[--n] = new Catch(type, local, null, handler);
             }
@@ -162,14 +162,6 @@ namespace Microsoft.CodeAnalysis.IL
         {
             return ImportBlockStatement(region.HandlerOffset, region.HandlerLength);
         }
-
-        private ILocalSymbol GenerateLocal(ITypeSymbol type)
-        {
-            var local = new LocalSymbol($"TMP_{_locals.Count}", _method, type);
-            _locals.Add(local);
-            return local;
-        }
-
         //
         // Associate exception regions with the first basic block they protect.
         //
@@ -248,12 +240,9 @@ namespace Microsoft.CodeAnalysis.IL
 
                 if (localType != null)
                 {
-                    var local = GenerateLocal(localType);
                     _basicBlocks[region.HandlerOffset].EntryStack = new[]
                     {
-                        new StackValue(
-                            StackValueKind.ObjRef,
-                            new LocalReferenceExpression(local))
+                        GenerateTemporaryAsStackValue(localType)
                     };
                 }
             }
@@ -315,22 +304,81 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void Append(IStatement statement)
         {
-            RequireEmptyStackForNow();
+            // If the stack is not empty when we append a new statement, we effectively
+            // save all of its contents to locals and reload them. This ensures that
+            // we do not misrepresent the order-of-evaluation.
+            if (_stackTop != 0)
+            {
+                TransferStack(ref _stack, _statements);
+            }
+
             _statements.Add(statement);
         }
 
-        private void RequireEmptyStackForNow()
+        private StackValue GenerateTemporaryAsStackValue(ITypeSymbol type)
         {
-            if (_stackTop != 0)
+            return new StackValue(GenerateTemporaryAsReference(type));
+        }
+
+        private ILocalReferenceExpression GenerateTemporaryAsReference(ITypeSymbol type)
+        {
+            return new LocalReferenceExpression(GenerateTemporaryAsSymbol(type));
+        }
+
+        private ILocalSymbol GenerateTemporaryAsSymbol(ITypeSymbol type)
+        {
+            var local = new LocalSymbol($"TMP_{_locals.Count}", _method, type);
+            _locals.Add(local);
+            return local;
+        }
+
+        private void AppendTemporaryAssignment(ImmutableArray<IStatement>.Builder statements, StackValue target, StackValue source)
+        {
+            statements.Add(
+                new ExpressionStatement(
+                    new AssignmentExpression(
+                        (ILocalReferenceExpression)target.Expression,
+                        source.Expression)));
+        }
+
+        private void TransferStack(ref StackValue[] target, ImmutableArray<IStatement>.Builder statements)
+        {
+            Debug.Assert(_stackTop != 0);
+            Debug.Assert(target != _stack);
+
+            if (target == null || target == _stack)
             {
-                // TODO: We don't yet have the machinery to (1) move between basic
-                // blocks or (2) append statements when the operand stack isn't empty. 
-                // We'll have to create temporaries to deal with those cases.
-                //
-                // (2) might not be as obviously problematic, but if we leave 
-                // expressions on the stack and emit a statement, we'd create
-                // a tree that does not preserve execution order semantics.
-                throw new NotImplementedException();
+                target = target ?? new StackValue[_stackTop];
+
+                for (int i = 0; i < _stackTop; i++)
+                {
+                    var source = _stack[i];
+                    target[i] = GenerateTemporaryAsStackValue(source.Expression.ResultType);
+                    AppendTemporaryAssignment(statements, target[i], source);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < target.Length; i++)
+                {
+                    var source = _stack[i];
+                    var destination = target[i];
+
+                    if (source.Kind != destination.Kind)
+                    {
+                        // error case: illegal to hit same block with differently typed operands on stack
+                        throw new NotImplementedException();
+                    }
+
+                    if (source.Expression.ResultType != destination.Expression.ResultType)
+                    {
+                        // TODO: This can be legal: e.g. Call(cond ? new Foo() : new Bar());
+                        //       Need to adjust local type to compatible type.
+                        throw new NotImplementedException();
+                    }
+
+                    AppendTemporaryAssignment(statements, destination, source);
+                }
             }
         }
 
@@ -404,12 +452,10 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportDup()
         {
-            var expression = Pop().Expression;
-            var local = GenerateLocal(expression.ResultType);
-            var localReference = new LocalReferenceExpression(local);
-
-            Push(new AssignmentExpression(localReference, expression));
-            Push(localReference);
+            var value = Pop();
+            var localReference = GenerateTemporaryAsReference(value.Expression.ResultType);
+            Push(value.Kind, new AssignmentExpression(localReference, value.Expression));
+            Push(value.Kind, localReference);
         }
 
         private void ImportPop()
@@ -525,7 +571,12 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportFallthrough(BasicBlock next)
         {
-            RequireEmptyStackForNow();
+            if (_stackTop != 0)
+            {
+                TransferStack(ref next.EntryStack, _statements);
+                _stackTop = 0;
+            }
+
             MarkBasicBlock(next);
         }
 
@@ -536,18 +587,43 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportBranch(ILOpcode opcode, BasicBlock target, BasicBlock fallthrough)
         {
+            IStatement gotoStatement = new GoToStatement(GetOrCreateLabel(target));
             StackValue left, right;
 
-            if (opcode == ILOpcode.brtrue || opcode == ILOpcode.brfalse)
+            switch (opcode)
             {
-                left = Pop();
-                right = new StackValue(left.Kind, GetZeroLiteral(left.Kind));
-                opcode = opcode == ILOpcode.brtrue ? ILOpcode.bne_un : ILOpcode.beq;
+                case ILOpcode.br:
+                    Debug.Assert(fallthrough == null);
+                    ImportFallthrough(target);
+                    Append(gotoStatement);
+                    return;
+
+                case ILOpcode.brtrue:
+                case ILOpcode.brfalse:
+                    opcode = opcode == ILOpcode.brtrue ? ILOpcode.beq : ILOpcode.bne_un;
+                    left = Pop();
+                    right = new StackValue(left.Kind, GetZeroLiteral(left.Kind));
+                    break;
+
+                default:
+                    right = Pop();
+                    left = Pop();
+                    break;
             }
-            else
+
+            MarkBasicBlock(fallthrough);
+            MarkBasicBlock(target);
+
+            if (_stackTop != 0)
             {
-                right = Pop();
-                left = Pop();
+                TransferStack(ref fallthrough.EntryStack, _statements);
+
+                var gotoBlock = ImmutableArray.CreateBuilder<IStatement>(_stackTop + 1);
+                TransferStack(ref target.EntryStack, gotoBlock);
+                gotoBlock.Add(gotoStatement);
+                gotoStatement = new BlockStatement(gotoBlock.MoveToImmutable());
+
+                _stackTop = 0;
             }
 
             Append(
@@ -557,11 +633,7 @@ namespace Microsoft.CodeAnalysis.IL
                         left.Expression,
                         right.Expression,
                         BooleanType),
-                    new GoToStatement(
-                        GetOrCreateLabel(target))));
-
-            ImportFallthrough(fallthrough);
-            MarkBasicBlock(target);
+                    gotoStatement));
         }
 
         private void ImportBinaryOperation(ILOpcode opcode)
@@ -950,7 +1022,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
-        private StackValueKind GetStackKind(ITypeSymbol type)
+        private static StackValueKind GetStackKind(ITypeSymbol type)
         {
             switch (type.SpecialType)
             {
@@ -971,11 +1043,28 @@ namespace Microsoft.CodeAnalysis.IL
                 case SpecialType.System_IntPtr:
                 case SpecialType.System_UIntPtr:
                     return StackValueKind.NativeInt;
-
-                default:
-                    // TODO: ByRef
-                    return type.IsValueType ? StackValueKind.ValueType : StackValueKind.ObjRef;
             }
+
+            if (type.IsReferenceType)
+            {
+                return StackValueKind.ObjRef;
+            }
+
+            if (type.IsValueType)
+            {
+                switch (type.TypeKind)
+                {
+                    case TypeKind.Pointer:
+                        return StackValueKind.NativeInt;
+                    case TypeKind.Enum:
+                        return GetStackKind(((INamedTypeSymbol)type).EnumUnderlyingType);
+                }
+
+                return StackValueKind.ValueType;
+            }
+
+            // error or unconstrained type parameter
+            return StackValueKind.Unknown;
         }
 
         private static StackValueKind GetStackKind(StackValueKind lhsKind, StackValueKind rhsKind)
@@ -1024,7 +1113,14 @@ namespace Microsoft.CodeAnalysis.IL
 
         private ISymbol GetSymbolFromHandle(EntityHandle handle)
         {
-            return _module.GetSymbolForMetadataHandle(handle);
+            var symbol =  _module.GetSymbolForMetadataHandle(handle);
+
+            if (symbol == null)
+            {
+                throw new NotImplementedException(); // TODO: failed resolution can trigger this. need error placeholder.
+            }
+
+            return symbol;
         }
 
         private ILabelSymbol GetOrCreateLabel(BasicBlock block)
@@ -1108,6 +1204,12 @@ namespace Microsoft.CodeAnalysis.IL
 
         private struct StackValue
         {
+            public StackValue(IExpression expression)
+            {
+                Kind = GetStackKind(expression.ResultType);
+                Expression = expression;
+            }
+
             public StackValue(StackValueKind kind, IExpression expression)
             {
                 Kind = kind;

@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             try
             {
-                int tmp = StaticMethod("hello", 42);
+                int tmp = StaticMethod(y == 12 ? "hello" : "goodbye", 42);
                 InstanceMethod(x, y);
             }
             catch (OverflowException)
@@ -68,7 +68,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
-        public static int StaticMethod(string x, int y)
+        public static int StaticMethod(object x, int y)
         {
             return 42;
         }

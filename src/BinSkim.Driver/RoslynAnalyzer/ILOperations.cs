@@ -371,7 +371,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override string ToString()
         {
-            return $"Literal [{ConstantValue}]";
+            return $"Literal [{ConstantValue.Value}]";
         }
     }
 
@@ -447,7 +447,12 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal class BlockStatement : Statement, IBlockStatement
     {
-        public BlockStatement(ImmutableArray<ILocalSymbol> locals, ImmutableArray<IStatement> statements)
+        public BlockStatement(ImmutableArray<IStatement> statements)
+            : this(statements, ImmutableArray<ILocalSymbol>.Empty)
+        {
+        }
+
+        public BlockStatement(ImmutableArray<IStatement> statements, ImmutableArray<ILocalSymbol> locals)
         {
             Locals = locals;
             Statements = statements;
