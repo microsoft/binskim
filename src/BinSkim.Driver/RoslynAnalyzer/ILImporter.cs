@@ -788,7 +788,28 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportUnaryOperation(ILOpcode opCode)
         {
-            throw new NotImplementedException();
+            UnaryOperationKind unaryKind;
+            var operand = Pop();
+
+            switch (opCode)
+            {
+                case ILOpcode.not:
+                    unaryKind = UnaryOperationKind.IntegerBitwiseNegation;
+                    break;
+                case ILOpcode.neg:
+                    unaryKind = GetUnaryMinusKind(operand);
+                    break;
+                default:
+                    throw Unreachable();
+            }
+
+            Push(
+                operand.Kind,
+                new UnaryOperatorExpression(
+                    unaryKind,
+                    operand.Expression,
+                    operand.Expression.ResultType));
+                   
         }
 
         private void ImportCpOpj(int token)
@@ -1011,6 +1032,28 @@ namespace Microsoft.CodeAnalysis.IL
                 default:
                     throw new NotImplementedException();
             }
+        }
+
+        private static UnaryOperationKind GetUnaryMinusKind(StackValue operand)
+        {
+            UnaryOperationKind unaryKind;
+            switch (operand.Kind)
+            {
+                case StackValueKind.Int32:
+                case StackValueKind.Int64:
+                case StackValueKind.NativeInt:
+                    unaryKind = UnaryOperationKind.IntegerMinus;
+                    break;
+
+                case StackValueKind.Float:
+                    unaryKind = UnaryOperationKind.FloatingMinus;
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
+
+            return unaryKind;
         }
 
         private StackValueKind GetStackKind(WellKnownType wellKnownType)

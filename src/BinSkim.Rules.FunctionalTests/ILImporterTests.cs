@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public int InstanceField;
-        public static int StaticField;
+        public static float StaticField;
 
         public void Scratch(string x, int y)
         {
@@ -50,8 +50,8 @@ namespace Microsoft.CodeAnalysis.IL
                 InstanceField = 42;
                 StaticField = 42;
 
-                int tmp = StaticMethod(y == 12 ? "hello" : "goodbye", InstanceField);
-                InstanceMethod(x, StaticField);
+                int tmp = StaticMethod(y == 12 ? "hello" : "goodbye", ~InstanceField);
+                InstanceMethod(x, -StaticField);
             }
             catch (OverflowException)
             {
@@ -74,12 +74,12 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
-        public static int StaticMethod(object x, int y)
+        public static int StaticMethod(object x, float y)
         {
             return 42;
         }
 
-        public void InstanceMethod(string x, int y)
+        public void InstanceMethod(string x, float y)
         {
         }
     }
