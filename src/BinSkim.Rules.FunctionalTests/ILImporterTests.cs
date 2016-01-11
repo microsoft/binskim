@@ -40,12 +40,18 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
+        public int InstanceField;
+        public static int StaticField;
+
         public void Scratch(string x, int y)
         {
             try
             {
-                int tmp = StaticMethod(y == 12 ? "hello" : "goodbye", 42);
-                InstanceMethod(x, y);
+                InstanceField = 42;
+                StaticField = 42;
+
+                int tmp = StaticMethod(y == 12 ? "hello" : "goodbye", InstanceField);
+                InstanceMethod(x, StaticField);
             }
             catch (OverflowException)
             {

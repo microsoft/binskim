@@ -675,17 +675,27 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLoadField(int token, bool isStatic)
         {
-            throw new NotImplementedException();
+            Push(PopFieldReference(token, isStatic));
         }
 
         private void ImportAddressOfField(int token, bool isStatic)
         {
-            throw new NotImplementedException();
+            Push(
+                new AddressOfExpression(
+                    _compilation,
+                    PopFieldReference(token, isStatic)));
         }
 
         private void ImportStoreField(int token, bool isStatic)
         {
-            throw new NotImplementedException();
+            var value = Pop().Expression;
+            var target = PopFieldReference(token, isStatic);
+
+            Append(
+                new ExpressionStatement(
+                    new AssignmentExpression(
+                        target,
+                        value)));
         }
 
         private void ImportLoadIndirect(int token)
@@ -899,6 +909,13 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             return new ParameterReferenceExpression(_method.Parameters[index]);
+        }
+
+        private FieldReferenceExpression PopFieldReference(int token, bool isStatic)
+        {
+            return new FieldReferenceExpression(
+                isStatic ? null : Pop().Expression,
+                (IFieldSymbol)GetSymbolFromToken(token));
         }
 
         private static BinaryOperationKind GetBranchKind(ILOpcode opcode, StackValueKind kind)

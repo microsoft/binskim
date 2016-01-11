@@ -380,7 +380,7 @@ namespace Microsoft.CodeAnalysis.IL
         public AddressOfExpression(Compilation compilation, IReferenceExpression addressed)
         {
             Addressed = addressed;
-            ResultType = compilation.CreatePointerTypeSymbol(addressed.ResultType);
+            ResultType = compilation.CreatePointerTypeSymbol(addressed.ResultType); // TODO: Need to handle managed pointer (by-ref) somehow.
         }
 
         public IReferenceExpression Addressed { get; }
