@@ -8,17 +8,6 @@ using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.IL
 {
-    // Things that are needed from a Compilation to ensure various invariants.
-    internal interface ISymbolProvider
-    {
-        ITypeSymbol CreatePointerType(ITypeSymbol pointedAtType);
-
-        // FEEDBACK: Do we need to support custom bounds? (Not supported in VB/C#)
-        ITypeSymbol CreateArrayType(ITypeSymbol elementType, int rank);
-
-        ITypeSymbol GetSpecialType(SpecialType specialType);
-    }
-
     internal abstract class Operation : IOperation
     {
         public abstract OperationKind Kind { get; }
@@ -263,10 +252,10 @@ namespace Microsoft.CodeAnalysis.IL
     // like what I might  need for ldftn and ldvirtfn. Do I have the interpretation right?
     internal sealed class MethodReferenceExpression : MemberReferenceExpression, IMethodReferenceExpression
     {
-        public MethodReferenceExpression(ISymbolProvider provider, IExpression instance, bool isVirtual, IMethodSymbol method)
+        public MethodReferenceExpression(Compilation compilation, IExpression instance, bool isVirtual, IMethodSymbol method)
             : base(instance)
         {
-            ResultType = provider.GetSpecialType(SpecialType.System_IntPtr);
+            ResultType = compilation.GetSpecialType(SpecialType.System_IntPtr);
         }
 
         public bool IsVirtual { get; }
@@ -337,10 +326,10 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class SizeOfExpression : Expression, ITypeOperationExpression
     {
-        public SizeOfExpression(ISymbolProvider provider, ITypeSymbol typeOperand)
+        public SizeOfExpression(Compilation compilation, ITypeSymbol typeOperand)
         {
             TypeOperand = typeOperand;
-            ResultType = provider.GetSpecialType(SpecialType.System_UInt32);
+            ResultType = compilation.GetSpecialType(SpecialType.System_Int32);
         }
 
         public ITypeSymbol TypeOperand { get; }

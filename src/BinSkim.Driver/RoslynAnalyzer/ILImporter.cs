@@ -869,7 +869,10 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportSizeOf(int token)
         {
-            throw new NotImplementedException();
+            Push(
+                new SizeOfExpression(
+                    _compilation,
+                    GetTypeFromToken(token)));
         }
 
         private void ImportRefAnyType()
