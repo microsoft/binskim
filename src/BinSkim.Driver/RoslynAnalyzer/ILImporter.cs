@@ -710,7 +710,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLoadIndirect(int token)
         {
-            throw new NotImplementedException();
+            ImportLoadIndirect(GetTypeFromToken(token));
         }
 
         private void ImportLoadIndirect(ITypeSymbol type)
@@ -767,7 +767,7 @@ namespace Microsoft.CodeAnalysis.IL
                 new ArrayCreationExpression(
                     _compilation,
                     GetTypeFromToken(token),
-                    ImmutableArray.Create(Pop().Expression)));
+                    Pop().Expression));
         }
 
         private void ImportLoadElement(int token)
@@ -777,12 +777,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLoadElement(ITypeSymbol type)
         {
-            type = type ?? ObjectType;
-            var index = Pop().Expression;
-
-            Push(
-                GetStackKind(type),
-                PopArrayReference(index));
+            Push(PopArrayReference(Pop().Expression, type));
         }
 
         private void ImportStoreElement(int token)
@@ -792,10 +787,9 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportStoreElement(ITypeSymbol type)
         {
-            type = type ?? ObjectType;
             var value = Pop().Expression;
             var index = Pop().Expression;
-            var arrayReference = PopArrayReference(index);
+            var arrayReference = PopArrayReference(index, type);
 
             Append(
                 new ExpressionStatement(
@@ -811,10 +805,8 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportAddressOfElement(ITypeSymbol type)
         {
-            type = type ?? ObjectType;
-
             var index = Pop().Expression;
-            var arrayReference = PopArrayReference(index);
+            var arrayReference = PopArrayReference(index, type);
 
             Push(
                 new AddressOfExpression(
@@ -984,11 +976,17 @@ namespace Microsoft.CodeAnalysis.IL
                 (IFieldSymbol)GetSymbolFromToken(token));
         }
 
-        private ArrayElementReferenceExpression PopArrayReference(IExpression index)
+        private ArrayElementReferenceExpression PopArrayReference(IExpression index, ITypeSymbol type)
         {
-            return new ArrayElementReferenceExpression(
-                Pop().Expression,
-                ImmutableArray.Create(index));
+            var arrayReference = Pop().Expression;
+
+            if (type == null)
+            {
+                var arrayType = arrayReference.ResultType as IArrayTypeSymbol;
+                type = arrayType != null ? arrayType.ElementType : ObjectType;
+            }
+
+            return new ArrayElementReferenceExpression(arrayReference, index, type);
         }
 
         private static BinaryOperationKind GetBranchKind(ILOpcode opcode, StackValueKind kind)

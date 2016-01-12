@@ -146,15 +146,16 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class ArrayElementReferenceExpression : ReferenceExpression, IArrayElementReferenceExpression
     {
-        public ArrayElementReferenceExpression(IExpression arrayReference, ImmutableArray<IExpression> indices)
+        public ArrayElementReferenceExpression(IExpression arrayReference, IExpression index, ITypeSymbol type)
         {
             ArrayReference = arrayReference;
-            Indices = indices;
+            Indices = ImmutableArray.Create(index);
+            ResultType = type;
         }
 
         public IExpression ArrayReference { get; }
         public ImmutableArray<IExpression> Indices { get; }
-        public override ITypeSymbol ResultType => ((IArrayTypeSymbol)ArrayReference.ResultType).ElementType;
+        public override ITypeSymbol ResultType { get; }
         public override OperationKind Kind => OperationKind.ArrayElementReferenceExpression;
     }
 
@@ -379,11 +380,11 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class ArrayCreationExpression : Expression, IArrayCreationExpression
     {
-        public ArrayCreationExpression(Compilation compilation, ITypeSymbol elementType, ImmutableArray<IExpression> dimensionSizes)
+        public ArrayCreationExpression(Compilation compilation, ITypeSymbol elementType, IExpression size)
         {
             ElementType = elementType;
-            DimensionSizes = dimensionSizes;
-            ResultType = compilation.CreateArrayTypeSymbol(elementType, dimensionSizes.Length);
+            DimensionSizes = ImmutableArray.Create(size);
+            ResultType = compilation.CreateArrayTypeSymbol(elementType);
         }
 
         public ITypeSymbol ElementType { get; }
