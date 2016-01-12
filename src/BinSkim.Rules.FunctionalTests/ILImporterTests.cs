@@ -43,12 +43,22 @@ namespace Microsoft.CodeAnalysis.IL
         public int InstanceField;
         public static float StaticField;
 
-        public void Scratch(string x, int y)
+        public void Scratch(string x, int y, float z)
         {
             try
             {
                 InstanceField = 42;
                 StaticField = 42;
+
+                InstanceField += y;
+                InstanceField -= y;
+                InstanceField /= y;
+                InstanceField %= y;
+
+                StaticField += z;
+                StaticField -= z;
+                StaticField /= z;
+                StaticField %= z;
 
                 int tmp = StaticMethod(y == 12 ? "hello" : "goodbye", ~InstanceField);
                 InstanceMethod(x, -StaticField);
@@ -81,6 +91,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public void InstanceMethod(string x, float y)
         {
+        }
+
+        public void InstanceMethod(int x)
+        {
+
         }
     }
 }

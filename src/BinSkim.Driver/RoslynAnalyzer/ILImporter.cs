@@ -638,7 +638,17 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportBinaryOperation(ILOpcode opcode)
         {
-            throw new NotImplementedException();
+            var right = Pop();
+            var left = Pop();
+            var stackKind = GetStackKind(left.Kind, right.Kind);
+
+            Push(
+                stackKind,
+                new BinaryOperatorExpression(
+                    GetBinaryOperationKind(opcode, stackKind),
+                    left.Expression,
+                    right.Expression,
+                    left.Expression.ResultType)); // TODO: handle heterogeneous types here.
         }
 
         private void ImportShiftOperation(ILOpcode opcode)
@@ -1024,6 +1034,114 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
+        private BinaryOperationKind GetBinaryOperationKind(ILOpcode opcode, StackValueKind stackKind)
+        {
+            switch (opcode)
+            {
+                case ILOpcode.add_ovf:
+                case ILOpcode.add_ovf_un:
+                case ILOpcode.add:
+                    return GetAddKind(stackKind);
+                case ILOpcode.sub_ovf:
+                case ILOpcode.sub_ovf_un:
+                case ILOpcode.sub:
+                    return GetSubtractKind(stackKind);
+                case ILOpcode.mul_ovf:
+                case ILOpcode.mul_ovf_un:
+                case ILOpcode.mul:
+                    return GetMultiplyKind(stackKind);
+                case ILOpcode.div:
+                case ILOpcode.div_un:
+                    return GetDivideKind(stackKind);
+                case ILOpcode.rem:
+                case ILOpcode.rem_un:
+                    return GetRemainderKind(stackKind);
+                case ILOpcode.and:
+                    return BinaryOperationKind.IntegerAnd;
+                case ILOpcode.or:
+                    return BinaryOperationKind.IntegerOr;
+                case ILOpcode.xor:
+                    return BinaryOperationKind.IntegerExclusiveOr;
+                default:
+                    throw Unreachable();
+            }
+        }
+
+        private BinaryOperationKind GetAddKind(StackValueKind stackKind)
+        {
+            switch (stackKind)
+            {
+                case StackValueKind.Int32:
+                case StackValueKind.Int64:
+                case StackValueKind.NativeInt:
+                    return BinaryOperationKind.IntegerAdd;
+                case StackValueKind.Float:
+                    return BinaryOperationKind.FloatingAdd;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private BinaryOperationKind GetSubtractKind(StackValueKind stackKind)
+        {
+            switch (stackKind)
+            {
+                case StackValueKind.Int32:
+                case StackValueKind.Int64:
+                case StackValueKind.NativeInt:
+                    return BinaryOperationKind.IntegerSubtract;
+                case StackValueKind.Float:
+                    return BinaryOperationKind.IntegerSubtract;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private BinaryOperationKind GetMultiplyKind(StackValueKind stackKind)
+        {
+            switch (stackKind)
+            {
+                case StackValueKind.Int32:
+                case StackValueKind.Int64:
+                case StackValueKind.NativeInt:
+                    return BinaryOperationKind.IntegerAdd;
+                case StackValueKind.Float:
+                    return BinaryOperationKind.FloatingAdd;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private BinaryOperationKind GetDivideKind(StackValueKind stackKind)
+        {
+            switch (stackKind)
+            {
+                case StackValueKind.Int32:
+                case StackValueKind.Int64:
+                case StackValueKind.NativeInt:
+                    return BinaryOperationKind.IntegerDivide;
+                case StackValueKind.Float:
+                    return BinaryOperationKind.FloatingDivide;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private BinaryOperationKind GetRemainderKind(StackValueKind stackKind)
+        {
+            switch (stackKind)
+            {
+                case StackValueKind.Int32:
+                case StackValueKind.Int64:
+                case StackValueKind.NativeInt:
+                    return BinaryOperationKind.IntegerRemainder;
+                case StackValueKind.Float:
+                    return BinaryOperationKind.FloatingRemainder;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         private static BinaryOperationKind GetObjectBranchKind(ILOpcode opcode)
         {
             switch (opcode)
@@ -1039,24 +1157,17 @@ namespace Microsoft.CodeAnalysis.IL
 
         private static UnaryOperationKind GetUnaryMinusKind(StackValue operand)
         {
-            UnaryOperationKind unaryKind;
             switch (operand.Kind)
             {
                 case StackValueKind.Int32:
                 case StackValueKind.Int64:
                 case StackValueKind.NativeInt:
-                    unaryKind = UnaryOperationKind.IntegerMinus;
-                    break;
-
+                    return UnaryOperationKind.IntegerMinus;
                 case StackValueKind.Float:
-                    unaryKind = UnaryOperationKind.FloatingMinus;
-                    break;
-
+                    return UnaryOperationKind.FloatingMinus;
                 default:
                     throw new NotImplementedException();
             }
-
-            return unaryKind;
         }
 
         private StackValueKind GetStackKind(WellKnownType wellKnownType)
