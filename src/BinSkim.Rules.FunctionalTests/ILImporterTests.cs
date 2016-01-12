@@ -42,12 +42,14 @@ namespace Microsoft.CodeAnalysis.IL
 
         public int InstanceField;
         public static float StaticField;
+        public static string[] xs;
 
         public void Scratch(string x, int y, float z)
         {
             try
             {
-                string[] xs = new string[3];
+                xs = new string[3];
+                xs[0] = xs[1];
 
                 InstanceField = 42;
                 StaticField = 42;

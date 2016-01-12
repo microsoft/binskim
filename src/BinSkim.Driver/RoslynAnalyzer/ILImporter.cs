@@ -777,7 +777,12 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLoadElement(ITypeSymbol type)
         {
-            throw new NotImplementedException();
+            type = type ?? ObjectType;
+            var index = Pop().Expression;
+
+            Push(
+                GetStackKind(type),
+                PopArrayReference(index));
         }
 
         private void ImportStoreElement(int token)
@@ -787,16 +792,39 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportStoreElement(ITypeSymbol type)
         {
-            throw new NotImplementedException();
+            type = type ?? ObjectType;
+            var value = Pop().Expression;
+            var index = Pop().Expression;
+            var arrayReference = PopArrayReference(index);
+
+            Append(
+                new ExpressionStatement(
+                    new AssignmentExpression(
+                        arrayReference,
+                        value)));
         }
 
         private void ImportAddressOfElement(int token)
         {
-            throw new NotImplementedException();
+            ImportAddressOfElement(GetTypeFromToken(token));
+        }
+
+        private void ImportAddressOfElement(ITypeSymbol type)
+        {
+            type = type ?? ObjectType;
+
+            var index = Pop().Expression;
+            var arrayReference = PopArrayReference(index);
+
+            Push(
+                new AddressOfExpression(
+                    _compilation,
+                    arrayReference));
         }
 
         private void ImportLoadLength()
         {
+            // TODO: Need to synthesize access to Array.Length.
             throw new NotImplementedException();
         }
 
@@ -954,6 +982,13 @@ namespace Microsoft.CodeAnalysis.IL
             return new FieldReferenceExpression(
                 isStatic ? null : Pop().Expression,
                 (IFieldSymbol)GetSymbolFromToken(token));
+        }
+
+        private ArrayElementReferenceExpression PopArrayReference(IExpression index)
+        {
+            return new ArrayElementReferenceExpression(
+                Pop().Expression,
+                ImmutableArray.Create(index));
         }
 
         private static BinaryOperationKind GetBranchKind(ILOpcode opcode, StackValueKind kind)
