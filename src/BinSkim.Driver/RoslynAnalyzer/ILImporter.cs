@@ -897,32 +897,32 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportUnalignedPrefix(byte alignment)
         {
-            throw new NotImplementedException();
+            // TODO?
         }
 
         private void ImportVolatilePrefix()
         {
-            throw new NotImplementedException();
+            // TODO?
         }
 
         private void ImportTailPrefix()
         {
-            throw new NotImplementedException();
+            // TODO?
         }
 
         private void ImportConstrainedPrefix(int token)
         {
-            throw new NotImplementedException();
+            // TODO?
         }
 
         private void ImportNoPrefix(byte mask)
         {
-            throw new NotImplementedException();
+            // TODO?
         }
 
         private void ImportReadOnlyPrefix()
         {
-            throw new NotImplementedException();
+            // TODO?
         }
 
         private IReferenceExpression GetVariableReference(int index, bool argument)
