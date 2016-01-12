@@ -64,6 +64,13 @@ namespace Microsoft.CodeAnalysis.IL
                 StaticField /= z;
                 StaticField %= z;
 
+                unsafe
+                {
+                    int* p = &y;
+                    *p = 4242;
+                }
+
+
                 int tmp = StaticMethod(y == 12 ? "hello" : "goodbye", ~InstanceField);
                 InstanceMethod(x, -StaticField);
             }

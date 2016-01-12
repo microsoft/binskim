@@ -161,13 +161,13 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class PointerIndirectionReferenceExpression : ReferenceExpression, IPointerIndirectionReferenceExpression
     {
-        public PointerIndirectionReferenceExpression(IExpression pointer)
+        public PointerIndirectionReferenceExpression(IExpression pointer, ITypeSymbol type)
         {
             Pointer = pointer;
         }
 
         public IExpression Pointer { get; }
-        public override ITypeSymbol ResultType => ((IPointerTypeSymbol)Pointer.ResultType).PointedAtType;
+        public override ITypeSymbol ResultType { get; }
         public override OperationKind Kind => OperationKind.PointerIndirectionReferenceExpression;
     }
 

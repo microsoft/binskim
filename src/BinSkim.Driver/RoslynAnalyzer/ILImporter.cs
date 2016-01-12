@@ -334,11 +334,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void AppendTemporaryAssignment(ImmutableArray<IStatement>.Builder statements, StackValue target, StackValue source)
         {
-            statements.Add(
-                new ExpressionStatement(
-                    new AssignmentExpression(
-                        (ILocalReferenceExpression)target.Expression,
-                        source.Expression)));
+            statements.Add(NewAssignmentStatement((ILocalReferenceExpression)target.Expression, source.Expression));
         }
 
         private void TransferStack(ref StackValue[] target, ImmutableArray<IStatement>.Builder statements)
@@ -435,11 +431,10 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportStoreVar(int index, bool argument)
         {
-            Append(
-                new ExpressionStatement(
-                    new AssignmentExpression(
-                        GetVariableReference(index, argument),
-                        Pop().Expression)));
+            var target = GetVariableReference(index, argument);
+            var value = Pop().Expression;
+
+            Append(NewAssignmentStatement(target, value));
         }
 
         private void ImportAddressOfVar(int index, bool argument)
@@ -454,6 +449,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             var value = Pop();
             var localReference = GenerateTemporaryAsReference(value.Expression.ResultType);
+
             Push(value.Kind, new AssignmentExpression(localReference, value.Expression));
             Push(value.Kind, localReference);
         }
@@ -701,11 +697,7 @@ namespace Microsoft.CodeAnalysis.IL
             var value = Pop().Expression;
             var target = PopFieldReference(token, isStatic);
 
-            Append(
-                new ExpressionStatement(
-                    new AssignmentExpression(
-                        target,
-                        value)));
+            Append(NewAssignmentStatement(target, value));
         }
 
         private void ImportLoadIndirect(int token)
@@ -715,7 +707,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLoadIndirect(ITypeSymbol type)
         {
-            throw new NotImplementedException();
+            Push(PopPointerIndirection(type));
         }
 
         private void ImportStoreIndirect(int token)
@@ -725,7 +717,10 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportStoreIndirect(ITypeSymbol type)
         {
-            throw new NotImplementedException();
+            var value = Pop().Expression;
+            var target = PopPointerIndirection(type);
+
+            Append(NewAssignmentStatement(target, value));
         }
 
         private void ImportThrow()
@@ -789,13 +784,9 @@ namespace Microsoft.CodeAnalysis.IL
         {
             var value = Pop().Expression;
             var index = Pop().Expression;
-            var arrayReference = PopArrayReference(index, type);
+            var target = PopArrayReference(index, type);
 
-            Append(
-                new ExpressionStatement(
-                    new AssignmentExpression(
-                        arrayReference,
-                        value)));
+            Append(NewAssignmentStatement(target, value));
         }
 
         private void ImportAddressOfElement(int token)
@@ -808,10 +799,7 @@ namespace Microsoft.CodeAnalysis.IL
             var index = Pop().Expression;
             var arrayReference = PopArrayReference(index, type);
 
-            Push(
-                new AddressOfExpression(
-                    _compilation,
-                    arrayReference));
+            Push(new AddressOfExpression(_compilation, arrayReference));
         }
 
         private void ImportLoadLength()
@@ -987,6 +975,24 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             return new ArrayElementReferenceExpression(arrayReference, index, type);
+        }
+
+        private PointerIndirectionReferenceExpression PopPointerIndirection(ITypeSymbol type)
+        {
+            var pointer = Pop().Expression;
+
+            if (type == null)
+            {
+                var pointerType = pointer.ResultType as IPointerTypeSymbol;
+                type = pointerType != null ? pointerType.PointedAtType : ObjectType;
+            }
+
+            return new PointerIndirectionReferenceExpression(pointer, type);
+        }
+
+        private static ExpressionStatement NewAssignmentStatement(IReferenceExpression target, IExpression value)
+        {
+            return new ExpressionStatement(new AssignmentExpression(target, value));
         }
 
         private static BinaryOperationKind GetBranchKind(ILOpcode opcode, StackValueKind kind)

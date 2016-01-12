@@ -11,6 +11,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyName>BinSkim.Rules.FunctionalTests</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Library</OutputType>
