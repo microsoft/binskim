@@ -314,6 +314,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             Conversion = conversion;
             Operand = operand;
+            ResultType = resultType;
         }
 
         public ConversionKind Conversion { get; }
