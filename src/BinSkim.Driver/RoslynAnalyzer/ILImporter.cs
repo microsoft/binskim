@@ -763,7 +763,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportNewArray(int token)
         {
-            throw new NotImplementedException();
+            Push(
+                new ArrayCreationExpression(
+                    _compilation,
+                    GetTypeFromToken(token),
+                    ImmutableArray.Create(Pop().Expression)));
         }
 
         private void ImportLoadElement(int token)

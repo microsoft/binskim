@@ -47,6 +47,8 @@ namespace Microsoft.CodeAnalysis.IL
         {
             try
             {
+                string[] xs = new string[3];
+
                 InstanceField = 42;
                 StaticField = 42;
 
