@@ -1134,7 +1134,7 @@ namespace Microsoft.CodeAnalysis.IL
                 case StackValueKind.NativeInt:
                     return BinaryOperationKind.IntegerSubtract;
                 case StackValueKind.Float:
-                    return BinaryOperationKind.IntegerSubtract;
+                    return BinaryOperationKind.FloatingSubtract;
                 default:
                     throw new NotImplementedException();
             }
