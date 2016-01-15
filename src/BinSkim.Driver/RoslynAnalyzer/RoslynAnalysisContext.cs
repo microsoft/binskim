@@ -49,5 +49,6 @@ namespace Microsoft.CodeAnalysis.IL
         public override void RegisterOperationBlockAction(Action<OperationBlockAnalysisContext> action) { }
         public override void RegisterOperationAction(Action<OperationAnalysisContext> action, ImmutableArray<OperationKind> operationKinds) { }
         public override void EnableConcurrentExecution() { }
+        public override void ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags analysisMode) { }
     }
 }

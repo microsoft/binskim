@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis.IL
         ImmutableArray<IArgument> IObjectCreationExpression.ConstructorArguments => Arguments;
     }
 
-    internal sealed class Argument : IArgument
+    internal sealed class Argument : Operation, IArgument
     {
         public Argument(IParameterSymbol parameter, IExpression value)
         {
@@ -124,9 +124,10 @@ namespace Microsoft.CodeAnalysis.IL
 
         public IParameterSymbol Parameter { get; }
         public IExpression Value { get; }
+        public override OperationKind Kind => OperationKind.Argument;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ArgumentKind IArgument.Kind => ArgumentKind.Positional;
+        ArgumentKind IArgument.ArgumentKind => ArgumentKind.Positional;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IExpression IArgument.InConversion => null;
@@ -227,42 +228,26 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal abstract class MemberReferenceExpression : ReferenceExpression, IMemberReferenceExpression
     {
-        protected MemberReferenceExpression(IExpression instance)
+        protected MemberReferenceExpression(IExpression instance, ISymbol member)
         {
             Instance = instance;
+            Member = member;
         }
 
         public IExpression Instance { get; }
+        public ISymbol Member { get; }
     }
 
     internal sealed class FieldReferenceExpression : MemberReferenceExpression, IFieldReferenceExpression
     {
         public FieldReferenceExpression(IExpression instance, IFieldSymbol field)
-            : base(instance)
+            : base(instance, field)
         {
-            Field = field;
         }
 
-        public IFieldSymbol Field { get; }
-
+        public IFieldSymbol Field => (IFieldSymbol)Member;
         public override OperationKind Kind => OperationKind.FieldReferenceExpression;
         public override ITypeSymbol ResultType => Field.Type;
-    }
-
-    // FEEDBACK: This does not appear to be used implemented by VB or C#, but seems
-    // like what I might  need for ldftn and ldvirtfn. Do I have the interpretation right?
-    internal sealed class MethodReferenceExpression : MemberReferenceExpression, IMethodReferenceExpression
-    {
-        public MethodReferenceExpression(Compilation compilation, IExpression instance, bool isVirtual, IMethodSymbol method)
-            : base(instance)
-        {
-            ResultType = compilation.GetSpecialType(SpecialType.System_IntPtr);
-        }
-
-        public bool IsVirtual { get; }
-        public IMethodSymbol Method { get; }
-        public override ITypeSymbol ResultType { get; }
-        public override OperationKind Kind => OperationKind.MethodReferenceExpression;
     }
 
     internal abstract class HasOperatorExpression : Expression, IHasOperatorExpression
@@ -277,14 +262,14 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class UnaryOperatorExpression : HasOperatorExpression, IUnaryOperatorExpression
     {
-        public UnaryOperatorExpression(UnaryOperationKind unaryKind, IExpression operand, ITypeSymbol resultType)
+        public UnaryOperatorExpression(UnaryOperationKind unaryOperationKind, IExpression operand, ITypeSymbol resultType)
         {
-            UnaryKind = unaryKind;
+            UnaryOperationKind = unaryOperationKind;
             Operand = operand;
             ResultType = resultType;
         }
 
-        public UnaryOperationKind UnaryKind { get; }
+        public UnaryOperationKind UnaryOperationKind { get; }
         public IExpression Operand { get; }
         public override ITypeSymbol ResultType { get; }
 
@@ -293,15 +278,15 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class BinaryOperatorExpression : HasOperatorExpression, IBinaryOperatorExpression
     {
-        public BinaryOperatorExpression(BinaryOperationKind binaryKind, IExpression left, IExpression right, ITypeSymbol resultType)
+        public BinaryOperatorExpression(BinaryOperationKind binaryOperationKind, IExpression left, IExpression right, ITypeSymbol resultType)
         {
-            BinaryKind = binaryKind;
+            BinaryOperationKind = binaryOperationKind;
             Left = left;
             Right = right;
             ResultType = resultType;
         }
 
-        public BinaryOperationKind BinaryKind { get; }
+        public BinaryOperationKind BinaryOperationKind { get; }
         public IExpression Left { get; }
         public IExpression Right { get; }
         public override ITypeSymbol ResultType { get; }
@@ -310,14 +295,14 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class ConversionExpression : HasOperatorExpression, IConversionExpression
     {
-        public ConversionExpression(ConversionKind conversion, IExpression operand, ITypeSymbol resultType)
+        public ConversionExpression(ConversionKind conversionKind, IExpression operand, ITypeSymbol resultType)
         {
-            Conversion = conversion;
+            ConversionKind = conversionKind;
             Operand = operand;
             ResultType = resultType;
         }
 
-        public ConversionKind Conversion { get; }
+        public ConversionKind ConversionKind { get; }
         public IExpression Operand { get; }
         public override ITypeSymbol ResultType { get; }
         public override OperationKind Kind => OperationKind.ConversionExpression;
@@ -337,7 +322,7 @@ namespace Microsoft.CodeAnalysis.IL
         public ITypeSymbol TypeOperand { get; }
         public override ITypeSymbol ResultType { get; }
         public override OperationKind Kind => OperationKind.TypeOperationExpression;
-        public TypeOperationKind TypeOperationClass => TypeOperationKind.SizeOf; // FEEDBACK: Inconsistent naming of enum and member.
+        public TypeOperationKind TypeOperationKind => TypeOperationKind.SizeOf;
     }
 
     // TODO: TypeOfExpression should be here.
@@ -393,7 +378,7 @@ namespace Microsoft.CodeAnalysis.IL
         public override ITypeSymbol ResultType { get; }
         public override OperationKind Kind => OperationKind.ArrayCreationExpression;
 
-        IArrayInitializer IArrayCreationExpression.ElementValues => null;
+        IArrayInitializer IArrayCreationExpression.Initializer => null;
     }
 
     internal sealed class AssignmentExpression : Expression, IAssignmentExpression
