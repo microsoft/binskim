@@ -347,7 +347,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override string ToString()
         {
-            return $"Literal [{ConstantValue.Value}]";
+            return $"Literal [{ConstantValue.Value ?? "null"}]";
         }
     }
 

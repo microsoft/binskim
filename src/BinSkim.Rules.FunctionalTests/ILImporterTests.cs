@@ -43,6 +43,17 @@ namespace Microsoft.CodeAnalysis.IL
         public int InstanceField;
         public static float StaticField;
         public static string[] xs;
+        public static object Obj;
+
+        class Foo
+        {
+            public int X = 22;
+        }
+
+        class Bar
+        {
+            public int Y = 23;
+        }
 
         public void Scratch(string x, int y, float z)
         {
@@ -50,6 +61,17 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 xs = new string[3];
                 xs[0] = xs[1];
+
+                if (Obj is Foo)
+                {
+                    InstanceMethod(((Foo)Obj).X);
+                }
+
+                var bar = Obj as Bar;
+                if (bar != null)
+                {
+                    InstanceMethod(bar.Y);
+                }
 
                 InstanceField = 42;
                 StaticField = 42;

@@ -464,9 +464,30 @@ namespace Microsoft.CodeAnalysis.IL
             throw new NotImplementedException();
         }
 
+        private void ImportConvert(WellKnownType wellKnownType, bool checkOverflow, bool unsigned)
+        {
+            // unsigned argument deliberately unused: it is captured in wellKnownType.
+            // FEEDBACK: How to represent checkOverflow = true?
+
+            ImportCasting(ConversionKind.Cast, GetWellKnownType(wellKnownType));
+        }
+
         private void ImportCasting(ILOpcode opcode, int token)
         {
-            throw new NotImplementedException();
+            Debug.Assert(opcode == ILOpcode.castclass || opcode == ILOpcode.isinst);
+
+            ImportCasting(
+                opcode == ILOpcode.castclass ? ConversionKind.Cast : ConversionKind.AsCast,
+                GetTypeFromToken(token));
+        }
+
+        private void ImportCasting(ConversionKind conversionKind, ITypeSymbol type)
+        {
+            Push(
+                new ConversionExpression(
+                    conversionKind,
+                    Pop().Expression,
+                    type));
         }
 
         private void ImportCall(ILOpcode opcode, int token)
@@ -663,20 +684,17 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportCompareOperation(ILOpcode opcode)
         {
-            throw new NotImplementedException();
-        }
+            var right = Pop();
+            var left = Pop();
 
-        private void ImportConvert(WellKnownType wellKnownType, bool checkOverflow, bool unsigned)
-        {
-            // unsigned argument deliberately unused: it is captured in wellKnownType.
-            // FEEDBACK: How to represent checkOverflow = true?
+            var kind = GetCompareKind(opcode, GetStackKind(left.Kind, right.Kind));
 
             Push(
-                GetStackKind(wellKnownType),
-                new ConversionExpression(
-                    ConversionKind.Cast,
-                    Pop().Expression,
-                    GetWellKnownType(wellKnownType)));
+                new BinaryOperatorExpression(
+                    kind,
+                    left.Expression,
+                    right.Expression,
+                    BooleanType));
         }
 
         private void ImportLoadField(int token, bool isStatic)
@@ -995,6 +1013,89 @@ namespace Microsoft.CodeAnalysis.IL
             return new ExpressionStatement(new AssignmentExpression(target, value));
         }
 
+        private static BinaryOperationKind GetCompareKind(ILOpcode opcode, StackValueKind kind)
+        {
+            switch (kind)
+            {
+                case StackValueKind.Int32:
+                case StackValueKind.Int64:
+                case StackValueKind.NativeInt:
+                    return GetIntegerCompareKind(opcode);
+                case StackValueKind.Float:
+                    return GetFloatCompareKind(opcode);
+                case StackValueKind.ObjRef:
+                    return GetObjectCompareKind(opcode);
+                default:
+                    throw new NotImplementedException(); // should byref compares be integer compares?
+            }
+        }
+
+        private static BinaryOperationKind GetIntegerCompareKind(ILOpcode opcode)
+        {
+            switch (opcode)
+            {
+                case ILOpcode.beq:
+                    return BinaryOperationKind.IntegerEquals;
+                case ILOpcode.bge:
+                    return BinaryOperationKind.IntegerGreaterThanOrEqual;
+                case ILOpcode.bgt:
+                    return BinaryOperationKind.IntegerGreaterThan;
+                case ILOpcode.ble:
+                    return BinaryOperationKind.IntegerLessThanOrEqual;
+                case ILOpcode.blt:
+                    return BinaryOperationKind.IntegerLessThan;
+                case ILOpcode.bne_un:
+                    return BinaryOperationKind.IntegerNotEquals;
+                case ILOpcode.bge_un:
+                    return BinaryOperationKind.UnsignedGreaterThan;
+                case ILOpcode.bgt_un:
+                    return BinaryOperationKind.UnsignedGreaterThan;
+                case ILOpcode.ble_un:
+                    return BinaryOperationKind.UnsignedLessThanOrEqual;
+                case ILOpcode.blt_un:
+                    return BinaryOperationKind.UnsignedLessThan;
+                default:
+                    throw Unreachable();
+            }
+        }
+
+        private static BinaryOperationKind GetFloatCompareKind(ILOpcode opcode)
+        {
+            switch (opcode)
+            {
+                case ILOpcode.beq:
+                    return BinaryOperationKind.FloatingEquals;
+                case ILOpcode.bge:
+                    return BinaryOperationKind.FloatingGreaterThanOrEqual;
+                case ILOpcode.bgt:
+                    return BinaryOperationKind.FloatingGreaterThan;
+                case ILOpcode.ble:
+                    return BinaryOperationKind.FloatingLessThanOrEqual;
+                case ILOpcode.blt:
+                    return BinaryOperationKind.FloatingLessThan;
+                case ILOpcode.bne_un:
+                    return BinaryOperationKind.FloatingNotEquals;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private static BinaryOperationKind GetObjectCompareKind(ILOpcode opcode)
+        {
+            switch (opcode)
+            {
+                case ILOpcode.ceq:
+                    return BinaryOperationKind.ObjectEquals;
+                case ILOpcode.cgt_un:
+                    // NOTE: cgt.un is allowed on objects for != null since there is no cne. No other comparisons are valid on obj refs.
+                    //       we therefore just assume rhs is null here and represent as ObjectNotEquals.
+                    return BinaryOperationKind.ObjectNotEquals; 
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+
         private static BinaryOperationKind GetBranchKind(ILOpcode opcode, StackValueKind kind)
         {
             switch (kind)
@@ -1057,6 +1158,19 @@ namespace Microsoft.CodeAnalysis.IL
                     return BinaryOperationKind.FloatingLessThan;
                 case ILOpcode.bne_un:
                     return BinaryOperationKind.FloatingNotEquals;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private static BinaryOperationKind GetObjectBranchKind(ILOpcode opcode)
+        {
+            switch (opcode)
+            {
+                case ILOpcode.beq:
+                    return BinaryOperationKind.ObjectEquals;
+                case ILOpcode.bne_un:
+                    return BinaryOperationKind.ObjectNotEquals;
                 default:
                     throw new NotImplementedException();
             }
@@ -1180,19 +1294,6 @@ namespace Microsoft.CodeAnalysis.IL
                     return BinaryOperationKind.IntegerRemainder;
                 case StackValueKind.Float:
                     return BinaryOperationKind.FloatingRemainder;
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        private static BinaryOperationKind GetObjectBranchKind(ILOpcode opcode)
-        {
-            switch (opcode)
-            {
-                case ILOpcode.beq:
-                    return BinaryOperationKind.ObjectEquals;
-                case ILOpcode.bne_un:
-                    return BinaryOperationKind.ObjectNotEquals;
                 default:
                     throw new NotImplementedException();
             }
