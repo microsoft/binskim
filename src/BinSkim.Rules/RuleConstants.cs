@@ -9,7 +9,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string LoadImageAboveFourGigabyteAddressId = "BA2001";
         public const string DoNotIncorporateVulnerableDependenciesId = "BA2002";
 
-        // 2003 open.
         // 2004 open. Previously for specific ATL implementation verification
 
         // Id gap relates to unported analysis 
@@ -34,5 +33,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // 2020 open. Previously for 'do not use vb6' check
 
         public const string DoNotMarkWritableSectionsAsExecutableId = "BA2021";
+
+        public const string SignCorrectly = "BA2022";
     }
 }

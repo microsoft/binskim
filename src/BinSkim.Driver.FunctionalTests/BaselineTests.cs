@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 
 using Microsoft.CodeAnalysis.Sarif.Readers;
-using Microsoft.CodeAnalysis.Sarif.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;

@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 
 using Xunit;
 using Xunit.Abstractions;
-using Microsoft.CodeAnalysis.Sarif.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -649,13 +649,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableControlFlowGuard_Fail()
         {
-            //VerifyFail(new EnableControlFlowGuard());
+            VerifyFail(new EnableControlFlowGuard());
         }
 
         [Fact]
         public void EnableControlFlowGuard_Pass()
         {
-            //VerifyPass(new EnableControlFlowGuard());
+            VerifyPass(new EnableControlFlowGuard());
         }
 
         [Fact]
@@ -726,6 +726,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
             VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
+        }
+
+        [Fact]
+        public void SignSecurely_Fail()
+        {
+            VerifyFail(new SignSecurely());
+        }
+
+        [Fact]
+        public void SignSecurely_Pass()
+        {
+            VerifyPass(new SignSecurely());
+        }
+
+        [Fact]
+        public void SignSecurely_NotApplicable()
+        {
+            HashSet<string> applicableTo = new HashSet<string>();
+            applicableTo.Add(MetadataConditions.ImageIsNotSigned);
+            VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableToSpecifiedTarget);
         }
     }
 }

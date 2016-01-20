@@ -147,6 +147,9 @@
   <data name="MetadataCondition_ImageIsNot64BitBinary" xml:space="preserve">
     <value>image is not a 64-bit binary</value>
   </data>
+  <data name="MetadataCondition_ImageIsNotSigned" xml:space="preserve">
+    <value>image is not signed </value>
+  </data>
   <data name="MetadataCondition_ImageIsPreV7WindowsCEBinary" xml:space="preserve">
     <value>image is a pre-version 7 Windows CE binary</value>
   </data>

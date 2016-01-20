@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.IL
     {
         [Option(
             "sympath",
-            HelpText = "Symbols path value, e.g., SRV*http://msdl.microsoft.com/download/symbols or Cache*d:\\symbols;Srv**http://symweb")]
+            HelpText = "Symbols path value, e.g., SRV*http://msdl.microsoft.com/download/symbols or Cache*d:\\symbols;Srv*http://symweb")]
         public string SymbolsPath { get; internal set; }
     }
 }

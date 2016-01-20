@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -74,6 +74,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = RuleResources.BA2005_MissingRequiredConfiguration;
             if (context.Policy == null) { return AnalysisApplicability.NotApplicableDueToMissingConfiguration; }
 
+            reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 

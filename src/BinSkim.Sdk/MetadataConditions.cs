@@ -6,6 +6,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
     public static class MetadataConditions
     {
         public static readonly string CouldNotLoadPdb = SdkResources.MetadataCondition_CouldNotLoadPdb;
+        public static readonly string ImageIsNotSigned = SdkResources.MetadataCondition_ImageIsNotSigned;
         public static readonly string ImageIsXBoxBinary = SdkResources.MetadataCondition_ImageIsXboxBinary;
         public static readonly string ImageIs64BitBinary = SdkResources.MetadataCondition_ImageIs64BitBinary;
         public static readonly string ImageIsNot32BitBinary = SdkResources.MetadataCondition_ImageIsNot32BitBinary;
