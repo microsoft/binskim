@@ -70,19 +70,31 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Native.WINTRUST_DATA winTrustData;
             string filePath = context.PE.FileName;
 
-            if (InvokeVerifyAction(context, filePath, out winTrustData) &&
-                ValidateSignatureAlgorithm(context, winTrustData, out certInfo) &&
-                VerifyCodeIsSignedByApprovedCertificate(certInfo))
-            {
+            winTrustData = new Native.WINTRUST_DATA();
 
-                // '{0}' appears to be signed securely by a trusted publisher with
-                // no verification or time stamp errors. Revocation checking was
-                // performed on the entire certificate chain, excluding the root
-                // certificate. The image was signed with '{1}', a
-                // cryptographically strong algorithm.
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                        nameof(RuleResources.BA2022_Pass)));
+            try
+            {
+                if (InvokeVerifyAction(context, filePath, out winTrustData) &&
+                    ValidateSignatureAlgorithm(context, winTrustData, out certInfo) &&
+                    VerifyCodeIsSignedByApprovedCertificate(certInfo))
+                {
+
+                    // '{0}' appears to be signed securely by a trusted publisher with
+                    // no verification or time stamp errors. Revocation checking was
+                    // performed on the entire certificate chain, excluding the root
+                    // certificate. The image was signed with '{1}', a
+                    // cryptographically strong algorithm.
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                            nameof(RuleResources.BA2022_Pass)));
+                }
+            }
+            finally
+            {
+                if (winTrustData.hWVTStateData != IntPtr.Zero)
+                {
+                    InvokeCloseAction(winTrustData);
+                }
             }
         }
 
@@ -300,41 +312,44 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static Dictionary<string, AlgorithmData> BuildAlgorithmData()
         {
-            var result = new Dictionary<string, AlgorithmData>();
+            var result = new Dictionary<string, AlgorithmData>
+            {
+                // PRESUMED weak
 
-            // PRESUMED weak
-            result["1.2.840.113549.1.1.5"] = new AlgorithmData() { Name = "sha1RSA",    Weak = true };
-            result["1.2.840.113549.1.1.4"] = new AlgorithmData() { Name = "md5RSA",     Weak = true };
-            result["1.2.840.10040.4.3"   ] = new AlgorithmData() { Name = "sha1DSA",    Weak = true };
-            result["1.3.14.3.2.29"       ] = new AlgorithmData() { Name = "sha1RSA",    Weak = true };
-            result["1.3.14.3.2.15"       ] = new AlgorithmData() { Name = "shaRSA",     Weak = true };
-            result["1.3.14.3.2.3"        ] = new AlgorithmData() { Name = "md5RSA",     Weak = true };
-            result["1.2.840.113549.1.1.2"] = new AlgorithmData() { Name = "md2RSA",     Weak = true };
-            result["1.2.840.113549.1.1.3"] = new AlgorithmData() { Name = "md4RSA",     Weak = true };
-            result["1.3.14.3.2.2"        ] = new AlgorithmData() { Name = "md4RSA",     Weak = true };
-            result["1.3.14.3.2.4"        ] = new AlgorithmData() { Name = "md4RSA",     Weak = true };
-            result["1.3.14.7.2.3.1"      ] = new AlgorithmData() { Name = "md2RSA",     Weak = true };
-            result["1.3.14.3.2.13"       ] = new AlgorithmData() { Name = "sha1DSA",    Weak = true };
-            result["1.3.14.3.2.27"       ] = new AlgorithmData() { Name = "dsaSHA1",    Weak = true };
-            result["1.2.840.10045.4.1"   ] = new AlgorithmData() { Name = "sha1ECDSA",  Weak = true };
-            result["1.3.14.3.2.26"       ] = new AlgorithmData() { Name = "sha1NoSign", Weak = true };
-            result["1.2.840.113549.2.5"  ] = new AlgorithmData() { Name = "md5NoSign",  Weak = true };
+                { "1.2.840.113549.1.1.2", new AlgorithmData() { Name = "md2RSA",    Weak = true }},
+                { "1.2.840.113549.1.1.4", new AlgorithmData() { Name = "md5RSA",    Weak = true }},
+                { "1.2.840.113549.2.5",   new AlgorithmData() { Name = "md5NoSign", Weak = true }},
+                { "1.3.14.3.2.2",         new AlgorithmData() { Name = "md4RSA",    Weak = true }},
+                { "1.3.14.3.2.3",         new AlgorithmData() { Name = "md5RSA",    Weak = true }},
+                { "1.3.14.7.2.3.1",       new AlgorithmData() { Name = "md2RSA",    Weak = true }},
+                { "1.3.14.3.2.4",         new AlgorithmData() { Name = "md4RSA",    Weak = true }},
 
-            // Are these weak or broken algorithms? shut down results related to them until we know
-            result["2.16.840.1.101.2.1.1.19"] = new AlgorithmData() { Name = "mosaicUpdatedSig", Weak = false };
-            result["1.2.840.113549.1.1.10"  ] = new AlgorithmData() { Name = "RSASSA - PSS",     Weak = false };
-            result["1.2.840.10045.4.3"      ] = new AlgorithmData() { Name = "specifiedECDSA",   Weak = false };
-        
-            // PRESUMED strong but what about this NoSign designation?
-            result["1.2.840.10045.4.3.2"   ] = new AlgorithmData() { Name = "sha256ECDSA",  Weak = false };
-            result["1.2.840.10045.4.3.3"   ] = new AlgorithmData() { Name = "sha384ECDSA",  Weak = false };
-            result["1.2.840.10045.4.3.4"   ] = new AlgorithmData() { Name = "sha512ECDSA",  Weak = false };
-            result["1.2.840.113549.1.1.11" ] = new AlgorithmData() { Name = "sha256RSA",    Weak = false };
-            result["1.2.840.113549.1.1.12" ] = new AlgorithmData() { Name = "sha384RSA",    Weak = false };
-            result["1.2.840.113549.1.1.13" ] = new AlgorithmData() { Name = "sha512RSA",    Weak = false };
-            result["2.16.840.1.101.3.4.2.1"] = new AlgorithmData() { Name = "sha256NoSign", Weak = false };
-            result["2.16.840.1.101.3.4.2.2"] = new AlgorithmData() { Name = "sha384NoSign", Weak = false };
-            result["2.16.840.1.101.3.4.2.3"] = new AlgorithmData() { Name = "sha512NoSign", Weak = false };
+                { "1.2.840.10040.4.3",    new AlgorithmData() { Name = "sha1DSA",    Weak = true }},
+                { "1.2.840.10045.4.1",    new AlgorithmData() { Name = "sha1ECDSA",  Weak = true }},
+                { "1.2.840.113549.1.1.3", new AlgorithmData() { Name = "md4RSA",     Weak = true }},
+                { "1.2.840.113549.1.1.5", new AlgorithmData() { Name = "sha1RSA",    Weak = true }},
+                { "1.3.14.3.2.15",        new AlgorithmData() { Name = "shaRSA",     Weak = true }},
+                { "1.3.14.3.2.13",        new AlgorithmData() { Name = "sha1DSA",    Weak = true }},
+                { "1.3.14.3.2.26",        new AlgorithmData() { Name = "sha1NoSign", Weak = true }},
+                { "1.3.14.3.2.27",        new AlgorithmData() { Name = "dsaSHA1",    Weak = true }},
+                { "1.3.14.3.2.29",        new AlgorithmData() { Name = "sha1RSA",    Weak = true }},
+
+                // Are these weak or broken algorithms? shut down results related to them until we know
+                { "1.2.840.10045.4.3",       new AlgorithmData() { Name = "specifiedECDSA",   Weak = false }},
+                { "1.2.840.113549.1.1.10",   new AlgorithmData() { Name = "RSASSA - PSS",     Weak = false }},
+                { "2.16.840.1.101.2.1.1.19", new AlgorithmData() { Name = "mosaicUpdatedSig", Weak = false }},
+
+                // PRESUMED strong but what about this NoSign designation?
+                { "1.2.840.10045.4.3.2",    new AlgorithmData() { Name = "sha256ECDSA",  Weak = false }},
+                { "1.2.840.10045.4.3.3",    new AlgorithmData() { Name = "sha384ECDSA",  Weak = false }},
+                { "1.2.840.10045.4.3.4",    new AlgorithmData() { Name = "sha512ECDSA",  Weak = false }},
+                { "1.2.840.113549.1.1.11",  new AlgorithmData() { Name = "sha256RSA",    Weak = false }},
+                { "1.2.840.113549.1.1.12",  new AlgorithmData() { Name = "sha384RSA",    Weak = false }},
+                { "1.2.840.113549.1.1.13",  new AlgorithmData() { Name = "sha512RSA",    Weak = false }},
+                { "2.16.840.1.101.3.4.2.1", new AlgorithmData() { Name = "sha256NoSign", Weak = false }},
+                { "2.16.840.1.101.3.4.2.2", new AlgorithmData() { Name = "sha384NoSign", Weak = false }},
+                { "2.16.840.1.101.3.4.2.3", new AlgorithmData() { Name = "sha512NoSign", Weak = false }},
+            };
 
             return result;
         }
