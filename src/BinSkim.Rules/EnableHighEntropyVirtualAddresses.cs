@@ -9,7 +9,7 @@ using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -64,6 +64,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // TODO need to put a check here for verifying that the
             // compiler that built the target supports high entropy va                       
 
+            reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 

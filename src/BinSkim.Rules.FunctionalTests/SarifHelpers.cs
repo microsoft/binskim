@@ -3,7 +3,7 @@
 
 using System;
 
-using Microsoft.CodeAnalysis.Sarif.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
 
 using Xunit;
 

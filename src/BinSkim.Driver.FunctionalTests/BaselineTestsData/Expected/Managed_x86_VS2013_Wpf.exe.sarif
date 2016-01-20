@@ -4,8 +4,8 @@
     {
       "toolInfo": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.2.14-beta",
-        "version": "1.2.14"
+        "fullName": "BinSkim 1.2.15-beta",
+        "version": "1.2.15"
       },
       "runInfo": {
         "invocationInfo": "\"D:\\src\\binskim-ms\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Managed_x86_VS2013_Wpf.exe --output D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Managed_x86_VS2013_Wpf.exe.sarif.temp --verbose --config default",
@@ -336,6 +336,29 @@
             "specifierId": "Pass",
             "arguments": [
               "Managed_x86_VS2013_Wpf.exe"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Managed_x86_VS2013_Wpf.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "Managed_x86_VS2013_Wpf.exe",
+              "BA2022",
+              "SignSecurely",
+              "image is not signed "
             ]
           },
           "locations": [

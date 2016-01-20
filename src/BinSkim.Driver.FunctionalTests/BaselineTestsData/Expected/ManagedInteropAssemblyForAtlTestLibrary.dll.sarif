@@ -4,8 +4,8 @@
     {
       "toolInfo": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.2.14-beta",
-        "version": "1.2.14"
+        "fullName": "BinSkim 1.2.15-beta",
+        "version": "1.2.15"
       },
       "runInfo": {
         "invocationInfo": "\"D:\\src\\binskim-ms\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedInteropAssemblyForAtlTestLibrary.dll --output D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedInteropAssemblyForAtlTestLibrary.dll.sarif.temp --verbose --config default",
@@ -336,6 +336,29 @@
             "specifierId": "Pass",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedInteropAssemblyForAtlTestLibrary.dll",
+              "BA2022",
+              "SignSecurely",
+              "image is not signed "
             ]
           },
           "locations": [

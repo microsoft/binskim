@@ -37,13 +37,16 @@ namespace Microsoft.CodeAnalysis.IL
         private RoslynAnalysisContext _globalRoslynAnalysisContext;
         private IEnumerable<string> _plugInFilePaths;
 
-        protected override void InitializeFromOptions(AnalyzeOptions analyzeOptions)
+
+        public override PropertyBag CreateConfigurationFromOptions(AnalyzeOptions analyzeOptions)
         {
             if (!string.IsNullOrEmpty(analyzeOptions.SymbolsPath))
             {
                 Pdb.SymbolPath = analyzeOptions.SymbolsPath;
             }
             _plugInFilePaths = analyzeOptions.PlugInFilePaths;
+
+            return base.CreateConfigurationFromOptions(analyzeOptions);
         }
 
         protected override void AnalyzeTarget(IEnumerable<ISkimmer<BinaryAnalyzerContext>> skimmers, BinaryAnalyzerContext context, HashSet<string> disabledSkimmers)
@@ -111,7 +114,7 @@ namespace Microsoft.CodeAnalysis.IL
 
                 // 1. Record the assembly under analysis
                 result.Locations = new[] {
-                new Sarif.Sdk.Location {
+                new Sarif.Location {
                     AnalysisTarget = new[]
                     {
                         new PhysicalLocationComponent

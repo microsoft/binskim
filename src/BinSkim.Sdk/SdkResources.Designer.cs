@@ -151,6 +151,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is not signed .
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotSigned {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotSigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is a pre-version 7 Windows CE binary.
         /// </summary>
         internal static string MetadataCondition_ImageIsPreV7WindowsCEBinary {

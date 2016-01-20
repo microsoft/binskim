@@ -25,12 +25,12 @@
       <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sarif, Version=1.4.28.0, Culture=neutral, PublicKeyToken=ac41962ee2e3a7cd, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Sdk.1.4.28-beta\lib\net40\Sarif.dll</HintPath>
+    <Reference Include="Sarif, Version=1.4.32.0, Culture=neutral, PublicKeyToken=ac41962ee2e3a7cd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Sdk.1.4.32-beta\lib\net40\Sarif.pdb\Sarif.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sarif.Driver, Version=1.4.28.0, Culture=neutral, PublicKeyToken=ac41962ee2e3a7cd, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Driver.1.4.28-beta\lib\net40\Sarif.Driver.dll</HintPath>
+    <Reference Include="Sarif.Driver, Version=1.4.32.0, Culture=neutral, PublicKeyToken=ac41962ee2e3a7cd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Driver.1.4.32-beta\lib\net40\Sarif.Driver.pdb\Sarif.Driver.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -76,6 +76,7 @@
     <Compile Include="DoNotMarkWritableSectionsAsShared.cs" />
     <Compile Include="DoNotModifyStackProtectionCookie.cs" />
     <Compile Include="DoNotShipVulnerableBinaries.cs" />
+    <Compile Include="SignSecurely.cs" />
     <Compile Include="EnableAddressSpaceLayoutRandomization.cs" />
     <Compile Include="EnableControlFlowGuard.cs" />
     <Compile Include="EnableCriticalCompilerWarnings.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="EnableSafeSEH.cs" />
     <Compile Include="InitializeStackProtection.cs" />
     <Compile Include="LoadImagesAboveFourGigabyteAddress.cs" />
+    <Compile Include="NativeInterop.cs" />
     <Compile Include="RuleConstants.cs" />
     <Compile Include="MarkImageAsNXCompatible.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
