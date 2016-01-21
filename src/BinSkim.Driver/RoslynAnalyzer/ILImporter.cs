@@ -340,7 +340,6 @@ namespace Microsoft.CodeAnalysis.IL
         private void TransferStack(ref StackValue[] target, ImmutableArray<IStatement>.Builder statements)
         {
             Debug.Assert(_stackTop != 0);
-            Debug.Assert(target != _stack);
 
             if (target == null || target == _stack)
             {
@@ -376,6 +375,16 @@ namespace Microsoft.CodeAnalysis.IL
                     AppendTemporaryAssignment(statements, destination, source);
                 }
             }
+        }
+
+        private void TransferStack(BasicBlock target, ref IStatement gotoStatement)
+        {
+            Debug.Assert(_stackTop != 0);
+
+            var gotoBlock = ImmutableArray.CreateBuilder<IStatement>(_stackTop + 1);
+            TransferStack(ref target.EntryStack, gotoBlock);
+            gotoBlock.Add(gotoStatement);
+            gotoStatement = new BlockStatement(gotoBlock.MoveToImmutable());
         }
 
         private ITypeSymbol GetWellKnownType(WellKnownType wellKnownType)
@@ -599,7 +608,38 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportSwitchJump(int jmpBase, int[] jmpDelta, BasicBlock fallthrough)
         {
-            throw new NotImplementedException();
+            var value = Pop().Expression;
+
+            var cases = ImmutableArray.CreateBuilder<ICase>(jmpDelta.Length);
+
+            if (_stackTop != 0)
+            {
+                TransferStack(ref _stack, _statements);
+            }
+
+            MarkBasicBlock(fallthrough);
+
+            for (int i = 0; i < jmpDelta.Length; i++)
+            {
+                var target = _basicBlocks[jmpBase + jmpDelta[i]];
+                IStatement gotoStatement = new GoToStatement(GetOrCreateLabel(target));
+
+                if (_stackTop != 0)
+                {
+                    TransferStack(target, ref gotoStatement);
+                }
+
+                cases.Add(
+                    new Case(
+                        new LiteralExpression(i, Int32Type),
+                        gotoStatement));
+
+                MarkBasicBlock(target);
+            }
+
+            _stackTop = 0;
+
+            Append(new SwitchStatement(value, cases.MoveToImmutable()));
         }
 
         private void ImportBranch(ILOpcode opcode, BasicBlock target, BasicBlock fallthrough)
@@ -634,12 +674,7 @@ namespace Microsoft.CodeAnalysis.IL
             if (_stackTop != 0)
             {
                 TransferStack(ref fallthrough.EntryStack, _statements);
-
-                var gotoBlock = ImmutableArray.CreateBuilder<IStatement>(_stackTop + 1);
-                TransferStack(ref target.EntryStack, gotoBlock);
-                gotoBlock.Add(gotoStatement);
-                gotoStatement = new BlockStatement(gotoBlock.MoveToImmutable());
-
+                TransferStack(target, ref gotoStatement);
                 _stackTop = 0;
             }
 

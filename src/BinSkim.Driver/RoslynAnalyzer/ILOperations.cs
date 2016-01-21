@@ -559,4 +559,56 @@ namespace Microsoft.CodeAnalysis.IL
         // FEEDBACK: inconsistently named vs. interface
         public override OperationKind Kind => OperationKind.CatchHandler;
     }
+
+    internal sealed class SwitchStatement : Statement, ISwitchStatement
+    {
+        public SwitchStatement(IExpression value, ImmutableArray<ICase> cases)
+        {
+            Value = value;
+            Cases = cases;
+        }
+
+        public IExpression Value { get; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+        public ImmutableArray<ICase> Cases { get; }
+
+        public override OperationKind Kind => OperationKind.SwitchStatement;
+    }
+
+    internal sealed class Case : Statement, ICase
+    {
+        public Case(IExpression value, IStatement body)
+        {
+            Clauses = ImmutableArray.Create<ICaseClause>(new CaseClause(value));
+            Body = ImmutableArray.Create<IStatement>(body);
+        }
+
+        public ImmutableArray<ICaseClause> Clauses { get; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+        public ImmutableArray<IStatement> Body { get; }
+        
+        // FEEDBACK: inconsistently named vs. interface
+        public override OperationKind Kind => OperationKind.SwitchSection;
+
+        public override string ToString()
+        {
+            return $"Case {((CaseClause)Clauses[0]).Value}";
+        }
+    }
+
+    internal sealed class CaseClause : Operation, ISingleValueCaseClause
+    {
+        public CaseClause(IExpression value)
+        {
+            Value = value;
+        }
+
+        public IExpression Value { get; }
+
+        public BinaryOperationKind Equality => BinaryOperationKind.IntegerEquals;
+        public CaseKind CaseKind => CaseKind.SingleValue;
+        public override OperationKind Kind => OperationKind.SingleValueCaseClause;
+    }
 }

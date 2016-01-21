@@ -59,6 +59,22 @@ namespace Microsoft.CodeAnalysis.IL
         {
             try
             {
+                switch (y)
+                {
+                    case 0:
+                        StaticMethod("a", 1);
+                        break;
+
+                    case 2:
+                    case 3:
+                        InstanceMethod(42);
+                        break;
+
+                    default:
+                        StaticMethod("c", 2);
+                        break;
+                }
+
                 xs = new string[3];
                 xs[0] = xs[1];
 
