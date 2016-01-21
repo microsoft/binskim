@@ -481,6 +481,24 @@ namespace Microsoft.CodeAnalysis.IL
             ImportCasting(ConversionKind.Cast, GetWellKnownType(wellKnownType));
         }
 
+        private void ImportBox(int token)
+        {
+            ImportCasting(ConversionKind.Cast, ObjectType);
+        }
+
+        private void ImportUnbox(int token, ILOpcode opCode)
+        {
+            Debug.Assert(opCode == ILOpcode.unbox || opCode == ILOpcode.unbox_any);
+
+            if (opCode == ILOpcode.unbox)
+            {
+                // TODO: The non-any variant puts a byref value on the heap on to the stack.
+                throw new NotImplementedException();
+            }
+
+            ImportCasting(ConversionKind.Cast, GetTypeFromToken(token));
+        }
+
         private void ImportCasting(ILOpcode opcode, int token)
         {
             Debug.Assert(opcode == ILOpcode.castclass || opcode == ILOpcode.isinst);
@@ -793,11 +811,6 @@ namespace Microsoft.CodeAnalysis.IL
             throw new NotImplementedException();
         }
 
-        private void ImportBox(int token)
-        {
-            throw new NotImplementedException();
-        }
-
         private void ImportLeave(BasicBlock target)
         {
             MarkBasicBlock(target);
@@ -888,11 +901,6 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         private void ImportCpOpj(int token)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void ImportUnbox(int token, ILOpcode opCode)
         {
             throw new NotImplementedException();
         }

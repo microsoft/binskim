@@ -59,15 +59,17 @@ namespace Microsoft.CodeAnalysis.IL
         {
             try
             {
+                int q = (int)Obj;
+
                 switch (y)
                 {
                     case 0:
-                        StaticMethod("a", 1);
+                        StaticMethod(1, 1);
                         break;
 
                     case 2:
                     case 3:
-                        InstanceMethod(42);
+                        InstanceMethod(q);
                         break;
 
                     default:
