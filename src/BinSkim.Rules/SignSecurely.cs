@@ -4,12 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 
-using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
@@ -25,19 +21,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id { get { return RuleIds.SignCorrectly; } }
 
         /// <summary>
-        /// Images should be correctly signed using a cryptographically secure
-        /// signature algorithm. This rule verifies a signed binary using the
-        /// WinTrustVerify Authenticode policy provider. This check excludes 
-        /// the certificate chain root (preventing execution across the 
-        /// network). After retrieving the certificate chain information, the
-        /// rule ensures that the binary was not signed with a SHA1 certificate
-        /// (as SHA1 is currently deprecated by several companies including
-        /// Microsoft and Google). Optionally, this rule can enforce that all
-        /// binaries under analysis are actually signed (otherwise, analysis
-        /// reports a 'not applicable' message for unsigned code). The check
-        /// can also be configured to enforce that all analysis targets are
-        /// signed with a recognized certificate (driven by a signature hash
-        /// allow list).
+        /// Images should be correctly signed by trusted publishers using 
+        /// cryptographically secure signature algorithms. This rule 
+        /// invokes WinTrustVerify to validate that binary hash, signing
+        /// and public key algorithms are secure and, where configurable,
+        /// that key sizes meet acceptable size thresholds.
         /// </summary>
 
         public override string FullDescription
@@ -51,10 +39,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2022_Pass),
-                    nameof(RuleResources.BA2022_Fail_Sha1Signature),
-                    nameof(RuleResources.BA2022_Fail_VerifyActionFailed),
-                    nameof(RuleResources.BA2022_Fail_WinTrustVerifyApiError),
-                    nameof(RuleResources.BA2022_InvalidSignatureOrFileOpenError)};
+                    nameof(RuleResources.BA2022_Fail_BadSigningAlgorithm),
+                    nameof(RuleResources.BA2022_Fail_DidNotVerify),
+                    nameof(RuleResources.BA2022_Fail_WinTrustVerifyApiError)};
             }
         }
 
@@ -66,19 +53,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            Native.CERT_INFO certInfo;
             Native.WINTRUST_DATA winTrustData;
-            string filePath = context.PE.FileName;
+            string algorithmName, filePath;
+
+            filePath = context.PE.FileName;
 
             winTrustData = new Native.WINTRUST_DATA();
 
             try
             {
-                if (InvokeVerifyAction(context, filePath, out winTrustData) &&
-                    ValidateSignatureAlgorithm(context, winTrustData, out certInfo) &&
-                    VerifyCodeIsSignedByApprovedCertificate(certInfo))
+                if (InvokeVerifyAction(context, filePath, out winTrustData, out algorithmName))
                 {
-
                     // '{0}' appears to be signed securely by a trusted publisher with
                     // no verification or time stamp errors. Revocation checking was
                     // performed on the entire certificate chain, excluding the root
@@ -86,7 +71,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // cryptographically strong algorithm.
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                            nameof(RuleResources.BA2022_Pass)));
+                            nameof(RuleResources.BA2022_Pass),
+                            algorithmName));
                 }
             }
             finally
@@ -98,113 +84,112 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        private bool InvokeVerifyAction(BinaryAnalyzerContext context, string filePath, out Native.WINTRUST_DATA winTrustData)
+        private bool InvokeVerifyAction(
+            BinaryAnalyzerContext context, 
+            string filePath, 
+            out Native.WINTRUST_DATA winTrustData,
+            out string algorithmName)
         {
             Guid action;
             bool continueProcessing;
-            ValidationResult validationResult;
+            CryptoError cryptoError;
 
-            continueProcessing = true;
-            winTrustData = InitializeWinTrustDataStruct(filePath);
+            continueProcessing = false;
+            var certInfo = new Native.CERT_INFO();
+
+            winTrustData = InitializeWinTrustDataStruct(filePath, enforcePolicy: true);
+
+            algorithmName = null;
 
             // First, we will invoke the basic verification. Note that currently this code path
             // does not reach across the network to perform its function. We could optionally
             // enable this (which would require altering the code that initializes our
             // WINTRUST_DATA instance).
             action = Native.ActionGenericVerifyV2;
+            cryptoError = (CryptoError)Native.WinVerifyTrust(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
 
-            validationResult = WinVerifyTrustHelper(Native.INVALID_HANDLE_VALUE, ref winTrustData);
+            InvokeCloseAction(winTrustData);
 
-            switch (validationResult)
+            // We cannot retrieve algorithm id and cert info for images that fail
+            // the stringent WinTrustVerify security check. We therefore start
+            // a new call chain with looser validation criteria.
+            winTrustData = InitializeWinTrustDataStruct(filePath, enforcePolicy: false);
+            Native.WinVerifyTrust(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
+
+            switch (cryptoError)
             {
-                case ValidationResult.ERROR_SUCCESS:
+                case CryptoError.ERROR_SUCCESS:
                 {
                     // Hash that represents the subject is trusted.
                     // Trusted publisher with no verification errors.
                     // No publisher or time stamp errors.
                     // This verification excludes root chain info.
+                    algorithmName = RetrieveSignatureAlgorithmAndCertInfo(context, winTrustData, out certInfo);
+                    continueProcessing = true;
                     break;
                 }
 
-                case ValidationResult.TRUST_E_NOSIGNATURE:
+                case CryptoError.NTE_BAD_ALGID:
                 {
-                    validationResult = (ValidationResult)Marshal.GetLastWin32Error();
-
-                    // File was not signed
-                    if (validationResult == ValidationResult.TRUST_E_NOSIGNATURE ||
-                        validationResult == ValidationResult.TRUST_E_PROVIDER_UNKNOWN ||
-                        validationResult == ValidationResult.TRUST_E_SUBJECT_FORM_UNKNOWN)
+                    algorithmName = RetrieveSignatureAlgorithmAndCertInfo(context, winTrustData, out certInfo);
+                    if (algorithmName != null) // If null, we have already logged an error
                     {
-                        Notes.LogNotApplicableToSpecifiedTarget(context, MetadataConditions.ImageIsNotSigned);
-                    }
-                    else
-                    {
-
-                        // The signature of '{0}' was invalid or there was an error opening the file.
+                        // '{0}' was signed using '{1}', an algorithm that WinTrustVerify has flagged as insecure.
                         context.Logger.Log(this, RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                            nameof(RuleResources.BA2022_InvalidSignatureOrFileOpenError)));
-
+                            nameof(RuleResources.BA2022_Fail_BadSigningAlgorithm),
+                            algorithmName));
                     }
-                    continueProcessing = false;
+                    break;
+                }
+
+                case CryptoError.TRUST_E_NOSIGNATURE:
+                {
+                    Notes.LogNotApplicableToSpecifiedTarget(context, MetadataConditions.ImageIsNotSigned);
                     break;
                 }
 
                 default:
                 {
-                    // '{0}' signing verification failed with WinTrustVerify error: '{1}'
+                    string cryptoErrorDescription = cryptoError.GetErrorDescription();
+                    // '{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}' ({2})
                     context.Logger.Log(this, RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2022_Fail_VerifyActionFailed),
-                        validationResult.ToString()));
+                        nameof(RuleResources.BA2022_Fail_DidNotVerify),
+                        cryptoError.ToString(),
+                        cryptoErrorDescription));
                     break;
                 }
             }
-
             return continueProcessing;
         }
 
-        private bool ValidateSignatureAlgorithm(BinaryAnalyzerContext context, Native.WINTRUST_DATA winTrustData, out Native.CERT_INFO certInfo)
+        private string RetrieveSignatureAlgorithmAndCertInfo(
+            BinaryAnalyzerContext context, 
+            Native.WINTRUST_DATA winTrustData, 
+            out Native.CERT_INFO certInfo)
         {
             string failedApiName;
-            bool continueProcessing;
-            ValidationResult validationResult;
+            CryptoError cryptoError;
 
-            continueProcessing = false;
-            validationResult = GetCertInfo(winTrustData.hWVTStateData, out certInfo, out failedApiName);
+            cryptoError = GetCertInfo(winTrustData.hWVTStateData, out certInfo, out failedApiName);
 
-            if (validationResult != 0)
+            if (cryptoError != CryptoError.ERROR_SUCCESS)
             {
                 // '{0}' signing could not be completely verified because
                 // '{1}' failed with error code: '{2}'.
                 context.Logger.Log(this, RuleUtilities.BuildResult(ResultKind.Error, context, null,
                     nameof(RuleResources.BA2022_Fail_WinTrustVerifyApiError),
                     failedApiName,
-                    validationResult.ToString()));
-                return continueProcessing;
+                    cryptoError.ToString()));
+                return null;
             }
 
-            string algorithmId;
-            bool hasWeakSignatureAlgorithm = IsWeakSignatureAlgorithm(certInfo.SignatureAlgorithm.pszObjId, out algorithmId);
-
-            if (hasWeakSignatureAlgorithm)
-            {
-                // '{0}' is signed with a weak cryptographic algorithm '{1}'. '{1}' is
-                // or is shortly expected to be vulnerable to collision attacks. Sign 
-                // this binary with a stronger cryptographic algorithm such as SHA256.
-                context.Logger.Log(this, RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                    nameof(RuleResources.BA2022_Fail_Sha1Signature),
-                    algorithmId));
-            }
-
-            continueProcessing = !hasWeakSignatureAlgorithm;
-            return continueProcessing;
+            return GetAlgorithmName(certInfo.SignatureAlgorithm.pszObjId);
         }
 
-        private bool IsWeakSignatureAlgorithm(string pszObjId, out string algorithmId)
+        private string GetAlgorithmName(string pszObjId)
         {
-            algorithmId = null;
-
-            AlgorithmData algorithmData;
-            if (!s_algorithmData.TryGetValue(pszObjId, out algorithmData))
+            string algorithmName;
+            if (!s_idToAlgorithmMap.TryGetValue(pszObjId, out algorithmName))
             {
                 // NOTE: this rule by design currently raises an exception on encountering an 
                 // unrecognized algorithm id. This will have the effect of shutting down this rule
@@ -214,200 +199,149 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // configuration file that extends this data).
                 throw new ArgumentException("Unrecognized algorithm id: " + pszObjId, nameof(pszObjId));
             }
-
-            algorithmId = algorithmData.Name;
-            return algorithmData.Weak;
-        }
-
-        private bool VerifyCodeIsSignedByApprovedCertificate(Native.CERT_INFO certInfo)
-        {
-            // TODO. This code could to ensure that retrieved certificate matches
-            // against an allow list. This functionality will require adding
-            // appropriate options to this rule
-#if NOT_DEFINED
-            // #define SHA256_HASH_LEN 32
-            uint cbKeyId = 32;
-            byte[] rgbKeyId = new byte[cbKeyId];
-            string key;
-
-            if (!Native.CryptHashPublicKeyInfo(
-                IntPtr.Zero,
-                Native.CALG_SHA_256,
-                0,
-                Native.X509_ASN_ENCODING,
-                ref certInfo.SubjectPublicKeyInfo,
-                rgbKeyId,
-                ref cbKeyId
-                ))
-            {
-                validationResult = (ValidationResult)Marshal.GetLastWin32Error();
-                return;
-            }
-
-            // Strip hyphens to match output as provided by tools such as certutil.exe 
-            key = BitConverter.ToString(rgbKeyId).Replace('-', ' ');
-
-            // This call to HashSet.Contains is case-insensitive due to initializing the hashset with an appropriate comparer
-            validationResult = (trustedKeys.Contains(key) ? ValidationResult.Valid : ValidationResult.UnknownCertificateKey);
-#endif
-            return true;
+            return algorithmName;
         }
 
         private void InvokeCloseAction(Native.WINTRUST_DATA winTrustData)
         {
-            IntPtr pWinTrustData = IntPtr.Zero;
             Guid action = Native.ActionGenericVerifyV2;
             winTrustData.StateAction = Native.StateAction.WTD_STATEACTION_CLOSE;
+            Native.WinVerifyTrust(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
 
-            try
+            if (winTrustData.pFile != IntPtr.Zero)
             {
-                pWinTrustData = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Native.WINTRUST_DATA)));
-                Marshal.StructureToPtr(winTrustData, pWinTrustData, false);
-
-                Native.WinVerifyTrust(Native.INVALID_HANDLE_VALUE, ref action, pWinTrustData);
+                Marshal.DestroyStructure(winTrustData.pFile, typeof(Native.WINTRUST_FILE_INFO));
+                Marshal.FreeHGlobal(winTrustData.pFile);
             }
-            finally
+
+            if (winTrustData.pSignatureSettings != IntPtr.Zero)
             {
-                if (pWinTrustData != IntPtr.Zero)
+                var signatureSettings = Marshal.PtrToStructure<Native.WINTRUST_SIGNATURE_SETTINGS>(winTrustData.pSignatureSettings);
+
+                if (signatureSettings.pCryptoPolicy != IntPtr.Zero)
                 {
-                    Marshal.FreeHGlobal(pWinTrustData);
+                    Marshal.DestroyStructure(signatureSettings.pCryptoPolicy, typeof(Native.CERT_STRONG_SIGN_PARA));
+                    Marshal.FreeHGlobal(signatureSettings.pCryptoPolicy);
                 }
-                Debug.Assert(winTrustData.File == IntPtr.Zero);
+
+                Marshal.DestroyStructure(winTrustData.pSignatureSettings, typeof(Native.WINTRUST_SIGNATURE_SETTINGS));
+                Marshal.FreeHGlobal(winTrustData.pSignatureSettings);
             }
         }
 
-        private ValidationResult WinVerifyTrustHelper(IntPtr handle, ref Native.WINTRUST_DATA winTrustData)
+        private CryptoError WinVerifyTrustHelper(IntPtr handle, ref Native.WINTRUST_DATA winTrustData)
         {
-            Guid action = Native.ActionGenericVerifyV2;
+            Guid action;
+            CryptoError cryptoError;
 
-            ValidationResult validationResult;
-            IntPtr pWinTrustData = IntPtr.Zero;
+            action = Native.ActionGenericVerifyV2;
+            cryptoError = (CryptoError)Native.WinVerifyTrust(handle, ref action, ref winTrustData);
 
-            try
-            {
-                pWinTrustData = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Native.WINTRUST_DATA)));
-                Marshal.StructureToPtr(winTrustData, pWinTrustData, false);
-
-                validationResult = (ValidationResult)Native.WinVerifyTrust(handle, ref action, pWinTrustData);
-
-                winTrustData = (Native.WINTRUST_DATA)Marshal.PtrToStructure(pWinTrustData, typeof(Native.WINTRUST_DATA));
-            }
-            finally
-            {
-                if (pWinTrustData != IntPtr.Zero)
-                { 
-                    Marshal.FreeHGlobal(pWinTrustData);
-                }
-
-                if (winTrustData.File != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(winTrustData.File);
-                    winTrustData.File = IntPtr.Zero;
-                }
-            }
-            return validationResult;
+            return cryptoError;
         }
 
-        private static Dictionary<string, AlgorithmData> s_algorithmData = BuildAlgorithmData();
+        private static Dictionary<string, string> s_idToAlgorithmMap = BuildIdToAlgorithmMap();
 
-        private static Dictionary<string, AlgorithmData> BuildAlgorithmData()
+        private static Dictionary<string, string> BuildIdToAlgorithmMap()
         {
-            var result = new Dictionary<string, AlgorithmData>
+            var result = new Dictionary<string, string>
             {
-                // PRESUMED weak
-
-                { "1.2.840.113549.1.1.2", new AlgorithmData() { Name = "md2RSA",    Weak = true }},
-                { "1.2.840.113549.1.1.4", new AlgorithmData() { Name = "md5RSA",    Weak = true }},
-                { "1.2.840.113549.2.5",   new AlgorithmData() { Name = "md5NoSign", Weak = true }},
-                { "1.3.14.3.2.2",         new AlgorithmData() { Name = "md4RSA",    Weak = true }},
-                { "1.3.14.3.2.3",         new AlgorithmData() { Name = "md5RSA",    Weak = true }},
-                { "1.3.14.7.2.3.1",       new AlgorithmData() { Name = "md2RSA",    Weak = true }},
-                { "1.3.14.3.2.4",         new AlgorithmData() { Name = "md4RSA",    Weak = true }},
-
-                { "1.2.840.10040.4.3",    new AlgorithmData() { Name = "sha1DSA",    Weak = true }},
-                { "1.2.840.10045.4.1",    new AlgorithmData() { Name = "sha1ECDSA",  Weak = true }},
-                { "1.2.840.113549.1.1.3", new AlgorithmData() { Name = "md4RSA",     Weak = true }},
-                { "1.2.840.113549.1.1.5", new AlgorithmData() { Name = "sha1RSA",    Weak = true }},
-                { "1.3.14.3.2.15",        new AlgorithmData() { Name = "shaRSA",     Weak = true }},
-                { "1.3.14.3.2.13",        new AlgorithmData() { Name = "sha1DSA",    Weak = true }},
-                { "1.3.14.3.2.26",        new AlgorithmData() { Name = "sha1NoSign", Weak = true }},
-                { "1.3.14.3.2.27",        new AlgorithmData() { Name = "dsaSHA1",    Weak = true }},
-                { "1.3.14.3.2.29",        new AlgorithmData() { Name = "sha1RSA",    Weak = true }},
-
-                // Are these weak or broken algorithms? shut down results related to them until we know
-                { "1.2.840.10045.4.3",       new AlgorithmData() { Name = "specifiedECDSA",   Weak = false }},
-                { "1.2.840.113549.1.1.10",   new AlgorithmData() { Name = "RSASSA - PSS",     Weak = false }},
-                { "2.16.840.1.101.2.1.1.19", new AlgorithmData() { Name = "mosaicUpdatedSig", Weak = false }},
-
-                // PRESUMED strong but what about this NoSign designation?
-                { "1.2.840.10045.4.3.2",    new AlgorithmData() { Name = "sha256ECDSA",  Weak = false }},
-                { "1.2.840.10045.4.3.3",    new AlgorithmData() { Name = "sha384ECDSA",  Weak = false }},
-                { "1.2.840.10045.4.3.4",    new AlgorithmData() { Name = "sha512ECDSA",  Weak = false }},
-                { "1.2.840.113549.1.1.11",  new AlgorithmData() { Name = "sha256RSA",    Weak = false }},
-                { "1.2.840.113549.1.1.12",  new AlgorithmData() { Name = "sha384RSA",    Weak = false }},
-                { "1.2.840.113549.1.1.13",  new AlgorithmData() { Name = "sha512RSA",    Weak = false }},
-                { "2.16.840.1.101.3.4.2.1", new AlgorithmData() { Name = "sha256NoSign", Weak = false }},
-                { "2.16.840.1.101.3.4.2.2", new AlgorithmData() { Name = "sha384NoSign", Weak = false }},
-                { "2.16.840.1.101.3.4.2.3", new AlgorithmData() { Name = "sha512NoSign", Weak = false }},
+                // These algorithms are not used by Authenticode
+                { "1.2.840.113549.1.1.2",    "md2RSA"},
+                { "1.3.14.7.2.3.1",          "md2RSA"},
+                { "1.3.14.3.2.4",            "md4RSA"},
+                { "1.2.840.113549.1.1.3",    "md4RSA"},
+                { "1.3.14.3.2.2",            "md4RSA"},
+                { "1.2.840.113549.1.1.4",    "md5RSA"},
+                { "1.2.840.113549.2.5",      "md5NoSign"},
+                { "1.3.14.3.2.3",            "md5RSA"},
+                { "2.16.840.1.101.2.1.1.19", "mosaicUpdatedSig"},
+                // This algorithm is a padding method, not a signing algorithm. 
+                { "1.2.840.113549.1.1.10",   "RSASSA - PSS"},
+                { "1.2.840.10040.4.3",       "sha1DSA"},
+                { "1.2.840.10045.4.1",       "sha1ECDSA"},
+                { "1.2.840.113549.1.1.5",    "sha1RSA"},
+                { "1.3.14.3.2.15",           "shaRSA"},
+                { "1.3.14.3.2.13",           "sha1DSA"},
+                { "1.3.14.3.2.26",           "sha1NoSign"},
+                { "1.3.14.3.2.27",           "dsaSHA1"},
+                { "1.3.14.3.2.29",           "sha1RSA"},
+                { "1.2.840.10045.4.3.2",    "sha256ECDSA"},
+                { "1.2.840.10045.4.3.3",    "sha384ECDSA"},
+                { "1.2.840.10045.4.3.4",    "sha512ECDSA"},
+                { "1.2.840.113549.1.1.11",  "sha256RSA"},
+                { "1.2.840.113549.1.1.12",  "sha384RSA"},
+                { "1.2.840.113549.1.1.13",  "sha512RSA"},
+                { "2.16.840.1.101.3.4.2.1", "sha256NoSign"},
+                { "2.16.840.1.101.3.4.2.2", "sha384NoSign"},
+                { "2.16.840.1.101.3.4.2.3", "sha512NoSign"},
+                // ECDSA is weak or strong depending on the key size
+                { "1.2.840.10045.4.3",       "specifiedECDSA"},
             };
 
             return result;
         }
 
-        struct AlgorithmData
+        private CryptoError GetCertInfo(IntPtr hWVTStateData, out Native.CERT_INFO certInfo, out string failedApiName)
         {
-            public string Name;
-            public bool Weak;
-        }
-
-        private ValidationResult GetCertInfo(IntPtr hWVTStateData, out Native.CERT_INFO certInfo, out string failedApiName)
-        {
-            failedApiName = null;
             certInfo = new Native.CERT_INFO();
 
+            failedApiName = "WTHelperProvDataFromStateData";
             IntPtr providerData = Native.WTHelperProvDataFromStateData(hWVTStateData);
             if (providerData == IntPtr.Zero)
             {
-                failedApiName = "WTHelperProvDataFromStateData";
-                return (ValidationResult)Marshal.GetLastWin32Error();
+                return (CryptoError)Marshal.GetLastWin32Error();
             }
 
+            failedApiName = "WTHelperGetProvSignerFromChain";
             IntPtr providerSigner = Native.WTHelperGetProvSignerFromChain(providerData, 0, false, 0);
             if (providerSigner == IntPtr.Zero)
             {
-                failedApiName = "WTHelperGetProvSignerFromChain";
-                return (ValidationResult)Marshal.GetLastWin32Error();
+                return (CryptoError)Marshal.GetLastWin32Error();
             }
 
             var cryptProviderSigner = (Native.CRYPT_PROVIDER_SGNR)Marshal.PtrToStructure(providerSigner, typeof(Native.CRYPT_PROVIDER_SGNR));
-            var chainContext = (Native.CERT_CHAIN_CONTEXT)Marshal.PtrToStructure(cryptProviderSigner.pChainContext, typeof(Native.CERT_CHAIN_CONTEXT));
 
-            IntPtr[] simpleChains = new IntPtr[chainContext.cChain];
-            Marshal.Copy(chainContext.rgpChain, simpleChains, 0, simpleChains.Length);
-            var certChain = (Native.CERT_SIMPLE_CHAIN)Marshal.PtrToStructure(simpleChains[0], typeof(Native.CERT_SIMPLE_CHAIN));
+            var cryptoError = (CryptoError)cryptProviderSigner.dwError;
 
-            IntPtr[] chainElements = new IntPtr[certChain.cElement];
-            Marshal.Copy(certChain.rgpElement, chainElements, 0, chainElements.Length);
-            var certElement = (Native.CERT_CHAIN_ELEMENT)Marshal.PtrToStructure(chainElements[0], typeof(Native.CERT_CHAIN_ELEMENT));
+            if (cryptProviderSigner.pChainContext != IntPtr.Zero)
+            {
+                var chainContext = (Native.CERT_CHAIN_CONTEXT)Marshal.PtrToStructure(cryptProviderSigner.pChainContext, typeof(Native.CERT_CHAIN_CONTEXT));
 
-            var certContext = (Native.CERT_CONTEXT)Marshal.PtrToStructure(certElement.pCertContext, typeof(Native.CERT_CONTEXT));
-            certInfo = (Native.CERT_INFO)Marshal.PtrToStructure(certContext.pCertInfo, typeof(Native.CERT_INFO));
+                IntPtr[] simpleChains = new IntPtr[chainContext.cChain];
+                Marshal.Copy(chainContext.rgpChain, simpleChains, 0, simpleChains.Length);
+                var certChain = (Native.CERT_SIMPLE_CHAIN)Marshal.PtrToStructure(simpleChains[0], typeof(Native.CERT_SIMPLE_CHAIN));
 
-            return ValidationResult.ERROR_SUCCESS;
+                IntPtr[] chainElements = new IntPtr[certChain.cElement];
+                Marshal.Copy(certChain.rgpElement, chainElements, 0, chainElements.Length);
+                var certElement = (Native.CERT_CHAIN_ELEMENT)Marshal.PtrToStructure(chainElements[0], typeof(Native.CERT_CHAIN_ELEMENT));
+
+                var certContext = (Native.CERT_CONTEXT)Marshal.PtrToStructure(certElement.pCertContext, typeof(Native.CERT_CONTEXT));
+                certInfo = (Native.CERT_INFO)Marshal.PtrToStructure(certContext.pCertInfo, typeof(Native.CERT_INFO));
+            }
+
+            if (cryptoError == CryptoError.ERROR_SUCCESS)
+            {
+                failedApiName = null;
+            }
+
+            return cryptoError;
         }
 
-        private Native.WINTRUST_DATA InitializeWinTrustDataStruct(string filePath)
+        private Native.WINTRUST_DATA InitializeWinTrustDataStruct(string filePath, bool enforcePolicy)
         {
             // See https://msdn.microsoft.com/en-us/library/windows/desktop/aa382384(v=vs.85).aspx
             // which was used to drive data initialization, API use and comments in this code.
 
             var winTrustData = new Native.WINTRUST_DATA();
+            winTrustData.cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_DATA));
 
             var fileInfo = new Native.WINTRUST_FILE_INFO();
-            fileInfo.pcwszFilePath = filePath;   // Path to the signed file
             fileInfo.cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_FILE_INFO));
+            fileInfo.pcwszFilePath = filePath;
 
-            winTrustData.cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_DATA));
+            winTrustData.pFile = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Native.WINTRUST_FILE_INFO)));
+            Marshal.StructureToPtr(fileInfo, winTrustData.pFile, false);
 
             winTrustData.pPolicyCallbackData = IntPtr.Zero;                                           // Use default code signing EKU
             winTrustData.pSIPClientData = IntPtr.Zero;                                                // No data to pass to SIP
@@ -418,54 +352,34 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             winTrustData.RevocationChecks = Native.RevocationChecks.WTD_REVOKE_WHOLECHAIN;            // Revocation checking on whole chain.
             winTrustData.dwProvFlags = Native.ProviderFlags.WTD_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT;  // Don't reach across the network
             winTrustData.dwProvFlags |= Native.ProviderFlags.WTD_CACHE_ONLY_URL_RETRIEVAL;
+
             winTrustData.pwszURLReference = null;                                                     // Reserved for future use
 
             winTrustData.StateAction = Native.StateAction.WTD_STATEACTION_VERIFY;
             winTrustData.hWVTStateData = IntPtr.Zero; // This value set by API call
 
-            winTrustData.File = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Native.WINTRUST_FILE_INFO)));
-            Marshal.StructureToPtr(fileInfo, winTrustData.File, false);
+            if (enforcePolicy)
+            {
+                var signatureSettings = new Native.WINTRUST_SIGNATURE_SETTINGS();
+                signatureSettings.cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_SIGNATURE_SETTINGS));
+                signatureSettings.dwIndex = 0;
+                signatureSettings.dwFlags = Native.SignatureSettingsFlags.WSS_VERIFY_SPECIFIC;
+                signatureSettings.cSecondarySigs = 0;
+                signatureSettings.dwVerifiedSigIndex = 0;
+
+                var policy = new Native.CERT_STRONG_SIGN_PARA();
+                policy.cbStruct = (uint)Marshal.SizeOf(typeof(Native.CERT_STRONG_SIGN_PARA));
+                policy.dwInfoChoice = Native.InfoChoice.CERT_STRONG_SIGN_OID_INFO_CHOICE;
+                policy.pszOID = Native.szOID_CERT_STRONG_SIGN_OS_1;
+
+                signatureSettings.pCryptoPolicy = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Native.CERT_STRONG_SIGN_PARA)));
+                Marshal.StructureToPtr(policy, signatureSettings.pCryptoPolicy, false);
+
+                winTrustData.pSignatureSettings = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Native.WINTRUST_SIGNATURE_SETTINGS)));
+                Marshal.StructureToPtr(signatureSettings, winTrustData.pSignatureSettings, false);
+            }
 
             return winTrustData;
         }
-    }
-
-    /// <summary>
-    /// This class defines a range of execution conditions that identify various results
-    /// in code, both for primary function of application and negative conditions
-    /// </summary>
-    public enum ValidationResult : uint
-    {
-        // Possible DOS/Win32 error codes
-        ERROR_SUCCESS = 0,
-        ERROR_MORE_DATA = 234, // e.g., insufficient buffer storage provided for key extraction
-
-        // HRESULT error codes
-        CRYPT_E_FILE_ERROR = 0x80092003,
-        TRUST_E_NOSIGNATURE = 0x800B0100,
-        TRUST_E_PROVIDER_UNKNOWN = 0x800B0001,
-        TRUST_E_SUBJECT_FORM_UNKNOWN = 0x800B0003,
-        TRUST_E_SUBJECT_NOT_TRUSTED = 0x800B0004,
-        TRUST_E_FAIL = 0x800B010B,
-        TRUST_E_EXPLICIT_DISTRUST = 0x800B0111,
-        CERT_E_EXPIRED = 0x800B0101,
-        CERT_E_VALIDITYPERIODNESTING = 0x800B0102,
-        CERT_E_ROLE = 0x800B0103,
-        CERT_E_PATHLENCONST = 0x800B0104,
-        CERT_E_CRITICAL = 0x800B0105,
-        CERT_E_PURPOSE = 0x800B0106,
-        CERT_E_ISSUERCHAINING = 0x800B0107,
-        CERT_E_MALFORMED = 0x800B0108,
-        CERT_E_UNTRUSTEDROOT = 0x800B0109,
-        CERT_E_CHAINING = 0x800B010A,
-        CERT_E_REVOKED = 0x800B010C,
-        CERT_E_UNTRUSTEDTESTROOT = 0x800B010D,
-        CERT_E_REVOCATION_FAILURE = 0x800B010E,
-        CERT_E_CN_NO_MATCH = 0x800B010F,
-        CERT_E_WRONG_USAGE = 0x800B0110,
-        CERT_E_UNTRUSTEDCA = 0x800B0112,
-        CERT_E_INVALID_POLICY = 0x800B0113,
-        CERT_E_INVALID_NAME = 0x800B0114,
-        CRYPT_E_SECURITY_SETTINGS = 0x80092026
     }
 }

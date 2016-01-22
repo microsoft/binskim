@@ -702,20 +702,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is signed with a weak cryptographic algorithm &apos;{1}&apos;. &apos;{1}&apos; is or is shortly expected to be vulnerable to collision attacks. Sign this binary with a stronger cryptographic algorithm such as SHA256..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was signed using &apos;{1}&apos;, an algorithm that WinTrustVerify has flagged as insecure..
         /// </summary>
-        internal static string BA2022_Fail_Sha1Signature {
+        internal static string BA2022_Fail_BadSigningAlgorithm {
             get {
-                return ResourceManager.GetString("BA2022_Fail_Sha1Signature", resourceCulture);
+                return ResourceManager.GetString("BA2022_Fail_BadSigningAlgorithm", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; signing verification failed with WinTrustVerify error: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; signing was flagged as insecure by WinTrustVerify with error code: &apos;{1}&apos;.
         /// </summary>
-        internal static string BA2022_Fail_VerifyActionFailed {
+        internal static string BA2022_Fail_DidNotVerify {
             get {
-                return ResourceManager.GetString("BA2022_Fail_VerifyActionFailed", resourceCulture);
+                return ResourceManager.GetString("BA2022_Fail_DidNotVerify", resourceCulture);
             }
         }
         
@@ -729,15 +729,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The signature of &apos;{0}&apos; was invalid or there was an error opening the file..
-        /// </summary>
-        internal static string BA2022_InvalidSignatureOrFileOpenError {
-            get {
-                return ResourceManager.GetString("BA2022_InvalidSignatureOrFileOpenError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The image was signed with &apos;{1}&apos;, a cryptographically strong algorithm..
         /// </summary>
         internal static string BA2022_Pass {
@@ -747,7 +738,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Images should be correctly signed using a cryptographically secure signature algorithm. This rule verifies a signed binary using the WinTrustVerify Authenticode policy provider. This check excludes the certificate chain root (preventing execution across the network). After retrieving the certificate chain information, the rule ensures that the binary was not signed with a SHA1 certificate (as SHA1 is currently deprecated by several companies including Microsoft and Google). Optionally, this rule can enforce [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds..
         /// </summary>
         internal static string BA2022_SignCorrectly_Description {
             get {

@@ -4,8 +4,8 @@
     {
       "toolInfo": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.2.15-beta",
-        "version": "1.2.15"
+        "fullName": "BinSkim 1.2.16-beta",
+        "version": "1.2.16"
       },
       "runInfo": {
         "invocationInfo": "\"D:\\src\\binskim-ms\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_Default.exe --output D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\MixedMode_x86_VS2013_Default.exe.sarif.temp --verbose --config default",

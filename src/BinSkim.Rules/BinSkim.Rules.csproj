@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="BinarySkimmerBase.cs" />
     <Compile Include="BuildWithSecureTools.cs" />
+    <Compile Include="CryptoErrors.cs" />
     <Compile Include="DoNotDisableStackProtectionForFunctions.cs" />
     <Compile Include="DoNotIncorporateVulnerableDependencies.cs" />
     <Compile Include="DoNotMarkImportsSectionAsExecutable.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="DoNotMarkWritableSectionsAsShared.cs" />
     <Compile Include="DoNotModifyStackProtectionCookie.cs" />
     <Compile Include="DoNotShipVulnerableBinaries.cs" />
+    <Compile Include="RulesExtensionMethods.cs" />
     <Compile Include="SignSecurely.cs" />
     <Compile Include="EnableAddressSpaceLayoutRandomization.cs" />
     <Compile Include="EnableControlFlowGuard.cs" />

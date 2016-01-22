@@ -113,7 +113,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             internal CRYPT_BIT_BLOB PublicKey;
         }
 
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         internal struct CRYPT_ALGORITHM_IDENTIFIER
         {
@@ -213,6 +212,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         internal const uint CALG_SHA1 = (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_SHA1);
         internal const uint CALG_SHA_256 = (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_SHA_256);
 
+        // CERT_STRONG_SIGN_PARA policy constants
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/hh870262(v=vs.85).aspx
+        internal const string szOID_CERT_STRONG_SIGN_OS_1 = "1.3.6.1.4.1.311.72.1.1";
+        internal const string szOID_CERT_STRONG_KEY_OS_1 = "1.3.6.1.4.1.311.72.2.1";
+
         [DllImport("winterop.dll", EntryPoint = "HashPublicKeyInfo", CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = false)]
         internal static extern void HashPublicKeyInfo(IntPtr certContext, byte[] publicKeyInfoHashed, ref uint sizePublicKeyInfoHashed);
 
@@ -241,7 +245,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public static extern UInt32 WinVerifyTrust(
             IntPtr hwnd,
             ref Guid action,
-            IntPtr pWVTData);
+            [In, Out] ref WINTRUST_DATA winVerifyTrustData);
 
         [DllImport("wintrust.dll")]
         public static extern IntPtr WTHelperProvDataFromStateData(
@@ -310,6 +314,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             WTD_UICONTEXT_INSTALL = 1,
         }
 
+        public enum SignatureSettingsFlags : uint
+        {
+            WSS_VERIFY_SPECIFIC = 1,         // Indicates dwIndex is specified in WINTRUST_SIGNATURE_SETTINGS
+            WSS_GET_SECONDARY_SIG_COUNT = 2, // Return the # of secondary signatures in cSecondarySigns
+        }
+
         [StructLayout(LayoutKind.Sequential)]
         public struct CertChainPolicyPara
         {
@@ -328,13 +338,45 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             public IntPtr pvExtraPolicyStatus;
         }
 
+        public enum InfoChoice : uint
+        {
+            CERT_STRONG_SIGN_SERIALIZED_INFO_CHOICE = 1,
+            CERT_STRONG_SIGN_OID_INFO_CHOICE
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct CERT_STRONG_SIGN_PARA
+        {
+            public uint cbStruct;
+            public InfoChoice dwInfoChoice;
+            //    union
+            //    {
+            //        void* pvInfo;
+            //        PCERT_STRONG_SIGN_SERIALIZED_INFO pSerializedInfo;
+            //        LPSTR pszOID;
+            //    };
+            [MarshalAs(UnmanagedType.LPStr)]
+            public string pszOID;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WINTRUST_SIGNATURE_SETTINGS
+        {
+            public uint cbStruct;
+            public uint dwIndex;
+            public SignatureSettingsFlags dwFlags;
+            public uint cSecondarySigs;
+            public uint dwVerifiedSigIndex;
+            public IntPtr pCryptoPolicy;  // *CERT_STRONG_SIGN_PARA
+        }
+
         [StructLayout(LayoutKind.Sequential)]
         public struct WINTRUST_DATA
         {
             public UInt32 cbStruct;
 
             public IntPtr pPolicyCallbackData;   // optional: used to pass data between the app and policy
-            public IntPtr pSIPClientData;         // optional: used to pass data between the app and SIP.
+            public IntPtr pSIPClientData;        // optional: used to pass data between the app and SIP.
             public UIChoice UIChoice;
             public RevocationChecks RevocationChecks;
             //    union
@@ -346,7 +388,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             //        struct WINTRUST_CERT_INFO_      *pCert;
             //    };
             public UnionChoice UnionChoice;
-            public IntPtr File;
+
+            public IntPtr pFile;
+
             public StateAction StateAction;
             public IntPtr hWVTStateData;
 
@@ -355,6 +399,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             public ProviderFlags dwProvFlags;
             public UIContext UIContext;
+
+            public IntPtr pSignatureSettings;
         }
 
         [StructLayout(LayoutKind.Sequential)]
