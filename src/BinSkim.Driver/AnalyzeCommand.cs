@@ -52,7 +52,11 @@ namespace Microsoft.CodeAnalysis.IL
         protected override void AnalyzeTarget(IEnumerable<ISkimmer<BinaryAnalyzerContext>> skimmers, BinaryAnalyzerContext context, HashSet<string> disabledSkimmers)
         {
             base.AnalyzeTarget(skimmers, context, disabledSkimmers);
-            AnalyzeManagedAssembly(context.TargetUri.LocalPath, _plugInFilePaths, context);
+
+            if (context.PE.IsManaged && !context.PE.IsManagedResourceOnly)
+            {
+                AnalyzeManagedAssembly(context.TargetUri.LocalPath, _plugInFilePaths, context);
+            }
         }
 
         private void AnalyzeManagedAssembly(string assemblyFilePath, IEnumerable<string> roslynAnalyzerFilePaths, BinaryAnalyzerContext context)
