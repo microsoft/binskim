@@ -25,9 +25,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             _testOutputHelper = output;
         }
 
-        private void VerifyPass(IBinarySkimmer skimmer, bool useDefaultPolicy = false)
+        private void VerifyPass(
+            IBinarySkimmer skimmer, 
+            IEnumerable<string> additionalTestFiles = null,
+            bool useDefaultPolicy = false)
         {
-            Verify(skimmer, null, useDefaultPolicy, expectToPass: true);
+            Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: true);
         }
 
         private void VerifyFail(
@@ -737,7 +740,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void SignSecurely_Pass()
         {
-            VerifyPass(new SignSecurely());
+            string kernel32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
+            kernel32Path = Path.Combine(kernel32Path, "kernel32.dll");
+
+            VerifyPass(new SignSecurely(), additionalTestFiles : new[] { kernel32Path });
         }
 
         [Fact]

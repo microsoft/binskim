@@ -4,8 +4,8 @@
     {
       "toolInfo": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.2.15-beta",
-        "version": "1.2.15"
+        "fullName": "BinSkim 1.2.16-beta",
+        "version": "1.2.16"
       },
       "runInfo": {
         "invocationInfo": "\"D:\\src\\binskim-ms\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedResourcesOnly.dll --output D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedResourcesOnly.dll.sarif.temp --verbose --config default",
@@ -399,7 +399,7 @@
           "ruleId": "BA2022",
           "kind": "error",
           "formattedMessage": {
-            "specifierId": "Fail_Sha1Signature",
+            "specifierId": "Fail_BadSigningAlgorithm",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "sha1RSA"
@@ -493,15 +493,14 @@
         {
           "id": "BA2022",
           "name": "SignSecurely",
-          "shortDescription": "Images should be correctly signed using a cryptographically secure signature algorithm.",
-          "fullDescription": "Images should be correctly signed using a cryptographically secure signature algorithm. This rule verifies a signed binary using the WinTrustVerify Authenticode policy provider. This check excludes the certificate chain root (preventing execution across the network). After retrieving the certificate chain information, the rule ensures that the binary was not signed with a SHA1 certificate (as SHA1 is currently deprecated by several companies including Microsoft and Google). Optionally, this rule can enforce that all binaries under analysis are actually signed (otherwise, analysis reports a 'not applicable' message for unsigned code). The check can also be configured to enforce that all analysis targets are signed with a recognized certificate (driven by a signature hash allow list).",
+          "shortDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms.",
+          "fullDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.",
           "options": {},
           "formatSpecifiers": {
             "Pass": "'{0}' appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The image was signed with '{1}', a cryptographically strong algorithm.",
-            "Fail_Sha1Signature": "'{0}' is signed with a weak cryptographic algorithm '{1}'. '{1}' is or is shortly expected to be vulnerable to collision attacks. Sign this binary with a stronger cryptographic algorithm such as SHA256.",
-            "Fail_VerifyActionFailed": "'{0}' signing verification failed with WinTrustVerify error: '{1}'",
-            "Fail_WinTrustVerifyApiError": "'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'.",
-            "InvalidSignatureOrFileOpenError": "The signature of '{0}' was invalid or there was an error opening the file."
+            "Fail_BadSigningAlgorithm": "'{0}' was signed using '{1}', an algorithm that WinTrustVerify has flagged as insecure.",
+            "Fail_DidNotVerify": "'{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}'",
+            "Fail_WinTrustVerifyApiError": "'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'."
           }
         },
         {
