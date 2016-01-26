@@ -68,10 +68,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         CERT_E_MALFORMED = 0x800B0108, // A certificate is missing or has an empty value for an important field, such as a subject or issuer name.  
         CERT_E_UNTRUSTEDROOT = 0x800B0109, // A certificate chain processed correctly, but terminated in a root certificate which is not trusted by the trust provider.  
         CERT_E_CHAINING = 0x800B010A, // An internal certificate chaining error has occurred.  
-        TRUST_E_Error = 0x800B010B, // Generic trust failure.  
+        TRUST_E_FAIL = 0x800B010B, // Generic trust failure.  
         CERT_E_REVOKED = 0x800B010C, // A certificate was explicitly revoked by its issuer.  
         CERT_E_UNTRUSTEDTESTROOT = 0x800B010D, // The certification path terminates with the test root which is not trusted with the current policy settings.  
-        CERT_E_REVOCATION_ErrorURE = 0x800B010E, // The revocation process could not continue - the certificate(s) could not be checked.  
+        CERT_E_REVOCATION_FAILURE = 0x800B010E, // The revocation process could not continue - the certificate(s) could not be checked.  
         CERT_E_CN_NO_MATCH = 0x800B010F, // The certificate's CN name does not match the passed value.  
         CERT_E_WRONG_USAGE = 0x800B0110, // The certificate is not valid for the requested usage.  
         TRUST_E_EXPLICIT_DISTRUST = 0x800B0111, // The certificate was explicitly marked as untrusted by the user.  
