@@ -50,9 +50,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2007_Pass),
-                    nameof(RuleResources.BA2007_Fail_WarningsDisabled),
-                    nameof(RuleResources.BA2007_Fail_InsufficientWarningLevel),
-                    nameof(RuleResources.BA2007_Fail_UnknownModuleLanguage)};
+                    nameof(RuleResources.BA2007_Error_WarningsDisabled),
+                    nameof(RuleResources.BA2007_Error_InsufficientWarningLevel),
+                    nameof(RuleResources.BA2007_Error_UnknownModuleLanguage)};
             }
         }
 
@@ -206,7 +206,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // The language could not be identified for the following modules: {1}
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2007_Fail_UnknownModuleLanguage),
+                        nameof(RuleResources.BA2007_Error_UnknownModuleLanguage),
                         unknownLanguageModules.CreateSortedObjectList()));
             }
 
@@ -222,7 +222,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // Modules triggering this check: {2}
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2007_Fail_InsufficientWarningLevel),
+                        nameof(RuleResources.BA2007_Error_InsufficientWarningLevel),
                         overallMinimumWarningLevel.ToString(),
                         exampleTooLowWarningCommandLine,
                         warningTooLowModules.CreateTruncatedObjectList()));
@@ -241,7 +241,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // Modules triggering this check were: {2}
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2007_Fail_WarningsDisabled),
+                        nameof(RuleResources.BA2007_Error_WarningsDisabled),
                         exampleDisabledWarningCommandLine,
                         disabledWarningModules.CreateTruncatedObjectList()));
             }

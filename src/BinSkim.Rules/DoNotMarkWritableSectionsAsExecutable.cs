@@ -42,8 +42,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2021_Pass),
-                    nameof(RuleResources.BA2021_Fail),
-                    nameof(RuleResources.BA2021_Fail_UnexpectedSectionAligment)};
+                    nameof(RuleResources.BA2021_Error),
+                    nameof(RuleResources.BA2021_Error_UnexpectedSectionAligment)};
             }
         }
 
@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' has a section alignment ({1}) that is less than page size ({2}).
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2021_Fail),
+                        nameof(RuleResources.BA2021_Error),
                         context.PE.FileName,
                         "0x" + peHeader.SectionAlignment.ToString("x"),
                         "0x" + PAGE_SIZE.ToString("x")));
@@ -116,7 +116,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // C++ source code, which mark a section with both attributes.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                    nameof(RuleResources.BA2021_Fail),
+                    nameof(RuleResources.BA2021_Error),
                     badSectionsText));
         }
     }

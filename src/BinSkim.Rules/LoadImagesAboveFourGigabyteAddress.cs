@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2001_Pass),
-                    nameof(RuleResources.BA2001_Fail)};
+                    nameof(RuleResources.BA2001_Error)};
             }
         }
 
@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // for 32-bit binaries.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2001_Fail)));
+                        nameof(RuleResources.BA2001_Error)));
                 return;
             }
 

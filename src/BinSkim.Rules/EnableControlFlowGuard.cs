@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2008_Pass),
-                    nameof(RuleResources.BA2008_Fail)};
+                    nameof(RuleResources.BA2008_Error)};
             }
         }
 
@@ -94,7 +94,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // /DYNAMICBASE linker option in order to enable CFG.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2008_Fail)));
+                        nameof(RuleResources.BA2008_Error)));
                 return;
             }
 

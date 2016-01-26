@@ -53,8 +53,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return new string[] {
                     nameof(RuleResources.BA2012_Pass),
                     nameof(RuleResources.BA2012_Pass_NoLoadConfig),
-                    nameof(RuleResources.BA2012_Fail),
-                    nameof(RuleResources.BA2012_Fail_CouldNotLocateCookie)};
+                    nameof(RuleResources.BA2012_Error),
+                    nameof(RuleResources.BA2012_Error_CouldNotLocateCookie),
+                    nameof(RuleResources.BA2012_Warning_InvalidSecurityCookieOffset)};
             }
         }
 
@@ -87,16 +88,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            if (context.PE.Is64Bit)
+            try
             {
-                if (!Validate64BitImage(context))
+                if (context.PE.Is64Bit)
+                {
+                    if (!Validate64BitImage(context))
+                    {
+                        return;
+                    }
+                }
+                else if (!Validate32BitImage(context))
                 {
                     return;
                 }
             }
-            else if (!Validate32BitImage(context))
+            catch (Exception)
             {
-                return;
+                Console.WriteLine();
             }
 
             // '{0}' is a C or C++ binary built with the buffer security feature 
@@ -144,6 +152,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             UInt64 fileCookieOffset = (cookieVA - baseAddress) - (sectionVA - baseAddress) + (UInt32)ish.PointerToRawData;
             SafePointer fileCookiePtr = loadConfigVA;
             fileCookiePtr.Address = (int)fileCookieOffset;
+
+
+            SafePointer boundsCheck = fileCookiePtr + 8;
+            if (!CookieOffsetValid(context, boundsCheck))
+            {
+                return false;
+            }
+
+            if (!boundsCheck.IsValid && context.PE.IsPacked)
+            {
+                LogInvalidCookieOffsetForKnownPackedFile(context);
+                return false;
+            }
+
             UInt64 cookie = BitConverter.ToUInt64(fileCookiePtr.GetBytes(8), 0);
 
             if (cookie != StackProtectionUtilities.DefaultCookieX64)
@@ -153,6 +175,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             return true;
         }
+
 
         private bool Validate32BitImage(BinaryAnalyzerContext context)
         {
@@ -190,7 +213,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             UInt64 fileCookieOffset = (cookieVA - baseAddress) - (sectionVA - baseAddress) + (UInt32)ish.PointerToRawData;
             SafePointer fileCookiePtr = loadConfigVA;
             fileCookiePtr.Address = (int)fileCookieOffset;
-            UInt32 cookie = BitConverter.ToUInt32(fileCookiePtr.GetBytes(8), 0);
+
+            SafePointer boundsCheck = fileCookiePtr + 4;
+            if (!CookieOffsetValid(context, boundsCheck))
+            {
+                return false;
+            }
+
+            UInt32 cookie = BitConverter.ToUInt32(fileCookiePtr.GetBytes(4), 0);
 
             if (!StackProtectionUtilities.DefaultCookiesX86.Contains(cookie) && context.PE.Machine == Machine.I386)
             {
@@ -201,13 +231,50 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return true;
         }
 
+        private bool CookieOffsetValid(BinaryAnalyzerContext context, SafePointer boundsCheck)
+        {
+            if (boundsCheck.IsValid) { return true; }
+
+            if (context.PE.IsPacked)
+            {
+                LogInvalidCookieOffsetForKnownPackedFile(context);
+            }
+            else
+            {
+                LogInvalidCookieOffset(context);
+            }
+            return false;
+        }
+
+        private void LogInvalidCookieOffset(BinaryAnalyzerContext context)
+        {
+            // The security cookie offset for '{0}' exceeds the size of the image.
+            // The file may be corrupted or processed by an executable packer.
+            // feature therefore could not be verified. The file was possibly packed by: {1}
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Warning, context, null,
+                    nameof(RuleResources.BA2012_Warning_InvalidSecurityCookieOffset),
+                    context.PE.Packer.ToString()));
+        }
+
+        private void LogInvalidCookieOffsetForKnownPackedFile(BinaryAnalyzerContext context)
+        {
+            // '{0}' appears to be a packed C or C++ binary that reports a security cookie  
+            // offset that exceeds the size of the packed file. Use of the stack protector (/GS)
+            // feature therefore could not be verified. The file was possibly packed by: {1}
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Warning, context, null,
+                    nameof(RuleResources.BA2012_Warning_InvalidSecurityCookieOffset),
+                    context.PE.Packer.ToString()));
+        }
+
         private void LogCouldNotLocateCookie(BinaryAnalyzerContext context)
         {
-            // '{0}' is a C or C++binary that enables the stack protection feature 
+            // '{0}' is a C or C++ binary that enables the stack protection feature 
             // but the security cookie could not be located. The binary may be corrupted.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                    nameof(RuleResources.BA2012_Fail_CouldNotLocateCookie)));
+                    nameof(RuleResources.BA2012_Error_CouldNotLocateCookie)));
         }
 
         private void LogFailure(BinaryAnalyzerContext context, string cookie)
@@ -230,7 +297,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // the modified cookie value detected was: {1}
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                    nameof(RuleResources.BA2012_Fail),
+                    nameof(RuleResources.BA2012_Error),
                     cookie));
         }
     }

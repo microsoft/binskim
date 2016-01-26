@@ -43,8 +43,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2011_Pass),                    
-                    nameof(RuleResources.BA2011_Fail),
-                    nameof(RuleResources.BA2011_Fail_UnknownModuleLanguage)};
+                    nameof(RuleResources.BA2011_Error),
+                    nameof(RuleResources.BA2011_Error_UnknownModuleLanguage)};
             }
         }
 
@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // the following modules: {1}.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2011_Fail_UnknownModuleLanguage),
+                        nameof(RuleResources.BA2011_Error_UnknownModuleLanguage),
                         unknownLanguageModules.CreateSortedObjectList()));
             }
 
@@ -128,7 +128,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // compiler command line. The affected modules were: {1}
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2011_Fail),
+                        nameof(RuleResources.BA2011_Error),
                         noGsModules.ToString()));
             }
         }

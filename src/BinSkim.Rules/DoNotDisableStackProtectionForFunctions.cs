@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2014_Pass),
-                    nameof(RuleResources.BA2014_Fail)};
+                    nameof(RuleResources.BA2014_Error)};
             }
         }
 
@@ -130,7 +130,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // than disabling the stack protector altogether.
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2014_Fail), 
+                        nameof(RuleResources.BA2014_Error), 
                         functionNames));
                 return;
             }

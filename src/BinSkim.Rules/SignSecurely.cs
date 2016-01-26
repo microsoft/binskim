@@ -39,9 +39,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2022_Pass),
-                    nameof(RuleResources.BA2022_Fail_BadSigningAlgorithm),
-                    nameof(RuleResources.BA2022_Fail_DidNotVerify),
-                    nameof(RuleResources.BA2022_Fail_WinTrustVerifyApiError)};
+                    nameof(RuleResources.BA2022_Error_BadSigningAlgorithm),
+                    nameof(RuleResources.BA2022_Error_DidNotVerify),
+                    nameof(RuleResources.BA2022_Error_WinTrustVerifyApiError)};
             }
         }
 
@@ -136,7 +136,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     {
                         // '{0}' was signed using '{1}', an algorithm that WinTrustVerify has flagged as insecure.
                         context.Logger.Log(this, RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                            nameof(RuleResources.BA2022_Fail_BadSigningAlgorithm),
+                            nameof(RuleResources.BA2022_Error_BadSigningAlgorithm),
                             algorithmName));
                     }
                     break;
@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     string cryptoErrorDescription = cryptoError.GetErrorDescription();
                     // '{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}' ({2})
                     context.Logger.Log(this, RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2022_Fail_DidNotVerify),
+                        nameof(RuleResources.BA2022_Error_DidNotVerify),
                         cryptoError.ToString(),
                         cryptoErrorDescription));
                     break;
@@ -177,7 +177,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' signing could not be completely verified because
                 // '{1}' failed with error code: '{2}'.
                 context.Logger.Log(this, RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                    nameof(RuleResources.BA2022_Fail_WinTrustVerifyApiError),
+                    nameof(RuleResources.BA2022_Error_WinTrustVerifyApiError),
                     failedApiName,
                     cryptoError.ToString()));
                 return null;

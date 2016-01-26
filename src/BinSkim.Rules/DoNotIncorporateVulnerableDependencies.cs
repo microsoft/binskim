@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2002_Pass),
-                    nameof(RuleResources.BA2002_Fail)};
+                    nameof(RuleResources.BA2002_Error)};
             }
         }
 
@@ -162,7 +162,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // To resolve this, {3}. The source files that triggered this were: {4}
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                            nameof(RuleResources.BA2002_Fail),
+                            nameof(RuleResources.BA2002_Error),
                             descriptor.Name,
                             descriptor.VulnerabilityDescription,
                             descriptor.Resolution,

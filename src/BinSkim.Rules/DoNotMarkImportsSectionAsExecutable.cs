@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2010_Pass),
-                    nameof(RuleResources.BA2010_Fail)};
+                    nameof(RuleResources.BA2010_Error)};
             }
         }
 
@@ -103,7 +103,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // section.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2010_Fail)));
+                        nameof(RuleResources.BA2010_Error)));
                 return;
             }
 
