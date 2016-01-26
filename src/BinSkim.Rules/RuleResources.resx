@@ -345,7 +345,7 @@ Modules triggering this check were:
     <value>'{0}' was signed using '{1}', an algorithm that WinTrustVerify has flagged as insecure.</value>
   </data>
   <data name="BA2022_Error_DidNotVerify" xml:space="preserve">
-    <value>'{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}'</value>
+    <value>'{0}' signing was flagged as insecure by WinTrustVerify with error code '{1}' ({2})</value>
   </data>
   <data name="BA2022_Error_WinTrustVerifyApiError" xml:space="preserve">
     <value>'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'.</value>

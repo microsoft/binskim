@@ -53,7 +53,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 { CryptoError.CRYPT_E_ASN1_INTERNAL, "ASN1 internal encode or decode error." },
                 { CryptoError.CRYPT_E_ASN1_LARGE, "ASN1 value too large." },
                 { CryptoError.CRYPT_E_ASN1_MEMORY, "ASN1 out of memory." },
-                { CryptoError.CRYPT_E_ASN1_NOEOD, "ASN1 end of data expected" },
                 { CryptoError.CRYPT_E_ASN1_NOEOD, "ASN1 end of data expected." },
                 { CryptoError.CRYPT_E_ASN1_NYI, "ASN1 not yet implemented." },
                 { CryptoError.CRYPT_E_ASN1_OVERFLOW, "ASN1 buffer overflow." },
