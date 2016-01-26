@@ -43,9 +43,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2009_Pass),
-                    nameof(RuleResources.BA2009_Fail_NotDynamicBase),
-                    nameof(RuleResources.BA2009_Fail_RelocsStripped),
-                    nameof(RuleResources.BA2009_Fail_WinCENoRelocationSection)};
+                    nameof(RuleResources.BA2009_Error_NotDynamicBase),
+                    nameof(RuleResources.BA2009_Error_RelocsStripped),
+                    nameof(RuleResources.BA2009_Error_WinCENoRelocationSection)};
             }
         }
 
@@ -81,7 +81,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // with Visual Studio 2008 or later.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2009_Fail_NotDynamicBase)));
+                        nameof(RuleResources.BA2009_Error_NotDynamicBase)));
                 return;
             }
 
@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // from the image, preventing address space layout randomization. 
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2009_Fail_RelocsStripped)));
+                        nameof(RuleResources.BA2009_Error_RelocsStripped)));
                 return;
             }
 
@@ -118,12 +118,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (!relocSectionFound)
                 {
-                    // EnableAddressSpaceLayoutRandomization_WinCENoRelocationSection_Fail	'{0}'
+                    // EnableAddressSpaceLayoutRandomization_WinCENoRelocationSection_Error	'{0}'
                     // is a Windows CE image but does not contain any relocation data, preventing 
                     // address space layout randomization.	
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                            nameof(RuleResources.BA2009_Fail_WinCENoRelocationSection)));
+                            nameof(RuleResources.BA2009_Error_WinCENoRelocationSection)));
                     return;
                 }
             }

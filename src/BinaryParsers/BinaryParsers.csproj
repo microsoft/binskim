@@ -71,6 +71,7 @@
     <Compile Include="..\DefaultProject\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Packer.cs" />
     <Compile Include="PortableExecutable\ImageLoadConfigDirectory64.cs" />
     <Compile Include="PortableExecutable\ImageType.cs" />
     <Compile Include="PortableExecutable\ImageHeader.cs" />

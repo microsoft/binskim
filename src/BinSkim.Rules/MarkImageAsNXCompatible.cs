@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2016_Pass),
-                    nameof(RuleResources.BA2016_Fail)};
+                    nameof(RuleResources.BA2016_Error)};
             }
         }
 
@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 //your binaries as NX compatible, e.g. by passing / NXCOMPAT to the C / C++ linker.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2016_Fail)));
+                        nameof(RuleResources.BA2016_Error)));
                 return;
             }
 

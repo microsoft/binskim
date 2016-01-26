@@ -39,9 +39,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             get
             {
                 return new string[] {
-                    nameof(RuleResources.BA2006_Fail_BadModule),
+                    nameof(RuleResources.BA2006_Error_BadModule),
                     nameof(RuleResources.BA2006_Pass),
-                    nameof(RuleResources.BA2006_Fail)};
+                    nameof(RuleResources.BA2006_Error)};
             }
         }
 
@@ -166,7 +166,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     badModuleList.Add(
                         om.CreateCompilandRecordWithSuffix(
                             String.Format(CultureInfo.InvariantCulture,
-                            RuleResources.BA2006_Fail_BadModule,
+                            RuleResources.BA2006_Error_BadModule,
                             omLanguage, omDetails.CompilerVersion, omDetails.CompilerFrontEndVersion)));
                 }
             }
@@ -183,7 +183,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // Modules built outside of policy: {3}
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                    nameof(RuleResources.BA2006_Fail),
+                    nameof(RuleResources.BA2006_Error),
                         minCompilerVersion.ToString(),
                         minLinkVersion.ToString(),
                         badModuleList.CreateSortedObjectList()));

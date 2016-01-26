@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BA2001_Fail" xml:space="preserve">
+  <data name="BA2001_Error" xml:space="preserve">
     <value>'{0}' is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress / /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.</value>
   </data>
   <data name="BA2001_LoadImageAboveFourGigabyteAddress_Description" xml:space="preserve">
@@ -129,7 +129,7 @@
   <data name="BA2002_DoNotIncorporateVulnerableBinaries_Description" xml:space="preserve">
     <value>Binaries should not take dependencies on other code with known security vulnerabilities.</value>
   </data>
-  <data name="BA2002_Fail" xml:space="preserve">
+  <data name="BA2002_Error" xml:space="preserve">
     <value>'{0}' was built with a dependency on version of {1}, which is subject to the following issues: {2}. To resolve this, {3}. The source files that triggered this were: {4}</value>
   </data>
   <data name="BA2002_Pass" xml:space="preserve">
@@ -138,10 +138,10 @@
   <data name="BA2005_DoNotShipVulnerableBinaries_Description" xml:space="preserve">
     <value>Do not ship obsolete libraries for which there are known security vulnerabilities.</value>
   </data>
-  <data name="BA2005_Fail" xml:space="preserve">
+  <data name="BA2005_Error" xml:space="preserve">
     <value>'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.</value>
   </data>
-  <data name="BA2005_Fail_CouldNotParseVersion" xml:space="preserve">
+  <data name="BA2005_Error_CouldNotParseVersion" xml:space="preserve">
     <value>Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems.</value>
   </data>
   <data name="BA2005_MissingRequiredConfiguration" xml:space="preserve">
@@ -153,12 +153,12 @@
   <data name="BA2006_BuildWithSecureTools_Description" xml:space="preserve">
     <value>Application code should be compiled with the most up-to-date tool sets possible in order to take advantage of the most current compile-time security features.</value>
   </data>
-  <data name="BA2006_Fail" xml:space="preserve">
+  <data name="BA2006_Error" xml:space="preserve">
     <value>'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}, linker version {2}). More recent tool chains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning.
 Modules built outside of policy: 
 {3}</value>
   </data>
-  <data name="BA2006_Fail_BadModule" xml:space="preserve">
+  <data name="BA2006_Error_BadModule" xml:space="preserve">
     <value>built with {0} compiler version {1} (Front end version {2})</value>
   </data>
   <data name="BA2006_Pass" xml:space="preserve">
@@ -167,14 +167,14 @@ Modules built outside of policy:
   <data name="BA2007_EnableCriticalCompilerWarnings_Description" xml:space="preserve">
     <value>Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted.</value>
   </data>
-  <data name="BA2007_Fail_InsufficientWarningLevel" xml:space="preserve">
+  <data name="BA2007_Error_InsufficientWarningLevel" xml:space="preserve">
     <value>'{0}' was compiled at too low a warning level (effective warning level {1} for one or more modules). Warning level 3 enables important static analysis in the compiler to flag bugs that can lead to memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted. An example compiler command line triggering this check: {2}
 Modules triggering this check: {3}</value>
   </data>
-  <data name="BA2007_Fail_UnknownModuleLanguage" xml:space="preserve">
+  <data name="BA2007_Error_UnknownModuleLanguage" xml:space="preserve">
     <value>'{0}' contains code from an unknown language, preventing a comprehensive analysis of the compiler warning settings. The language could not be identified for the following modules: {1}</value>
   </data>
-  <data name="BA2007_Fail_WarningsDisabled" xml:space="preserve">
+  <data name="BA2007_Error_WarningsDisabled" xml:space="preserve">
     <value>'{0}' disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation. An example compiler command line triggering this check was: {1}
 Modules triggering this check were:
 {2}</value>
@@ -185,7 +185,7 @@ Modules triggering this check were:
   <data name="BA2008_EnableControlFlowGuard_Description" xml:space="preserve">
     <value>Binaries should enable the compiler control guard feature (CFG) at build time in order to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program.</value>
   </data>
-  <data name="BA2008_Fail" xml:space="preserve">
+  <data name="BA2008_Error" xml:space="preserve">
     <value>'{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /GUARD:CF on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG.</value>
   </data>
   <data name="BA2008_Pass" xml:space="preserve">
@@ -194,13 +194,13 @@ Modules triggering this check were:
   <data name="BA2009_EnableAddressSpaceLayoutRandomization_Description" xml:space="preserve">
     <value>Binaries should linked as DYNAMICBASE in order to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.</value>
   </data>
-  <data name="BA2009_Fail_NotDynamicBase" xml:space="preserve">
+  <data name="BA2009_Error_NotDynamicBase" xml:space="preserve">
     <value>'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.</value>
   </data>
-  <data name="BA2009_Fail_RelocsStripped" xml:space="preserve">
+  <data name="BA2009_Error_RelocsStripped" xml:space="preserve">
     <value>'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. </value>
   </data>
-  <data name="BA2009_Fail_WinCENoRelocationSection" xml:space="preserve">
+  <data name="BA2009_Error_WinCENoRelocationSection" xml:space="preserve">
     <value>'{0}' is a Windows CE image but does not contain any relocation data, preventing address space layout randomization.</value>
   </data>
   <data name="BA2009_Pass" xml:space="preserve">
@@ -209,7 +209,7 @@ Modules triggering this check were:
   <data name="BA2010_DoNotMarkImportsSectionAsExecutable_Description" xml:space="preserve">
     <value>PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the ".rdata" segment into an executable section.</value>
   </data>
-  <data name="BA2010_Fail" xml:space="preserve">
+  <data name="BA2010_Error" xml:space="preserve">
     <value>'{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here. To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the ".rdata" segment into an executable section.</value>
   </data>
   <data name="BA2010_Pass" xml:space="preserve">
@@ -218,10 +218,10 @@ Modules triggering this check were:
   <data name="BA2011_EnableStackProtection_Description" xml:space="preserve">
     <value>Binaries should be built with the stack protector buffer security feature (/GS) enabled in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line.</value>
   </data>
-  <data name="BA2011_Fail" xml:space="preserve">
+  <data name="BA2011_Error" xml:space="preserve">
     <value>'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}</value>
   </data>
-  <data name="BA2011_Fail_UnknownModuleLanguage" xml:space="preserve">
+  <data name="BA2011_Error_UnknownModuleLanguage" xml:space="preserve">
     <value>'{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}.</value>
   </data>
   <data name="BA2011_Pass" xml:space="preserve">
@@ -230,10 +230,10 @@ Modules triggering this check were:
   <data name="BA2012_DoNotModifyStackProtectionCookie_Description" xml:space="preserve">
     <value>Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the "security cookie", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the magic statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement.</value>
   </data>
-  <data name="BA2012_Fail" xml:space="preserve">
+  <data name="BA2012_Error" xml:space="preserve">
     <value>'{0}' is a C or C++ binary that interferes with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the "security cookie", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the magic statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement. NOTE: the modified cookie value detected was: {1}</value>
   </data>
-  <data name="BA2012_Fail_CouldNotLocateCookie" xml:space="preserve">
+  <data name="BA2012_Error_CouldNotLocateCookie" xml:space="preserve">
     <value>'{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted.</value>
   </data>
   <data name="BA2012_Pass" xml:space="preserve">
@@ -242,7 +242,13 @@ Modules triggering this check were:
   <data name="BA2012_Pass_NoLoadConfig" xml:space="preserve">
     <value>'{0}' is  C or C++binary that does not contain a load config table, which indicates either that it was compiled and linked with a version of the compiler that precedes stack protection features or is a binary (such as an ngen'ed assembly) that is not subject to relevant security issues.</value>
   </data>
-  <data name="BA2013_Fail" xml:space="preserve">
+  <data name="BA2012_Warning_InvalidSecurityCookieOffset" xml:space="preserve">
+    <value>'{0}' appears to be a packed C or C++ binary that reports a security cookie offset that exceeds the size of the packed file. Use of the stack protector (/GS) feature therefore could not be verified. The file was possibly packed by: {1}.</value>
+  </data>
+  <data name="BA2012_Warning_InvalidSecurityCookieOffsetForPackedImage" xml:space="preserve">
+    <value>'{0}' appears to be a packed C or C++ binary that reports a security cookie offset that exceeds the size of the packed file. Use of the stack protector (/GS) feature therefore could not be verified. The file was possibly packed by: {1}.</value>
+  </data>
+  <data name="BA2013_Error" xml:space="preserve">
     <value>'{0}' is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.</value>
   </data>
   <data name="BA2013_InitializeStackProtection_Description" xml:space="preserve">
@@ -260,7 +266,7 @@ Modules triggering this check were:
   <data name="BA2014_DoNotDisableStackProtectionForFunctions_Description" xml:space="preserve">
     <value>Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.</value>
   </data>
-  <data name="BA2014_Fail" xml:space="preserve">
+  <data name="BA2014_Error" xml:space="preserve">
     <value>'{0}' is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.</value>
   </data>
   <data name="BA2014_Pass" xml:space="preserve">
@@ -269,19 +275,19 @@ Modules triggering this check were:
   <data name="BA2015_EnableHighEntropyVirtualAddresses_Description" xml:space="preserve">
     <value>Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR.</value>
   </data>
-  <data name="BA2015_Fail_NeitherHighEntropyVANorLargeAddressAware" xml:space="preserve">
+  <data name="BA2015_Error_NeitherHighEntropyVANorLargeAddressAware" xml:space="preserve">
     <value>'{0}' does not declare itself as high entropy ASLR compatible. High entropy allows Address Space Layout Randomization to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line.</value>
   </data>
-  <data name="BA2015_Fail_NoHighEntropyVA" xml:space="preserve">
+  <data name="BA2015_Error_NoHighEntropyVA" xml:space="preserve">
     <value>'{0}' does not declare itself as high entropy ASLR compatible. High entropy allows Address Space Layout Randomization to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.)</value>
   </data>
-  <data name="BA2015_Fail_NoLargeAddressAware" xml:space="preserve">
+  <data name="BA2015_Error_NoLargeAddressAware" xml:space="preserve">
     <value>'{0}' does not declare itself as high entropy ASLR compatible. High entropy allows Address Space Layout Randomization to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible by supplying /LARGEADDRESSAWARE to the C or C++ linker command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.)</value>
   </data>
   <data name="BA2015_Pass" xml:space="preserve">
     <value>'{0}' is high entropy ASLR compatible, reducing an attacker's ability to exploit code in well-known locations.</value>
   </data>
-  <data name="BA2016_Fail" xml:space="preserve">
+  <data name="BA2016_Error" xml:space="preserve">
     <value>'{0}' is not marked NX compatible. The NXCompat bit, also known as "Data Execution Prevention" (DEP) or "Execute Disable" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tool chain is configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker.</value>
   </data>
   <data name="BA2016_MarkImageAsNXCompatible_Description" xml:space="preserve">
@@ -293,19 +299,19 @@ Modules triggering this check were:
   <data name="BA2018_EnableSafeSEH_Description" xml:space="preserve">
     <value>X86 binaries should enable the SafeSEH mitigation in order to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.</value>
   </data>
-  <data name="BA2018_Fail" xml:space="preserve">
+  <data name="BA2018_Error" xml:space="preserve">
     <value>'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.</value>
   </data>
-  <data name="BA2018_Fail_EmptySEHandlerTable" xml:space="preserve">
+  <data name="BA2018_Error_EmptySEHandlerTable" xml:space="preserve">
     <value>has an empty SE handler table in the load configuration table</value>
   </data>
-  <data name="BA2018_Fail_LoadConfigurationIsTooSmall" xml:space="preserve">
+  <data name="BA2018_Error_LoadConfigurationIsTooSmall" xml:space="preserve">
     <value>contains an unexpectedly small load configuration table {size 0}</value>
   </data>
-  <data name="BA2018_Fail_NoLoadConfigurationTable" xml:space="preserve">
+  <data name="BA2018_Error_NoLoadConfigurationTable" xml:space="preserve">
     <value>does not contain a load configuration table</value>
   </data>
-  <data name="BA2018_Fail_NoSEHandlers" xml:space="preserve">
+  <data name="BA2018_Error_NoSEHandlers" xml:space="preserve">
     <value>has zero SE handlers in the load configuration table</value>
   </data>
   <data name="BA2018_Pass" xml:space="preserve">
@@ -317,7 +323,7 @@ Modules triggering this check were:
   <data name="BA2019_DoNotMarkWritableSectionsAsShared_Description" xml:space="preserve">
     <value>Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).</value>
   </data>
-  <data name="BA2019_Fail" xml:space="preserve">
+  <data name="BA2019_Error" xml:space="preserve">
     <value>'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).</value>
   </data>
   <data name="BA2019_Pass" xml:space="preserve">
@@ -326,22 +332,22 @@ Modules triggering this check were:
   <data name="BA2021_DoNotMarkWritableSectionsAsExecutable_Description" xml:space="preserve">
     <value>PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your toolchain to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.</value>
   </data>
-  <data name="BA2021_Fail" xml:space="preserve">
+  <data name="BA2021_Error" xml:space="preserve">
     <value>'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your toolchain to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.</value>
   </data>
-  <data name="BA2021_Fail_UnexpectedSectionAligment" xml:space="preserve">
+  <data name="BA2021_Error_UnexpectedSectionAligment" xml:space="preserve">
     <value>'{0}' has a section alignment ({1}) that is smaller than page size ({2}).</value>
   </data>
   <data name="BA2021_Pass" xml:space="preserve">
     <value>'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitability of code vulnerabilities.</value>
   </data>
-  <data name="BA2022_Fail_BadSigningAlgorithm" xml:space="preserve">
+  <data name="BA2022_Error_BadSigningAlgorithm" xml:space="preserve">
     <value>'{0}' was signed using '{1}', an algorithm that WinTrustVerify has flagged as insecure.</value>
   </data>
-  <data name="BA2022_Fail_DidNotVerify" xml:space="preserve">
+  <data name="BA2022_Error_DidNotVerify" xml:space="preserve">
     <value>'{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}'</value>
   </data>
-  <data name="BA2022_Fail_WinTrustVerifyApiError" xml:space="preserve">
+  <data name="BA2022_Error_WinTrustVerifyApiError" xml:space="preserve">
     <value>'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'.</value>
   </data>
   <data name="BA2022_Pass" xml:space="preserve">

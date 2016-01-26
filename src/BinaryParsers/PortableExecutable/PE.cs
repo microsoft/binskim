@@ -314,6 +314,30 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
+        
+        public Packer Packer
+        {
+            get
+            {
+                if (PEHeaders != null)
+                {
+                    foreach (SectionHeader sh in PEHeaders.SectionHeaders)
+                    {
+                        if (sh.Name.StartsWith("UPX")) { return Packer.Upx; }
+                    }
+                }
+                return Packer.UnknownOrNotPacked;
+            }
+        }
+       
+        public bool IsPacked
+        {
+            get
+            {
+                return Packer != Packer.UnknownOrNotPacked;
+            }
+        }
+
         /// <summary>
         /// Returns true if the PE is managed
         /// </summary>

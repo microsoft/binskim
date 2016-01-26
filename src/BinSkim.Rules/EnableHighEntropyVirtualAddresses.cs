@@ -42,9 +42,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2015_Pass),
-                    nameof(RuleResources.BA2015_Fail_NoHighEntropyVA),
-                    nameof(RuleResources.BA2015_Fail_NoLargeAddressAware),
-                    nameof(RuleResources.BA2015_Fail_NeitherHighEntropyVANorLargeAddressAware)};
+                    nameof(RuleResources.BA2015_Error_NoHighEntropyVA),
+                    nameof(RuleResources.BA2015_Error_NoLargeAddressAware),
+                    nameof(RuleResources.BA2015_Error_NeitherHighEntropyVANorLargeAddressAware)};
             }
         }
 
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // as /LARGEADDRESSAWARE to the C or C++ linker command line.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2015_Fail_NeitherHighEntropyVANorLargeAddressAware)));
+                        nameof(RuleResources.BA2015_Error_NeitherHighEntropyVANorLargeAddressAware)));
                 return;
             }
 
@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // compiled as /LARGEADDRESSAWARE.)
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2015_Fail_NoHighEntropyVA)));
+                        nameof(RuleResources.BA2015_Error_NoHighEntropyVA)));
                 return;
             }
 
@@ -119,7 +119,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // compiled as /HIGHENTROPYVA.)
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2015_Fail_NoLargeAddressAware)));
+                        nameof(RuleResources.BA2015_Error_NoLargeAddressAware)));
                 return;
             }
 

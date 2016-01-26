@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return new string[] {
                     nameof(RuleResources.BA2018_Pass),
                     nameof(RuleResources.BA2018_Pass_NoSEH),
-                    nameof(RuleResources.BA2018_Fail)};
+                    nameof(RuleResources.BA2018_Error)};
             }
         }
 
@@ -99,8 +99,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2018_Fail),
-                        RuleResources.BA2018_Fail_NoLoadConfigurationTable));
+                        nameof(RuleResources.BA2018_Error),
+                        RuleResources.BA2018_Error_NoLoadConfigurationTable));
                 return;
             }
 
@@ -112,12 +112,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (seHandlerSize < 72)
             {
                 // contains an unexpectedly small load configuration table {size 0}
-                string seHandlerSizeText = String.Format(RuleResources.BA2018_Fail_LoadConfigurationIsTooSmall, seHandlerSize.ToString());
+                string seHandlerSizeText = String.Format(RuleResources.BA2018_Error_LoadConfigurationIsTooSmall, seHandlerSize.ToString());
 
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2018_Fail),
-                        RuleResources.BA2018_Fail_LoadConfigurationIsTooSmall,
+                        nameof(RuleResources.BA2018_Error),
+                        RuleResources.BA2018_Error_LoadConfigurationIsTooSmall,
                         seHandlerSizeText));
                 return;
             }
@@ -131,12 +131,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (seHandlerTable == 0)
                 {
                     // has an empty SE handler table in the load configuration table
-                    failureKind = RuleResources.BA2018_Fail_EmptySEHandlerTable;
+                    failureKind = RuleResources.BA2018_Error_EmptySEHandlerTable;
                 }
                 else if (seHandlerCount == 0)
                 {
                     // has zero SE handlers in the load configuration table
-                    failureKind = RuleResources.BA2018_Fail_NoSEHandlers;
+                    failureKind = RuleResources.BA2018_Error_NoSEHandlers;
                 }
 
                 // '{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH 
@@ -149,7 +149,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // as the /SafeSEH flag is invalid when linking for ARM and x64.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2018_Fail), 
+                        nameof(RuleResources.BA2018_Error), 
                         failureKind));
                 return;
             }

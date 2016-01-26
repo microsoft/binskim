@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2019_Pass),
-                    nameof(RuleResources.BA2019_Fail)};
+                    nameof(RuleResources.BA2019_Error)};
             }
         }
 
@@ -101,7 +101,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // instead (COM, named pipes, LPC, etc.).
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                    nameof(RuleResources.BA2019_Fail),
+                    nameof(RuleResources.BA2019_Error),
                     badSectionsText));
         }
     }

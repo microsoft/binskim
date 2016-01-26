@@ -49,7 +49,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2013_Pass),
                     nameof(RuleResources.BA2013_Pass_NoCode),
                     nameof(RuleResources.BA2013_NotApplicable_FeatureNotEnabled),
-                    nameof(RuleResources.BA2013_Fail)};
+                    nameof(RuleResources.BA2013_Error)};
             }
         }
 
@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // __security_init_cookie() manually in your custom entry point.
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultKind.Error, context, null,
-                        nameof(RuleResources.BA2013_Fail)));
+                        nameof(RuleResources.BA2013_Error)));
                 return;
             }
 
