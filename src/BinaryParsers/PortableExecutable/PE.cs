@@ -46,13 +46,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 _peReader = new PEReader(_fs);
                 PEHeaders = _peReader.PEHeaders;
                 IsPEFile = true;
-            }
-            catch (IOException e) { LoadException = e; }
-            catch (BadImageFormatException e) { LoadException = e; }
-            catch (UnauthorizedAccessException e) { LoadException = e; }
 
-            if (IsPEFile)
-            {
                 m_pImage = new SafePointer(_peReader.GetEntireImage().GetContent().ToBuilder().ToArray());
 
                 if (IsManaged)
@@ -60,6 +54,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     _metadataReader = _peReader.GetMetadataReader();
                 }
             }
+            catch (IOException e) { LoadException = e; }
+            catch (BadImageFormatException e) { LoadException = e; }
+            catch (UnauthorizedAccessException e) { LoadException = e; }
         }
 
         public void Dispose()
