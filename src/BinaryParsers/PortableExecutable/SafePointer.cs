@@ -262,7 +262,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         private void TestPointerAndThrow()
         {
             if (!IsValid)
-                throw new InvalidOperationException("Pointer is beyound the safe range.");
+                throw new InvalidOperationException("Pointer is beyond the safe range.");
         }
 
         public bool IsValid

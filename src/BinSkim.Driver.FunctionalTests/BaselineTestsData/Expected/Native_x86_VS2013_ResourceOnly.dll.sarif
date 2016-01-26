@@ -8,10 +8,10 @@
         "version": "1.2.16"
       },
       "runInfo": {
-        "invocationInfo": "\"D:\\src\\binskim-ms\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_ResourceOnly.dll --output D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2013_ResourceOnly.dll.sarif.temp --verbose --config default",
+        "invocationInfo": "\"D:\\src\\binskim\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_ResourceOnly.dll --output D:\\src\\binskim\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2013_ResourceOnly.dll.sarif.temp --verbose --config default",
         "analysisTargets": [
           {
-            "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll"
+            "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll"
           }
         ]
       },
@@ -29,7 +29,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -52,7 +52,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -75,7 +75,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -98,7 +98,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -121,7 +121,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -144,7 +144,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -167,7 +167,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -190,7 +190,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -213,7 +213,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -236,7 +236,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -259,7 +259,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -282,7 +282,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -305,7 +305,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -325,7 +325,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -345,7 +345,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -365,7 +365,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -385,7 +385,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -408,7 +408,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -428,7 +428,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_ResourceOnly.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -462,7 +462,7 @@
           "options": {},
           "formatSpecifiers": {
             "Pass": "'{0}' does not have an imports section that is marked as executable, helping to prevent the exploitability of code vulnerabilities.",
-            "Fail": "'{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here. To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
+            "Error": "'{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here. To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
           }
         },
         {
@@ -473,8 +473,8 @@
           "options": {},
           "formatSpecifiers": {
             "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitability of code vulnerabilities.",
-            "Fail": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your toolchain to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.",
-            "Fail_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2})."
+            "Error": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your toolchain to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.",
+            "Error_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2})."
           }
         },
         {
@@ -485,7 +485,7 @@
           "options": {},
           "formatSpecifiers": {
             "Pass": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitability of code vulnerabilities.",
-            "Fail": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+            "Error": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
           }
         },
         {
@@ -496,8 +496,8 @@
           "options": {},
           "formatSpecifiers": {
             "Pass": "'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems.",
-            "Fail": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.",
-            "Fail_CouldNotParseVersion": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems."
+            "Error": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.",
+            "Error_CouldNotParseVersion": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems."
           }
         },
         {
@@ -508,9 +508,9 @@
           "options": {},
           "formatSpecifiers": {
             "Pass": "'{0}' is properly compiled to enable address space layout randomization, reducing an attacker's ability to exploit code in well-known locations.",
-            "Fail_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
-            "Fail_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
-            "Fail_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing address space layout randomization."
+            "Error_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
+            "Error_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
+            "Error_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing address space layout randomization."
           }
         }
       ]
