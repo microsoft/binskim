@@ -74,6 +74,7 @@ namespace Microsoft.CodeAnalysis.IL
                 "Roslyn 'RegisterCompilationEndAction' callback invoked analyzing 'BinSkim.Rules.FunctionalTests.dll'",
                 "Symbol encountered in MSIL 'global::<Module>'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryData.BinaryParsersResources'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.Packer'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PdbParseErrorCode'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.ImageLoadConfigDirectory64.Fields'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.ImageLoadConfigDirectory64'",
@@ -106,8 +107,7 @@ namespace Microsoft.CodeAnalysis.IL
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.TruncatedCompilandRecordList'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.IL.VersionConstants'",
                 "Roslyn 'RegisterCompilationAction' callback invoked analyzing 'BinaryParsers.dll'",
-                "Roslyn 'RegisterCompilationEndAction' callback invoked analyzing 'BinaryParsers.dll'",
-            });
+                "Roslyn 'RegisterCompilationEndAction' callback invoked analyzing 'BinaryParsers.dll'",            });
             string testAssemblyPath = this.GetType().Assembly.Location;
             string binskimBinaryPath = typeof(PE).Assembly.Location;
             Verify(testAssemblyPath, expected, testAssemblyPath, binskimBinaryPath);
