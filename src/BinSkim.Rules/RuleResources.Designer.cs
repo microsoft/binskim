@@ -729,7 +729,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; signing was flagged as insecure by WinTrustVerify with error code: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; signing was flagged as insecure by WinTrustVerify with error code &apos;{1}&apos; ({2}).
         /// </summary>
         internal static string BA2022_Error_DidNotVerify {
             get {
