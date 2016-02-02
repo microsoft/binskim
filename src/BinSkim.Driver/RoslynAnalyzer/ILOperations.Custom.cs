@@ -11,12 +11,15 @@ namespace Microsoft.CodeAnalysis.IL
     // Some of them may be raisable to higher level constructs that are modeled by IOperation (TODO), 
     // while others can happen in IL and have no IOperation equivalent.
 
-    internal abstract class CustomExpression : Expression
+    internal interface ICustomExpression : IExpression { }
+    internal interface ICustomStatement : IStatement { }
+
+    internal abstract class CustomExpression : Expression, ICustomExpression
     {
         public override OperationKind Kind => OperationKind.None;
     }
 
-    internal abstract class CustomStatement : Statement
+    internal abstract class CustomStatement : Statement, ICustomStatement
     {
         public override OperationKind Kind => OperationKind.None;
     }
@@ -31,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL
     //       if (!succeeded) { ... } 
     //   }
 
-    internal sealed class TryFaultStatement : TryStatement
+    internal sealed class TryFaultStatement : TryStatement, ICustomStatement
     {
         public TryFaultStatement(IBlockStatement body, IBlockStatement faultHandler)
             : base(body)
@@ -113,6 +116,23 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public IExpression Operand { get; private set; }
+        public override ITypeSymbol ResultType { get; }
+    }
+
+    // ldftn/ldvirtftn. 
+    //
+    // TODO: raise use of this combined with delegate creation to IMethodBindingExpresion.
+    internal sealed class LoadFunctionExpression : CustomExpression
+    {
+        public LoadFunctionExpression(IMethodSymbol method, bool isVirtual, Compilation compilation)
+        {
+            Method = method;
+            IsVirtual = isVirtual;
+            ResultType = compilation.GetSpecialType(SpecialType.System_IntPtr);
+        }
+
+        public bool IsVirtual { get; }
+        public IMethodSymbol Method { get; }
         public override ITypeSymbol ResultType { get; }
     }
 }

@@ -653,7 +653,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLdFtn(int token, ILOpcode opCode)
         {
-            throw new NotImplementedException();
+            Push(
+                new LoadFunctionExpression(
+                    (IMethodSymbol)GetSymbolFromToken(token), 
+                    opCode == ILOpcode.ldvirtftn, 
+                    _compilation));
         }
 
         private void ImportLoadInt(long value, StackValueKind kind)
