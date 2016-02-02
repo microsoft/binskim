@@ -171,4 +171,36 @@ namespace Microsoft.CodeAnalysis.IL
         public IExpression Operand { get; }
         public override ITypeSymbol ResultType => Operand.ResultType;
     }
+
+
+    // ldtoken
+    //
+    // TODO: raise Type.GetTypeFromHandle(ldtoken(X)) to typeof(X)
+    internal sealed class LoadTokenExpression : CustomExpression
+    {
+        public LoadTokenExpression(ISymbol symbol, Compilation compilation)
+        {
+            Symbol = symbol;
+
+            if (symbol is ITypeSymbol)
+            {
+                ResultType = compilation.GetSpecialType(SpecialType.System_RuntimeTypeHandle);
+            }
+            else if (symbol is IMethodSymbol)
+            {
+                ResultType = compilation.GetSpecialType(SpecialType.System_RuntimeMethodHandle);
+            }
+            else if (symbol is IFieldSymbol)
+            {
+                ResultType = compilation.GetSpecialType(SpecialType.System_RuntimeFieldHandle);
+            }
+            else
+            {
+                throw new NotImplementedException(); // error case
+            }
+        }
+
+        public override ITypeSymbol ResultType { get; }
+        public ISymbol Symbol { get; }
+    }
 }

@@ -25,9 +25,10 @@ namespace Microsoft.CodeAnalysis.IL
             using (var peReader = new PEReader(stream))
             {
                 var metadataReader = peReader.GetMetadataReader();
-                var reference = MetadataReference.CreateFromFile(path);
-                var compilation = CSharpCompilation.Create("_", references: new[] { reference });
-                var target = (IAssemblySymbol)compilation.GetAssemblyOrModuleSymbol(reference);
+                var assembly = MetadataReference.CreateFromFile(path);
+                var mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
+                var compilation = CSharpCompilation.Create("_", references: new[] { assembly, mscorlib });
+                var target = (IAssemblySymbol)compilation.GetAssemblyOrModuleSymbol(assembly);
 
                 var type = target.GetTypeByMetadataName(typeof(ILImporterTests).FullName);
                 var method = (IMethodSymbol)type.GetMembers().Single(m => m.Name == nameof(Scratch));
@@ -57,10 +58,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public void Scratch(string x, int y, float z)
         {
+            int q = (int)Obj;
+            Type t = typeof(Foo);
+
             try
             {
-                int q = (int)Obj;
-
                 switch (y)
                 {
                     case 0:

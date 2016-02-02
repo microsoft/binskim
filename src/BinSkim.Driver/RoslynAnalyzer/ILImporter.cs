@@ -1008,7 +1008,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLdToken(int token)
         {
-            throw new NotImplementedException();
+            Push(new LoadTokenExpression(GetSymbolFromToken(token), _compilation));
         }
 
         private void ImportLocalAlloc()
