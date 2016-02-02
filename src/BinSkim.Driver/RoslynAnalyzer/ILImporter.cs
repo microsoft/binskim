@@ -505,7 +505,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportBreak()
         {
-            throw new NotImplementedException();
+            Append(new BreakStatement());
         }
 
         private void ImportLoadVar(int index, bool argument)

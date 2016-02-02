@@ -75,4 +75,9 @@ namespace Microsoft.CodeAnalysis.IL
         public override ITypeSymbol ResultType => Expression.ResultType;
         public override OperationKind Kind => OperationKind.None;
     }
+
+    internal sealed class BreakStatement : Statement
+    {
+        public override OperationKind Kind => OperationKind.None;
+    }
 }
