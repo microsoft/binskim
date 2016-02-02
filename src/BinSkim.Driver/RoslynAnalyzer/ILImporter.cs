@@ -952,8 +952,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLoadLength()
         {
-            // TODO: Need to synthesize access to Array.Length.
-            throw new NotImplementedException();
+            Push(new ArrayLengthExpression(Pop().Expression, _compilation));
         }
 
         private void ImportUnaryOperation(ILOpcode opCode)

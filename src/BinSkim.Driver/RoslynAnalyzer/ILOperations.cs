@@ -315,7 +315,7 @@ namespace Microsoft.CodeAnalysis.IL
         public SizeOfExpression(Compilation compilation, ITypeSymbol typeOperand)
         {
             TypeOperand = typeOperand;
-            ResultType = compilation.GetSpecialType(SpecialType.System_Int32);
+            ResultType = compilation.GetSpecialType(SpecialType.System_UInt32);
         }
 
         public ITypeSymbol TypeOperand { get; }

@@ -135,4 +135,19 @@ namespace Microsoft.CodeAnalysis.IL
         public IMethodSymbol Method { get; }
         public override ITypeSymbol ResultType { get; }
     }
+
+    // ldlen
+    //
+    // TODO: raise to call to Length property
+    internal sealed class ArrayLengthExpression : CustomExpression
+    {
+        public ArrayLengthExpression(IExpression array, Compilation compilation)
+        {
+            Array = array;
+            ResultType = compilation.GetSpecialType(SpecialType.System_UIntPtr);
+        }
+
+        public IExpression Array { get; }
+        public override ITypeSymbol ResultType { get; }
+    }
 }
