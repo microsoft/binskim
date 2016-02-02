@@ -101,4 +101,18 @@ namespace Microsoft.CodeAnalysis.IL
 
         public IMethodSymbol TargetMethod { get; }
     }
+
+    // unbox opcode: unlike unbox.any cannot be directly represented as a conversion
+    // as it puts a byref to the value type on the heap on to the stack.
+    internal sealed class UnboxExpression : CustomExpression
+    {
+        public UnboxExpression(IExpression operand, ITypeSymbol valueType, Compilation compilation)
+        {
+            Operand = operand;
+            ResultType = compilation.CreatePointerTypeSymbol(valueType); // TODO: Need to handle managed pointer (by-ref) somehow.
+        }
+
+        public IExpression Operand { get; private set; }
+        public override ITypeSymbol ResultType { get; }
+    }
 }

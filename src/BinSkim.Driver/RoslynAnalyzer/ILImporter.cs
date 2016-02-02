@@ -568,14 +568,12 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportUnbox(int token, ILOpcode opCode)
         {
-            Debug.Assert(opCode == ILOpcode.unbox || opCode == ILOpcode.unbox_any);
-
             if (opCode == ILOpcode.unbox)
             {
-                // TODO: The non-any variant puts a byref value on the heap on to the stack.
-                throw new NotImplementedException();
+                Push(new UnboxExpression(Pop().Expression, GetTypeFromToken(token), _compilation));
             }
 
+            Debug.Assert(opCode == ILOpcode.unbox_any);
             ImportCasting(ConversionKind.Cast, GetTypeFromToken(token));
         }
 
