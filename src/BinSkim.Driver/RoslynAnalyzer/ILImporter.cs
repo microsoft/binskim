@@ -890,7 +890,10 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportInitObj(int token)
         {
-            throw new NotImplementedException();
+            var type = GetTypeFromToken(token);
+            var value = new DefaultValueExpression(type);
+            var target = PopPointerIndirection(type);
+            Append(NewAssignmentStatement(target, value));
         }
 
         private void ImportLeave(BasicBlock target)
@@ -902,7 +905,6 @@ namespace Microsoft.CodeAnalysis.IL
             // Leave semantics empties the evaluation stack, so we don't want to keep those temporaries reloaded here.
             _stackTop = 0; 
         }
-
 
         private void ImportNewArray(int token)
         {
@@ -978,12 +980,15 @@ namespace Microsoft.CodeAnalysis.IL
                     unaryKind,
                     operand.Expression,
                     operand.Expression.ResultType));
-                   
         }
 
         private void ImportCpOpj(int token)
         {
-            throw new NotImplementedException();
+            var type = GetTypeFromToken(token);
+            var src = PopPointerIndirection(type);
+            var dst = PopPointerIndirection(type);
+
+            Append(NewAssignmentStatement(dst, src));
         }
 
         private void ImportRefAnyVal(int token)

@@ -141,6 +141,17 @@ namespace Microsoft.CodeAnalysis.IL
         }
     }
 
+    internal sealed class DefaultValueExpression : Expression
+    {
+        public DefaultValueExpression(ITypeSymbol resultType)
+        {
+            ResultType = resultType;
+        }
+
+        public override ITypeSymbol ResultType { get; }
+        public override OperationKind Kind => OperationKind.DefaultValueExpression;
+    }
+
     internal abstract class ReferenceExpression : Expression, IReferenceExpression
     {
     }
