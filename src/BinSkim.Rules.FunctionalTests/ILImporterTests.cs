@@ -56,10 +56,12 @@ namespace Microsoft.CodeAnalysis.IL
             public int Y = 23;
         }
 
-        public void Scratch(string x, int y, float z)
+        public unsafe void Scratch(string x, int y, float z)
         {
             int q = (int)Obj;
             Type t = typeof(Foo);
+
+            byte* b = stackalloc byte[33];
 
             try
             {

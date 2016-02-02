@@ -172,7 +172,6 @@ namespace Microsoft.CodeAnalysis.IL
         public override ITypeSymbol ResultType => Operand.ResultType;
     }
 
-
     // ldtoken
     //
     // TODO: raise Type.GetTypeFromHandle(ldtoken(X)) to typeof(X)
@@ -202,5 +201,20 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override ITypeSymbol ResultType { get; }
         public ISymbol Symbol { get; }
+    }
+
+    // localloc
+    //
+    // TODO/FEEDBACK: There does not seem to be a public IOperation node for stackalloc.
+    internal sealed class LocalAllocationExpression : CustomExpression
+    {
+        public LocalAllocationExpression(IExpression size, Compilation compilation)
+        {
+            Size = size;
+            ResultType = compilation.GetSpecialType(SpecialType.System_IntPtr);
+        }
+
+        public IExpression Size { get; }
+        public override ITypeSymbol ResultType { get; }
     }
 }

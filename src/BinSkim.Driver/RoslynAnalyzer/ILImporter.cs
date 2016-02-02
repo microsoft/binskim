@@ -1013,7 +1013,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLocalAlloc()
         {
-            throw new NotImplementedException();
+            Push(new LocalAllocationExpression(Pop().Expression, _compilation));
         }
 
         private void ImportEndFinally()
