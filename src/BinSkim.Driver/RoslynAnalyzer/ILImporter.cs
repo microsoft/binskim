@@ -359,7 +359,8 @@ namespace Microsoft.CodeAnalysis.IL
         {
             if (_stackTop == 0)
             {
-                throw new BadImageFormatException();
+                // todo: error case: stack underflow
+                throw new NotImplementedException();
             }
 
             var value = _stack[--_stackTop];
