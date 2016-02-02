@@ -310,7 +310,6 @@ namespace Microsoft.CodeAnalysis.IL
         bool IConversionExpression.IsExplicit => true;
     }
 
-
     internal sealed class SizeOfExpression : Expression, ITypeOperationExpression
     {
         public SizeOfExpression(Compilation compilation, ITypeSymbol typeOperand)
@@ -324,10 +323,6 @@ namespace Microsoft.CodeAnalysis.IL
         public override OperationKind Kind => OperationKind.TypeOperationExpression;
         public TypeOperationKind TypeOperationKind => TypeOperationKind.SizeOf;
     }
-
-    // TODO: TypeOfExpression should be here.
-    // FEEDBACK: It would be easier to express ldtoken directly, with separate GetTypeFomHandle call.
-    //           Also exposes gap for field and method handles.
 
     internal sealed class LiteralExpression : Expression, ILiteralExpression
     {
@@ -523,22 +518,42 @@ namespace Microsoft.CodeAnalysis.IL
         }
     }
 
-    internal sealed class TryStatement : Statement, ITryStatement
+    internal abstract class TryStatement : Statement, ITryStatement
     {
-        public TryStatement(IBlockStatement body, ImmutableArray<ICatch> catches, IBlockStatement finallyHandler)
+        public TryStatement(IBlockStatement body)
         {
             Body = body;
-            Catches = catches;
-            FinallyHandler = finallyHandler;
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public IBlockStatement Body { get; }
 
-        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public ImmutableArray<ICatch> Catches { get; }
-        public IBlockStatement FinallyHandler { get; }
+        public virtual ImmutableArray<ICatch> Catches => ImmutableArray<ICatch>.Empty;
+        public virtual IBlockStatement FinallyHandler => null;
+
         public override OperationKind Kind => OperationKind.TryStatement;
+    }
+
+    internal sealed class TryCatchStatement : TryStatement
+    {
+        public TryCatchStatement(IBlockStatement body, ImmutableArray<ICatch> catches)
+            : base(body)
+        {
+            Catches = catches;
+        }
+
+        public override ImmutableArray<ICatch> Catches { get; }
+    }
+
+    internal sealed class TryFinallyStatement : TryStatement
+    {
+        public TryFinallyStatement(IBlockStatement body, IBlockStatement finallyHandler)
+            : base(body)
+        {
+            FinallyHandler = finallyHandler;
+        }
+
+        public override IBlockStatement FinallyHandler { get; }
     }
 
     internal sealed class Catch : Operation, ICatch

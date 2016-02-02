@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.IL
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (Condition())
             {
                 throw ex;
             }
@@ -147,6 +147,11 @@ namespace Microsoft.CodeAnalysis.IL
         public void InstanceMethod(int x)
         {
 
+        }
+
+        public static bool Condition()
+        {
+            return false;
         }
     }
 }

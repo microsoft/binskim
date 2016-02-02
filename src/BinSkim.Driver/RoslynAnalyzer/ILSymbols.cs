@@ -167,7 +167,7 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class LabelSymbol : LocalOrLabelSymbol, ILabelSymbol
     {
-        public LabelSymbol(int offset, IMethodSymbol containingMethod)
+        public LabelSymbol(int offset, IMethodSymbol containingMethod, string prefix = "IL")
             : base(GenerateName(offset), containingMethod)
         {
         }
@@ -176,7 +176,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private static string GenerateName(int offset)
         {
-            return $"IL{offset:X}";
+            return $"IL_{offset:X}";
         }
 
         public override void Accept(SymbolVisitor visitor)

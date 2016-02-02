@@ -115,53 +115,125 @@ namespace Microsoft.CodeAnalysis.IL
 
             ImportStatements(startOffset, length, statements);
             var body = new BlockStatement(statements.ToImmutable());
-            var catches = ImmutableArray<ICatch>.Empty;
-            var finallyHandler = default(IBlockStatement);
 
             switch (tryRegion.Kind)
             {
                 case ExceptionRegionKind.Catch:
-                    catches = ImportCatches(tryRegion);
-                    break;
+                case ExceptionRegionKind.Filter:
+                    return new TryCatchStatement(body, ImportCatches(tryRegion));
 
                 case ExceptionRegionKind.Finally:
-                    finallyHandler = ImportHandler(tryRegion);
-                    break;
+                    return new TryFinallyStatement(body, ImportFaultOrFinally(tryRegion));
 
                 case ExceptionRegionKind.Fault:
-                    // TODO: fault is not supported by C# / VB / IOperation, but semantics can be emulated.
-                    throw new NotImplementedException();
+                    return new TryFaultStatement(body, ImportFaultOrFinally(tryRegion));
 
-                case ExceptionRegionKind.Filter:
-                    // TODO: no representation issue, just not done yet.
-                    throw new NotImplementedException();
+                default:
+                    throw Unreachable();
             }
-
-            return new TryStatement(body, catches, finallyHandler);
         }
 
         private ImmutableArray<ICatch> ImportCatches(ExceptionRegion region)
         {
+            Debug.Assert(region.IsCatchOrFilter);
+
             int n = region.CatchCount;
             var catches = ImmutableArray.CreateBuilder<ICatch>(n);
             catches.Count = n;
 
             for (var r = region; r != null; r = r.PreviousCatch)
             {
-                Debug.Assert(r.Kind == ExceptionRegionKind.Catch);
-                var type = GetTypeFromHandle(r.CatchType);
-                var local = GenerateTemporaryAsSymbol(type);
+                var local = ((ILocalReferenceExpression)_basicBlocks[r.HandlerOffset].EntryStack[0].Expression).Local;
                 var handler = ImportHandler(r);
-                catches[--n] = new Catch(type, local, null, handler);
+                var filter = ImportFilter(r);
+
+                catches[--n] = new Catch(local.Type, local, filter, handler);
             }
 
             return catches.MoveToImmutable();
+        }
+
+        private IBlockStatement ImportFaultOrFinally(ExceptionRegion region)
+        {
+            Debug.Assert(region.IsFaultOrFinally);
+
+            var block = ImportHandler(region);
+            var statements = block.Statements;
+
+            // lazily used for uncommon case of an endfinally elsewhere than the lexical end of finally block,
+            // which will raise as a goto to the end of the block. The last one is just removed.
+            ImmutableArray<IStatement>.Builder builder = null;
+            IStatement gotoEnd = null;
+
+            int i = 0, n = statements.Length;
+            for (; i < n - 1; i++)
+            {
+                if (statements[i] == EndFinally.Instance)
+                {
+                    if (builder == null)
+                    {
+                        // note that this label is not the same as GetOrCreateLabel(region.HandlerOffset + region.HandlerLength). The former
+                        // is logically outside of the fault or finally block while this one is inside.
+                        var label = new LabelSymbol(region.HandlerOffset + region.HandlerLength, _method, "IL_EH");
+                        gotoEnd = new GoToStatement(label);
+                        builder = statements.ToBuilder();
+                    }
+
+                    builder[i] = gotoEnd;
+                }
+            }
+
+            if (n == 0 || statements[n - 1] != EndFinally.Instance)
+            {
+                // todo: error case, can't end finally block with something other than endfinally.
+                throw new NotImplementedException(); 
+            }
+
+            if (builder != null)
+            {
+                builder.RemoveAt(n - 1);
+                return new BlockStatement(builder.ToImmutable(), block.Locals);
+            }
+
+            return new BlockStatement(statements.RemoveAt(n - 1), block.Locals);
+        }
+
+        private IExpression ImportFilter(ExceptionRegion region)
+        {
+            if (!region.IsFilter)
+            {
+                return null;
+            }
+
+            var block = ImportBlockStatement(region.FilterOffset, region.FilterLength);
+            int n = block.Statements.Length;
+
+            var endFilter = n > 0 ? block.Statements[n - 1] as EndFilter : null;
+            if (endFilter == null)
+            {
+                // todo: error case -- must end with endfilter (we should also flag improper use of endfilter elsewhere).
+                throw new NotImplementedException(); 
+            }
+
+            Debug.Assert(n > 0);
+            if (n > 1)
+            {
+                // This case should be uncommon (filter that we couldn't represent as a single expression),
+                // but unoptimized C# output has side-effects like stloc/ldloc. We'd have to optimize these
+                // away to get back to a single expression. :(
+                return new BlockExpression(
+                    new BlockStatement(block.Statements.RemoveAt(n - 1), block.Locals),
+                    endFilter.Expression);
+            }
+
+            return endFilter.Expression;
         }
 
         private IBlockStatement ImportHandler(ExceptionRegion region)
         {
             return ImportBlockStatement(region.HandlerOffset, region.HandlerLength);
         }
+
         //
         // Associate exception regions with the first basic block they protect.
         //
@@ -213,9 +285,7 @@ namespace Microsoft.CodeAnalysis.IL
                         throw new NotImplementedException();
                     }
 
-                    if (region.TryLength == outerTry.TryLength &&
-                        region.Kind == ExceptionRegionKind.Catch && 
-                        outerTry.Kind == ExceptionRegionKind.Catch)
+                    if (region.TryLength == outerTry.TryLength && region.IsCatchOrFilter && outerTry.IsCatchOrFilter)
                     {
                         region.PreviousCatch = outerTry;
                         region.CatchCount = outerTry.CatchCount + 1;
@@ -227,23 +297,18 @@ namespace Microsoft.CodeAnalysis.IL
                 }
                 block.OuterTry = region;
 
-                ITypeSymbol localType = null;
                 switch (region.Kind)
                 {
-                    case ExceptionRegionKind.Filter:
-                        localType = ObjectType;
-                        break;
                     case ExceptionRegionKind.Catch:
-                        localType = GetTypeFromHandle(region.CatchType);
+                        var catchLocal = GenerateTemporaryAsStackValue(GetTypeFromHandle(region.CatchType));
+                        _basicBlocks[region.HandlerOffset].EntryStack = new[] { catchLocal };
                         break;
-                }
 
-                if (localType != null)
-                {
-                    _basicBlocks[region.HandlerOffset].EntryStack = new[]
-                    {
-                        GenerateTemporaryAsStackValue(localType)
-                    };
+                    case ExceptionRegionKind.Filter:
+                        var filterLocal = GenerateTemporaryAsStackValue(ObjectType);
+                        _basicBlocks[region.FilterOffset].EntryStack = new[] { filterLocal };
+                        _basicBlocks[region.HandlerOffset].EntryStack = new[] { filterLocal };
+                        break;
                 }
             }
         }
@@ -367,9 +432,8 @@ namespace Microsoft.CodeAnalysis.IL
 
                     if (source.Expression.ResultType != destination.Expression.ResultType)
                     {
-                        // TODO: This can be legal: e.g. Call(cond ? new Foo() : new Bar());
-                        //       Need to adjust local type to compatible type.
-                        throw new NotImplementedException();
+                        // TODO: This is legal: e.g. Call(cond ? new Foo() : new Bar());
+                        //       Need to adjust local type to compatible type. For now, just leave local with bad type.
                     }
 
                     AppendTemporaryAssignment(statements, destination, source);
@@ -418,10 +482,20 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 for (var c = t.PreviousCatch; c != null; c = c.PreviousCatch)
                 {
-                    MarkBasicBlock(_basicBlocks[c.HandlerOffset]);
+                    MarkHandlerBlocks(c);
                 }
-                MarkBasicBlock(_basicBlocks[t.HandlerOffset]);
+                MarkHandlerBlocks(t);
             }
+        }
+
+        private void MarkHandlerBlocks(ExceptionRegion region)
+        {
+            if (region.IsFilter)
+            {
+                MarkBasicBlock(_basicBlocks[region.FilterOffset]);
+            }
+
+            MarkBasicBlock(_basicBlocks[region.HandlerOffset]);
         }
 
         private void ImportNop()
@@ -815,12 +889,12 @@ namespace Microsoft.CodeAnalysis.IL
         {
             MarkBasicBlock(target);
             Append(new GoToStatement(GetOrCreateLabel(target)));
+
+            // Append will have flushed any extra values on stack to temporaries.
+            // Leave semantics empties the evaluation stack, so we don't want to keep those temporaries reloaded here.
+            _stackTop = 0; 
         }
 
-        private void ImportEndFinally()
-        {
-            // TODO: We need to branch if we're not at the lexical end of finally block.
-        }
 
         private void ImportNewArray(int token)
         {
@@ -930,9 +1004,24 @@ namespace Microsoft.CodeAnalysis.IL
             throw new NotImplementedException();
         }
 
+        private void ImportEndFinally()
+        {
+            Append(EndFinally.Instance);
+
+            // Append will have flushed any extra values on stack to temporaries.
+            // Endfinally semantics empties the evaluation stack, so we don't want to keep those temporaries reloaded here.
+            _stackTop = 0;
+        }
+
         private void ImportEndFilter()
         {
-            throw new NotImplementedException();
+            Append(new EndFilter(Pop().Expression));
+
+            if (_stackTop != 0)
+            {
+                // TODO: error case.
+                throw new NotImplementedException();
+            }
         }
 
         private void ImportCpBlk()
@@ -1077,25 +1166,15 @@ namespace Microsoft.CodeAnalysis.IL
         {
             switch (opcode)
             {
-                case ILOpcode.beq:
+                case ILOpcode.ceq:
                     return BinaryOperationKind.IntegerEquals;
-                case ILOpcode.bge:
-                    return BinaryOperationKind.IntegerGreaterThanOrEqual;
-                case ILOpcode.bgt:
+                case ILOpcode.cgt:
                     return BinaryOperationKind.IntegerGreaterThan;
-                case ILOpcode.ble:
-                    return BinaryOperationKind.IntegerLessThanOrEqual;
-                case ILOpcode.blt:
+                case ILOpcode.cgt_un:
+                    return BinaryOperationKind.UnsignedGreaterThan;
+                case ILOpcode.clt:
                     return BinaryOperationKind.IntegerLessThan;
-                case ILOpcode.bne_un:
-                    return BinaryOperationKind.IntegerNotEquals;
-                case ILOpcode.bge_un:
-                    return BinaryOperationKind.UnsignedGreaterThan;
-                case ILOpcode.bgt_un:
-                    return BinaryOperationKind.UnsignedGreaterThan;
-                case ILOpcode.ble_un:
-                    return BinaryOperationKind.UnsignedLessThanOrEqual;
-                case ILOpcode.blt_un:
+                case ILOpcode.clt_un:
                     return BinaryOperationKind.UnsignedLessThan;
                 default:
                     throw Unreachable();
@@ -1106,20 +1185,18 @@ namespace Microsoft.CodeAnalysis.IL
         {
             switch (opcode)
             {
-                case ILOpcode.beq:
-                    return BinaryOperationKind.FloatingEquals;
-                case ILOpcode.bge:
-                    return BinaryOperationKind.FloatingGreaterThanOrEqual;
-                case ILOpcode.bgt:
-                    return BinaryOperationKind.FloatingGreaterThan;
-                case ILOpcode.ble:
-                    return BinaryOperationKind.FloatingLessThanOrEqual;
-                case ILOpcode.blt:
-                    return BinaryOperationKind.FloatingLessThan;
-                case ILOpcode.bne_un:
-                    return BinaryOperationKind.FloatingNotEquals;
+                case ILOpcode.ceq:
+                    return BinaryOperationKind.IntegerEquals;
+                case ILOpcode.cgt:
+                    return BinaryOperationKind.IntegerGreaterThan;
+                case ILOpcode.cgt_un:
+                    return BinaryOperationKind.UnsignedGreaterThan;
+                case ILOpcode.clt:
+                    return BinaryOperationKind.IntegerLessThan;
+                case ILOpcode.clt_un:
+                    return BinaryOperationKind.UnsignedLessThan;
                 default:
-                    throw new NotImplementedException();
+                    throw Unreachable();
             }
         }
 
@@ -1132,12 +1209,17 @@ namespace Microsoft.CodeAnalysis.IL
                 case ILOpcode.cgt_un:
                     // NOTE: cgt.un is allowed on objects for != null since there is no cne. No other comparisons are valid on obj refs.
                     //       we therefore just assume rhs is null here and represent as ObjectNotEquals.
-                    return BinaryOperationKind.ObjectNotEquals; 
+                    return BinaryOperationKind.ObjectNotEquals;
+
+                case ILOpcode.clt:
+                case ILOpcode.clt_un:
+                case ILOpcode.cgt:
+                    throw new NotImplementedException(); //todo - error cases
+
                 default:
-                    throw new NotImplementedException();
+                    throw Unreachable();
             }
         }
-
 
         private static BinaryOperationKind GetBranchKind(ILOpcode opcode, StackValueKind kind)
         {
@@ -1387,6 +1469,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             switch (type.SpecialType)
             {
+                case SpecialType.System_Boolean:
                 case SpecialType.System_Byte:
                 case SpecialType.System_SByte:
                 case SpecialType.System_Char:
@@ -1547,14 +1630,19 @@ namespace Microsoft.CodeAnalysis.IL
             public ExceptionRegion PreviousCatch;
             public int CatchCount;
 
-            // shorthand for ILRegion.* for readability.
+            // shorthand properties for readability
             public ExceptionRegionKind Kind => ILRegion.Kind;
             public int TryOffset => ILRegion.TryOffset;
             public int TryLength => ILRegion.TryLength;
+            public int FilterOffset => ILRegion.FilterOffset;
+            public int FilterLength => ILRegion.HandlerOffset - ILRegion.FilterOffset;
             public int HandlerOffset => ILRegion.HandlerOffset;
             public int HandlerLength => ILRegion.HandlerLength;
+            public int HandlerEndOffset => HandlerOffset + HandlerLength - 1;
             public EntityHandle CatchType => ILRegion.CatchType;
-
+            public bool IsCatchOrFilter => Kind <= ExceptionRegionKind.Filter;
+            public bool IsFaultOrFinally => Kind >= ExceptionRegionKind.Finally;
+            public bool IsFilter => Kind == ExceptionRegionKind.Filter;
         }
 
         // for source compatibility with driver
