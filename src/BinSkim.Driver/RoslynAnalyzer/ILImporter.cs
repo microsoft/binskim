@@ -1038,12 +1038,20 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportCpBlk()
         {
-            throw new NotImplementedException();
+            var byteCount = Pop().Expression;
+            var srcPointer = Pop().Expression;
+            var dstPointer = Pop().Expression;
+
+            Append(new CopyBlockStatement(srcPointer, dstPointer, byteCount));
         }
 
         private void ImportInitBlk()
         {
-            throw new NotImplementedException();
+            var byteCount = Pop().Expression;
+            var value = Pop().Expression;
+            var pointer = Pop().Expression;
+
+            Append(new InitializeBlockStatement(pointer, value, byteCount));
         }
 
         private void ImportRethrow()

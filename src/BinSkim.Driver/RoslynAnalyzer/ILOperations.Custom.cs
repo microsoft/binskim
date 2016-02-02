@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.IL
     internal sealed class BreakStatement : CustomStatement
     {
     }
-    
+
     // jmp opcode
     //
     // TODO: raise to tail call
@@ -216,5 +216,42 @@ namespace Microsoft.CodeAnalysis.IL
 
         public IExpression Size { get; }
         public override ITypeSymbol ResultType { get; }
+    }
+
+    // cpblk
+    //
+    // TODO: Raise to Buffer.BlockCopy or naive loop
+    //
+    internal sealed class CopyBlockStatement : CustomStatement
+    {
+        public CopyBlockStatement(IExpression sourcePointer, IExpression destinationPointer, IExpression byteCount)
+        {
+            SourcePointer = sourcePointer;
+            DestinationPointer = destinationPointer;
+            ByteCount = byteCount;
+        }
+
+        public IExpression SourcePointer { get; }
+        public IExpression DestinationPointer { get; }
+        public IExpression ByteCount { get; }
+    }
+
+
+    // initblk
+    //
+    // TODO: Raise to naive loop
+    //
+    internal sealed class InitializeBlockStatement : CustomStatement
+    {
+        public InitializeBlockStatement(IExpression pointer, IExpression value, IExpression byteCount)
+        {
+            Pointer = pointer;
+            Value = value;
+            ByteCount = byteCount;
+        }
+
+        public IExpression Pointer { get; }
+        public IExpression Value { get; }
+        public IExpression ByteCount { get; }
     }
 }
