@@ -998,7 +998,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportCkFinite()
         {
-            throw new NotImplementedException();
+            Push(new CheckFiniteExpression(Pop().Expression));
         }
 
         private void ImportMkRefAny(int token)

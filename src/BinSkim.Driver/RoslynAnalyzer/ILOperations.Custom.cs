@@ -150,4 +150,25 @@ namespace Microsoft.CodeAnalysis.IL
         public IExpression Array { get; }
         public override ITypeSymbol ResultType { get; }
     }
+
+    // ckfinite
+    //
+    // TODO: raise X(ckfinite(Y)) to
+    //
+    //      double tmp = Y;
+    //      if (dobule.IsNaN(tmp) || double.IsInfinity(tmp)) {
+    //          throw new ArithmeticException();
+    //      }
+    //      X(tmp);
+    //
+    internal sealed class CheckFiniteExpression : CustomExpression
+    {
+        public CheckFiniteExpression(IExpression operand)
+        {
+            Operand = operand;
+        }
+
+        public IExpression Operand { get; }
+        public override ITypeSymbol ResultType => Operand.ResultType;
+    }
 }
