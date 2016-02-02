@@ -11,6 +11,16 @@ namespace Microsoft.CodeAnalysis.IL
     // Some of them may be raisable to higher level constructs that are modeled by IOperation (TODO), 
     // while others can happen in IL and have no IOperation equivalent.
 
+    internal abstract class CustomExpression : Expression
+    {
+        public override OperationKind Kind => OperationKind.None;
+    }
+
+    internal abstract class CustomStatement : Statement
+    {
+        public override OperationKind Kind => OperationKind.None;
+    }
+
     // TODO -- Raise to: 
     //
     //    bool succeeded = false;
@@ -34,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL
     }
 
     // temporary node to hold an endfilter operation. replaced appropriately when exception blocks are built.
-    internal sealed class EndFilter : Statement
+    internal sealed class EndFilter : CustomStatement
     {
         public EndFilter(IExpression expression)
         {
@@ -42,11 +52,10 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public IExpression Expression { get; }
-        public override OperationKind Kind => OperationKind.None;
     }
 
     // temporary node to mark end of filter. replaced appropriately when exception blocks are built.
-    internal sealed class EndFinally : Statement
+    internal sealed class EndFinally : CustomStatement
     {
         private EndFinally() { }
 
@@ -61,7 +70,7 @@ namespace Microsoft.CodeAnalysis.IL
     //  1) execute the block
     //  2) evaluate the expression
     //
-    internal sealed class BlockExpression : Expression
+    internal sealed class BlockExpression : CustomExpression
     {
         public BlockExpression(IBlockStatement block, IExpression expression)
         {
@@ -73,11 +82,23 @@ namespace Microsoft.CodeAnalysis.IL
         public IExpression Expression { get; }
 
         public override ITypeSymbol ResultType => Expression.ResultType;
-        public override OperationKind Kind => OperationKind.None;
     }
 
-    internal sealed class BreakStatement : Statement
+    // break opcode
+    internal sealed class BreakStatement : CustomStatement
     {
-        public override OperationKind Kind => OperationKind.None;
+    }
+    
+    // jmp opcode
+    //
+    // TODO: raise to tail call
+    internal sealed class JumpStatement : CustomStatement
+    {
+        public JumpStatement(IMethodSymbol targetMethod)
+        {
+            TargetMethod = targetMethod;
+        }
+
+        public IMethodSymbol TargetMethod { get; }
     }
 }

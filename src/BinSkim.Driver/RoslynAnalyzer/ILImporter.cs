@@ -545,7 +545,12 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportJmp(int token)
         {
-            throw new NotImplementedException();
+            if (_stackTop != 0)
+            {
+                throw new NotImplementedException(); // error case
+            }
+
+            Append(new JumpStatement((IMethodSymbol)GetSymbolFromToken(token)));
         }
 
         private void ImportConvert(WellKnownType wellKnownType, bool checkOverflow, bool unsigned)
