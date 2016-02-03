@@ -601,13 +601,7 @@ namespace Microsoft.CodeAnalysis.IL
         private void ImportCall(ILOpcode opcode, int token)
         {
             var callee = (IMethodSymbol)GetSymbolFromToken(token);
-
-            if (callee.IsVararg)
-            {
-                throw new NotImplementedException();
-            }
-
-            var arguments = PopArguments(callee.Parameters);
+            var arguments = PopArguments(callee, token);
 
             switch (opcode)
             {
@@ -639,14 +633,43 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
-        private ImmutableArray<IArgument> PopArguments(ImmutableArray<IParameterSymbol> parameters)
+        private ImmutableArray<IArgument> PopArguments(IMethodSymbol callee, int token)
         {
-            int count = parameters.Length;
+            var parameters = callee.Parameters;
 
-            var args = ImmutableArray.CreateBuilder<IArgument>(count);
-            args.Count = count;
+            int parameterCount = parameters.Length;
+            int argumentCount = parameterCount;
 
-            for (int i = count - 1; i >= 0; i--)
+            if (callee.IsVararg)
+            {
+                var memberRef = _reader.GetMemberReference(MetadataTokens.MemberReferenceHandle(token));
+                var sigReader = _reader.GetBlobReader(memberRef.Signature);
+                var header = sigReader.ReadSignatureHeader();
+                Debug.Assert(header.CallingConvention == SignatureCallingConvention.VarArgs);
+
+                if (header.IsGeneric)
+                {
+                    sigReader.ReadCompressedInteger(); // skip generic parameter count
+                }
+
+                argumentCount = sigReader.ReadCompressedInteger();
+                Debug.Assert(argumentCount >= parameters.Length);
+            }
+
+            var args = ImmutableArray.CreateBuilder<IArgument>(argumentCount);
+            args.Count = argumentCount;
+
+            int i;
+            for (i = argumentCount - 1; i >= parameterCount; i--)
+            {
+                // TODO/FEEDBACK: It's unclear how we're supposed to represent vararg arguments.
+                //                __arglist calls don't seem to surface at all to IOperation analyzers.
+                //                For now, just use a positional argument with a null parameter symbol.
+                Debug.Assert(callee.IsVararg);
+                args[i] = new Argument(null, Pop().Expression);
+            }
+
+            for (; i >= 0; i--)
             {
                 args[i] = new Argument(parameters[i], Pop().Expression);
             }

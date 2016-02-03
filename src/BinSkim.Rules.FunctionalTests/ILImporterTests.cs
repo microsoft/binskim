@@ -58,6 +58,8 @@ namespace Microsoft.CodeAnalysis.IL
 
         public unsafe void Scratch(string x, int y, float z, __arglist)
         {
+            Scratch("x", y, 1, __arglist(1, 2, 3));
+
             var iterator = new ArgIterator(__arglist);
             var value = __refvalue(iterator.GetNextArg(), int);
             var type = __reftype(iterator.GetNextArg());

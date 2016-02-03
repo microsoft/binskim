@@ -147,7 +147,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override string ToString()
         {
-            return $"Argument [{Parameter.Name}: {Value}]";
+            return $"Argument [{Parameter?.Name ?? "(vararg)"} : {Value}]";
         }
     }
 
