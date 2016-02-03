@@ -27,12 +27,12 @@ namespace Microsoft.CodeAnalysis.IL
 
         public ITypeSymbol GetByReferenceType(ITypeSymbol elementType)
         {
-            throw new NotImplementedException();
+            return _compilation.CreatePointerTypeSymbol(elementType); // TODO: by-ref
         }
 
         public ITypeSymbol GetFunctionPointerType(MethodSignature<ITypeSymbol> signature)
         {
-            throw new NotImplementedException();
+            return _compilation.GetSpecialType(SpecialType.System_IntPtr);
         }
 
         public ITypeSymbol GetGenericInstance(ITypeSymbol genericType, ImmutableArray<ITypeSymbol> typeArguments)

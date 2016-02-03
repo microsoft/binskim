@@ -5,6 +5,7 @@ using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+using System.Reflection.Metadata.Decoding;
 using System.Reflection.Metadata.Ecma335;
 
 using Microsoft.CodeAnalysis.Semantics;
@@ -20,6 +21,7 @@ namespace Microsoft.CodeAnalysis.IL
         private ImmutableArray<IStatement>.Builder _statements;
         private ImmutableArray<ILocalSymbol>.Builder _locals;
         private MetadataReader _reader;
+        private ILSignatureProvider _signatureProvider;
         private StandaloneSignatureHandle _localSignatureHandle;
 
         public ILImporter(Compilation compilation, MetadataReader reader, IMethodSymbol method, MethodBodyBlock body)
@@ -28,6 +30,7 @@ namespace Microsoft.CodeAnalysis.IL
             _reader = reader;
             _method = method;
             _ilBytes = body.GetILBytes();
+            _signatureProvider = new ILSignatureProvider(compilation, method);
             _localSignatureHandle = body.LocalSignature;
             _exceptionRegions = GetExceptionRegions(body);
             _statements = ImmutableArray.CreateBuilder<IStatement>();
@@ -324,9 +327,8 @@ namespace Microsoft.CodeAnalysis.IL
                 return;
             }
 
-            var provider = new ILSignatureProvider(_compilation, _method);
             var signature = _reader.GetStandaloneSignature(_localSignatureHandle);
-            var localTypes = signature.DecodeLocalSignature(provider);
+            var localTypes = signature.DecodeLocalSignature(_signatureProvider);
             var locals = ImmutableArray.CreateBuilder<ILocalSymbol>(localTypes.Length);
 
             int i = 0;
@@ -600,6 +602,62 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportCall(ILOpcode opcode, int token)
         {
+            if (opcode == ILOpcode.calli)
+            {
+                ImportCallIndirect(token);
+            }
+            else
+            {
+                ImportCallDirect(opcode, token);
+            }
+        }
+
+        private void ImportCallIndirect(int token)
+        {
+            var signature = _reader.GetStandaloneSignature(MetadataTokens.StandaloneSignatureHandle(token));
+            var sigReader = _reader.GetBlobReader(signature.Signature);
+            var header = sigReader.ReadSignatureHeader();
+
+            if (header.Kind != SignatureKind.Method || header.IsGeneric)
+            {
+                throw new NotImplementedException(); // error: bad calli signature
+            }
+
+            int argumentCount = sigReader.ReadCompressedInteger();
+            if (header.IsInstance && !header.HasExplicitThis)
+            {
+                argumentCount++;
+            }
+
+            var decoder = new SignatureDecoder<ITypeSymbol>(_signatureProvider, _reader);
+            var returnType = decoder.DecodeType(ref sigReader);
+            var arguments = ImmutableArray.CreateBuilder<IExpression>(argumentCount);
+            arguments.Count = argumentCount;
+
+            var functionPointer = Pop().Expression;
+            for (int i = argumentCount - 1; i >= 0; i--)
+            {
+                arguments[i] = Pop().Expression;
+            }
+
+            var invocation = new IndirectInvocationExpression(
+                header.CallingConvention,
+                functionPointer,
+                returnType,
+                arguments.MoveToImmutable());
+
+            if (returnType.SpecialType == SpecialType.System_Void)
+            {
+                Append(new ExpressionStatement(invocation));
+            }
+            else
+            {
+                Push(invocation);
+            }
+        }
+
+        private void ImportCallDirect(ILOpcode opcode, int token)
+        {
             var callee = (IMethodSymbol)GetSymbolFromToken(token);
             var arguments = PopArguments(callee, token);
 
@@ -624,9 +682,6 @@ namespace Microsoft.CodeAnalysis.IL
                 case ILOpcode.newobj:
                     Push(new ObjectCreationExpression(callee, arguments));
                     break;
-
-                case ILOpcode.calli:
-                    throw new NotImplementedException();
 
                 default:
                     throw Unreachable();

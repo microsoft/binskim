@@ -2,6 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Immutable;
+using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.Semantics;
 
 namespace Microsoft.CodeAnalysis.IL
@@ -236,7 +239,6 @@ namespace Microsoft.CodeAnalysis.IL
         public IExpression ByteCount { get; }
     }
 
-
     // initblk
     //
     // TODO: Raise to naive loop
@@ -316,6 +318,23 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public IExpression Pointer { get; }
+        public override ITypeSymbol ResultType { get; }
+    }
+
+    // calli
+    //
+    internal sealed class IndirectInvocationExpression : CustomExpression
+    {
+        public IndirectInvocationExpression(SignatureCallingConvention callingConvention, IExpression functionPointer, ITypeSymbol resultType, ImmutableArray<IExpression> arguments)
+        {
+            FunctionPointer = functionPointer;
+            Arguments = arguments;
+            ResultType = resultType;
+        }
+
+        public SignatureCallingConvention CallingConvention { get; }
+        public IExpression FunctionPointer { get; }
+        public ImmutableArray<IExpression> Arguments { get; }
         public override ITypeSymbol ResultType { get; }
     }
 }
