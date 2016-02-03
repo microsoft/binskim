@@ -132,7 +132,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private ITypeSymbol GetTypeFromHandle(EntityHandle handle)
         {
-            return (ITypeSymbol)((IMetadataModuleSymbol)(_method.ContainingModule)).GetSymbolForMetadataHandle(handle);
+            return (ITypeSymbol)(_method.ContainingModule.GetSymbolForMetadataHandle(handle));
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.IL
 
                 var type = target.GetTypeByMetadataName(typeof(ILImporterTests).FullName);
                 var method = (IMethodSymbol)type.GetMembers().Single(m => m.Name == nameof(Scratch));
-                var handle = (MethodDefinitionHandle)((IMetadataSymbol)method).MetadataHandle;
+                var handle = (MethodDefinitionHandle)method.MetadataHandle;
                 var methodDef = metadataReader.GetMethodDefinition(handle);
                 var methodBody = peReader.GetMethodBody(methodDef.RelativeVirtualAddress);
 

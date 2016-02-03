@@ -5,6 +5,7 @@ using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection.Metadata;
 using System.Threading;
 
 // TODO: Figure out versioning here. Either we have to move in to Roslyn 
@@ -120,6 +121,9 @@ namespace Microsoft.CodeAnalysis.IL
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ISymbol ISymbol.OriginalDefinition => this;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        Handle ISymbol.MetadataHandle => default(Handle);
 
         ImmutableArray<AttributeData> ISymbol.GetAttributes() => ImmutableArray<AttributeData>.Empty;
         string ISymbol.GetDocumentationCommentId() => null;

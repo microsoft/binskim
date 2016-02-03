@@ -36,6 +36,16 @@ namespace Microsoft.CodeAnalysis.IL
 
             return name;
         }
+
+        public void Accept(OperationVisitor visitor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     internal abstract class Expression : Operation, IExpression
@@ -108,7 +118,7 @@ namespace Microsoft.CodeAnalysis.IL
         public override OperationKind Kind => OperationKind.ObjectCreationExpression;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ImmutableArray<IMemberInitializer> IObjectCreationExpression.MemberInitializers => ImmutableArray<IMemberInitializer>.Empty;
+        ImmutableArray<ISymbolInitializer> IObjectCreationExpression.MemberInitializers => ImmutableArray<ISymbolInitializer>.Empty;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ImmutableArray<IArgument> IObjectCreationExpression.ConstructorArguments => Arguments;

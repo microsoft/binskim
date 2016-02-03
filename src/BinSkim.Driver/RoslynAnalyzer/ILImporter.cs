@@ -19,7 +19,6 @@ namespace Microsoft.CodeAnalysis.IL
         private ExceptionRegion[] _exceptionRegions;
         private ImmutableArray<IStatement>.Builder _statements;
         private ImmutableArray<ILocalSymbol>.Builder _locals;
-        private IMetadataModuleSymbol _module;
         private MetadataReader _reader;
         private StandaloneSignatureHandle _localSignatureHandle;
 
@@ -28,7 +27,6 @@ namespace Microsoft.CodeAnalysis.IL
             _compilation = compilation;
             _reader = reader;
             _method = method;
-            _module = (IMetadataModuleSymbol)method.ContainingModule;
             _ilBytes = body.GetILBytes();
             _localSignatureHandle = body.LocalSignature;
             _exceptionRegions = GetExceptionRegions(body);
@@ -1588,7 +1586,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private ISymbol GetSymbolFromHandle(EntityHandle handle)
         {
-            var symbol =  _module.GetSymbolForMetadataHandle(handle);
+            var symbol =  _method.ContainingModule.GetSymbolForMetadataHandle(handle);
 
             if (symbol == null)
             {
