@@ -157,45 +157,47 @@ namespace Microsoft.CodeAnalysis.IL
         {
             Debug.Assert(region.IsFaultOrFinally);
 
-            var block = ImportHandler(region);
-            var statements = block.Statements;
+            var statements = ImmutableArray.CreateBuilder<IStatement>();
+            ImportStatements(region.HandlerOffset, region.HandlerLength, statements);
 
             // lazily used for uncommon case of an endfinally elsewhere than the lexical end of finally block,
             // which will raise as a goto to the end of the block. The last one is just removed.
-            ImmutableArray<IStatement>.Builder builder = null;
+            ILabelSymbol endLabel = null;
             IStatement gotoEnd = null;
 
-            int i = 0, n = statements.Length;
-            for (; i < n - 1; i++)
-            {
-                if (statements[i] == EndFinally.Instance)
-                {
-                    if (builder == null)
-                    {
-                        // note that this label is not the same as GetOrCreateLabel(region.HandlerOffset + region.HandlerLength). The former
-                        // is logically outside of the fault or finally block while this one is inside.
-                        var label = new LabelSymbol(region.HandlerOffset + region.HandlerLength, _method, "IL_EH");
-                        gotoEnd = new GoToStatement(label);
-                        builder = statements.ToBuilder();
-                    }
-
-                    builder[i] = gotoEnd;
-                }
-            }
-
+            int n = statements.Count;
             if (n == 0 || statements[n - 1] != EndFinally.Instance)
             {
                 // todo: error case, can't end finally block with something other than endfinally.
-                throw new NotImplementedException(); 
+                throw new NotImplementedException();
             }
 
-            if (builder != null)
+            for (int i = 0; i < n - 1; i++)
             {
-                builder.RemoveAt(n - 1);
-                return new BlockStatement(builder.ToImmutable(), block.Locals);
+                if (statements[i] == EndFinally.Instance)
+                {
+                    if (gotoEnd == null)
+                    {
+                        // note that this label is not the same as GetOrCreateLabel(region.HandlerOffset + region.HandlerLength). The former
+                        // is logically outside of the fault or finally block while this one is inside.
+                        endLabel = new LabelSymbol(region.HandlerOffset + region.HandlerLength, _method, "IL_EH");
+                        gotoEnd = new GoToStatement(endLabel);
+                    }
+
+                    statements[i] = gotoEnd;
+                }
             }
 
-            return new BlockStatement(statements.RemoveAt(n - 1), block.Locals);
+            if (endLabel != null)
+            {
+                statements[n - 1] = new LabelStatement(endLabel);
+            }
+            else
+            {
+                statements.RemoveAt(n - 1);
+            }
+
+            return new BlockStatement(statements.ToImmutable());
         }
 
         private IExpression ImportFilter(ExceptionRegion region)
@@ -205,24 +207,27 @@ namespace Microsoft.CodeAnalysis.IL
                 return null;
             }
 
-            var block = ImportBlockStatement(region.FilterOffset, region.FilterLength);
-            int n = block.Statements.Length;
+            var statements = ImmutableArray.CreateBuilder<IStatement>();
 
-            var endFilter = n > 0 ? block.Statements[n - 1] as EndFilter : null;
+            ImportStatements(region.FilterOffset, region.FilterLength, statements);
+
+            int n = statements.Count;
+            var endFilter = n > 0 ? statements[n - 1] as EndFilter : null;
             if (endFilter == null)
             {
                 // todo: error case -- must end with endfilter (we should also flag improper use of endfilter elsewhere).
                 throw new NotImplementedException(); 
             }
 
-            Debug.Assert(n > 0);
             if (n > 1)
             {
+                statements.RemoveAt(n - 1);
+
                 // This case should be uncommon (filter that we couldn't represent as a single expression),
                 // but unoptimized C# output has side-effects like stloc/ldloc. We'd have to optimize these
                 // away to get back to a single expression. :(
                 return new BlockExpression(
-                    new BlockStatement(block.Statements.RemoveAt(n - 1), block.Locals),
+                    new BlockStatement(statements.ToImmutable()),
                     endFilter.Expression);
             }
 
