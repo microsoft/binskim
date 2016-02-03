@@ -176,6 +176,7 @@ namespace Microsoft.CodeAnalysis.IL
         public PointerIndirectionReferenceExpression(IExpression pointer, ITypeSymbol type)
         {
             Pointer = pointer;
+            ResultType = type;
         }
 
         public IExpression Pointer { get; }
@@ -362,7 +363,7 @@ namespace Microsoft.CodeAnalysis.IL
         public AddressOfExpression(Compilation compilation, IReferenceExpression addressed)
         {
             Addressed = addressed;
-            ResultType = compilation.CreatePointerTypeSymbol(addressed.ResultType); // TODO: Need to handle managed pointer (by-ref) somehow.
+            ResultType = compilation.CreatePointerTypeSymbol(addressed.ResultType); // TODO: by-ref
         }
 
         public IReferenceExpression Addressed { get; }

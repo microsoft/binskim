@@ -998,7 +998,10 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportRefAnyVal(int token)
         {
-            throw new NotImplementedException();
+            var type = GetTypeFromToken(token);
+            var typedRef = Pop().Expression;
+
+            Push(new RefValueExpression(type, typedRef, _compilation));
         }
 
         private void ImportCkFinite()
@@ -1008,7 +1011,10 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportMkRefAny(int token)
         {
-            throw new NotImplementedException();
+            var type = GetTypeFromToken(token);
+            var pointer = Pop().Expression;
+
+            Push(new MakeRefExpression(type, pointer, _compilation));
         }
 
         private void ImportLdToken(int token)
@@ -1074,12 +1080,12 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportRefAnyType()
         {
-            throw new NotImplementedException();
+            Push(new RefTypeExpression(Pop().Expression, _compilation));
         }
 
         private void ImportArgList()
         {
-            throw new NotImplementedException();
+            Push(new ArgumentListExpression(_compilation));
         }
 
         private void ImportUnalignedPrefix(byte alignment)

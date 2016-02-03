@@ -112,7 +112,7 @@ namespace Microsoft.CodeAnalysis.IL
         public UnboxExpression(IExpression operand, ITypeSymbol valueType, Compilation compilation)
         {
             Operand = operand;
-            ResultType = compilation.CreatePointerTypeSymbol(valueType); // TODO: Need to handle managed pointer (by-ref) somehow.
+            ResultType = compilation.CreatePointerTypeSymbol(valueType); // TODO: by-ref
         }
 
         public IExpression Operand { get; private set; }
@@ -253,5 +253,69 @@ namespace Microsoft.CodeAnalysis.IL
         public IExpression Pointer { get; }
         public IExpression Value { get; }
         public IExpression ByteCount { get; }
+    }
+
+    // arglist
+    //
+    // TODO/FEEDBACK: C# has __arglist syntax for this (which is slightly higher, it also 
+    //                calls ArgIterator ctor on handle), but no public IOperation.
+    internal sealed class ArgumentListExpression : CustomExpression
+    {
+        public ArgumentListExpression(Compilation compilation)
+        {
+            ResultType = compilation.GetSpecialType(SpecialType.System_RuntimeArgumentHandle);
+        }
+
+        public override ITypeSymbol ResultType { get; }
+    }
+
+    // refanyval
+    //
+    // TODO/FEEDBACK: C# has __refvalue syntax for this (which is slightly higher, it also
+    //                loads the resulting byref), but no public IOperation.
+    //
+    internal sealed class RefValueExpression : CustomExpression
+    {
+        public RefValueExpression(ITypeSymbol pointedAtType, IExpression typedReference, Compilation compilation)
+        {
+            TypedReference = typedReference;
+            ResultType = compilation.CreatePointerTypeSymbol(pointedAtType); // TODO: by-ref
+        }
+
+        public IExpression TypedReference { get; }
+        public override ITypeSymbol ResultType { get; }
+    }
+
+    // refanytype
+    //
+    // TODO/FEEDBACK: C# has __reftype syntax for this (which is slightly higher, it also
+    //                calls GetTypeFromHandle), but no public IOperation.
+    //
+    internal sealed class RefTypeExpression : CustomExpression
+    {
+        public RefTypeExpression(IExpression typedReference, Compilation compilation)
+        {
+            TypedReference = typedReference;
+            ResultType = compilation.GetSpecialType(SpecialType.System_RuntimeTypeHandle);
+        }
+
+        public IExpression TypedReference { get; }
+        public override ITypeSymbol ResultType { get; }
+    }
+
+    // mkrefany
+    //
+    // TODO/FEEDBACK: C# has __makeref syntax for this, but no public IOperation.
+    //
+    internal sealed class MakeRefExpression : CustomExpression
+    {
+        public MakeRefExpression(ITypeSymbol type, IExpression pointer, Compilation compilation)
+        {
+            Pointer = pointer;
+            ResultType = compilation.GetSpecialType(SpecialType.System_TypedReference);
+        }
+
+        public IExpression Pointer { get; }
+        public override ITypeSymbol ResultType { get; }
     }
 }

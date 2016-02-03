@@ -56,8 +56,15 @@ namespace Microsoft.CodeAnalysis.IL
             public int Y = 23;
         }
 
-        public unsafe void Scratch(string x, int y, float z)
+        public unsafe void Scratch(string x, int y, float z, __arglist)
         {
+            var iterator = new ArgIterator(__arglist);
+            var value = __refvalue(iterator.GetNextArg(), int);
+            var type = __reftype(iterator.GetNextArg());
+
+            int v = 3;
+            var r = __makeref(v);
+
             int q = (int)Obj;
             Type t = typeof(Foo);
 
