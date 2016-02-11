@@ -1340,15 +1340,15 @@ namespace Microsoft.CodeAnalysis.IL
             switch (opcode)
             {
                 case ILOpcode.ceq:
-                    return BinaryOperationKind.IntegerEquals;
+                    return BinaryOperationKind.FloatingEquals;
                 case ILOpcode.cgt:
-                    return BinaryOperationKind.IntegerGreaterThan;
-                case ILOpcode.cgt_un:
-                    return BinaryOperationKind.UnsignedGreaterThan;
+                    return BinaryOperationKind.FloatingGreaterThan;
                 case ILOpcode.clt:
-                    return BinaryOperationKind.IntegerLessThan;
+                    return BinaryOperationKind.FloatingGreaterThan;
+                case ILOpcode.cgt_un:
                 case ILOpcode.clt_un:
-                    return BinaryOperationKind.UnsignedLessThan;
+                    // TODO/FEEDBACK: No "unordered" floating comparison in IOperation
+                    throw new NotImplementedException();  
                 default:
                     throw Unreachable();
             }
@@ -1361,8 +1361,9 @@ namespace Microsoft.CodeAnalysis.IL
                 case ILOpcode.ceq:
                     return BinaryOperationKind.ObjectEquals;
                 case ILOpcode.cgt_un:
-                    // NOTE: cgt.un is allowed on objects for != null since there is no cne. No other comparisons are valid on obj refs.
-                    //       we therefore just assume rhs is null here and represent as ObjectNotEquals.
+                    // NOTE: cgt.un is allowed on objects for != null since there is no cne. The result is arbitrary in 
+                    // any other case anyhow because the GC can move object references at will. We therefore just assume
+                    // rhs is null here and represent as ObjectNotEquals.
                     return BinaryOperationKind.ObjectNotEquals;
                 case ILOpcode.clt:
                 case ILOpcode.clt_un:
@@ -1437,8 +1438,14 @@ namespace Microsoft.CodeAnalysis.IL
                     return BinaryOperationKind.FloatingLessThan;
                 case ILOpcode.bne_un:
                     return BinaryOperationKind.FloatingNotEquals;
-                default:
+                case ILOpcode.bge_un:
+                case ILOpcode.bgt_un:
+                case ILOpcode.ble_un:
+                case ILOpcode.blt_un:
+                    // TODO/FEEDBACK: No "unordered" floating comparison in IOperation
                     throw new NotImplementedException();
+                default:
+                    throw Unreachable();
             }
         }
 
