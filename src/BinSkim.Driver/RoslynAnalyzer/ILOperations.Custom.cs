@@ -27,16 +27,6 @@ namespace Microsoft.CodeAnalysis.IL
         public override OperationKind Kind => OperationKind.None;
     }
 
-    // TODO -- Raise to: 
-    //
-    //    bool succeeded = false;
-    //    try { 
-    //       ...;
-    //       succeeded = true 
-    //   } finally { 
-    //       if (!succeeded) { ... } 
-    //   }
-
     internal sealed class TryFaultStatement : TryStatement, ICustomStatement
     {
         public TryFaultStatement(IBlockStatement body, IBlockStatement faultHandler)
@@ -95,9 +85,8 @@ namespace Microsoft.CodeAnalysis.IL
     {
     }
 
-    // jmp opcode
+    // jmp
     //
-    // TODO: raise to tail call
     internal sealed class JumpStatement : CustomStatement
     {
         public JumpStatement(IMethodSymbol targetMethod)
@@ -108,7 +97,9 @@ namespace Microsoft.CodeAnalysis.IL
         public IMethodSymbol TargetMethod { get; }
     }
 
-    // unbox opcode: unlike unbox.any cannot be directly represented as a conversion
+    // unbox
+    // 
+    // unlike unbox.any cannot be directly represented as a conversion
     // as it puts a byref to the value type on the heap on to the stack.
     internal sealed class UnboxExpression : ReferenceExpression, ICustomExpression
     {
@@ -161,14 +152,6 @@ namespace Microsoft.CodeAnalysis.IL
 
     // ckfinite
     //
-    // TODO: raise X(ckfinite(Y)) to
-    //
-    //      double tmp = Y;
-    //      if (dobule.IsNaN(tmp) || double.IsInfinity(tmp)) {
-    //          throw new ArithmeticException();
-    //      }
-    //      X(tmp);
-    //
     internal sealed class CheckFiniteExpression : CustomExpression
     {
         public CheckFiniteExpression(IExpression operand)
@@ -183,6 +166,8 @@ namespace Microsoft.CodeAnalysis.IL
     // ldtoken
     //
     // TODO: raise Type.GetTypeFromHandle(ldtoken(X)) to typeof(X)
+    //       can also raise arbitrary use of ldtoken(type) to typeof(type).TypeHandle,
+    //       but still no way to represent ldtoken(field) or ldtoken(method).
     internal sealed class LoadTokenExpression : CustomExpression
     {
         public LoadTokenExpression(ISymbol symbol, Compilation compilation)
@@ -228,8 +213,6 @@ namespace Microsoft.CodeAnalysis.IL
 
     // cpblk
     //
-    // TODO: Raise to Buffer.BlockCopy or naive loop
-    //
     internal sealed class CopyBlockStatement : CustomStatement
     {
         public CopyBlockStatement(IExpression sourcePointer, IExpression destinationPointer, IExpression byteCount)
@@ -245,8 +228,6 @@ namespace Microsoft.CodeAnalysis.IL
     }
 
     // initblk
-    //
-    // TODO: Raise to naive loop
     //
     internal sealed class InitializeBlockStatement : CustomStatement
     {
@@ -298,8 +279,11 @@ namespace Microsoft.CodeAnalysis.IL
 
     // refanytype
     //
-    // TODO/FEEDBACK: C# has __reftype syntax for this (which is slightly higher, it also
-    //                calls GetTypeFromHandle), but no public IOperation.
+    // TODO/FEEDBACK: C# has __reftype syntax for this but no public IOperation. 
+    // refanytype is slightly higher as it also calls GetTypeFromHandle, but we
+    // can pattern match that in the common case and fallback to getting the handle
+    // back via Type.TypeHandle. We can also just raise this node to a call to
+    // TypedReference.TargetTypeToken.
     //
     internal sealed class RefTypeExpression : CustomExpression
     {
@@ -340,6 +324,7 @@ namespace Microsoft.CodeAnalysis.IL
             ResultType = resultType;
         }
 
+        // TODO: Need full signature here, not just calling convention.
         public SignatureCallingConvention CallingConvention { get; }
         public IExpression FunctionPointer { get; }
         public ImmutableArray<IExpression> Arguments { get; }
