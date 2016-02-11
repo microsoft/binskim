@@ -110,16 +110,21 @@ namespace Microsoft.CodeAnalysis.IL
 
     // unbox opcode: unlike unbox.any cannot be directly represented as a conversion
     // as it puts a byref to the value type on the heap on to the stack.
-    internal sealed class UnboxExpression : CustomExpression
+    internal sealed class UnboxExpression : ReferenceExpression, ICustomExpression
     {
-        public UnboxExpression(IExpression operand, ITypeSymbol valueType, Compilation compilation)
+        public UnboxExpression(IExpression operand, ITypeSymbol type)
+            : base(type)
         {
             Operand = operand;
-            ResultType = compilation.CreatePointerTypeSymbol(valueType); // TODO: by-ref
         }
 
-        public IExpression Operand { get; private set; }
-        public override ITypeSymbol ResultType { get; }
+        public IExpression Operand { get; }
+        public override OperationKind Kind => OperationKind.None;
+
+        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        {
+            return new UnboxExpression(Operand, type);
+        }
     }
 
     // ldftn/ldvirtftn. 
@@ -259,8 +264,7 @@ namespace Microsoft.CodeAnalysis.IL
 
     // arglist
     //
-    // TODO/FEEDBACK: C# has __arglist syntax for this (which is slightly higher, it also 
-    //                calls ArgIterator ctor on handle), but no public IOperation.
+    // TODO/FEEDBACK: C# has __arglist syntax for this but no public IOperation.
     internal sealed class ArgumentListExpression : CustomExpression
     {
         public ArgumentListExpression(Compilation compilation)
@@ -273,19 +277,23 @@ namespace Microsoft.CodeAnalysis.IL
 
     // refanyval
     //
-    // TODO/FEEDBACK: C# has __refvalue syntax for this (which is slightly higher, it also
-    //                loads the resulting byref), but no public IOperation.
+    // TODO/FEEDBACK: C# has __refvalue syntax for this but no public IOperation.
     //
-    internal sealed class RefValueExpression : CustomExpression
+    internal sealed class RefValueExpression : ReferenceExpression, ICustomExpression
     {
-        public RefValueExpression(ITypeSymbol pointedAtType, IExpression typedReference, Compilation compilation)
+        public RefValueExpression(IExpression typedReference, ITypeSymbol type)
+            : base(type)
         {
             TypedReference = typedReference;
-            ResultType = compilation.CreatePointerTypeSymbol(pointedAtType); // TODO: by-ref
         }
 
         public IExpression TypedReference { get; }
-        public override ITypeSymbol ResultType { get; }
+        public override OperationKind Kind => OperationKind.None;
+
+        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        {
+            return new RefValueExpression(TypedReference, type);
+        }
     }
 
     // refanytype

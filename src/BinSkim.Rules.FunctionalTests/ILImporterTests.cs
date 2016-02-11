@@ -45,6 +45,8 @@ namespace Microsoft.CodeAnalysis.IL
         public static float StaticField;
         public static string[] xs;
         public static object Obj;
+        public static readonly S ReadonlyMutableStruct = new S();
+        public static S MutableStruct;
 
         class Foo
         {
@@ -56,6 +58,16 @@ namespace Microsoft.CodeAnalysis.IL
             public int Y = 23;
         }
 
+        public struct S
+        {
+            public int X, Y;
+
+            public void Mutate()
+            {
+                X = Y = 42;
+            }
+        }
+
         public unsafe void Scratch(string x, int y, float z, __arglist)
         {
             Scratch("x", y, 1, __arglist(1, 2, 3));
@@ -63,9 +75,14 @@ namespace Microsoft.CodeAnalysis.IL
             var iterator = new ArgIterator(__arglist);
             var value = __refvalue(iterator.GetNextArg(), int);
             var type = __reftype(iterator.GetNextArg());
-
+            ByRef(ref __refvalue(iterator.GetNextArg(), int));
             int v = 3;
+            ByRef(ref v);
             var r = __makeref(v);
+
+            ReadonlyMutableStruct.Mutate();
+            MutableStruct.Mutate();
+            new S().Mutate();
 
             int q = (int)Obj;
             Type t = typeof(Foo);
@@ -159,7 +176,10 @@ namespace Microsoft.CodeAnalysis.IL
 
         public void InstanceMethod(int x)
         {
+        }
 
+        public void ByRef(ref int x)
+        {
         }
 
         public static bool Condition()

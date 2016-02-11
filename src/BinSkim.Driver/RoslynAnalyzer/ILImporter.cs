@@ -373,6 +373,23 @@ namespace Microsoft.CodeAnalysis.IL
             return value;
         }
 
+        // managed pointer types do not exist in the Roslyn type system. We therefore convert
+        // to unmanaged pointers to perform comparison or arithmetic on byrefs. This 
+        // unfortunately gives the wrong impression that GC tracking is abandoned, but it is
+        // the closest thing we can represent. 
+        private StackValue PopWithByRefAsPointer()
+        {
+            var value = Pop();
+            if (value.Kind == StackValueKind.ByRef)
+            {
+                value = new StackValue(
+                    StackValueKind.NativeInt,
+                    new AddressOfExpression(_compilation, (IReferenceExpression)value.Expression));
+            }
+
+            return value;
+        }
+
         private void Append(IStatement statement)
         {
             // If the stack is not empty when we append a new statement, we effectively
@@ -386,9 +403,25 @@ namespace Microsoft.CodeAnalysis.IL
             _statements.Add(statement);
         }
 
+
+        private StackValue GenerateTemporaryAsStackValue(StackValue value)
+        {
+            return new StackValue(GenerateTemporaryAsReference(value));
+        }
+
         private StackValue GenerateTemporaryAsStackValue(ITypeSymbol type)
         {
             return new StackValue(GenerateTemporaryAsReference(type));
+        }
+
+        private ILocalReferenceExpression GenerateTemporaryAsReference(StackValue value)
+        {
+            if (value.Kind == StackValueKind.ByRef)
+            {
+                throw new NotImplementedException(); // TODO: need byref locals in this case. (coming soon to roslyn)
+            }
+
+            return GenerateTemporaryAsReference(value.Expression.ResultType);
         }
 
         private ILocalReferenceExpression GenerateTemporaryAsReference(ITypeSymbol type)
@@ -419,7 +452,7 @@ namespace Microsoft.CodeAnalysis.IL
                 for (int i = 0; i < _stackTop; i++)
                 {
                     var source = _stack[i];
-                    target[i] = GenerateTemporaryAsStackValue(source.Expression.ResultType);
+                    target[i] = GenerateTemporaryAsStackValue(source);
                     AppendTemporaryAssignment(statements, target[i], source);
                 }
             }
@@ -529,15 +562,14 @@ namespace Microsoft.CodeAnalysis.IL
         private void ImportAddressOfVar(int index, bool argument)
         {
             Push(
-                new AddressOfExpression(
-                    _compilation, 
-                    GetVariableReference(index, argument)));
+                StackValueKind.ByRef,
+                GetVariableReference(index, argument));
         }
 
         private void ImportDup()
         {
             var value = Pop();
-            var localReference = GenerateTemporaryAsReference(value.Expression.ResultType);
+            var localReference = GenerateTemporaryAsReference(value);
 
             Push(value.Kind, new AssignmentExpression(localReference, value.Expression));
             Push(value.Kind, localReference);
@@ -575,7 +607,9 @@ namespace Microsoft.CodeAnalysis.IL
         {
             if (opCode == ILOpcode.unbox)
             {
-                Push(new UnboxExpression(Pop().Expression, GetTypeFromToken(token), _compilation));
+                Push(
+                    StackValueKind.ByRef,
+                    new UnboxExpression(Pop().Expression, GetTypeFromToken(token)));
             }
 
             Debug.Assert(opCode == ILOpcode.unbox_any);
@@ -839,13 +873,13 @@ namespace Microsoft.CodeAnalysis.IL
                 case ILOpcode.brtrue:
                 case ILOpcode.brfalse:
                     opcode = opcode == ILOpcode.brtrue ? ILOpcode.beq : ILOpcode.bne_un;
-                    left = Pop();
+                    left = PopWithByRefAsPointer();
                     right = new StackValue(left.Kind, GetZeroLiteral(left.Kind));
                     break;
 
                 default:
-                    right = Pop();
-                    left = Pop();
+                    right = PopWithByRefAsPointer();
+                    left = PopWithByRefAsPointer();
                     break;
             }
 
@@ -871,8 +905,9 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportBinaryOperation(ILOpcode opcode)
         {
-            var right = Pop();
-            var left = Pop();
+            var right = PopWithByRefAsPointer();
+            var left = PopWithByRefAsPointer();
+
             var stackKind = GetStackKind(left.Kind, right.Kind);
 
             Push(
@@ -900,8 +935,8 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportCompareOperation(ILOpcode opcode)
         {
-            var right = Pop();
-            var left = Pop();
+            var right = PopWithByRefAsPointer();
+            var left = PopWithByRefAsPointer();
 
             var kind = GetCompareKind(opcode, GetStackKind(left.Kind, right.Kind));
 
@@ -921,9 +956,8 @@ namespace Microsoft.CodeAnalysis.IL
         private void ImportAddressOfField(int token, bool isStatic)
         {
             Push(
-                new AddressOfExpression(
-                    _compilation,
-                    PopFieldReference(token, isStatic)));
+                StackValueKind.ByRef,
+                PopFieldReference(token, isStatic));
         }
 
         private void ImportStoreField(int token, bool isStatic)
@@ -941,7 +975,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLoadIndirect(ITypeSymbol type)
         {
-            Push(PopPointerIndirection(type));
+            Push(PopIndirectionReference(type));
         }
 
         private void ImportStoreIndirect(int token)
@@ -952,7 +986,7 @@ namespace Microsoft.CodeAnalysis.IL
         private void ImportStoreIndirect(ITypeSymbol type)
         {
             var value = Pop().Expression;
-            var target = PopPointerIndirection(type);
+            var target = PopIndirectionReference(type);
 
             Append(NewAssignmentStatement(target, value));
         }
@@ -973,7 +1007,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             var type = GetTypeFromToken(token);
             var value = new DefaultValueExpression(type);
-            var target = PopPointerIndirection(type);
+            var target = PopIndirectionReference(type);
             Append(NewAssignmentStatement(target, value));
         }
 
@@ -1030,7 +1064,7 @@ namespace Microsoft.CodeAnalysis.IL
             var index = Pop().Expression;
             var arrayReference = PopArrayReference(index, type);
 
-            Push(new AddressOfExpression(_compilation, arrayReference));
+            Push(StackValueKind.ByRef, arrayReference);
         }
 
         private void ImportLoadLength()
@@ -1066,8 +1100,8 @@ namespace Microsoft.CodeAnalysis.IL
         private void ImportCpOpj(int token)
         {
             var type = GetTypeFromToken(token);
-            var src = PopPointerIndirection(type);
-            var dst = PopPointerIndirection(type);
+            var src = PopIndirectionReference(type);
+            var dst = PopIndirectionReference(type);
 
             Append(NewAssignmentStatement(dst, src));
         }
@@ -1077,7 +1111,9 @@ namespace Microsoft.CodeAnalysis.IL
             var type = GetTypeFromToken(token);
             var typedRef = Pop().Expression;
 
-            Push(new RefValueExpression(type, typedRef, _compilation));
+            Push(
+                StackValueKind.ByRef,
+                new RefValueExpression(typedRef, type));
         }
 
         private void ImportCkFinite()
@@ -1234,17 +1270,26 @@ namespace Microsoft.CodeAnalysis.IL
             return new ArrayElementReferenceExpression(arrayReference, index, type);
         }
 
-        private PointerIndirectionReferenceExpression PopPointerIndirection(ITypeSymbol type)
+        private IReferenceExpression PopIndirectionReference(ITypeSymbol type)
         {
-            var pointer = Pop().Expression;
+            var value = Pop();
+            var expression = value.Expression;
 
-            if (type == null)
+            // TODO: Is it OK that we just adjust the result type here or should we have explicit
+            // pointer conversions? Doing so would create another situation where we degrade managed
+            // pointers to native pointers unnecessarily.
+
+            switch (value.Kind)
             {
-                var pointerType = pointer.ResultType as IPointerTypeSymbol;
-                type = pointerType != null ? pointerType.PointedAtType : ObjectType;
-            }
+                case StackValueKind.ByRef:
+                    return ((ReferenceExpression)expression).WithResultType(type);
 
-            return new PointerIndirectionReferenceExpression(pointer, type);
+                case StackValueKind.NativeInt:
+                    return new PointerIndirectionReferenceExpression(expression, type ?? expression.ResultType);
+
+                default:
+                    throw new NotImplementedException(); // error.
+            }
         }
 
         private static ExpressionStatement NewAssignmentStatement(IReferenceExpression target, IExpression value)
@@ -1254,6 +1299,8 @@ namespace Microsoft.CodeAnalysis.IL
 
         private static BinaryOperationKind GetCompareKind(ILOpcode opcode, StackValueKind kind)
         {
+            Debug.Assert(kind != StackValueKind.ByRef); // we should have coerced to native int already
+
             switch (kind)
             {
                 case StackValueKind.Int32:
@@ -1317,12 +1364,10 @@ namespace Microsoft.CodeAnalysis.IL
                     // NOTE: cgt.un is allowed on objects for != null since there is no cne. No other comparisons are valid on obj refs.
                     //       we therefore just assume rhs is null here and represent as ObjectNotEquals.
                     return BinaryOperationKind.ObjectNotEquals;
-
                 case ILOpcode.clt:
                 case ILOpcode.clt_un:
                 case ILOpcode.cgt:
                     throw new NotImplementedException(); //todo - error cases
-
                 default:
                     throw Unreachable();
             }
@@ -1330,6 +1375,8 @@ namespace Microsoft.CodeAnalysis.IL
 
         private static BinaryOperationKind GetBranchKind(ILOpcode opcode, StackValueKind kind)
         {
+            Debug.Assert(kind != StackValueKind.ByRef); // we should have coerced to native int already
+
             switch (kind)
             {
                 case StackValueKind.Int32:
@@ -1341,7 +1388,7 @@ namespace Microsoft.CodeAnalysis.IL
                 case StackValueKind.ObjRef:
                     return GetObjectBranchKind(opcode);
                 default:
-                    throw new NotImplementedException(); // should byref compares be integer compares?
+                    throw new NotImplementedException(); // error
             }
         }
 

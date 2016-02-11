@@ -164,79 +164,132 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal abstract class ReferenceExpression : Expression, IReferenceExpression
     {
+        protected ReferenceExpression(ITypeSymbol type)
+        {
+            ResultType = type;
+        }
+
+        public sealed override ITypeSymbol ResultType { get; }
+
+        public IReferenceExpression WithResultType(ITypeSymbol type)
+        {
+            if (type == null || type == ResultType)
+                return this;
+
+            return WithResultTypeCore(type);
+        }
+
+        protected abstract IReferenceExpression WithResultTypeCore(ITypeSymbol type);
     }
 
     internal sealed class ArrayElementReferenceExpression : ReferenceExpression, IArrayElementReferenceExpression
     {
         public ArrayElementReferenceExpression(IExpression arrayReference, IExpression index, ITypeSymbol type)
+            : this(arrayReference, ImmutableArray.Create(index), type)
+        {
+        }
+
+        public ArrayElementReferenceExpression(IExpression arrayReference, ImmutableArray<IExpression> indices, ITypeSymbol type)
+            : base(type)
         {
             ArrayReference = arrayReference;
-            Indices = ImmutableArray.Create(index);
-            ResultType = type;
+            Indices = indices;
         }
 
         public IExpression ArrayReference { get; }
         public ImmutableArray<IExpression> Indices { get; }
-        public override ITypeSymbol ResultType { get; }
         public override OperationKind Kind => OperationKind.ArrayElementReferenceExpression;
+
+        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        {
+            return new ArrayElementReferenceExpression(ArrayReference, Indices, type);
+        }
     }
 
     internal sealed class PointerIndirectionReferenceExpression : ReferenceExpression, IPointerIndirectionReferenceExpression
     {
         public PointerIndirectionReferenceExpression(IExpression pointer, ITypeSymbol type)
+            : base(type)
         {
             Pointer = pointer;
-            ResultType = type;
         }
 
         public IExpression Pointer { get; }
-        public override ITypeSymbol ResultType { get; }
         public override OperationKind Kind => OperationKind.PointerIndirectionReferenceExpression;
+
+        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        {
+            return new PointerIndirectionReferenceExpression(Pointer, type);
+        }
     }
 
     internal class LocalReferenceExpression : ReferenceExpression, ILocalReferenceExpression
     {
         public LocalReferenceExpression(ILocalSymbol local)
+            : this(local, local.Type)
+        {
+        }
+
+        public LocalReferenceExpression(ILocalSymbol local, ITypeSymbol type)
+            : base(type)
         {
             Local = local;
         }
 
         public ILocalSymbol Local { get; }
-        public override ITypeSymbol ResultType => Local.Type;
         public override OperationKind Kind => OperationKind.LocalReferenceExpression;
 
         public override string ToString()
         {
             return $"LocalReference [{Local.Name}]";
         }
+
+        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        {
+            return new LocalReferenceExpression(Local, type);
+        }
     }
 
     internal class ParameterReferenceExpression : ReferenceExpression, IParameterReferenceExpression
     {
         public ParameterReferenceExpression(IParameterSymbol parameter)
+            : this(parameter, parameter.Type)
+        {
+        }
+
+        public ParameterReferenceExpression(IParameterSymbol parameter, ITypeSymbol type)
+            : base(type)
         {
             Parameter = parameter;
         }
 
         public IParameterSymbol Parameter { get; }
-        public override ITypeSymbol ResultType => Parameter.Type;
         public override OperationKind Kind => OperationKind.ParameterReferenceExpression;
 
         public override string ToString()
         {
             return $"ParameterReference [{Parameter.Name}]";
         }
+
+        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        {
+            return new ParameterReferenceExpression(Parameter, type);
+        }
     }
 
     internal sealed class InstanceReferenceExpression : ParameterReferenceExpression, IInstanceReferenceExpression
     {
         public InstanceReferenceExpression(IMethodSymbol method)
-            : base(null) // FEEDBACK: There no public API to get the this parameter. 
-        {                // Do we need IInstanceReferenceExpression to be IParameterReferenceExpresison?
-            ResultType = method.ContainingType;
+            : this(method.ContainingType)
+        {
         }
 
-        public override ITypeSymbol ResultType { get; }
+        public InstanceReferenceExpression(ITypeSymbol type)
+            : base(parameter: null, type: type) // FEEDBACK: Can't get this parameter. Do we even need InstanceReference to be a ParameterReference?
+        {
+
+        }
+
         public override OperationKind Kind => OperationKind.InstanceReferenceExpression;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -246,11 +299,17 @@ namespace Microsoft.CodeAnalysis.IL
         {
             return "InstanceReference";
         }
+
+        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        {
+            return new InstanceReferenceExpression(type);
+        }
     }
 
     internal abstract class MemberReferenceExpression : ReferenceExpression, IMemberReferenceExpression
     {
-        protected MemberReferenceExpression(IExpression instance, ISymbol member)
+        protected MemberReferenceExpression(IExpression instance, ISymbol member, ITypeSymbol type)
+            : base(type)
         {
             Instance = instance;
             Member = member;
@@ -263,13 +322,22 @@ namespace Microsoft.CodeAnalysis.IL
     internal sealed class FieldReferenceExpression : MemberReferenceExpression, IFieldReferenceExpression
     {
         public FieldReferenceExpression(IExpression instance, IFieldSymbol field)
-            : base(instance, field)
+            : this(instance, field, field.Type)
+        {
+        }
+
+        public FieldReferenceExpression(IExpression instance, ISymbol member, ITypeSymbol type) 
+            : base(instance, member, type)
         {
         }
 
         public IFieldSymbol Field => (IFieldSymbol)Member;
         public override OperationKind Kind => OperationKind.FieldReferenceExpression;
-        public override ITypeSymbol ResultType => Field.Type;
+
+        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        {
+            return new FieldReferenceExpression(Instance, Field, type);
+        }
     }
 
     internal abstract class HasOperatorExpression : Expression, IHasOperatorExpression
@@ -373,7 +441,7 @@ namespace Microsoft.CodeAnalysis.IL
         public AddressOfExpression(Compilation compilation, IReferenceExpression addressed)
         {
             Addressed = addressed;
-            ResultType = compilation.CreatePointerTypeSymbol(addressed.ResultType); // TODO: by-ref
+            ResultType = compilation.CreatePointerTypeSymbol(addressed.ResultType);
         }
 
         public IReferenceExpression Addressed { get; }
