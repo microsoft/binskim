@@ -80,8 +80,9 @@ namespace Microsoft.CodeAnalysis.IL
         public override ITypeSymbol ResultType => Expression.ResultType;
     }
 
-    // break opcode
-    internal sealed class BreakStatement : CustomStatement
+    // break
+    //
+    internal sealed class DebugBreakStatement : CustomStatement
     {
     }
 

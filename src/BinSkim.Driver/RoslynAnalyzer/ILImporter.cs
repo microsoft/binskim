@@ -543,7 +543,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportBreak()
         {
-            Append(new BreakStatement());
+            Append(new DebugBreakStatement());
         }
 
         private void ImportLoadVar(int index, bool argument)
@@ -1361,9 +1361,10 @@ namespace Microsoft.CodeAnalysis.IL
                 case ILOpcode.ceq:
                     return BinaryOperationKind.ObjectEquals;
                 case ILOpcode.cgt_un:
-                    // NOTE: cgt.un is allowed on objects for != null since there is no cne. The result is arbitrary in 
-                    // any other case anyhow because the GC can move object references at will. We therefore just assume
-                    // rhs is null here and represent as ObjectNotEquals.
+                    // NOTE: cgt.un is allowed on objects for != null since there is no cne. No other comparisons
+                    // are valid on obj refs. We therefore just assume rhs is null here and represent as
+                    // ObjectNotEquals. The result is arbitrary in any other case anyhow because the GC
+                    // can move object references at will.
                     return BinaryOperationKind.ObjectNotEquals;
                 case ILOpcode.clt:
                 case ILOpcode.clt_un:
