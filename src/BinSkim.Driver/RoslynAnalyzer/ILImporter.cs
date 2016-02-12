@@ -916,7 +916,7 @@ namespace Microsoft.CodeAnalysis.IL
                     GetBinaryOperationKind(opcode, stackKind),
                     left.Expression,
                     right.Expression,
-                    left.Expression.ResultType)); // TODO: handle heterogeneous types here.
+                    GetTypeForStackKind(stackKind))); // TODO: We should be more precise than stack kind -> type.
         }
 
         private void ImportShiftOperation(ILOpcode opcode)
@@ -1727,6 +1727,29 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             return symbol;
+        }
+
+        private ITypeSymbol GetTypeForStackKind(StackValueKind stackKind)
+        {
+            switch (stackKind)
+            {
+                case StackValueKind.Float:
+                    return DoubleType;
+                case StackValueKind.Int32:
+                    return Int32Type;
+                case StackValueKind.Int64:
+                    return Int64Type;
+                case StackValueKind.NativeInt:
+                    return IntPtrType;
+                case StackValueKind.ObjRef:
+                    return ObjectType;
+                case StackValueKind.Unknown:
+                case StackValueKind.ByRef:
+                case StackValueKind.ValueType:
+                default:
+                    // should not attempt to get a type symbol for these.
+                    throw Unreachable();
+            }
         }
 
         private ILabelSymbol GetOrCreateLabel(BasicBlock block)
