@@ -9,6 +9,10 @@ using Microsoft.CodeAnalysis.Semantics;
 
 namespace Microsoft.CodeAnalysis.IL
 {
+    // TODO: To ease first pass of Roslyn upgrade
+    using IExpression = IOperation;
+    using IStatement = IOperation;
+
     // Nodes for operations that that aren't publicly supported by IOperation.
     //
     // Some of them may be raisable to higher level constructs that are modeled by IOperation (TODO), 
@@ -77,7 +81,7 @@ namespace Microsoft.CodeAnalysis.IL
         public IBlockStatement Block { get; }
         public IExpression Expression { get; }
 
-        public override ITypeSymbol ResultType => Expression.ResultType;
+        public override ITypeSymbol Type => Expression.Type;
     }
 
     // break
@@ -113,7 +117,7 @@ namespace Microsoft.CodeAnalysis.IL
         public IExpression Operand { get; }
         public override OperationKind Kind => OperationKind.None;
 
-        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new UnboxExpression(Operand, type);
         }
@@ -128,12 +132,12 @@ namespace Microsoft.CodeAnalysis.IL
         {
             Method = method;
             IsVirtual = isVirtual;
-            ResultType = compilation.GetSpecialType(SpecialType.System_IntPtr);
+            Type = compilation.GetSpecialType(SpecialType.System_IntPtr);
         }
 
         public bool IsVirtual { get; }
         public IMethodSymbol Method { get; }
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
     }
 
     // ldlen
@@ -144,11 +148,11 @@ namespace Microsoft.CodeAnalysis.IL
         public ArrayLengthExpression(IExpression array, Compilation compilation)
         {
             Array = array;
-            ResultType = compilation.GetSpecialType(SpecialType.System_UIntPtr);
+            Type = compilation.GetSpecialType(SpecialType.System_UIntPtr);
         }
 
         public IExpression Array { get; }
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
     }
 
     // ckfinite
@@ -161,7 +165,7 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public IExpression Operand { get; }
-        public override ITypeSymbol ResultType => Operand.ResultType;
+        public override ITypeSymbol Type => Operand.Type;
     }
 
     // ldtoken
@@ -177,15 +181,15 @@ namespace Microsoft.CodeAnalysis.IL
 
             if (symbol is ITypeSymbol)
             {
-                ResultType = compilation.GetSpecialType(SpecialType.System_RuntimeTypeHandle);
+                Type = compilation.GetSpecialType(SpecialType.System_RuntimeTypeHandle);
             }
             else if (symbol is IMethodSymbol)
             {
-                ResultType = compilation.GetSpecialType(SpecialType.System_RuntimeMethodHandle);
+                Type = compilation.GetSpecialType(SpecialType.System_RuntimeMethodHandle);
             }
             else if (symbol is IFieldSymbol)
             {
-                ResultType = compilation.GetSpecialType(SpecialType.System_RuntimeFieldHandle);
+                Type = compilation.GetSpecialType(SpecialType.System_RuntimeFieldHandle);
             }
             else
             {
@@ -193,7 +197,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
         public ISymbol Symbol { get; }
     }
 
@@ -205,11 +209,11 @@ namespace Microsoft.CodeAnalysis.IL
         public LocalAllocationExpression(IExpression size, Compilation compilation)
         {
             Size = size;
-            ResultType = compilation.GetSpecialType(SpecialType.System_IntPtr);
+            Type = compilation.GetSpecialType(SpecialType.System_IntPtr);
         }
 
         public IExpression Size { get; }
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
     }
 
     // cpblk
@@ -251,10 +255,10 @@ namespace Microsoft.CodeAnalysis.IL
     {
         public ArgumentListExpression(Compilation compilation)
         {
-            ResultType = compilation.GetSpecialType(SpecialType.System_RuntimeArgumentHandle);
+            Type = compilation.GetSpecialType(SpecialType.System_RuntimeArgumentHandle);
         }
 
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
     }
 
     // refanyval
@@ -272,7 +276,7 @@ namespace Microsoft.CodeAnalysis.IL
         public IExpression TypedReference { get; }
         public override OperationKind Kind => OperationKind.None;
 
-        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new RefValueExpression(TypedReference, type);
         }
@@ -291,11 +295,11 @@ namespace Microsoft.CodeAnalysis.IL
         public RefTypeExpression(IExpression typedReference, Compilation compilation)
         {
             TypedReference = typedReference;
-            ResultType = compilation.GetSpecialType(SpecialType.System_RuntimeTypeHandle);
+            Type = compilation.GetSpecialType(SpecialType.System_RuntimeTypeHandle);
         }
 
         public IExpression TypedReference { get; }
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
     }
 
     // mkrefany
@@ -307,11 +311,11 @@ namespace Microsoft.CodeAnalysis.IL
         public MakeRefExpression(ITypeSymbol type, IExpression pointer, Compilation compilation)
         {
             Pointer = pointer;
-            ResultType = compilation.GetSpecialType(SpecialType.System_TypedReference);
+            Type = compilation.GetSpecialType(SpecialType.System_TypedReference);
         }
 
         public IExpression Pointer { get; }
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
     }
 
     // calli
@@ -322,14 +326,14 @@ namespace Microsoft.CodeAnalysis.IL
         {
             FunctionPointer = functionPointer;
             Arguments = arguments;
-            ResultType = resultType;
+            Type = resultType;
         }
 
         // TODO: Need full signature here, not just calling convention.
         public SignatureCallingConvention CallingConvention { get; }
         public IExpression FunctionPointer { get; }
         public ImmutableArray<IExpression> Arguments { get; }
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
     }
 
     // isinst on value types: Like IsExpression, but result is non-boolean.
@@ -345,7 +349,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         public ITypeSymbol AsType { get; }
         public IExpression Operand { get; }
-        public override ITypeSymbol ResultType => Operand.ResultType;
+        public override ITypeSymbol Type => Operand.Type;
     }
 
 }

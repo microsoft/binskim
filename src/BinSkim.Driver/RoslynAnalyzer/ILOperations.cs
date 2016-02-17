@@ -8,6 +8,10 @@ using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.IL
 {
+    // TODO: To ease first pass of Roslyn upgrade
+    using IExpression = IOperation;
+    using IStatement = IOperation;
+
     internal abstract class Operation : IOperation
     {
         public abstract OperationKind Kind { get; }
@@ -20,6 +24,9 @@ namespace Microsoft.CodeAnalysis.IL
         // TODO: Handle invalid IL gracefully
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool IOperation.IsInvalid => false;
+
+        public virtual ITypeSymbol Type => null;
+        public virtual Optional<object> ConstantValue => default(Optional<object>);
 
         public override string ToString()
         {
@@ -50,11 +57,10 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal abstract class Expression : Operation, IExpression
     {
-        public abstract ITypeSymbol ResultType { get; }
-        public virtual Optional<object> ConstantValue => default(Optional<object>);
+        public abstract override ITypeSymbol Type { get; }
     }
 
-    internal abstract class HasArgumentsExpression : Expression
+    internal abstract class HasArgumentsExpression : Expression, IHasArgumentsExpression
     {
         protected HasArgumentsExpression(ImmutableArray<IArgument> arguments)
         {
@@ -64,7 +70,10 @@ namespace Microsoft.CodeAnalysis.IL
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public ImmutableArray<IArgument> Arguments { get; }
 
-        public IArgument ArgumentMatchingParameter(IParameterSymbol parameter)
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ImmutableArray<IArgument> IHasArgumentsExpression.ArgumentsInParameterOrder => Arguments;
+
+        public IArgument GetArgumentMatchingParameter(IParameterSymbol parameter)
         {
             int ordinal = parameter.Ordinal;
             if (ordinal < 0 || ordinal >= Arguments.Length)
@@ -95,11 +104,8 @@ namespace Microsoft.CodeAnalysis.IL
         public bool IsVirtual { get; }
         public IExpression Instance { get; }
         public IMethodSymbol TargetMethod { get; }
-        public override ITypeSymbol ResultType => TargetMethod.ReturnType;
+        public override ITypeSymbol Type => TargetMethod.ReturnType;
         public override OperationKind Kind => OperationKind.InvocationExpression;
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ImmutableArray<IArgument> IInvocationExpression.ArgumentsInParameterOrder => Arguments;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ImmutableArray<IArgument> IInvocationExpression.ArgumentsInSourceOrder => Arguments;
@@ -116,14 +122,11 @@ namespace Microsoft.CodeAnalysis.IL
         public IMethodSymbol Constructor { get; }
 
         //NOTE: Not just .ContainingType to allow for magic array methods that belong to array types.
-        public override ITypeSymbol ResultType => Constructor.ContainingSymbol as ITypeSymbol; 
+        public override ITypeSymbol Type => Constructor.ContainingSymbol as ITypeSymbol; 
         public override OperationKind Kind => OperationKind.ObjectCreationExpression;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ImmutableArray<ISymbolInitializer> IObjectCreationExpression.MemberInitializers => ImmutableArray<ISymbolInitializer>.Empty;
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ImmutableArray<IArgument> IObjectCreationExpression.ConstructorArguments => Arguments;
     }
 
     internal sealed class Argument : Operation, IArgument
@@ -155,12 +158,12 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class DefaultValueExpression : Expression
     {
-        public DefaultValueExpression(ITypeSymbol resultType)
+        public DefaultValueExpression(ITypeSymbol type)
         {
-            ResultType = resultType;
+            Type = type;
         }
 
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
         public override OperationKind Kind => OperationKind.DefaultValueExpression;
     }
 
@@ -168,20 +171,20 @@ namespace Microsoft.CodeAnalysis.IL
     {
         protected ReferenceExpression(ITypeSymbol type)
         {
-            ResultType = type;
+            Type = type;
         }
 
-        public sealed override ITypeSymbol ResultType { get; }
+        public sealed override ITypeSymbol Type { get; }
 
-        public IReferenceExpression WithResultType(ITypeSymbol type)
+        public IReferenceExpression WithType(ITypeSymbol type)
         {
-            if (type == null || type == ResultType)
+            if (type == null || type == Type)
                 return this;
 
-            return WithResultTypeCore(type);
+            return WithTypeCore(type);
         }
 
-        protected abstract IReferenceExpression WithResultTypeCore(ITypeSymbol type);
+        protected abstract IReferenceExpression WithTypeCore(ITypeSymbol type);
     }
 
     internal sealed class ArrayElementReferenceExpression : ReferenceExpression, IArrayElementReferenceExpression
@@ -202,7 +205,7 @@ namespace Microsoft.CodeAnalysis.IL
         public ImmutableArray<IExpression> Indices { get; }
         public override OperationKind Kind => OperationKind.ArrayElementReferenceExpression;
 
-        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new ArrayElementReferenceExpression(ArrayReference, Indices, type);
         }
@@ -219,7 +222,7 @@ namespace Microsoft.CodeAnalysis.IL
         public IExpression Pointer { get; }
         public override OperationKind Kind => OperationKind.PointerIndirectionReferenceExpression;
 
-        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new PointerIndirectionReferenceExpression(Pointer, type);
         }
@@ -246,7 +249,7 @@ namespace Microsoft.CodeAnalysis.IL
             return $"LocalReference [{Local.Name}]";
         }
 
-        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new LocalReferenceExpression(Local, type);
         }
@@ -273,13 +276,13 @@ namespace Microsoft.CodeAnalysis.IL
             return $"ParameterReference [{Parameter.Name}]";
         }
 
-        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new ParameterReferenceExpression(Parameter, type);
         }
     }
 
-    internal sealed class InstanceReferenceExpression : ParameterReferenceExpression, IInstanceReferenceExpression
+    internal sealed class InstanceReferenceExpression : ReferenceExpression, IInstanceReferenceExpression
     {
         public InstanceReferenceExpression(IMethodSymbol method)
             : this(method.ContainingType)
@@ -287,22 +290,19 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public InstanceReferenceExpression(ITypeSymbol type)
-            : base(parameter: null, type: type) // FEEDBACK: Can't get this parameter. Do we even need InstanceReference to be a ParameterReference?
+            : base(type)
         {
-
         }
 
+        public InstanceReferenceKind InstanceReferenceKind => InstanceReferenceKind.Explicit; // TODO/FEEDBACK: needs to be adjusted to base sometimes, but what about other bindings?
         public override OperationKind Kind => OperationKind.InstanceReferenceExpression;
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        bool IInstanceReferenceExpression.IsExplicit => true;
 
         public override string ToString()
         {
             return "InstanceReference";
         }
 
-        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new InstanceReferenceExpression(type);
         }
@@ -336,84 +336,83 @@ namespace Microsoft.CodeAnalysis.IL
         public IFieldSymbol Field => (IFieldSymbol)Member;
         public override OperationKind Kind => OperationKind.FieldReferenceExpression;
 
-        protected override IReferenceExpression WithResultTypeCore(ITypeSymbol type)
+        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new FieldReferenceExpression(Instance, Field, type);
         }
     }
 
-    internal abstract class HasOperatorExpression : Expression, IHasOperatorExpression
+    internal abstract class HasOperatorMethodExpression : Expression, IHasOperatorMethodExpression
     {
         // operator method calls will be raised as regular invocations so this is always false/null.
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        bool IHasOperatorExpression.UsesOperatorMethod => false;
+        bool IHasOperatorMethodExpression.UsesOperatorMethod => false;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IMethodSymbol IHasOperatorExpression.Operator => null;
+        IMethodSymbol IHasOperatorMethodExpression.OperatorMethod => null;
     }
 
-    internal sealed class UnaryOperatorExpression : HasOperatorExpression, IUnaryOperatorExpression
+    internal sealed class UnaryOperatorExpression : HasOperatorMethodExpression, IUnaryOperatorExpression
     {
-        public UnaryOperatorExpression(UnaryOperationKind unaryOperationKind, IExpression operand, ITypeSymbol resultType)
+        public UnaryOperatorExpression(UnaryOperationKind unaryOperationKind, IExpression operand, ITypeSymbol type)
         {
             UnaryOperationKind = unaryOperationKind;
             Operand = operand;
-            ResultType = resultType;
+            Type = type;
         }
 
         public UnaryOperationKind UnaryOperationKind { get; }
         public IExpression Operand { get; }
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
 
         public override OperationKind Kind => OperationKind.UnaryOperatorExpression;
     }
 
-    internal sealed class BinaryOperatorExpression : HasOperatorExpression, IBinaryOperatorExpression
+    internal sealed class BinaryOperatorExpression : HasOperatorMethodExpression, IBinaryOperatorExpression
     {
-        public BinaryOperatorExpression(BinaryOperationKind binaryOperationKind, IExpression left, IExpression right, ITypeSymbol resultType)
+        public BinaryOperatorExpression(BinaryOperationKind binaryOperationKind, IExpression left, IExpression right, ITypeSymbol type)
         {
             BinaryOperationKind = binaryOperationKind;
-            Left = left;
-            Right = right;
-            ResultType = resultType;
+            LeftOperand = left;
+            RightOperand = right;
+            Type = type;
         }
 
         public BinaryOperationKind BinaryOperationKind { get; }
-        public IExpression Left { get; }
-        public IExpression Right { get; }
-        public override ITypeSymbol ResultType { get; }
+        public IExpression LeftOperand { get; }
+        public IExpression RightOperand { get; }
+        public override ITypeSymbol Type { get; }
         public override OperationKind Kind => OperationKind.BinaryOperatorExpression;
     }
 
-    internal sealed class ConversionExpression : HasOperatorExpression, IConversionExpression
+    internal sealed class ConversionExpression : HasOperatorMethodExpression, IConversionExpression
     {
-        public ConversionExpression(ConversionKind conversionKind, IExpression operand, ITypeSymbol resultType)
+        public ConversionExpression(ConversionKind conversionKind, IExpression operand, ITypeSymbol type)
         {
             ConversionKind = conversionKind;
             Operand = operand;
-            ResultType = resultType;
+            Type = type;
         }
 
         public ConversionKind ConversionKind { get; }
         public IExpression Operand { get; }
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
         public override OperationKind Kind => OperationKind.ConversionExpression;
 
         bool IConversionExpression.IsExplicit => true;
     }
 
-    internal sealed class SizeOfExpression : Expression, ITypeOperationExpression
+    internal sealed class SizeOfExpression : Expression, ISizeOfExpression
     {
         public SizeOfExpression(Compilation compilation, ITypeSymbol typeOperand)
         {
             TypeOperand = typeOperand;
-            ResultType = compilation.GetSpecialType(SpecialType.System_UInt32);
+            Type = compilation.GetSpecialType(SpecialType.System_UInt32);
         }
 
         public ITypeSymbol TypeOperand { get; }
-        public override ITypeSymbol ResultType { get; }
-        public override OperationKind Kind => OperationKind.TypeOperationExpression;
-        public TypeOperationKind TypeOperationKind => TypeOperationKind.SizeOf;
+        public override ITypeSymbol Type { get; }
+        public override OperationKind Kind => OperationKind.SizeOfExpression;
     }
 
     internal sealed class LiteralExpression : Expression, ILiteralExpression
@@ -421,16 +420,15 @@ namespace Microsoft.CodeAnalysis.IL
         public LiteralExpression(object value, ITypeSymbol type)
         {
             ConstantValue = value;
-            ResultType = type;
+            Type = type;
         }
 
         public override Optional<object> ConstantValue { get; }
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
         public override OperationKind Kind => OperationKind.LiteralExpression;
 
         // TODO: Proper IL/round-trippable syntax.
-        // FEEDBACK: Does Spelling belong on ILiteralExpression? Why not get it from IOperation.Syntax?
-        public string Spelling => ConstantValue.ToString();
+        public string Text => ConstantValue.ToString();
 
         public override string ToString()
         {
@@ -440,14 +438,14 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class AddressOfExpression : Expression, IAddressOfExpression
     {
-        public AddressOfExpression(Compilation compilation, IReferenceExpression addressed)
+        public AddressOfExpression(Compilation compilation, IReferenceExpression reference)
         {
-            Addressed = addressed;
-            ResultType = compilation.CreatePointerTypeSymbol(addressed.ResultType);
+            Reference = reference;
+            Type = compilation.CreatePointerTypeSymbol(reference.Type);
         }
 
-        public IReferenceExpression Addressed { get; }
-        public override ITypeSymbol ResultType { get; }
+        public IReferenceExpression Reference { get; }
+        public override ITypeSymbol Type { get; }
         public override OperationKind Kind => OperationKind.AddressOfExpression;
     }
 
@@ -457,12 +455,12 @@ namespace Microsoft.CodeAnalysis.IL
         {
             ElementType = elementType;
             DimensionSizes = ImmutableArray.Create(size);
-            ResultType = compilation.CreateArrayTypeSymbol(elementType);
+            Type = compilation.CreateArrayTypeSymbol(elementType);
         }
 
         public ITypeSymbol ElementType { get; }
         public ImmutableArray<IExpression> DimensionSizes { get; }
-        public override ITypeSymbol ResultType { get; }
+        public override ITypeSymbol Type { get; }
         public override OperationKind Kind => OperationKind.ArrayCreationExpression;
 
         IArrayInitializer IArrayCreationExpression.Initializer => null;
@@ -480,7 +478,7 @@ namespace Microsoft.CodeAnalysis.IL
         public IExpression Value { get; }
 
         public override OperationKind Kind => OperationKind.AssignmentExpression;
-        public override ITypeSymbol ResultType => Target.ResultType;
+        public override ITypeSymbol Type => Target.Type;
 
         public override string ToString()
         {
@@ -539,6 +537,9 @@ namespace Microsoft.CodeAnalysis.IL
         public ILabelSymbol Label { get; }
         public override OperationKind Kind => OperationKind.LabelStatement;
 
+        // This is allowed to be null and so we do that uniformly.
+        IExpression ILabelStatement.LabeledStatement => null;
+
         public override string ToString()
         {
             return $"Label: {Label.Name}";
@@ -550,27 +551,26 @@ namespace Microsoft.CodeAnalysis.IL
         public IfStatement(IExpression condition, IStatement ifTrue)
         {
             Condition = condition;
-            IfTrue = ifTrue;
+            IfTrueStatement = ifTrue;
         }
         public IExpression Condition { get; }
-        public IStatement IfTrue { get; }
+        public IStatement IfTrueStatement { get; }
         public override OperationKind Kind => OperationKind.IfStatement;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IStatement IIfStatement.IfFalse => null; // we always goto on true and fallthrough on false 
+        IStatement IIfStatement.IfFalseStatement => null; // we always goto on true and fallthrough on false 
     }
 
-    internal sealed class GoToStatement : Statement, IBranchStatement
+    internal sealed class BranchStatement : Statement, IBranchStatement
     {
-        public GoToStatement(ILabelSymbol target)
+        public BranchStatement(ILabelSymbol target)
         {
             Target = target;
         }
 
         public ILabelSymbol Target { get; }
-
-        // FEEDBACK: first non 1:1 I see between interface name and kind, others have distinct subkinds. Should this be BranchKind.GoTo and OperationKind.BranchStatement?
-        public override OperationKind Kind => OperationKind.GoToStatement;
+        public override OperationKind Kind => OperationKind.BranchStatement;
+        public BranchKind BranchKind => BranchKind.GoTo;
 
         public override string ToString()
         {
@@ -582,15 +582,15 @@ namespace Microsoft.CodeAnalysis.IL
     {
         public ThrowStatement(IExpression thrown)
         {
-            Thrown = thrown;
+            ThrownObject = thrown;
         }
 
-        public IExpression Thrown { get; }
+        public IExpression ThrownObject { get; }
         public override OperationKind Kind => OperationKind.ThrowStatement;
 
         public override string ToString()
         {
-            return Thrown == null ? "Throw" : $"Throw [{Thrown}]";
+            return ThrownObject == null ? "Throw" : $"Throw [{ThrownObject}]";
         }
     }
 
@@ -598,15 +598,15 @@ namespace Microsoft.CodeAnalysis.IL
     {
         public ReturnStatement(IExpression returned)
         {
-            Returned = returned;
+            ReturnedValue = returned;
         }
 
-        public IExpression Returned { get; }
+        public IExpression ReturnedValue { get; }
         public override OperationKind Kind => OperationKind.ReturnStatement;
 
         public override string ToString()
         {
-            return Returned == null ? "Return" : $"Return [{Returned}]";
+            return ReturnedValue == null ? "Return" : $"Return [{ReturnedValue}]";
         }
     }
 
@@ -620,7 +620,7 @@ namespace Microsoft.CodeAnalysis.IL
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public IBlockStatement Body { get; }
 
-        public virtual ImmutableArray<ICatch> Catches => ImmutableArray<ICatch>.Empty;
+        public virtual ImmutableArray<ICatchClause> Catches => ImmutableArray<ICatchClause>.Empty;
         public virtual IBlockStatement FinallyHandler => null;
 
         public override OperationKind Kind => OperationKind.TryStatement;
@@ -628,13 +628,13 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class TryCatchStatement : TryStatement
     {
-        public TryCatchStatement(IBlockStatement body, ImmutableArray<ICatch> catches)
+        public TryCatchStatement(IBlockStatement body, ImmutableArray<ICatchClause> catches)
             : base(body)
         {
             Catches = catches;
         }
 
-        public override ImmutableArray<ICatch> Catches { get; }
+        public override ImmutableArray<ICatchClause> Catches { get; }
     }
 
     internal sealed class TryFinallyStatement : TryStatement
@@ -648,9 +648,9 @@ namespace Microsoft.CodeAnalysis.IL
         public override IBlockStatement FinallyHandler { get; }
     }
 
-    internal sealed class Catch : Operation, ICatch
+    internal sealed class CatchClause : Operation, ICatchClause
     {
-        public Catch(ITypeSymbol caughtType, ILocalSymbol exceptionLocal, IExpression filter, IBlockStatement handler)
+        public CatchClause(ITypeSymbol caughtType, ILocalSymbol exceptionLocal, IExpression filter, IBlockStatement handler)
         {
             CaughtType = caughtType;
             ExceptionLocal = exceptionLocal;
@@ -663,13 +663,12 @@ namespace Microsoft.CodeAnalysis.IL
         public IExpression Filter { get; }
         public IBlockStatement Handler { get; }
 
-        // FEEDBACK: inconsistently named vs. interface
-        public override OperationKind Kind => OperationKind.CatchHandler;
+        public override OperationKind Kind => OperationKind.CatchClause;
     }
 
     internal sealed class SwitchStatement : Statement, ISwitchStatement
     {
-        public SwitchStatement(IExpression value, ImmutableArray<ICase> cases)
+        public SwitchStatement(IExpression value, ImmutableArray<ISwitchCase> cases)
         {
             Value = value;
             Cases = cases;
@@ -678,16 +677,16 @@ namespace Microsoft.CodeAnalysis.IL
         public IExpression Value { get; }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public ImmutableArray<ICase> Cases { get; }
+        public ImmutableArray<ISwitchCase> Cases { get; }
 
         public override OperationKind Kind => OperationKind.SwitchStatement;
     }
 
-    internal sealed class Case : Statement, ICase
+    internal sealed class SwitchCase : Statement, ISwitchCase
     {
-        public Case(IExpression value, IStatement body)
+        public SwitchCase(IExpression value, IStatement body)
         {
-            Clauses = ImmutableArray.Create<ICaseClause>(new CaseClause(value));
+            Clauses = ImmutableArray.Create<ICaseClause>(new SingleValueCaseClause(value));
             Body = ImmutableArray.Create<IStatement>(body);
         }
 
@@ -696,18 +695,17 @@ namespace Microsoft.CodeAnalysis.IL
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public ImmutableArray<IStatement> Body { get; }
         
-        // FEEDBACK: inconsistently named vs. interface
-        public override OperationKind Kind => OperationKind.SwitchSection;
+        public override OperationKind Kind => OperationKind.SwitchCase;
 
         public override string ToString()
         {
-            return $"Case {((CaseClause)Clauses[0]).Value}";
+            return $"Case {((SingleValueCaseClause)Clauses[0]).Value}";
         }
     }
 
-    internal sealed class CaseClause : Operation, ISingleValueCaseClause
+    internal sealed class SingleValueCaseClause : Operation, ISingleValueCaseClause
     {
-        public CaseClause(IExpression value)
+        public SingleValueCaseClause(IExpression value)
         {
             Value = value;
         }

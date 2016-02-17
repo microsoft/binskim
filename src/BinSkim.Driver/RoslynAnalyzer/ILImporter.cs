@@ -12,6 +12,10 @@ using Microsoft.CodeAnalysis.Semantics;
 
 namespace Microsoft.CodeAnalysis.IL
 {
+    // TODO: To ease first-pass of Roslyn upgrade
+    using IExpression = IOperation;
+    using IStatement = IOperation;
+
     internal partial class ILImporter
     {
         private Compilation _compilation;
@@ -134,12 +138,12 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
-        private ImmutableArray<ICatch> ImportCatches(ExceptionRegion region)
+        private ImmutableArray<ICatchClause> ImportCatches(ExceptionRegion region)
         {
             Debug.Assert(region.IsCatchOrFilter);
 
             int n = region.CatchCount;
-            var catches = ImmutableArray.CreateBuilder<ICatch>(n);
+            var catches = ImmutableArray.CreateBuilder<ICatchClause>(n);
             catches.Count = n;
 
             for (var r = region; r != null; r = r.PreviousCatch)
@@ -148,7 +152,7 @@ namespace Microsoft.CodeAnalysis.IL
                 var handler = ImportHandler(r);
                 var filter = ImportFilter(r);
 
-                catches[--n] = new Catch(local.Type, local, filter, handler);
+                catches[--n] = new CatchClause(local.Type, local, filter, handler);
             }
 
             return catches.MoveToImmutable();
@@ -182,7 +186,7 @@ namespace Microsoft.CodeAnalysis.IL
                         // note that this label is not the same as GetOrCreateLabel(region.HandlerOffset + region.HandlerLength). The former
                         // is logically outside of the fault or finally block while this one is inside.
                         endLabel = new LabelSymbol(region.HandlerOffset + region.HandlerLength, _method, "IL_EH");
-                        gotoEnd = new GoToStatement(endLabel);
+                        gotoEnd = new BranchStatement(endLabel);
                     }
 
                     statements[i] = gotoEnd;
@@ -357,7 +361,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void Push(IExpression expression)
         {
-            Push(GetStackKind(expression.ResultType), expression);
+            Push(GetStackKind(expression.Type), expression);
         }
 
         private StackValue Pop()
@@ -419,10 +423,10 @@ namespace Microsoft.CodeAnalysis.IL
             if (value.Kind == StackValueKind.ByRef)
             {
                 // TODO: proper by ref local
-                return GenerateTemporaryAsReference(_compilation.CreatePointerTypeSymbol(value.Expression.ResultType));
+                return GenerateTemporaryAsReference(_compilation.CreatePointerTypeSymbol(value.Expression.Type));
             }
 
-            return GenerateTemporaryAsReference(value.Expression.ResultType);
+            return GenerateTemporaryAsReference(value.Expression.Type);
         }
 
         private ILocalReferenceExpression GenerateTemporaryAsReference(ITypeSymbol type)
@@ -475,7 +479,7 @@ namespace Microsoft.CodeAnalysis.IL
                         throw new NotImplementedException();
                     }
 
-                    if (source.Expression.ResultType != destination.Expression.ResultType)
+                    if (source.Expression.Type != destination.Expression.Type)
                     {
                         // TODO: This is legal: e.g. Call(cond ? new Foo() : new Bar());
                         //       Need to adjust local type to compatible type. For now, just leave local with bad type.
@@ -638,7 +642,7 @@ namespace Microsoft.CodeAnalysis.IL
             Debug.Assert(opcode == ILOpcode.castclass || opcode == ILOpcode.isinst);
 
             ImportCasting(
-                opcode == ILOpcode.castclass ? ConversionKind.Cast : ConversionKind.AsCast,
+                opcode == ILOpcode.castclass ? ConversionKind.Cast : ConversionKind.TryCast,
                 GetTypeFromToken(token));
         }
 
@@ -646,7 +650,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             var operand = Pop().Expression;
 
-            if (conversionKind == ConversionKind.AsCast && type.IsValueType)
+            if (conversionKind == ConversionKind.TryCast && type.IsValueType)
             {
                 Push(new ValueTypeAsExpression(type, operand));
             }
@@ -847,7 +851,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             var value = Pop().Expression;
 
-            var cases = ImmutableArray.CreateBuilder<ICase>(jmpDelta.Length);
+            var cases = ImmutableArray.CreateBuilder<ISwitchCase>(jmpDelta.Length);
 
             if (_stackTop != 0)
             {
@@ -859,7 +863,7 @@ namespace Microsoft.CodeAnalysis.IL
             for (int i = 0; i < jmpDelta.Length; i++)
             {
                 var target = _basicBlocks[jmpBase + jmpDelta[i]];
-                IStatement gotoStatement = new GoToStatement(GetOrCreateLabel(target));
+                IStatement gotoStatement = new BranchStatement(GetOrCreateLabel(target));
 
                 if (_stackTop != 0)
                 {
@@ -867,7 +871,7 @@ namespace Microsoft.CodeAnalysis.IL
                 }
 
                 cases.Add(
-                    new Case(
+                    new SwitchCase(
                         new LiteralExpression(i, Int32Type),
                         gotoStatement));
 
@@ -881,7 +885,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportBranch(ILOpcode opcode, BasicBlock target, BasicBlock fallthrough)
         {
-            IStatement gotoStatement = new GoToStatement(GetOrCreateLabel(target));
+            IStatement gotoStatement = new BranchStatement(GetOrCreateLabel(target));
             StackValue left, right;
 
             switch (opcode)
@@ -952,7 +956,7 @@ namespace Microsoft.CodeAnalysis.IL
                     GetShiftKind(opcode),
                     left.Expression,
                     right.Expression,
-                    left.Expression.ResultType));
+                    left.Expression.Type));
         }
 
         private void ImportCompareOperation(ILOpcode opcode)
@@ -1036,7 +1040,7 @@ namespace Microsoft.CodeAnalysis.IL
         private void ImportLeave(BasicBlock target)
         {
             MarkBasicBlock(target);
-            Append(new GoToStatement(GetOrCreateLabel(target)));
+            Append(new BranchStatement(GetOrCreateLabel(target)));
 
             // Append will have flushed any extra values on stack to temporaries.
             // Leave semantics empties the evaluation stack, so we don't want to keep those temporaries reloaded here.
@@ -1116,7 +1120,7 @@ namespace Microsoft.CodeAnalysis.IL
                 new UnaryOperatorExpression(
                     unaryKind,
                     operand.Expression,
-                    operand.Expression.ResultType));
+                    operand.Expression.Type));
         }
 
         private void ImportCpOpj(int token)
@@ -1256,7 +1260,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             RefKind refKind;
             var reference = GetVariableReference(index, argument, out refKind);
-            var stackKind = refKind == RefKind.None ? GetStackKind(reference.ResultType) : StackValueKind.ByRef;
+            var stackKind = refKind == RefKind.None ? GetStackKind(reference.Type) : StackValueKind.ByRef;
             return new StackValue(stackKind, reference);
         }
 
@@ -1307,7 +1311,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             if (type == null)
             {
-                var arrayType = arrayReference.ResultType as IArrayTypeSymbol;
+                var arrayType = arrayReference.Type as IArrayTypeSymbol;
                 type = arrayType != null ? arrayType.ElementType : ObjectType;
             }
 
@@ -1326,10 +1330,10 @@ namespace Microsoft.CodeAnalysis.IL
             switch (value.Kind)
             {
                 case StackValueKind.ByRef:
-                    return ((ReferenceExpression)expression).WithResultType(type);
+                    return ((ReferenceExpression)expression).WithType(type);
 
                 case StackValueKind.NativeInt:
-                    return new PointerIndirectionReferenceExpression(expression, type ?? expression.ResultType);
+                    return new PointerIndirectionReferenceExpression(expression, type ?? expression.Type);
 
                 default:
                     throw new NotImplementedException(); // error.
@@ -1927,7 +1931,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             public StackValue(IExpression expression)
             {
-                Kind = GetStackKind(expression.ResultType);
+                Kind = GetStackKind(expression.Type);
                 Expression = expression;
             }
 
