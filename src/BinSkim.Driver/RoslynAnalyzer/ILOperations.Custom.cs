@@ -331,4 +331,21 @@ namespace Microsoft.CodeAnalysis.IL
         public ImmutableArray<IExpression> Arguments { get; }
         public override ITypeSymbol ResultType { get; }
     }
+
+    // isinst on value types: Like IsExpression, but result is non-boolean.
+    // TODO: raise to IsExpression where possible, else ternary.
+
+    internal sealed class ValueTypeAsExpression : CustomExpression
+    {
+        public ValueTypeAsExpression(ITypeSymbol asType, IExpression operand)
+        {
+            AsType = asType;
+            Operand = operand;
+        }
+
+        public ITypeSymbol AsType { get; }
+        public IExpression Operand { get; }
+        public override ITypeSymbol ResultType => Operand.ResultType;
+    }
+
 }

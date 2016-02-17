@@ -418,7 +418,8 @@ namespace Microsoft.CodeAnalysis.IL
         {
             if (value.Kind == StackValueKind.ByRef)
             {
-                throw new NotImplementedException(); // TODO: need byref locals in this case. (coming soon to roslyn)
+                // TODO: proper by ref local
+                return GenerateTemporaryAsReference(_compilation.CreatePointerTypeSymbol(value.Expression.ResultType));
             }
 
             return GenerateTemporaryAsReference(value.Expression.ResultType);
@@ -463,7 +464,12 @@ namespace Microsoft.CodeAnalysis.IL
                     var source = _stack[i];
                     var destination = target[i];
 
-                    if (source.Kind != destination.Kind)
+                    if (source.Kind == StackValueKind.ByRef && destination.Kind == StackValueKind.NativeInt)
+                    {
+                        // TODO: consequence of not having by-ref locals yet
+                        source = new StackValue(StackValueKind.NativeInt, new AddressOfExpression(_compilation, (IReferenceExpression)source.Expression));
+                    }
+                    else if (source.Kind != destination.Kind)
                     {
                         // error case: illegal to hit same block with differently typed operands on stack
                         throw new NotImplementedException();
@@ -548,7 +554,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportLoadVar(int index, bool argument)
         {
-            Push(GetVariableReference(index, argument));
+            Push(GetVariableReferenceAsStackValue(index, argument));
         }
 
         private void ImportStoreVar(int index, bool argument)
@@ -569,10 +575,19 @@ namespace Microsoft.CodeAnalysis.IL
         private void ImportDup()
         {
             var value = Pop();
-            var localReference = GenerateTemporaryAsReference(value);
 
-            Push(value.Kind, new AssignmentExpression(localReference, value.Expression));
-            Push(value.Kind, localReference);
+            if (value.Expression is IReferenceExpression)
+            {
+                Push(value);
+                Push(value);
+            }
+            else
+            {
+                var localReference = GenerateTemporaryAsReference(value);
+
+                Push(value.Kind, new AssignmentExpression(localReference, value.Expression));
+                Push(value.Kind, localReference);
+            }
         }
 
         private void ImportPop()
@@ -611,9 +626,11 @@ namespace Microsoft.CodeAnalysis.IL
                     StackValueKind.ByRef,
                     new UnboxExpression(Pop().Expression, GetTypeFromToken(token)));
             }
-
-            Debug.Assert(opCode == ILOpcode.unbox_any);
-            ImportCasting(ConversionKind.Cast, GetTypeFromToken(token));
+            else
+            {
+                Debug.Assert(opCode == ILOpcode.unbox_any);
+                ImportCasting(ConversionKind.Cast, GetTypeFromToken(token));
+            }
         }
 
         private void ImportCasting(ILOpcode opcode, int token)
@@ -627,11 +644,16 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportCasting(ConversionKind conversionKind, ITypeSymbol type)
         {
-            Push(
-                new ConversionExpression(
-                    conversionKind,
-                    Pop().Expression,
-                    type));
+            var operand = Pop().Expression;
+
+            if (conversionKind == ConversionKind.AsCast && type.IsValueType)
+            {
+                Push(new ValueTypeAsExpression(type, operand));
+            }
+            else
+            {
+                Push(new ConversionExpression(conversionKind, operand, type));
+            }
         }
 
         private void ImportCall(ILOpcode opcode, int token)
@@ -1230,8 +1252,24 @@ namespace Microsoft.CodeAnalysis.IL
             // TODO?
         }
 
+        private StackValue GetVariableReferenceAsStackValue(int index, bool argument)
+        {
+            RefKind refKind;
+            var reference = GetVariableReference(index, argument, out refKind);
+            var stackKind = refKind == RefKind.None ? GetStackKind(reference.ResultType) : StackValueKind.ByRef;
+            return new StackValue(stackKind, reference);
+        }
+
         private IReferenceExpression GetVariableReference(int index, bool argument)
         {
+            RefKind _;
+            return GetVariableReference(index, argument, out _);
+        }
+
+        private IReferenceExpression GetVariableReference(int index, bool argument, out RefKind refKind)
+        {
+            refKind = RefKind.None;
+
             if (!argument)
             {
                 return new LocalReferenceExpression(_locals[index]);
@@ -1244,10 +1282,16 @@ namespace Microsoft.CodeAnalysis.IL
 
             if (index == -1)
             {
+                if (_method.ContainingType.IsValueType)
+                {
+                    refKind = RefKind.Ref;
+                }
                 return new InstanceReferenceExpression(_method);
             }
 
-            return new ParameterReferenceExpression(_method.Parameters[index]);
+            var parameter = _method.Parameters[index];
+            refKind = parameter.RefKind;
+            return new ParameterReferenceExpression(parameter);
         }
 
         private FieldReferenceExpression PopFieldReference(int token, bool isStatic)
@@ -1345,10 +1389,13 @@ namespace Microsoft.CodeAnalysis.IL
                     return BinaryOperationKind.FloatingGreaterThan;
                 case ILOpcode.clt:
                     return BinaryOperationKind.FloatingGreaterThan;
+
+                // TODO/FEEDBACK: No "unordered" floating comparison in IOperation
                 case ILOpcode.cgt_un:
+                    goto case ILOpcode.cgt; // TODO
                 case ILOpcode.clt_un:
-                    // TODO/FEEDBACK: No "unordered" floating comparison in IOperation
-                    throw new NotImplementedException();  
+                    goto case ILOpcode.clt; // TODO
+
                 default:
                     throw Unreachable();
             }
@@ -1387,6 +1434,7 @@ namespace Microsoft.CodeAnalysis.IL
                     return GetIntegerBranchKind(opcode);
                 case StackValueKind.Float:
                     return GetFloatBranchKind(opcode);
+                case StackValueKind.Unknown: // type parameter
                 case StackValueKind.ObjRef:
                     return GetObjectBranchKind(opcode);
                 default:
@@ -1439,12 +1487,17 @@ namespace Microsoft.CodeAnalysis.IL
                     return BinaryOperationKind.FloatingLessThan;
                 case ILOpcode.bne_un:
                     return BinaryOperationKind.FloatingNotEquals;
+
+                // TODO/FEEDBACK: No "unordered" floating comparison in IOperation
                 case ILOpcode.bge_un:
+                    goto case ILOpcode.bge; // TODO
                 case ILOpcode.bgt_un:
+                    goto case ILOpcode.bgt; // TODO
                 case ILOpcode.ble_un:
+                    goto case ILOpcode.ble; // TODO
                 case ILOpcode.blt_un:
-                    // TODO/FEEDBACK: No "unordered" floating comparison in IOperation
-                    throw new NotImplementedException();
+                    goto case ILOpcode.blt; // TODO
+
                 default:
                     throw Unreachable();
             }
@@ -1687,6 +1740,7 @@ namespace Microsoft.CodeAnalysis.IL
                     return new LiteralExpression(0, Int32Type);
                 case StackValueKind.Int64:
                     return new LiteralExpression(0L, Int64Type);
+                case StackValueKind.Unknown: // Generic Type Parameter can be compared to null.
                 case StackValueKind.ObjRef:
                     return new LiteralExpression(null, ObjectType);
                 case StackValueKind.NativeInt:
@@ -1719,14 +1773,47 @@ namespace Microsoft.CodeAnalysis.IL
 
         private ISymbol GetSymbolFromHandle(EntityHandle handle)
         {
-            var symbol =  _method.ContainingModule.GetSymbolForMetadataHandle(handle);
+            return _method.ContainingModule.GetSymbolForMetadataHandle(handle, _method)
+                ?? GetUnresolvedSymbolFromHandle(handle);
+        }
 
-            if (symbol == null)
+        private ISymbol GetUnresolvedSymbolFromHandle(EntityHandle handle)
+        {
+            if (handle.Kind == HandleKind.MemberReference)
             {
-                throw new NotImplementedException(); // TODO: failed resolution can trigger this. need error placeholder.
+                var memberRef = _reader.GetMemberReference((MemberReferenceHandle)handle);
+                var arrayType = GetSymbolFromHandle(memberRef.Parent) as IArrayTypeSymbol;
+                if (arrayType != null)
+                {
+                    return GetArrayMethod(memberRef.Name, arrayType);
+                }
             }
 
-            return symbol;
+            // TODO: Handle more than just special array methods. Unresolved references should not throw.
+            throw new NotImplementedException();
+        }
+
+        private IMethodSymbol GetArrayMethod(StringHandle name, IArrayTypeSymbol arrayType)
+        {
+            // TODO: Decode parameter types to make sure they match.
+
+            if (_reader.StringComparer.Equals(name, "Get"))
+            {
+                return ArrayMethodSymbol.Get(arrayType, _compilation);
+            }
+            else if (_reader.StringComparer.Equals(name, "Set"))
+            {
+                return ArrayMethodSymbol.Set(arrayType, _compilation);
+            }
+            else if (_reader.StringComparer.Equals(name, ".ctor"))
+            {
+                return ArrayMethodSymbol.Ctor(arrayType, _compilation);
+            }
+            else
+            {
+                // error
+                throw new NotImplementedException();
+            }
         }
 
         private ITypeSymbol GetTypeForStackKind(StackValueKind stackKind)

@@ -114,7 +114,9 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public IMethodSymbol Constructor { get; }
-        public override ITypeSymbol ResultType => Constructor.ContainingType;
+
+        //NOTE: Not just .ContainingType to allow for magic array methods that belong to array types.
+        public override ITypeSymbol ResultType => Constructor.ContainingSymbol as ITypeSymbol; 
         public override OperationKind Kind => OperationKind.ObjectCreationExpression;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -326,7 +328,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
         }
 
-        public FieldReferenceExpression(IExpression instance, ISymbol member, ITypeSymbol type) 
+        public FieldReferenceExpression(IExpression instance, ISymbol member, ITypeSymbol type)
             : base(instance, member, type)
         {
         }
