@@ -37,7 +37,33 @@ namespace Microsoft.CodeAnalysis.IL
 
         public ITypeSymbol GetGenericInstance(ITypeSymbol genericType, ImmutableArray<ITypeSymbol> typeArguments)
         {
-            return ((INamedTypeSymbol)genericType).Construct(typeArguments.ToArray());
+            return InstantiateGeneric((INamedTypeSymbol)genericType, typeArguments, 0, typeArguments.Length);
+        }
+
+        private INamedTypeSymbol InstantiateGeneric(INamedTypeSymbol type, ImmutableArray<ITypeSymbol> typeArguments, int index, int count)
+        {
+            if (count == 0)
+            {
+                return type;
+            }
+
+            if (count == type.Arity)
+            {
+                var typeArgumentArray = new ITypeSymbol[count];
+                typeArguments.CopyTo(index, typeArgumentArray, 0, count);
+                return type.Construct(typeArgumentArray);
+            }
+
+            var parent = type.ContainingType;
+
+            if (parent == null)
+            {
+                throw new BadImageFormatException();
+            }
+
+            var outerType = InstantiateGeneric(type.ContainingType, typeArguments, index, count - type.Arity);
+            var innerType = outerType.GetTypeMembers().Single(t => t.OriginalDefinition == type);
+            return InstantiateGeneric(innerType, typeArguments, index + parent.Arity, type.Arity);
         }
 
         public ITypeSymbol GetGenericMethodParameter(int index)
@@ -47,7 +73,39 @@ namespace Microsoft.CodeAnalysis.IL
 
         public ITypeSymbol GetGenericTypeParameter(int index)
         {
-            return _method.ContainingType.TypeParameters[index];
+            return GetGenericTypeParameter(_method.ContainingType, index);
+        }
+
+        private ITypeParameterSymbol GetGenericTypeParameter(INamedTypeSymbol type, int index)
+        {
+            while (type != null)
+            {
+                int combinedParentArity = GetCombinedArity(type.ContainingType);
+
+                if (index >= combinedParentArity)
+                {
+                    return type.TypeParameters[index - combinedParentArity];
+                }
+
+                type = type.ContainingType;
+            }
+
+            throw new BadImageFormatException();
+        }
+
+        private static int GetCombinedArity(INamedTypeSymbol type)
+        {
+            // TODO: This loop makes GetGenericTypeParameter O(N^2) where N is the nested type depth.
+            //       We can get the combined arity directly from metadata.
+            int total = 0;
+
+            while (type != null)
+            {
+                total += type.Arity;
+                type = type.ContainingType;
+            }
+
+            return total;
         }
 
         public ITypeSymbol GetModifiedType(MetadataReader reader, bool isRequired, EntityHandle modifierTypeHandle, ITypeSymbol unmodifiedType)
@@ -132,7 +190,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private ITypeSymbol GetTypeFromHandle(EntityHandle handle)
         {
-            return (ITypeSymbol)(_method.ContainingModule.GetSymbolForMetadataHandle(handle));
+            return (ITypeSymbol)(_method.ContainingModule.GetSymbolForMetadataHandle(handle, _method));
         }
     }
 }
