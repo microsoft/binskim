@@ -9,17 +9,13 @@ using Microsoft.CodeAnalysis.Semantics;
 
 namespace Microsoft.CodeAnalysis.IL
 {
-    // TODO: To ease first pass of Roslyn upgrade
-    using IExpression = IOperation;
-    using IStatement = IOperation;
-
     // Nodes for operations that that aren't publicly supported by IOperation.
     //
     // Some of them may be raisable to higher level constructs that are modeled by IOperation (TODO), 
     // while others can happen in IL and have no IOperation equivalent.
 
-    internal interface ICustomExpression : IExpression { }
-    internal interface ICustomStatement : IStatement { }
+    internal interface ICustomExpression : IOperation { }
+    internal interface ICustomStatement : IOperation { }
 
     internal abstract class CustomExpression : Expression, ICustomExpression
     {
@@ -46,12 +42,12 @@ namespace Microsoft.CodeAnalysis.IL
     // temporary node to hold an endfilter operation. replaced appropriately when exception blocks are built.
     internal sealed class EndFilter : CustomStatement
     {
-        public EndFilter(IExpression expression)
+        public EndFilter(IOperation expression)
         {
             Expression = expression;
         }
 
-        public IExpression Expression { get; }
+        public IOperation Expression { get; }
     }
 
     // temporary node to mark end of filter. replaced appropriately when exception blocks are built.
@@ -63,7 +59,7 @@ namespace Microsoft.CodeAnalysis.IL
         public override OperationKind Kind => OperationKind.None;
     }
 
-    // For arbitrary filters to hide as IExpression. No direct C#/VB equivalent. 
+    // For arbitrary filters to hide as IOperation. No direct C#/VB equivalent. 
     //
     // Semantics:
     //
@@ -72,14 +68,14 @@ namespace Microsoft.CodeAnalysis.IL
     //
     internal sealed class BlockExpression : CustomExpression
     {
-        public BlockExpression(IBlockStatement block, IExpression expression)
+        public BlockExpression(IBlockStatement block, IOperation expression)
         {
             Block = block;
             Expression = expression;
         }
 
         public IBlockStatement Block { get; }
-        public IExpression Expression { get; }
+        public IOperation Expression { get; }
 
         public override ITypeSymbol Type => Expression.Type;
     }
@@ -108,13 +104,13 @@ namespace Microsoft.CodeAnalysis.IL
     // as it puts a byref to the value type on the heap on to the stack.
     internal sealed class UnboxExpression : ReferenceExpression, ICustomExpression
     {
-        public UnboxExpression(IExpression operand, ITypeSymbol type)
+        public UnboxExpression(IOperation operand, ITypeSymbol type)
             : base(type)
         {
             Operand = operand;
         }
 
-        public IExpression Operand { get; }
+        public IOperation Operand { get; }
         public override OperationKind Kind => OperationKind.None;
 
         protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
@@ -145,13 +141,13 @@ namespace Microsoft.CodeAnalysis.IL
     // TODO: raise to call to Length property
     internal sealed class ArrayLengthExpression : CustomExpression
     {
-        public ArrayLengthExpression(IExpression array, Compilation compilation)
+        public ArrayLengthExpression(IOperation array, Compilation compilation)
         {
             Array = array;
             Type = compilation.GetSpecialType(SpecialType.System_UIntPtr);
         }
 
-        public IExpression Array { get; }
+        public IOperation Array { get; }
         public override ITypeSymbol Type { get; }
     }
 
@@ -159,12 +155,12 @@ namespace Microsoft.CodeAnalysis.IL
     //
     internal sealed class CheckFiniteExpression : CustomExpression
     {
-        public CheckFiniteExpression(IExpression operand)
+        public CheckFiniteExpression(IOperation operand)
         {
             Operand = operand;
         }
 
-        public IExpression Operand { get; }
+        public IOperation Operand { get; }
         public override ITypeSymbol Type => Operand.Type;
     }
 
@@ -206,13 +202,13 @@ namespace Microsoft.CodeAnalysis.IL
     // TODO/FEEDBACK: There does not seem to be a public IOperation node for stackalloc.
     internal sealed class LocalAllocationExpression : CustomExpression
     {
-        public LocalAllocationExpression(IExpression size, Compilation compilation)
+        public LocalAllocationExpression(IOperation size, Compilation compilation)
         {
             Size = size;
             Type = compilation.GetSpecialType(SpecialType.System_IntPtr);
         }
 
-        public IExpression Size { get; }
+        public IOperation Size { get; }
         public override ITypeSymbol Type { get; }
     }
 
@@ -220,32 +216,32 @@ namespace Microsoft.CodeAnalysis.IL
     //
     internal sealed class CopyBlockStatement : CustomStatement
     {
-        public CopyBlockStatement(IExpression sourcePointer, IExpression destinationPointer, IExpression byteCount)
+        public CopyBlockStatement(IOperation sourcePointer, IOperation destinationPointer, IOperation byteCount)
         {
             SourcePointer = sourcePointer;
             DestinationPointer = destinationPointer;
             ByteCount = byteCount;
         }
 
-        public IExpression SourcePointer { get; }
-        public IExpression DestinationPointer { get; }
-        public IExpression ByteCount { get; }
+        public IOperation SourcePointer { get; }
+        public IOperation DestinationPointer { get; }
+        public IOperation ByteCount { get; }
     }
 
     // initblk
     //
     internal sealed class InitializeBlockStatement : CustomStatement
     {
-        public InitializeBlockStatement(IExpression pointer, IExpression value, IExpression byteCount)
+        public InitializeBlockStatement(IOperation pointer, IOperation value, IOperation byteCount)
         {
             Pointer = pointer;
             Value = value;
             ByteCount = byteCount;
         }
 
-        public IExpression Pointer { get; }
-        public IExpression Value { get; }
-        public IExpression ByteCount { get; }
+        public IOperation Pointer { get; }
+        public IOperation Value { get; }
+        public IOperation ByteCount { get; }
     }
 
     // arglist
@@ -267,13 +263,13 @@ namespace Microsoft.CodeAnalysis.IL
     //
     internal sealed class RefValueExpression : ReferenceExpression, ICustomExpression
     {
-        public RefValueExpression(IExpression typedReference, ITypeSymbol type)
+        public RefValueExpression(IOperation typedReference, ITypeSymbol type)
             : base(type)
         {
             TypedReference = typedReference;
         }
 
-        public IExpression TypedReference { get; }
+        public IOperation TypedReference { get; }
         public override OperationKind Kind => OperationKind.None;
 
         protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
@@ -292,13 +288,13 @@ namespace Microsoft.CodeAnalysis.IL
     //
     internal sealed class RefTypeExpression : CustomExpression
     {
-        public RefTypeExpression(IExpression typedReference, Compilation compilation)
+        public RefTypeExpression(IOperation typedReference, Compilation compilation)
         {
             TypedReference = typedReference;
             Type = compilation.GetSpecialType(SpecialType.System_RuntimeTypeHandle);
         }
 
-        public IExpression TypedReference { get; }
+        public IOperation TypedReference { get; }
         public override ITypeSymbol Type { get; }
     }
 
@@ -308,13 +304,13 @@ namespace Microsoft.CodeAnalysis.IL
     //
     internal sealed class MakeRefExpression : CustomExpression
     {
-        public MakeRefExpression(ITypeSymbol type, IExpression pointer, Compilation compilation)
+        public MakeRefExpression(ITypeSymbol type, IOperation pointer, Compilation compilation)
         {
             Pointer = pointer;
             Type = compilation.GetSpecialType(SpecialType.System_TypedReference);
         }
 
-        public IExpression Pointer { get; }
+        public IOperation Pointer { get; }
         public override ITypeSymbol Type { get; }
     }
 
@@ -322,7 +318,7 @@ namespace Microsoft.CodeAnalysis.IL
     //
     internal sealed class IndirectInvocationExpression : CustomExpression
     {
-        public IndirectInvocationExpression(SignatureCallingConvention callingConvention, IExpression functionPointer, ITypeSymbol resultType, ImmutableArray<IExpression> arguments)
+        public IndirectInvocationExpression(SignatureCallingConvention callingConvention, IOperation functionPointer, ITypeSymbol resultType, ImmutableArray<IOperation> arguments)
         {
             FunctionPointer = functionPointer;
             Arguments = arguments;
@@ -331,8 +327,8 @@ namespace Microsoft.CodeAnalysis.IL
 
         // TODO: Need full signature here, not just calling convention.
         public SignatureCallingConvention CallingConvention { get; }
-        public IExpression FunctionPointer { get; }
-        public ImmutableArray<IExpression> Arguments { get; }
+        public IOperation FunctionPointer { get; }
+        public ImmutableArray<IOperation> Arguments { get; }
         public override ITypeSymbol Type { get; }
     }
 
@@ -341,14 +337,14 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class ValueTypeAsExpression : CustomExpression
     {
-        public ValueTypeAsExpression(ITypeSymbol asType, IExpression operand)
+        public ValueTypeAsExpression(ITypeSymbol asType, IOperation operand)
         {
             AsType = asType;
             Operand = operand;
         }
 
         public ITypeSymbol AsType { get; }
-        public IExpression Operand { get; }
+        public IOperation Operand { get; }
         public override ITypeSymbol Type => Operand.Type;
     }
 

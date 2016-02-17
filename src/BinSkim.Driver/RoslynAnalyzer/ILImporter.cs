@@ -12,17 +12,13 @@ using Microsoft.CodeAnalysis.Semantics;
 
 namespace Microsoft.CodeAnalysis.IL
 {
-    // TODO: To ease first-pass of Roslyn upgrade
-    using IExpression = IOperation;
-    using IStatement = IOperation;
-
     internal partial class ILImporter
     {
         private Compilation _compilation;
         private IMethodSymbol _method;
         private byte[] _ilBytes;
         private ExceptionRegion[] _exceptionRegions;
-        private ImmutableArray<IStatement>.Builder _statements;
+        private ImmutableArray<IOperation>.Builder _statements;
         private ImmutableArray<ILocalSymbol>.Builder _locals;
         private MetadataReader _reader;
         private ILSignatureProvider _signatureProvider;
@@ -37,7 +33,7 @@ namespace Microsoft.CodeAnalysis.IL
             _signatureProvider = new ILSignatureProvider(compilation, method);
             _localSignatureHandle = body.LocalSignature;
             _exceptionRegions = GetExceptionRegions(body);
-            _statements = ImmutableArray.CreateBuilder<IStatement>();
+            _statements = ImmutableArray.CreateBuilder<IOperation>();
         }
 
         public IBlockStatement Import()
@@ -59,7 +55,7 @@ namespace Microsoft.CodeAnalysis.IL
                 locals = ImmutableArray<ILocalSymbol>.Empty;
             }
 
-            var statements = ImmutableArray.CreateBuilder<IStatement>();
+            var statements = ImmutableArray.CreateBuilder<IOperation>();
             ImportStatements(ilStartOffset, length, statements);
             return new BlockStatement(statements.ToImmutable(), locals);
         }
@@ -67,7 +63,7 @@ namespace Microsoft.CodeAnalysis.IL
         private void ImportStatements(
             int ilStartOffset,
             int length,
-            ImmutableArray<IStatement>.Builder statements)
+            ImmutableArray<IOperation>.Builder statements)
         {
             for (int i = ilStartOffset, endOffset = ilStartOffset + length; i < endOffset; )
             {
@@ -106,7 +102,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private ITryStatement ImportTryStatement(ExceptionRegion tryRegion)
         {
-            var statements = ImmutableArray.CreateBuilder<IStatement>();
+            var statements = ImmutableArray.CreateBuilder<IOperation>();
             int startOffset = tryRegion.TryOffset;
             int length = tryRegion.TryLength;
 
@@ -162,13 +158,13 @@ namespace Microsoft.CodeAnalysis.IL
         {
             Debug.Assert(region.IsFaultOrFinally);
 
-            var statements = ImmutableArray.CreateBuilder<IStatement>();
+            var statements = ImmutableArray.CreateBuilder<IOperation>();
             ImportStatements(region.HandlerOffset, region.HandlerLength, statements);
 
             // lazily used for uncommon case of an endfinally elsewhere than the lexical end of finally block,
             // which will raise as a goto to the end of the block. The last one is just removed.
             ILabelSymbol endLabel = null;
-            IStatement gotoEnd = null;
+            IOperation gotoEnd = null;
 
             int n = statements.Count;
             if (n == 0 || statements[n - 1] != EndFinally.Instance)
@@ -205,14 +201,14 @@ namespace Microsoft.CodeAnalysis.IL
             return new BlockStatement(statements.ToImmutable());
         }
 
-        private IExpression ImportFilter(ExceptionRegion region)
+        private IOperation ImportFilter(ExceptionRegion region)
         {
             if (!region.IsFilter)
             {
                 return null;
             }
 
-            var statements = ImmutableArray.CreateBuilder<IStatement>();
+            var statements = ImmutableArray.CreateBuilder<IOperation>();
 
             ImportStatements(region.FilterOffset, region.FilterLength, statements);
 
@@ -354,12 +350,12 @@ namespace Microsoft.CodeAnalysis.IL
             _stack[_stackTop++] = value;
         }
 
-        private void Push(StackValueKind kind, IExpression expression)
+        private void Push(StackValueKind kind, IOperation expression)
         {
             Push(new StackValue(kind, expression));
         }
 
-        private void Push(IExpression expression)
+        private void Push(IOperation expression)
         {
             Push(GetStackKind(expression.Type), expression);
         }
@@ -394,7 +390,7 @@ namespace Microsoft.CodeAnalysis.IL
             return value;
         }
 
-        private void Append(IStatement statement)
+        private void Append(IOperation statement)
         {
             // If the stack is not empty when we append a new statement, we effectively
             // save all of its contents to locals and reload them. This ensures that
@@ -441,12 +437,12 @@ namespace Microsoft.CodeAnalysis.IL
             return local;
         }
 
-        private void AppendTemporaryAssignment(ImmutableArray<IStatement>.Builder statements, StackValue target, StackValue source)
+        private void AppendTemporaryAssignment(ImmutableArray<IOperation>.Builder statements, StackValue target, StackValue source)
         {
             statements.Add(NewAssignmentStatement((ILocalReferenceExpression)target.Expression, source.Expression));
         }
 
-        private void TransferStack(ref StackValue[] target, ImmutableArray<IStatement>.Builder statements)
+        private void TransferStack(ref StackValue[] target, ImmutableArray<IOperation>.Builder statements)
         {
             Debug.Assert(_stackTop != 0);
 
@@ -490,11 +486,11 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
-        private void TransferStack(BasicBlock target, ref IStatement gotoStatement)
+        private void TransferStack(BasicBlock target, ref IOperation gotoStatement)
         {
             Debug.Assert(_stackTop != 0);
 
-            var gotoBlock = ImmutableArray.CreateBuilder<IStatement>(_stackTop + 1);
+            var gotoBlock = ImmutableArray.CreateBuilder<IOperation>(_stackTop + 1);
             TransferStack(ref target.EntryStack, gotoBlock);
             gotoBlock.Add(gotoStatement);
             gotoStatement = new BlockStatement(gotoBlock.MoveToImmutable());
@@ -691,7 +687,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             var decoder = new SignatureDecoder<ITypeSymbol>(_signatureProvider, _reader);
             var returnType = decoder.DecodeType(ref sigReader);
-            var arguments = ImmutableArray.CreateBuilder<IExpression>(argumentCount);
+            var arguments = ImmutableArray.CreateBuilder<IOperation>(argumentCount);
             arguments.Count = argumentCount;
 
             var functionPointer = Pop().Expression;
@@ -863,7 +859,7 @@ namespace Microsoft.CodeAnalysis.IL
             for (int i = 0; i < jmpDelta.Length; i++)
             {
                 var target = _basicBlocks[jmpBase + jmpDelta[i]];
-                IStatement gotoStatement = new BranchStatement(GetOrCreateLabel(target));
+                IOperation gotoStatement = new BranchStatement(GetOrCreateLabel(target));
 
                 if (_stackTop != 0)
                 {
@@ -885,7 +881,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportBranch(ILOpcode opcode, BasicBlock target, BasicBlock fallthrough)
         {
-            IStatement gotoStatement = new BranchStatement(GetOrCreateLabel(target));
+            IOperation gotoStatement = new BranchStatement(GetOrCreateLabel(target));
             StackValue left, right;
 
             switch (opcode)
@@ -1305,7 +1301,7 @@ namespace Microsoft.CodeAnalysis.IL
                 (IFieldSymbol)GetSymbolFromToken(token));
         }
 
-        private ArrayElementReferenceExpression PopArrayReference(IExpression index, ITypeSymbol type)
+        private ArrayElementReferenceExpression PopArrayReference(IOperation index, ITypeSymbol type)
         {
             var arrayReference = Pop().Expression;
 
@@ -1340,7 +1336,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
-        private static ExpressionStatement NewAssignmentStatement(IReferenceExpression target, IExpression value)
+        private static ExpressionStatement NewAssignmentStatement(IReferenceExpression target, IOperation value)
         {
             return new ExpressionStatement(new AssignmentExpression(target, value));
         }
@@ -1929,19 +1925,19 @@ namespace Microsoft.CodeAnalysis.IL
 
         private struct StackValue
         {
-            public StackValue(IExpression expression)
+            public StackValue(IOperation expression)
             {
                 Kind = GetStackKind(expression.Type);
                 Expression = expression;
             }
 
-            public StackValue(StackValueKind kind, IExpression expression)
+            public StackValue(StackValueKind kind, IOperation expression)
             {
                 Kind = kind;
                 Expression = expression;
             }
 
-            public readonly IExpression Expression;
+            public readonly IOperation Expression;
             public readonly StackValueKind Kind;
 
             public override string ToString()
