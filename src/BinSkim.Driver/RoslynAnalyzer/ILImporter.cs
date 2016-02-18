@@ -340,6 +340,9 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void Push(StackValue value)
         {
+            Debug.Assert(value.Expression.Type != null);
+            Debug.Assert(value.Expression.Type.SpecialType != SpecialType.System_Void);
+
             if (_stackTop >= _stack.Length)
             {
                 Array.Resize(ref _stack, 2 * _stackTop + 3);
@@ -367,8 +370,18 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             var value = _stack[--_stackTop];
+#if DEBUG
             _stack[_stackTop] = default(StackValue);
+#endif
             return value;
+        }
+
+        private void ClearStack()
+        {
+#if DEBUG
+            Array.Clear(_stack, 0, _stack.Length);
+#endif
+            _stackTop = 0;
         }
 
         // managed pointer types do not exist in the Roslyn type system. We therefore convert
@@ -835,7 +848,7 @@ namespace Microsoft.CodeAnalysis.IL
             if (_stackTop != 0)
             {
                 TransferStack(ref next.EntryStack, _statements);
-                _stackTop = 0;
+                ClearStack();
             }
 
             MarkBasicBlock(next);
@@ -872,7 +885,7 @@ namespace Microsoft.CodeAnalysis.IL
                 MarkBasicBlock(target);
             }
 
-            _stackTop = 0;
+            ClearStack();
 
             Append(new SwitchStatement(value, cases.MoveToImmutable()));
         }
@@ -910,7 +923,7 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 TransferStack(ref fallthrough.EntryStack, _statements);
                 TransferStack(target, ref gotoStatement);
-                _stackTop = 0;
+                ClearStack();
             }
 
             Append(
@@ -1038,7 +1051,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             // Append will have flushed any extra values on stack to temporaries.
             // Leave semantics empties the evaluation stack, so we don't want to keep those temporaries reloaded here.
-            _stackTop = 0; 
+            ClearStack(); 
         }
 
         private void ImportNewArray(int token)
@@ -1165,7 +1178,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             // Append will have flushed any extra values on stack to temporaries.
             // Endfinally semantics empties the evaluation stack, so we don't want to keep those temporaries reloaded here.
-            _stackTop = 0;
+            ClearStack();
         }
 
         private void ImportEndFilter()
