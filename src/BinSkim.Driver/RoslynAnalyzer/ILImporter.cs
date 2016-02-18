@@ -222,14 +222,12 @@ namespace Microsoft.CodeAnalysis.IL
 
             if (n > 1)
             {
-                statements.RemoveAt(n - 1);
+                statements[n - 1] = endFilter.Expression;
 
                 // This case should be uncommon (filter that we couldn't represent as a single expression),
                 // but unoptimized C# output has side-effects like stloc/ldloc. We'd have to optimize these
-                // away to get back to a single expression. :(
-                return new BlockExpression(
-                    new BlockStatement(statements.ToImmutable()),
-                    endFilter.Expression);
+                // away to get back to a single expression.
+                return new BlockStatement(statements.ToImmutable());
             }
 
             return endFilter.Expression;
@@ -439,7 +437,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void AppendTemporaryAssignment(ImmutableArray<IOperation>.Builder statements, StackValue target, StackValue source)
         {
-            statements.Add(NewAssignmentStatement((ILocalReferenceExpression)target.Expression, source.Expression));
+            statements.Add(new AssignmentExpression((ILocalReferenceExpression)target.Expression, source.Expression));
         }
 
         private void TransferStack(ref StackValue[] target, ImmutableArray<IOperation>.Builder statements)
@@ -562,7 +560,7 @@ namespace Microsoft.CodeAnalysis.IL
             var target = GetVariableReference(index, argument);
             var value = Pop().Expression;
 
-            Append(NewAssignmentStatement(target, value));
+            Append(new AssignmentExpression(target, value));
         }
 
         private void ImportAddressOfVar(int index, bool argument)
@@ -592,7 +590,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportPop()
         {
-            Append(new ExpressionStatement(Pop().Expression));
+            Append(Pop().Expression);
         }
 
         private void ImportJmp(int token)
@@ -704,7 +702,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             if (returnType.SpecialType == SpecialType.System_Void)
             {
-                Append(new ExpressionStatement(invocation));
+                Append(invocation);
             }
             else
             {
@@ -727,7 +725,7 @@ namespace Microsoft.CodeAnalysis.IL
 
                     if (callee.ReturnsVoid)
                     {
-                        Append(new ExpressionStatement(invocation));
+                        Append(invocation);
                     }
                     else
                     {
@@ -987,7 +985,7 @@ namespace Microsoft.CodeAnalysis.IL
             var value = Pop().Expression;
             var target = PopFieldReference(token, isStatic);
 
-            Append(NewAssignmentStatement(target, value));
+            Append(new AssignmentExpression(target, value));
         }
 
         private void ImportLoadIndirect(int token)
@@ -1010,7 +1008,7 @@ namespace Microsoft.CodeAnalysis.IL
             var value = Pop().Expression;
             var target = PopIndirectionReference(type);
 
-            Append(NewAssignmentStatement(target, value));
+            Append(new AssignmentExpression(target, value));
         }
 
         private void ImportThrow()
@@ -1030,7 +1028,7 @@ namespace Microsoft.CodeAnalysis.IL
             var type = GetTypeFromToken(token);
             var value = new DefaultValueExpression(type);
             var target = PopIndirectionReference(type);
-            Append(NewAssignmentStatement(target, value));
+            Append(new AssignmentExpression(target, value));
         }
 
         private void ImportLeave(BasicBlock target)
@@ -1073,7 +1071,7 @@ namespace Microsoft.CodeAnalysis.IL
             var index = Pop().Expression;
             var target = PopArrayReference(index, type);
 
-            Append(NewAssignmentStatement(target, value));
+            Append(new AssignmentExpression(target, value));
         }
 
         private void ImportAddressOfElement(int token)
@@ -1125,7 +1123,7 @@ namespace Microsoft.CodeAnalysis.IL
             var src = PopIndirectionReference(type);
             var dst = PopIndirectionReference(type);
 
-            Append(NewAssignmentStatement(dst, src));
+            Append(new AssignmentExpression(dst, src));
         }
 
         private void ImportRefAnyVal(int token)
@@ -1334,11 +1332,6 @@ namespace Microsoft.CodeAnalysis.IL
                 default:
                     throw new NotImplementedException(); // error.
             }
-        }
-
-        private static ExpressionStatement NewAssignmentStatement(IReferenceExpression target, IOperation value)
-        {
-            return new ExpressionStatement(new AssignmentExpression(target, value));
         }
 
         private static BinaryOperationKind GetCompareKind(ILOpcode opcode, StackValueKind kind)

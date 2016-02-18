@@ -28,13 +28,13 @@ namespace Microsoft.CodeAnalysis.IL
         {
             var name = this.GetType().Name;
 
-            if (name.EndsWith(nameof(Expression), StringComparison.Ordinal))
+            if (name.EndsWith("Expression", StringComparison.Ordinal))
             {
-                name = name.Substring(0, name.Length - nameof(Expression).Length);
+                name = name.Substring(0, name.Length - "Expression".Length);
             }
-            else if (name.EndsWith(nameof(Statement), StringComparison.Ordinal))
+            else if (name.EndsWith("Statement", StringComparison.Ordinal))
             {
-                name = name.Substring(0, name.Length - nameof(Statement).Length);
+                name = name.Substring(0, name.Length - "Statement".Length);
             }
 
             return name;
@@ -482,27 +482,7 @@ namespace Microsoft.CodeAnalysis.IL
         }
     }
 
-    internal abstract class Statement : Operation, IOperation
-    {
-    }
-
-    internal sealed class ExpressionStatement : Statement, IExpressionStatement
-    {
-        public ExpressionStatement(IOperation expression)
-        {
-            Expression = expression;
-        }
-
-        public IOperation Expression { get; }
-        public override OperationKind Kind => OperationKind.ExpressionStatement;
-
-        public override string ToString()
-        {
-            return $"{Expression} (statement)";
-        }
-    }
-
-    internal class BlockStatement : Statement, IBlockStatement
+    internal class BlockStatement : Operation, IBlockStatement
     {
         public BlockStatement(ImmutableArray<IOperation> statements)
             : this(statements, ImmutableArray<ILocalSymbol>.Empty)
@@ -520,10 +500,14 @@ namespace Microsoft.CodeAnalysis.IL
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public ImmutableArray<IOperation> Statements { get; }
         public override OperationKind Kind => OperationKind.BlockStatement;
+
+        // We allow block statements to be used as expressions (which is particularly useful for
+        // arbitrary exception filters). The interpretation is that the final operation yields
+        // the result.
+        public override ITypeSymbol Type => Statements[Statements.Length - 1].Type;
     }
 
-    // FEEDBACK: Why is there both ILabelStatement and ILabeledStatement? Not sure which to use.
-    internal sealed class LabelStatement : Statement, ILabelStatement
+    internal sealed class LabelStatement : Operation, ILabelStatement
     {
         public LabelStatement(ILabelSymbol label)
         {
@@ -542,7 +526,7 @@ namespace Microsoft.CodeAnalysis.IL
         }
     }
 
-    internal sealed class IfStatement : Statement, IIfStatement
+    internal sealed class IfStatement : Operation, IIfStatement
     {
         public IfStatement(IOperation condition, IOperation ifTrue)
         {
@@ -557,7 +541,7 @@ namespace Microsoft.CodeAnalysis.IL
         IOperation IIfStatement.IfFalseStatement => null; // we always goto on true and fallthrough on false 
     }
 
-    internal sealed class BranchStatement : Statement, IBranchStatement
+    internal sealed class BranchStatement : Operation, IBranchStatement
     {
         public BranchStatement(ILabelSymbol target)
         {
@@ -574,7 +558,7 @@ namespace Microsoft.CodeAnalysis.IL
         }
     }
 
-    internal sealed class ThrowStatement : Statement, IThrowStatement
+    internal sealed class ThrowStatement : Operation, IThrowStatement
     {
         public ThrowStatement(IOperation thrown)
         {
@@ -590,7 +574,7 @@ namespace Microsoft.CodeAnalysis.IL
         }
     }
 
-    internal sealed class ReturnStatement : Statement, IReturnStatement
+    internal sealed class ReturnStatement : Operation, IReturnStatement
     {
         public ReturnStatement(IOperation returned)
         {
@@ -606,7 +590,7 @@ namespace Microsoft.CodeAnalysis.IL
         }
     }
 
-    internal abstract class TryStatement : Statement, ITryStatement
+    internal abstract class TryStatement : Operation, ITryStatement
     {
         public TryStatement(IBlockStatement body)
         {
@@ -662,7 +646,7 @@ namespace Microsoft.CodeAnalysis.IL
         public override OperationKind Kind => OperationKind.CatchClause;
     }
 
-    internal sealed class SwitchStatement : Statement, ISwitchStatement
+    internal sealed class SwitchStatement : Operation, ISwitchStatement
     {
         public SwitchStatement(IOperation value, ImmutableArray<ISwitchCase> cases)
         {
@@ -678,12 +662,12 @@ namespace Microsoft.CodeAnalysis.IL
         public override OperationKind Kind => OperationKind.SwitchStatement;
     }
 
-    internal sealed class SwitchCase : Statement, ISwitchCase
+    internal sealed class SwitchCase : Operation, ISwitchCase
     {
         public SwitchCase(IOperation value, IOperation body)
         {
-            Clauses = ImmutableArray.Create<ICaseClause>(new SingleValueCaseClause(value));
-            Body = ImmutableArray.Create<IOperation>(body);
+            Clauses = ImmutableArray.Create<ICaseClause>(new Clause(value));
+            Body = ImmutableArray.Create(body);
         }
 
         public ImmutableArray<ICaseClause> Clauses { get; }
@@ -695,21 +679,21 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override string ToString()
         {
-            return $"Case {((SingleValueCaseClause)Clauses[0]).Value}";
+            return $"Case {((Clause)Clauses[0]).Value}";
         }
-    }
 
-    internal sealed class SingleValueCaseClause : Operation, ISingleValueCaseClause
-    {
-        public SingleValueCaseClause(IOperation value)
+        private sealed class Clause : Operation, ISingleValueCaseClause
         {
-            Value = value;
+            public Clause(IOperation value)
+            {
+                Value = value;
+            }
+
+            public IOperation Value { get; }
+
+            public BinaryOperationKind Equality => BinaryOperationKind.IntegerEquals;
+            public CaseKind CaseKind => CaseKind.SingleValue;
+            public override OperationKind Kind => OperationKind.SingleValueCaseClause;
         }
-
-        public IOperation Value { get; }
-
-        public BinaryOperationKind Equality => BinaryOperationKind.IntegerEquals;
-        public CaseKind CaseKind => CaseKind.SingleValue;
-        public override OperationKind Kind => OperationKind.SingleValueCaseClause;
     }
 }

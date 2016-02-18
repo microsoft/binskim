@@ -14,20 +14,19 @@ namespace Microsoft.CodeAnalysis.IL
     // Some of them may be raisable to higher level constructs that are modeled by IOperation (TODO), 
     // while others can happen in IL and have no IOperation equivalent.
 
-    internal interface ICustomExpression : IOperation { }
-    internal interface ICustomStatement : IOperation { }
+    internal interface ICustomOperation : IOperation { }
 
-    internal abstract class CustomExpression : Expression, ICustomExpression
+    internal abstract class CustomOperation : Operation, ICustomOperation
     {
         public override OperationKind Kind => OperationKind.None;
     }
 
-    internal abstract class CustomStatement : Statement, ICustomStatement
+    internal abstract class CustomExpression : Expression, ICustomOperation
     {
         public override OperationKind Kind => OperationKind.None;
     }
 
-    internal sealed class TryFaultStatement : TryStatement, ICustomStatement
+    internal sealed class TryFaultStatement : TryStatement, ICustomOperation
     {
         public TryFaultStatement(IBlockStatement body, IBlockStatement faultHandler)
             : base(body)
@@ -40,7 +39,7 @@ namespace Microsoft.CodeAnalysis.IL
     }
 
     // temporary node to hold an endfilter operation. replaced appropriately when exception blocks are built.
-    internal sealed class EndFilter : CustomStatement
+    internal sealed class EndFilter : CustomOperation
     {
         public EndFilter(IOperation expression)
         {
@@ -51,7 +50,7 @@ namespace Microsoft.CodeAnalysis.IL
     }
 
     // temporary node to mark end of filter. replaced appropriately when exception blocks are built.
-    internal sealed class EndFinally : CustomStatement
+    internal sealed class EndFinally : CustomOperation
     {
         private EndFinally() { }
 
@@ -59,36 +58,15 @@ namespace Microsoft.CodeAnalysis.IL
         public override OperationKind Kind => OperationKind.None;
     }
 
-    // For arbitrary filters to hide as IOperation. No direct C#/VB equivalent. 
-    //
-    // Semantics:
-    //
-    //  1) execute the block
-    //  2) evaluate the expression
-    //
-    internal sealed class BlockExpression : CustomExpression
-    {
-        public BlockExpression(IBlockStatement block, IOperation expression)
-        {
-            Block = block;
-            Expression = expression;
-        }
-
-        public IBlockStatement Block { get; }
-        public IOperation Expression { get; }
-
-        public override ITypeSymbol Type => Expression.Type;
-    }
-
     // break
     //
-    internal sealed class DebugBreakStatement : CustomStatement
+    internal sealed class DebugBreakStatement : CustomOperation
     {
     }
 
     // jmp
     //
-    internal sealed class JumpStatement : CustomStatement
+    internal sealed class JumpStatement : CustomOperation
     {
         public JumpStatement(IMethodSymbol targetMethod)
         {
@@ -102,7 +80,7 @@ namespace Microsoft.CodeAnalysis.IL
     // 
     // unlike unbox.any cannot be directly represented as a conversion
     // as it puts a byref to the value type on the heap on to the stack.
-    internal sealed class UnboxExpression : ReferenceExpression, ICustomExpression
+    internal sealed class UnboxExpression : ReferenceExpression, ICustomOperation
     {
         public UnboxExpression(IOperation operand, ITypeSymbol type)
             : base(type)
@@ -214,7 +192,7 @@ namespace Microsoft.CodeAnalysis.IL
 
     // cpblk
     //
-    internal sealed class CopyBlockStatement : CustomStatement
+    internal sealed class CopyBlockStatement : CustomOperation
     {
         public CopyBlockStatement(IOperation sourcePointer, IOperation destinationPointer, IOperation byteCount)
         {
@@ -230,7 +208,7 @@ namespace Microsoft.CodeAnalysis.IL
 
     // initblk
     //
-    internal sealed class InitializeBlockStatement : CustomStatement
+    internal sealed class InitializeBlockStatement : CustomOperation
     {
         public InitializeBlockStatement(IOperation pointer, IOperation value, IOperation byteCount)
         {
@@ -261,7 +239,7 @@ namespace Microsoft.CodeAnalysis.IL
     //
     // TODO/FEEDBACK: C# has __refvalue syntax for this but no public IOperation.
     //
-    internal sealed class RefValueExpression : ReferenceExpression, ICustomExpression
+    internal sealed class RefValueExpression : ReferenceExpression, ICustomOperation
     {
         public RefValueExpression(IOperation typedReference, ITypeSymbol type)
             : base(type)
