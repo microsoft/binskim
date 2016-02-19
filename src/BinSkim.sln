@@ -4,10 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinSkim.Driver", "BinSkim.Driver\BinSkim.Driver.csproj", "{7B4552DC-901C-4569-BFBD-9EA129D53288}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B501A547-C911-4A05-AC6E-274A50DFF30E} = {B501A547-C911-4A05-AC6E-274A50DFF30E}
-		{1EE8CAD3-55F9-4D91-96B2-084641DA9A6C} = {1EE8CAD3-55F9-4D91-96B2-084641DA9A6C}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinSkim.Sdk", "BinSkim.Sdk\BinSkim.Sdk.csproj", "{D2EBE67E-6115-4825-9EAD-3DB54672C03E}"
 EndProject
@@ -88,6 +84,7 @@ Global
 		{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}.Debug|x64.ActiveCfg = Debug|x64
 		{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}.Debug|x64.Build.0 = Debug|x64
 		{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}.Debug|x86.ActiveCfg = Debug|x86
+		{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}.Debug|x86.Build.0 = Debug|x86
 		{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}.Release|x64.ActiveCfg = Release|x64
 		{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}.Release|x64.Build.0 = Release|x64
 		{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}.Release|x86.ActiveCfg = Release|x86
