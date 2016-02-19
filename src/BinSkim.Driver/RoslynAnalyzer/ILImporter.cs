@@ -1250,7 +1250,9 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ImportConstrainedPrefix(int token)
         {
-            // TODO?
+            // TODO: We're surviving without special handling here only because we tolerate improper use
+            //       of passing reference type 'this' by ref in any situation. We should instead have
+            //       some diagnostics about the bad case and handle constrained calls deliberately.
         }
 
         private void ImportNoPrefix(byte mask)
