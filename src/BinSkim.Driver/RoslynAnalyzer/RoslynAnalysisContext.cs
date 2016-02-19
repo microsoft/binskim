@@ -5,7 +5,7 @@ using System;
 using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Semantics;
+
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -18,15 +18,28 @@ namespace Microsoft.CodeAnalysis.IL
     /// </summary>
     internal sealed class RoslynAnalysisContext : AnalysisContext
     {
-        public ActionMap<SymbolAnalysisContext, SymbolKind> SymbolActions { get; } = new ActionMap<SymbolAnalysisContext, SymbolKind>();
+        public ActionMap<SymbolAnalysisContext, SymbolKind> SymbolActions { get; }
+        public ActionMap<OperationAnalysisContext, OperationKind> OperationActions { get; }
 
         public Action<CompilationStartAnalysisContext> CompilationStartActions { get; private set; }
-
         public Action<CompilationAnalysisContext> CompilationActions { get; private set; }
+        public Action<OperationBlockStartAnalysisContext> OperationBlockStartActions { get; private set; }
+        public Action<OperationBlockAnalysisContext> OperationBlockActions { get; private set; }
+
+        public RoslynAnalysisContext()
+        {
+            SymbolActions = new ActionMap<SymbolAnalysisContext, SymbolKind>();
+            OperationActions = new ActionMap<OperationAnalysisContext, OperationKind>();
+        }
 
         public override void RegisterSymbolAction(Action<SymbolAnalysisContext> action, ImmutableArray<SymbolKind> symbolKinds)
         {
             SymbolActions.Add(action, symbolKinds);
+        }
+
+        public override void RegisterOperationAction(Action<OperationAnalysisContext> action, ImmutableArray<OperationKind> operationKinds)
+        {
+            OperationActions.Add(action, operationKinds);
         }
 
         public override void RegisterCompilationStartAction(Action<CompilationStartAnalysisContext> action)
@@ -39,15 +52,22 @@ namespace Microsoft.CodeAnalysis.IL
             CompilationActions += action;
         }
 
+        public override void RegisterOperationBlockStartAction(Action<OperationBlockStartAnalysisContext> action)
+        {
+            OperationBlockStartActions += action;
+        }
+
+        public override void RegisterOperationBlockAction(Action<OperationBlockAnalysisContext> action)
+        {
+            OperationBlockActions += action;
+        }
+
         // These registration actions are currently unsupported or not relevant to an MSIL-driven analysis
         public override void RegisterCodeBlockAction(Action<CodeBlockAnalysisContext> action) { }
         public override void RegisterCodeBlockStartAction<TLanguageKindEnum>(Action<CodeBlockStartAnalysisContext<TLanguageKindEnum>> action) { }
         public override void RegisterSemanticModelAction(Action<SemanticModelAnalysisContext> action) { }
         public override void RegisterSyntaxNodeAction<TLanguageKindEnum>(Action<SyntaxNodeAnalysisContext> action, ImmutableArray<TLanguageKindEnum> syntaxKinds) { }
         public override void RegisterSyntaxTreeAction(Action<SyntaxTreeAnalysisContext> action) { }
-        public override void RegisterOperationBlockStartAction(Action<OperationBlockStartAnalysisContext> action) { }
-        public override void RegisterOperationBlockAction(Action<OperationBlockAnalysisContext> action) { }
-        public override void RegisterOperationAction(Action<OperationAnalysisContext> action, ImmutableArray<OperationKind> operationKinds) { }
         public override void EnableConcurrentExecution() { }
         public override void ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags analysisMode) { }
     }
