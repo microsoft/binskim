@@ -11,16 +11,6 @@ namespace Microsoft.CodeAnalysis.IL
     internal abstract class Operation : IOperation
     {
         public abstract OperationKind Kind { get; }
-
-        // TODO: Fake this out. 
-        // FEEDBACK: Should this be optional, with separate location?
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        SyntaxNode IOperation.Syntax => null;
-
-        // TODO: Handle invalid IL gracefully
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        bool IOperation.IsInvalid => false;
-
         public virtual ITypeSymbol Type => null;
         public virtual Optional<object> ConstantValue => default(Optional<object>);
 
@@ -49,6 +39,16 @@ namespace Microsoft.CodeAnalysis.IL
         {
             throw new NotImplementedException();
         }
+
+        // TODO: Hang a location from PDB off of this.
+        // FEEDBACK: Should this be optional, with separate location?
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        SyntaxNode IOperation.Syntax => s_fakeStatement;
+        private static readonly SyntaxNode s_fakeStatement = CSharp.SyntaxFactory.EmptyStatement();
+
+        // TODO: Handle invalid IL gracefully
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        bool IOperation.IsInvalid => false;
     }
 
     internal abstract class Expression : Operation, IOperation
