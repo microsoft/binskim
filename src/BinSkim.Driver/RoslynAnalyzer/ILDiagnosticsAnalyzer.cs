@@ -4,7 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
 using System.Threading;
 
 using Microsoft.CodeAnalysis.CSharp;
@@ -13,7 +17,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace Microsoft.CodeAnalysis.IL
 {
     /// <summary>
-    /// Proof-of-concept driver to run Roslyn diagnostics analyzer symbol rules against symbols raised from IL/metadata.
+    /// Proof-of-concept driver to run Roslyn diagnostics analyzer symbol and operation rules against nodes raised from IL/metadata.
     /// </summary>
     internal sealed class ILDiagnosticsAnalyzer
     {
@@ -53,7 +57,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             analysisContext = analysisContext ?? new RoslynAnalysisContext();
 
-            Assembly assembly = Assembly.LoadFrom(path);
+            var assembly = Assembly.LoadFrom(path);
 
             foreach (Type type in assembly.GetTypes())
             {
@@ -79,41 +83,148 @@ namespace Microsoft.CodeAnalysis.IL
             var compilation = CSharpCompilation.Create("_", references: new[] { reference });
             var target = compilation.GetAssemblyOrModuleSymbol(reference);
 
-            // For each analysis target, we create a compilation start context, which may result
-            // in symbol action registration. We need to capture and throw these registrations 
-            // away for each binary we inspect. 
-            var compilationStartAnalysisContext = new RoslynCompilationStartAnalysisContext(compilation, _options, cancellationToken);
+            using (var stream = File.OpenRead(targetPath))
+            using (var peReader = new PEReader(stream))
+            {
+                var metadataReader = peReader.GetMetadataReader();
 
-            GlobalRoslynAnalysisContext.CompilationStartActions?.Invoke(compilationStartAnalysisContext);
+                // For each analysis target, we create a compilation start context, which may result
+                // in symbol action registration. We need to capture and throw these registrations 
+                // away for each binary we inspect. 
+                var compilationStartAnalysisContext = new RoslynCompilationStartAnalysisContext(compilation, _options, cancellationToken);
 
-            var visitor = new RoslynSymbolVisitor(symbol => Analyze(
-                symbol,
-                compilation,
-                compilationStartAnalysisContext.SymbolActions,
-                reportDiagnostic, 
-                cancellationToken));
+                GlobalRoslynAnalysisContext.CompilationStartActions?.Invoke(compilationStartAnalysisContext);
 
-            visitor.Visit(target);
+                RoslynSymbolVisitor.Visit(
+                    target,
+                    symbol => AnalyzeSymbol(
+                        symbol,
+                        compilation,
+                        compilationStartAnalysisContext.SymbolActions,
+                        reportDiagnostic,
+                        peReader,
+                        metadataReader,
+                        cancellationToken));
 
-            // Having finished analysis, we'll invoke any compilation end actions registered previously.
-            // We also discard the per-compilation symbol actions we collected.
-            var compilationAnalysisContext = new CompilationAnalysisContext(compilation, _options, reportDiagnostic, _isSupportedDiagnostic, cancellationToken);
+                // Having finished analysis, we'll invoke any compilation end actions registered previously.
+                // We also discard the per-compilation symbol actions we collected.
+                var compilationAnalysisContext = new CompilationAnalysisContext(
+                    compilation,
+                    _options, 
+                    reportDiagnostic,
+                    _isSupportedDiagnostic,
+                    cancellationToken);
 
-            GlobalRoslynAnalysisContext.CompilationActions?.Invoke(compilationAnalysisContext);
-            compilationStartAnalysisContext.CompilationEndActions?.Invoke(compilationAnalysisContext);
+                GlobalRoslynAnalysisContext.CompilationActions?.Invoke(compilationAnalysisContext);
+                compilationStartAnalysisContext.CompilationEndActions?.Invoke(compilationAnalysisContext);
+            }
         }
 
-        private void Analyze(
+        private void AnalyzeSymbol(
             ISymbol symbol, 
             Compilation compilation,
             ActionMap<SymbolAnalysisContext, SymbolKind> perCompilationSymbolActions,
             Action<Diagnostic> reportDiagnostic, 
+            PEReader peReader,
+            MetadataReader metadataReader,
             CancellationToken cancellationToken)
-        {            
-            var symbolContext = new SymbolAnalysisContext(symbol, compilation, _options, reportDiagnostic, _isSupportedDiagnostic, cancellationToken);
+        {
+            var symbolContext = new SymbolAnalysisContext(
+                symbol, 
+                compilation, 
+                _options,
+                reportDiagnostic, 
+                _isSupportedDiagnostic, 
+                cancellationToken);
 
             GlobalRoslynAnalysisContext.SymbolActions.Invoke(symbol.Kind, symbolContext);
             perCompilationSymbolActions.Invoke(symbol.Kind, symbolContext);
+
+            var method = symbol as IMethodSymbol;
+            if (symbol != null)
+            {
+                AnalyzeMethodBody(method, compilation, reportDiagnostic, peReader, metadataReader, cancellationToken);
+            }
+        }
+
+        private void AnalyzeMethodBody(
+            IMethodSymbol method, 
+            Compilation compilation, 
+            Action<Diagnostic> reportDiagnostic,
+            PEReader peReader, 
+            MetadataReader metadataReader,
+            CancellationToken cancellationToken)
+        {
+            var handle = (MethodDefinitionHandle)method.MetadataHandle;
+            Debug.Assert(!handle.IsNil);
+
+            var methodDef = metadataReader.GetMethodDefinition(handle);
+            if (methodDef.RelativeVirtualAddress == 0)
+            {
+                return; // abstract or extern
+            }
+
+            var methodBody = peReader.GetMethodBody(methodDef.RelativeVirtualAddress);
+            var importer = new ILImporter(compilation, metadataReader, method, methodBody);
+            var body = importer.Import();
+            var blocks = ImmutableArray.Create<IOperation>(body);
+
+            // For each method, we create a block start context, which may result
+            // in operation action registration. We need to capture and throw these
+            // registrations for each method we inspect. 
+            var blockStartContext = new RoslynOperationBlockStartAnalysisContext(
+                blocks,
+                method,
+                compilation,
+                _options,
+                cancellationToken);
+
+            GlobalRoslynAnalysisContext.OperationBlockStartActions?.Invoke(blockStartContext);
+
+            RoslynOperationVisitor.Visit(
+                body,
+                operation => AnalyzeOperation(
+                    operation,
+                    method,
+                    compilation,
+                    reportDiagnostic,
+                    cancellationToken,
+                    blockStartContext.OperationActions));
+
+            // Having finished operation, we'll invoke any block end actions registered previously.
+            // We also discard the per-block operation actions we collected.
+            var blockContext = new OperationBlockAnalysisContext(
+                blocks,
+                method,
+                compilation,
+                _options,
+                reportDiagnostic,
+                _isSupportedDiagnostic,
+                cancellationToken);
+
+            GlobalRoslynAnalysisContext.OperationBlockActions?.Invoke(blockContext);
+            blockStartContext.OperationBlockEndActions?.Invoke(blockContext);
+        }
+
+        private void AnalyzeOperation(
+            IOperation operation,
+            IMethodSymbol containingMethod,
+            Compilation compilation,
+            Action<Diagnostic> reportDiagnostic,
+            CancellationToken cancellationToken,
+            ActionMap<OperationAnalysisContext, OperationKind> perBlockOperationActions)
+        {
+            var operationContext = new OperationAnalysisContext(
+                operation,
+                containingMethod,
+                compilation,
+                _options,
+                reportDiagnostic,
+                _isSupportedDiagnostic,
+                cancellationToken);
+
+            GlobalRoslynAnalysisContext.OperationActions.Invoke(operation.Kind, operationContext);
+            perBlockOperationActions.Invoke(operation.Kind, operationContext);
         }
     }
 }

@@ -99,6 +99,7 @@
     <Compile Include="RoslynAnalyzer\RoslynExtensionMethods.cs" />
     <Compile Include="RoslynAnalyzer\RoslynAnalysisContext.cs" />
     <Compile Include="RoslynAnalyzer\ILDiagnosticsAnalyzer.cs" />
+    <Compile Include="RoslynAnalyzer\RoslynOperationVisitor.cs" />
     <Compile Include="RoslynAnalyzer\RoslynSymbolVisitor.cs" />
     <Compile Include="..\Shared\SharedAssemblyInfo.cs" />
   </ItemGroup>
