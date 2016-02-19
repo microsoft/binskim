@@ -72,6 +72,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             return this.CreateAllObjectList();
         }
 
+        public override string ToString()
+        {
+            return CreateSortedObjectList();
+        }
+
         /// <summary>Creates truncated object list for display purposes.</summary>
         /// <returns>The new truncated object list.</returns>
         public string CreateTruncatedObjectList()

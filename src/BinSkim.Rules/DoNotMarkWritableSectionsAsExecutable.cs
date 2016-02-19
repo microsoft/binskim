@@ -5,23 +5,51 @@ using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer))]
-    public class DoNotMarkWritableSectionsAsExecutable : IBinarySkimmer, IRuleContext
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor))]
+    public class DoNotMarkWritableSectionsAsExecutable : BinarySkimmerBase
     {
-        public string Id { get { return RuleConstants.DoNotMarkWritableSectionsAsExecutableId; } }
+        /// <summary>
+        /// BA2021
+        /// </summary>
+        public override string Id { get { return RuleIds.DoNotMarkWritableSectionsAsExecutableId; } }
 
-        public string Name { get { return nameof(DoNotMarkWritableSectionsAsShared); } }
+        /// <summary>
+        /// PE sections should not be marked as both writable and executable. This condition
+        /// makes it easier for an attacker to exploit memory corruption vulnerabilities,
+        /// as it may provide an attacker executable location(s) to inject shellcode.
+        /// To resolve this issue, configure your toolchain to not emit memory sections that
+        /// are writable and executable. For example, look for uses of /SECTION on the
+        /// linker command line for C and C++ programs, or #pragma section in C and C++
+        /// source code, which mark a section with both attributes.
+        /// </summary>
+
+        public override string FullDescription
+        {
+            get { return RuleResources.BA2019_DoNotMarkWritableSectionsAsShared_Description; }
+        }
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2021_Pass),
+                    nameof(RuleResources.BA2021_Error),
+                    nameof(RuleResources.BA2021_Error_UnexpectedSectionAligment)};
+            }
+        }
 
         private const int PAGE_SIZE = 0x1000;
-
-        public void Initialize(BinaryAnalyzerContext context) { return; }
-
-        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -29,10 +57,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeBinary;
             if (portableExecutable.IsKernelMode) { return result; }
 
+            reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
-        public void Analyze(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
 
@@ -40,9 +69,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (peHeader.SectionAlignment < PAGE_SIZE)
             {
                 // '{0}' has a section alignment ({1}) that is less than page size ({2}).
-                context.Logger.Log(MessageKind.Fail, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.DoNotMarkWritableSectionsAsExecutable_Fail,
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2021_Error),
                         context.PE.FileName,
                         "0x" + peHeader.SectionAlignment.ToString("x"),
                         "0x" + PAGE_SIZE.ToString("x")));
@@ -69,9 +98,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (badSections.Count == 0)
             {
                 // '{0}' contains no data or code sections marked as both shared and executable.
-                context.Logger.Log(MessageKind.Pass, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.DoNotMarkWritableSectionsAsExecutable_Pass));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                        nameof(RuleResources.BA2021_Pass)));
                 return;
             }
 
@@ -85,9 +114,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // writable and executable.For example, look for uses of / SECTION on the 
             // linker command line for C and C++ programs, or  #pragma section in C and 
             // C++ source code, which mark a section with both attributes.
-            context.Logger.Log(MessageKind.Fail, context,
-                RuleUtilities.BuildMessage(context,
-                    RulesResources.DoNotMarkWritableSectionsAsExecutable_Fail, badSectionsText));
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    nameof(RuleResources.BA2021_Error),
+                    badSectionsText));
         }
     }
 }

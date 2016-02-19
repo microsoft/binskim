@@ -1,0 +1,1 @@
+This directory intentionally left empty. The tests retrieve kernel32.dll dynamically from the current machine in order to validate signing against a Microsoft-signed image.

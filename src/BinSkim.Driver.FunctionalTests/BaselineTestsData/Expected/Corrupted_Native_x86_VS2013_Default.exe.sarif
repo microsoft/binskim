@@ -1,0 +1,60 @@
+{
+  "version": "0.4",
+  "runLogs": [
+    {
+      "toolInfo": {
+        "name": "BinSkim",
+        "fullName": "BinSkim 1.2.16-beta",
+        "version": "1.2.16"
+      },
+      "runInfo": {
+        "invocationInfo": "\"D:\\src\\binskim\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Corrupted_Native_x86_VS2013_Default.exe --output D:\\src\\binskim\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Corrupted_Native_x86_VS2013_Default.exe.sarif.temp --verbose --config default",
+        "analysisTargets": [
+          {
+            "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
+          }
+        ]
+      },
+      "results": [
+        {
+          "ruleId": "ERR0997",
+          "kind": "configurationError",
+          "formattedMessage": {
+            "specifierId": "ExceptionLoadingAnalysisTarget",
+            "arguments": [
+              "Corrupted_Native_x86_VS2013_Default.exe",
+              "System.BadImageFormatException: Image is either too small or contains an invalid byte offset or count.\r\n   at System.Reflection.Throw.ImageTooSmallOrContainsInvalidOffsetOrCount()\r\n   at System.Reflection.PortableExecutable.PEHeaders.SkipDosHeader(PEBinaryReader& reader, Boolean& isCOFFOnly)\r\n   at System.Reflection.PortableExecutable.PEHeaders..ctor(Stream peStream, Nullable`1 sizeOpt)\r\n   at System.Reflection.PortableExecutable.PEReader.InitializePEHeaders()\r\n   at Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PE..ctor(String fileName) in D:\\src\\testbinskim\\src\\BinaryParsers\\PortableExecutable\\PE.cs:line 47"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ruleInfo": [
+        {
+          "id": "ERR0997",
+          "name": "InvalidConfiguration",
+          "fullDescription": "An unhandled exception was raised while configuring analysis for execution.",
+          "formatSpecifiers": {
+            "ExceptionLoadingPdb": "'{0}' was not evaluated for check '{1}' as an exception occurred loading its pdb: '{2}'",
+            "ExceptionLoadingPlugIn": "An exception was raised attempting to load plug-in '{0}'. Exception information:\r\n{1}",
+            "ExceptionCreatingLogFile": "An exception was raised attempting to create output file '{0}'. Exception information:\r\n{1}",
+            "ExceptionLoadingAnalysisTarget": "An exception was raised attempting to load analysis target '{0}'. Exception information:\r\n{1}",
+            "ExceptionInstantiatingSkimmers": "An exception was raised attempting to instantiate skimmers from the following plugins'{0}'. Exception information:\r\n{1}",
+            "MissingRuleConfiguration": "Check '{1}' was disabled while analyzing '{0}' because the analysis was not configured with required policy ({2}). To resolve this, configure and provide a policy file on the {3} command-line using the --policy argument (recommended), or pass '--config default' to invoke built-in settings. Invoke the {3} 'exportConfig' command to produce an initial configuration file that can be edited, if necessary, and passed back into the tool.",
+            "NoRulesLoaded": "No analysis rules could be instantiated.",
+            "NoValidAnalysisTargets": "No valid analysis targets were specified."
+          }
+        }
+      ]
+    }
+  ]
+}

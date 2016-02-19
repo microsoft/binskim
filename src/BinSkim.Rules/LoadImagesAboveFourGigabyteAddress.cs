@@ -4,23 +4,57 @@
 using System;
 using System.Composition;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+using System.Collections.Generic;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer))]
-    public class LoadImageAboveFourGigabyteAddress : IBinarySkimmer, IRuleContext
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor))]
+    public class LoadImageAboveFourGigabyteAddress : BinarySkimmerBase
     {
-        public string Id { get { return RuleConstants.LoadImageAboveFourGigabyteAddressId; } }
+        /// <summary>
+        /// BA2001
+        /// </summary>
+        public override string Id { get { return RuleIds.LoadImageAboveFourGigabyteAddressId; } }
 
-        public string Name { get { return nameof(LoadImageAboveFourGigabyteAddress); } }
+        /// <summary>
+        /// 64-bit images should have a preferred base address above the 4GB boundary in
+        /// order to prevent triggering an Address Space Layour Randomization (ASLR)
+        /// compatibility mode that decreases security. ASLR compatibility mode reduces
+        /// the number of locations to which ASLR may relocate the binary, reducing its
+        /// effectiveness at mitigating memory corruption vulnerabilities. To resolve
+        /// this issue, either use the default preferred base address by removing any
+        /// uses of /baseaddress from compiler command lines, or /BASE from linker
+        /// command lines (recommended), or configure your program to start at a base 
+        /// address above 4GB when compiled for 64 bit platforms (by changing the
+        /// constant passed to /baseaddress / /BASE). Note that if you choose to
+        /// continue using a custom preferred base address, you will need to make this
+        /// modification only for 64-bit builds, as base addresses above 4GB are not
+        /// valid for 32-bit binaries.
+        /// </summary>
 
-        public void Initialize(BinaryAnalyzerContext context) { return; }
+        public override string FullDescription
+        {
+            get { return RuleResources.BA2001_LoadImageAboveFourGigabyteAddress_Description; }
+        }
+
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2001_Pass),
+                    nameof(RuleResources.BA2001_Error)};
+            }
+        }
 
         private static readonly Version s_winCeVersion70 = new Version(7, 0);
 
-        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -34,10 +68,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
             if (portableExecutable.IsResourceOnly) { return result; }
 
+            reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
-        public void Analyze(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
 
@@ -58,16 +93,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // to continue using a custom preferred base address, you will need to make this 
                 // modification only for 64-bit builds, as base addresses above 4GB are not valid 
                 // for 32-bit binaries.
-                context.Logger.Log(MessageKind.Fail, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.LoadImageAboveFourGigabyteAddress_Fail));
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2001_Error)));
                 return;
             }
 
             // '{0}' is marked as NX compatible.
-            context.Logger.Log(MessageKind.Pass, context,
-                RuleUtilities.BuildMessage(context,
-                    RulesResources.LoadImageAboveFourGigabyteAddress_Pass));
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2001_Pass)));
         }
     }
 }

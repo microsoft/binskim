@@ -1,0 +1,522 @@
+{
+  "version": "0.4",
+  "runLogs": [
+    {
+      "toolInfo": {
+        "name": "BinSkim",
+        "fullName": "BinSkim 1.2.16-beta",
+        "version": "1.2.16"
+      },
+      "runInfo": {
+        "invocationInfo": "\"D:\\src\\binskim\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedResourcesOnly.dll --output D:\\src\\binskim\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedResourcesOnly.dll.sarif.temp --verbose --config default",
+        "analysisTargets": [
+          {
+            "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+          }
+        ]
+      },
+      "results": [
+        {
+          "ruleId": "MSG1001",
+          "kind": "note",
+          "formattedMessage": {
+            "specifierId": "AnalyzingTarget",
+            "arguments": [
+              "ManagedResourcesOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2006",
+              "BuildWithSecureTools",
+              "image is an IL-only managed assembly"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2014",
+              "DoNotDisableStackProtectionForFunctions",
+              "image is a resource-only binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2002",
+              "DoNotIncorporateVulnerableDependencies",
+              "image is an IL-only managed assembly"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2010",
+              "DoNotMarkImportsSectionAsExecutable",
+              "image is an IL-only managed assembly"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2012",
+              "DoNotModifyStackProtectionCookie",
+              "image is a resource-only binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2008",
+              "EnableControlFlowGuard",
+              "image is a resource-only binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2007",
+              "EnableCriticalCompilerWarnings",
+              "image is an IL-only managed assembly"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2011",
+              "EnableStackProtection",
+              "image is a resource-only binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2015",
+              "EnableHighEntropyVirtualAddresses",
+              "image is not a 64-bit binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2018",
+              "EnableSafeSEH",
+              "image is a resource-only binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2013",
+              "InitializeStackProtection",
+              "image is a resource-only binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2001",
+              "LoadImageAboveFourGigabyteAddress",
+              "image is not a 64-bit binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "MSG1002",
+          "kind": "notApplicable",
+          "formattedMessage": {
+            "specifierId": "InvalidMetadata",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "BA2016",
+              "MarkImageAsNXCompatible",
+              "image is a resource-only binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "ManagedResourcesOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "ManagedResourcesOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "ManagedResourcesOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "kind": "error",
+          "formattedMessage": {
+            "specifierId": "Error_BadSigningAlgorithm",
+            "arguments": [
+              "ManagedResourcesOnly.dll",
+              "sha1RSA"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2009",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "ManagedResourcesOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": [
+                {
+                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+                  "mimeType": "application/octet-stream"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ruleInfo": [
+        {
+          "id": "MSG1001",
+          "name": "AnalyzingTarget",
+          "fullDescription": "An analysis target was analyzed.",
+          "formatSpecifiers": {
+            "AnalyzingTarget": "Analyzing '{0}'..."
+          }
+        },
+        {
+          "id": "MSG1002",
+          "name": "InvalidTarget",
+          "fullDescription": "A file was skipped as it does not appear to be a valid target for analysis.",
+          "formatSpecifiers": {
+            "InvalidFileType": "'{0}' was not analyzed as it does not appear to be a valid file type for analysis.",
+            "InvalidMetadata": "'{0}' was not evaluated for check '{1}:{2}' as the analysis is not relevant based on observed metadata: {3}."
+          }
+        },
+        {
+          "id": "BA2021",
+          "name": "DoNotMarkWritableSectionsAsExecutable",
+          "shortDescription": "Code or data sections should not be marked as both shared and writable.",
+          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitability of code vulnerabilities.",
+            "Error": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your toolchain to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.",
+            "Error_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2})."
+          }
+        },
+        {
+          "id": "BA2019",
+          "name": "DoNotMarkWritableSectionsAsShared",
+          "shortDescription": "Code or data sections should not be marked as both shared and writable.",
+          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitability of code vulnerabilities.",
+            "Error": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+          }
+        },
+        {
+          "id": "BA2005",
+          "name": "DoNotShipVulnerableBinaries",
+          "shortDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
+          "fullDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems.",
+            "Error": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.",
+            "Error_CouldNotParseVersion": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems."
+          }
+        },
+        {
+          "id": "BA2022",
+          "name": "SignSecurely",
+          "shortDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms.",
+          "fullDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The image was signed with '{1}', a cryptographically strong algorithm.",
+            "Error_BadSigningAlgorithm": "'{0}' was signed using '{1}', an algorithm that WinTrustVerify has flagged as insecure.",
+            "Error_DidNotVerify": "'{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}'",
+            "Error_WinTrustVerifyApiError": "'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'."
+          }
+        },
+        {
+          "id": "BA2009",
+          "name": "EnableAddressSpaceLayoutRandomization",
+          "shortDescription": "Binaries should linked as DYNAMICBASE in order to be eligible for relocation by Address Space Layout Randomization (ASLR).",
+          "fullDescription": "Binaries should linked as DYNAMICBASE in order to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' is properly compiled to enable address space layout randomization, reducing an attacker's ability to exploit code in well-known locations.",
+            "Error_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
+            "Error_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
+            "Error_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing address space layout randomization."
+          }
+        }
+      ]
+    }
+  ]
+}

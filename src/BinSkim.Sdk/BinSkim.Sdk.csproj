@@ -4,7 +4,7 @@
     <ProjectGuid>{D2EBE67E-6115-4825-9EAD-3DB54672C03E}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup>
-    <RootNamespace>Microsoft.CodeAnalysis.BinSkim.Sdk</RootNamespace>
+    <RootNamespace>Microsoft.CodeAnalysis.IL.Sdk</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyName>BinSkim.Sdk</AssemblyName>
@@ -17,9 +17,41 @@
   </PropertyGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.props))\build.props" />
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sarif, Version=1.4.33.0, Culture=neutral, PublicKeyToken=ac41962ee2e3a7cd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Sdk.1.4.33-beta\lib\net40\Sarif.pdb\Sarif.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sarif.Driver, Version=1.4.33.0, Culture=neutral, PublicKeyToken=ac41962ee2e3a7cd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Driver.1.4.33-beta\lib\net40\Sarif.Driver.pdb\Sarif.Driver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.AttributedModel, Version=1.0.30.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.30\lib\portable-net45+win8+wp8+wpa81\System.Composition.AttributedModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Convention, Version=1.0.30.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.30\lib\portable-net45+win8+wp8+wpa81\System.Composition.Convention.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Hosting, Version=1.0.30.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.30\lib\portable-net45+win8+wp8+wpa81\System.Composition.Hosting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Runtime, Version=1.0.30.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.30\lib\portable-net45+win8+wp8+wpa81\System.Composition.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.TypedParts, Version=1.0.30.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.30\lib\portable-net45+win8+wp8+wpa81\System.Composition.TypedParts.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
@@ -32,37 +64,19 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalysisApplicability.cs" />
     <Compile Include="BinaryAnalyzerContext.cs" />
-    <Compile Include="IBinaryMessageLogger.cs" />
     <Compile Include="IBinarySkimmer.cs" />
-    <Compile Include="IMessageLogger.cs" />
-    <Compile Include="IntegerSet.cs" />
-    <Compile Include="IOption.cs" />
-    <Compile Include="IOptionsProvider.cs" />
-    <Compile Include="MessageKind.cs" />
     <Compile Include="MetadataConditions.cs" />
     <Compile Include="OSVersions.cs" />
-    <Compile Include="PerLanguageOption.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IRuleContext.cs" />
-    <Compile Include="PropertyBag.cs" />
-    <Compile Include="PropertyBagExtensionMethods.cs" />
     <Compile Include="RuleUtilities.cs" />
     <Compile Include="SdkResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SdkResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="StringSet.cs" />
-    <Compile Include="TypedPropertyBag.cs" />
     <Compile Include="..\Shared\SharedAssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj">
-      <Project>{f17e6921-2504-4ae8-afd3-7aceed935fec}</Project>
-      <Name>BinaryParsers</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SdkResources.resx">
@@ -73,6 +87,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj">
+      <Project>{f17e6921-2504-4ae8-afd3-7aceed935fec}</Project>
+      <Name>BinaryParsers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

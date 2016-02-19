@@ -2,13 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
-using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
-    public class BinaryAnalyzerContext
+    public class BinaryAnalyzerContext : IAnalysisContext
     {
         private PE _pe;
         private Uri _uri;
@@ -17,13 +19,25 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public bool IsManagedAssembly { get; internal set; }
 
+        public Exception TargetLoadException
+        {
+            get { return PE.LoadException; }
+            set { throw new InvalidOperationException(); }
+        }
+
+        public bool IsValidAnalysisTarget
+        {
+            get { return PE.IsPEFile; }
+            set { throw new InvalidOperationException(); }
+        }
+
         public PE PE
         {
             get
             {
                 if (_pe == null)
                 {
-                    PE = new PE(Uri.LocalPath);
+                    PE = new PE(TargetUri.LocalPath);
                     IsManagedAssembly = _pe.IsManaged;
                 }
                 return _pe;
@@ -38,7 +52,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        public Uri Uri
+        public Uri TargetUri
         {
             get
             {
@@ -100,14 +114,27 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
+        public void Dispose()
+        {
+            DisposePortableExecutableData();
+        }
+
         public PdbParseException PdbParseException { get; internal set; }
 
-        public IMessageLogger<BinaryAnalyzerContext> Logger { get; internal set; }
+        public IAnalysisLogger Logger { get; set; }
 
-        public IRuleContext Rule { get; internal set; }
+        public IRuleDescriptor Rule { get; set; }
 
         public Version MinimumSupportedCompilerVersion { get; internal set; }
 
-        public PropertyBag Policy { get; internal set; }
+        public PropertyBag Policy { get; set; }
+
+        public string MimeType
+        {
+            get { return Microsoft.CodeAnalysis.Sarif.Writers.MimeType.Binary; }
+            set { throw new InvalidOperationException(); }
+        }
+
+        public RuntimeConditions RuntimeErrors { get; set; }
     }
 }

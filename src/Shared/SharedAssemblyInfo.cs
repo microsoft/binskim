@@ -5,6 +5,9 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
+[assembly: AssemblyVersion(Microsoft.CodeAnalysis.IL.VersionConstants.AssemblyVersion)]
+[assembly: AssemblyFileVersion(Microsoft.CodeAnalysis.IL.VersionConstants.FileVersion)]
+
 [assembly: AssemblyProduct("BinSkim Portable Executable Analyzer")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
@@ -17,5 +20,6 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
+[assembly: InternalsVisibleTo("BinSkim.Driver.FunctionalTests")]
 [assembly: InternalsVisibleTo("BinSkim.Rules.FunctionalTests")]
 [assembly: InternalsVisibleTo("BinSkim")]

@@ -8,10 +8,11 @@ using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 
 using Xunit;
 using Xunit.Abstractions;
+using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -24,9 +25,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             _testOutputHelper = output;
         }
 
-        private void VerifyPass(IBinarySkimmer skimmer, bool useDefaultPolicy = false)
+        private void VerifyPass(
+            IBinarySkimmer skimmer, 
+            IEnumerable<string> additionalTestFiles = null,
+            bool useDefaultPolicy = false)
         {
-            Verify(skimmer, null, useDefaultPolicy, expectToPass: true);
+            Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: true);
         }
 
         private void VerifyFail(
@@ -85,7 +89,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 PE pe = new PE(target);
                 if (!pe.IsPEFile) { continue; }
 
-                context = AnalyzeCommand.CreateContext(logger, policy, target);
+                context = CreateContext(logger, policy, target);
 
                 context.Rule = skimmer;
 
@@ -100,6 +104,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> expected = expectToPass ? logger.PassTargets : logger.FailTargets;
             HashSet<string> other = expectToPass ? logger.FailTargets : logger.PassTargets;
+            HashSet<string> configErrors = logger.ConfigurationErrorTargets;
+
             string expectedText = expectToPass ? "success" : "failure";
             string actualText = expectToPass ? "failed" : "succeeded";
             var sb = new StringBuilder();
@@ -112,6 +118,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
                 bool missingEntirely = !other.Contains(target);
+
+                if (missingEntirely && !expectToPass && target.Contains("Pdb"))
+                {
+                    // Missing pdbs provoke configuration errors;
+                    if (configErrors.Contains(target))
+                    {
+                        missingEntirely = false;
+                        configErrors.Remove(target);
+                        continue;
+                    }
+                }
 
                 if (missingEntirely)
                 {
@@ -132,6 +149,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Assert.Equal(0, sb.Length);
             Assert.Equal(0, expected.Count);
             Assert.Equal(0, other.Count);
+        }
+
+        private BinaryAnalyzerContext CreateContext(TestMessageLogger logger, PropertyBag policy, string target)
+        {
+            var context = new BinaryAnalyzerContext();
+            context.Logger = logger;
+            context.Policy = policy;
+
+            if (target != null)
+            {
+                context.TargetUri = new Uri(target);
+            }
+
+            return context;
         }
 
         private void VerifyNotApplicable(
@@ -172,7 +203,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Assert.True(false, "Test file with unexpected extension encountered: " + target);
                 }
 
-                context = AnalyzeCommand.CreateContext(logger, null, target);
+                context = CreateContext(logger, null, target);
                 if (!context.PE.IsPEFile) { continue; }
 
                 context.Rule = skimmer;
@@ -200,7 +231,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
         {
             string testFilesDirectory;
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", "UsefulTestFiles");
+            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestsData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
             HashSet<string> result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -476,7 +507,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             notApplicableTo.Add(MetadataConditions.ImageIsResourceOnlyBinary);
             notApplicableTo.Add(MetadataConditions.ImageIsXBoxBinary);
 
-            VerifyNotApplicable(new DoNotShipVulnerableBinaries(), notApplicableTo, AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy);
+            VerifyNotApplicable(new DoNotShipVulnerableBinaries(), notApplicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
         }
 
         [Fact]
@@ -584,7 +615,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-            VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), applicableTo, AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy);
+            VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), applicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
         }
 
         [Fact]
@@ -615,19 +646,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-            VerifyNotApplicable(new EnableCriticalCompilerWarnings(), applicableTo, AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy);
+            VerifyNotApplicable(new EnableCriticalCompilerWarnings(), applicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
         }
 
         [Fact]
         public void EnableControlFlowGuard_Fail()
         {
-            //VerifyFail(new EnableControlFlowGuard());
+            VerifyFail(new EnableControlFlowGuard());
         }
 
         [Fact]
         public void EnableControlFlowGuard_Pass()
         {
-            //VerifyPass(new EnableControlFlowGuard());
+            VerifyPass(new EnableControlFlowGuard());
         }
 
         [Fact]
@@ -697,7 +728,30 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-            VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy);
+            VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
+        }
+
+        [Fact]
+        public void SignSecurely_Fail()
+        {
+            VerifyFail(new SignSecurely());
+        }
+
+        [Fact]
+        public void SignSecurely_Pass()
+        {
+            string kernel32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
+            kernel32Path = Path.Combine(kernel32Path, "kernel32.dll");
+
+            VerifyPass(new SignSecurely(), additionalTestFiles : new[] { kernel32Path });
+        }
+
+        [Fact]
+        public void SignSecurely_NotApplicable()
+        {
+            HashSet<string> applicableTo = new HashSet<string>();
+            applicableTo.Add(MetadataConditions.ImageIsNotSigned);
+            VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableToSpecifiedTarget);
         }
     }
 }

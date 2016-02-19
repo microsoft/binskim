@@ -4,34 +4,67 @@
 using System.Composition;
 using System.Linq;
 using System.Reflection.PortableExecutable;
-using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+using System.Collections.Generic;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer))]
-    public class InitializeStackProtection : IBinarySkimmer, IRuleContext
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor))]
+    public class InitializeStackProtection : BinarySkimmerBase
     {
-        public string Id { get { return RuleConstants.InitializeStackProtectionId; } }
+        /// <summary>
+        /// BA2013
+        /// 
+        /// </summary>
+        public override string Id { get { return RuleIds.InitializeStackProtectionId; } }
 
-        public string Name { get { return nameof(InitializeStackProtection); } }
+        /// <summary>
+        /// Binaries should properly initialize the stack protector (/GS) in order
+        /// to increase the difficulty of exploiting stack buffer overflow memory
+        /// corruption vulnerabilities. The stack protector requires access to
+        /// entropy in order to be effective, which means a binary must initialize
+        /// a random number generator at startup, by calling
+        /// __security_init_cookie() as close to the binary's entry point as
+        /// possible. Failing to do so will result in spurious buffer overflow
+        /// detections on the part of the stack protector. To resolve this issue,
+        /// use the default entry point provided by the C runtime, which will make
+        /// this call for you, or call __security_init_cookie() manually in your
+        /// custom entry point.
+        /// </summary>
 
-        public void Initialize(BinaryAnalyzerContext context) { return; }
+        public override string FullDescription
+        {
+            get { return RuleResources.BA2013_InitializeStackProtection_Description; }
+        }
 
-        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2013_Pass),
+                    nameof(RuleResources.BA2013_Pass_NoCode),
+                    nameof(RuleResources.BA2013_NotApplicable_FeatureNotEnabled),
+                    nameof(RuleResources.BA2013_Error)};
+            }
+        }
+
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             return StackProtectionUtilities.CommonCanAnalyze(context, out reasonForNotAnalyzing);
         }
 
-        public void Analyze(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
 
             if (context.Pdb == null)
             {
-                context.Logger.Log(MessageKind.Fail, context,
-                    RuleUtilities.BuildCouldNotLoadPdbMessage(context));
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
                 return;
             }
 
@@ -42,9 +75,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (noCode)
             {
                 // '{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code.
-                context.Logger.Log(MessageKind.Pass, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.InitializeStackProtection_NoCode_Pass));
+                context.Logger.Log(this, 
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                        nameof(RuleResources.BA2013_Pass_NoCode)));
                 return;
             }
 
@@ -57,11 +90,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!bHasGSCheck && !bHasGSInit)
             {
-                // '{0}' is a C or C++ binary that does not make use of the stack protection 
-                // buffer security feature. It is therefore not required to initialize the feature.
-                context.Logger.Log(MessageKind.Pass, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.InitializeStackProtection_NoFeatureUse_Pass));
+                // '{0}' is a C or C++ binary that does enable the stack protection buffer
+                // security feature. It is therefore not required to initialize the stack protector.
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.NotApplicable, context, null,
+                        nameof(RuleResources.BA2013_NotApplicable_FeatureNotEnabled)));
                 return;
             }
 
@@ -78,9 +111,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // protector. To resolve this issue, use the default entry point provided 
                 // by the C runtime, which will make this call for you, or call 
                 // __security_init_cookie() manually in your custom entry point.
-                context.Logger.Log(MessageKind.Fail, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.InitializeStackProtection_Fail));
+                context.Logger.Log(this, 
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2013_Error)));
                 return;
             }
 
@@ -88,9 +121,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // that properly initializes the stack protecter. This has the 
             //effect of increasing the effectiveness of the feature and reducing 
             // spurious detections.
-            context.Logger.Log(MessageKind.Pass, context,
-                RuleUtilities.BuildMessage(context,
-                   RulesResources.InitializeStackProtection_Pass));
+            context.Logger.Log(this, 
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                   nameof(RuleResources.BA2013_Pass)));
         }
     }
 }

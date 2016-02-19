@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.CodeAnalysis.BinSkim.Sdk.SdkResources", typeof(SdkResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.CodeAnalysis.IL.Sdk.SdkResources", typeof(SdkResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -151,6 +151,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is not signed .
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotSigned {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotSigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is a pre-version 7 Windows CE binary.
         /// </summary>
         internal static string MetadataCondition_ImageIsPreV7WindowsCEBinary {
@@ -183,15 +192,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string RuleWasDisabledDueToMissingPolicy {
             get {
                 return ResourceManager.GetString("RuleWasDisabledDueToMissingPolicy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; as {2}: &apos;{3}&apos;.
-        /// </summary>
-        internal static string TargetNotAnalyzed_MissingPdb {
-            get {
-                return ResourceManager.GetString("TargetNotAnalyzed_MissingPdb", resourceCulture);
             }
         }
         

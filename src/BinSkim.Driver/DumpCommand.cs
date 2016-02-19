@@ -6,9 +6,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
-using Microsoft.CodeAnalysis.Driver;
+using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -20,11 +22,19 @@ namespace Microsoft.CodeAnalysis.IL
 
             foreach (string specifier in dumpOptions.BinaryFileSpecifiers)
             {
-                var fileSpecifier = new FileSpecifier(specifier, recurse: dumpOptions.Recurse, filter: "*.dll");
-                targets.AddRange(fileSpecifier.Files);
+                if (Directory.Exists(specifier))
+                {
+                    var fileSpecifier = new FileSpecifier(specifier, recurse: dumpOptions.Recurse, filter: "*.dll");
+                    targets.AddRange(fileSpecifier.Files);
 
-                fileSpecifier = new FileSpecifier(specifier, recurse: dumpOptions.Recurse, filter: "*.exe");
-                targets.AddRange(fileSpecifier.Files);
+                    fileSpecifier = new FileSpecifier(specifier, recurse: dumpOptions.Recurse, filter: "*.exe");
+                    targets.AddRange(fileSpecifier.Files);
+                }
+                else
+                {
+                    var fileSpecifier = new FileSpecifier(specifier, recurse: dumpOptions.Recurse);
+                    targets.AddRange(fileSpecifier.Files);
+                }
             }
 
             var dumpTask = Task.Run(() => Parallel.ForEach(targets, (target) => DumpFile(target, dumpOptions.Verbose)));
@@ -99,17 +109,18 @@ namespace Microsoft.CodeAnalysis.IL
             catch (PdbParseException pdbParseException)
             {
                 sb.AppendLine(pdbParseException.ExceptionCode.ToString());
-                sb.AppendLine();
-                return;
             }
 
-            if (verbose)
+            if (pdb != null)
             {
-                sb.AppendLine(pdb.PdbLocation);
-            }
-            else
-            {
-                sb.AppendLine(Path.GetFileName(pdb.PdbLocation));
+                if (verbose)
+                {
+                    sb.AppendLine(pdb.PdbLocation);
+                }
+                else
+                {
+                    sb.AppendLine(Path.GetFileName(pdb.PdbLocation));
+                }
             }
 
             sb.AppendLine(Indent + "SHA1: " + pe.SHA1Hash);

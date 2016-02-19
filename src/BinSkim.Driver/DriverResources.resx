@@ -120,13 +120,41 @@
   <data name="Analyzing" xml:space="preserve">
     <value>Analyzing {0}...</value>
   </data>
+  <data name="ExceptionAnalyzingTarget" xml:space="preserve">
+    <value>An exception was raised analyzing '{0}' for check '{1}' (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing image metadata and not specific to the rule, however. Exception information:
+{2}</value>
+  </data>
+  <data name="ExceptionCheckingApplicability" xml:space="preserve">
+    <value>An exception was raised attempting to determine whether '{0}' is a valid analysis target for check '{1}' (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however. Exception information:
+{2}</value>
+  </data>
   <data name="ExceptionCreatingLogFile" xml:space="preserve">
     <value>An exception was raised attempting to create output file '{0}'. Exception information:
+{1}</value>
+  </data>
+  <data name="ExceptionInAnalysisEngine_Description" xml:space="preserve">
+    <value>An exception was raised in the analysis engine.</value>
+  </data>
+  <data name="ExceptionInitializingRule" xml:space="preserve">
+    <value>An exception was raised initializing check '{0}' (which has been disabled for the remainder of the analysis). Exception information:
+{1}</value>
+  </data>
+  <data name="ExceptionInRule_Description" xml:space="preserve">
+    <value>An exception was raised in an analysis rule, indicating an issue with the rule itself or a problem inspecting the binary being analyzed.</value>
+  </data>
+  <data name="ExceptionLoadingAnalysisPlugIn" xml:space="preserve">
+    <value>An exception was raised attempting to load analysis plug-in '{0}'. Exception information:
 {1}</value>
   </data>
   <data name="ExceptionLoadingAnalysisTarget" xml:space="preserve">
     <value>An exception was raised attempting to load analysis target '{0}'. Exception information:
 {1}</value>
+  </data>
+  <data name="InvalidConfiguration_Description" xml:space="preserve">
+    <value>An exception was raised while configuring analysis for execution.</value>
+  </data>
+  <data name="InvalidPE_Description" xml:space="preserve">
+    <value>A binary was not analyzed as the it does not appear to be a valid portable executable.</value>
   </data>
   <data name="NoAnalyzerPathsSpecified" xml:space="preserve">
     <value>No analyzer paths specified</value>
@@ -135,23 +163,7 @@
     <value>Application exited unexpectedly.</value>
   </data>
   <data name="UnhandledEngineException" xml:space="preserve">
-    <value>An unhandled exception was raised during analysis:
+    <value>An exception was raised during analysis:
 {0}</value>
-  </data>
-  <data name="UnhandledExceptionCheckingApplicability" xml:space="preserve">
-    <value>An unhandled exception was raised attempting to determine whether '{0}' is a valid analysis target for check '{1}' (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing image metadata and not specific to the rule, however. Exception information:
-{2}</value>
-  </data>
-  <data name="UnhandledExceptionInitializingRule" xml:space="preserve">
-    <value>An unhandled exception was raised initializing check '{0}' (which has been disabled for the remainder of the analysis). Exception information:
-{1}</value>
-  </data>
-  <data name="UnhandledExceptionLoadingRoslynAnalyzer" xml:space="preserve">
-    <value>An exception was raised attempting to load Roslyn analyzer '{0}'. Exception information:
-{1}</value>
-  </data>
-  <data name="UnhandledRuleExceptionAnalyzingTarget" xml:space="preserve">
-    <value>An unhandled exception was raised analyzing '{0}' for check '{1}' (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing image metadata and not specific to the rule, however. Exception information:
-{2}</value>
   </data>
 </root>

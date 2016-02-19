@@ -147,6 +147,9 @@
   <data name="MetadataCondition_ImageIsNot64BitBinary" xml:space="preserve">
     <value>image is not a 64-bit binary</value>
   </data>
+  <data name="MetadataCondition_ImageIsNotSigned" xml:space="preserve">
+    <value>image is not signed </value>
+  </data>
   <data name="MetadataCondition_ImageIsPreV7WindowsCEBinary" xml:space="preserve">
     <value>image is a pre-version 7 Windows CE binary</value>
   </data>
@@ -158,9 +161,6 @@
   </data>
   <data name="RuleWasDisabledDueToMissingPolicy" xml:space="preserve">
     <value>Check '{0}' was disabled for this run as the analysis was not configured with required policy ({1}). To resolve this, configure and provide a policy file on the BinSkim command-line using the --policy argument (recommended), or pass --defaultPolicy to invoke built-in settings. Invoke the BinSkim.exe 'export' command to produce an initial policy file that can be edited if required and passed back into the tool.</value>
-  </data>
-  <data name="TargetNotAnalyzed_MissingPdb" xml:space="preserve">
-    <value>'{0}' was not evaluated for check '{1}' as {2}: '{3}'</value>
   </data>
   <data name="TargetNotAnalyzed_NotAPortableExecutable" xml:space="preserve">
     <value>'{0}' was not analyzed as it does not appear to be a valid portable executable.</value>

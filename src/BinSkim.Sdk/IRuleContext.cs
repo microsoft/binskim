@@ -8,5 +8,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         string Id { get; }
 
         string Name { get; }
+
+        string FullDescription { get; }
     }
 }

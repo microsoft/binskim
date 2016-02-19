@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.IL {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.CodeAnalysis.BinSkim.DriverResources", typeof(DriverResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.CodeAnalysis.IL.DriverResources", typeof(DriverResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -70,6 +70,26 @@ namespace Microsoft.CodeAnalysis.IL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An exception was raised analyzing &apos;{0}&apos; for check &apos;{1}&apos; (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing image metadata and not specific to the rule, however. Exception information:
+        ///{2}.
+        /// </summary>
+        internal static string ExceptionAnalyzingTarget {
+            get {
+                return ResourceManager.GetString("ExceptionAnalyzingTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception was raised attempting to determine whether &apos;{0}&apos; is a valid analysis target for check &apos;{1}&apos; (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however. Exception information:
+        ///{2}.
+        /// </summary>
+        internal static string ExceptionCheckingApplicability {
+            get {
+                return ResourceManager.GetString("ExceptionCheckingApplicability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An exception was raised attempting to create output file &apos;{0}&apos;. Exception information:
         ///{1}.
         /// </summary>
@@ -80,12 +100,68 @@ namespace Microsoft.CodeAnalysis.IL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An exception was raised in the analysis engine..
+        /// </summary>
+        internal static string ExceptionInAnalysisEngine_Description {
+            get {
+                return ResourceManager.GetString("ExceptionInAnalysisEngine_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception was raised initializing check &apos;{0}&apos; (which has been disabled for the remainder of the analysis). Exception information:
+        ///{1}.
+        /// </summary>
+        internal static string ExceptionInitializingRule {
+            get {
+                return ResourceManager.GetString("ExceptionInitializingRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception was raised in an analysis rule, indicating an issue with the rule itself or a problem inspecting the binary being analyzed..
+        /// </summary>
+        internal static string ExceptionInRule_Description {
+            get {
+                return ResourceManager.GetString("ExceptionInRule_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception was raised attempting to load analysis plug-in &apos;{0}&apos;. Exception information:
+        ///{1}.
+        /// </summary>
+        internal static string ExceptionLoadingAnalysisPlugIn {
+            get {
+                return ResourceManager.GetString("ExceptionLoadingAnalysisPlugIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An exception was raised attempting to load analysis target &apos;{0}&apos;. Exception information:
         ///{1}.
         /// </summary>
         internal static string ExceptionLoadingAnalysisTarget {
             get {
                 return ResourceManager.GetString("ExceptionLoadingAnalysisTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception was raised while configuring analysis for execution..
+        /// </summary>
+        internal static string InvalidConfiguration_Description {
+            get {
+                return ResourceManager.GetString("InvalidConfiguration_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A binary was not analyzed as the it does not appear to be a valid portable executable..
+        /// </summary>
+        internal static string InvalidPE_Description {
+            get {
+                return ResourceManager.GetString("InvalidPE_Description", resourceCulture);
             }
         }
         
@@ -108,52 +184,12 @@ namespace Microsoft.CodeAnalysis.IL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An unhandled exception was raised during analysis:
+        ///   Looks up a localized string similar to An exception was raised during analysis:
         ///{0}.
         /// </summary>
         internal static string UnhandledEngineException {
             get {
                 return ResourceManager.GetString("UnhandledEngineException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to An unhandled exception was raised attempting to determine whether &apos;{0}&apos; is a valid analysis target for check &apos;{1}&apos; (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing image metadata and not specific to the rule, however. Exception information:
-        ///{2}.
-        /// </summary>
-        internal static string UnhandledExceptionCheckingApplicability {
-            get {
-                return ResourceManager.GetString("UnhandledExceptionCheckingApplicability", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to An unhandled exception was raised initializing check &apos;{0}&apos; (which has been disabled for the remainder of the analysis). Exception information:
-        ///{1}.
-        /// </summary>
-        internal static string UnhandledExceptionInitializingRule {
-            get {
-                return ResourceManager.GetString("UnhandledExceptionInitializingRule", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to An exception was raised attempting to load Roslyn analyzer &apos;{0}&apos;. Exception information:
-        ///{1}.
-        /// </summary>
-        internal static string UnhandledExceptionLoadingRoslynAnalyzer {
-            get {
-                return ResourceManager.GetString("UnhandledExceptionLoadingRoslynAnalyzer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to An unhandled exception was raised analyzing &apos;{0}&apos; for check &apos;{1}&apos; (which has been disabled for the remainder of the analysis). The exception may have resulted from a problem related to parsing image metadata and not specific to the rule, however. Exception information:
-        ///{2}.
-        /// </summary>
-        internal static string UnhandledRuleExceptionAnalyzingTarget {
-            get {
-                return ResourceManager.GetString("UnhandledRuleExceptionAnalyzingTarget", resourceCulture);
             }
         }
     }

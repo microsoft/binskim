@@ -4,7 +4,7 @@
     <ProjectGuid>{494AC26C-9591-4137-A3D4-5CD9B8D169DB}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup>
-    <RootNamespace>Microsoft.CodeAnalysis.BinSkim.Rules</RootNamespace>
+    <RootNamespace>Microsoft.CodeAnalysis.IL.Rules</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyName>BinSkim.Rules</AssemblyName>
@@ -21,8 +21,16 @@
       <HintPath>..\..\refs\dia2lib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Driver.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Driver.Utilities.1.0.0\lib\net40\Driver.Utilities.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sarif, Version=1.4.33.0, Culture=neutral, PublicKeyToken=ac41962ee2e3a7cd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Sdk.1.4.33-beta\lib\net40\Sarif.pdb\Sarif.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sarif.Driver, Version=1.4.33.0, Culture=neutral, PublicKeyToken=ac41962ee2e3a7cd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Driver.1.4.33-beta\lib\net40\Sarif.Driver.pdb\Sarif.Driver.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -59,7 +67,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinarySkimmerBase.cs" />
     <Compile Include="BuildWithSecureTools.cs" />
+    <Compile Include="CryptoErrors.cs" />
     <Compile Include="DoNotDisableStackProtectionForFunctions.cs" />
     <Compile Include="DoNotIncorporateVulnerableDependencies.cs" />
     <Compile Include="DoNotMarkImportsSectionAsExecutable.cs" />
@@ -67,6 +77,8 @@
     <Compile Include="DoNotMarkWritableSectionsAsShared.cs" />
     <Compile Include="DoNotModifyStackProtectionCookie.cs" />
     <Compile Include="DoNotShipVulnerableBinaries.cs" />
+    <Compile Include="RulesExtensionMethods.cs" />
+    <Compile Include="SignSecurely.cs" />
     <Compile Include="EnableAddressSpaceLayoutRandomization.cs" />
     <Compile Include="EnableControlFlowGuard.cs" />
     <Compile Include="EnableCriticalCompilerWarnings.cs" />
@@ -75,13 +87,14 @@
     <Compile Include="EnableSafeSEH.cs" />
     <Compile Include="InitializeStackProtection.cs" />
     <Compile Include="LoadImagesAboveFourGigabyteAddress.cs" />
+    <Compile Include="NativeInterop.cs" />
     <Compile Include="RuleConstants.cs" />
     <Compile Include="MarkImageAsNXCompatible.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RulesResources.Designer.cs">
+    <Compile Include="RuleResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>RulesResources.resx</DependentUpon>
+      <DependentUpon>RuleResources.resx</DependentUpon>
     </Compile>
     <Compile Include="StackProtectionUtilities.cs" />
     <Compile Include="StringToVersionDictionary.cs" />
@@ -99,12 +112,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="RulesResources.resx">
+    <EmbeddedResource Include="RuleResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>RulesResources.Designer.cs</LastGenOutput>
+      <LastGenOutput>RuleResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

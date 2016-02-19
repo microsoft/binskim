@@ -5,22 +5,50 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Reflection.PortableExecutable;
-using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Driver;
-using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(IBinarySkimmer)), Export(typeof(IOptionsProvider))]
-    public class DoNotDisableStackProtectionForFunctions : IBinarySkimmer, IRuleContext, IOptionsProvider
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor)), Export(typeof(IOptionsProvider))]
+    public class DoNotDisableStackProtectionForFunctions : BinarySkimmerBase, IOptionsProvider
     {
-        public string Id { get { return RuleConstants.DoNotDisableStackProtectionForFunctionsId; } }
+        /// <summary>
+        /// BA2014
+        /// </summary>
+        public override string Id { get { return RuleIds.DoNotDisableStackProtectionForFunctionsId; } }
 
-        public string Name { get { return nameof(DoNotDisableStackProtectionForFunctions); } }
+        /// <summary>
+        /// Application code should not disable stack protection for individual functions. 
+        /// The stack protector (/GS) is a security feature of the Windows native compiler
+        /// which makes it more difficult to exploit stack buffer overflow memory corruption
+        /// vulnerabilities. Disabling the stack protector, even on a function-by-function
+        /// basis, can compromise the security of code. To resolve this issue, remove
+        /// occurrences of __declspec(safebuffers) from your code. If the additional code
+        /// inserted by the stack protector has been shown in profiling to cause a significant
+        /// performance problem for your application, attempt to move stack buffer
+        /// modifications out of the hot path of execution to allow the compiler to avoid
+        /// inserting stack protector checks in these locations rather than disabling the
+        /// stack protector altogether.
+        /// </summary>
+        public override string FullDescription
+        {
+            get { return RuleResources.BA2014_DoNotDisableStackProtectionForFunctions_Description; }
+        }
 
-        public void Initialize(BinaryAnalyzerContext context) { return; }
+        protected override IEnumerable<string> FormatSpecifierIds
+        {
+            get
+            {
+                return new string[] {
+                    nameof(RuleResources.BA2014_Pass),
+                    nameof(RuleResources.BA2014_Error)};
+            }
+        }
 
         public IEnumerable<IOption> GetOptions()
         {
@@ -30,7 +58,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleConstants.DoNotDisableStackProtectionForFunctionsId + "." + nameof(DoNotDisableStackProtectionForFunctions);
+        private const string AnalyzerName = RuleIds.DoNotDisableStackProtectionForFunctionsId + "." + nameof(DoNotDisableStackProtectionForFunctions);
 
         private static StringSet BuildApprovedFunctionsStringSet()
         {
@@ -39,38 +67,32 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return result;
         }
 
-        /// <summary>
-        /// Enable namespace import optimization.
-        /// </summary>
         public static PerLanguageOption<StringSet> ApprovedFunctionsThatDisableStackProtection { get; } =
             new PerLanguageOption<StringSet>(
                 AnalyzerName, nameof(StringSet), defaultValue: () => { return BuildApprovedFunctionsStringSet(); });
 
-        public void Initialize() { return; }
-
-        public AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             AnalysisApplicability applicability = StackProtectionUtilities.CommonCanAnalyze(context, out reasonForNotAnalyzing);
 
             // Checks for missing policy should always be evaluated as the last action, so that 
-            // we do not raise an error in cases where the analysis would not otherise be applied.
+            // we do not raise an error in cases where the analysis would not otherwise be applied.
             if (applicability == AnalysisApplicability.ApplicableToSpecifiedTarget)
             {
-                reasonForNotAnalyzing = RulesResources.DoNotShipVulnerabilities_MissingPolicy_InternalError;
-                if (context.Policy == null) { return AnalysisApplicability.NotApplicableToAnyTargetWithoutPolicy; }
+                reasonForNotAnalyzing = RuleResources.BA2005_MissingRequiredConfiguration;
+                if (context.Policy == null) { return AnalysisApplicability.NotApplicableDueToMissingConfiguration; }
             }
             return applicability;
         }
 
-        public void Analyze(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
             Pdb pdb = context.Pdb;
 
             if (pdb == null)
             {
-                context.Logger.Log(MessageKind.Fail, context,
-                    RuleUtilities.BuildCouldNotLoadPdbMessage(context));
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
                 return;
             }
 
@@ -106,9 +128,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // move stack buffer modifications out of the hot path of execution to allow the 
                 // compiler to avoid inserting stack protector checks in these locations rather 
                 // than disabling the stack protector altogether.
-                context.Logger.Log(MessageKind.Fail, context,
-                    RuleUtilities.BuildMessage(context,
-                        RulesResources.DoNotDisableStackProtectionForFunctions_Pass, functionNames));
+                context.Logger.Log(this, 
+                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        nameof(RuleResources.BA2014_Error), 
+                        functionNames));
                 return;
             }
 
@@ -117,9 +140,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // any individual functions (via __declspec(safebuffers), making it 
             // more difficult for an attacker to exploit stack buffer overflow 
             // memory corruption vulnerabilities.
-            context.Logger.Log(MessageKind.Pass, context,
-                RuleUtilities.BuildMessage(context,
-                    RulesResources.DoNotDisableStackProtectionForFunctions_Pass));
+            context.Logger.Log(this, 
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2014_Pass)));
         }
     }
 }

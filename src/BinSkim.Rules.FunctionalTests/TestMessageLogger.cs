@@ -3,55 +3,91 @@
 
 using System;
 using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    internal class TestMessageLogger : IMessageLogger<BinaryAnalyzerContext>
+    internal class TestMessageLogger : IAnalysisLogger
     {
         public TestMessageLogger()
         {
             FailTargets = new HashSet<string>();
             PassTargets = new HashSet<string>();
             NotApplicableTargets = new HashSet<string>();
+            ConfigurationErrorTargets = new HashSet<string>();
         }
+
+        public RuntimeConditions RuntimeErrors { get; set; }
 
         public HashSet<string> PassTargets { get; set; }
 
         public HashSet<string> FailTargets { get; set; }
 
+        public HashSet<string> ConfigurationErrorTargets { get; set; }
+
         public HashSet<string> NotApplicableTargets { get; set; }
 
-        public void Log(MessageKind messageKind, BinaryAnalyzerContext context, string message)
+        public void AnalysisStarted()
+        {
+        }
+
+        public void AnalysisStopped(RuntimeConditions runtimeConditions)
+        {
+            RuntimeErrors = runtimeConditions;
+        }
+
+        public void AnalyzingTarget(IAnalysisContext context)
+        {
+        }
+
+        public void LogMessage(bool verbose, string message)
+        {
+        }
+
+        public void Log(IRuleDescriptor rule, Result result)
+        {
+            NoteTestResult(result.Kind, result.Locations[0].AnalysisTarget[0].Uri.LocalPath);
+        }
+
+        public void NoteTestResult(ResultKind messageKind, string targetPath)
         {
             switch (messageKind)
             {
-                case MessageKind.Pass:
-                    {
-                        PassTargets.Add(context.PE.FileName);
-                        break;
-                    }
+                case ResultKind.Pass:
+                {
+                    PassTargets.Add(targetPath);
+                    break;
+                }
 
-                case MessageKind.Fail:
-                    {
-                        FailTargets.Add(context.PE.FileName);
-                        break;
-                    }
+                case ResultKind.ConfigurationError:
+                {
+                    ConfigurationErrorTargets.Add(targetPath);
+                    break;
+                }
 
-                case MessageKind.NotApplicable:
-                    {
-                        NotApplicableTargets.Add(context.PE.FileName);
-                        break;
-                    }
+                case ResultKind.Error:
+                {
+                    FailTargets.Add(targetPath);
+                    break;
+                }
 
-                case MessageKind.Note:
-                case MessageKind.Pending:
-                case MessageKind.InternalError:
-                case MessageKind.ConfigurationError:
-                    {
-                        throw new NotImplementedException();
-                    }
+                case ResultKind.NotApplicable:
+                {
+                    NotApplicableTargets.Add(targetPath);
+                    break;
+                }
+
+                case ResultKind.Note:
+                case ResultKind.InternalError:
+                {
+                    throw new NotImplementedException();
+                }
+
+                default:
+                {
+                    throw new InvalidOperationException();
+                }
             }
         }
     }
