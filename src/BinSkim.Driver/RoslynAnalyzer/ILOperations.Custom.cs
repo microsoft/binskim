@@ -14,28 +14,27 @@ namespace Microsoft.CodeAnalysis.IL
     // Some of them may be raisable to higher level constructs that are modeled by IOperation (TODO), 
     // while others can happen in IL and have no IOperation equivalent.
 
+
     internal interface ICustomOperation : IOperation { }
 
     internal abstract class CustomOperation : Operation, ICustomOperation
     {
         public override OperationKind Kind => OperationKind.None;
-    }
 
-    internal abstract class CustomExpression : Expression, ICustomOperation
-    {
-        public override OperationKind Kind => OperationKind.None;
-    }
-
-    internal sealed class TryFaultStatement : TryStatement, ICustomOperation
-    {
-        public TryFaultStatement(IBlockStatement body, IBlockStatement faultHandler)
-            : base(body)
+        public override void Accept(OperationVisitor visitor)
         {
-            FaultHandler = faultHandler;
+            visitor.DefaultVisit(this);
         }
 
-        public IBlockStatement FaultHandler { get; }
-        public override OperationKind Kind => OperationKind.None;
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.DefaultVisit(this, argument);
+        }
+    }
+
+    internal abstract class CustomExpression : CustomOperation, ICustomOperation
+    {
+        public abstract override ITypeSymbol Type { get; }
     }
 
     // temporary node to hold an endfilter operation. replaced appropriately when exception blocks are built.
@@ -94,6 +93,16 @@ namespace Microsoft.CodeAnalysis.IL
         protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new UnboxExpression(Operand, type);
+        }
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.DefaultVisit(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.DefaultVisit(this, argument);
         }
     }
 
@@ -253,6 +262,16 @@ namespace Microsoft.CodeAnalysis.IL
         protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new RefValueExpression(TypedReference, type);
+        }
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            // TODO
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return default(TResult); // TODO
         }
     }
 

@@ -14,6 +14,9 @@ namespace Microsoft.CodeAnalysis.IL
         public virtual ITypeSymbol Type => null;
         public virtual Optional<object> ConstantValue => default(Optional<object>);
 
+        public abstract void Accept(OperationVisitor visitor);
+        public abstract TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument);
+
         public override string ToString()
         {
             var name = this.GetType().Name;
@@ -28,16 +31,6 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             return name;
-        }
-
-        public void Accept(OperationVisitor visitor)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
-        {
-            throw new NotImplementedException();
         }
 
         // TODO: Hang a location from PDB off of this.
@@ -105,6 +98,16 @@ namespace Microsoft.CodeAnalysis.IL
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ImmutableArray<IArgument> IInvocationExpression.ArgumentsInSourceOrder => Arguments;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitInvocationExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitInvocationExpression(this, argument);
+        }
     }
 
     internal sealed class ObjectCreationExpression : HasArgumentsExpression, IObjectCreationExpression
@@ -123,6 +126,16 @@ namespace Microsoft.CodeAnalysis.IL
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ImmutableArray<ISymbolInitializer> IObjectCreationExpression.MemberInitializers => ImmutableArray<ISymbolInitializer>.Empty;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitObjectCreationExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitObjectCreationExpression(this, argument);
+        }
     }
 
     internal sealed class Argument : Operation, IArgument
@@ -150,9 +163,19 @@ namespace Microsoft.CodeAnalysis.IL
         {
             return $"Argument [{Parameter?.Name ?? "(vararg)"} : {Value}]";
         }
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitArgument(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitArgument(this, argument);
+        }
     }
 
-    internal sealed class DefaultValueExpression : Expression
+    internal sealed class DefaultValueExpression : Expression, IDefaultValueExpression
     {
         public DefaultValueExpression(ITypeSymbol type)
         {
@@ -161,6 +184,16 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override ITypeSymbol Type { get; }
         public override OperationKind Kind => OperationKind.DefaultValueExpression;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitDefaultValueExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitDefaultValueExpression(this, argument);
+        }
     }
 
     internal abstract class ReferenceExpression : Expression, IReferenceExpression
@@ -201,6 +234,16 @@ namespace Microsoft.CodeAnalysis.IL
         public ImmutableArray<IOperation> Indices { get; }
         public override OperationKind Kind => OperationKind.ArrayElementReferenceExpression;
 
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitArrayElementReferenceExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitArrayElementReferenceExpression(this, argument);
+        }
+
         protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new ArrayElementReferenceExpression(ArrayReference, Indices, type);
@@ -221,6 +264,16 @@ namespace Microsoft.CodeAnalysis.IL
         protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new PointerIndirectionReferenceExpression(Pointer, type);
+        }
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitPointerIndirectionReferenceExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitPointerIndirectionReferenceExpression(this, argument);
         }
     }
 
@@ -249,6 +302,16 @@ namespace Microsoft.CodeAnalysis.IL
         {
             return new LocalReferenceExpression(Local, type);
         }
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitLocalReferenceExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitLocalReferenceExpression(this, argument);
+        }
     }
 
     internal class ParameterReferenceExpression : ReferenceExpression, IParameterReferenceExpression
@@ -276,6 +339,16 @@ namespace Microsoft.CodeAnalysis.IL
         {
             return new ParameterReferenceExpression(Parameter, type);
         }
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitParameterReferenceExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitParameterReferenceExpression(this, argument);
+        }
     }
 
     internal sealed class InstanceReferenceExpression : ReferenceExpression, IInstanceReferenceExpression
@@ -292,6 +365,16 @@ namespace Microsoft.CodeAnalysis.IL
 
         public InstanceReferenceKind InstanceReferenceKind => InstanceReferenceKind.Explicit; // TODO/FEEDBACK: needs to be adjusted to base sometimes, but what about other bindings?
         public override OperationKind Kind => OperationKind.InstanceReferenceExpression;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitInstanceReferenceExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitInstanceReferenceExpression(this, argument);
+        }
 
         public override string ToString()
         {
@@ -332,6 +415,16 @@ namespace Microsoft.CodeAnalysis.IL
         public IFieldSymbol Field => (IFieldSymbol)Member;
         public override OperationKind Kind => OperationKind.FieldReferenceExpression;
 
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitFieldReferenceExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitFieldReferenceExpression(this, argument);
+        }
+
         protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new FieldReferenceExpression(Instance, Field, type);
@@ -362,6 +455,16 @@ namespace Microsoft.CodeAnalysis.IL
         public override ITypeSymbol Type { get; }
 
         public override OperationKind Kind => OperationKind.UnaryOperatorExpression;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitUnaryOperatorExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitUnaryOperatorExpression(this, argument);
+        }
     }
 
     internal sealed class BinaryOperatorExpression : HasOperatorMethodExpression, IBinaryOperatorExpression
@@ -379,6 +482,16 @@ namespace Microsoft.CodeAnalysis.IL
         public IOperation RightOperand { get; }
         public override ITypeSymbol Type { get; }
         public override OperationKind Kind => OperationKind.BinaryOperatorExpression;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitBinaryOperatorExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitBinaryOperatorExpression(this, argument);
+        }
     }
 
     internal sealed class ConversionExpression : HasOperatorMethodExpression, IConversionExpression
@@ -396,6 +509,16 @@ namespace Microsoft.CodeAnalysis.IL
         public override OperationKind Kind => OperationKind.ConversionExpression;
 
         bool IConversionExpression.IsExplicit => true;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitConversionExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitConversionExpression(this, argument);
+        }
     }
 
     internal sealed class SizeOfExpression : Expression, ISizeOfExpression
@@ -409,6 +532,16 @@ namespace Microsoft.CodeAnalysis.IL
         public ITypeSymbol TypeOperand { get; }
         public override ITypeSymbol Type { get; }
         public override OperationKind Kind => OperationKind.SizeOfExpression;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitSizeOfExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitSizeOfExpression(this, argument);
+        }
     }
 
     internal sealed class LiteralExpression : Expression, ILiteralExpression
@@ -430,6 +563,16 @@ namespace Microsoft.CodeAnalysis.IL
         {
             return $"Literal [{ConstantValue.Value ?? "null"}]";
         }
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitLiteralExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitLiteralExpression(this, argument);
+        }
     }
 
     internal sealed class AddressOfExpression : Expression, IAddressOfExpression
@@ -443,6 +586,16 @@ namespace Microsoft.CodeAnalysis.IL
         public IReferenceExpression Reference { get; }
         public override ITypeSymbol Type { get; }
         public override OperationKind Kind => OperationKind.AddressOfExpression;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitAddressOfExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitAddressOfExpression(this, argument);
+        }
     }
 
     internal sealed class ArrayCreationExpression : Expression, IArrayCreationExpression
@@ -460,6 +613,16 @@ namespace Microsoft.CodeAnalysis.IL
         public override OperationKind Kind => OperationKind.ArrayCreationExpression;
 
         IArrayInitializer IArrayCreationExpression.Initializer => null;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitArrayCreationExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitArrayCreationExpression(this, argument);
+        }
     }
 
     internal sealed class AssignmentExpression : Expression, IAssignmentExpression
@@ -479,6 +642,16 @@ namespace Microsoft.CodeAnalysis.IL
         public override string ToString()
         {
             return $"Assignment [{Target} = {Value}]";
+        }
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitAssignmentExpression(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitAssignmentExpression(this, argument);
         }
     }
 
@@ -505,6 +678,16 @@ namespace Microsoft.CodeAnalysis.IL
         // arbitrary exception filters). The interpretation is that the final operation yields
         // the result.
         public override ITypeSymbol Type => Statements[Statements.Length - 1].Type;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitBlockStatement(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitBlockStatement(this, argument);
+        }
     }
 
     internal sealed class LabelStatement : Operation, ILabelStatement
@@ -524,6 +707,16 @@ namespace Microsoft.CodeAnalysis.IL
         {
             return $"Label: {Label.Name}";
         }
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitLabelStatement(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitLabelStatement(this, argument);
+        }
     }
 
     internal sealed class IfStatement : Operation, IIfStatement
@@ -539,6 +732,16 @@ namespace Microsoft.CodeAnalysis.IL
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IOperation IIfStatement.IfFalseStatement => null; // we always goto on true and fallthrough on false 
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitIfStatement(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitIfStatement(this, argument);
+        }
     }
 
     internal sealed class BranchStatement : Operation, IBranchStatement
@@ -556,6 +759,16 @@ namespace Microsoft.CodeAnalysis.IL
         {
             return $"GoTo {Target.Name}";
         }
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitBranchStatement(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitBranchStatement(this, argument);
+        }
     }
 
     internal sealed class ThrowStatement : Operation, IThrowStatement
@@ -571,6 +784,16 @@ namespace Microsoft.CodeAnalysis.IL
         public override string ToString()
         {
             return ThrownObject == null ? "Throw" : $"Throw [{ThrownObject}]";
+        }
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitThrowStatement(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitThrowStatement(this, argument);
         }
     }
 
@@ -588,6 +811,16 @@ namespace Microsoft.CodeAnalysis.IL
         {
             return ReturnedValue == null ? "Return" : $"Return [{ReturnedValue}]";
         }
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitReturnStatement(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitReturnStatement(this, argument);
+        }
     }
 
     internal abstract class TryStatement : Operation, ITryStatement
@@ -604,6 +837,16 @@ namespace Microsoft.CodeAnalysis.IL
         public virtual IBlockStatement FinallyHandler => null;
 
         public override OperationKind Kind => OperationKind.TryStatement;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitTryStatement(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitTryStatement(this, argument);
+        }
     }
 
     internal sealed class TryCatchStatement : TryStatement
@@ -628,6 +871,18 @@ namespace Microsoft.CodeAnalysis.IL
         public override IBlockStatement FinallyHandler { get; }
     }
 
+    internal sealed class TryFaultStatement : TryStatement, ICustomOperation
+    {
+        public TryFaultStatement(IBlockStatement body, IBlockStatement faultHandler)
+            : base(body)
+        {
+            FaultHandler = faultHandler;
+        }
+
+        // FEEDBACK: This is not exposed publicly
+        public IBlockStatement FaultHandler { get; }
+    }
+
     internal sealed class CatchClause : Operation, ICatchClause
     {
         public CatchClause(ITypeSymbol caughtType, ILocalSymbol exceptionLocal, IOperation filter, IBlockStatement handler)
@@ -644,6 +899,16 @@ namespace Microsoft.CodeAnalysis.IL
         public IBlockStatement Handler { get; }
 
         public override OperationKind Kind => OperationKind.CatchClause;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitCatch(this); // FEEDBACK: inconsistent naming
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitCatch(this, argument); // FEEDBACK: inconsistent naming
+        }
     }
 
     internal sealed class SwitchStatement : Operation, ISwitchStatement
@@ -660,6 +925,16 @@ namespace Microsoft.CodeAnalysis.IL
         public ImmutableArray<ISwitchCase> Cases { get; }
 
         public override OperationKind Kind => OperationKind.SwitchStatement;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitSwitchStatement(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitSwitchStatement(this, argument);
+        }
     }
 
     internal sealed class SwitchCase : Operation, ISwitchCase
@@ -682,6 +957,16 @@ namespace Microsoft.CodeAnalysis.IL
             return $"Case {((Clause)Clauses[0]).Value}";
         }
 
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitSwitchCase(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitSwitchCase(this, argument);
+        }
+
         private sealed class Clause : Operation, ISingleValueCaseClause
         {
             public Clause(IOperation value)
@@ -694,6 +979,16 @@ namespace Microsoft.CodeAnalysis.IL
             public BinaryOperationKind Equality => BinaryOperationKind.IntegerEquals;
             public CaseKind CaseKind => CaseKind.SingleValue;
             public override OperationKind Kind => OperationKind.SingleValueCaseClause;
+
+            public override void Accept(OperationVisitor visitor)
+            {
+                visitor.VisitSingleValueCaseClause(this);
+            }
+
+            public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+            {
+                return visitor.VisitSingleValueCaseClause(this, argument);
+            }
         }
     }
 }
