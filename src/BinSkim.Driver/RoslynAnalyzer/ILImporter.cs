@@ -36,13 +36,20 @@ namespace Microsoft.CodeAnalysis.IL
             _statements = ImmutableArray.CreateBuilder<IOperation>();
         }
 
-        public IBlockStatement Import()
+        public IOperation Import()
         {
-            DecodeLocals();
-            FindBasicBlocks();
-            FindExceptionRegions();
-            ImportBasicBlocks();
-            return ImportBlockStatement(0, _ilBytes.Length, locals: _locals.ToImmutable());
+            try
+            {
+                DecodeLocals();
+                FindBasicBlocks();
+                FindExceptionRegions();
+                ImportBasicBlocks();
+                return ImportBlockStatement(0, _ilBytes.Length, locals: _locals.ToImmutable());
+            }
+            catch (Exception ex) when (ex is BadImageFormatException || ex is NotImplementedException)
+            {
+                return new InvalidStatement(ex);
+            }
         }
 
         private IBlockStatement ImportBlockStatement(

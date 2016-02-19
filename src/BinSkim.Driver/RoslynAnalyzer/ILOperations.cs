@@ -13,6 +13,8 @@ namespace Microsoft.CodeAnalysis.IL
         public abstract OperationKind Kind { get; }
         public virtual ITypeSymbol Type => null;
         public virtual Optional<object> ConstantValue => default(Optional<object>);
+        public virtual bool IsInvalid => false;
+
 
         public abstract void Accept(OperationVisitor visitor);
         public abstract TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument);
@@ -39,9 +41,7 @@ namespace Microsoft.CodeAnalysis.IL
         SyntaxNode IOperation.Syntax => s_fakeStatement;
         private static readonly SyntaxNode s_fakeStatement = CSharp.SyntaxFactory.EmptyStatement();
 
-        // TODO: Handle invalid IL gracefully
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        bool IOperation.IsInvalid => false;
+ 
     }
 
     internal abstract class Expression : Operation, IOperation
@@ -989,6 +989,28 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 return visitor.VisitSingleValueCaseClause(this, argument);
             }
+        }
+    }
+
+    internal sealed class InvalidStatement : Operation, IInvalidStatement
+    {
+        public InvalidStatement(Exception exception)
+        {
+            Exception = exception;
+        }
+
+        public Exception Exception { get; }
+        public override bool IsInvalid => true;
+        public override OperationKind Kind => OperationKind.InvalidStatement;
+
+        public override void Accept(OperationVisitor visitor)
+        {
+            visitor.VisitInvalidStatement(this);
+        }
+
+        public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
+        {
+            return visitor.VisitInvalidStatement(this, argument);
         }
     }
 }

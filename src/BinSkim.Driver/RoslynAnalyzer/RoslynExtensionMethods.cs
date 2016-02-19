@@ -5,11 +5,39 @@ using System;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
+using System.Reflection;
 
 namespace Microsoft.CodeAnalysis.IL
 {
+    internal enum MetadataImportOptions : byte
+    {
+        /// <summary>  
+        /// Only import public and protected symbols.  
+        /// </summary>  
+        Public = 0,
+
+        /// <summary>  
+        /// Import public, protected and internal symbols.  
+        /// </summary>  
+        Internal = 1,
+
+        /// <summary>  
+        /// Import all symbols.
+        /// </summary>
+        All = 2,
+    }
+
     internal static class RoslynExtensionMethods
     {
+        // Temporary workaround while blocked on https://github.com/dotnet/roslyn/issues/6748  
+        // This method is only called once. No fancy tricks required for speed.
+        public static void SetMetadataImportOptions(this CompilationOptions instance, MetadataImportOptions options)
+        {
+            typeof(CompilationOptions)
+                .GetProperty(nameof(MetadataImportOptions), BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(instance, options);
+        }
+
         public static IRuleDescriptor ConvertToRuleDescriptor(this Diagnostic diagnostic)
         {
             // TODO we should consume the standard Roslyn->SARIF emit code here.

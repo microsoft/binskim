@@ -80,7 +80,9 @@ namespace Microsoft.CodeAnalysis.IL
             // of analyzing it). Using this mechanism, we can scan types/members contained in the 
             // binary. We cannot currently retrieve IL from method bodies.
             var reference = MetadataReference.CreateFromFile(targetPath);
-            var compilation = CSharpCompilation.Create("_", references: new[] { reference });
+            var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+            options.SetMetadataImportOptions(MetadataImportOptions.All);
+            var compilation = CSharpCompilation.Create("_", options: options, references: new[] { reference });
             var target = compilation.GetAssemblyOrModuleSymbol(reference);
 
             using (var stream = File.OpenRead(targetPath))
@@ -141,7 +143,7 @@ namespace Microsoft.CodeAnalysis.IL
             perCompilationSymbolActions.Invoke(symbol.Kind, symbolContext);
 
             var method = symbol as IMethodSymbol;
-            if (symbol != null)
+            if (method != null)
             {
                 AnalyzeMethodBody(method, compilation, reportDiagnostic, peReader, metadataReader, cancellationToken);
             }

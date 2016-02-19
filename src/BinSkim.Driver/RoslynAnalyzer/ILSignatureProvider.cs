@@ -47,6 +47,11 @@ namespace Microsoft.CodeAnalysis.IL
                 return type;
             }
 
+            if (type is IErrorTypeSymbol)
+            {
+                throw new NotImplementedException();
+            }
+
             if (count == type.Arity)
             {
                 var typeArgumentArray = new ITypeSymbol[count];
