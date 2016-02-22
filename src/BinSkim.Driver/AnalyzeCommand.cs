@@ -133,7 +133,7 @@ namespace Microsoft.CodeAnalysis.IL
                 var region = diagnostic.Location.ConvertToRegion();
                 string filePath;
 
-                if (diagnostic.Location != Location.None)
+                if (diagnostic.Location.IsInSource)
                 {
                     filePath = diagnostic.Location.GetLineSpan().Path;
 
