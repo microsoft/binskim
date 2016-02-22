@@ -38,6 +38,8 @@ namespace Microsoft.CodeAnalysis.IL
 
                 var importer = new ILImporter(compilation, metadataReader, method, methodBody);
                 var body = importer.Import();
+
+                Assert.False(body.IsInvalid, (body as InvalidStatement)?.Exception.ToString());
             }
         }
 
