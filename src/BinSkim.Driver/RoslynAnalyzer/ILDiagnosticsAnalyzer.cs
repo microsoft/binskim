@@ -157,10 +157,14 @@ namespace Microsoft.CodeAnalysis.IL
             MetadataReader metadataReader,
             CancellationToken cancellationToken)
         {
-            var handle = (MethodDefinitionHandle)method.MetadataHandle;
-            Debug.Assert(!handle.IsNil);
+            var handle = method.MetadataHandle;
 
-            var methodDef = metadataReader.GetMethodDefinition(handle);
+            if (handle.IsNil)
+            {
+                return; // synthesized symbol (no metadata backing)
+            }
+
+            var methodDef = metadataReader.GetMethodDefinition((MethodDefinitionHandle)handle);
             if (methodDef.RelativeVirtualAddress == 0)
             {
                 return; // abstract or extern
