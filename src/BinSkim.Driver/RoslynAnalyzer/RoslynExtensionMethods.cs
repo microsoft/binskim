@@ -48,7 +48,12 @@ namespace Microsoft.CodeAnalysis.IL
             ruleDescriptor.FormatSpecifiers = new Dictionary<string, string>();
             ruleDescriptor.FormatSpecifiers["Default"] = diagnosticDescriptor.MessageFormat.ToString();
             ruleDescriptor.FullDescription = diagnosticDescriptor.Description.ToString();
-            ruleDescriptor.HelpUri = new Uri(diagnosticDescriptor.HelpLinkUri);
+
+            if (!String.IsNullOrEmpty(diagnosticDescriptor.HelpLinkUri))
+            {
+                ruleDescriptor.HelpUri = new Uri(diagnosticDescriptor.HelpLinkUri);
+            }
+
             ruleDescriptor.Id = diagnosticDescriptor.Id;
 
             // TODO: review this decision
