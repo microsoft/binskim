@@ -139,12 +139,12 @@ Global
 		{288089C5-8721-458E-BE3E-78990DAB5E2D}.Release|x86.Build.0 = Release|Any CPU
 		{F3E433C8-352F-4944-BF7F-765CE435370D}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{F3E433C8-352F-4944-BF7F-765CE435370D}.Debug|x64.Build.0 = Debug|Any CPU
-		{F3E433C8-352F-4944-BF7F-765CE435370D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F3E433C8-352F-4944-BF7F-765CE435370D}.Debug|x86.Build.0 = Debug|Any CPU
+		{F3E433C8-352F-4944-BF7F-765CE435370D}.Debug|x86.ActiveCfg = Debug_Future|Any CPU
+		{F3E433C8-352F-4944-BF7F-765CE435370D}.Debug|x86.Build.0 = Debug_Future|Any CPU
 		{F3E433C8-352F-4944-BF7F-765CE435370D}.Release|x64.ActiveCfg = Release|Any CPU
 		{F3E433C8-352F-4944-BF7F-765CE435370D}.Release|x64.Build.0 = Release|Any CPU
-		{F3E433C8-352F-4944-BF7F-765CE435370D}.Release|x86.ActiveCfg = Release|Any CPU
-		{F3E433C8-352F-4944-BF7F-765CE435370D}.Release|x86.Build.0 = Release|Any CPU
+		{F3E433C8-352F-4944-BF7F-765CE435370D}.Release|x86.ActiveCfg = Release_Future|Any CPU
+		{F3E433C8-352F-4944-BF7F-765CE435370D}.Release|x86.Build.0 = Release_Future|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

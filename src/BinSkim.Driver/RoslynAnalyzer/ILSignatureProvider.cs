@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis.IL
             return total;
         }
 
-        public ITypeSymbol GetModifiedType(MetadataReader reader, bool isRequired, EntityHandle modifierTypeHandle, ITypeSymbol unmodifiedType)
+        public ITypeSymbol GetModifiedType(MetadataReader reader, bool isRequired, ITypeSymbol modifierType, ITypeSymbol unmodifiedType)
         {
             return unmodifiedType; // TODO
         }
@@ -146,6 +146,11 @@ namespace Microsoft.CodeAnalysis.IL
         public ITypeSymbol GetTypeFromReference(MetadataReader reader, TypeReferenceHandle handle, SignatureTypeHandleCode code)
         {
             return GetTypeFromHandle(handle);
+        }
+
+        public ITypeSymbol GetTypeFromSpecification(MetadataReader reader, TypeSpecificationHandle handle, SignatureTypeHandleCode code)
+        {
+            return reader.GetTypeSpecification(handle).DecodeSignature(this);
         }
 
         private SpecialType GetSpecialType(PrimitiveTypeCode typeCode)

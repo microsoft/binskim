@@ -147,6 +147,7 @@
     <ProjectReference Include="..\CoreFx\src\System.Reflection.Metadata\src\System.Reflection.Metadata.csproj">
       <Project>{f3e433c8-352f-4944-bf7f-765ce435370d}</Project>
       <Name>System.Reflection.Metadata</Name>
+      <AdditionalProperties>Future=true</AdditionalProperties>
     </ProjectReference>
     <ProjectReference Include="..\Roslyn\src\Compilers\Core\Portable\CodeAnalysis.csproj">
       <Project>{1ee8cad3-55f9-4d91-96b2-084641da9a6c}</Project>
