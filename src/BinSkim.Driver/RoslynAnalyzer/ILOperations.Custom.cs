@@ -138,7 +138,6 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override void Accept(OperationVisitor visitor)
         {
-
         }
 
         public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
@@ -445,7 +444,6 @@ namespace Microsoft.CodeAnalysis.IL
 
     // isinst on value types: Like IsExpression, but result is non-boolean.
     // TODO: raise to IsExpression where possible, else ternary.
-
     internal sealed class ValueTypeAsExpression : CustomExpression
     {
         public ValueTypeAsExpression(ITypeSymbol asType, IOperation operand)
