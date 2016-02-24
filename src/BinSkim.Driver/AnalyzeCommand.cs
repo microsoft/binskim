@@ -98,6 +98,7 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 // 0. Populate various members
                 var result = new Result();
+                result.RuleId = diagnostic.Id;
                 result.Kind = diagnostic.Severity.ConvertToMessageKind();
                 result.FullMessage = diagnostic.GetMessage();
 
