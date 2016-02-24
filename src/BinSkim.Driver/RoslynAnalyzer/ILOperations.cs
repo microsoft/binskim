@@ -40,8 +40,6 @@ namespace Microsoft.CodeAnalysis.IL
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         SyntaxNode IOperation.Syntax => s_fakeStatement;
         private static readonly SyntaxNode s_fakeStatement = CSharp.SyntaxFactory.EmptyStatement();
-
- 
     }
 
     internal abstract class Expression : Operation, IOperation
@@ -881,6 +879,12 @@ namespace Microsoft.CodeAnalysis.IL
 
         // FEEDBACK: This is not exposed publicly
         public IBlockStatement FaultHandler { get; }
+
+        public void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(Body);
+            walker.Visit(FaultHandler);
+        }
     }
 
     internal sealed class CatchClause : Operation, ICatchClause

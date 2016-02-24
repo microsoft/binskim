@@ -15,7 +15,10 @@ namespace Microsoft.CodeAnalysis.IL
     // while others can happen in IL and have no IOperation equivalent.
 
 
-    internal interface ICustomOperation : IOperation { }
+    internal interface ICustomOperation : IOperation
+    {
+        void CustomWalk(OperationWalker walker);
+    }
 
     internal abstract class CustomOperation : Operation, ICustomOperation
     {
@@ -23,13 +26,14 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override void Accept(OperationVisitor visitor)
         {
-            visitor.DefaultVisit(this);
         }
 
         public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
         {
-            return visitor.DefaultVisit(this, argument);
+            return default(TResult);
         }
+
+        public abstract void CustomWalk(OperationWalker walker);
     }
 
     internal abstract class CustomExpression : CustomOperation, ICustomOperation
@@ -46,6 +50,11 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public IOperation Expression { get; }
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(Expression);
+        }
     }
 
     // temporary node to mark end of filter. replaced appropriately when exception blocks are built.
@@ -55,12 +64,21 @@ namespace Microsoft.CodeAnalysis.IL
 
         public static readonly EndFinally Instance = new EndFinally();
         public override OperationKind Kind => OperationKind.None;
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            // no children
+        }
     }
 
     // break
     //
     internal sealed class DebugBreakStatement : CustomOperation
     {
+        public override void CustomWalk(OperationWalker walker)
+        {
+            // no children
+        }
     }
 
     // jmp
@@ -73,6 +91,11 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public IMethodSymbol TargetMethod { get; }
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            // no children
+        }
     }
 
     // unbox
@@ -97,12 +120,17 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override void Accept(OperationVisitor visitor)
         {
-            visitor.DefaultVisit(this);
+
         }
 
         public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
         {
-            return visitor.DefaultVisit(this, argument);
+            return default(TResult);
+        }
+
+        public void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(Operand);
         }
     }
 
@@ -121,6 +149,11 @@ namespace Microsoft.CodeAnalysis.IL
         public bool IsVirtual { get; }
         public IMethodSymbol Method { get; }
         public override ITypeSymbol Type { get; }
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            // no children
+        }
     }
 
     // ldlen
@@ -136,6 +169,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public IOperation Array { get; }
         public override ITypeSymbol Type { get; }
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(Array);
+        }
     }
 
     // ckfinite
@@ -149,6 +187,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public IOperation Operand { get; }
         public override ITypeSymbol Type => Operand.Type;
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(Operand);
+        }
     }
 
     // ldtoken
@@ -182,6 +225,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override ITypeSymbol Type { get; }
         public ISymbol Symbol { get; }
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            // no children
+        }
     }
 
     // localloc
@@ -197,6 +245,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public IOperation Size { get; }
         public override ITypeSymbol Type { get; }
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(Size);
+        }
     }
 
     // cpblk
@@ -213,6 +266,13 @@ namespace Microsoft.CodeAnalysis.IL
         public IOperation SourcePointer { get; }
         public IOperation DestinationPointer { get; }
         public IOperation ByteCount { get; }
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(SourcePointer);
+            walker.Visit(DestinationPointer);
+            walker.Visit(ByteCount);
+        }
     }
 
     // initblk
@@ -229,6 +289,13 @@ namespace Microsoft.CodeAnalysis.IL
         public IOperation Pointer { get; }
         public IOperation Value { get; }
         public IOperation ByteCount { get; }
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(Pointer);
+            walker.Visit(Value);
+            walker.Visit(ByteCount);
+        }
     }
 
     // arglist
@@ -242,6 +309,11 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public override ITypeSymbol Type { get; }
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            // no children
+        }
     }
 
     // refanyval
@@ -266,12 +338,16 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override void Accept(OperationVisitor visitor)
         {
-            // TODO
         }
 
         public override TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument)
         {
-            return default(TResult); // TODO
+            return default(TResult); 
+        }
+
+        public void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(TypedReference);
         }
     }
 
@@ -293,6 +369,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public IOperation TypedReference { get; }
         public override ITypeSymbol Type { get; }
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(TypedReference);
+        }
     }
 
     // mkrefany
@@ -309,6 +390,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public IOperation Pointer { get; }
         public override ITypeSymbol Type { get; }
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(Pointer);
+        }
     }
 
     // calli
@@ -327,6 +413,16 @@ namespace Microsoft.CodeAnalysis.IL
         public IOperation FunctionPointer { get; }
         public ImmutableArray<IOperation> Arguments { get; }
         public override ITypeSymbol Type { get; }
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(FunctionPointer);
+
+            foreach (var argument in Arguments)
+            {
+                walker.Visit(argument);
+            }
+        }
     }
 
     // isinst on value types: Like IsExpression, but result is non-boolean.
@@ -343,6 +439,11 @@ namespace Microsoft.CodeAnalysis.IL
         public ITypeSymbol AsType { get; }
         public IOperation Operand { get; }
         public override ITypeSymbol Type => Operand.Type;
+
+        public override void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(Operand);
+        }
     }
 
 }

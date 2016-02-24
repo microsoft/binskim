@@ -15,8 +15,23 @@ namespace Microsoft.CodeAnalysis.IL
             _action = action;
         }
 
-        public override void DefaultVisit(IOperation operation)
+        public override void Visit(IOperation operation)
         {
+            if (operation == null)
+            {
+                return;
+            }
+
+            var customOperation = operation as ICustomOperation;
+            if (customOperation != null)
+            {
+                customOperation.CustomWalk(this);
+            }
+            else
+            {
+                base.Visit(operation);
+            }
+
             _action(operation);
         }
 
