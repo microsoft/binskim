@@ -137,15 +137,18 @@ namespace Microsoft.CodeAnalysis.IL
                 {
                     filePath = diagnostic.Location.GetLineSpan().Path;
 
-                    result.Locations[0].ResultFile = new[]
+                    if (!String.IsNullOrEmpty(filePath))
                     {
-                        new PhysicalLocationComponent
+                        result.Locations[0].ResultFile = new[]
                         {
-                            Uri = filePath.CreateUriForJsonSerialization(),
-                            MimeType = Sarif.Writers.MimeType.DetermineFromFileExtension(filePath),
-                            Region = region
-                        }
-                    };
+                            new PhysicalLocationComponent
+                            {
+                                Uri = filePath.CreateUriForJsonSerialization(),
+                                MimeType = Sarif.Writers.MimeType.DetermineFromFileExtension(filePath),
+                                Region = region
+                            }
+                        };
+                    }
                 }
 
                 // 3. If present, emit additional locations associated with diagnostic.\
