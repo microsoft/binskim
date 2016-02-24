@@ -869,24 +869,6 @@ namespace Microsoft.CodeAnalysis.IL
         public override IBlockStatement FinallyHandler { get; }
     }
 
-    internal sealed class TryFaultStatement : TryStatement, ICustomOperation
-    {
-        public TryFaultStatement(IBlockStatement body, IBlockStatement faultHandler)
-            : base(body)
-        {
-            FaultHandler = faultHandler;
-        }
-
-        // FEEDBACK: This is not exposed publicly
-        public IBlockStatement FaultHandler { get; }
-
-        public void CustomWalk(OperationWalker walker)
-        {
-            walker.Visit(Body);
-            walker.Visit(FaultHandler);
-        }
-    }
-
     internal sealed class CatchClause : Operation, ICatchClause
     {
         public CatchClause(ITypeSymbol caughtType, ILocalSymbol exceptionLocal, IOperation filter, IBlockStatement handler)

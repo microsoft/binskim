@@ -71,6 +71,24 @@ namespace Microsoft.CodeAnalysis.IL
         }
     }
 
+    internal sealed class TryFaultStatement : TryStatement, ICustomOperation
+    {
+        public TryFaultStatement(IBlockStatement body, IBlockStatement faultHandler)
+            : base(body)
+        {
+            FaultHandler = faultHandler;
+        }
+
+        // FEEDBACK: This is not exposed publicly
+        public IBlockStatement FaultHandler { get; }
+
+        public void CustomWalk(OperationWalker walker)
+        {
+            walker.Visit(Body);
+            walker.Visit(FaultHandler);
+        }
+    }
+
     // break
     //
     internal sealed class DebugBreakStatement : CustomOperation
