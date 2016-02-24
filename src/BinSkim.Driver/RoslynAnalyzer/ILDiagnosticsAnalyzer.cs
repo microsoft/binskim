@@ -70,6 +70,7 @@ namespace Microsoft.CodeAnalysis.IL
             return analysisContext;
         }
 
+
         public void Analyze(
             string targetPath, 
             Action<Diagnostic> reportDiagnostic, 
@@ -93,16 +94,16 @@ namespace Microsoft.CodeAnalysis.IL
                 // For each analysis target, we create a compilation start context, which may result
                 // in symbol action registration. We need to capture and throw these registrations 
                 // away for each binary we inspect. 
-                var compilationStartAnalysisContext = new RoslynCompilationStartAnalysisContext(compilation, _options, cancellationToken);
+                var compilationStartContext = new RoslynCompilationStartAnalysisContext(compilation, _options, cancellationToken);
 
-                GlobalRoslynAnalysisContext.CompilationStartActions?.Invoke(compilationStartAnalysisContext);
+                GlobalRoslynAnalysisContext.CompilationStartActions?.Invoke(compilationStartContext);
 
                 RoslynSymbolVisitor.Visit(
                     target,
                     symbol => AnalyzeSymbol(
                         symbol,
                         compilation,
-                        compilationStartAnalysisContext.SymbolActions,
+                        compilationStartContext,
                         reportDiagnostic,
                         peReader,
                         metadataReader,
@@ -118,14 +119,14 @@ namespace Microsoft.CodeAnalysis.IL
                     cancellationToken);
 
                 GlobalRoslynAnalysisContext.CompilationActions?.Invoke(compilationAnalysisContext);
-                compilationStartAnalysisContext.CompilationEndActions?.Invoke(compilationAnalysisContext);
+                compilationStartContext.CompilationEndActions?.Invoke(compilationAnalysisContext);
             }
         }
 
         private void AnalyzeSymbol(
             ISymbol symbol, 
             Compilation compilation,
-            ActionMap<SymbolAnalysisContext, SymbolKind> perCompilationSymbolActions,
+            RoslynCompilationStartAnalysisContext compilationStartContext,
             Action<Diagnostic> reportDiagnostic, 
             PEReader peReader,
             MetadataReader metadataReader,
@@ -140,18 +141,26 @@ namespace Microsoft.CodeAnalysis.IL
                 cancellationToken);
 
             GlobalRoslynAnalysisContext.SymbolActions.Invoke(symbol.Kind, symbolContext);
-            perCompilationSymbolActions.Invoke(symbol.Kind, symbolContext);
+            compilationStartContext.SymbolActions.Invoke(symbol.Kind, symbolContext);
 
             var method = symbol as IMethodSymbol;
             if (method != null)
             {
-                AnalyzeMethodBody(method, compilation, reportDiagnostic, peReader, metadataReader, cancellationToken);
+                AnalyzeMethodBody(
+                    method,
+                    compilation,
+                    compilationStartContext,
+                    reportDiagnostic,
+                    peReader,
+                    metadataReader,
+                    cancellationToken);
             }
         }
 
         private void AnalyzeMethodBody(
             IMethodSymbol method, 
             Compilation compilation, 
+            RoslynCompilationStartAnalysisContext compilationStartContext,
             Action<Diagnostic> reportDiagnostic,
             PEReader peReader, 
             MetadataReader metadataReader,
@@ -186,6 +195,7 @@ namespace Microsoft.CodeAnalysis.IL
                 cancellationToken);
 
             GlobalRoslynAnalysisContext.OperationBlockStartActions?.Invoke(blockStartContext);
+            compilationStartContext.OperationBlockStartActions?.Invoke(blockStartContext);
 
             RoslynOperationVisitor.Visit(
                 body,
@@ -193,11 +203,12 @@ namespace Microsoft.CodeAnalysis.IL
                     operation,
                     method,
                     compilation,
+                    compilationStartContext,
+                    blockStartContext,
                     reportDiagnostic,
-                    cancellationToken,
-                    blockStartContext.OperationActions));
+                    cancellationToken));
 
-            // Having finished operation, we'll invoke any block end actions registered previously.
+            // Having finished operation analysis, we'll invoke any block end actions registered previously.
             // We also discard the per-block operation actions we collected.
             var blockContext = new OperationBlockAnalysisContext(
                 blocks,
@@ -209,6 +220,7 @@ namespace Microsoft.CodeAnalysis.IL
                 cancellationToken);
 
             GlobalRoslynAnalysisContext.OperationBlockActions?.Invoke(blockContext);
+            compilationStartContext.OperationBlockActions?.Invoke(blockContext);
             blockStartContext.OperationBlockEndActions?.Invoke(blockContext);
         }
 
@@ -216,9 +228,10 @@ namespace Microsoft.CodeAnalysis.IL
             IOperation operation,
             IMethodSymbol containingMethod,
             Compilation compilation,
+            RoslynCompilationStartAnalysisContext compilationStartContext,
+            RoslynOperationBlockStartAnalysisContext blockStartContext,
             Action<Diagnostic> reportDiagnostic,
-            CancellationToken cancellationToken,
-            ActionMap<OperationAnalysisContext, OperationKind> perBlockOperationActions)
+            CancellationToken cancellationToken)
         {
             var operationContext = new OperationAnalysisContext(
                 operation,
@@ -230,7 +243,8 @@ namespace Microsoft.CodeAnalysis.IL
                 cancellationToken);
 
             GlobalRoslynAnalysisContext.OperationActions.Invoke(operation.Kind, operationContext);
-            perBlockOperationActions.Invoke(operation.Kind, operationContext);
+            compilationStartContext.OperationActions.Invoke(operation.Kind, operationContext);
+            blockStartContext.OperationActions.Invoke(operation.Kind, operationContext);
         }
     }
 }
