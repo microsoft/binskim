@@ -119,37 +119,23 @@ namespace Microsoft.CodeAnalysis.IL
 
                 // 1. Record the assembly under analysis
                 result.Locations = new[] {
-                new Sarif.Location {
-                    AnalysisTarget = new[]
-                    {
-                        new PhysicalLocationComponent
-                        {
-                            Uri = assemblyFilePath.CreateUriForJsonSerialization(),
-                            MimeType = context.MimeType,
-                        }
-                    }
-               }};
-
-                // 2. Record the actual location associated with the result
-                var region = diagnostic.Location.ConvertToRegion();
-                string filePath;
-
-                if (diagnostic.Location.IsInSource)
-                {
-                    filePath = diagnostic.Location.GetLineSpan().Path;
-
-                    if (!String.IsNullOrEmpty(filePath))
-                    {
-                        result.Locations[0].ResultFile = new[]
+                    new Sarif.Location {
+                        AnalysisTarget = new[]
                         {
                             new PhysicalLocationComponent
                             {
-                                Uri = filePath.CreateUriForJsonSerialization(),
-                                MimeType = Sarif.Writers.MimeType.DetermineFromFileExtension(filePath),
-                                Region = region
+                                Uri = assemblyFilePath.CreateUriForJsonSerialization(),
+                                MimeType = context.MimeType,
                             }
-                        };
-                    }
+                        }
+                   }
+                };
+
+                // 2. Record the actual location associated with the result
+                PhysicalLocationComponent physicalLocation = GetPhysicalLocation(diagnostic.Location);
+                if (physicalLocation != null)
+                {
+                    result.Locations[0].ResultFile = new[] { physicalLocation };
                 }
 
                 // 3. If present, emit additional locations associated with diagnostic.\
@@ -157,34 +143,47 @@ namespace Microsoft.CodeAnalysis.IL
                 //    locations (i.e., they are not locations that specify other 
                 //    occurrences of a problem).
 
-                if (diagnostic.AdditionalLocations != null && diagnostic.AdditionalLocations.Count > 0)
+                if (diagnostic.AdditionalLocations?.Count > 0)
                 {
                     result.RelatedLocations = new List<AnnotatedCodeLocation>(diagnostic.AdditionalLocations.Count);
 
-                    foreach(Location location in diagnostic.AdditionalLocations)
+                    foreach (Location location in diagnostic.AdditionalLocations)
                     {
-                        filePath = location.GetLineSpan().Path;
-                        region = location.ConvertToRegion();
-
-                        result.RelatedLocations.Add(new AnnotatedCodeLocation
+                        physicalLocation = GetPhysicalLocation(location);
+                        if (physicalLocation != null)
                         {
-                            Message = "Additional location",
-                            PhysicalLocation = new[]
+                            result.RelatedLocations.Add(new AnnotatedCodeLocation
                             {
-                                new PhysicalLocationComponent
-                                {
-                                    Uri = filePath.CreateUriForJsonSerialization(),
-                                    MimeType = Sarif.Writers.MimeType.DetermineFromFileExtension(filePath),
-                                    Region = region
-                                }
-                            }
-                        });
+                                Message = "Additional location",
+                                PhysicalLocation = new[] { physicalLocation },
+                            });
+                        }
                     }
                 }
 
-                IRuleDescriptor rule = diagnostic.ConvertToRuleDescriptor();
-                context.Logger.Log(null, result);
+                context.Logger.Log(diagnostic.ConvertToRuleDescriptor(), result);
             });
-        }    
+        }
+
+        private static PhysicalLocationComponent GetPhysicalLocation(Location location)
+        {
+            if (!location.IsInSource)
+            {
+                return null;
+            }
+
+            string filePath = location.SourceTree.FilePath;
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return null;
+            }
+
+            return new PhysicalLocationComponent
+            {
+                Uri = filePath.CreateUriForJsonSerialization(),
+                MimeType = Sarif.Writers.MimeType.DetermineFromFileExtension(filePath),
+                Region = location.ConvertToRegion(),
+            };
+        }
     }
 }
