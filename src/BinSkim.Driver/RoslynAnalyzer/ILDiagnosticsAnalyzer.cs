@@ -180,8 +180,14 @@ namespace Microsoft.CodeAnalysis.IL
 
             var methodBody = peReader.GetMethodBody(methodDef.RelativeVirtualAddress);
             var importer = new ILImporter(compilation, metadataReader, method, methodBody);
-            var body = importer.Import();
-            var blocks = ImmutableArray.Create<IOperation>(body);
+            var raisedBody = importer.Import();
+            var blocks = ImmutableArray.Create(raisedBody);
+
+            if (raisedBody.IsInvalid)
+            {
+                // TODO: Proper handling here. Should create built-in diagnostic and report it.
+                Console.WriteLine("warning: Failed to raise {0}: {1}", method, ((InvalidStatement)raisedBody).Exception);
+            }
 
             // For each method, we create a block start context, which may result
             // in operation action registration. We need to capture and throw these
@@ -197,7 +203,7 @@ namespace Microsoft.CodeAnalysis.IL
             compilationStartContext.OperationBlockStartActions?.Invoke(blockStartContext);
 
             RoslynOperationVisitor.Visit(
-                body,
+                raisedBody,
                 operation => AnalyzeOperation(
                     operation,
                     method,
