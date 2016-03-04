@@ -76,26 +76,25 @@ namespace Microsoft.CodeAnalysis.IL
             Action<Diagnostic> reportDiagnostic, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            // Create a Roslyn representation of the IL by constructing a MetadataReference against
-            // the target path (as if we intended to reference this binary during compilation, instead
-            // of analyzing it). Using this mechanism, we can scan types/members contained in the 
-            // binary. We cannot currently retrieve IL from method bodies.
-            var reference = MetadataReference.CreateFromFile(targetPath);
-            var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
-            options.SetMetadataImportOptions(MetadataImportOptions.All);
-            var compilation = CSharpCompilation.Create("_", options: options, references: new[] { reference });
-            var target = compilation.GetAssemblyOrModuleSymbol(reference);
-
             using (var stream = File.OpenRead(targetPath))
             using (var peReader = new PEReader(stream))
             {
                 var metadataReader = peReader.GetMetadataReader();
+                var references = GetReferences(targetPath, metadataReader);
+
+                // Create a Roslyn representation of the IL by constructing a MetadataReference against
+                // the target path (as if we intended to reference this binary during compilation, instead
+                // of analyzing it). Using this mechanism, we can scan types/members contained in the 
+                // binary. We cannot currently retrieve IL from method bodies.
+                var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+                options.SetMetadataImportOptions(MetadataImportOptions.All);
+                var compilation = CSharpCompilation.Create("_", options: options, references: references);
+                var target = compilation.GetAssemblyOrModuleSymbol(references[0]);
 
                 // For each analysis target, we create a compilation start context, which may result
                 // in symbol action registration. We need to capture and throw these registrations 
                 // away for each binary we inspect. 
                 var compilationStartContext = new RoslynCompilationStartAnalysisContext(compilation, _options, cancellationToken);
-
                 GlobalRoslynAnalysisContext.CompilationStartActions?.Invoke(compilationStartContext);
 
                 RoslynSymbolVisitor.Visit(
@@ -245,6 +244,38 @@ namespace Microsoft.CodeAnalysis.IL
             GlobalRoslynAnalysisContext.OperationActions.Invoke(operation.Kind, operationContext);
             compilationStartContext.OperationActions.Invoke(operation.Kind, operationContext);
             blockStartContext.OperationActions.Invoke(operation.Kind, operationContext);
+        }
+
+        // TODO: This policy is incomplete and incorrect -- just barely enough to bootstrap/test 
+        //       without having designed and implemented the reference specification, resolution, 
+		//       and error handling yet.
+        private static List<MetadataReference> GetReferences(string targetPath, MetadataReader metadataReader)
+        {
+            var frameworkDir = Path.GetDirectoryName(typeof(object).Assembly.Location);
+            var targetDir = Path.GetDirectoryName(targetPath);
+            var references = new List<MetadataReference>(metadataReader.AssemblyReferences.Count + 1);
+            references.Add(MetadataReference.CreateFromFile(targetPath));
+
+            foreach (var assemblyRefHandle in metadataReader.AssemblyReferences)
+            {
+                var assemblyRef = metadataReader.GetAssemblyReference(assemblyRefHandle);
+                var name = metadataReader.GetString(assemblyRef.Name);
+
+                var frameworkCandidate = Path.Combine(frameworkDir, name + ".dll");
+                if (File.Exists(frameworkCandidate))
+                {
+                    references.Add(MetadataReference.CreateFromFile(frameworkCandidate));
+                    continue;
+                }
+
+                var targetCandidate = Path.Combine(targetDir, name + ".dll");
+                if (File.Exists(targetCandidate))
+                {
+                    references.Add(MetadataReference.CreateFromFile(targetCandidate));
+                }
+            }
+
+            return references;
         }
     }
 }
