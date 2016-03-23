@@ -32,14 +32,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpErrorFactsGenerator",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpSyntaxGenerator", "Roslyn\src\Tools\Source\CompilerGeneratorTools\Source\CSharpSyntaxGenerator\CSharpSyntaxGenerator.csproj", "{288089C5-8721-458E-BE3E-78990DAB5E2D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CoreFx", "CoreFx", "{6848176C-05E7-46CE-B532-28FC328A426A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reflection.Metadata", "CoreFx\src\System.Reflection.Metadata\src\System.Reflection.Metadata.csproj", "{F3E433C8-352F-4944-BF7F-765CE435370D}"
-EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Roslyn\src\Compilers\Core\AnalyzerDriver\AnalyzerDriver.projitems*{1ee8cad3-55f9-4d91-96b2-084641da9a6c}*SharedItemsImports = 4
 		Roslyn\src\Compilers\Core\SharedCollections\SharedCollections.projitems*{1ee8cad3-55f9-4d91-96b2-084641da9a6c}*SharedItemsImports = 4
+		Roslyn\src\Compilers\Core\AnalyzerDriver\AnalyzerDriver.projitems*{1ee8cad3-55f9-4d91-96b2-084641da9a6c}*SharedItemsImports = 4
 		Roslyn\src\Compilers\CSharp\CSharpAnalyzerDriver\CSharpAnalyzerDriver.projitems*{b501a547-c911-4a05-ac6e-274a50dff30e}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,14 +133,6 @@ Global
 		{288089C5-8721-458E-BE3E-78990DAB5E2D}.Release|x64.Build.0 = Release|Any CPU
 		{288089C5-8721-458E-BE3E-78990DAB5E2D}.Release|x86.ActiveCfg = Release|Any CPU
 		{288089C5-8721-458E-BE3E-78990DAB5E2D}.Release|x86.Build.0 = Release|Any CPU
-		{F3E433C8-352F-4944-BF7F-765CE435370D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{F3E433C8-352F-4944-BF7F-765CE435370D}.Debug|x64.Build.0 = Debug|Any CPU
-		{F3E433C8-352F-4944-BF7F-765CE435370D}.Debug|x86.ActiveCfg = Debug_Future|Any CPU
-		{F3E433C8-352F-4944-BF7F-765CE435370D}.Debug|x86.Build.0 = Debug_Future|Any CPU
-		{F3E433C8-352F-4944-BF7F-765CE435370D}.Release|x64.ActiveCfg = Release|Any CPU
-		{F3E433C8-352F-4944-BF7F-765CE435370D}.Release|x64.Build.0 = Release|Any CPU
-		{F3E433C8-352F-4944-BF7F-765CE435370D}.Release|x86.ActiveCfg = Release_Future|Any CPU
-		{F3E433C8-352F-4944-BF7F-765CE435370D}.Release|x86.Build.0 = Release_Future|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,6 +143,5 @@ Global
 		{02459936-CD2C-4F61-B671-5C518F2A3DDC} = {E8EFBBD3-0C93-4695-ABDD-223CC99B6A11}
 		{288089C5-8721-458E-BE3E-78990DAB5E2E} = {E8EFBBD3-0C93-4695-ABDD-223CC99B6A11}
 		{288089C5-8721-458E-BE3E-78990DAB5E2D} = {E8EFBBD3-0C93-4695-ABDD-223CC99B6A11}
-		{F3E433C8-352F-4944-BF7F-765CE435370D} = {6848176C-05E7-46CE-B532-28FC328A426A}
 	EndGlobalSection
 EndGlobal
