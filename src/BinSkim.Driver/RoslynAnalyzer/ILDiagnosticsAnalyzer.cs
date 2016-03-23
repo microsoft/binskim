@@ -186,7 +186,7 @@ namespace Microsoft.CodeAnalysis.IL
             if (raisedBody.IsInvalid)
             {
                 // TODO: Proper handling here. Should create built-in diagnostic and report it.
-                Console.WriteLine("warning: Failed to raise {0}: {1}", method, ((InvalidStatement)raisedBody).Exception);
+                //Console.WriteLine("warning: Failed to raise {0}: {1}", method, ((InvalidStatement)raisedBody).Exception);
             }
 
             // For each method, we create a block start context, which may result
