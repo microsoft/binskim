@@ -8,3 +8,4 @@ bin/
 obj/
 src/packages/
 src/TestResults
+src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Actual/
