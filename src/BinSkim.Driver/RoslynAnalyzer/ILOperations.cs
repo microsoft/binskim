@@ -194,6 +194,10 @@ namespace Microsoft.CodeAnalysis.IL
         }
     }
 
+    internal interface IReferenceExpression : IOperation
+    {
+    }
+
     internal abstract class ReferenceExpression : Expression, IReferenceExpression
     {
         protected ReferenceExpression(ITypeSymbol type)
@@ -581,7 +585,7 @@ namespace Microsoft.CodeAnalysis.IL
             Type = compilation.CreatePointerTypeSymbol(reference.Type);
         }
 
-        public IReferenceExpression Reference { get; }
+        public IOperation Reference { get; }
         public override ITypeSymbol Type { get; }
         public override OperationKind Kind => OperationKind.AddressOfExpression;
 
@@ -625,13 +629,13 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class AssignmentExpression : Expression, IAssignmentExpression
     {
-        public AssignmentExpression(IReferenceExpression target, IOperation value)
+        public AssignmentExpression(IOperation target, IOperation value)
         {
             Target = target;
             Value = value;
         }
 
-        public IReferenceExpression Target { get; }
+        public IOperation Target { get; }
         public IOperation Value { get; }
 
         public override OperationKind Kind => OperationKind.AssignmentExpression;

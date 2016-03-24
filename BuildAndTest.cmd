@@ -36,7 +36,12 @@ echo Restoring roslyn nuget dependencies...
 call src\Roslyn\Restore.cmd || exit /b 1
 
 echo Restoring binskim nuget dependencies...
-%~dp0.nuget\NuGet.exe restore src\BinSkim.sln || exit /b 1
+%~dp0.nuget\NuGet.exe restore -PackagesDirectory src\packages src\BinaryParsers\BinaryParsers.csproj || exit /b 1
+%~dp0.nuget\NuGet.exe restore -PackagesDirectory src\packages src\BinSkim.Driver\BinSkim.Driver.csproj || exit /b 1
+%~dp0.nuget\NuGet.exe restore -PackagesDirectory src\packages src\BinSkim.Rules\BinSkim.Rules.csproj || exit /b 1
+%~dp0.nuget\NuGet.exe restore -PackagesDirectory src\packages src\BinSkim.Sdk\BinSkim.Sdk.csproj || exit /b 1
+%~dp0.nuget\NuGet.exe restore -PackagesDirectory src\packages src\BinSkim.Driver.FunctionalTests\BinSkim.Driver.FunctionalTests.csproj || exit /b 1
+%~dp0.nuget\NuGet.exe restore -PackagesDirectory src\packages src\BinSkim.Rules.FunctionalTests\BinSkim.Rules.FunctionalTests.csproj || exit /b 1
 
 echo Building x64...
 msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x64" || exit /b 1
