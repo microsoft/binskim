@@ -194,11 +194,7 @@ namespace Microsoft.CodeAnalysis.IL
         }
     }
 
-    internal interface IReferenceExpression : IOperation
-    {
-    }
-
-    internal abstract class ReferenceExpression : Expression, IReferenceExpression
+    internal abstract class ReferenceExpression : Expression
     {
         protected ReferenceExpression(ITypeSymbol type)
         {
@@ -207,7 +203,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         public sealed override ITypeSymbol Type { get; }
 
-        public IReferenceExpression WithType(ITypeSymbol type)
+        public ReferenceExpression WithType(ITypeSymbol type)
         {
             if (type == null || type == Type)
                 return this;
@@ -215,7 +211,7 @@ namespace Microsoft.CodeAnalysis.IL
             return WithTypeCore(type);
         }
 
-        protected abstract IReferenceExpression WithTypeCore(ITypeSymbol type);
+        protected abstract ReferenceExpression WithTypeCore(ITypeSymbol type);
     }
 
     internal sealed class ArrayElementReferenceExpression : ReferenceExpression, IArrayElementReferenceExpression
@@ -246,7 +242,7 @@ namespace Microsoft.CodeAnalysis.IL
             return visitor.VisitArrayElementReferenceExpression(this, argument);
         }
 
-        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
+        protected override ReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new ArrayElementReferenceExpression(ArrayReference, Indices, type);
         }
@@ -263,7 +259,7 @@ namespace Microsoft.CodeAnalysis.IL
         public IOperation Pointer { get; }
         public override OperationKind Kind => OperationKind.PointerIndirectionReferenceExpression;
 
-        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
+        protected override ReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new PointerIndirectionReferenceExpression(Pointer, type);
         }
@@ -300,7 +296,7 @@ namespace Microsoft.CodeAnalysis.IL
             return $"LocalReference [{Local.Name}]";
         }
 
-        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
+        protected override ReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new LocalReferenceExpression(Local, type);
         }
@@ -337,7 +333,7 @@ namespace Microsoft.CodeAnalysis.IL
             return $"ParameterReference [{Parameter.Name}]";
         }
 
-        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
+        protected override ReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new ParameterReferenceExpression(Parameter, type);
         }
@@ -383,7 +379,7 @@ namespace Microsoft.CodeAnalysis.IL
             return "InstanceReference";
         }
 
-        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
+        protected override ReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new InstanceReferenceExpression(type);
         }
@@ -427,7 +423,7 @@ namespace Microsoft.CodeAnalysis.IL
             return visitor.VisitFieldReferenceExpression(this, argument);
         }
 
-        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
+        protected override ReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new FieldReferenceExpression(Instance, Field, type);
         }
@@ -579,7 +575,7 @@ namespace Microsoft.CodeAnalysis.IL
 
     internal sealed class AddressOfExpression : Expression, IAddressOfExpression
     {
-        public AddressOfExpression(Compilation compilation, IReferenceExpression reference)
+        public AddressOfExpression(Compilation compilation, IOperation reference)
         {
             Reference = reference;
             Type = compilation.CreatePointerTypeSymbol(reference.Type);

@@ -131,7 +131,7 @@ namespace Microsoft.CodeAnalysis.IL
         public IOperation Operand { get; }
         public override OperationKind Kind => OperationKind.None;
 
-        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
+        protected override ReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new UnboxExpression(Operand, type);
         }
@@ -348,7 +348,7 @@ namespace Microsoft.CodeAnalysis.IL
         public IOperation TypedReference { get; }
         public override OperationKind Kind => OperationKind.None;
 
-        protected override IReferenceExpression WithTypeCore(ITypeSymbol type)
+        protected override ReferenceExpression WithTypeCore(ITypeSymbol type)
         {
             return new RefValueExpression(TypedReference, type);
         }

@@ -402,7 +402,7 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 value = new StackValue(
                     StackValueKind.NativeInt,
-                    new AddressOfExpression(_compilation, (IReferenceExpression)value.Expression));
+                    new AddressOfExpression(_compilation, value.Expression));
             }
 
             return value;
@@ -457,7 +457,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void AppendTemporaryAssignment(ImmutableArray<IOperation>.Builder statements, StackValue target, StackValue source)
         {
-            statements.Add(new AssignmentExpression((ILocalReferenceExpression)target.Expression, source.Expression));
+            statements.Add(new AssignmentExpression(target.Expression, source.Expression));
         }
 
         private void TransferStack(ref StackValue[] target, ImmutableArray<IOperation>.Builder statements)
@@ -485,7 +485,7 @@ namespace Microsoft.CodeAnalysis.IL
                     if (source.Kind == StackValueKind.ByRef && destination.Kind == StackValueKind.NativeInt)
                     {
                         // TODO: consequence of not having by-ref locals yet
-                        source = new StackValue(StackValueKind.NativeInt, new AddressOfExpression(_compilation, (IReferenceExpression)source.Expression));
+                        source = new StackValue(StackValueKind.NativeInt, new AddressOfExpression(_compilation, source.Expression));
                     }
                     else if (source.Kind != destination.Kind)
                     {
@@ -594,7 +594,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             var value = Pop();
 
-            if (value.Expression is IReferenceExpression)
+            if (value.Expression is ReferenceExpression)
             {
                 Push(value);
                 Push(value);
@@ -1280,13 +1280,13 @@ namespace Microsoft.CodeAnalysis.IL
             return new StackValue(stackKind, reference);
         }
 
-        private IReferenceExpression GetVariableReference(int index, bool argument)
+        private ReferenceExpression GetVariableReference(int index, bool argument)
         {
             RefKind _;
             return GetVariableReference(index, argument, out _);
         }
 
-        private IReferenceExpression GetVariableReference(int index, bool argument, out RefKind refKind)
+        private ReferenceExpression GetVariableReference(int index, bool argument, out RefKind refKind)
         {
             refKind = RefKind.None;
 
@@ -1334,7 +1334,7 @@ namespace Microsoft.CodeAnalysis.IL
             return new ArrayElementReferenceExpression(arrayReference, index, type);
         }
 
-        private IReferenceExpression PopIndirectionReference(ITypeSymbol type)
+        private ReferenceExpression PopIndirectionReference(ITypeSymbol type)
         {
             var value = Pop();
             var expression = value.Expression;
