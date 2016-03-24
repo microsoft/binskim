@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.Sarif;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -116,6 +117,17 @@ namespace Microsoft.CodeAnalysis.IL
 
             string expectedText = File.ReadAllText(expectedFileName);
             string actualText = File.ReadAllText(actualFileName);
+
+            // Replace repository root absolute path with Z:\ for machine and enlistment independence
+            string repoRoot = Path.GetFullPath(Path.Combine(actualDirectory, "..", "..", "..", ".."));
+            actualText = actualText.Replace(repoRoot.Replace(@"\", @"\\"), @"Z:");
+            actualText = actualText.Replace(repoRoot.Replace(@"\", @"/"), @"Z:");
+
+            // Remove stack traces as they can change due to inlining differences by configuration and runtime.
+            actualText = Regex.Replace(actualText, @"\\r\\n   at [^""]+", "");
+
+            // Write back the normalized actual text so that the diff command given on failure shows what was actually compared.
+            File.WriteAllText(actualFileName, actualText);
 
             // Make sure we can successfully deserialize what was just generated
             ResultLog expectedLog = JsonConvert.DeserializeObject<ResultLog>(expectedText, settings);

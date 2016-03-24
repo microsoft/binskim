@@ -2,9 +2,11 @@
 *.user 
 *.userosscache 
 *.sln.docstates 
-  
+.vs/
+
 # Build results 
 bin/
 obj/
 src/packages/
-src/TestResults
+src/TestResults/
+src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Actual/

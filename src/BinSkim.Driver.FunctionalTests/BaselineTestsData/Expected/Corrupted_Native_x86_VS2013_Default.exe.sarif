@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "0.4",
   "runLogs": [
     {
@@ -8,10 +8,10 @@
         "version": "1.2.16"
       },
       "runInfo": {
-        "invocationInfo": "\"D:\\src\\binskim\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Corrupted_Native_x86_VS2013_Default.exe --output D:\\src\\binskim\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Corrupted_Native_x86_VS2013_Default.exe.sarif.temp --verbose --config default",
+        "invocationInfo": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Corrupted_Native_x86_VS2013_Default.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Corrupted_Native_x86_VS2013_Default.exe.sarif.temp --verbose --config default",
         "analysisTargets": [
           {
-            "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
+            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
           }
         ]
       },
@@ -23,14 +23,14 @@
             "specifierId": "ExceptionLoadingAnalysisTarget",
             "arguments": [
               "Corrupted_Native_x86_VS2013_Default.exe",
-              "System.BadImageFormatException: Image is either too small or contains an invalid byte offset or count.\r\n   at System.Reflection.Throw.ImageTooSmallOrContainsInvalidOffsetOrCount()\r\n   at System.Reflection.PortableExecutable.PEHeaders.SkipDosHeader(PEBinaryReader& reader, Boolean& isCOFFOnly)\r\n   at System.Reflection.PortableExecutable.PEHeaders..ctor(Stream peStream, Nullable`1 sizeOpt)\r\n   at System.Reflection.PortableExecutable.PEReader.InitializePEHeaders()\r\n   at Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PE..ctor(String fileName) in D:\\src\\testbinskim\\src\\BinaryParsers\\PortableExecutable\\PE.cs:line 47"
+              "System.BadImageFormatException: Image is either too small or contains an invalid byte offset or count."
             ]
           },
           "locations": [
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
