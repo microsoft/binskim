@@ -12,10 +12,16 @@ echo Restoring roslyn nuget dependencies...
 call src\Roslyn\Restore.cmd || exit /b 1
 
 echo Restoring binskim nuget dependencies...
-%~dp0.nuget\NuGet.exe restore -PackagesDirectory src\packages src\BinaryParsers\BinaryParsers.csproj || exit /b 1
-%~dp0.nuget\NuGet.exe restore -PackagesDirectory src\packages src\BinSkim.Driver\BinSkim.Driver.csproj || exit /b 1
-%~dp0.nuget\NuGet.exe restore -PackagesDirectory src\packages src\BinSkim.Rules\BinSkim.Rules.csproj || exit /b 1
-%~dp0.nuget\NuGet.exe restore -PackagesDirectory src\packages src\BinSkim.Sdk\BinSkim.Sdk.csproj || exit /b 1
-%~dp0.nuget\NuGet.exe restore -PackagesDirectory src\packages src\BinSkim.Driver.FunctionalTests\BinSkim.Driver.FunctionalTests.csproj || exit /b 1
-%~dp0.nuget\NuGet.exe restore -PackagesDirectory src\packages src\BinSkim.Rules.FunctionalTests\BinSkim.Rules.FunctionalTests.csproj || exit /b 1
 
+@REM NOTE: We restore individual projects instead of the entire .sln because our version of nuget.exe can't 
+@REM handle roslyn projects which do their restore above.
+for %%p in (
+  BinaryParsers
+  BinSkim.Driver 
+  BinSkim.Rules
+  BinSkim.Sdk 
+  BinSkim.Driver.FunctionalTests 
+  BinSkim.Rules.FunctionalTests
+) do (
+  %~dp0.nuget\NuGet.exe restore -ConfigFile src\NuGet.config -PackagesDirectory src\packages src\%%p\%%p.csproj || exit /b 1
+)
