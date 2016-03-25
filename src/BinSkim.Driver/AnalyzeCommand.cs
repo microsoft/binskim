@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             Debug.Assert(context.MimeType == Sarif.Writers.MimeType.Binary);
 
-            ILDiagnosticsAnalyzer roslynAnalyzer = ILDiagnosticsAnalyzer.Create(_globalRoslynAnalysisContext);
+            ILDiagnosticsAnalyzer roslynAnalyzer = ILDiagnosticsAnalyzer.Create(_globalRoslynAnalysisContext, context);
             roslynAnalyzer.Analyze(assemblyFilePath, diagnostic =>
             {
                 // 0. Populate various members

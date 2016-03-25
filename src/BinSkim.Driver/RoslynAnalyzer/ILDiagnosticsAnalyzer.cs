@@ -13,6 +13,8 @@ using System.Threading;
 
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -24,12 +26,14 @@ namespace Microsoft.CodeAnalysis.IL
         private static readonly AnalyzerOptions _options = new AnalyzerOptions(ImmutableArray<AdditionalText>.Empty);
         private static readonly Func<Diagnostic, bool> _isSupportedDiagnostic = diagnostic => true;
 
-        private ILDiagnosticsAnalyzer(RoslynAnalysisContext analysisContext)
+        private ILDiagnosticsAnalyzer(RoslynAnalysisContext roslynContext, BinaryAnalyzerContext binSkimContext)
         {
-            GlobalRoslynAnalysisContext = analysisContext;
+            GlobalRoslynAnalysisContext = roslynContext;
+            BinSkimContext = binSkimContext;
         }
 
-        public RoslynAnalysisContext GlobalRoslynAnalysisContext { get; private set; }
+        public RoslynAnalysisContext GlobalRoslynAnalysisContext { get; }
+        public BinaryAnalyzerContext BinSkimContext { get; }
 
         public static ILDiagnosticsAnalyzer Create(params string[] analyzerFilePaths)
         {
@@ -38,19 +42,19 @@ namespace Microsoft.CodeAnalysis.IL
 
         public static ILDiagnosticsAnalyzer Create(IEnumerable<string> analyzerFilePaths)
         {
-            var analysisContext = new RoslynAnalysisContext();
+            var roslynContext = new RoslynAnalysisContext();
 
             foreach(string analyzerFilePath in analyzerFilePaths)
             {
-                LoadAnalyzer(analyzerFilePath, analysisContext);
+                LoadAnalyzer(analyzerFilePath, roslynContext);
             }
 
-            return Create(analysisContext);
+            return Create(roslynContext);
         }
 
-        public static ILDiagnosticsAnalyzer Create(RoslynAnalysisContext analysisContext)
+        public static ILDiagnosticsAnalyzer Create(RoslynAnalysisContext roslynContext, BinaryAnalyzerContext binSkimContext = null)
         {
-            return new ILDiagnosticsAnalyzer(analysisContext);
+            return new ILDiagnosticsAnalyzer(roslynContext, binSkimContext);
         }
 
         public static RoslynAnalysisContext LoadAnalyzer(string path, RoslynAnalysisContext analysisContext = null)
@@ -81,6 +85,7 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 var metadataReader = peReader.GetMetadataReader();
                 var references = GetReferences(targetPath, metadataReader);
+                var targetReference = references[Path.GetFileNameWithoutExtension(targetPath)];
 
                 // Create a Roslyn representation of the IL by constructing a MetadataReference against
                 // the target path (as if we intended to reference this binary during compilation, instead
@@ -88,8 +93,8 @@ namespace Microsoft.CodeAnalysis.IL
                 // binary. We cannot currently retrieve IL from method bodies.
                 var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
                 options.SetMetadataImportOptions(MetadataImportOptions.All);
-                var compilation = CSharpCompilation.Create("_", options: options, references: references);
-                var target = compilation.GetAssemblyOrModuleSymbol(references[0]);
+                var compilation = CSharpCompilation.Create("_", options: options, references: references.Values);
+                var target = compilation.GetAssemblyOrModuleSymbol(targetReference);
 
                 // For each analysis target, we create a compilation start context, which may result
                 // in symbol action registration. We need to capture and throw these registrations 
@@ -185,8 +190,13 @@ namespace Microsoft.CodeAnalysis.IL
 
             if (raisedBody.IsInvalid)
             {
-                // TODO: Proper handling here. Should create built-in diagnostic and report it.
-                //Console.WriteLine("warning: Failed to raise {0}: {1}", method, ((InvalidStatement)raisedBody).Exception);
+                var message = $"Failed to raise {method}: {((InvalidStatement)raisedBody).Exception}";
+                Debug.WriteLine(message);
+
+                if (BinSkimContext != null)
+                {
+                    Errors.LogTargetParseError(BinSkimContext, null, message);
+                }
             }
 
             // For each method, we create a block start context, which may result
@@ -254,34 +264,68 @@ namespace Microsoft.CodeAnalysis.IL
 
         // TODO: This policy is incomplete and incorrect -- just barely enough to bootstrap/test 
         //       without having designed and implemented the reference specification, resolution, 
-		//       and error handling yet.
-        private static List<MetadataReference> GetReferences(string targetPath, MetadataReader metadataReader)
+        //       and error handling yet.
+        private static Dictionary<string, MetadataReference> GetReferences(string targetPath, MetadataReader metadataReader)
         {
             var frameworkDir = Path.GetDirectoryName(typeof(object).Assembly.Location);
             var targetDir = Path.GetDirectoryName(targetPath);
-            var references = new List<MetadataReference>(metadataReader.AssemblyReferences.Count + 1);
-            references.Add(MetadataReference.CreateFromFile(targetPath));
+            var references = new Dictionary<string, MetadataReference>();
+            references.Add(Path.GetFileNameWithoutExtension(targetPath), MetadataReference.CreateFromFile(targetPath));
+            AddReferences(references, metadataReader, frameworkDir, targetDir);
+            return references;
+        }
 
+        private static void AddReferences(Dictionary<string, MetadataReference> references, MetadataReader metadataReader, params string[] dirs)
+        {
             foreach (var assemblyRefHandle in metadataReader.AssemblyReferences)
             {
                 var assemblyRef = metadataReader.GetAssemblyReference(assemblyRefHandle);
                 var name = metadataReader.GetString(assemblyRef.Name);
+                AddReferences(references, name, dirs);
+            }
+        }
 
-                var frameworkCandidate = Path.Combine(frameworkDir, name + ".dll");
-                if (File.Exists(frameworkCandidate))
+        private static void AddReferences(Dictionary<string, MetadataReference> references, string name, params string[] dirs)
+        {
+            for (int i = 0; i < dirs.Length; i++)
+            {
+                if (AddReferences(references, name, dirs, i))
                 {
-                    references.Add(MetadataReference.CreateFromFile(frameworkCandidate));
+                    return;
+                }
+            }
+        }
+
+        private static bool AddReferences(Dictionary<string, MetadataReference> references, string name, string[] dirs, int index)
+        {
+            if (references.ContainsKey(name))
+            {
+                return true;
+            }
+
+            foreach (var extension in new[] { ".dll", ".exe"})
+            {
+                var candidate = Path.Combine(dirs[index], name + extension);
+                if (!File.Exists(candidate))
+                {
                     continue;
                 }
 
-                var targetCandidate = Path.Combine(targetDir, name + ".dll");
-                if (File.Exists(targetCandidate))
+                try
                 {
-                    references.Add(MetadataReference.CreateFromFile(targetCandidate));
+                    using (var stream = File.OpenRead(candidate))
+                    using (var peReader = new PEReader(stream))
+                    {
+                        references.Add(name, MetadataReference.CreateFromFile(candidate));
+                        AddReferences(references, peReader.GetMetadataReader(), dirs);
+                        return true;
+                    }
                 }
+                catch (IOException) { }
+                catch (BadImageFormatException) { }
             }
 
-            return references;
+            return false;
         }
     }
 }

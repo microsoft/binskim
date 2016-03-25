@@ -1788,8 +1788,14 @@ namespace Microsoft.CodeAnalysis.IL
 
         private ISymbol GetSymbolFromHandle(EntityHandle handle)
         {
-            return _method.ContainingModule.GetSymbolForMetadataHandle(handle, _method)
-                ?? GetUnresolvedSymbolFromHandle(handle);
+            var symbol = _method.ContainingModule.GetSymbolForMetadataHandle(handle, _method);
+
+            if (symbol == null)
+            {
+                symbol = GetUnresolvedSymbolFromHandle(handle);
+            }
+
+            return symbol;
         }
 
         private ISymbol GetUnresolvedSymbolFromHandle(EntityHandle handle)
@@ -1805,7 +1811,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             // TODO: Handle more than just special array methods. Unresolved references should not throw.
-            throw new NotImplementedException();
+            throw new NotImplementedException("Unresolved reference");
         }
 
         private IMethodSymbol GetArrayMethod(StringHandle name, IArrayTypeSymbol arrayType)
