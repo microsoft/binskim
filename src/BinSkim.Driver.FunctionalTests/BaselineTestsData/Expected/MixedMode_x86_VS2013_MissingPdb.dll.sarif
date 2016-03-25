@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "0.4",
   "runLogs": [
     {
@@ -8,10 +8,10 @@
         "version": "1.2.16"
       },
       "runInfo": {
-        "invocationInfo": "\"D:\\src\\binskim\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll --output D:\\src\\binskim\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\MixedMode_x86_VS2013_MissingPdb.dll.sarif.temp --verbose --config default",
+        "invocationInfo": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\MixedMode_x86_VS2013_MissingPdb.dll.sarif.temp --verbose --config default",
         "analysisTargets": [
           {
-            "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll"
+            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll"
           }
         ]
       },
@@ -29,7 +29,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -52,7 +52,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -75,7 +75,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -98,7 +98,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -120,7 +120,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -142,7 +142,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -164,7 +164,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -184,7 +184,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -204,7 +204,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -224,7 +224,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -244,7 +244,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -264,7 +264,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -287,7 +287,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -307,7 +307,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -329,7 +329,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -351,7 +351,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -371,7 +371,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -393,7 +393,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -413,7 +413,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]

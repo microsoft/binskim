@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "0.4",
   "runLogs": [
     {
@@ -8,10 +8,10 @@
         "version": "1.2.16"
       },
       "runInfo": {
-        "invocationInfo": "\"D:\\src\\binskim-ms\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedInteropAssemblyForAtlTestLibrary.dll --output D:\\src\\binskim-ms\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedInteropAssemblyForAtlTestLibrary.dll.sarif.temp --verbose --config default",
+        "invocationInfo": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedInteropAssemblyForAtlTestLibrary.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedInteropAssemblyForAtlTestLibrary.dll.sarif.temp --verbose --config default",
         "analysisTargets": [
           {
-            "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll"
+            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll"
           }
         ]
       },
@@ -29,7 +29,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -52,7 +52,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -75,7 +75,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -98,7 +98,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -121,7 +121,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -144,7 +144,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -167,7 +167,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -190,7 +190,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -213,7 +213,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -236,7 +236,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -259,7 +259,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -282,7 +282,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -302,7 +302,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -322,7 +322,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -342,7 +342,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -365,7 +365,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -385,7 +385,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -405,7 +405,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -425,7 +425,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim-ms/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -459,8 +459,8 @@
           "options": {},
           "formatSpecifiers": {
             "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitability of code vulnerabilities.",
-            "Fail": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your toolchain to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.",
-            "Fail_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2})."
+            "Error": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your toolchain to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.",
+            "Error_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2})."
           }
         },
         {
@@ -471,7 +471,7 @@
           "options": {},
           "formatSpecifiers": {
             "Pass": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitability of code vulnerabilities.",
-            "Fail": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+            "Error": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
           }
         },
         {
@@ -482,8 +482,8 @@
           "options": {},
           "formatSpecifiers": {
             "Pass": "'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems.",
-            "Fail": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.",
-            "Fail_CouldNotParseVersion": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems."
+            "Error": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.",
+            "Error_CouldNotParseVersion": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems."
           }
         },
         {
@@ -494,9 +494,9 @@
           "options": {},
           "formatSpecifiers": {
             "Pass": "'{0}' is properly compiled to enable address space layout randomization, reducing an attacker's ability to exploit code in well-known locations.",
-            "Fail_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
-            "Fail_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
-            "Fail_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing address space layout randomization."
+            "Error_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
+            "Error_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
+            "Error_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing address space layout randomization."
           }
         },
         {
@@ -508,7 +508,7 @@
           "formatSpecifiers": {
             "Pass": "'{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception jump targets are defined as exception handlers in the program (and not shellcode).",
             "Pass_NoSEH": "'{0}' is an x86 binary that does not use SEH, making it an invalid target for exploits that attempt to replace SEH jump targets with attacker-controlled shellcode.",
-            "Fail": "'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+            "Error": "'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
           }
         },
         {
@@ -519,7 +519,7 @@
           "options": {},
           "formatSpecifiers": {
             "Pass": "'{0}' is marked as NX compatible, helping to prevent attackers from executing code that is injected into data segments.",
-            "Fail": "'{0}' is not marked NX compatible. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tool chain is configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+            "Error": "'{0}' is not marked NX compatible. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tool chain is configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
           }
         }
       ]

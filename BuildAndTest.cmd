@@ -43,3 +43,4 @@ md bld\bin\nuget
 
 echo Running unit tests...
 src\packages\xunit.runner.console.2.1.0\tools\xunit.console.x86.exe bld\bin\BinSkim.Rules.FunctionalTests\x86_Release\BinSkim.Rules.FunctionalTests.dll
+src\packages\xunit.runner.console.2.1.0\tools\xunit.console.x86.exe bld\bin\BinSkim.Driver.FunctionalTests\x86_Release\BinSkim.Driver.FunctionalTests.dll
