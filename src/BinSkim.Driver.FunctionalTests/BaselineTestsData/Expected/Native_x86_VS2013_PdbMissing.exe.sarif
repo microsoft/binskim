@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "0.4",
   "runLogs": [
     {
@@ -8,10 +8,10 @@
         "version": "1.2.16"
       },
       "runInfo": {
-        "invocationInfo": "\"D:\\src\\binskim\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze D:\\src\\binskim\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_PdbMissing.exe --output D:\\src\\binskim\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2013_PdbMissing.exe.sarif.temp --verbose --config default",
+        "invocationInfo": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_PdbMissing.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2013_PdbMissing.exe.sarif.temp --verbose --config default",
         "analysisTargets": [
           {
-            "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
           }
         ]
       },
@@ -29,7 +29,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -52,7 +52,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -75,7 +75,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -98,7 +98,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -120,7 +120,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -142,7 +142,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -164,7 +164,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -184,7 +184,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -205,7 +205,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -225,7 +225,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -245,7 +245,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -265,7 +265,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -288,7 +288,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -308,7 +308,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -330,7 +330,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -352,7 +352,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -373,7 +373,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -395,7 +395,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]
@@ -415,7 +415,7 @@
             {
               "analysisTarget": [
                 {
-                  "uri": "file:///D:/src/binskim/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
                   "mimeType": "application/octet-stream"
                 }
               ]

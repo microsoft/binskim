@@ -3,7 +3,8 @@ Param(
 )
 
 $tool = "BinSkim"
-$utility = "$PSScriptRoot\..\..\bld\bin\$tool.Driver\x86_Release\$tool.exe"
+$repoRoot = ( Resolve-Path "$PSScriptRoot\..\..\" ).ToString()
+$utility = "$repoRoot\bld\bin\$tool.Driver\x86_Release\$tool.exe"
 
 function Build-Tool()
 {
@@ -19,14 +20,14 @@ function Build-Baselines($sourceExtension)
 {
     Write-Host "Building baselines..."
     $expectedDirectory = Join-Path "$PSScriptRoot\BaselineTestsData" $ruleName
-	$expectedDirectory = Join-Path $expectedDirectory "Expected"
+    $expectedDirectory = Join-Path $expectedDirectory "Expected"
     $testsDirectory = "$PSScriptRoot\BaselineTestsData\" 
-	Write-Host "$sourceExtension"
+    Write-Host "$sourceExtension"
 
     Get-ChildItem $testsDirectory -Filter $sourceExtension | ForEach-Object {
         Write-Host "    $_ -> $_.sarif"
         $input = $_.FullName
-		$outputFile = $_.Name
+        $outputFile = $_.Name
         $output = Join-Path $expectedDirectory "$outputFile.sarif"
         $outputTemp = "$output.temp"
 
@@ -34,6 +35,15 @@ function Build-Baselines($sourceExtension)
         Remove-Item $outputTemp -ErrorAction SilentlyContinue
         &$utility analyze "$input" --output "$outputTemp" --verbose --config default
 
+        # Replace repository root absolute path with Z:\ for machine and enlistment independence
+        $text = [IO.File]::ReadAllText($outputTemp)
+        $text = $text.Replace($repoRoot.Replace("\", "\\"), "Z:\\")
+        $text = $text.Replace($repoRoot.Replace("\", "/"), "Z:/")
+
+        # Remove stack traces as they can change due to inlining differences by configuration and runtime.
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\\r\\n   at [^""]+", "")
+
+        [IO.File]::WriteAllText($outputTemp, $text, [Text.Encoding]::UTF8)
         Move-Item $outputTemp $output -Force
     }
 }
