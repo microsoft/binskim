@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a 64-bit image with a base address that is &gt;= 4 gigabytes, increasing the effectiveness of Address Space Layout randomization (which helps prevent attackers from executing security-sensitive code in well-known locations)..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a 64-bit image with a base address that is &gt;= 4 gigabytes, increasing the effectiveness of Address Space Layout Randomization (which helps prevent attackers from executing security-sensitive code in well-known locations)..
         /// </summary>
         internal static string BA2001_Pass {
             get {
