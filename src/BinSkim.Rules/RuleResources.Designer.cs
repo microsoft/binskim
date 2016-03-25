@@ -70,7 +70,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 64-bit images should have a preferred base address above the 4GB boundary in order to prevent triggering an Address Space Layour Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE fro [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to 64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2001_LoadImageAboveFourGigabyteAddress_Description {
             get {
@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a 64-bit image with a base address that is &gt;= 4 gigabytes, increaseing the effectiveness of address space layout randomization (that helps prevent attackers from executing security-sensitive code in well-known locations)..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a 64-bit image with a base address that is &gt;= 4 gigabytes, increasing the effectiveness of Address Space Layout randomization (which helps prevent attackers from executing security-sensitive code in well-known locations)..
         /// </summary>
         internal static string BA2001_Pass {
             get {
@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binaries should not take dependencies on other code with known security vulnerabilities..
+        ///   Looks up a localized string similar to Binaries should not take dependencies on code with known security vulnerabilities..
         /// </summary>
         internal static string BA2002_DoNotIncorporateVulnerableBinaries_Description {
             get {
@@ -97,7 +97,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was built with a dependency on version of {1}, which is subject to the following issues: {2}. To resolve this, {3}. The source files that triggered this were: {4}.
+        ///   Looks up a localized string similar to &apos;{0}&apos; was built with a version of {1} which is subject to the following issues: {2}. To resolve this, {3}. The source files that triggered this were: {4}.
         /// </summary>
         internal static string BA2002_Error {
             get {
@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application code should be compiled with the most up-to-date tool sets possible in order to take advantage of the most current compile-time security features..
+        ///   Looks up a localized string similar to Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features..
         /// </summary>
         internal static string BA2006_BuildWithSecureTools_Description {
             get {
@@ -169,7 +169,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}, linker version {2}). More recent tool chains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warnin [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}, linker version {2}). More recent tools contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning.
+        ///Mo [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2006_Error {
             get {
@@ -187,7 +188,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was built with a tool chain that satisfies configured policy (compiler minimum version {1}, linker minimum version {2})..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was built with tools that satisfy configured policy (compiler minimum version {1}, linker minimum version {2})..
         /// </summary>
         internal static string BA2006_Pass {
             get {
@@ -234,7 +235,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled at a secure warning level ({1}) and does not include any modules that disable specific warnings that are required by policy. As a result, there is a greater likelihood that memory corruption, information disclosure, double-free and other security-related vulnerabilities do not exist in code..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled at a secure warning level ({1}) and does not include any modules that disable specific warnings that are required by policy. As a result, it is less likely that memory corruption, information disclosure, double-free and other security-related vulnerabilities exist in code..
         /// </summary>
         internal static string BA2007_Pass {
             get {
@@ -243,7 +244,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binaries should enable the compiler control guard feature (CFG) at build time in order to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program..
+        ///   Looks up a localized string similar to Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program..
         /// </summary>
         internal static string BA2008_EnableControlFlowGuard_Description {
             get {
@@ -270,7 +271,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binaries should linked as DYNAMICBASE in order to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later..
+        ///   Looks up a localized string similar to Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later..
         /// </summary>
         internal static string BA2009_EnableAddressSpaceLayoutRandomization_Description {
             get {
@@ -279,7 +280,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later..
         /// </summary>
         internal static string BA2009_Error_NotDynamicBase {
             get {
@@ -297,7 +298,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows CE image but does not contain any relocation data, preventing address space layout randomization..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows CE image but does not contain any relocation data, preventing Address Space Layout Randomization..
         /// </summary>
         internal static string BA2009_Error_WinCENoRelocationSection {
             get {
@@ -306,7 +307,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is properly compiled to enable address space layout randomization, reducing an attacker&apos;s ability to exploit code in well-known locations..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is properly compiled to enable Address Space Layout Randomization, reducing an attacker&apos;s ability to exploit code in well-known locations..
         /// </summary>
         internal static string BA2009_Pass {
             get {
@@ -333,7 +334,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not have an imports section that is marked as executable, helping to prevent the exploitability of code vulnerabilities..
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not have an imports section that is marked as executable, helping to prevent the exploitation of code vulnerabilities..
         /// </summary>
         internal static string BA2010_Pass {
             get {
@@ -342,7 +343,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binaries should be built with the stack protector buffer security feature (/GS) enabled in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line..
+        ///   Looks up a localized string similar to Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line..
         /// </summary>
         internal static string BA2011_EnableStackProtection_Description {
             get {
@@ -522,7 +523,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy allows Address Space Layout Randomization to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line..
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line..
         /// </summary>
         internal static string BA2015_Error_NeitherHighEntropyVANorLargeAddressAware {
             get {
@@ -531,7 +532,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy allows Address Space Layout Randomization to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.).
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.).
         /// </summary>
         internal static string BA2015_Error_NoHighEntropyVA {
             get {
@@ -540,7 +541,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy allows Address Space Layout Randomization to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible by supplying /LARGEADDRESSAWARE to the C or C++ linker command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.).
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible by supplying /LARGEADDRESSAWARE to the C or C++ linker command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.).
         /// </summary>
         internal static string BA2015_Error_NoLargeAddressAware {
             get {
@@ -567,7 +568,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binaries should be marked as NX compatible in order to help prevent execution of untrusted data as code. The NXCompat bit, also known as &quot;Data Execution Prevention&quot; (DEP) or &quot;Execute Disable&quot; (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as &quot;Data Execution Prevention&quot; (DEP) or &quot;Execute Disable&quot; (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data s [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2016_MarkImageAsNXCompatible_Description {
             get {
@@ -585,7 +586,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to X86 binaries should enable the SafeSEH mitigation in order to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to su [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to sup [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2018_EnableSafeSEH_Description {
             get {
@@ -657,7 +658,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process commu [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IP [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2019_DoNotMarkWritableSectionsAsShared_Description {
             get {
@@ -666,7 +667,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across proce [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for in [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2019_Error {
             get {
@@ -675,7 +676,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; contains no data or code sections marked as both shared and writable, helping to prevent the exploitability of code vulnerabilities..
+        ///   Looks up a localized string similar to &apos;{0}&apos; contains no data or code sections marked as both shared and writable, helping to prevent the exploitation of code vulnerabilities..
         /// </summary>
         internal static string BA2019_Pass {
             get {
@@ -684,7 +685,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your toolchain to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both att [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attribu [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2021_DoNotMarkWritableSectionsAsExecutable_Description {
             get {
@@ -693,7 +694,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your toolchain to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source cod [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, w [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2021_Error {
             get {
@@ -711,7 +712,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; contains no data or code sections marked as both shared and executable, helping to prevent the exploitability of code vulnerabilities..
+        ///   Looks up a localized string similar to &apos;{0}&apos; contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities..
         /// </summary>
         internal static string BA2021_Pass {
             get {
