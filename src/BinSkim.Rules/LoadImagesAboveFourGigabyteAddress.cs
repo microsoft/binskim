@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         /// <summary>
         /// 64-bit images should have a preferred base address above the 4GB boundary in
-        /// order to prevent triggering an Address Space Layour Randomization (ASLR)
+        /// order to prevent triggering an Address Space Layout Randomization (ASLR)
         /// compatibility mode that decreases security. ASLR compatibility mode reduces
         /// the number of locations to which ASLR may relocate the binary, reducing its
         /// effectiveness at mitigating memory corruption vulnerabilities. To resolve
