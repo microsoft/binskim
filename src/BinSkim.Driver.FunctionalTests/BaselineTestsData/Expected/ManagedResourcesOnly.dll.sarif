@@ -1,19 +1,11 @@
 ﻿{
-  "version": "0.4",
+  "version": "1.0.0-beta.2",
   "runLogs": [
     {
-      "toolInfo": {
+      "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.2.16-beta",
-        "version": "1.2.16"
-      },
-      "runInfo": {
-        "invocationInfo": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedResourcesOnly.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedResourcesOnly.dll.sarif.temp --verbose --config default",
-        "analysisTargets": [
-          {
-            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
-          }
-        ]
+        "fullName": "BinSkim 1.3.0-beta",
+        "version": "1.3.0"
       },
       "results": [
         {
@@ -27,12 +19,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -50,12 +39,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -73,12 +59,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -96,12 +79,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -119,12 +99,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -142,12 +119,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -165,12 +139,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -188,12 +159,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -211,12 +179,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -234,12 +199,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -257,12 +219,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -280,12 +239,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -303,12 +259,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -326,12 +279,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -346,12 +296,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -366,12 +313,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -386,12 +330,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -407,12 +348,9 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         },
@@ -427,17 +365,32 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll"
+              }
             }
           ]
         }
       ],
-      "ruleInfo": [
+      "run": {
+        "invocation": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedResourcesOnly.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedResourcesOnly.dll.sarif.temp --verbose --hashes --config default",
+        "files": {
+          "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll": [
+            {
+              "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
+              "hashes": [
+                {
+                  "value": "EC2AF30CA7884124D1BF9618227E02C4841467CE87CCE8C0693C9075A66459AB",
+                  "algorithm": "SHA-256"
+                }
+              ]
+            }
+          ]
+        },
+        "runStartTime": "2016-04-09T03:00:30.79Z",
+        "runEndTime": "2016-04-09T03:00:31.04Z"
+      },
+      "rules": [
         {
           "id": "MSG1001",
           "name": "AnalyzingTarget",
@@ -459,11 +412,11 @@
           "id": "BA2021",
           "name": "DoNotMarkWritableSectionsAsExecutable",
           "shortDescription": "Code or data sections should not be marked as both shared and writable.",
-          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
+          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
           "options": {},
           "formatSpecifiers": {
-            "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitability of code vulnerabilities.",
-            "Error": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your toolchain to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.",
+            "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities.",
+            "Error": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.",
             "Error_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2})."
           }
         },
@@ -471,11 +424,11 @@
           "id": "BA2019",
           "name": "DoNotMarkWritableSectionsAsShared",
           "shortDescription": "Code or data sections should not be marked as both shared and writable.",
-          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
+          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
           "options": {},
           "formatSpecifiers": {
-            "Pass": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitability of code vulnerabilities.",
-            "Error": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to mutate memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you are required to share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+            "Pass": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitation of code vulnerabilities.",
+            "Error": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
           }
         },
         {
@@ -506,14 +459,14 @@
         {
           "id": "BA2009",
           "name": "EnableAddressSpaceLayoutRandomization",
-          "shortDescription": "Binaries should linked as DYNAMICBASE in order to be eligible for relocation by Address Space Layout Randomization (ASLR).",
-          "fullDescription": "Binaries should linked as DYNAMICBASE in order to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
+          "shortDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR).",
+          "fullDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
           "options": {},
           "formatSpecifiers": {
-            "Pass": "'{0}' is properly compiled to enable address space layout randomization, reducing an attacker's ability to exploit code in well-known locations.",
-            "Error_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tool chain to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
+            "Pass": "'{0}' is properly compiled to enable Address Space Layout Randomization, reducing an attacker's ability to exploit code in well-known locations.",
+            "Error_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
             "Error_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
-            "Error_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing address space layout randomization."
+            "Error_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing Address Space Layout Randomization."
           }
         }
       ]

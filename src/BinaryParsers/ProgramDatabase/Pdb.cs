@@ -275,7 +275,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         private HashSet<uint> GenerateExecutableSectionContribIds()
         {
             var result = new HashSet<uint>();
-            var enumSectionContribs = CreateDiaTable<IDiaEnumSectionContribs>();
+            IDiaEnumSectionContribs enumSectionContribs = null;
+
+            try
+            {
+                CreateDiaTable<IDiaEnumSectionContribs>();
+            }
+            catch (NotImplementedException) { }
+
+            if (enumSectionContribs == null)
+            {
+                return result;
+            }
 
             try
             {
