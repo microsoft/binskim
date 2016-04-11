@@ -235,7 +235,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         private HashSet<uint> GenerateWritableSegmentSet()
         {
             var result = new HashSet<uint>();
-            var enumSegments = CreateDiaTable<IDiaEnumSegments>();
+            IDiaEnumSegments enumSegments = null;
+
+            try
+            {
+                enumSegments = CreateDiaTable<IDiaEnumSegments>();
+            }
+            catch (NotImplementedException) { }
 
             try
             {
@@ -279,7 +285,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             try
             {
-                CreateDiaTable<IDiaEnumSectionContribs>();
+                enumSectionContribs = CreateDiaTable<IDiaEnumSectionContribs>();
             }
             catch (NotImplementedException) { }
 
