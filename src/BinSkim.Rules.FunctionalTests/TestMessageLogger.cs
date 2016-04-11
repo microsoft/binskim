@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void Log(IRuleDescriptor rule, Result result)
         {
-            NoteTestResult(result.Kind, result.Locations[0].AnalysisTarget[0].Uri.LocalPath);
+            NoteTestResult(result.Kind, result.Locations[0].AnalysisTarget.Uri.LocalPath);
         }
 
         public void NoteTestResult(ResultKind messageKind, string targetPath)

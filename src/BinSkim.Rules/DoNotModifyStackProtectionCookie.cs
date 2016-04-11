@@ -88,23 +88,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            try
+            if (context.PE.Is64Bit)
             {
-                if (context.PE.Is64Bit)
-                {
-                    if (!Validate64BitImage(context))
-                    {
-                        return;
-                    }
-                }
-                else if (!Validate32BitImage(context))
+                if (!Validate64BitImage(context))
                 {
                     return;
                 }
             }
-            catch (Exception)
+            else if (!Validate32BitImage(context))
             {
-                Console.WriteLine();
+                return;
             }
 
             // '{0}' is a C or C++ binary built with the buffer security feature 
@@ -116,6 +109,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2012_Pass)));
         }
+
         private bool Validate64BitImage(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;

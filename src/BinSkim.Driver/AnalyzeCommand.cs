@@ -38,15 +38,15 @@ namespace Microsoft.CodeAnalysis.IL
         private IEnumerable<string> _plugInFilePaths;
 
 
-        public override PropertyBag CreateConfigurationFromOptions(AnalyzeOptions analyzeOptions)
+        public override void ConfigureFromOptions(BinaryAnalyzerContext context, AnalyzeOptions analyzeOptions)
         {
+            base.ConfigureFromOptions(context, analyzeOptions);
+
             if (!string.IsNullOrEmpty(analyzeOptions.SymbolsPath))
             {
                 Pdb.SymbolPath = analyzeOptions.SymbolsPath;
             }
             _plugInFilePaths = analyzeOptions.PlugInFilePaths;
-
-            return base.CreateConfigurationFromOptions(analyzeOptions);
         }
 
         protected override void AnalyzeTarget(IEnumerable<ISkimmer<BinaryAnalyzerContext>> skimmers, BinaryAnalyzerContext context, HashSet<string> disabledSkimmers)
@@ -119,15 +119,11 @@ namespace Microsoft.CodeAnalysis.IL
                 // 1. Record the assembly under analysis
                 result.Locations = new[] {
                 new Sarif.Location {
-                    AnalysisTarget = new[]
-                    {
-                        new PhysicalLocationComponent
+                    AnalysisTarget = new PhysicalLocation
                         {
-                            Uri = assemblyFilePath.CreateUriForJsonSerialization(),
-                            MimeType = context.MimeType,
+                            Uri = new Uri(assemblyFilePath),
                         }
-                    }
-               }};
+                } };
 
                 // 2. Record the actual location associated with the result
                 var region = diagnostic.Location.ConvertToRegion();
@@ -137,18 +133,15 @@ namespace Microsoft.CodeAnalysis.IL
                 {
                     filePath = diagnostic.Location.GetLineSpan().Path;
 
-                    result.Locations[0].ResultFile = new[]
-                    {
-                        new PhysicalLocationComponent
+                    result.Locations[0].ResultFile =
+                        new PhysicalLocation
                         {
-                            Uri = filePath.CreateUriForJsonSerialization(),
-                            MimeType = Sarif.Writers.MimeType.DetermineFromFileExtension(filePath),
+                            Uri = new Uri(filePath),
                             Region = region
-                        }
-                    };
+                        };
                 }
 
-                // 3. If present, emit additional locations associated with diagnostic.\
+                // 3. If present, emit additional locations associated with diagnostic.
                 //    According to docs, these locations typically reference related
                 //    locations (i.e., they are not locations that specify other 
                 //    occurrences of a problem).
@@ -165,15 +158,11 @@ namespace Microsoft.CodeAnalysis.IL
                         result.RelatedLocations.Add(new AnnotatedCodeLocation
                         {
                             Message = "Additional location",
-                            PhysicalLocation = new[]
-                            {
-                                new PhysicalLocationComponent
+                            PhysicalLocation = new PhysicalLocation
                                 {
-                                    Uri = filePath.CreateUriForJsonSerialization(),
-                                    MimeType = Sarif.Writers.MimeType.DetermineFromFileExtension(filePath),
+                                    Uri = new Uri(filePath),
                                     Region = region
                                 }
-                            }
                         });
                     }
                 }

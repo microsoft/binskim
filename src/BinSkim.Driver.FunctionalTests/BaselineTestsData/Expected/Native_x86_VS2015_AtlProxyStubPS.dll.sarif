@@ -14,13 +14,13 @@
           "formattedMessage": {
             "specifierId": "AnalyzingTarget",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -31,27 +31,7 @@
           "formattedMessage": {
             "specifierId": "InvalidMetadata",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe",
-              "BA2008",
-              "EnableControlFlowGuard",
-              "image was compiled with a toolset version (12.0) that is not sufficiently recent (14.0 or newer) to provide relevant settings."
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
-            "specifierId": "InvalidMetadata",
-            "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe",
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
               "BA2015",
               "EnableHighEntropyVirtualAddresses",
               "image is not a 64-bit binary"
@@ -60,7 +40,7 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -71,7 +51,7 @@
           "formattedMessage": {
             "specifierId": "InvalidMetadata",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe",
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
               "BA2001",
               "LoadImageAboveFourGigabyteAddress",
               "image is not a 64-bit binary"
@@ -80,64 +60,60 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         },
         {
-          "ruleId": "ERR0997",
-          "kind": "configurationError",
+          "ruleId": "BA2006",
+          "kind": "pass",
           "formattedMessage": {
-            "specifierId": "ExceptionLoadingPdb",
+            "specifierId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe",
-              "BuildWithSecureTools",
-              "E_PDB_NOT_FOUND (File not found)"
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
+              "17.0.65501.17016",
+              "11.0.65501.17016"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         },
         {
-          "ruleId": "ERR0997",
-          "kind": "configurationError",
+          "ruleId": "BA2014",
+          "kind": "pass",
           "formattedMessage": {
-            "specifierId": "ExceptionLoadingPdb",
+            "specifierId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe",
-              "DoNotDisableStackProtectionForFunctions",
-              "E_PDB_NOT_FOUND (File not found)"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         },
         {
-          "ruleId": "ERR0997",
-          "kind": "configurationError",
+          "ruleId": "BA2002",
+          "kind": "pass",
           "formattedMessage": {
-            "specifierId": "ExceptionLoadingPdb",
+            "specifierId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe",
-              "DoNotIncorporateVulnerableDependencies",
-              "E_PDB_NOT_FOUND (File not found)"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -148,31 +124,30 @@
           "formattedMessage": {
             "specifierId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         },
         {
           "ruleId": "BA2021",
-          "kind": "error",
+          "kind": "pass",
           "formattedMessage": {
-            "specifierId": "Error",
+            "specifierId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe",
-              ".textbss"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -183,13 +158,13 @@
           "formattedMessage": {
             "specifierId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -200,13 +175,13 @@
           "formattedMessage": {
             "specifierId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -217,13 +192,13 @@
           "formattedMessage": {
             "specifierId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -234,7 +209,7 @@
           "formattedMessage": {
             "specifierId": "InvalidMetadata",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe",
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
               "BA2022",
               "SignSecurely",
               "image is not signed "
@@ -243,7 +218,7 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -254,88 +229,101 @@
           "formattedMessage": {
             "specifierId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         },
         {
-          "ruleId": "ERR0997",
-          "kind": "configurationError",
+          "ruleId": "BA2008",
+          "kind": "error",
           "formattedMessage": {
-            "specifierId": "ExceptionLoadingPdb",
+            "specifierId": "Error",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe",
-              "EnableCriticalCompilerWarnings",
-              "E_PDB_NOT_FOUND (File not found)"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         },
         {
-          "ruleId": "ERR0997",
-          "kind": "configurationError",
+          "ruleId": "BA2007",
+          "kind": "error",
           "formattedMessage": {
-            "specifierId": "ExceptionLoadingPdb",
+            "specifierId": "Error_InsufficientWarningLevel",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe",
-              "EnableStackProtection",
-              "E_PDB_NOT_FOUND (File not found)"
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
+              "1",
+              "-c -Zi -nologo -W1 -WX- -O2 -Oy- -DWIN32 -DREGISTER_PROXY_DLL -DNDEBUG -D_WINDLL -D_UNICODE -DUNICODE -Gm- -EHs -EHc -MD -GS -fp:precise -Zc:wchar_t -Zc:forScope -Zc:inline -Gd -TC -analyze- -errorreport:prompt -I\"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\include\" -I\"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\atlmfc\\include\" -I\"C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.10240.0\\ucrt\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\um\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\shared\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\winrt\" -X",
+              "dlldata.obj [warning level: 1]\r\nNative_x86_VS2015_AtlProxyStub_p.obj [warning level: 1]\r\n"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2011",
+          "kind": "pass",
+          "formattedMessage": {
+            "specifierId": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         },
         {
           "ruleId": "BA2018",
-          "kind": "error",
+          "kind": "pass",
           "formattedMessage": {
-            "specifierId": "Error",
+            "specifierId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe",
-              "has an empty SE handler table in the load configuration table"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         },
         {
-          "ruleId": "ERR0997",
-          "kind": "configurationError",
+          "ruleId": "BA2013",
+          "kind": "pass",
           "formattedMessage": {
-            "specifierId": "ExceptionLoadingPdb",
+            "specifierId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe",
-              "InitializeStackProtection",
-              "E_PDB_NOT_FOUND (File not found)"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -346,35 +334,35 @@
           "formattedMessage": {
             "specifierId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         }
       ],
       "run": {
-        "invocation": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_PdbMissing.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2013_PdbMissing.exe.sarif.temp --verbose --hashes --config default",
+        "invocation": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2015_AtlProxyStubPS.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2015_AtlProxyStubPS.dll.sarif.temp --verbose --hashes --config default",
         "files": {
-          "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe": [
+          "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll": [
             {
-              "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+              "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll",
               "hashes": [
                 {
-                  "value": "DE324C3638925DBE4ACF7AD6F9CE1ECEEBB6D6A2F8F27AEE2F8F1F3F80B766F0",
+                  "value": "D9933BFE1FF014C5AD2C6F84465ADD174DEE31326737B29B5DD26ACA701E0948",
                   "algorithm": "SHA-256"
                 }
               ]
             }
           ]
         },
-        "runStartTime": "2016-04-09T03:00:39.65Z",
-        "runEndTime": "2016-04-09T03:00:39.88Z"
+        "runStartTime": "2016-04-09T03:00:35.19Z",
+        "runEndTime": "2016-04-09T03:00:35.47Z"
       },
       "rules": [
         {
@@ -395,20 +383,37 @@
           }
         },
         {
-          "id": "ERR0997",
-          "name": "InvalidConfiguration",
-          "fullDescription": "An unhandled exception was raised while configuring analysis for execution.",
+          "id": "BA2006",
+          "name": "BuildWithSecureTools",
+          "shortDescription": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features.",
+          "fullDescription": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features.",
+          "options": {},
           "formatSpecifiers": {
-            "ExceptionAccessingFile": "An exception was raised accessing a file specified on the command line:'{0}'. Exception information:\r\n{1}",
-            "ExceptionLoadingPdb": "'{0}' was not evaluated for check '{1}' as an exception occurred loading its pdb: '{2}'",
-            "ExceptionLoadingPlugIn": "An exception was raised attempting to load plug-in: '{0}'. Exception information:\r\n{1}",
-            "ExceptionCreatingLogFile": "An exception was raised attempting to create output file: '{0}'. Exception information:\r\n{1}",
-            "ExceptionLoadingAnalysisTarget": "An exception was raised attempting to load analysis target: '{0}'. Exception information:\r\n{1}",
-            "ExceptionInstantiatingSkimmers": "An exception was raised attempting to instantiate skimmers from the following plugins'{0}'. Exception information:\r\n{1}",
-            "MissingRuleConfiguration": "Check '{1}' was disabled while analyzing '{0}' because the analysis was not configured with required policy ({2}). To resolve this, configure and provide a policy file on the {3} command-line using the --policy argument (recommended), or pass '--config default' to invoke built-in settings. Invoke the {3} 'exportConfig' command to produce an initial configuration file that can be edited, if necessary, and passed back into the tool.",
-            "MissingFile": "A required file specified on the command line could not be found: '{0}'.",
-            "NoRulesLoaded": "No analysis rules could be instantiated.",
-            "NoValidAnalysisTargets": "No valid analysis targets were specified."
+            "Error_BadModule": "built with {0} compiler version {1} (Front end version {2})",
+            "Pass": "'{0}' was built with tools that satisfy configured policy (compiler minimum version {1}, linker minimum version {2}).",
+            "Error": "'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}, linker version {2}). More recent tools contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning.\r\nModules built outside of policy: \r\n{3}"
+          }
+        },
+        {
+          "id": "BA2014",
+          "name": "DoNotDisableStackProtectionForFunctions",
+          "shortDescription": "Application code should not disable stack protection for individual functions.",
+          "fullDescription": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled which does not disable protection for any individual functions (via __declspec(safebuffers), making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities.",
+            "Error": "'{0}' is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
+          }
+        },
+        {
+          "id": "BA2002",
+          "name": "DoNotIncorporateVulnerableDependencies",
+          "shortDescription": "Binaries should not take dependencies on code with known security vulnerabilities.",
+          "fullDescription": "Binaries should not take dependencies on code with known security vulnerabilities.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' does not incorporate any known vulnerable dependencies, as configured by current policy.",
+            "Error": "'{0}' was built with a version of {1} which is subject to the following issues: {2}. To resolve this, {3}. The source files that triggered this were: {4}"
           }
         },
         {
@@ -485,6 +490,42 @@
           }
         },
         {
+          "id": "BA2008",
+          "name": "EnableControlFlowGuard",
+          "shortDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations.",
+          "fullDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location.",
+            "Error": "'{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /GUARD:CF on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG."
+          }
+        },
+        {
+          "id": "BA2007",
+          "name": "EnableCriticalCompilerWarnings",
+          "shortDescription": "Binaries should be compiled with a warning level that enables all critical security-relevant checks.",
+          "fullDescription": "Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' was compiled at a secure warning level ({1}) and does not include any modules that disable specific warnings that are required by policy. As a result, it is less likely that memory corruption, information disclosure, double-free and other security-related vulnerabilities exist in code.",
+            "Error_WarningsDisabled": "'{0}' disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation. An example compiler command line triggering this check was: {1}\r\nModules triggering this check were:\r\n{2}",
+            "Error_InsufficientWarningLevel": "'{0}' was compiled at too low a warning level (effective warning level {1} for one or more modules). Warning level 3 enables important static analysis in the compiler to flag bugs that can lead to memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted. An example compiler command line triggering this check: {2}\r\nModules triggering this check: {3}",
+            "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the compiler warning settings. The language could not be identified for the following modules: {1}"
+          }
+        },
+        {
+          "id": "BA2011",
+          "name": "EnableStackProtection",
+          "shortDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.",
+          "fullDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled for all modules, making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities. ",
+            "Error": "'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}",
+            "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}."
+          }
+        },
+        {
           "id": "BA2018",
           "name": "EnableSafeSEH",
           "shortDescription": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues.",
@@ -494,6 +535,19 @@
             "Pass": "'{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception jump targets are defined as exception handlers in the program (and not shellcode).",
             "Pass_NoSEH": "'{0}' is an x86 binary that does not use SEH, making it an invalid target for exploits that attempt to replace SEH jump targets with attacker-controlled shellcode.",
             "Error": "'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+          }
+        },
+        {
+          "id": "BA2013",
+          "name": "InitializeStackProtection",
+          "shortDescription": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.",
+          "fullDescription": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.",
+          "options": {},
+          "formatSpecifiers": {
+            "Pass": "'{0}' is a C or C++ binary built with the buffer security feature that properly initializes the stack protecter. This has the effect of increasing the effectiveness of the feature and reducing spurious detections.",
+            "Pass_NoCode": "'{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code.",
+            "NotApplicable_FeatureNotEnabled": "'{0}' is a C or C++ binary that does enable the stack protection buffer security feature. It is therefore not required to initialize the stack protector.",
+            "Error": "'{0}' is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
           }
         },
         {

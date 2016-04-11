@@ -6,8 +6,8 @@ SETLOCAL
 @REM %~dp0.nuget\NuGet.exe update -self
 
 set MAJOR=1
-set MINOR=2
-set PATCH=16
+set MINOR=3
+set PATCH=0
 set PRERELEASE=-beta
 
 set VERSION_CONSTANTS=src\BinaryParsers\VersionConstants.cs
@@ -30,8 +30,8 @@ echo  }                                                                         
 
 
 %~dp0.nuget\NuGet.exe restore src\BinSkim.sln 
-msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x64"
-msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x86"
+msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x64" /filelogger /fileloggerparameters:Verbosity=detailed
+msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x86" /filelogger /fileloggerparameters:Verbosity=detailed
 
 md bld\bin\nuget
 

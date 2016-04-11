@@ -13,14 +13,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         public static void ValidateRunLog(RunLog runLog, Action<Result> resultAction)
         {
-            ValidateToolInfo(runLog.ToolInfo);
+            ValidateTool(runLog.Tool);
 
             foreach (Result result in runLog.Results) { resultAction(result); }
         }
 
-        public static void ValidateToolInfo(ToolInfo toolInfo)
+        public static void ValidateTool(Tool tool)
         {
-            Assert.Equal("BinSkim", toolInfo.Name);
+            Assert.Equal("BinSkim", tool.Name);
             // TODO version, etc
         }
     }
