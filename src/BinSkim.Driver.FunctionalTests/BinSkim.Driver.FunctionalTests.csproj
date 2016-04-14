@@ -120,7 +120,6 @@
     <Compile Include="..\Shared\SharedAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="BaselineTests.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
