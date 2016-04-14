@@ -11,9 +11,9 @@
         "properties": {
           "Language": "Language Neutral",
           "FileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
-          "Comments": "BinSkim PE Analysis Driver",
-          "ProductName": "1.3.0.0",
-          "ProductVersion": "1.3.0.0"
+          "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
+          "CompanyName": "Microsoft",
+          "ProductVersion": "BinSkim Portable Executable Analyzer"
         }
       },
       "results": [
@@ -366,8 +366,8 @@
         }
       ],
       "invocation": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\MixedMode_x86_VS2013_MissingPdb.dll.sarif.temp --verbose --hashes --config default",
-      "startTime": "2016-04-14T21:40:19.27Z",
-      "endTime": "2016-04-14T21:40:19.81Z",
+      "startTime": "2016-04-14T22:52:12.33Z",
+      "endTime": "2016-04-14T22:52:12.88Z",
       "files": {
         "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll": [
           {
