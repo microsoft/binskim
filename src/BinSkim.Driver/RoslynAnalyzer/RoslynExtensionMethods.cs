@@ -10,39 +10,39 @@ namespace Microsoft.CodeAnalysis.IL
 {
     internal static class RoslynExtensionMethods
     {
-        public static IRuleDescriptor ConvertToRuleDescriptor(this Diagnostic diagnostic)
+        public static IRule ConvertToRuleDescriptor(this Diagnostic diagnostic)
         {
             // TODO we should consume the standard Roslyn->SARIF emit code here.
 
             DiagnosticDescriptor diagnosticDescriptor = diagnostic.Descriptor;
 
-            var ruleDescriptor = new RuleDescriptor();
-            ruleDescriptor.FormatSpecifiers = new Dictionary<string, string>();
-            ruleDescriptor.FormatSpecifiers["Default"] = diagnosticDescriptor.MessageFormat.ToString();
-            ruleDescriptor.FullDescription = diagnosticDescriptor.Description.ToString();
-            ruleDescriptor.HelpUri = new Uri(diagnosticDescriptor.HelpLinkUri);
-            ruleDescriptor.Id = diagnosticDescriptor.Id;
+            var rule = new Rule();
+            rule.MessageFormats = new Dictionary<string, string>();
+            rule.MessageFormats["Default"] = diagnosticDescriptor.MessageFormat.ToString();
+            rule.FullDescription = diagnosticDescriptor.Description.ToString();
+            rule.HelpUri = new Uri(diagnosticDescriptor.HelpLinkUri);
+            rule.Id = diagnosticDescriptor.Id;
 
             // TODO: review this decision
-            ruleDescriptor.Name = diagnostic.GetType().Name;
+            rule.Name = diagnostic.GetType().Name;
 
-            ruleDescriptor.Properties = new Dictionary<string, string>();
+            rule.Properties = new Dictionary<string, string>();
 
             foreach (string tag in diagnosticDescriptor.CustomTags)
             {
-                ruleDescriptor.Properties[tag] = String.Empty;
+                rule.Properties[tag] = String.Empty;
             }
 
-            ruleDescriptor.Properties["Category"] = diagnosticDescriptor.Category;
-            ruleDescriptor.Properties["DefaultSeverity"] = diagnosticDescriptor.DefaultSeverity.ToString();
-            ruleDescriptor.Properties["IsEnabledByDefault"] = diagnosticDescriptor.IsEnabledByDefault.ToString();
+            rule.Properties["Category"] = diagnosticDescriptor.Category;
+            rule.Properties["DefaultSeverity"] = diagnosticDescriptor.DefaultSeverity.ToString();
+            rule.Properties["IsEnabledByDefault"] = diagnosticDescriptor.IsEnabledByDefault.ToString();
 
-            ruleDescriptor.ShortDescription = diagnosticDescriptor.Title.ToString();
+            rule.ShortDescription = diagnosticDescriptor.Title.ToString();
 
             // No Roslyn analog for these available from diagnostic
-            //ruleDescriptor.Options
+            //rule.Options
 
-            return ruleDescriptor;
+            return rule;
         }
 
         public static Region ConvertToRegion(this Location location)

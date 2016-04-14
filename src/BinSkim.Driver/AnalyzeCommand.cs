@@ -167,7 +167,7 @@ namespace Microsoft.CodeAnalysis.IL
                     }
                 }
 
-                IRuleDescriptor rule = diagnostic.ConvertToRuleDescriptor();
+                IRule rule = diagnostic.ConvertToRuleDescriptor();
                 context.Logger.Log(null, result);
             });
         }    

@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
-    public interface IBinarySkimmer : ISkimmer<BinaryAnalyzerContext>, IRuleDescriptor
+    public interface IBinarySkimmer : ISkimmer<BinaryAnalyzerContext>, IRule
     {
     }
 }
