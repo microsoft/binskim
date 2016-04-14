@@ -3,5 +3,6 @@
 
 using System.Reflection;
 
-[assembly: AssemblyTitle("BinSkim")]
-[assembly: AssemblyDescription("BinSkim PE Analysis Driver")]
+[assembly: AssemblyTitle("BinSkim PE/MSIL Analysis Driver")]
+[assembly: AssemblyDescription("A security and correctness analyzer for portable executable and MSIL formats.")]
+

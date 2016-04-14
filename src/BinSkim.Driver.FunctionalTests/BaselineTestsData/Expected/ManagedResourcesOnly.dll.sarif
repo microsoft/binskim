@@ -1,18 +1,27 @@
 ﻿{
-  "version": "1.0.0-beta.2",
-  "runLogs": [
+  "version": "1.0.0-beta.3",
+  "runs": [
     {
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.3.0-beta",
-        "version": "1.3.0"
+        "fullName": "BinSkim 1.3.0.0-beta",
+        "version": "1.3.0.0",
+        "semanticVersion": "1.3.0",
+        "fileVersion": "1.3.0.0",
+        "properties": {
+          "Language": "Language Neutral",
+          "FileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
+          "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
+          "CompanyName": "Microsoft",
+          "ProductVersion": "BinSkim Portable Executable Analyzer"
+        }
       },
       "results": [
         {
           "ruleId": "MSG1001",
           "kind": "note",
           "formattedMessage": {
-            "specifierId": "AnalyzingTarget",
+            "formatId": "AnalyzingTarget",
             "arguments": [
               "ManagedResourcesOnly.dll"
             ]
@@ -29,7 +38,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2006",
@@ -49,7 +58,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2014",
@@ -69,7 +78,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2002",
@@ -89,7 +98,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2010",
@@ -109,7 +118,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2012",
@@ -129,7 +138,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2008",
@@ -149,7 +158,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2007",
@@ -169,7 +178,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2011",
@@ -189,7 +198,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2015",
@@ -209,7 +218,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2018",
@@ -229,7 +238,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2013",
@@ -249,7 +258,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2001",
@@ -269,7 +278,7 @@
           "ruleId": "MSG1002",
           "kind": "notApplicable",
           "formattedMessage": {
-            "specifierId": "InvalidMetadata",
+            "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BA2016",
@@ -289,7 +298,7 @@
           "ruleId": "BA2021",
           "kind": "pass",
           "formattedMessage": {
-            "specifierId": "Pass",
+            "formatId": "Pass",
             "arguments": [
               "ManagedResourcesOnly.dll"
             ]
@@ -306,7 +315,7 @@
           "ruleId": "BA2019",
           "kind": "pass",
           "formattedMessage": {
-            "specifierId": "Pass",
+            "formatId": "Pass",
             "arguments": [
               "ManagedResourcesOnly.dll"
             ]
@@ -323,7 +332,7 @@
           "ruleId": "BA2005",
           "kind": "pass",
           "formattedMessage": {
-            "specifierId": "Pass",
+            "formatId": "Pass",
             "arguments": [
               "ManagedResourcesOnly.dll"
             ]
@@ -340,7 +349,7 @@
           "ruleId": "BA2022",
           "kind": "error",
           "formattedMessage": {
-            "specifierId": "Error_BadSigningAlgorithm",
+            "formatId": "Error_BadSigningAlgorithm",
             "arguments": [
               "ManagedResourcesOnly.dll",
               "sha1RSA"
@@ -358,7 +367,7 @@
           "ruleId": "BA2009",
           "kind": "pass",
           "formattedMessage": {
-            "specifierId": "Pass",
+            "formatId": "Pass",
             "arguments": [
               "ManagedResourcesOnly.dll"
             ]
@@ -372,30 +381,35 @@
           ]
         }
       ],
-      "run": {
-        "invocation": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedResourcesOnly.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedResourcesOnly.dll.sarif.temp --verbose --hashes --config default",
-        "files": {
-          "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll": [
-            {
-              "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll",
-              "hashes": [
-                {
-                  "value": "EC2AF30CA7884124D1BF9618227E02C4841467CE87CCE8C0693C9075A66459AB",
-                  "algorithm": "SHA-256"
-                }
-              ]
-            }
-          ]
-        },
-        "runStartTime": "2016-04-09T03:00:30.79Z",
-        "runEndTime": "2016-04-09T03:00:31.04Z"
+      "invocation": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedResourcesOnly.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedResourcesOnly.dll.sarif.temp --verbose --hashes --config default",
+      "startTime": "2016-04-14T22:52:10.66Z",
+      "endTime": "2016-04-14T22:52:10.92Z",
+      "files": {
+        "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedResourcesOnly.dll": [
+          {
+            "hashes": [
+              {
+                "value": "98365623B50A6639C79AEC58223BDFC9",
+                "algorithm": "MD5"
+              },
+              {
+                "value": "394F7EA08DC2C8988123778F00EE281678CB4BDD",
+                "algorithm": "SHA-1"
+              },
+              {
+                "value": "EC2AF30CA7884124D1BF9618227E02C4841467CE87CCE8C0693C9075A66459AB",
+                "algorithm": "SHA-256"
+              }
+            ]
+          }
+        ]
       },
       "rules": [
         {
           "id": "MSG1001",
           "name": "AnalyzingTarget",
           "fullDescription": "An analysis target was analyzed.",
-          "formatSpecifiers": {
+          "messageFormats": {
             "AnalyzingTarget": "Analyzing '{0}'..."
           }
         },
@@ -403,7 +417,7 @@
           "id": "MSG1002",
           "name": "InvalidTarget",
           "fullDescription": "A file was skipped as it does not appear to be a valid target for analysis.",
-          "formatSpecifiers": {
+          "messageFormats": {
             "InvalidFileType": "'{0}' was not analyzed as it does not appear to be a valid file type for analysis.",
             "InvalidMetadata": "'{0}' was not evaluated for check '{1}:{2}' as the analysis is not relevant based on observed metadata: {3}."
           }
@@ -414,7 +428,7 @@
           "shortDescription": "Code or data sections should not be marked as both shared and writable.",
           "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
           "options": {},
-          "formatSpecifiers": {
+          "messageFormats": {
             "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities.",
             "Error": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.",
             "Error_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2})."
@@ -426,7 +440,7 @@
           "shortDescription": "Code or data sections should not be marked as both shared and writable.",
           "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
           "options": {},
-          "formatSpecifiers": {
+          "messageFormats": {
             "Pass": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitation of code vulnerabilities.",
             "Error": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
           }
@@ -437,7 +451,7 @@
           "shortDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
           "fullDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
           "options": {},
-          "formatSpecifiers": {
+          "messageFormats": {
             "Pass": "'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems.",
             "Error": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.",
             "Error_CouldNotParseVersion": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems."
@@ -449,7 +463,7 @@
           "shortDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms.",
           "fullDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.",
           "options": {},
-          "formatSpecifiers": {
+          "messageFormats": {
             "Pass": "'{0}' appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The image was signed with '{1}', a cryptographically strong algorithm.",
             "Error_BadSigningAlgorithm": "'{0}' was signed using '{1}', an algorithm that WinTrustVerify has flagged as insecure.",
             "Error_DidNotVerify": "'{0}' signing was flagged as insecure by WinTrustVerify with error code '{1}' ({2})",
@@ -462,7 +476,7 @@
           "shortDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR).",
           "fullDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
           "options": {},
-          "formatSpecifiers": {
+          "messageFormats": {
             "Pass": "'{0}' is properly compiled to enable Address Space Layout Randomization, reducing an attacker's ability to exploit code in well-known locations.",
             "Error_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
             "Error_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",

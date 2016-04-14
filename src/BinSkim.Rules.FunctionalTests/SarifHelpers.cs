@@ -11,11 +11,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 {
     internal static class SarifHelpers
     {
-        public static void ValidateRunLog(RunLog runLog, Action<Result> resultAction)
+        public static void ValidateRun(Run run, Action<Result> resultAction)
         {
-            ValidateTool(runLog.Tool);
+            ValidateTool(run.Tool);
 
-            foreach (Result result in runLog.Results) { resultAction(result); }
+            foreach (Result result in run.Results) { resultAction(result); }
         }
 
         public static void ValidateTool(Tool tool)

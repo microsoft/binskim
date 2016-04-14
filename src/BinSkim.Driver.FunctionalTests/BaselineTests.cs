@@ -136,7 +136,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             var visitor = new ResultDiffingVisitor(expectedLog);
 
-            if (!visitor.Diff(actualLog.RunLogs[0].Results))
+            if (!visitor.Diff(actualLog.Runs[0].Results))
             {
                 string errorMessage = "The output of the tool did not match for input {0}.";
                 sb.AppendLine(String.Format(CultureInfo.CurrentCulture, errorMessage, inputFileName));

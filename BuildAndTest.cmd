@@ -5,10 +5,7 @@ SETLOCAL
 @REM create a nuget package for binskim) so must opt-in
 @REM %~dp0.nuget\NuGet.exe update -self
 
-set MAJOR=1
-set MINOR=3
-set PATCH=0
-set PRERELEASE=-beta
+call SetCurrentVersion.cmd
 
 set VERSION_CONSTANTS=src\BinaryParsers\VersionConstants.cs
 
@@ -27,7 +24,6 @@ echo         public const string FileVersion = AssemblyVersion + ".0";          
 echo         public const string Version = AssemblyVersion + Prerelease;           >> %VERSION_CONSTANTS%
 echo     }                                                                         >> %VERSION_CONSTANTS%
 echo  }                                                                            >> %VERSION_CONSTANTS%
-
 
 %~dp0.nuget\NuGet.exe restore src\BinSkim.sln 
 msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x64" /filelogger /fileloggerparameters:Verbosity=detailed
