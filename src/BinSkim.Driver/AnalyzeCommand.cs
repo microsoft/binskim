@@ -132,13 +132,15 @@ namespace Microsoft.CodeAnalysis.IL
                 if (diagnostic.Location != Location.None)
                 {
                     filePath = diagnostic.Location.GetLineSpan().Path;
-
-                    result.Locations[0].ResultFile =
-                        new PhysicalLocation
-                        {
-                            Uri = new Uri(filePath),
-                            Region = region
-                        };
+                    if (!string.IsNullOrEmpty(filePath))
+                    {
+                        result.Locations[0].ResultFile =
+                            new PhysicalLocation
+                            {
+                                Uri = new Uri(filePath),
+                                Region = region
+                            };
+                    }
                 }
 
                 // 3. If present, emit additional locations associated with diagnostic.
@@ -153,6 +155,11 @@ namespace Microsoft.CodeAnalysis.IL
                     foreach(Location location in diagnostic.AdditionalLocations)
                     {
                         filePath = location.GetLineSpan().Path;
+                        if (string.IsNullOrEmpty(filePath))
+                        {
+                            continue;
+                        }
+
                         region = location.ConvertToRegion();
 
                         result.RelatedLocations.Add(new AnnotatedCodeLocation
