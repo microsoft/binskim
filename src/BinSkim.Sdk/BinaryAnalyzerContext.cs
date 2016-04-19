@@ -123,7 +123,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public IAnalysisLogger Logger { get; set; }
 
-        public IRuleDescriptor Rule { get; set; }
+        public IRule Rule { get; set; }
 
         public Version MinimumSupportedCompilerVersion { get; internal set; }
 

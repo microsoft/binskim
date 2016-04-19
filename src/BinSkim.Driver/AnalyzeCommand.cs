@@ -38,15 +38,15 @@ namespace Microsoft.CodeAnalysis.IL
         private IEnumerable<string> _plugInFilePaths;
 
 
-        public override PropertyBag CreateConfigurationFromOptions(AnalyzeOptions analyzeOptions)
+        public override void ConfigureFromOptions(BinaryAnalyzerContext context, AnalyzeOptions analyzeOptions)
         {
+            base.ConfigureFromOptions(context, analyzeOptions);
+
             if (!string.IsNullOrEmpty(analyzeOptions.SymbolsPath))
             {
                 Pdb.SymbolPath = analyzeOptions.SymbolsPath;
             }
             _plugInFilePaths = analyzeOptions.PlugInFilePaths;
-
-            return base.CreateConfigurationFromOptions(analyzeOptions);
         }
 
         protected override void AnalyzeTarget(IEnumerable<ISkimmer<BinaryAnalyzerContext>> skimmers, BinaryAnalyzerContext context, HashSet<string> disabledSkimmers)
@@ -93,12 +93,11 @@ namespace Microsoft.CodeAnalysis.IL
 
             Debug.Assert(context.MimeType == Sarif.Writers.MimeType.Binary);
 
-            ILDiagnosticsAnalyzer roslynAnalyzer = ILDiagnosticsAnalyzer.Create(_globalRoslynAnalysisContext, context);
+            ILDiagnosticsAnalyzer roslynAnalyzer = ILDiagnosticsAnalyzer.Create(_globalRoslynAnalysisContext);
             roslynAnalyzer.Analyze(assemblyFilePath, diagnostic =>
             {
                 // 0. Populate various members
                 var result = new Result();
-                result.RuleId = diagnostic.Id;
                 result.Kind = diagnostic.Severity.ConvertToMessageKind();
                 result.FullMessage = diagnostic.GetMessage();
 
@@ -119,71 +118,58 @@ namespace Microsoft.CodeAnalysis.IL
 
                 // 1. Record the assembly under analysis
                 result.Locations = new[] {
-                    new Sarif.Location {
-                        AnalysisTarget = new[]
+                new Sarif.Location {
+                    AnalysisTarget = new PhysicalLocation
                         {
-                            new PhysicalLocationComponent
-                            {
-                                Uri = assemblyFilePath.CreateUriForJsonSerialization(),
-                                MimeType = context.MimeType,
-                            }
+                            Uri = new Uri(assemblyFilePath),
                         }
-                   }
-                };
+                } };
 
                 // 2. Record the actual location associated with the result
-                PhysicalLocationComponent physicalLocation = GetPhysicalLocation(diagnostic.Location);
-                if (physicalLocation != null)
+                var region = diagnostic.Location.ConvertToRegion();
+                string filePath;
+
+                if (diagnostic.Location != Location.None)
                 {
-                    result.Locations[0].ResultFile = new[] { physicalLocation };
+                    filePath = diagnostic.Location.GetLineSpan().Path;
+
+                    result.Locations[0].ResultFile =
+                        new PhysicalLocation
+                        {
+                            Uri = new Uri(filePath),
+                            Region = region
+                        };
                 }
 
-                // 3. If present, emit additional locations associated with diagnostic.\
+                // 3. If present, emit additional locations associated with diagnostic.
                 //    According to docs, these locations typically reference related
                 //    locations (i.e., they are not locations that specify other 
                 //    occurrences of a problem).
 
-                if (diagnostic.AdditionalLocations?.Count > 0)
+                if (diagnostic.AdditionalLocations != null && diagnostic.AdditionalLocations.Count > 0)
                 {
                     result.RelatedLocations = new List<AnnotatedCodeLocation>(diagnostic.AdditionalLocations.Count);
 
-                    foreach (Location location in diagnostic.AdditionalLocations)
+                    foreach(Location location in diagnostic.AdditionalLocations)
                     {
-                        physicalLocation = GetPhysicalLocation(location);
-                        if (physicalLocation != null)
+                        filePath = location.GetLineSpan().Path;
+                        region = location.ConvertToRegion();
+
+                        result.RelatedLocations.Add(new AnnotatedCodeLocation
                         {
-                            result.RelatedLocations.Add(new AnnotatedCodeLocation
-                            {
-                                Message = "Additional location",
-                                PhysicalLocation = new[] { physicalLocation },
-                            });
-                        }
+                            Message = "Additional location",
+                            PhysicalLocation = new PhysicalLocation
+                                {
+                                    Uri = new Uri(filePath),
+                                    Region = region
+                                }
+                        });
                     }
                 }
 
-                context.Logger.Log(diagnostic.ConvertToRuleDescriptor(), result);
+                IRule rule = diagnostic.ConvertToRuleDescriptor();
+                context.Logger.Log(null, result);
             });
-        }
-
-        private static PhysicalLocationComponent GetPhysicalLocation(Location location)
-        {
-            if (!location.IsInSource)
-            {
-                return null;
-            }
-
-            string filePath = location.SourceTree.FilePath;
-            if (string.IsNullOrEmpty(filePath))
-            {
-                return null;
-            }
-
-            return new PhysicalLocationComponent
-            {
-                Uri = filePath.CreateUriForJsonSerialization(),
-                MimeType = Sarif.Writers.MimeType.DetermineFromFileExtension(filePath),
-                Region = location.ConvertToRegion(),
-            };
-        }
+        }    
     }
 }

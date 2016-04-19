@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.Sarif.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRuleDescriptor))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
     public class DoNotModifyStackProtectionCookie : BinarySkimmerBase
     {
         /// <summary>
@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             get { return RuleResources.BA2012_DoNotModifyStackProtectionCookie_Description; }
         }
 
-        protected override IEnumerable<string> FormatSpecifierIds
+        protected override IEnumerable<string> FormatIds
         {
             get
             {
@@ -88,23 +88,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            try
+            if (context.PE.Is64Bit)
             {
-                if (context.PE.Is64Bit)
-                {
-                    if (!Validate64BitImage(context))
-                    {
-                        return;
-                    }
-                }
-                else if (!Validate32BitImage(context))
+                if (!Validate64BitImage(context))
                 {
                     return;
                 }
             }
-            catch (Exception)
+            else if (!Validate32BitImage(context))
             {
-                Console.WriteLine();
+                return;
             }
 
             // '{0}' is a C or C++ binary built with the buffer security feature 
@@ -116,6 +109,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2012_Pass)));
         }
+
         private bool Validate64BitImage(BinaryAnalyzerContext context)
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;

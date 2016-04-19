@@ -1,26 +1,27 @@
 ﻿{
-  "version": "0.4",
-  "runLogs": [
+  "version": "1.0.0-beta.3",
+  "runs": [
     {
-      "toolInfo": {
+      "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.2.16-beta",
-        "version": "1.2.16"
-      },
-      "runInfo": {
-        "invocationInfo": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Corrupted_Native_x86_VS2013_Default.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Corrupted_Native_x86_VS2013_Default.exe.sarif.temp --verbose --config default",
-        "analysisTargets": [
-          {
-            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
-          }
-        ]
+        "fullName": "BinSkim 1.3.0.0-beta",
+        "version": "1.3.0.0",
+        "semanticVersion": "1.3.0",
+        "fileVersion": "1.3.0.0",
+        "properties": {
+          "Language": "Language Neutral",
+          "FileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
+          "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
+          "CompanyName": "Microsoft",
+          "ProductVersion": "BinSkim Portable Executable Analyzer"
+        }
       },
       "results": [
         {
           "ruleId": "ERR0997",
           "kind": "configurationError",
           "formattedMessage": {
-            "specifierId": "ExceptionLoadingAnalysisTarget",
+            "formatId": "ExceptionLoadingAnalysisTarget",
             "arguments": [
               "Corrupted_Native_x86_VS2013_Default.exe",
               "System.BadImageFormatException: Image is either too small or contains an invalid byte offset or count."
@@ -28,28 +29,50 @@
           },
           "locations": [
             {
-              "analysisTarget": [
-                {
-                  "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe",
-                  "mimeType": "application/octet-stream"
-                }
-              ]
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
+              }
             }
           ]
         }
       ],
-      "ruleInfo": [
+      "invocation": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Corrupted_Native_x86_VS2013_Default.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Corrupted_Native_x86_VS2013_Default.exe.sarif.temp --verbose --hashes --config default",
+      "startTime": "2016-04-14T22:52:15.74Z",
+      "endTime": "2016-04-14T22:52:15.90Z",
+      "files": {
+        "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe": [
+          {
+            "hashes": [
+              {
+                "value": "992F5D2554195F9F19B9480A0E11AC78",
+                "algorithm": "MD5"
+              },
+              {
+                "value": "A88412258FFEAC619F3FD960AD9A48AC2F29CBAE",
+                "algorithm": "SHA-1"
+              },
+              {
+                "value": "9F92EDE722DC8740BFDF02CD199090B249BFBBF268DE3CD541FE9400A5652166",
+                "algorithm": "SHA-256"
+              }
+            ]
+          }
+        ]
+      },
+      "rules": [
         {
           "id": "ERR0997",
           "name": "InvalidConfiguration",
           "fullDescription": "An unhandled exception was raised while configuring analysis for execution.",
-          "formatSpecifiers": {
+          "messageFormats": {
+            "ExceptionAccessingFile": "An exception was raised accessing a file specified on the command line:'{0}'. Exception information:\r\n{1}",
             "ExceptionLoadingPdb": "'{0}' was not evaluated for check '{1}' as an exception occurred loading its pdb: '{2}'",
-            "ExceptionLoadingPlugIn": "An exception was raised attempting to load plug-in '{0}'. Exception information:\r\n{1}",
-            "ExceptionCreatingLogFile": "An exception was raised attempting to create output file '{0}'. Exception information:\r\n{1}",
-            "ExceptionLoadingAnalysisTarget": "An exception was raised attempting to load analysis target '{0}'. Exception information:\r\n{1}",
+            "ExceptionLoadingPlugIn": "An exception was raised attempting to load plug-in: '{0}'. Exception information:\r\n{1}",
+            "ExceptionCreatingLogFile": "An exception was raised attempting to create output file: '{0}'. Exception information:\r\n{1}",
+            "ExceptionLoadingAnalysisTarget": "An exception was raised attempting to load analysis target: '{0}'. Exception information:\r\n{1}",
             "ExceptionInstantiatingSkimmers": "An exception was raised attempting to instantiate skimmers from the following plugins'{0}'. Exception information:\r\n{1}",
             "MissingRuleConfiguration": "Check '{1}' was disabled while analyzing '{0}' because the analysis was not configured with required policy ({2}). To resolve this, configure and provide a policy file on the {3} command-line using the --policy argument (recommended), or pass '--config default' to invoke built-in settings. Invoke the {3} 'exportConfig' command to produce an initial configuration file that can be edited, if necessary, and passed back into the tool.",
+            "MissingFile": "A required file specified on the command line could not be found: '{0}'.",
             "NoRulesLoaded": "No analysis rules could be instantiated.",
             "NoValidAnalysisTargets": "No valid analysis targets were specified."
           }

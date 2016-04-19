@@ -477,7 +477,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             try
             {
-                _sym.findChildren(symbolTagType, symbolName, (uint)searchOptions, out enumSymbols);
+                try
+                {
+                    _sym.findChildren(symbolTagType, symbolName, (uint)searchOptions, out enumSymbols);
+                }
+                catch (NotImplementedException) { }
+
                 if (enumSymbols == null)
                 {
                     yield break;

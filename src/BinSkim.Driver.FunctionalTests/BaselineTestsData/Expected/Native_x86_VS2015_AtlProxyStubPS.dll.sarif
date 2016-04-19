@@ -23,13 +23,13 @@
           "formattedMessage": {
             "formatId": "AnalyzingTarget",
             "arguments": [
-              "Native_x86_VS2013_Default.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -40,27 +40,7 @@
           "formattedMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
-              "Native_x86_VS2013_Default.exe",
-              "BA2008",
-              "EnableControlFlowGuard",
-              "image was compiled with a toolset version (12.0) that is not sufficiently recent (14.0 or newer) to provide relevant settings."
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
-            "formatId": "InvalidMetadata",
-            "arguments": [
-              "Native_x86_VS2013_Default.exe",
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
               "BA2015",
               "EnableHighEntropyVirtualAddresses",
               "image is not a 64-bit binary"
@@ -69,7 +49,7 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -80,7 +60,7 @@
           "formattedMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
-              "Native_x86_VS2013_Default.exe",
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
               "BA2001",
               "LoadImageAboveFourGigabyteAddress",
               "image is not a 64-bit binary"
@@ -89,7 +69,7 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -100,7 +80,7 @@
           "formattedMessage": {
             "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe",
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
               "17.0.65501.17016",
               "11.0.65501.17016"
             ]
@@ -108,7 +88,7 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -119,13 +99,13 @@
           "formattedMessage": {
             "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -136,13 +116,13 @@
           "formattedMessage": {
             "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -153,31 +133,30 @@
           "formattedMessage": {
             "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         },
         {
           "ruleId": "BA2021",
-          "kind": "error",
+          "kind": "pass",
           "formattedMessage": {
-            "formatId": "Error",
+            "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe",
-              ".textbss"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -188,13 +167,13 @@
           "formattedMessage": {
             "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -205,13 +184,13 @@
           "formattedMessage": {
             "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -222,13 +201,13 @@
           "formattedMessage": {
             "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -239,7 +218,7 @@
           "formattedMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
-              "Native_x86_VS2013_Default.exe",
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
               "BA2022",
               "SignSecurely",
               "image is not signed "
@@ -248,7 +227,7 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -259,31 +238,50 @@
           "formattedMessage": {
             "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2008",
+          "kind": "error",
+          "formattedMessage": {
+            "formatId": "Error",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         },
         {
           "ruleId": "BA2007",
-          "kind": "pass",
+          "kind": "error",
           "formattedMessage": {
-            "formatId": "Pass",
+            "formatId": "Error_InsufficientWarningLevel",
             "arguments": [
-              "Native_x86_VS2013_Default.exe",
-              "2147483647"
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
+              "1",
+              "-c -Zi -nologo -W1 -WX- -O2 -Oy- -DWIN32 -DREGISTER_PROXY_DLL -DNDEBUG -D_WINDLL -D_UNICODE -DUNICODE -Gm- -EHs -EHc -MD -GS -fp:precise -Zc:wchar_t -Zc:forScope -Zc:inline -Gd -TC -analyze- -errorreport:prompt -I\"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\include\" -I\"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\atlmfc\\include\" -I\"C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.10240.0\\ucrt\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\um\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\shared\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\winrt\" -X",
+              "dlldata.obj [warning level: 1]\r\nNative_x86_VS2015_AtlProxyStub_p.obj [warning level: 1]\r\n"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -294,31 +292,30 @@
           "formattedMessage": {
             "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         },
         {
           "ruleId": "BA2018",
-          "kind": "error",
+          "kind": "pass",
           "formattedMessage": {
-            "formatId": "Error",
+            "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe",
-              "has an empty SE handler table in the load configuration table"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -329,13 +326,13 @@
           "formattedMessage": {
             "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
@@ -346,35 +343,35 @@
           "formattedMessage": {
             "formatId": "Pass",
             "arguments": [
-              "Native_x86_VS2013_Default.exe"
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll"
               }
             }
           ]
         }
       ],
-      "invocation": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_Default.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2013_Default.exe.sarif.temp --verbose --hashes --config default",
-      "startTime": "2016-04-14T22:52:19.05Z",
-      "endTime": "2016-04-14T22:52:19.32Z",
+      "invocation": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2015_AtlProxyStubPS.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2015_AtlProxyStubPS.dll.sarif.temp --verbose --hashes --config default",
+      "startTime": "2016-04-14T22:52:15.10Z",
+      "endTime": "2016-04-14T22:52:15.39Z",
       "files": {
-        "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe": [
+        "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll": [
           {
             "hashes": [
               {
-                "value": "C549C31FE11FFACC7C7A7A121F83301D",
+                "value": "6AE56F109CB2FC5A3FAB039C21CB9298",
                 "algorithm": "MD5"
               },
               {
-                "value": "562F9862DCBC936FD8FCDD7CE3A3B0867EE3D5A6",
+                "value": "ADA174BDF6654D85507ADAA80F333F9EBDE1F221",
                 "algorithm": "SHA-1"
               },
               {
-                "value": "41CD8A9F07B7BDCD30877BE523A4B1DCB31E7DEA5FACE792BCB24F673F8787D2",
+                "value": "D9933BFE1FF014C5AD2C6F84465ADD174DEE31326737B29B5DD26ACA701E0948",
                 "algorithm": "SHA-256"
               }
             ]
@@ -504,6 +501,17 @@
             "Error_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
             "Error_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
             "Error_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing Address Space Layout Randomization."
+          }
+        },
+        {
+          "id": "BA2008",
+          "name": "EnableControlFlowGuard",
+          "shortDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations.",
+          "fullDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program.",
+          "options": {},
+          "messageFormats": {
+            "Pass": "'{0}' enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location.",
+            "Error": "'{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /GUARD:CF on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG."
           }
         },
         {

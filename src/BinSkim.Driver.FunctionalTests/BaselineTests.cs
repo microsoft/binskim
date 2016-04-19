@@ -102,6 +102,7 @@ namespace Microsoft.CodeAnalysis.IL
             options.OutputFilePath = actualFileName;
             options.Verbose = true;
             options.Recurse = false;
+            options.ComputeTargetsHash = true;
             options.ConfigurationFilePath = "default";
 
             int result = command.Run(options);
@@ -130,12 +131,12 @@ namespace Microsoft.CodeAnalysis.IL
             File.WriteAllText(actualFileName, actualText);
 
             // Make sure we can successfully deserialize what was just generated
-            ResultLog expectedLog = JsonConvert.DeserializeObject<ResultLog>(expectedText, settings);
-            ResultLog actualLog = JsonConvert.DeserializeObject<ResultLog>(actualText, settings);
+            SarifLog expectedLog = JsonConvert.DeserializeObject<SarifLog>(expectedText, settings);
+            SarifLog actualLog = JsonConvert.DeserializeObject<SarifLog>(actualText, settings);
 
             var visitor = new ResultDiffingVisitor(expectedLog);
 
-            if (!visitor.Diff(actualLog.RunLogs[0].Results))
+            if (!visitor.Diff(actualLog.Runs[0].Results))
             {
                 string errorMessage = "The output of the tool did not match for input {0}.";
                 sb.AppendLine(String.Format(CultureInfo.CurrentCulture, errorMessage, inputFileName));
