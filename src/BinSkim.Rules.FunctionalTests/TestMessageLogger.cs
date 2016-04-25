@@ -3,8 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
+using System.Linq;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -47,7 +48,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void Log(IRule rule, Result result)
         {
-            NoteTestResult(result.Kind, result.Locations[0].AnalysisTarget.Uri.LocalPath);
+            NoteTestResult(result.Kind, result.Locations.First().AnalysisTarget.Uri.LocalPath);
         }
 
         public void NoteTestResult(ResultKind messageKind, string targetPath)

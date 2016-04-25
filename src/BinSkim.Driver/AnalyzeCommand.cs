@@ -116,32 +116,38 @@ namespace Microsoft.CodeAnalysis.IL
                     result.Properties[key] = diagnostic.Properties[key];
                 }
 
+                result.Locations = new HashSet<Sarif.Location>();
+
                 // 1. Record the assembly under analysis
-                result.Locations = new[] {
-                new Sarif.Location {
-                    AnalysisTarget = new PhysicalLocation
-                        {
-                            Uri = new Uri(assemblyFilePath),
-                        }
-                } };
+                PhysicalLocation analysisTarget = new PhysicalLocation()
+                {
+                    Uri = new Uri(assemblyFilePath)
+                };
 
                 // 2. Record the actual location associated with the result
                 var region = diagnostic.Location.ConvertToRegion();
                 string filePath;
+                PhysicalLocation resultFile = null;
 
                 if (diagnostic.Location != Location.None)
                 {
                     filePath = diagnostic.Location.GetLineSpan().Path;
                     if (!string.IsNullOrEmpty(filePath))
                     {
-                        result.Locations[0].ResultFile =
-                            new PhysicalLocation
-                            {
-                                Uri = new Uri(filePath),
-                                Region = region
-                            };
+                        resultFile = new PhysicalLocation
+                        {
+                            Uri = new Uri(filePath),
+                            Region = region
+                        };
                     }
                 }
+
+                result.Locations.Add(new Sarif.Location()
+                {
+                    AnalysisTarget = analysisTarget,
+                    ResultFile = resultFile,
+                });
+                
 
                 // 3. If present, emit additional locations associated with diagnostic.
                 //    According to docs, these locations typically reference related
@@ -150,7 +156,7 @@ namespace Microsoft.CodeAnalysis.IL
 
                 if (diagnostic.AdditionalLocations != null && diagnostic.AdditionalLocations.Count > 0)
                 {
-                    result.RelatedLocations = new List<AnnotatedCodeLocation>(diagnostic.AdditionalLocations.Count);
+                    result.RelatedLocations = new HashSet<AnnotatedCodeLocation>();
 
                     foreach(Location location in diagnostic.AdditionalLocations)
                     {
