@@ -6,4 +6,4 @@ set PRERELEASE_PREVIOUS=-beta
 set MAJOR=1
 set MINOR=3
 set PATCH=1
-set PRERELEASE=-developer
+set PRERELEASE=-beta
