@@ -401,83 +401,68 @@
           }
         },
         "BA2010": {
-          "Id": "BA2010",
-          "FullDescription": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section.",
-          "HelpUri": "https://github.com/microsoft/binskim",
-          "DefaultLevel": "warning",
-          "MessageFormats": {
+          "id": "BA2010",
+          "name": "DoNotMarkImportsSectionAsExecutable",
+          "shortDescription": "PE sections should not be marked as both writable and executable.",
+          "fullDescription": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section.",
+          "messageFormats": {
             "Pass": "'{0}' does not have an imports section that is marked as executable, helping to prevent the exploitation of code vulnerabilities.",
             "Error": "'{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here. To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
           },
-          "ShortDescription": "PE sections should not be marked as both writable and executable.",
-          "Name": "DoNotMarkImportsSectionAsExecutable",
-          "Options": {},
-          "Properties": null,
-          "Tags": null
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
         },
         "BA2021": {
-          "Id": "BA2021",
-          "FullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
-          "HelpUri": "https://github.com/microsoft/binskim",
-          "DefaultLevel": "warning",
-          "MessageFormats": {
+          "id": "BA2021",
+          "name": "DoNotMarkWritableSectionsAsExecutable",
+          "shortDescription": "Code or data sections should not be marked as both shared and writable.",
+          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
+          "messageFormats": {
             "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities.",
             "Error": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.",
             "Error_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2})."
           },
-          "ShortDescription": "Code or data sections should not be marked as both shared and writable.",
-          "Name": "DoNotMarkWritableSectionsAsExecutable",
-          "Options": {},
-          "Properties": null,
-          "Tags": null
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
         },
         "BA2019": {
-          "Id": "BA2019",
-          "FullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
-          "HelpUri": "https://github.com/microsoft/binskim",
-          "DefaultLevel": "warning",
-          "MessageFormats": {
+          "id": "BA2019",
+          "name": "DoNotMarkWritableSectionsAsShared",
+          "shortDescription": "Code or data sections should not be marked as both shared and writable.",
+          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
+          "messageFormats": {
             "Pass": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitation of code vulnerabilities.",
             "Error": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
           },
-          "ShortDescription": "Code or data sections should not be marked as both shared and writable.",
-          "Name": "DoNotMarkWritableSectionsAsShared",
-          "Options": {},
-          "Properties": null,
-          "Tags": null
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
         },
         "BA2005": {
-          "Id": "BA2005",
-          "FullDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
-          "HelpUri": "https://github.com/microsoft/binskim",
-          "DefaultLevel": "warning",
-          "MessageFormats": {
+          "id": "BA2005",
+          "name": "DoNotShipVulnerableBinaries",
+          "shortDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
+          "fullDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
+          "messageFormats": {
             "Pass": "'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems.",
             "Error": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.",
             "Error_CouldNotParseVersion": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems."
           },
-          "ShortDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
-          "Name": "DoNotShipVulnerableBinaries",
-          "Options": {},
-          "Properties": null,
-          "Tags": null
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
         },
         "BA2009": {
-          "Id": "BA2009",
-          "FullDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
-          "HelpUri": "https://github.com/microsoft/binskim",
-          "DefaultLevel": "warning",
-          "MessageFormats": {
+          "id": "BA2009",
+          "name": "EnableAddressSpaceLayoutRandomization",
+          "shortDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR).",
+          "fullDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
+          "messageFormats": {
             "Pass": "'{0}' is properly compiled to enable Address Space Layout Randomization, reducing an attacker's ability to exploit code in well-known locations.",
             "Error_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
             "Error_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
             "Error_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing Address Space Layout Randomization."
           },
-          "ShortDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR).",
-          "Name": "EnableAddressSpaceLayoutRandomization",
-          "Options": {},
-          "Properties": null,
-          "Tags": null
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
         }
       },
       "files": {
@@ -502,9 +487,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_ResourceOnly.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2013_ResourceOnly.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-03T20:22:03.51Z",
-        "endTime": "2016-05-03T20:22:03.72Z",
-        "processId": 50552,
+        "startTime": "2016-05-03T22:01:59.55Z",
+        "endTime": "2016-05-03T22:01:59.77Z",
+        "processId": 41328,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }
