@@ -490,9 +490,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedResourcesOnly.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedResourcesOnly.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-03T22:01:55.66Z",
-        "endTime": "2016-05-03T22:01:55.93Z",
-        "processId": 10228,
+        "startTime": "2016-05-03T23:35:41.26Z",
+        "endTime": "2016-05-03T23:35:41.49Z",
+        "processId": 52864,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

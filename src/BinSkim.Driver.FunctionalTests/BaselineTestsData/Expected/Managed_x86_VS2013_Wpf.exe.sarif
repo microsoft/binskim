@@ -497,9 +497,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Managed_x86_VS2013_Wpf.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Managed_x86_VS2013_Wpf.exe.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-03T22:02:01.34Z",
-        "endTime": "2016-05-03T22:02:01.81Z",
-        "processId": 31644,
+        "startTime": "2016-05-03T23:35:46.54Z",
+        "endTime": "2016-05-03T23:35:47.02Z",
+        "processId": 54644,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

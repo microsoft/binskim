@@ -592,9 +592,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x64_VS2015_Default.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x64_VS2015_Default.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-03T22:01:58.88Z",
-        "endTime": "2016-05-03T22:01:59.16Z",
-        "processId": 14212,
+        "startTime": "2016-05-03T23:35:44.33Z",
+        "endTime": "2016-05-03T23:35:44.57Z",
+        "processId": 25444,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

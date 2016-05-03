@@ -497,9 +497,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedInteropAssemblyForAtlTestLibrary.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedInteropAssemblyForAtlTestLibrary.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-03T22:01:54.74Z",
-        "endTime": "2016-05-03T22:01:55.27Z",
-        "processId": 42660,
+        "startTime": "2016-05-03T23:35:40.43Z",
+        "endTime": "2016-05-03T23:35:40.91Z",
+        "processId": 31312,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

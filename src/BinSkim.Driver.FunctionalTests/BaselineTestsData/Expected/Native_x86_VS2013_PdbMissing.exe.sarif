@@ -255,6 +255,314 @@
           ]
         }
       ],
+      "configurationNotifications": [
+        {
+          "id": "ExceptionLoadingPdb",
+          "ruleId": "BA2006",
+          "analysisTarget": {
+            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+          },
+          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded.\nE_PDB_NOT_FOUND (File not found)",
+          "level": "error",
+          "exception": {
+            "kind": "PdbParseException",
+            "message": "E_PDB_NOT_FOUND (File not found)",
+            "stack": {
+              "frames": [
+                {
+                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                  "line": 111,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
+                },
+                {
+                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                  "line": 43,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String peOrPdbPath, String symbolPath)"
+                },
+                {
+                  "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
+                  "line": 90,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
+                }
+              ]
+            },
+            "innerExceptions": [
+              {
+                "kind": "COMException",
+                "message": "Exception from HRESULT: 0x806D0005",
+                "stack": {
+                  "frames": [
+                    {
+                      "fullyQualifiedLogicalName": "Dia2Lib.IDiaDataSource.loadDataForExe(String executable, String searchPath, Object pCallback)"
+                    },
+                    {
+                      "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                      "line": 104,
+                      "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              }
+            ]
+          }
+        },
+        {
+          "id": "ExceptionLoadingPdb",
+          "ruleId": "BA2014",
+          "analysisTarget": {
+            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+          },
+          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded.\nE_PDB_NOT_FOUND (File not found)",
+          "level": "error",
+          "exception": {
+            "kind": "PdbParseException",
+            "message": "E_PDB_NOT_FOUND (File not found)",
+            "stack": {
+              "frames": [
+                {
+                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                  "line": 111,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
+                },
+                {
+                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                  "line": 43,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String peOrPdbPath, String symbolPath)"
+                },
+                {
+                  "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
+                  "line": 90,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
+                }
+              ]
+            },
+            "innerExceptions": [
+              {
+                "kind": "COMException",
+                "message": "Exception from HRESULT: 0x806D0005",
+                "stack": {
+                  "frames": [
+                    {
+                      "fullyQualifiedLogicalName": "Dia2Lib.IDiaDataSource.loadDataForExe(String executable, String searchPath, Object pCallback)"
+                    },
+                    {
+                      "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                      "line": 104,
+                      "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              }
+            ]
+          }
+        },
+        {
+          "id": "ExceptionLoadingPdb",
+          "ruleId": "BA2002",
+          "analysisTarget": {
+            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+          },
+          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded.\nE_PDB_NOT_FOUND (File not found)",
+          "level": "error",
+          "exception": {
+            "kind": "PdbParseException",
+            "message": "E_PDB_NOT_FOUND (File not found)",
+            "stack": {
+              "frames": [
+                {
+                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                  "line": 111,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
+                },
+                {
+                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                  "line": 43,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String peOrPdbPath, String symbolPath)"
+                },
+                {
+                  "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
+                  "line": 90,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
+                }
+              ]
+            },
+            "innerExceptions": [
+              {
+                "kind": "COMException",
+                "message": "Exception from HRESULT: 0x806D0005",
+                "stack": {
+                  "frames": [
+                    {
+                      "fullyQualifiedLogicalName": "Dia2Lib.IDiaDataSource.loadDataForExe(String executable, String searchPath, Object pCallback)"
+                    },
+                    {
+                      "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                      "line": 104,
+                      "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              }
+            ]
+          }
+        },
+        {
+          "id": "ExceptionLoadingPdb",
+          "ruleId": "BA2007",
+          "analysisTarget": {
+            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+          },
+          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded.\nE_PDB_NOT_FOUND (File not found)",
+          "level": "error",
+          "exception": {
+            "kind": "PdbParseException",
+            "message": "E_PDB_NOT_FOUND (File not found)",
+            "stack": {
+              "frames": [
+                {
+                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                  "line": 111,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
+                },
+                {
+                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                  "line": 43,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String peOrPdbPath, String symbolPath)"
+                },
+                {
+                  "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
+                  "line": 90,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
+                }
+              ]
+            },
+            "innerExceptions": [
+              {
+                "kind": "COMException",
+                "message": "Exception from HRESULT: 0x806D0005",
+                "stack": {
+                  "frames": [
+                    {
+                      "fullyQualifiedLogicalName": "Dia2Lib.IDiaDataSource.loadDataForExe(String executable, String searchPath, Object pCallback)"
+                    },
+                    {
+                      "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                      "line": 104,
+                      "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              }
+            ]
+          }
+        },
+        {
+          "id": "ExceptionLoadingPdb",
+          "ruleId": "BA2011",
+          "analysisTarget": {
+            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+          },
+          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded.\nE_PDB_NOT_FOUND (File not found)",
+          "level": "error",
+          "exception": {
+            "kind": "PdbParseException",
+            "message": "E_PDB_NOT_FOUND (File not found)",
+            "stack": {
+              "frames": [
+                {
+                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                  "line": 111,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
+                },
+                {
+                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                  "line": 43,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String peOrPdbPath, String symbolPath)"
+                },
+                {
+                  "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
+                  "line": 90,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
+                }
+              ]
+            },
+            "innerExceptions": [
+              {
+                "kind": "COMException",
+                "message": "Exception from HRESULT: 0x806D0005",
+                "stack": {
+                  "frames": [
+                    {
+                      "fullyQualifiedLogicalName": "Dia2Lib.IDiaDataSource.loadDataForExe(String executable, String searchPath, Object pCallback)"
+                    },
+                    {
+                      "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                      "line": 104,
+                      "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              }
+            ]
+          }
+        },
+        {
+          "id": "ExceptionLoadingPdb",
+          "ruleId": "BA2013",
+          "analysisTarget": {
+            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+          },
+          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded.\nE_PDB_NOT_FOUND (File not found)",
+          "level": "error",
+          "exception": {
+            "kind": "PdbParseException",
+            "message": "E_PDB_NOT_FOUND (File not found)",
+            "stack": {
+              "frames": [
+                {
+                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                  "line": 111,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
+                },
+                {
+                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                  "line": 43,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String peOrPdbPath, String symbolPath)"
+                },
+                {
+                  "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
+                  "line": 90,
+                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
+                }
+              ]
+            },
+            "innerExceptions": [
+              {
+                "kind": "COMException",
+                "message": "Exception from HRESULT: 0x806D0005",
+                "stack": {
+                  "frames": [
+                    {
+                      "fullyQualifiedLogicalName": "Dia2Lib.IDiaDataSource.loadDataForExe(String executable, String searchPath, Object pCallback)"
+                    },
+                    {
+                      "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
+                      "line": 104,
+                      "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              }
+            ]
+          }
+        }
+      ],
       "rules": {
         "MSG1001": {
           "id": "MSG1001",
@@ -400,9 +708,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2013_PdbMissing.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2013_PdbMissing.exe.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-03T22:02:04.75Z",
-        "endTime": "2016-05-03T22:02:05.01Z",
-        "processId": 268,
+        "startTime": "2016-05-03T23:35:49.82Z",
+        "endTime": "2016-05-03T23:35:50.08Z",
+        "processId": 23096,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

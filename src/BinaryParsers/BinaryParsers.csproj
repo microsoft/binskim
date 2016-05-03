@@ -26,12 +26,12 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sarif, Version=1.5.17.0, Culture=neutral, PublicKeyToken=06c70c7db0c6cd6b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Sdk.1.5.17-beta\lib\net45\Sarif.dll</HintPath>
+    <Reference Include="Sarif, Version=1.5.18.0, Culture=neutral, PublicKeyToken=06c70c7db0c6cd6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Sdk.1.5.18-beta\lib\net45\Sarif.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sarif.Driver, Version=1.5.17.0, Culture=neutral, PublicKeyToken=06c70c7db0c6cd6b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Driver.1.5.17-beta\lib\net45\Sarif.Driver.dll</HintPath>
+    <Reference Include="Sarif.Driver, Version=1.5.18.0, Culture=neutral, PublicKeyToken=06c70c7db0c6cd6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Driver.1.5.18-beta\lib\net45\Sarif.Driver.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
