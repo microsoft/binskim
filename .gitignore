@@ -5,8 +5,10 @@
 .vs/
 
 # Build results 
+bld/
 bin/
 obj/
 src/packages/
 src/TestResults/
 src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Actual/
+.local/

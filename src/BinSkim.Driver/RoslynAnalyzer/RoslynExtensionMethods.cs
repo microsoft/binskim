@@ -62,24 +62,24 @@ namespace Microsoft.CodeAnalysis.IL
             return region;
         }
 
-        public static ResultKind ConvertToMessageKind(this DiagnosticSeverity severity)
+        public static ResultLevel ConvertToMessageKind(this DiagnosticSeverity severity)
         {
             switch (severity)
             {
                 case DiagnosticSeverity.Error:
                 {
-                    return ResultKind.Error;
+                    return ResultLevel.Error;
                 }
 
                 case DiagnosticSeverity.Hidden:
                 case DiagnosticSeverity.Warning:
                 {
-                    return ResultKind.Warning;
+                    return ResultLevel.Warning;
                 }
 
                 case DiagnosticSeverity.Info:
                 {
-                    return ResultKind.Note;
+                    return ResultLevel.Note;
                 }
 
                 default: 

@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (context.Pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
                 return;
             }
 
@@ -193,7 +193,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // that memory corruption, information disclosure, double-free and 
                 // other security-related vulnerabilities do not exist in code.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                         nameof(RuleResources.BA2007_Pass), 
                         overallMinimumWarningLevel.ToString()));
                 return;
@@ -205,7 +205,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // comprehensive analysis of the compiler warning settings. 
                 // The language could not be identified for the following modules: {1}
                 context.Logger.Log(this, 
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_UnknownModuleLanguage),
                         unknownLanguageModules.CreateSortedObjectList()));
             }
@@ -221,7 +221,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // An example compiler command line triggering this check: {1}
                 // Modules triggering this check: {2}
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_InsufficientWarningLevel),
                         overallMinimumWarningLevel.ToString(),
                         exampleTooLowWarningCommandLine,
@@ -240,7 +240,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // An example compiler command line triggering this check was: {1}
                 // Modules triggering this check were: {2}
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_WarningsDisabled),
                         exampleDisabledWarningCommandLine,
                         disabledWarningModules.CreateTruncatedObjectList()));

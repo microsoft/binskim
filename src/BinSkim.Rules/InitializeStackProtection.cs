@@ -64,7 +64,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (context.Pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
                 return;
             }
 
@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // '{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code.
                 context.Logger.Log(this, 
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                         nameof(RuleResources.BA2013_Pass_NoCode)));
                 return;
             }
@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' is a C or C++ binary that does enable the stack protection buffer
                 // security feature. It is therefore not required to initialize the stack protector.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.NotApplicable, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.NotApplicable, context, null,
                         nameof(RuleResources.BA2013_NotApplicable_FeatureNotEnabled)));
                 return;
             }
@@ -112,7 +112,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // by the C runtime, which will make this call for you, or call 
                 // __security_init_cookie() manually in your custom entry point.
                 context.Logger.Log(this, 
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2013_Error)));
                 return;
             }
@@ -122,7 +122,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             //effect of increasing the effectiveness of the feature and reducing 
             // spurious detections.
             context.Logger.Log(this, 
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                    nameof(RuleResources.BA2013_Pass)));
         }
     }

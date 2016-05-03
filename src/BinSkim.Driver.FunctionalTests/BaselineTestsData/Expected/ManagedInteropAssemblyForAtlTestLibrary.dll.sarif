@@ -1,5 +1,6 @@
 ﻿{
-  "version": "1.0.0-beta.3",
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0-beta.4",
   "runs": [
     {
       "tool": {
@@ -7,20 +8,21 @@
         "fullName": "BinSkim 1.3.0.0-beta",
         "version": "1.3.0.0",
         "semanticVersion": "1.3.0",
-        "fileVersion": "1.3.0.0",
+        "fileVersion": "1.3.1.0",
+        "language": "en-US",
         "properties": {
           "Language": "Language Neutral",
-          "FileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
           "CompanyName": "Microsoft",
-          "ProductName": "BinSkim Portable Executable Analyzer"
+          "ProductName": "BinSkim Portable Executable Analyzer",
+          "ProductVersion": "1.3.1.0"
         }
       },
       "results": [
         {
           "ruleId": "MSG1001",
-          "kind": "note",
-          "formattedMessage": {
+          "level": "note",
+          "formattedRuleMessage": {
             "formatId": "AnalyzingTarget",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll"
@@ -36,8 +38,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
@@ -56,8 +58,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
@@ -76,8 +78,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
@@ -96,8 +98,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
@@ -116,8 +118,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
@@ -136,8 +138,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
@@ -156,8 +158,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
@@ -176,8 +178,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
@@ -196,8 +198,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
@@ -216,8 +218,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
@@ -236,8 +238,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
@@ -256,8 +258,8 @@
         },
         {
           "ruleId": "BA2021",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll"
@@ -273,8 +275,8 @@
         },
         {
           "ruleId": "BA2019",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll"
@@ -290,8 +292,8 @@
         },
         {
           "ruleId": "BA2005",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll"
@@ -307,8 +309,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
@@ -327,8 +329,8 @@
         },
         {
           "ruleId": "BA2009",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll"
@@ -344,8 +346,8 @@
         },
         {
           "ruleId": "BA2018",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass_NoSEH",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll"
@@ -361,8 +363,8 @@
         },
         {
           "ruleId": "BA2016",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll"
@@ -377,29 +379,6 @@
           ]
         }
       ],
-      "invocation": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedInteropAssemblyForAtlTestLibrary.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedInteropAssemblyForAtlTestLibrary.dll.sarif.temp --verbose --hashes --config default",
-      "startTime": "2016-04-23T01:31:38.85Z",
-      "endTime": "2016-04-23T01:31:39.38Z",
-      "files": {
-        "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll": [
-          {
-            "hashes": [
-              {
-                "value": "3BF4EEE0AB9F903D6457DEA2A2EFE989",
-                "algorithm": "MD5"
-              },
-              {
-                "value": "90AFC5FFED99E8B58B2DDD799BD7BAD0F9A98012",
-                "algorithm": "SHA-1"
-              },
-              {
-                "value": "9569B5AE3FB3A6A91888DF4F5E5D85E6FE81F68E3B5AD4DCA1EDDB4780AF2F21",
-                "algorithm": "SHA-256"
-              }
-            ]
-          }
-        ]
-      },
       "rules": {
         "MSG1001": {
           "id": "MSG1001",
@@ -423,12 +402,12 @@
           "name": "DoNotMarkWritableSectionsAsExecutable",
           "shortDescription": "Code or data sections should not be marked as both shared and writable.",
           "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
-          "options": {},
           "messageFormats": {
             "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities.",
             "Error": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.",
             "Error_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2})."
           },
+          "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         },
         "BA2019": {
@@ -436,11 +415,11 @@
           "name": "DoNotMarkWritableSectionsAsShared",
           "shortDescription": "Code or data sections should not be marked as both shared and writable.",
           "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
-          "options": {},
           "messageFormats": {
             "Pass": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitation of code vulnerabilities.",
             "Error": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
           },
+          "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         },
         "BA2005": {
@@ -448,12 +427,12 @@
           "name": "DoNotShipVulnerableBinaries",
           "shortDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
           "fullDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
-          "options": {},
           "messageFormats": {
             "Pass": "'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems.",
             "Error": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.",
             "Error_CouldNotParseVersion": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems."
           },
+          "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         },
         "BA2009": {
@@ -461,13 +440,13 @@
           "name": "EnableAddressSpaceLayoutRandomization",
           "shortDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR).",
           "fullDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
-          "options": {},
           "messageFormats": {
             "Pass": "'{0}' is properly compiled to enable Address Space Layout Randomization, reducing an attacker's ability to exploit code in well-known locations.",
             "Error_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
             "Error_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
             "Error_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing Address Space Layout Randomization."
           },
+          "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         },
         "BA2018": {
@@ -475,12 +454,12 @@
           "name": "EnableSafeSEH",
           "shortDescription": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues.",
           "fullDescription": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.",
-          "options": {},
           "messageFormats": {
             "Pass": "'{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception jump targets are defined as exception handlers in the program (and not shellcode).",
             "Pass_NoSEH": "'{0}' is an x86 binary that does not use SEH, making it an invalid target for exploits that attempt to replace SEH jump targets with attacker-controlled shellcode.",
             "Error": "'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
           },
+          "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         },
         "BA2016": {
@@ -488,13 +467,41 @@
           "name": "MarkImageAsNXCompatible",
           "shortDescription": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code.",
           "fullDescription": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker.",
-          "options": {},
           "messageFormats": {
             "Pass": "'{0}' is marked as NX compatible, helping to prevent attackers from executing code that is injected into data segments.",
             "Error": "'{0}' is not marked NX compatible. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
           },
+          "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         }
+      },
+      "files": {
+        "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll": [
+          {
+            "hashes": [
+              {
+                "value": "3BF4EEE0AB9F903D6457DEA2A2EFE989",
+                "algorithm": "md5"
+              },
+              {
+                "value": "90AFC5FFED99E8B58B2DDD799BD7BAD0F9A98012",
+                "algorithm": "sha1"
+              },
+              {
+                "value": "9569B5AE3FB3A6A91888DF4F5E5D85E6FE81F68E3B5AD4DCA1EDDB4780AF2F21",
+                "algorithm": "sha256"
+              }
+            ]
+          }
+        ]
+      },
+      "invocation": {
+        "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\ManagedInteropAssemblyForAtlTestLibrary.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\ManagedInteropAssemblyForAtlTestLibrary.dll.sarif.temp --verbose --hashes --config default",
+        "startTime": "2016-05-03T23:35:40.43Z",
+        "endTime": "2016-05-03T23:35:40.91Z",
+        "processId": 31312,
+        "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
+        "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }
     }
   ]

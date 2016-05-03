@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // target for exploits that attempt to replace SEH jump targets with 
                 // attacker-controlled shellcode.	
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                         nameof(RuleResources.BA2018_Pass_NoSEH)));
                 return;
             }
@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // that you will need to configure your build system to supply this flag for 
                 // x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2018_Error),
                         RuleResources.BA2018_Error_NoLoadConfigurationTable));
                 return;
@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 string seHandlerSizeText = String.Format(RuleResources.BA2018_Error_LoadConfigurationIsTooSmall, seHandlerSize.ToString());
 
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2018_Error),
                         RuleResources.BA2018_Error_LoadConfigurationIsTooSmall,
                         seHandlerSizeText));
@@ -148,7 +148,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // will need to configure your build system to supply this flag for x86 builds only, 
                 // as the /SafeSEH flag is invalid when linking for ARM and x64.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2018_Error), 
                         failureKind));
                 return;
@@ -157,7 +157,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // ''{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception 
             // jump targets are defined as exception handlers in the program (and not shellcode).
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                     nameof(RuleResources.BA2018_Pass)));
         }
     }

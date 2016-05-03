@@ -80,7 +80,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping 
                 // with Visual Studio 2008 or later.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2009_Error_NotDynamicBase)));
                 return;
             }
@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' is marked as DYNAMICBASE but relocation data has been stripped
                 // from the image, preventing address space layout randomization. 
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2009_Error_RelocsStripped)));
                 return;
             }
@@ -122,7 +122,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // is a Windows CE image but does not contain any relocation data, preventing 
                     // address space layout randomization.	
                     context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                             nameof(RuleResources.BA2009_Error_WinCENoRelocationSection)));
                     return;
                 }
@@ -130,7 +130,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             //'{0}' is properly compiled to enable address space layout randomization.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                     nameof(RuleResources.BA2009_Pass)));
         }
     }
