@@ -6,7 +6,7 @@ namespace Microsoft.CodeAnalysis.IL
     {                                                                         
         public const string Prerelease = "-beta";                      
         public const string AssemblyVersion = "1.3.0";      
-        public const string FileVersion = AssemblyVersion + ".0";             
+        public const string FileVersion = "1.3.1" + ".0";   
         public const string Version = AssemblyVersion + Prerelease;           
     }                                                                         
  }                                                                            

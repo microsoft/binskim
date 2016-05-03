@@ -60,7 +60,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
                 return;
             }
 
@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // feature enabled for all modules, making it more difficult for an attacker to 
                 // exploit stack buffer overflow memory corruption vulnerabilities. 
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                         nameof(RuleResources.BA2011_Pass)));
                 return;
             }
@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // stack protector buffer security features. The language could not be identified for
                 // the following modules: {1}.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2011_Error_UnknownModuleLanguage),
                         unknownLanguageModules.CreateSortedObjectList()));
             }
@@ -127,7 +127,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // is compiled with the stack protector enabled by supplying /GS on the Visual C++ 
                 // compiler command line. The affected modules were: {1}
                 context.Logger.Log(this, 
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2011_Error),
                         noGsModules.ToString()));
             }

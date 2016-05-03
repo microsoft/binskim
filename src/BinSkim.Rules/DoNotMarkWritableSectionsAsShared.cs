@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // Image '{0}' contains no data or code sections marked as both shared and writable.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                         nameof(RuleResources.BA2019_Pass)));
                 return;
             }
@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // CreateFileMapping with proper security attributes or an actual IPC mechanism 
             // instead (COM, named pipes, LPC, etc.).
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                     nameof(RuleResources.BA2019_Error),
                     badSectionsText));
         }

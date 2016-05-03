@@ -1,5 +1,6 @@
 ﻿{
-  "version": "1.0.0-beta.3",
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0-beta.4",
   "runs": [
     {
       "tool": {
@@ -7,20 +8,21 @@
         "fullName": "BinSkim 1.3.0.0-beta",
         "version": "1.3.0.0",
         "semanticVersion": "1.3.0",
-        "fileVersion": "1.3.0.0",
+        "fileVersion": "1.3.1.0",
+        "language": "en-US",
         "properties": {
           "Language": "Language Neutral",
-          "FileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
           "CompanyName": "Microsoft",
-          "ProductName": "BinSkim Portable Executable Analyzer"
+          "ProductName": "BinSkim Portable Executable Analyzer",
+          "ProductVersion": "1.3.1.0"
         }
       },
       "results": [
         {
           "ruleId": "MSG1001",
-          "kind": "note",
-          "formattedMessage": {
+          "level": "note",
+          "formattedRuleMessage": {
             "formatId": "AnalyzingTarget",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
@@ -36,8 +38,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
@@ -56,8 +58,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
@@ -76,8 +78,8 @@
         },
         {
           "ruleId": "BA2006",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
@@ -95,8 +97,8 @@
         },
         {
           "ruleId": "BA2014",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
@@ -112,8 +114,8 @@
         },
         {
           "ruleId": "BA2002",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
@@ -129,8 +131,8 @@
         },
         {
           "ruleId": "BA2010",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
@@ -146,8 +148,8 @@
         },
         {
           "ruleId": "BA2021",
-          "kind": "error",
-          "formattedMessage": {
+          "level": "error",
+          "formattedRuleMessage": {
             "formatId": "Error",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
@@ -164,8 +166,8 @@
         },
         {
           "ruleId": "BA2019",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
@@ -181,8 +183,8 @@
         },
         {
           "ruleId": "BA2012",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
@@ -198,8 +200,8 @@
         },
         {
           "ruleId": "BA2005",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
@@ -215,8 +217,8 @@
         },
         {
           "ruleId": "MSG1002",
-          "kind": "notApplicable",
-          "formattedMessage": {
+          "level": "notApplicable",
+          "formattedRuleMessage": {
             "formatId": "InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
@@ -235,8 +237,8 @@
         },
         {
           "ruleId": "BA2009",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
@@ -252,8 +254,8 @@
         },
         {
           "ruleId": "BA2008",
-          "kind": "error",
-          "formattedMessage": {
+          "level": "error",
+          "formattedRuleMessage": {
             "formatId": "Error",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
@@ -269,8 +271,8 @@
         },
         {
           "ruleId": "BA2007",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
@@ -287,8 +289,8 @@
         },
         {
           "ruleId": "BA2011",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
@@ -304,8 +306,8 @@
         },
         {
           "ruleId": "BA2018",
-          "kind": "error",
-          "formattedMessage": {
+          "level": "error",
+          "formattedRuleMessage": {
             "formatId": "Error",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
@@ -322,8 +324,8 @@
         },
         {
           "ruleId": "BA2013",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
@@ -339,8 +341,8 @@
         },
         {
           "ruleId": "BA2016",
-          "kind": "pass",
-          "formattedMessage": {
+          "level": "pass",
+          "formattedRuleMessage": {
             "formatId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
@@ -355,29 +357,6 @@
           ]
         }
       ],
-      "invocation": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2015_Default.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2015_Default.exe.sarif.temp --verbose --hashes --config default",
-      "startTime": "2016-04-23T01:31:50.01Z",
-      "endTime": "2016-04-23T01:31:50.34Z",
-      "files": {
-        "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_Default.exe": [
-          {
-            "hashes": [
-              {
-                "value": "875384EBB5D23EAAC9230EE89A508FE6",
-                "algorithm": "MD5"
-              },
-              {
-                "value": "DA6C30DA7F900D448E1A39304D59357E5E963069",
-                "algorithm": "SHA-1"
-              },
-              {
-                "value": "4C0360F3DCF5810FFC31203A6299892BF558C4BB1B59F5BE11EE98EB3F8962C1",
-                "algorithm": "SHA-256"
-              }
-            ]
-          }
-        ]
-      },
       "rules": {
         "MSG1001": {
           "id": "MSG1001",
@@ -397,199 +376,273 @@
           }
         },
         "BA2006": {
-          "id": "BA2006",
-          "name": "BuildWithSecureTools",
-          "shortDescription": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features.",
-          "fullDescription": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features.",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2006",
+          "FullDescription": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Error_BadModule": "built with {0} compiler version {1} (Front end version {2})",
             "Pass": "'{0}' was built with tools that satisfy configured policy (compiler minimum version {1}, linker minimum version {2}).",
             "Error": "'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}, linker version {2}). More recent tools contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning.\r\nModules built outside of policy: \r\n{3}"
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features.",
+          "Name": "BuildWithSecureTools",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2014": {
-          "id": "BA2014",
-          "name": "DoNotDisableStackProtectionForFunctions",
-          "shortDescription": "Application code should not disable stack protection for individual functions.",
-          "fullDescription": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2014",
+          "FullDescription": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled which does not disable protection for any individual functions (via __declspec(safebuffers), making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities.",
             "Error": "'{0}' is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Application code should not disable stack protection for individual functions.",
+          "Name": "DoNotDisableStackProtectionForFunctions",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2002": {
-          "id": "BA2002",
-          "name": "DoNotIncorporateVulnerableDependencies",
-          "shortDescription": "Binaries should not take dependencies on code with known security vulnerabilities.",
-          "fullDescription": "Binaries should not take dependencies on code with known security vulnerabilities.",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2002",
+          "FullDescription": "Binaries should not take dependencies on code with known security vulnerabilities.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' does not incorporate any known vulnerable dependencies, as configured by current policy.",
             "Error": "'{0}' was built with a version of {1} which is subject to the following issues: {2}. To resolve this, {3}. The source files that triggered this were: {4}"
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Binaries should not take dependencies on code with known security vulnerabilities.",
+          "Name": "DoNotIncorporateVulnerableDependencies",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2010": {
-          "id": "BA2010",
-          "name": "DoNotMarkImportsSectionAsExecutable",
-          "shortDescription": "PE sections should not be marked as both writable and executable.",
-          "fullDescription": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section.",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2010",
+          "FullDescription": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' does not have an imports section that is marked as executable, helping to prevent the exploitation of code vulnerabilities.",
             "Error": "'{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here. To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "PE sections should not be marked as both writable and executable.",
+          "Name": "DoNotMarkImportsSectionAsExecutable",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2021": {
-          "id": "BA2021",
-          "name": "DoNotMarkWritableSectionsAsExecutable",
-          "shortDescription": "Code or data sections should not be marked as both shared and writable.",
-          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2021",
+          "FullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities.",
             "Error": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.",
             "Error_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2})."
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Code or data sections should not be marked as both shared and writable.",
+          "Name": "DoNotMarkWritableSectionsAsExecutable",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2019": {
-          "id": "BA2019",
-          "name": "DoNotMarkWritableSectionsAsShared",
-          "shortDescription": "Code or data sections should not be marked as both shared and writable.",
-          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2019",
+          "FullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitation of code vulnerabilities.",
             "Error": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Code or data sections should not be marked as both shared and writable.",
+          "Name": "DoNotMarkWritableSectionsAsShared",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2012": {
-          "id": "BA2012",
-          "name": "DoNotModifyStackProtectionCookie",
-          "shortDescription": "Application code should not interfere with the stack protector.",
-          "fullDescription": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement.",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2012",
+          "FullDescription": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' is a C or C++ binary built with the buffer security feature that properly preserves the stack protecter cookie. This has the effect of enabling a significant increase in entropy provided by the operating system over that produced by the C runtime start-up code.",
             "Pass_NoLoadConfig": "'{0}' is  C or C++binary that does not contain a load config table, which indicates either that it was compiled and linked with a version of the compiler that precedes stack protection features or is a binary (such as an ngen'ed assembly) that is not subject to relevant security issues.",
             "Error": "'{0}' is a C or C++ binary that interferes with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the magic statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement. NOTE: the modified cookie value detected was: {1}",
             "Error_CouldNotLocateCookie": "'{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted.",
             "Warning_InvalidSecurityCookieOffset": "'{0}' appears to be a packed C or C++ binary that reports a security cookie offset that exceeds the size of the packed file. Use of the stack protector (/GS) feature therefore could not be verified. The file was possibly packed by: {1}."
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Application code should not interfere with the stack protector.",
+          "Name": "DoNotModifyStackProtectionCookie",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2005": {
-          "id": "BA2005",
-          "name": "DoNotShipVulnerableBinaries",
-          "shortDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
-          "fullDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2005",
+          "FullDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems.",
             "Error": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.",
             "Error_CouldNotParseVersion": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems."
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
+          "Name": "DoNotShipVulnerableBinaries",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2009": {
-          "id": "BA2009",
-          "name": "EnableAddressSpaceLayoutRandomization",
-          "shortDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR).",
-          "fullDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2009",
+          "FullDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' is properly compiled to enable Address Space Layout Randomization, reducing an attacker's ability to exploit code in well-known locations.",
             "Error_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
             "Error_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
             "Error_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing Address Space Layout Randomization."
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR).",
+          "Name": "EnableAddressSpaceLayoutRandomization",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2008": {
-          "id": "BA2008",
-          "name": "EnableControlFlowGuard",
-          "shortDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations.",
-          "fullDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program.",
-          "options": {},
-          "messageFormats": {
+          "MinimumSupportedLinkerVersion": 14.0,
+          "Id": "BA2008",
+          "FullDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location.",
             "Error": "'{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /GUARD:CF on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG."
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations.",
+          "Name": "EnableControlFlowGuard",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2007": {
-          "id": "BA2007",
-          "name": "EnableCriticalCompilerWarnings",
-          "shortDescription": "Binaries should be compiled with a warning level that enables all critical security-relevant checks.",
-          "fullDescription": "Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted.",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2007",
+          "FullDescription": "Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' was compiled at a secure warning level ({1}) and does not include any modules that disable specific warnings that are required by policy. As a result, it is less likely that memory corruption, information disclosure, double-free and other security-related vulnerabilities exist in code.",
             "Error_WarningsDisabled": "'{0}' disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation. An example compiler command line triggering this check was: {1}\r\nModules triggering this check were:\r\n{2}",
             "Error_InsufficientWarningLevel": "'{0}' was compiled at too low a warning level (effective warning level {1} for one or more modules). Warning level 3 enables important static analysis in the compiler to flag bugs that can lead to memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted. An example compiler command line triggering this check: {2}\r\nModules triggering this check: {3}",
             "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the compiler warning settings. The language could not be identified for the following modules: {1}"
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Binaries should be compiled with a warning level that enables all critical security-relevant checks.",
+          "Name": "EnableCriticalCompilerWarnings",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2011": {
-          "id": "BA2011",
-          "name": "EnableStackProtection",
-          "shortDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.",
-          "fullDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line.",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2011",
+          "FullDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled for all modules, making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities. ",
             "Error": "'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}",
             "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}."
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.",
+          "Name": "EnableStackProtection",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2018": {
-          "id": "BA2018",
-          "name": "EnableSafeSEH",
-          "shortDescription": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues.",
-          "fullDescription": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2018",
+          "FullDescription": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception jump targets are defined as exception handlers in the program (and not shellcode).",
             "Pass_NoSEH": "'{0}' is an x86 binary that does not use SEH, making it an invalid target for exploits that attempt to replace SEH jump targets with attacker-controlled shellcode.",
             "Error": "'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues.",
+          "Name": "EnableSafeSEH",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2013": {
-          "id": "BA2013",
-          "name": "InitializeStackProtection",
-          "shortDescription": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.",
-          "fullDescription": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2013",
+          "FullDescription": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' is a C or C++ binary built with the buffer security feature that properly initializes the stack protecter. This has the effect of increasing the effectiveness of the feature and reducing spurious detections.",
             "Pass_NoCode": "'{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code.",
             "NotApplicable_FeatureNotEnabled": "'{0}' is a C or C++ binary that does enable the stack protection buffer security feature. It is therefore not required to initialize the stack protector.",
             "Error": "'{0}' is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.",
+          "Name": "InitializeStackProtection",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         },
         "BA2016": {
-          "id": "BA2016",
-          "name": "MarkImageAsNXCompatible",
-          "shortDescription": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code.",
-          "fullDescription": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker.",
-          "options": {},
-          "messageFormats": {
+          "Id": "BA2016",
+          "FullDescription": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker.",
+          "HelpUri": "https://github.com/microsoft/binskim",
+          "DefaultLevel": "warning",
+          "MessageFormats": {
             "Pass": "'{0}' is marked as NX compatible, helping to prevent attackers from executing code that is injected into data segments.",
             "Error": "'{0}' is not marked NX compatible. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
           },
-          "helpUri": "https://github.com/microsoft/binskim"
+          "ShortDescription": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code.",
+          "Name": "MarkImageAsNXCompatible",
+          "Options": {},
+          "Properties": null,
+          "Tags": null
         }
+      },
+      "files": {
+        "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_Default.exe": [
+          {
+            "hashes": [
+              {
+                "value": "875384EBB5D23EAAC9230EE89A508FE6",
+                "algorithm": "md5"
+              },
+              {
+                "value": "DA6C30DA7F900D448E1A39304D59357E5E963069",
+                "algorithm": "sha1"
+              },
+              {
+                "value": "4C0360F3DCF5810FFC31203A6299892BF558C4BB1B59F5BE11EE98EB3F8962C1",
+                "algorithm": "sha256"
+              }
+            ]
+          }
+        ]
+      },
+      "invocation": {
+        "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2015_Default.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2015_Default.exe.sarif.temp --verbose --hashes --config default",
+        "startTime": "2016-05-03T20:22:10.12Z",
+        "endTime": "2016-05-03T20:22:10.44Z",
+        "processId": 47336,
+        "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
+        "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }
     }
   ]

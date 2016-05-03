@@ -48,39 +48,32 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void Log(IRule rule, Result result)
         {
-            NoteTestResult(result.Kind, result.Locations.First().AnalysisTarget.Uri.LocalPath);
+            NoteTestResult(result.Level, result.Locations.First().AnalysisTarget.Uri.LocalPath);
         }
 
-        public void NoteTestResult(ResultKind messageKind, string targetPath)
+        public void NoteTestResult(ResultLevel messageKind, string targetPath)
         {
             switch (messageKind)
             {
-                case ResultKind.Pass:
+                case ResultLevel.Pass:
                 {
                     PassTargets.Add(targetPath);
                     break;
                 }
 
-                case ResultKind.ConfigurationError:
-                {
-                    ConfigurationErrorTargets.Add(targetPath);
-                    break;
-                }
-
-                case ResultKind.Error:
+                case ResultLevel.Error:
                 {
                     FailTargets.Add(targetPath);
                     break;
                 }
 
-                case ResultKind.NotApplicable:
+                case ResultLevel.NotApplicable:
                 {
                     NotApplicableTargets.Add(targetPath);
                     break;
                 }
 
-                case ResultKind.Note:
-                case ResultKind.InternalError:
+                case ResultLevel.Note:
                 {
                     throw new NotImplementedException();
                 }
@@ -90,6 +83,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     throw new InvalidOperationException();
                 }
             }
+        }
+
+        public void LogToolNotification(Notification notification)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LogConfigurationNotification(Notification notification)
+        {
+            ConfigurationErrorTargets.Add(notification.AnalysisTarget.Uri.LocalPath);
         }
     }
 }

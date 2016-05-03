@@ -102,14 +102,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // imports section to be executable, or which merge the ".rdata" segment into an executable 
                 // section.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2010_Error)));
                 return;
             }
 
             // '{0}' does not have an imports section that is marked as executable.
             context.Logger.Log(this, 
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                     nameof(RuleResources.BA2010_Pass)));
         }
     }
