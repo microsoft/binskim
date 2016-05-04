@@ -5,17 +5,15 @@
     {
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.3.0.0-beta",
-        "version": "1.3.0.0",
-        "semanticVersion": "1.3.0",
-        "fileVersion": "1.3.1.0",
+        "fullName": "BinSkim 1.3.2.0-beta",
+        "version": "1.3.2.0",
+        "semanticVersion": "1.3.2",
         "language": "en-US",
         "properties": {
-          "Language": "Language Neutral",
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
           "CompanyName": "Microsoft",
           "ProductName": "BinSkim Portable Executable Analyzer",
-          "ProductVersion": "1.3.1.0"
+          "SarifLoggerVersion": "1.5.20.0"
         }
       },
       "results": [
@@ -279,7 +277,7 @@
                 },
                 {
                   "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
-                  "line": 90,
+                  "line": 89,
                   "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
                 }
               ]
@@ -330,7 +328,7 @@
                 },
                 {
                   "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
-                  "line": 90,
+                  "line": 89,
                   "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
                 }
               ]
@@ -381,7 +379,7 @@
                 },
                 {
                   "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
-                  "line": 90,
+                  "line": 89,
                   "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
                 }
               ]
@@ -432,7 +430,7 @@
                 },
                 {
                   "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
-                  "line": 90,
+                  "line": 89,
                   "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
                 }
               ]
@@ -483,7 +481,7 @@
                 },
                 {
                   "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
-                  "line": 90,
+                  "line": 89,
                   "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
                 }
               ]
@@ -534,7 +532,7 @@
                 },
                 {
                   "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
-                  "line": 90,
+                  "line": 89,
                   "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
                 }
               ]
@@ -706,9 +704,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\MixedMode_x86_VS2013_MissingPdb.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-03T23:35:42.79Z",
-        "endTime": "2016-05-03T23:35:43.38Z",
-        "processId": 15964,
+        "startTime": "2016-05-04T21:57:57.71Z",
+        "endTime": "2016-05-04T21:57:58.35Z",
+        "processId": 42844,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

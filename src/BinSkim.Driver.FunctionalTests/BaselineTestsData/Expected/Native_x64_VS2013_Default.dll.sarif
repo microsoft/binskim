@@ -5,17 +5,15 @@
     {
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.3.0.0-beta",
-        "version": "1.3.0.0",
-        "semanticVersion": "1.3.0",
-        "fileVersion": "1.3.1.0",
+        "fullName": "BinSkim 1.3.2.0-beta",
+        "version": "1.3.2.0",
+        "semanticVersion": "1.3.2",
         "language": "en-US",
         "properties": {
-          "Language": "Language Neutral",
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
           "CompanyName": "Microsoft",
           "ProductName": "BinSkim Portable Executable Analyzer",
-          "ProductVersion": "1.3.1.0"
+          "SarifLoggerVersion": "1.5.20.0"
         }
       },
       "results": [
@@ -582,9 +580,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x64_VS2013_Default.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x64_VS2013_Default.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-03T23:35:43.73Z",
-        "endTime": "2016-05-03T23:35:43.98Z",
-        "processId": 51504,
+        "startTime": "2016-05-04T21:57:58.68Z",
+        "endTime": "2016-05-04T21:57:58.98Z",
+        "processId": 8156,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

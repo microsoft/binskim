@@ -12,17 +12,17 @@ set VERSION_CONSTANTS=src\BinaryParsers\VersionConstants.cs
 rd /s /q bld
 
 @REM Rewrite VersionConstants.cs
-echo // Copyright (c) Microsoft. All rights reserved. Licensed under the MIT        > %VERSION_CONSTANTS%
-echo // license. See LICENSE file in the project root for full license information.>> %VERSION_CONSTANTS%
-echo namespace Microsoft.CodeAnalysis.IL                                           >> %VERSION_CONSTANTS%
-echo {                                                                             >> %VERSION_CONSTANTS%
-echo     public static class VersionConstants                                      >> %VERSION_CONSTANTS%
-echo     {                                                                         >> %VERSION_CONSTANTS%
-echo         public const string Prerelease = "%PRERELEASE%";                      >> %VERSION_CONSTANTS%
-echo         public const string AssemblyVersion = "%MAJOR%.%MINOR%.0";      >> %VERSION_CONSTANTS%
-echo         public const string FileVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0";   >> %VERSION_CONSTANTS%
-echo         public const string Version = AssemblyVersion + Prerelease;           >> %VERSION_CONSTANTS%
-echo     }                                                                         >> %VERSION_CONSTANTS%
+echo // Copyright (c) Microsoft. All rights reserved. Licensed under the MIT         > %VERSION_CONSTANTS%
+echo // license. See LICENSE file in the project root for full license information. >> %VERSION_CONSTANTS%
+echo namespace Microsoft.CodeAnalysis.IL                                            >> %VERSION_CONSTANTS%
+echo {                                                                              >> %VERSION_CONSTANTS%
+echo     public static class VersionConstants                                       >> %VERSION_CONSTANTS%
+echo     {                                                                          >> %VERSION_CONSTANTS%
+echo         public const string Prerelease = "%PRERELEASE%";                       >> %VERSION_CONSTANTS%
+echo         public const string AssemblyVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0"; >> %VERSION_CONSTANTS%
+echo         public const string FileVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0";    >> %VERSION_CONSTANTS%
+echo         public const string Version = AssemblyVersion + Prerelease;            >> %VERSION_CONSTANTS%
+echo     }                                                                          >> %VERSION_CONSTANTS%
 echo  }                                                                            >> %VERSION_CONSTANTS%
 
 %~dp0.nuget\NuGet.exe restore src\BinSkim.sln 

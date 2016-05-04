@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.IL.Rules;
 
 namespace Microsoft.CodeAnalysis.IL

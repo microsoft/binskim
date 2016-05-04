@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
