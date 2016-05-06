@@ -561,6 +561,7 @@
       "files": {
         "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_Default.dll": [
           {
+            "mimeType": "application/octet-stream",
             "hashes": [
               {
                 "value": "7450B749DB3518CA4193D0016C931796",
@@ -580,9 +581,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x64_VS2013_Default.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\MixedMode_x64_VS2013_Default.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-04T21:57:56.70Z",
-        "endTime": "2016-05-04T21:57:57.39Z",
-        "processId": 58340,
+        "startTime": "2016-05-05T22:55:16.83Z",
+        "endTime": "2016-05-05T22:55:17.55Z",
+        "processId": 31768,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

@@ -258,50 +258,8 @@
           "analysisTarget": {
             "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll"
           },
-          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded.\nE_PDB_NOT_FOUND (File not found)",
-          "level": "error",
-          "exception": {
-            "kind": "PdbParseException",
-            "message": "E_PDB_NOT_FOUND (File not found)",
-            "stack": {
-              "frames": [
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                  "line": 111,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
-                },
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                  "line": 43,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String peOrPdbPath, String symbolPath)"
-                },
-                {
-                  "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
-                  "line": 89,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
-                }
-              ]
-            },
-            "innerExceptions": [
-              {
-                "kind": "COMException",
-                "message": "Exception from HRESULT: 0x806D0005",
-                "stack": {
-                  "frames": [
-                    {
-                      "fullyQualifiedLogicalName": "Dia2Lib.IDiaDataSource.loadDataForExe(String executable, String searchPath, Object pCallback)"
-                    },
-                    {
-                      "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                      "line": 104,
-                      "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              }
-            ]
-          }
+          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. ('E_PDB_NOT_FOUND (File not found)')",
+          "level": "error"
         },
         {
           "id": "ExceptionLoadingPdb",
@@ -309,50 +267,8 @@
           "analysisTarget": {
             "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll"
           },
-          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded.\nE_PDB_NOT_FOUND (File not found)",
-          "level": "error",
-          "exception": {
-            "kind": "PdbParseException",
-            "message": "E_PDB_NOT_FOUND (File not found)",
-            "stack": {
-              "frames": [
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                  "line": 111,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
-                },
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                  "line": 43,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String peOrPdbPath, String symbolPath)"
-                },
-                {
-                  "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
-                  "line": 89,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
-                }
-              ]
-            },
-            "innerExceptions": [
-              {
-                "kind": "COMException",
-                "message": "Exception from HRESULT: 0x806D0005",
-                "stack": {
-                  "frames": [
-                    {
-                      "fullyQualifiedLogicalName": "Dia2Lib.IDiaDataSource.loadDataForExe(String executable, String searchPath, Object pCallback)"
-                    },
-                    {
-                      "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                      "line": 104,
-                      "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              }
-            ]
-          }
+          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded. ('E_PDB_NOT_FOUND (File not found)')",
+          "level": "error"
         },
         {
           "id": "ExceptionLoadingPdb",
@@ -360,50 +276,8 @@
           "analysisTarget": {
             "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll"
           },
-          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded.\nE_PDB_NOT_FOUND (File not found)",
-          "level": "error",
-          "exception": {
-            "kind": "PdbParseException",
-            "message": "E_PDB_NOT_FOUND (File not found)",
-            "stack": {
-              "frames": [
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                  "line": 111,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
-                },
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                  "line": 43,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String peOrPdbPath, String symbolPath)"
-                },
-                {
-                  "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
-                  "line": 89,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
-                }
-              ]
-            },
-            "innerExceptions": [
-              {
-                "kind": "COMException",
-                "message": "Exception from HRESULT: 0x806D0005",
-                "stack": {
-                  "frames": [
-                    {
-                      "fullyQualifiedLogicalName": "Dia2Lib.IDiaDataSource.loadDataForExe(String executable, String searchPath, Object pCallback)"
-                    },
-                    {
-                      "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                      "line": 104,
-                      "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              }
-            ]
-          }
+          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. ('E_PDB_NOT_FOUND (File not found)')",
+          "level": "error"
         },
         {
           "id": "ExceptionLoadingPdb",
@@ -411,50 +285,8 @@
           "analysisTarget": {
             "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll"
           },
-          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded.\nE_PDB_NOT_FOUND (File not found)",
-          "level": "error",
-          "exception": {
-            "kind": "PdbParseException",
-            "message": "E_PDB_NOT_FOUND (File not found)",
-            "stack": {
-              "frames": [
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                  "line": 111,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
-                },
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                  "line": 43,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String peOrPdbPath, String symbolPath)"
-                },
-                {
-                  "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
-                  "line": 89,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
-                }
-              ]
-            },
-            "innerExceptions": [
-              {
-                "kind": "COMException",
-                "message": "Exception from HRESULT: 0x806D0005",
-                "stack": {
-                  "frames": [
-                    {
-                      "fullyQualifiedLogicalName": "Dia2Lib.IDiaDataSource.loadDataForExe(String executable, String searchPath, Object pCallback)"
-                    },
-                    {
-                      "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                      "line": 104,
-                      "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              }
-            ]
-          }
+          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded. ('E_PDB_NOT_FOUND (File not found)')",
+          "level": "error"
         },
         {
           "id": "ExceptionLoadingPdb",
@@ -462,50 +294,8 @@
           "analysisTarget": {
             "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll"
           },
-          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded.\nE_PDB_NOT_FOUND (File not found)",
-          "level": "error",
-          "exception": {
-            "kind": "PdbParseException",
-            "message": "E_PDB_NOT_FOUND (File not found)",
-            "stack": {
-              "frames": [
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                  "line": 111,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
-                },
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                  "line": 43,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String peOrPdbPath, String symbolPath)"
-                },
-                {
-                  "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
-                  "line": 89,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
-                }
-              ]
-            },
-            "innerExceptions": [
-              {
-                "kind": "COMException",
-                "message": "Exception from HRESULT: 0x806D0005",
-                "stack": {
-                  "frames": [
-                    {
-                      "fullyQualifiedLogicalName": "Dia2Lib.IDiaDataSource.loadDataForExe(String executable, String searchPath, Object pCallback)"
-                    },
-                    {
-                      "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                      "line": 104,
-                      "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              }
-            ]
-          }
+          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded. ('E_PDB_NOT_FOUND (File not found)')",
+          "level": "error"
         },
         {
           "id": "ExceptionLoadingPdb",
@@ -513,50 +303,8 @@
           "analysisTarget": {
             "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll"
           },
-          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded.\nE_PDB_NOT_FOUND (File not found)",
-          "level": "error",
-          "exception": {
-            "kind": "PdbParseException",
-            "message": "E_PDB_NOT_FOUND (File not found)",
-            "stack": {
-              "frames": [
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                  "line": 111,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
-                },
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                  "line": 43,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String peOrPdbPath, String symbolPath)"
-                },
-                {
-                  "uri": "file:///Z:/src/BinSkim.Sdk/BinaryAnalyzerContext.cs",
-                  "line": 89,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Sdk.BinaryAnalyzerContext.get_Pdb()"
-                }
-              ]
-            },
-            "innerExceptions": [
-              {
-                "kind": "COMException",
-                "message": "Exception from HRESULT: 0x806D0005",
-                "stack": {
-                  "frames": [
-                    {
-                      "fullyQualifiedLogicalName": "Dia2Lib.IDiaDataSource.loadDataForExe(String executable, String searchPath, Object pCallback)"
-                    },
-                    {
-                      "uri": "file:///Z:/src/BinaryParsers/ProgramDatabase/Pdb.cs",
-                      "line": 104,
-                      "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String peOrPdbPath, String symbolPath)"
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              }
-            ]
-          }
+          "message": "'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded. ('E_PDB_NOT_FOUND (File not found)')",
+          "level": "error"
         }
       ],
       "rules": {
@@ -685,6 +433,7 @@
       "files": {
         "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll": [
           {
+            "mimeType": "application/octet-stream",
             "hashes": [
               {
                 "value": "C7A0E787617FE310627F4513929AC423",
@@ -704,9 +453,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\MixedMode_x86_VS2013_MissingPdb.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-04T21:57:57.71Z",
-        "endTime": "2016-05-04T21:57:58.35Z",
-        "processId": 42844,
+        "startTime": "2016-05-05T22:55:17.90Z",
+        "endTime": "2016-05-05T22:55:18.54Z",
+        "processId": 15644,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

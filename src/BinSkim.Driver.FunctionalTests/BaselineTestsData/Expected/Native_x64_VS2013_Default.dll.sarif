@@ -561,6 +561,7 @@
       "files": {
         "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x64_VS2013_Default.dll": [
           {
+            "mimeType": "application/octet-stream",
             "hashes": [
               {
                 "value": "A6220653CCEA28E2E6556FC297F209AB",
@@ -580,9 +581,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x64_VS2013_Default.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x64_VS2013_Default.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-04T21:57:58.68Z",
-        "endTime": "2016-05-04T21:57:58.98Z",
-        "processId": 8156,
+        "startTime": "2016-05-05T22:55:18.90Z",
+        "endTime": "2016-05-05T22:55:19.21Z",
+        "processId": 22144,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

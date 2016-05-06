@@ -571,6 +571,7 @@
       "files": {
         "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2015_AtlProxyStubPS.dll": [
           {
+            "mimeType": "application/octet-stream",
             "hashes": [
               {
                 "value": "6AE56F109CB2FC5A3FAB039C21CB9298",
@@ -590,9 +591,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2015_AtlProxyStubPS.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2015_AtlProxyStubPS.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-04T21:58:00.55Z",
-        "endTime": "2016-05-04T21:58:00.87Z",
-        "processId": 20112,
+        "startTime": "2016-05-05T22:55:20.85Z",
+        "endTime": "2016-05-05T22:55:21.19Z",
+        "processId": 22004,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }
