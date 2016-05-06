@@ -5,17 +5,15 @@
     {
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.3.0.0-beta",
-        "version": "1.3.0.0",
-        "semanticVersion": "1.3.0",
-        "fileVersion": "1.3.1.0",
+        "fullName": "BinSkim 1.3.2.0-beta",
+        "version": "1.3.2.0",
+        "semanticVersion": "1.3.2",
         "language": "en-US",
         "properties": {
-          "Language": "Language Neutral",
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
           "CompanyName": "Microsoft",
           "ProductName": "BinSkim Portable Executable Analyzer",
-          "ProductVersion": "1.3.1.0"
+          "SarifLoggerVersion": "1.5.20.0"
         }
       },
       "configurationNotifications": [
@@ -24,39 +22,14 @@
           "analysisTarget": {
             "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
           },
-          "message": "Could not load analysis target 'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Corrupted_Native_x86_VS2013_Default.exe'.\nImage is either too small or contains an invalid byte offset or count.",
-          "level": "error",
-          "exception": {
-            "kind": "BadImageFormatException",
-            "message": "Image is either too small or contains an invalid byte offset or count.",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "System.Reflection.Throw.ImageTooSmallOrContainsInvalidOffsetOrCount()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "System.Reflection.PortableExecutable.PEHeaders.SkipDosHeader(PEBinaryReader& reader, Boolean& isCOFFOnly)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "System.Reflection.PortableExecutable.PEHeaders..ctor(Stream peStream, Nullable`1 sizeOpt)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "System.Reflection.PortableExecutable.PEReader.InitializePEHeaders()"
-                },
-                {
-                  "uri": "file:///Z:/src/BinaryParsers/PortableExecutable/PE.cs",
-                  "line": 47,
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PE..ctor(String fileName)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
+          "message": "Could not load analysis target 'Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Corrupted_Native_x86_VS2013_Default.exe'. ('Image is either too small or contains an invalid byte offset or count.')",
+          "level": "error"
         }
       ],
       "files": {
         "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe": [
           {
+            "mimeType": "application/octet-stream",
             "hashes": [
               {
                 "value": "992F5D2554195F9F19B9480A0E11AC78",
@@ -76,9 +49,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Corrupted_Native_x86_VS2013_Default.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Corrupted_Native_x86_VS2013_Default.exe.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-03T23:35:46.06Z",
-        "endTime": "2016-05-03T23:35:46.21Z",
-        "processId": 49696,
+        "startTime": "2016-05-05T22:55:21.58Z",
+        "endTime": "2016-05-05T22:55:21.77Z",
+        "processId": 28212,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

@@ -8,11 +8,9 @@ using System.Reflection;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
 using System.Diagnostics;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.IL
 {

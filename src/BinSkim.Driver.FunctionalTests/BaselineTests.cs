@@ -156,7 +156,7 @@ namespace Microsoft.CodeAnalysis.IL
                 return String.Format(CultureInfo.InvariantCulture, "\"{0}\" \"{1}\" \"{2}\" /title1=Expected /title2=Actual", beyondCompare, expected, actual);
             }
 
-            return String.Format(CultureInfo.InvariantCulture, "tfsodd \"{0}\" \"{1}\"", expected, actual);
+            return String.Format(CultureInfo.InvariantCulture, "windiff \"{0}\" \"{1}\"", expected, actual);
         }
 
         private static string TryFindBeyondCompare()

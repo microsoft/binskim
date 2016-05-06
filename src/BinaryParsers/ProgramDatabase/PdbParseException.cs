@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         }
 
         public PdbParseException(PdbParseErrorCode code, Exception innerException)
-            : base(String.Format("{0} ({1})", code.ToString(), PdbParseExceptionStrings[(uint)code - (uint)PdbParseErrorCode.E_PDB_OK]), innerException)
+            : base(String.Format("{0} : {1}", code.ToString(), PdbParseExceptionStrings[(uint)code - (uint)PdbParseErrorCode.E_PDB_OK]), innerException)
         {
             ExceptionCode = code;
         }

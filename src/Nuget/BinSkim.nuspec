@@ -15,6 +15,8 @@
     <tags>Binary,Analysis,binskim,binscope</tags>
   </metadata>
   <files>
+    <file src="..\..\..\src\ReleaseHistory.md" target="tools\ReleaseHistory.md" />
+    
     <!-- tools\x64 -->
     <file src="x64_Release\BinSkim.exe" target="tools\x64" />
     <file src="x64_Release\BinSkim.pdb" target="tools\x64" />

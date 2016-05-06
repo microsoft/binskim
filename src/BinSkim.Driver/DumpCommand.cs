@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL
 {

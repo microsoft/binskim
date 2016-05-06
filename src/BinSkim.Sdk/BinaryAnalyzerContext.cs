@@ -6,7 +6,6 @@ using System;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.Sarif;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
