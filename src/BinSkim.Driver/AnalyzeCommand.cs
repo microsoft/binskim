@@ -130,12 +130,14 @@ namespace Microsoft.CodeAnalysis.IL
                 if (diagnostic.Location != Location.None)
                 {
                     filePath = diagnostic.Location.GetLineSpan().Path;
-
-                    resultFile = new PhysicalLocation
+                    if (!string.IsNullOrEmpty(filePath))
                     {
-                        Uri = new Uri(filePath),
-                        Region = region
-                    };
+                        resultFile = new PhysicalLocation
+                        {
+                            Uri = new Uri(filePath),
+                            Region = region
+                        };
+                    }
                 }
 
                 result.Locations.Add(new Sarif.Location()
@@ -157,6 +159,11 @@ namespace Microsoft.CodeAnalysis.IL
                     foreach(Location location in diagnostic.AdditionalLocations)
                     {
                         filePath = location.GetLineSpan().Path;
+                        if (string.IsNullOrEmpty(filePath))
+                        {
+                            continue;
+                        }
+
                         region = location.ConvertToRegion();
 
                         result.RelatedLocations.Add(new AnnotatedCodeLocation
@@ -170,9 +177,7 @@ namespace Microsoft.CodeAnalysis.IL
                         });
                     }
                 }
-
-                IRule rule = diagnostic.ConvertToRuleDescriptor();
-                context.Logger.Log(null, result);
+                context.Logger.Log(diagnostic.ConvertToRuleDescriptor(), result);
             });
         }    
     }

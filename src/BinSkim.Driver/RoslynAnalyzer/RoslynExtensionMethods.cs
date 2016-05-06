@@ -4,11 +4,39 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.Sarif;
+using System.Reflection;
 
 namespace Microsoft.CodeAnalysis.IL
 {
+    internal enum MetadataImportOptions : byte
+    {
+        /// <summary>  
+        /// Only import public and protected symbols.  
+        /// </summary>  
+        Public = 0,
+
+        /// <summary>  
+        /// Import public, protected and internal symbols.  
+        /// </summary>  
+        Internal = 1,
+
+        /// <summary>  
+        /// Import all symbols.
+        /// </summary>
+        All = 2,
+    }
+
     internal static class RoslynExtensionMethods
     {
+        // Temporary workaround while blocked on https://github.com/dotnet/roslyn/issues/6748  
+        // This method is only called once. No fancy tricks required for speed.
+        public static void SetMetadataImportOptions(this CompilationOptions instance, MetadataImportOptions options)
+        {
+            typeof(CompilationOptions)
+                .GetProperty(nameof(MetadataImportOptions), BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(instance, options);
+        }
+
         public static IRule ConvertToRuleDescriptor(this Diagnostic diagnostic)
         {
             // TODO we should consume the standard Roslyn->SARIF emit code here.
@@ -19,7 +47,12 @@ namespace Microsoft.CodeAnalysis.IL
             rule.MessageFormats = new Dictionary<string, string>();
             rule.MessageFormats["Default"] = diagnosticDescriptor.MessageFormat.ToString();
             rule.FullDescription = diagnosticDescriptor.Description.ToString();
+
+            if (!String.IsNullOrEmpty(diagnosticDescriptor.HelpLinkUri))
+            {
             rule.HelpUri = new Uri(diagnosticDescriptor.HelpLinkUri);
+            }
+
             rule.Id = diagnosticDescriptor.Id;
 
             // TODO: review this decision
