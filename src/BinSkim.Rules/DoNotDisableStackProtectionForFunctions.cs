@@ -9,7 +9,6 @@ using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -92,7 +91,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
                 return;
             }
 
@@ -129,7 +128,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // compiler to avoid inserting stack protector checks in these locations rather 
                 // than disabling the stack protector altogether.
                 context.Logger.Log(this, 
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2014_Error), 
                         functionNames));
                 return;
@@ -141,7 +140,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // more difficult for an attacker to exploit stack buffer overflow 
             // memory corruption vulnerabilities.
             context.Logger.Log(this, 
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                     nameof(RuleResources.BA2014_Pass)));
         }
     }

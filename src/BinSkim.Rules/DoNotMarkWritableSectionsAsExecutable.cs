@@ -8,7 +8,7 @@ using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -70,7 +70,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // '{0}' has a section alignment ({1}) that is less than page size ({2}).
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2021_Error),
                         context.PE.FileName,
                         "0x" + peHeader.SectionAlignment.ToString("x"),
@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // '{0}' contains no data or code sections marked as both shared and executable.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                         nameof(RuleResources.BA2021_Pass)));
                 return;
             }
@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // linker command line for C and C++ programs, or  #pragma section in C and 
             // C++ source code, which mark a section with both attributes.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                     nameof(RuleResources.BA2021_Error),
                     badSectionsText));
         }

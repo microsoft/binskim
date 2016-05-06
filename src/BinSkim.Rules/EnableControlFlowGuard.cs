@@ -9,7 +9,7 @@ using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -93,14 +93,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // and linker command lines. Binaries also require the 
                 // /DYNAMICBASE linker option in order to enable CFG.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2008_Error)));
                 return;
             }
 
             // '{0}' enables the control flow guard mitigation.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                     nameof(RuleResources.BA2008_Pass)));
         }
 

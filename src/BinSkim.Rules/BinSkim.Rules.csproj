@@ -17,6 +17,10 @@
   </PropertyGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.props))\build.props" />
   <ItemGroup>
+    <Reference Include="CommandLine, Version=2.0.275.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.2.0.275-beta\lib\net45\CommandLine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="dia2lib">
       <HintPath>..\..\refs\dia2lib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -25,12 +29,12 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sarif, Version=1.5.12.0, Culture=neutral, PublicKeyToken=06c70c7db0c6cd6b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Sdk.1.5.12-beta\lib\net45\Sarif.dll</HintPath>
+    <Reference Include="Sarif, Version=1.5.21.0, Culture=neutral, PublicKeyToken=06c70c7db0c6cd6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Sdk.1.5.21-beta\lib\net45\Sarif.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sarif.Driver, Version=1.5.12.0, Culture=neutral, PublicKeyToken=06c70c7db0c6cd6b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Driver.1.5.12-beta\lib\net45\Sarif.Driver.dll</HintPath>
+    <Reference Include="Sarif.Driver, Version=1.5.21.0, Culture=neutral, PublicKeyToken=06c70c7db0c6cd6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sarif.Driver.1.5.21-beta\lib\net45\Sarif.Driver.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

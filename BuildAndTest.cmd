@@ -13,17 +13,17 @@ if exist bld ( rd /s /q bld || exit /b 1 )
 
 @REM Rewrite VersionConstants.cs
 echo Rewriting VersionConstants.cs...
-echo // Copyright (c) Microsoft. All rights reserved. Licensed under the MIT       >  %VERSION_CONSTANTS% 
-echo // license. See LICENSE file in the project root for full license information.>> %VERSION_CONSTANTS%
-echo namespace Microsoft.CodeAnalysis.IL                                           >> %VERSION_CONSTANTS%
-echo {                                                                             >> %VERSION_CONSTANTS%
-echo     public static class VersionConstants                                      >> %VERSION_CONSTANTS%
-echo     {                                                                         >> %VERSION_CONSTANTS%
-echo         public const string Prerelease = "%PRERELEASE%";                      >> %VERSION_CONSTANTS%
-echo         public const string AssemblyVersion = "%MAJOR%.%MINOR%.%PATCH%";      >> %VERSION_CONSTANTS%
-echo         public const string FileVersion = AssemblyVersion + ".0";             >> %VERSION_CONSTANTS%
-echo         public const string Version = AssemblyVersion + Prerelease;           >> %VERSION_CONSTANTS%
-echo     }                                                                         >> %VERSION_CONSTANTS%
+echo // Copyright (c) Microsoft. All rights reserved. Licensed under the MIT        > %VERSION_CONSTANTS%
+echo // license. See LICENSE file in the project root for full license information. >> %VERSION_CONSTANTS%
+echo namespace Microsoft.CodeAnalysis.IL                                            >> %VERSION_CONSTANTS%
+echo {                                                                              >> %VERSION_CONSTANTS%
+echo     public static class VersionConstants                                       >> %VERSION_CONSTANTS%
+echo     {                                                                          >> %VERSION_CONSTANTS%
+echo         public const string Prerelease = "%PRERELEASE%";                       >> %VERSION_CONSTANTS%
+echo         public const string AssemblyVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0"; >> %VERSION_CONSTANTS%
+echo         public const string FileVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0";    >> %VERSION_CONSTANTS%
+echo         public const string Version = AssemblyVersion + Prerelease;            >> %VERSION_CONSTANTS%
+echo     }                                                                          >> %VERSION_CONSTANTS%
 echo  }                                                                            >> %VERSION_CONSTANTS%
 
 call Restore.cmd || exit /b 1

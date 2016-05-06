@@ -12,7 +12,6 @@ using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -97,7 +96,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Pdb pdb = context.Pdb;
             if (pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
                 return;
             }
 
@@ -182,7 +181,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // an already shipped version) ignore this warning.
                 // Modules built outside of policy: {3}
                 context.Logger.Log(this, 
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                     nameof(RuleResources.BA2006_Error),
                         minCompilerVersion.ToString(),
                         minLinkVersion.ToString(),
@@ -193,7 +192,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // '{0}' was built with a tool chain that satisfies configured policy 
             // (compiler minimum version {1}, linker minimum version {2}).
             context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                     nameof(RuleResources.BA2006_Pass),
                         minCompilerVersion.ToString(), minLinkVersion.ToString()));
         }

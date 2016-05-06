@@ -8,7 +8,7 @@ using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -90,7 +90,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well
                 // as /LARGEADDRESSAWARE to the C or C++ linker command line.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2015_Error_NeitherHighEntropyVANorLargeAddressAware)));
                 return;
             }
@@ -104,7 +104,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // C or C++ linker command line. (This image was determined to have been properly 
                 // compiled as /LARGEADDRESSAWARE.)
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2015_Error_NoHighEntropyVA)));
                 return;
             }
@@ -118,14 +118,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // or C++ linker command line. (This image was determined to have been properly 
                 // compiled as /HIGHENTROPYVA.)
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2015_Error_NoLargeAddressAware)));
                 return;
             }
 
             //'{0}' is high entropy ASLR compatible.
             context.Logger.Log(this, 
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                     nameof(RuleResources.BA2015_Pass)));
         }
     }

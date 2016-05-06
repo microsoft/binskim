@@ -6,7 +6,7 @@ using System.Composition;
 using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using System.Collections.Generic;
@@ -94,14 +94,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // modification only for 64-bit builds, as base addresses above 4GB are not valid 
                 // for 32-bit binaries.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2001_Error)));
                 return;
             }
 
             // '{0}' is marked as NX compatible.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                     nameof(RuleResources.BA2001_Pass)));
         }
     }

@@ -8,11 +8,9 @@ using System.Reflection;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
 using System.Diagnostics;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -98,13 +96,13 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 // 0. Populate various members
                 var result = new Result();
-                result.Kind = diagnostic.Severity.ConvertToMessageKind();
-                result.FullMessage = diagnostic.GetMessage();
+                result.Level = diagnostic.Severity.ConvertToMessageKind();
+                result.Message = diagnostic.GetMessage();
 
-                // For Roslyn diagnostics, suppression information is always available (i.e., it 
-                // is not contingent on compilation with specific #define such as CODE_ANLAYSIS).
-                // As a result, we always populate IsSuppressedInSource with this information.
-                result.IsSuppressedInSource = diagnostic.IsSuppressed;
+                if (diagnostic.IsSuppressed)
+                {
+                    result.SuppressionStates = SuppressionStates.SuppressedInSource;
+                }
 
                 result.Properties = new Dictionary<string, string>();
                 result.Properties["Severity"] = diagnostic.Severity.ToString();
@@ -116,7 +114,7 @@ namespace Microsoft.CodeAnalysis.IL
                     result.Properties[key] = diagnostic.Properties[key];
                 }
 
-                result.Locations = new HashSet<Sarif.Location>();
+                result.Locations = new List<Sarif.Location>();
 
                 // 1. Record the assembly under analysis
                 PhysicalLocation analysisTarget = new PhysicalLocation()
@@ -156,7 +154,7 @@ namespace Microsoft.CodeAnalysis.IL
 
                 if (diagnostic.AdditionalLocations != null && diagnostic.AdditionalLocations.Count > 0)
                 {
-                    result.RelatedLocations = new HashSet<AnnotatedCodeLocation>();
+                    result.RelatedLocations = new List<AnnotatedCodeLocation>();
 
                     foreach(Location location in diagnostic.AdditionalLocations)
                     {

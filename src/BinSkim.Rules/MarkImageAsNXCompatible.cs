@@ -5,7 +5,7 @@ using System.Composition;
 using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using System.Collections.Generic;
@@ -87,14 +87,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // executable code segment. To resolve this issue, ensure that your tool chain is configured to mark 
                 //your binaries as NX compatible, e.g. by passing / NXCOMPAT to the C / C++ linker.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2016_Error)));
                 return;
             }
 
             // '{0}' is marked as NX compatible.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                     nameof(RuleResources.BA2016_Pass)));
         }
     }

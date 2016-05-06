@@ -11,9 +11,8 @@ using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif.Driver.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -106,7 +105,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Pdb pdb = context.Pdb;
             if (pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException.Message);
+                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
                 return;
             }
 
@@ -161,7 +160,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // '{0}' was built with a version of {1} which is subject to the following issues: {2}. 
                     // To resolve this, {3}. The source files that triggered this were: {4}
                     context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultKind.Error, context, null,
+                        RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                             nameof(RuleResources.BA2002_Error),
                             descriptor.Name,
                             descriptor.VulnerabilityDescription,
@@ -173,7 +172,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // '{0}' does not incorporate any known vulnerable dependencies, as configured by current policy.
             context.Logger.Log(this, 
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                     nameof(RuleResources.BA2002_Pass)));
         }
 
