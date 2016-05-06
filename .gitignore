@@ -5,6 +5,7 @@
 .vs/
 
 # Build results 
+msbuild.log
 bld/
 bin/
 obj/
