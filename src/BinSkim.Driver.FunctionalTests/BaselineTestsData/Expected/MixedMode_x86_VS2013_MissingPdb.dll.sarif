@@ -1,19 +1,20 @@
 ﻿{
-  "$schema": "http://json.schemastore.org/sarif-1.0.0",
-  "version": "1.0.0-beta.4",
+  "$schema": "http://json.schemastore.org/sarif-1.0.0-beta.5",
+  "version": "1.0.0-beta.5",
   "runs": [
     {
+      "id": "9758ec7b-4109-4e40-bc0e-e9ce49d376eb",
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.3.2.0-beta",
-        "version": "1.3.2.0",
-        "semanticVersion": "1.3.2",
+        "fullName": "BinSkim 1.3.3.0-beta",
+        "version": "1.3.3.0",
+        "semanticVersion": "1.3.3",
+        "sarifLoggerVersion": "1.5.22.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
           "CompanyName": "Microsoft",
-          "ProductName": "BinSkim Portable Executable Analyzer",
-          "SarifLoggerVersion": "1.5.20.0"
+          "ProductName": "BinSkim Portable Executable Analyzer"
         }
       },
       "results": [
@@ -453,9 +454,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x86_VS2013_MissingPdb.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\MixedMode_x86_VS2013_MissingPdb.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-05T22:55:17.90Z",
-        "endTime": "2016-05-05T22:55:18.54Z",
-        "processId": 15644,
+        "startTime": "2016-05-16T21:25:58.236Z",
+        "endTime": "2016-05-16T21:25:58.813Z",
+        "processId": 20100,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

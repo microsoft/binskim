@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 // 0. Populate various members
                 var result = new Result();
-                result.Level = diagnostic.Severity.ConvertToMessageKind();
+                result.Level = diagnostic.Severity.ConvertToResultLevel();
                 result.Message = diagnostic.GetMessage();
 
                 if (diagnostic.IsSuppressed)
@@ -104,14 +104,20 @@ namespace Microsoft.CodeAnalysis.IL
                     result.SuppressionStates = SuppressionStates.SuppressedInSource;
                 }
 
-                result.Properties = new Dictionary<string, string>();
-                result.Properties["Severity"] = diagnostic.Severity.ToString();
-                result.Properties["IsWarningAsError"] = diagnostic.IsWarningAsError.ToString();
-                result.Properties["WarningLevel"] = diagnostic.WarningLevel.ToString();
+                result.SetProperty("Severity", diagnostic.Severity.ToString());
+                result.SetProperty("IsWarningAsError", diagnostic.IsWarningAsError.ToString());
+                result.SetProperty("WarningLevel", diagnostic.WarningLevel.ToString());
 
                 foreach (string key in diagnostic.Properties.Keys)
                 {
-                    result.Properties[key] = diagnostic.Properties[key];
+                    string value;
+                    if (result.TryGetProperty(key, out value))
+                    {
+                        // If the properties bag recapitulates one of the values set
+                        // previously, we'll retain the already set value
+                        continue;
+                    }
+                    result.SetProperty(key, diagnostic.Properties[key]);
                 }
 
                 result.Locations = new List<Sarif.Location>();
