@@ -44,7 +44,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2019_Pass),
-                    nameof(RuleResources.BA2019_Error)};
+                    nameof(RuleResources.BA2019_Error),
+                    nameof(RuleResources.SHARED_InvalidMetadata)
+                };
             }
         }
 

@@ -45,7 +45,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return new string[] {
                     nameof(RuleResources.BA2018_Pass),
                     nameof(RuleResources.BA2018_Pass_NoSEH),
-                    nameof(RuleResources.BA2018_Error)};
+                    nameof(RuleResources.BA2018_Error),
+                    nameof(RuleResources.SHARED_InvalidMetadata)
+                };
             }
         }
 
