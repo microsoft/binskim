@@ -43,7 +43,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return new string[] {
                     nameof(RuleResources.BA2011_Pass),                    
                     nameof(RuleResources.BA2011_Error),
-                    nameof(RuleResources.BA2011_Error_UnknownModuleLanguage)};
+                    nameof(RuleResources.BA2011_Error_UnknownModuleLanguage),
+                    nameof(RuleResources.SHARED_InvalidMetadata)
+                };
             }
         }
 

@@ -38,7 +38,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return new string[] {
                     nameof(RuleResources.BA2005_Pass),
                     nameof(RuleResources.BA2005_Error),
-                    nameof(RuleResources.BA2005_Error_CouldNotParseVersion)};
+                    nameof(RuleResources.BA2005_Error_CouldNotParseVersion),
+                    nameof(RuleResources.SHARED_InvalidMetadata)
+                };
             }
         }
 
