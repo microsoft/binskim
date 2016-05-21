@@ -356,4 +356,7 @@ Modules triggering this check were:
   <data name="BA2022_SignCorrectly_Description" xml:space="preserve">
     <value>Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.</value>
   </data>
+  <data name="NotApplicable_InvalidMetadata" xml:space="preserve">
+    <value>'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.</value>
+  </data>
 </root>

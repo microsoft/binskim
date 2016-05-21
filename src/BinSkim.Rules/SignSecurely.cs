@@ -41,7 +41,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2022_Pass),
                     nameof(RuleResources.BA2022_Error_BadSigningAlgorithm),
                     nameof(RuleResources.BA2022_Error_DidNotVerify),
-                    nameof(RuleResources.BA2022_Error_WinTrustVerifyApiError)};
+                    nameof(RuleResources.BA2022_Error_WinTrustVerifyApiError),
+                    nameof(RuleResources.NotApplicable_InvalidMetadata)
+                };
             }
         }
 

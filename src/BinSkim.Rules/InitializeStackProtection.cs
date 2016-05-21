@@ -49,7 +49,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2013_Pass),
                     nameof(RuleResources.BA2013_Pass_NoCode),
                     nameof(RuleResources.BA2013_NotApplicable_FeatureNotEnabled),
-                    nameof(RuleResources.BA2013_Error)};
+                    nameof(RuleResources.BA2013_Error),
+                    nameof(RuleResources.NotApplicable_InvalidMetadata)
+                };
             }
         }
 

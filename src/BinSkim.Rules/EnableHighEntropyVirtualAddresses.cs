@@ -44,7 +44,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2015_Pass),
                     nameof(RuleResources.BA2015_Error_NoHighEntropyVA),
                     nameof(RuleResources.BA2015_Error_NoLargeAddressAware),
-                    nameof(RuleResources.BA2015_Error_NeitherHighEntropyVANorLargeAddressAware)};
+                    nameof(RuleResources.BA2015_Error_NeitherHighEntropyVANorLargeAddressAware),
+                    nameof(RuleResources.NotApplicable_InvalidMetadata)
+                };
             }
         }
 

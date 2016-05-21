@@ -764,5 +764,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("BA2022_SignCorrectly_Description", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; as the analysis is not relevant based on observed metadata: {2}..
+        /// </summary>
+        internal static string NotApplicable_InvalidMetadata {
+            get {
+                return ResourceManager.GetString("NotApplicable_InvalidMetadata", resourceCulture);
+            }
+        }
     }
 }

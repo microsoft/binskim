@@ -45,7 +45,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2009_Pass),
                     nameof(RuleResources.BA2009_Error_NotDynamicBase),
                     nameof(RuleResources.BA2009_Error_RelocsStripped),
-                    nameof(RuleResources.BA2009_Error_WinCENoRelocationSection)};
+                    nameof(RuleResources.BA2009_Error_WinCENoRelocationSection),
+                    nameof(RuleResources.NotApplicable_InvalidMetadata)
+                };
             }
         }
 

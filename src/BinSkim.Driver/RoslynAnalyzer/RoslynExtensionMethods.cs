@@ -25,16 +25,15 @@ namespace Microsoft.CodeAnalysis.IL
             // TODO: review this decision
             rule.Name = diagnostic.GetType().Name;
 
-            rule.Properties = new Dictionary<string, string>();
-
             foreach (string tag in diagnosticDescriptor.CustomTags)
             {
-                rule.Properties[tag] = String.Empty;
+                rule.Tags.Add(tag);
             }
 
-            rule.Properties["Category"] = diagnosticDescriptor.Category;
-            rule.Properties["DefaultSeverity"] = diagnosticDescriptor.DefaultSeverity.ToString();
-            rule.Properties["IsEnabledByDefault"] = diagnosticDescriptor.IsEnabledByDefault.ToString();
+            rule.DefaultLevel = diagnosticDescriptor.DefaultSeverity.ConvertToResultLevel();
+
+            rule.SetProperty("Category", diagnosticDescriptor.Category);
+            rule.SetProperty("IsEnabledByDefault", diagnosticDescriptor.IsEnabledByDefault.ToString());
 
             rule.ShortDescription = diagnosticDescriptor.Title.ToString();
 
@@ -61,7 +60,7 @@ namespace Microsoft.CodeAnalysis.IL
             return region;
         }
 
-        public static ResultLevel ConvertToMessageKind(this DiagnosticSeverity severity)
+        public static ResultLevel ConvertToResultLevel(this DiagnosticSeverity severity)
         {
             switch (severity)
             {

@@ -42,7 +42,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2008_Pass),
-                    nameof(RuleResources.BA2008_Error)};
+                    nameof(RuleResources.BA2008_Error),
+                    nameof(RuleResources.NotApplicable_InvalidMetadata)
+                };
             }
         }
 
