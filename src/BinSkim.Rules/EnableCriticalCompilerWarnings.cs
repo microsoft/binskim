@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2007_Error_WarningsDisabled),
                     nameof(RuleResources.BA2007_Error_InsufficientWarningLevel),
                     nameof(RuleResources.BA2007_Error_UnknownModuleLanguage),
-                    nameof(RuleResources.SHARED_InvalidMetadata)
+                    nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
             }
         }

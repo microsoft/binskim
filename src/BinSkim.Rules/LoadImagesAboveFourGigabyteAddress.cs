@@ -49,7 +49,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return new string[] {
                     nameof(RuleResources.BA2001_Pass),
                     nameof(RuleResources.BA2001_Error),
-                    nameof(RuleResources.SHARED_InvalidMetadata)
+                    nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
             }
         }

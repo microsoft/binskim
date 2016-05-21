@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2018_Pass),
                     nameof(RuleResources.BA2018_Pass_NoSEH),
                     nameof(RuleResources.BA2018_Error),
-                    nameof(RuleResources.SHARED_InvalidMetadata)
+                    nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
             }
         }
