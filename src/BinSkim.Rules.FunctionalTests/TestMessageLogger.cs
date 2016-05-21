@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void LogConfigurationNotification(Notification notification)
         {
-            ConfigurationErrorTargets.Add(notification.AnalysisTarget.Uri.LocalPath);
+            ConfigurationErrorTargets.Add(notification.PhysicalLocation.Uri.LocalPath);
         }
     }
 }

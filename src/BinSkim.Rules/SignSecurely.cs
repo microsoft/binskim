@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2022_Error_BadSigningAlgorithm),
                     nameof(RuleResources.BA2022_Error_DidNotVerify),
                     nameof(RuleResources.BA2022_Error_WinTrustVerifyApiError),
-                    nameof(RuleResources.SHARED_InvalidMetadata)
+                    nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
             }
         }

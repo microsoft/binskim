@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2012_Error),
                     nameof(RuleResources.BA2012_Error_CouldNotLocateCookie),
                     nameof(RuleResources.BA2012_Warning_InvalidSecurityCookieOffset),
-                    nameof(RuleResources.SHARED_InvalidMetadata)
+                    nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
             }
         }

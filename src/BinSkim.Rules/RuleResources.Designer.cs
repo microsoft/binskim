@@ -768,9 +768,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; as the analysis is not relevant based on observed metadata: {2}..
         /// </summary>
-        internal static string SHARED_InvalidMetadata {
+        internal static string NotApplicable_InvalidMetadata {
             get {
-                return ResourceManager.GetString("SHARED_InvalidMetadata", resourceCulture);
+                return ResourceManager.GetString("NotApplicable_InvalidMetadata", resourceCulture);
             }
         }
     }

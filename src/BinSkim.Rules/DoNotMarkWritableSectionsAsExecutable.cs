@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2021_Pass),
                     nameof(RuleResources.BA2021_Error),
                     nameof(RuleResources.BA2021_Error_UnexpectedSectionAligment),
-                    nameof(RuleResources.SHARED_InvalidMetadata)
+                    nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
             }
         }

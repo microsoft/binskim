@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2006_Error_BadModule),
                     nameof(RuleResources.BA2006_Pass),
                     nameof(RuleResources.BA2006_Error),
-                    nameof(RuleResources.SHARED_InvalidMetadata)};
+                    nameof(RuleResources.NotApplicable_InvalidMetadata)};
             }
         }
 
