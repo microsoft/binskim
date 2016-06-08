@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Dia2Lib;
@@ -93,6 +94,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 DiaSource diaSource = new DiaSource();
                 Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
+
+                if (symbolPath == null)
+                {
+                    string pdbPath = Path.ChangeExtension(peOrPdbPath, ".pdb");
+                    if (File.Exists(pdbPath))
+                    {
+                        peOrPdbPath = pdbPath;
+                    }
+                }
 
                 // load the debug info depending on the file type
                 if (peOrPdbPath.EndsWith(".pdb", StringComparison.OrdinalIgnoreCase))
