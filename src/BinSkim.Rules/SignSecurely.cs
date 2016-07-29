@@ -342,7 +342,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 IntPtr[] chainElements = new IntPtr[certChain.cElement];
                 Marshal.Copy(certChain.rgpElement, chainElements, 0, chainElements.Length);
-                var certElement = (Native.CERT_CHAIN_ELEMENT)Marshal.PtrToStructure(chainElements[1], typeof(Native.CERT_CHAIN_ELEMENT));
+                var certElement = (Native.CERT_CHAIN_ELEMENT)Marshal.PtrToStructure(chainElements[0], typeof(Native.CERT_CHAIN_ELEMENT));
 
                 var certContext = (Native.CERT_CONTEXT)Marshal.PtrToStructure(certElement.pCertContext, typeof(Native.CERT_CONTEXT));
                 certInfo = (Native.CERT_INFO)Marshal.PtrToStructure(certContext.pCertInfo, typeof(Native.CERT_INFO));
