@@ -721,7 +721,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was signed using &apos;{1}&apos;, an algorithm that WinTrustVerify has flagged as insecure..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was signed using &apos;{1}&apos;, algorithm(s) that WinTrustVerify has flagged as insecure..
         /// </summary>
         internal static string BA2022_Error_BadSigningAlgorithm {
             get {
@@ -748,7 +748,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The image was signed with &apos;{1}&apos;, a cryptographically strong algorithm..
+        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The image was signed with &apos;{1}&apos;,  cryptographically strong algorithm(s)..
         /// </summary>
         internal static string BA2022_Pass {
             get {
