@@ -17,13 +17,8 @@ Run test.cmd at the root of the enlistment to ensure that all tests pass, and x6
 
 Getting Started as a User
 =========================
-Expand x64 or x86 version of tool from latest release
 
-*Latest stable Github x64 version:* [1.2.4-beta x64](https://github.com/Microsoft/binskim/releases/download/v1.2.4-beta/binskim.1.2.4-beta.x64.zip)
-
-*Latest stable Github x86 version:* [1.2.4-beta x86](https://github.com/michaelcfanning/binskim/releases/download/v1.2.4-beta/binskim.1.2.4-beta.x86.zip)
-
-Download from Nuget
+Download BinSkim from Nuget
 
 *Latest stable Nuget version:* [1.2.4-beta](https://www.nuget.org/packages/BinSkim/)
 
