@@ -241,6 +241,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 result.Add(Path.Combine(testFilesDirectory, "MixedMode_x64_VS2013_NoPdb.exe"));
                 result.Add(Path.Combine(testFilesDirectory, "MixedMode_x86_VS2013_MissingPdb.dll"));
             }
+
             if (metadataConditions.Contains(MetadataConditions.ImageIs64BitBinary))
             {
                 result.Add(Path.Combine(testFilesDirectory, "Native_x64_VS2013_Default.dll"));
@@ -272,12 +273,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 result.Add(Path.Combine(testFilesDirectory, "MixedMode_x64_VS2013_Default.dll"));
                 result.Add(Path.Combine(testFilesDirectory, "Native_x64_VS2013_Default.dll"));
+                result.Add(Path.Combine(testFilesDirectory, "Uwp_ARM_VS2015_DefaultBlankApp.dll"));
             }
 
             if (metadataConditions.Contains(MetadataConditions.ImageIsNot64BitBinary))
             {
                 result.Add(Path.Combine(testFilesDirectory, "Managed_x86_VS2013_Wpf.exe"));
                 result.Add(Path.Combine(testFilesDirectory, "Native_x86_VS2013_Default.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "Uwp_ARM_VS2015_DefaultBlankApp.dll"));
             }
 
             if (metadataConditions.Contains(MetadataConditions.ImageIsPreVersion7WindowsCEBinary))
@@ -294,6 +297,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (metadataConditions.Contains(MetadataConditions.ImageIsXBoxBinary))
             {
                 // TODO need test case
+            }
+
+            if (metadataConditions.Contains(MetadataConditions.ImageIsDotNetNativeBinary))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "Uwp_x86_VS2015_DefaultBlankApp.dll"));
+                result.Add(Path.Combine(testFilesDirectory, "Uwp_x64_VS2015_DefaultBlankApp.dll"));
+                result.Add(Path.Combine(testFilesDirectory, "Uwp_ARM_VS2015_DefaultBlankApp.dll"));
             }
 
             return result;
@@ -525,11 +535,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableStackProtection_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>();
-
-            notApplicableTo.Add(MetadataConditions.ImageIsILOnlyManagedAssembly);
-            notApplicableTo.Add(MetadataConditions.ImageIsResourceOnlyBinary);
-            notApplicableTo.Add(MetadataConditions.ImageIsXBoxBinary);
+            HashSet<string> notApplicableTo = GetNotApplicableBinariesForStackProtectionFeature();
 
             VerifyNotApplicable(new EnableStackProtection(), notApplicableTo);
         }
@@ -553,11 +559,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void InitializeStackProtection_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>();
-
-            notApplicableTo.Add(MetadataConditions.ImageIsILOnlyManagedAssembly);
-            notApplicableTo.Add(MetadataConditions.ImageIsResourceOnlyBinary);
-            notApplicableTo.Add(MetadataConditions.ImageIsXBoxBinary);
+            HashSet<string> notApplicableTo = GetNotApplicableBinariesForStackProtectionFeature();
 
             VerifyNotApplicable(new InitializeStackProtection(), notApplicableTo);
         }
@@ -577,13 +579,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotModifyStackProtectionCooke_NotApplicable()
         {
+            HashSet<string> notApplicableTo = GetNotApplicableBinariesForStackProtectionFeature();
+
+            VerifyNotApplicable(new DoNotModifyStackProtectionCookie(), notApplicableTo);
+        }
+
+        private static HashSet<string> GetNotApplicableBinariesForStackProtectionFeature()
+        {
             HashSet<string> notApplicableTo = new HashSet<string>();
 
             notApplicableTo.Add(MetadataConditions.ImageIsILOnlyManagedAssembly);
             notApplicableTo.Add(MetadataConditions.ImageIsResourceOnlyBinary);
             notApplicableTo.Add(MetadataConditions.ImageIsXBoxBinary);
-
-            VerifyNotApplicable(new DoNotModifyStackProtectionCookie(), notApplicableTo);
+            notApplicableTo.Add(MetadataConditions.ImageIsDotNetNativeBinary);
+            return notApplicableTo;
         }
 
         [Fact]
