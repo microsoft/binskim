@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "c44f233e-5951-4980-8721-14a886c87b60",
+      "id": "09fbdc8b-58cb-4e06-ae4f-0d0e22951f86",
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.3.3.0-beta",
-        "version": "1.3.3.0",
-        "semanticVersion": "1.3.3",
+        "fullName": "BinSkim 1.3.4.0-beta",
+        "version": "1.3.4.0",
+        "semanticVersion": "1.3.4",
         "sarifLoggerVersion": "1.5.22.0",
         "language": "en-US",
         "properties": {
@@ -26,7 +26,7 @@
             "arguments": [
               "MixedMode_x64_VS2013_Default.dll",
               "EnableControlFlowGuard",
-              "image was compiled with a toolset version (12.0) that is not sufficiently recent (14.0 or newer) to provide relevant settings."
+              "image was compiled with a tool set version (12.0) that is not sufficiently recent (14.0 or newer) to provide relevant settings."
             ]
           },
           "locations": [
@@ -344,7 +344,7 @@
           },
           "message": "Analyzing 'MixedMode_x64_VS2013_Default.dll'...",
           "level": "note",
-          "time": "2016-05-20T17:28:38.374Z"
+          "time": "2016-08-03T23:41:17.428Z"
         }
       ],
       "rules": {
@@ -504,8 +504,8 @@
           "shortDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms.",
           "fullDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.",
           "messageFormats": {
-            "Pass": "'{0}' appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The image was signed with '{1}', a cryptographically strong algorithm.",
-            "Error_BadSigningAlgorithm": "'{0}' was signed using '{1}', an algorithm that WinTrustVerify has flagged as insecure.",
+            "Pass": "'{0}' appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The image was signed with '{1}',  cryptographically strong algorithm(s).",
+            "Error_BadSigningAlgorithm": "'{0}' was signed using '{1}', algorithm(s) that WinTrustVerify has flagged as insecure.",
             "Error_DidNotVerify": "'{0}' signing was flagged as insecure by WinTrustVerify with error code '{1}' ({2})",
             "Error_WinTrustVerifyApiError": "'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'.",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
@@ -622,9 +622,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\MixedMode_x64_VS2013_Default.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\MixedMode_x64_VS2013_Default.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-05-20T17:28:38.195Z",
-        "endTime": "2016-05-20T17:28:38.884Z",
-        "processId": 9664,
+        "startTime": "2016-08-03T23:41:17.158Z",
+        "endTime": "2016-08-03T23:41:18.044Z",
+        "processId": 13112,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }
