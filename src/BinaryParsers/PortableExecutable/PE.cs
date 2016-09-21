@@ -93,8 +93,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 {
                     for (int i = 0; i < this.Imports.Length; i++)
                     {
-                        if (this.Imports[i].Equals("msrt100.dll", StringComparison.OrdinalIgnoreCase) ||
-                            this.Imports[i].Equals("msrt100_app.dll", StringComparison.OrdinalIgnoreCase))
+                        if (this.Imports[i].Equals("mrt100.dll", StringComparison.OrdinalIgnoreCase) ||
+                            this.Imports[i].Equals("mrt100_app.dll", StringComparison.OrdinalIgnoreCase))
                         {
                             return true;
                         }
@@ -330,26 +330,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-        public bool IsDotNetNative
-        {
-            get
-            {
-                if (this.Imports != null)
-                {
-                    for (int i = 0; i < this.Imports.Length; i++)
-                    {
-                        if (this.Imports[i].Equals("mrt100.dll", StringComparison.OrdinalIgnoreCase) ||
-                            this.Imports[i].Equals("mrt100_app.dll", StringComparison.OrdinalIgnoreCase))
-                        {
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
-            }
-        }
-        
         public Packer Packer
         {
             get

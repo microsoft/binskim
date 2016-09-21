@@ -90,14 +90,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 //your binaries as NX compatible, e.g. by passing / NXCOMPAT to the C / C++ linker.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.BA2016_Error)));
+                        nameof(RuleResources.BA2016_Error),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
             // '{0}' is marked as NX compatible.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                    nameof(RuleResources.BA2016_Pass)));
+                    nameof(RuleResources.BA2016_Pass),
+                        context.TargetUri.GetFileName()));
         }
     }
 }

@@ -106,7 +106,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems.
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                            nameof(RuleResources.BA2005_Error_CouldNotParseVersion)));
+                            nameof(RuleResources.BA2005_Error_CouldNotParseVersion),
+                            context.TargetUri.GetFileName()));
                     return;
                 }
 
@@ -120,6 +121,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                             nameof(RuleResources.BA2005_Error),
+                            context.TargetUri.GetFileName(),
                             sanitizedVersion.Value,
                             minimumVersion.ToString()));
                     return;
@@ -130,7 +132,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             //vulnerable to one or more security problems.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                    nameof(RuleResources.BA2005_Pass)));
+                    nameof(RuleResources.BA2005_Pass),
+                    context.TargetUri.GetFileName()));
         }
     }
 }

@@ -85,7 +85,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // an ngen'ed assembly) that is not subject to relevant security issues.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                        nameof(RuleResources.BA2012_Pass_NoLoadConfig)));
+                        nameof(RuleResources.BA2012_Pass_NoLoadConfig),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
@@ -108,7 +109,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // code.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                    nameof(RuleResources.BA2012_Pass)));
+                    nameof(RuleResources.BA2012_Pass), 
+                    context.TargetUri.GetFileName()));
         }
 
         private bool Validate64BitImage(BinaryAnalyzerContext context)
@@ -249,6 +251,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Warning, context, null,
                     nameof(RuleResources.BA2012_Warning_InvalidSecurityCookieOffset),
+                    context.TargetUri.GetFileName(),
                     context.PE.Packer.ToString()));
         }
 
@@ -260,6 +263,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Warning, context, null,
                     nameof(RuleResources.BA2012_Warning_InvalidSecurityCookieOffset),
+                    context.TargetUri.GetFileName(),
                     context.PE.Packer.ToString()));
         }
 
@@ -269,7 +273,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // but the security cookie could not be located. The binary may be corrupted.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                    nameof(RuleResources.BA2012_Error_CouldNotLocateCookie)));
+                    nameof(RuleResources.BA2012_Error_CouldNotLocateCookie),
+                    context.TargetUri.GetFileName()));
         }
 
         private void LogFailure(BinaryAnalyzerContext context, string cookie)
@@ -293,6 +298,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                     nameof(RuleResources.BA2012_Error),
+                    context.TargetUri.GetFileName(),
                     cookie));
         }
     }

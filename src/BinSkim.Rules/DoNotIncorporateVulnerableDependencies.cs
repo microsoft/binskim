@@ -164,6 +164,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                             nameof(RuleResources.BA2002_Error),
+                            context.TargetUri.GetFileName(),
                             descriptor.Name,
                             descriptor.VulnerabilityDescription,
                             descriptor.Resolution,
@@ -175,7 +176,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // '{0}' does not incorporate any known vulnerable dependencies, as configured by current policy.
             context.Logger.Log(this, 
                 RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                    nameof(RuleResources.BA2002_Pass)));
+                    nameof(RuleResources.BA2002_Pass),
+                    context.TargetUri.GetFileName()));
         }
 
         private static PropertiesDictionary BuildDefaultVulnerableDependenciesMap()

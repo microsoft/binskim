@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id { get { return RuleIds.BuildWithSecureToolsId; } }
 
         /// <summary>
-        /// Application code should be compiled with the most up-to-date tool sets possible
+        /// Application code should be compiled with the most up-to-date toolsets possible
         /// in order to take advantage of the most current compile-time security features.
         /// </summary>
         public override string FullDescription
@@ -184,6 +184,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                     nameof(RuleResources.BA2006_Error),
+                        context.TargetUri.GetFileName(),
                         minCompilerVersion.ToString(),
                         minLinkVersion.ToString(),
                         badModuleList.CreateSortedObjectList()));
@@ -195,7 +196,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                     nameof(RuleResources.BA2006_Pass),
-                        minCompilerVersion.ToString(), minLinkVersion.ToString()));
+                        context.TargetUri.GetFileName(),
+                        minCompilerVersion.ToString(), 
+                        minLinkVersion.ToString()));
         }
 
         public static Version Minimum(Version lhs, Version rhs)

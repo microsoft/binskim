@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "38f45240-fac0-4ac2-a66c-fc1586067171",
+      "id": "ea6d52a7-0ad0-4409-9394-7bf0f3eee67d",
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.3.5.0",
-        "version": "1.3.5.0",
-        "semanticVersion": "1.3.5",
-        "sarifLoggerVersion": "1.5.28.0",
+        "fullName": "BinSkim 1.3.6.0",
+        "version": "1.3.6.0",
+        "semanticVersion": "1.3.6",
+        "sarifLoggerVersion": "1.5.34.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -344,7 +344,7 @@
           },
           "message": "Analyzing 'Native_x86_VS2015_Default.exe'...",
           "level": "note",
-          "time": "2016-08-02T00:05:45.102Z"
+          "time": "2016-09-21T23:40:06.406Z"
         }
       ],
       "rules": {
@@ -622,9 +622,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2015_Default.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2015_Default.exe.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-08-02T00:05:44.917Z",
-        "endTime": "2016-08-02T00:05:45.283Z",
-        "processId": 48700,
+        "startTime": "2016-09-21T23:40:06.186Z",
+        "endTime": "2016-09-21T23:40:06.556Z",
+        "processId": 31592,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

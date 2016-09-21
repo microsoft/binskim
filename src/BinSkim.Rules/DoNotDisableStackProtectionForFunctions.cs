@@ -131,7 +131,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // than disabling the stack protector altogether.
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.BA2014_Error), 
+                        nameof(RuleResources.BA2014_Error),
+                        context.TargetUri.GetFileName(),
                         functionNames));
                 return;
             }
@@ -143,7 +144,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // memory corruption vulnerabilities.
             context.Logger.Log(this, 
                 RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                    nameof(RuleResources.BA2014_Pass)));
+                    nameof(RuleResources.BA2014_Pass),
+                    context.TargetUri.GetFileName()));
         }
     }
 }
