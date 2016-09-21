@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "1582c42f-4387-41f9-ba89-51789e6f34b1",
+      "id": "aa58925b-31a2-4e73-88cf-602d7da3c2c5",
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.3.4.0-beta",
-        "version": "1.3.4.0",
-        "semanticVersion": "1.3.4",
-        "sarifLoggerVersion": "1.5.22.0",
+        "fullName": "BinSkim 1.3.6.0",
+        "version": "1.3.6.0",
+        "semanticVersion": "1.3.6",
+        "sarifLoggerVersion": "1.5.34.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -26,7 +26,7 @@
             "arguments": [
               "Uwp_x64_VS2015_DefaultBlankApp.dll",
               "DoNotDisableStackProtectionForFunctions",
-              "image is a binary built by the .NET native tool set"
+              "image is a binary built by the .NET native toolset"
             ]
           },
           "locations": [
@@ -45,7 +45,7 @@
             "arguments": [
               "Uwp_x64_VS2015_DefaultBlankApp.dll",
               "DoNotModifyStackProtectionCookie",
-              "image is a binary built by the .NET native tool set"
+              "image is a binary built by the .NET native toolset"
             ]
           },
           "locations": [
@@ -64,7 +64,7 @@
             "arguments": [
               "Uwp_x64_VS2015_DefaultBlankApp.dll",
               "EnableControlFlowGuard",
-              "image was compiled with a tool set version (11.0) that is not sufficiently recent (14.0 or newer) to provide relevant settings."
+              "image was compiled with a toolset version (11.0) that is not sufficiently recent (14.0 or newer) to provide relevant settings."
             ]
           },
           "locations": [
@@ -83,7 +83,7 @@
             "arguments": [
               "Uwp_x64_VS2015_DefaultBlankApp.dll",
               "EnableStackProtection",
-              "image is a binary built by the .NET native tool set"
+              "image is a binary built by the .NET native toolset"
             ]
           },
           "locations": [
@@ -121,7 +121,7 @@
             "arguments": [
               "Uwp_x64_VS2015_DefaultBlankApp.dll",
               "InitializeStackProtection",
-              "image is a binary built by the .NET native tool set"
+              "image is a binary built by the .NET native toolset"
             ]
           },
           "locations": [
@@ -352,7 +352,7 @@
           },
           "message": "Analyzing 'Uwp_x64_VS2015_DefaultBlankApp.dll'...",
           "level": "note",
-          "time": "2016-08-03T23:41:23.623Z"
+          "time": "2016-09-21T23:40:00.617Z"
         }
       ],
       "rules": {
@@ -630,9 +630,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Uwp_x64_VS2015_DefaultBlankApp.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Uwp_x64_VS2015_DefaultBlankApp.dll.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-08-03T23:41:23.420Z",
-        "endTime": "2016-08-03T23:41:23.723Z",
-        "processId": 11196,
+        "startTime": "2016-09-21T23:40:00.396Z",
+        "endTime": "2016-09-21T23:40:00.709Z",
+        "processId": 31080,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

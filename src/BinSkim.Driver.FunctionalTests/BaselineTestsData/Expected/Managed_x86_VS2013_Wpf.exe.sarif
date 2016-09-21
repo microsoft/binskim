@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "54df012b-ec6a-40de-a7ff-251ca9f020c1",
+      "id": "32de0e3b-2208-4df7-8ba9-178fc3680dda",
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.3.5.0",
-        "version": "1.3.5.0",
-        "semanticVersion": "1.3.5",
-        "sarifLoggerVersion": "1.5.28.0",
+        "fullName": "BinSkim 1.3.6.0",
+        "version": "1.3.6.0",
+        "semanticVersion": "1.3.6",
+        "sarifLoggerVersion": "1.5.34.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -357,7 +357,7 @@
           },
           "message": "Analyzing 'Managed_x86_VS2013_Wpf.exe'...",
           "level": "note",
-          "time": "2016-08-02T00:05:40.706Z"
+          "time": "2016-09-21T23:40:02.250Z"
         }
       ],
       "rules": {
@@ -635,9 +635,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Managed_x86_VS2013_Wpf.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Managed_x86_VS2013_Wpf.exe.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-08-02T00:05:40.499Z",
-        "endTime": "2016-08-02T00:05:41.140Z",
-        "processId": 10796,
+        "startTime": "2016-09-21T23:40:02.006Z",
+        "endTime": "2016-09-21T23:40:02.670Z",
+        "processId": 21944,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

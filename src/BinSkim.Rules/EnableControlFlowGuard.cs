@@ -96,14 +96,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // /DYNAMICBASE linker option in order to enable CFG.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.BA2008_Error)));
+                        nameof(RuleResources.BA2008_Error),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
             // '{0}' enables the control flow guard mitigation.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                    nameof(RuleResources.BA2008_Pass)));
+                    nameof(RuleResources.BA2008_Pass),
+                        context.TargetUri.GetFileName()));
         }
 
         private bool EnablesControlFlowGuard(BinaryAnalyzerContext context)

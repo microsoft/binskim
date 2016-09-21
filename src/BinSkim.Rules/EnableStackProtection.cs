@@ -104,7 +104,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // exploit stack buffer overflow memory corruption vulnerabilities. 
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                        nameof(RuleResources.BA2011_Pass)));
+                        nameof(RuleResources.BA2011_Pass),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
@@ -116,6 +117,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2011_Error_UnknownModuleLanguage),
+                        context.TargetUri.GetFileName(),
                         unknownLanguageModules.CreateSortedObjectList()));
             }
 
@@ -130,6 +132,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2011_Error),
+                        context.TargetUri.GetFileName(),
                         noGsModules.ToString()));
             }
         }

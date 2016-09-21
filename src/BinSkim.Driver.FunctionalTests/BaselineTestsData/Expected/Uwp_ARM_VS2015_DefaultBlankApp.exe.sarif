@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "83b8720c-dae9-4169-a201-6e74145baeda",
+      "id": "be9b5e90-c82d-484b-99c0-1ef854f41496",
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.3.4.0-beta",
-        "version": "1.3.4.0",
-        "semanticVersion": "1.3.4",
-        "sarifLoggerVersion": "1.5.22.0",
+        "fullName": "BinSkim 1.3.6.0",
+        "version": "1.3.6.0",
+        "semanticVersion": "1.3.6",
+        "sarifLoggerVersion": "1.5.34.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -26,7 +26,7 @@
             "arguments": [
               "Uwp_ARM_VS2015_DefaultBlankApp.exe",
               "EnableControlFlowGuard",
-              "image was compiled with a tool set version (11.0) that is not sufficiently recent (14.0 or newer) to provide relevant settings."
+              "image was compiled with a toolset version (11.0) that is not sufficiently recent (14.0 or newer) to provide relevant settings."
             ]
           },
           "locations": [
@@ -346,7 +346,7 @@
           },
           "message": "Analyzing 'Uwp_ARM_VS2015_DefaultBlankApp.exe'...",
           "level": "note",
-          "time": "2016-08-03T23:41:31.941Z"
+          "time": "2016-09-21T23:40:07.036Z"
         }
       ],
       "rules": {
@@ -624,9 +624,9 @@
       },
       "invocation": {
         "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Uwp_ARM_VS2015_DefaultBlankApp.exe --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Uwp_ARM_VS2015_DefaultBlankApp.exe.sarif.temp --verbose --hashes --config default",
-        "startTime": "2016-08-03T23:41:31.689Z",
-        "endTime": "2016-08-03T23:41:32.080Z",
-        "processId": 11004,
+        "startTime": "2016-09-21T23:40:06.815Z",
+        "endTime": "2016-09-21T23:40:07.165Z",
+        "processId": 28408,
         "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
         "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }

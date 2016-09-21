@@ -79,7 +79,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code.
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                        nameof(RuleResources.BA2013_Pass_NoCode)));
+                        nameof(RuleResources.BA2013_Pass_NoCode),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
@@ -96,7 +97,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // security feature. It is therefore not required to initialize the stack protector.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.NotApplicable, context, null,
-                        nameof(RuleResources.BA2013_NotApplicable_FeatureNotEnabled)));
+                        nameof(RuleResources.BA2013_NotApplicable_FeatureNotEnabled),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
@@ -115,7 +117,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // __security_init_cookie() manually in your custom entry point.
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.BA2013_Error)));
+                        nameof(RuleResources.BA2013_Error),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
@@ -125,7 +128,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // spurious detections.
             context.Logger.Log(this, 
                 RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                   nameof(RuleResources.BA2013_Pass)));
+                   nameof(RuleResources.BA2013_Pass),
+                        context.TargetUri.GetFileName()));
         }
     }
 }

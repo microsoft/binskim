@@ -86,7 +86,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // Image '{0}' contains no data or code sections marked as both shared and writable.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                        nameof(RuleResources.BA2019_Pass)));
+                        nameof(RuleResources.BA2019_Pass),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
@@ -104,6 +105,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                     nameof(RuleResources.BA2019_Error),
+                    context.TargetUri.GetFileName(),
                     badSectionsText));
         }
     }

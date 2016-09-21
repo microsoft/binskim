@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features..
+        ///   Looks up a localized string similar to Application code should be compiled with the most up-to-date toolsets possible to take advantage of the most current compile-time security features..
         /// </summary>
         internal static string BA2006_BuildWithSecureTools_Description {
             get {

@@ -81,7 +81,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // attacker-controlled shellcode.	
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                        nameof(RuleResources.BA2018_Pass_NoSEH)));
+                        nameof(RuleResources.BA2018_Pass_NoSEH),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
@@ -102,6 +103,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2018_Error),
+                        context.TargetUri.GetFileName(),
                         RuleResources.BA2018_Error_NoLoadConfigurationTable));
                 return;
             }
@@ -119,6 +121,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2018_Error),
+                        context.TargetUri.GetFileName(),
                         RuleResources.BA2018_Error_LoadConfigurationIsTooSmall,
                         seHandlerSizeText));
                 return;
@@ -151,7 +154,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // as the /SafeSEH flag is invalid when linking for ARM and x64.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.BA2018_Error), 
+                        nameof(RuleResources.BA2018_Error),
+                        context.TargetUri.GetFileName(),
                         failureKind));
                 return;
             }
@@ -160,7 +164,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // jump targets are defined as exception handlers in the program (and not shellcode).
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                    nameof(RuleResources.BA2018_Pass)));
+                    nameof(RuleResources.BA2018_Pass),
+                        context.TargetUri.GetFileName()));
         }
     }
 }

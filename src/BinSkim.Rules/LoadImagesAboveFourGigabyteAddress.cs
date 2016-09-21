@@ -97,14 +97,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // for 32-bit binaries.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.BA2001_Error)));
+                        nameof(RuleResources.BA2001_Error),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
             // '{0}' is marked as NX compatible.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                    nameof(RuleResources.BA2001_Pass)));
+                    nameof(RuleResources.BA2001_Pass),
+                        context.TargetUri.GetFileName()));
         }
     }
 }

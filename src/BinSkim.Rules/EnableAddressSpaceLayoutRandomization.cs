@@ -83,7 +83,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // with Visual Studio 2008 or later.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.BA2009_Error_NotDynamicBase)));
+                        nameof(RuleResources.BA2009_Error_NotDynamicBase),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
@@ -95,7 +96,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // from the image, preventing address space layout randomization. 
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.BA2009_Error_RelocsStripped)));
+                        nameof(RuleResources.BA2009_Error_RelocsStripped),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
@@ -125,7 +127,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // address space layout randomization.	
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                            nameof(RuleResources.BA2009_Error_WinCENoRelocationSection)));
+                            nameof(RuleResources.BA2009_Error_WinCENoRelocationSection),
+                        context.TargetUri.GetFileName()));
                     return;
                 }
             }
@@ -133,7 +136,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             //'{0}' is properly compiled to enable address space layout randomization.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                    nameof(RuleResources.BA2009_Pass)));
+                    nameof(RuleResources.BA2009_Pass),
+                        context.TargetUri.GetFileName()));
         }
     }
 }

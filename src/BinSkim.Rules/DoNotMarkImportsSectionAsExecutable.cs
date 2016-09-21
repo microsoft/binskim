@@ -105,14 +105,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // section.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.BA2010_Error)));
+                        nameof(RuleResources.BA2010_Error),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
             // '{0}' does not have an imports section that is marked as executable.
             context.Logger.Log(this, 
                 RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                    nameof(RuleResources.BA2010_Pass)));
+                    nameof(RuleResources.BA2010_Pass), 
+                    context.TargetUri.GetFileName()));
         }
     }
 }

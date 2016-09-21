@@ -10,3 +10,6 @@
 * Fix false positives in 'sign securely' analysis for multi-signed binaries
 * Eliminate noise in stack protection analysis against .NET native binaries
 * Update Sarif dependency to 1.5.28
+
+## **v1.3.6** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.3.6
+* Update Sarif dependency to 1.5.34

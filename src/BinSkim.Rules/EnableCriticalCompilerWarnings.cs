@@ -195,7 +195,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // other security-related vulnerabilities do not exist in code.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                        nameof(RuleResources.BA2007_Pass), 
+                        nameof(RuleResources.BA2007_Pass),
+                        context.TargetUri.GetFileName(),
                         overallMinimumWarningLevel.ToString()));
                 return;
             }
@@ -208,6 +209,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_UnknownModuleLanguage),
+                        context.TargetUri.GetFileName(),
                         unknownLanguageModules.CreateSortedObjectList()));
             }
 
@@ -224,6 +226,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_InsufficientWarningLevel),
+                        context.TargetUri.GetFileName(),
                         overallMinimumWarningLevel.ToString(),
                         exampleTooLowWarningCommandLine,
                         warningTooLowModules.CreateTruncatedObjectList()));
@@ -243,6 +246,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_WarningsDisabled),
+                        context.TargetUri.GetFileName(),
                         exampleDisabledWarningCommandLine,
                         disabledWarningModules.CreateTruncatedObjectList()));
             }

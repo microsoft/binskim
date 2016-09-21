@@ -124,13 +124,13 @@
     <value>an exception occurred attempting to load its pdb</value>
   </data>
   <data name="MetadataCondition_ImageCompiledWithOutdatedTools" xml:space="preserve">
-    <value>image was compiled with a tool set version ({0}) that is not sufficiently recent ({1} or newer) to provide relevant settings.</value>
+    <value>image was compiled with a toolset version ({0}) that is not sufficiently recent ({1} or newer) to provide relevant settings.</value>
   </data>
   <data name="MetadataCondition_ImageIs64BitBinary" xml:space="preserve">
     <value>image is a 64-bit binary</value>
   </data>
   <data name="MetadataCondition_ImageIsDotNetNativeBinary" xml:space="preserve">
-    <value>image is a binary built by the .NET native tool set</value>
+    <value>image is a binary built by the .NET native toolset</value>
   </data>
   <data name="MetadataCondition_ImageIsILOnlyManagedAssembly" xml:space="preserve">
     <value>image is an IL-only managed assembly</value>

@@ -93,7 +93,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // as /LARGEADDRESSAWARE to the C or C++ linker command line.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.BA2015_Error_NeitherHighEntropyVANorLargeAddressAware)));
+                        nameof(RuleResources.BA2015_Error_NeitherHighEntropyVANorLargeAddressAware),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
@@ -107,7 +108,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // compiled as /LARGEADDRESSAWARE.)
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.BA2015_Error_NoHighEntropyVA)));
+                        nameof(RuleResources.BA2015_Error_NoHighEntropyVA),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
@@ -121,14 +123,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // compiled as /HIGHENTROPYVA.)
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.BA2015_Error_NoLargeAddressAware)));
+                        nameof(RuleResources.BA2015_Error_NoLargeAddressAware),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
             //'{0}' is high entropy ASLR compatible.
             context.Logger.Log(this, 
                 RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                    nameof(RuleResources.BA2015_Pass)));
+                    nameof(RuleResources.BA2015_Pass),
+                        context.TargetUri.GetFileName()));
         }
     }
 }

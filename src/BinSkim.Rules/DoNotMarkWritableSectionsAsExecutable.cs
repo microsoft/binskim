@@ -74,6 +74,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.BA2021_Error),
+                        context.TargetUri.GetFileName(),
                         context.PE.FileName,
                         "0x" + peHeader.SectionAlignment.ToString("x"),
                         "0x" + PAGE_SIZE.ToString("x")));
@@ -102,7 +103,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' contains no data or code sections marked as both shared and executable.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                        nameof(RuleResources.BA2021_Pass)));
+                        nameof(RuleResources.BA2021_Pass),
+                        context.TargetUri.GetFileName()));
                 return;
             }
 
@@ -119,6 +121,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                     nameof(RuleResources.BA2021_Error),
+                    context.TargetUri.GetFileName(),
                     badSectionsText));
         }
     }
