@@ -30,6 +30,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsXBoxBinary;
             if (portableExecutable.IsXBox) { return result; }
 
+            // .NET native compiled binaries are not fully /GS enabled. This is 
+            // considered reasonable, as the binaries themselves consist strictly
+            // of cross-compiled MSIL. The supporting native libraries for these
+            // applications exists in a separate (/GS enabled) native dll. 
+            reasonForNotAnalyzing = MetadataConditions.ImageIsDotNetNativeBinary;
+            if (portableExecutable.IsDotNetNative) { return result; }
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
