@@ -14,3 +14,4 @@ src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Actual/
 .local/
 *.user
 *.log
+*.sdf

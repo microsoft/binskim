@@ -6,11 +6,11 @@ using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    internal class VulnerableDependencyDescriptor : PropertyBag
+    internal class VulnerableDependencyDescriptor : PropertiesDictionary
     {
-        private static PerLanguageOption<StringSet> s_fileHashes { get; } =
-            new PerLanguageOption<StringSet>(
-                nameof(VulnerableDependencyDescriptor), nameof(FileHashes), defaultValue: () => { return new StringSet(); });
+        private static PerLanguageOption<StringSetCollection> s_fileHashes { get; } =
+            new PerLanguageOption<StringSetCollection>(
+                nameof(VulnerableDependencyDescriptor), nameof(FileHashes), defaultValue: () => { return new StringSetCollection(); });
 
         private static PerLanguageOption<string> s_id { get; } =
             new PerLanguageOption<string>(
@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<string>(
                 nameof(VulnerableDependencyDescriptor), nameof(Resolution), defaultValue: () => { return String.Empty; });
 
-        public StringSet FileHashes
+        public StringSetCollection FileHashes
         {
             get { return GetProperty(s_fileHashes); }
         }

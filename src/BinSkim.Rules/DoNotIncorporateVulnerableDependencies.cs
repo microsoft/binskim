@@ -54,8 +54,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private const string AnalyzerName = RuleIds.DoNotIncorporateVulnerableDependenciesId + "." + nameof(DoNotIncorporateVulnerableDependencies);
 
-        public static PerLanguageOption<PropertyBag> VulnerableDependencies { get; } =
-            new PerLanguageOption<PropertyBag>(
+        public static PerLanguageOption<PropertiesDictionary> VulnerableDependencies { get; } =
+            new PerLanguageOption<PropertiesDictionary>(
                 AnalyzerName, nameof(VulnerableDependencies), defaultValue: () => { return BuildDefaultVulnerableDependenciesMap(); });
 
         private HashSet<string> _files;
@@ -178,9 +178,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2002_Pass)));
         }
 
-        private static PropertyBag BuildDefaultVulnerableDependenciesMap()
+        private static PropertiesDictionary BuildDefaultVulnerableDependenciesMap()
         {
-            var result = new PropertyBag();
+            var result = new PropertiesDictionary();
 
             var vulnerabilityDescriptor = new VulnerableDependencyDescriptor();
 

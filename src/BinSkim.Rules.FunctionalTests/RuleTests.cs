@@ -74,11 +74,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var context = new BinaryAnalyzerContext();
             var logger = new TestMessageLogger();
             context.Logger = logger;
-            PropertyBag policy = null;
+            PropertiesDictionary policy = null;
 
             if (useDefaultPolicy)
             {
-                policy = new PropertyBag();
+                policy = new PropertiesDictionary();
             }
             context.Policy = policy;
 
@@ -151,7 +151,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Assert.Equal(0, other.Count);
         }
 
-        private BinaryAnalyzerContext CreateContext(TestMessageLogger logger, PropertyBag policy, string target)
+        private BinaryAnalyzerContext CreateContext(TestMessageLogger logger, PropertiesDictionary policy, string target)
         {
             var context = new BinaryAnalyzerContext();
             context.Logger = logger;

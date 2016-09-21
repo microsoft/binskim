@@ -126,7 +126,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public Version MinimumSupportedCompilerVersion { get; internal set; }
 
-        public PropertyBag Policy { get; set; }
+        public PropertiesDictionary Policy { get; set; }
 
         public string MimeType
         {

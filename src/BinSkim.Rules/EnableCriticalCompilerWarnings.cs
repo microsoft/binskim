@@ -70,8 +70,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// Enable namespace import optimization.
         /// </summary>
-        public static PerLanguageOption<IntegerSet> RequiredCompilerWarnings { get; } =
-            new PerLanguageOption<IntegerSet>(
+        public static PerLanguageOption<IntegerSetCollection> RequiredCompilerWarnings { get; } =
+            new PerLanguageOption<IntegerSetCollection>(
                 AnalyzerName, nameof(RequiredCompilerWarnings), defaultValue: () => { return BuildRequiredCompilerWarningsSet(); });
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
@@ -281,9 +281,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
         }
-        private static IntegerSet BuildRequiredCompilerWarningsSet()
+        private static IntegerSetCollection BuildRequiredCompilerWarningsSet()
         {
-            var result = new IntegerSet();
+            var result = new IntegerSetCollection();
             result.Add(4018);
             result.Add(4146);
             result.Add(4244);

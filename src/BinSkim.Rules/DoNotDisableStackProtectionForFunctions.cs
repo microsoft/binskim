@@ -61,16 +61,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private const string AnalyzerName = RuleIds.DoNotDisableStackProtectionForFunctionsId + "." + nameof(DoNotDisableStackProtectionForFunctions);
 
-        private static StringSet BuildApprovedFunctionsStringSet()
+        private static StringSetCollection BuildApprovedFunctionsStringSet()
         {
-            var result = new StringSet();
+            var result = new StringSetCollection();
             result.Add("_TlgWrite");
             return result;
         }
 
-        public static PerLanguageOption<StringSet> ApprovedFunctionsThatDisableStackProtection { get; } =
-            new PerLanguageOption<StringSet>(
-                AnalyzerName, nameof(StringSet), defaultValue: () => { return BuildApprovedFunctionsStringSet(); });
+        public static PerLanguageOption<StringSetCollection> ApprovedFunctionsThatDisableStackProtection { get; } =
+            new PerLanguageOption<StringSetCollection>(
+                AnalyzerName, nameof(StringSetCollection), defaultValue: () => { return BuildApprovedFunctionsStringSet(); });
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {

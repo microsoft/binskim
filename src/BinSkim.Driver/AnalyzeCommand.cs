@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 Pdb.SymbolPath = analyzeOptions.SymbolsPath;
             }
-            _plugInFilePaths = analyzeOptions.PlugInFilePaths;
+            _plugInFilePaths = analyzeOptions.PluginFilePaths;
         }
 
         protected override void AnalyzeTarget(IEnumerable<ISkimmer<BinaryAnalyzerContext>> skimmers, BinaryAnalyzerContext context, HashSet<string> disabledSkimmers)
@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.IL
                         action: () => { ILDiagnosticsAnalyzer.LoadAnalyzer(analyzerFilePath, _globalRoslynAnalysisContext); },
                         exceptionHandler: (ex) =>
                         {
-                            Errors.LogExceptionLoadingPlugIn(analyzerFilePath, context, ex);
+                            Errors.LogExceptionLoadingPlugin(analyzerFilePath, context, ex);
                         }
                     );
                 }

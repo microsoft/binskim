@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     // TODO: move into driver utilities?
-    public class StringToVersionMap : TypedPropertyBag<Version>
+    public class StringToVersionMap : TypedPropertiesDictionary<Version>
     {
     }
 }
