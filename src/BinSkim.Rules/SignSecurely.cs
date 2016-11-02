@@ -260,17 +260,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        private CryptoError WinVerifyTrustHelper(IntPtr handle, ref Native.WINTRUST_DATA winTrustData)
-        {
-            Guid action;
-            CryptoError cryptoError;
-
-            action = Native.ActionGenericVerifyV2;
-            cryptoError = (CryptoError)Native.WinVerifyTrust(handle, ref action, ref winTrustData);
-
-            return cryptoError;
-        }
-
         private static Dictionary<string, string> s_idToAlgorithmMap = BuildIdToAlgorithmMap();
 
         private static Dictionary<string, string> BuildIdToAlgorithmMap()
