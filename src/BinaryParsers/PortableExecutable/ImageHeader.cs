@@ -22,12 +22,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public object GetField(int n)
         {
-            object res = null;
+            object res;
             ImageFieldData fi = GetFieldInfo(n);
             int count = fi.Count;
             int offset = GetFieldOffset(n); ;
-            Object o = null;
-            int len = 0;
+            Object o;
+            int len;
 
             SafePointer sp = m_pHeader + offset;
 
@@ -75,8 +75,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             ImageFieldData fi = GetFieldInfo(n);
             int count = fi.Count;
             int padding = fi.PadTo;
-            int size = 0;
-            int len = 0;
+            int size;
+            int len;
 
 
             if (fi.VarLen)

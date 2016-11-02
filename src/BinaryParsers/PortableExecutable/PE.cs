@@ -178,7 +178,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             if (ish.VirtualAddress == 0) throw new InvalidOperationException("RVA does not belong to any section");
 
             // calculate the VA
-            rva.Address = (int)(rva.Address - ish.VirtualAddress + ish.PointerToRawData);
+            rva.Address = (rva.Address - ish.VirtualAddress + ish.PointerToRawData);
 
             return rva;
         }
@@ -305,10 +305,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 if (_versionDetails == null)
                 {
-                    System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.GetFullPath(FileName));
-
-                    _versionDetails = RemoveUnprintableChars(fvi.ToString());
-                    _version = RemoveUnprintableChars(fvi.FileVersion);
+                    UpdateVersionInformation();
                 }
 
                 return _versionDetails;
@@ -324,10 +321,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 if (_version == null)
                 {
-                    string s = FileVersionDetails;
+                    UpdateVersionInformation();
                 }
                 return _version;
             }
+        }
+    
+        private void UpdateVersionInformation()
+        {
+            System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.GetFullPath(FileName));
+
+            _versionDetails = RemoveUnprintableChars(fvi.ToString());
+            _version = RemoveUnprintableChars(fvi.FileVersion);
         }
 
         public Packer Packer
@@ -390,22 +395,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 if (IsILOnly)
                 {
-                    return IsManagedResourceOnly;
+                    _isResourceOnly = IsManagedResourceOnly;
+                    return _isResourceOnly.Value;
                 }
 
                 PEHeader peHeader = PEHeaders.PEHeader;
                 if (peHeader == null)
                 {
-                    return false;
+                    _isResourceOnly = false;
+                    return _isResourceOnly.Value;
                 }
 
                 // IMAGE_DIRECTORY_ENTRY_RESOURCE = 2;
                 if (peHeader.ResourceTableDirectory.RelativeVirtualAddress == 0)
                 {
-                    return false;
+                    _isResourceOnly = false;
+                    return _isResourceOnly.Value;
                 }
 
-                return (peHeader.ThreadLocalStorageTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_TLS = 9;
+                _isResourceOnly = 
+                       (peHeader.ThreadLocalStorageTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_TLS = 9;
                         peHeader.ImportAddressTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_IAT = 12;
                         peHeader.GlobalPointerTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_GLOBALPTR = 8;
                         peHeader.DelayImportTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT = 13;
@@ -416,6 +425,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                         peHeader.CorHeaderTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR 14
                         peHeader.ExportTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_EXPORT = 0;
                         peHeader.ImportTableDirectory.RelativeVirtualAddress == 0); // IMAGE_DIRECTORY_ENTRY_IMPORT = 1;                                                
+
+                return _isResourceOnly.Value;
 
                 // These are explicitly ignored. Debug info is sometimes present in resource
                 // only binaries. We've seen cases where help resource-only DLLs had a bogus
@@ -629,23 +640,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
 
             return sb.ToString();
-        }
-
-        /// <summary>
-        /// Counts the number of bits set in a 64bit value.
-        /// </summary>
-        /// <param name="data">Input value</param>
-        /// <returns>The count of bits set.</returns>
-        private static int CountBitSet(UInt64 data)
-        {
-            UInt64 output = data;
-            output = (output & 0x5555555555555555) + ((output & 0xAAAAAAAAAAAAAAAA) >> 1);
-            output = (output & 0x3333333333333333) + ((output & 0xCCCCCCCCCCCCCCCC) >> 2);
-            output = (output & 0x0F0F0F0F0F0F0F0F) + ((output & 0xF0F0F0F0F0F0F0F0) >> 4);
-            output = (output & 0x00FF00FF00FF00FF) + ((output & 0xFF00FF00FF00FF00) >> 8);
-            output = (output & 0x0000FFFF0000FFFF) + ((output & 0xFFFF0000FFFF0000) >> 16);
-            output = (output & 0x00000000FFFFFFFF) + ((output & 0xFFFFFFFF00000000) >> 32);
-            return (int)output;
         }
     }
 }

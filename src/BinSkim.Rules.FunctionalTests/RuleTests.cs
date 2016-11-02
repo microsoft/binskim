@@ -119,15 +119,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
                 bool missingEntirely = !other.Contains(target);
 
-                if (missingEntirely && !expectToPass && target.Contains("Pdb"))
+                if (missingEntirely &&
+                    !expectToPass &&
+                    target.Contains("Pdb") &&
+                    configErrors.Contains(target))
                 {
-                    // Missing pdbs provoke configuration errors;
-                    if (configErrors.Contains(target))
-                    {
-                        missingEntirely = false;
-                        configErrors.Remove(target);
-                        continue;
-                    }
+                    missingEntirely = false;
+                    configErrors.Remove(target);
+                    continue;
                 }
 
                 if (missingEntirely)
