@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // 2020 open. Previously for 'do not use vb6' check
 
         public const string DoNotMarkWritableSectionsAsExecutableId = "BA2021";
-
         public const string SignCorrectly = "BA2022";
+        public const string DoNotMarkImportsSectionAsWritableId = "BA2023";
     }
 }
