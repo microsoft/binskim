@@ -255,7 +255,7 @@ Modules triggering this check were:
     <value>Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.</value>
   </data>
   <data name="BA2013_NotApplicable_FeatureNotEnabled" xml:space="preserve">
-    <value>'{0}' is a C or C++ binary that does enable the stack protection buffer security feature. It is therefore not required to initialize the stack protector.</value>
+    <value>'{0}' is a C or C++ binary that does not enable the stack protection buffer security feature. It is therefore not required to initialize the stack protector.</value>
   </data>
   <data name="BA2013_Pass" xml:space="preserve">
     <value>'{0}' is a C or C++ binary built with the buffer security feature that properly initializes the stack protecter. This has the effect of increasing the effectiveness of the feature and reducing spurious detections.</value>
