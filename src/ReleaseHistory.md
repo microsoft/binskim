@@ -14,3 +14,8 @@
 ## **v1.3.6** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.3.6
 * Update Sarif dependency to 1.5.36
 * Improves output in error cases
+
+## **v1.3.7** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.3.7
+* Update Sarif dependency to 1.5.38
+* --config argument no longer required
+* More incidental reporting improvements
