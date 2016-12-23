@@ -65,7 +65,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             // https://msdn.microsoft.com/en-us/library/thxezb7y.aspx
             //
 
-            this.Raw = commandLine;
+            this.Raw = commandLine ?? "";
             this.WarningLevel = 0;
             this.WarningsAsErrors = false;
             var explicitWarnings = new Dictionary<int, WarningState>();

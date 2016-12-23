@@ -111,6 +111,27 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
         }
 
+        Nullable<WellKnownCompilers> _wellKnownCompiler;
+        public WellKnownCompilers WellKnownCompiler
+        {
+            get
+            {
+                if (!_wellKnownCompiler.HasValue) { ComputeWellKnownCompilerValue(); }
+                return _wellKnownCompiler.Value;
+            }
+        }
+
+        private void ComputeWellKnownCompilerValue()
+        {
+            _wellKnownCompiler = WellKnownCompilers.Unknown;
+
+            if ((this.Language == Language.C) || (this.Language == Language.Cxx) &&
+                this.Compiler == "Microsoft (R) Optimizing Compiler")
+            {
+                _wellKnownCompiler = WellKnownCompilers.MicrosoftNativeCompiler;
+            }
+        }
+
         public bool HasSecurityChecks
         {
             get
@@ -148,5 +169,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         MSIL,
         HLSL,
         Unknown
+    }
+
+    [Flags]
+    public enum WellKnownCompilers
+    {
+        Unknown,
+        MicrosoftNativeCompiler = 0x1
     }
 }

@@ -94,6 +94,7 @@ namespace Microsoft.CodeAnalysis.IL
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.PdbParseException'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.ObjectModuleDetails'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Language'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.WellKnownCompilers'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.SourceFile'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.HashType'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Symbol.<CreateChildrenImpl>d__52'",
