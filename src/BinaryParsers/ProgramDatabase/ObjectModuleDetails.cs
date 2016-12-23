@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             _wellKnownCompiler = WellKnownCompilers.Unknown;
 
-            if ((this.Language == Language.C) || (this.Language == Language.Cxx) &&
+            if ((this.Language == Language.C || this.Language == Language.Cxx) &&
                 this.Compiler == "Microsoft (R) Optimizing Compiler")
             {
                 _wellKnownCompiler = WellKnownCompilers.MicrosoftNativeCompiler;
