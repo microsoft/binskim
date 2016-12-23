@@ -406,7 +406,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 break; // For now we only look at the first compiland details record
             }
 
-            string commandLine = String.Empty;
+            string commandLine = null;
             foreach (DisposableEnumerableView<Symbol> compilandEnv in this.CreateChildIterator(SymTagEnum.SymTagCompilandEnv))
             {
                 Symbol env = compilandEnv.Value;

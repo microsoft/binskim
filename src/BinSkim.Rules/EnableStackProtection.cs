@@ -71,9 +71,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
-                ObjectModuleDetails details = om.GetObjectModuleDetails();
+                ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                if (details.Language == Language.Unknown)
+                // Detection applies to C/C++ produced by MS compiler only
+                if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftNativeCompiler)
+                {
+                    continue;
+                }
+
+                if (omDetails.Language == Language.Unknown)
                 {
                     // See if this module contributed to an executable section. 
                     // If not, we can ignore the module.
@@ -84,14 +90,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
-                // Detection applies to C/C++ produced by MS compiler only
-                if ((details.Language != Language.C) && (details.Language != Language.Cxx) ||
-                     details.Compiler != "Microsoft (R) Optimizing Compiler")
-                {
-                    continue;
-                }
-
-                if (!details.HasSecurityChecks && om.CreateChildIterator(SymTagEnum.SymTagFunction).Any())
+                if (!omDetails.HasSecurityChecks && om.CreateChildIterator(SymTagEnum.SymTagFunction).Any())
                 {
                     noGsModules.Add(om.CreateCompilandRecord());
                 }

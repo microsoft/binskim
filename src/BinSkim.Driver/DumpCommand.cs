@@ -23,10 +23,10 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 if (Directory.Exists(specifier))
                 {
-                    var fileSpecifier = new FileSpecifier(specifier, recurse: dumpOptions.Recurse, filter: "*.dll");
+                    var fileSpecifier = new FileSpecifier(specifier + ".dll", recurse: dumpOptions.Recurse);
                     targets.AddRange(fileSpecifier.Files);
 
-                    fileSpecifier = new FileSpecifier(specifier, recurse: dumpOptions.Recurse, filter: "*.exe");
+                    fileSpecifier = new FileSpecifier(specifier + ".exe", recurse: dumpOptions.Recurse);
                     targets.AddRange(fileSpecifier.Files);
                 }
                 else
