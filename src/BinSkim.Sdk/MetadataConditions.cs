@@ -11,13 +11,14 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageIs64BitBinary = SdkResources.MetadataCondition_ImageIs64BitBinary;
         public static readonly string ImageIsNot32BitBinary = SdkResources.MetadataCondition_ImageIsNot32BitBinary;
         public static readonly string ImageIsNot64BitBinary = SdkResources.MetadataCondition_ImageIsNot64BitBinary;
+        public static readonly string ImageIsMixedModeBinary = SdkResources.MetadataCondition_ImageIsMixedModeBinary;
         public static readonly string ImageIsKernelModeBinary = SdkResources.MetadataCondition_ImageIsKernelModeBinary;
         public static readonly string ImageIsResourceOnlyBinary = SdkResources.MetadataCondition_ImageIsResourceOnlyBinary;
         public static readonly string ImageIsDotNetNativeBinary = SdkResources.MetadataCondition_ImageIsDotNetNativeBinary;
         public static readonly string ImageIsILOnlyManagedAssembly = SdkResources.MetadataCondition_ImageIsILOnlyManagedAssembly;
         public static readonly string ImageIsManagedInteropAssembly = SdkResources.MetadataCondition_ImageIsManagedInteropAssembly;
-        public static readonly string ImageIsPreVersion7WindowsCEBinary = SdkResources.MetadataCondition_ImageIsPreV7WindowsCEBinary;
         public static readonly string ImageCompiledWithOutdatedTools = SdkResources.MetadataCondition_ImageCompiledWithOutdatedTools;
+        public static readonly string ImageIsPreVersion7WindowsCEBinary = SdkResources.MetadataCondition_ImageIsPreVersion7WindowsCEBinary;
         public static readonly string ImageIsManagedResourceOnlyAssembly = SdkResources.MetadataCondition_ImageIsManagedResourceOnlyAssembly;
     }
 }

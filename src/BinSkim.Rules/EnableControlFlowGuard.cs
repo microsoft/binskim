@@ -69,6 +69,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyManagedAssembly;
             if (portableExecutable.IsILOnly) { return result; }
 
+            reasonForNotAnalyzing = MetadataConditions.ImageIsMixedModeBinary;
+            if (portableExecutable.IsMixedMode) { return result; }
+
             if (portableExecutable.LinkerVersion < MinimumSupportedLinkerVersion)
             {
                 reasonForNotAnalyzing = string.Format(

@@ -46,14 +46,12 @@ function Build-Baselines($sourceExtension)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\\r\\n   at [^""]+", "", [Text.RegularExpressions.RegexOptions]::Singleline)
 
         # Remove log file details that change on every tool run
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"time`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"startTime`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"endTime`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"processId`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "      `"id`"[^,]+,\s+`"tool`"", "      `"tool`"", [Text.RegularExpressions.RegexOptions]::Singleline)
-        $text = [Text.RegularExpressions.Regex]::Replace($text, "      `"startTime`"[^,]+,\s+`"endTime`"", "      `"endTime`"", [Text.RegularExpressions.RegexOptions]::Singleline)
-        $text = [Text.RegularExpressions.Regex]::Replace($text, "      `"endTime`"[^,]+,\s+`"processId`"", "      `"processId`"", [Text.RegularExpressions.RegexOptions]::Singleline)
-        $text = [Text.RegularExpressions.Regex]::Replace($text, "      `"processId`"[^,]+,\s+`"fileName`"", "      `"fileName`"", [Text.RegularExpressions.RegexOptions]::Singleline)
-		#$text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"startTime`"[^,]+?,\s*", "",[Text.RegularExpressions.RegexOptions]::Multiline)
-        #$text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"endTime`"[^,]+?,\s*", "",[Text.RegularExpressions.RegexOptions]::Multiline)
-        #$text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"processId`"[^,]+?,\s*", "",[Text.RegularExpressions.RegexOptions]::Multiline)
-        
+    
         [IO.File]::WriteAllText($outputTemp, $text, [Text.Encoding]::UTF8)
         Move-Item $outputTemp $output -Force
     }
