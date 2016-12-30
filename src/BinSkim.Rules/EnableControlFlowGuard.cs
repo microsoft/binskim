@@ -63,9 +63,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PE portableExecutable = context.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeBinary;
-            if (portableExecutable.IsKernelMode) { return result; }
-
             reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
             if (portableExecutable.IsResourceOnly) { return result; }
 
@@ -88,6 +85,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
+            PE pe = context.PE;
+
+            if (pe.IsKernelMode && 
+                (pe.FileVersion.FileMajorPart < 10 ||
+                 pe.FileVersion.FileBuildPart < 15000))
+            {
+                if (pe.FileVersion.FileBuildPart < 15000)
+                {
+                    // '{0}' is a kernel mode portable executable compiled for a 
+                    // version of Windows that does not support the control flow
+                    // guard feature for kernel mode binaries.
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(ResultLevel.NotApplicable, context, null,
+                            nameof(RuleResources.BA2008_NotApplicable_UnsupportKernelModeVersion),
+                                context.TargetUri.GetFileName()));
+                }
+            }
+
             if (!EnablesControlFlowGuard(context))
             {
                 // '{0}' does not enable the control flow guard (CFG) mitigation. 

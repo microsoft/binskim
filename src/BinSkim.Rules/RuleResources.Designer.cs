@@ -261,6 +261,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries..
+        /// </summary>
+        internal static string BA2008_NotApplicable_UnsupportKernelModeVersion {
+            get {
+                return ResourceManager.GetString("BA2008_NotApplicable_UnsupportKernelModeVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location..
         /// </summary>
         internal static string BA2008_Pass {

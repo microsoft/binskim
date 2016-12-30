@@ -187,6 +187,9 @@ Modules triggering this check were:
   <data name="BA2008_Error" xml:space="preserve">
     <value>'{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /GUARD:CF on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG.</value>
   </data>
+  <data name="BA2008_NotApplicable_UnsupportKernelModeVersion" xml:space="preserve">
+    <value>'{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries.</value>
+  </data>
   <data name="BA2008_Pass" xml:space="preserve">
     <value>'{0}' enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location.</value>
   </data>

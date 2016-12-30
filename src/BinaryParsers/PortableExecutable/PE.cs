@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
@@ -13,20 +14,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 {
     public class PE : IDisposable
     {
-        internal SafePointer m_pImage;		// pointer to the beginning of the file in memory
-        private string[] _asImports;
+        private long? _length;
         private string _sha1Hash;
         private string _sha256Hash;
-        private long? _length;
-        private string _versionDetails;
-        private string _version;
-        private bool? _isResourceOnly = null;
-        private bool? _isManagedResourceOnly;
+        private string[] _asImports;
         private bool? _isKernelMode;
+        private bool? _isResourceOnly;
+        private FileVersionInfo _version;
+        private bool? _isManagedResourceOnly;
 
         private FileStream _fs;
         private PEReader _peReader;
+        internal SafePointer m_pImage; // pointer to the beginning of the file in memory
         private MetadataReader _metadataReader;
+
         public PE(string fileName)
         {
             FileName = Path.GetFullPath(fileName);
@@ -296,44 +297,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-        /// <summary>
-        /// File Version details string
-        /// </summary>
-        public string FileVersionDetails
-        {
-            get
-            {
-                if (_versionDetails == null)
-                {
-                    UpdateVersionInformation();
-                }
-
-                return _versionDetails;
-            }
-        }
 
         /// <summary>
-        /// File version
+        /// Windows OS file version information
         /// </summary>
-        public string FileVersion
+        public FileVersionInfo FileVersion
         {
             get
             {
                 if (_version == null)
                 {
-                    UpdateVersionInformation();
+                    _version = FileVersionInfo.GetVersionInfo(Path.GetFullPath(FileName));
                 }
                 return _version;
             }
         }
-    
-        private void UpdateVersionInformation()
-        {
-            System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.GetFullPath(FileName));
-
-            _versionDetails = RemoveUnprintableChars(fvi.ToString());
-            _version = RemoveUnprintableChars(fvi.FileVersion);
-        }
+   
 
         public Packer Packer
         {
@@ -439,7 +418,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         }
 
         /// <summary>
-        /// Returns true is the assembly is pure managed and doesn't have any methods
+        /// Returns true if the assembly is pure managed and has no methods
         /// </summary>
         public bool IsManagedResourceOnly
         {
