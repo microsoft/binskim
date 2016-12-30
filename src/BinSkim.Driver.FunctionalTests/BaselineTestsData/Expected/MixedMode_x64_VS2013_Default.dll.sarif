@@ -25,7 +25,7 @@
             "arguments": [
               "MixedMode_x64_VS2013_Default.dll",
               "EnableControlFlowGuard",
-              "image was compiled with a toolset version (12.0) that is not sufficiently recent (14.0 or newer) to provide relevant settings."
+              "image is a mixed mode binary"
             ]
           },
           "locations": [
@@ -342,7 +342,6 @@
           },
           "message": "Analyzing 'MixedMode_x64_VS2013_Default.dll'...",
           "level": "note",
-          "time": "2016-12-23T19:51:29.204Z"
         }
       ],
       "rules": {

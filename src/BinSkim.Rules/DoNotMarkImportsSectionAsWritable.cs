@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override string FullDescription
         {
-            get { return RuleResources.BA2010_DoNotMarkImportsSectionAsExecutable_Description; }
+            get { return RuleResources.BA2023_DoNotMarkImportsSectionAsWritable_Description; }
         }
 
         protected override IEnumerable<string> FormatIds

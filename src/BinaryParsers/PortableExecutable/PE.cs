@@ -361,6 +361,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         }
 
         /// <summary>
+        /// Returns true if the PE is a mixed mode assembly
+        /// </summary>
+        public bool IsMixedMode
+        {
+            get
+            {
+                return PEHeaders.CorHeader != null &&
+                       (PEHeaders.CorHeader.Flags & CorFlags.ILOnly) == 0;
+            }
+        }
+
+        /// <summary>
         /// Returns true if the only directory present is Resource Directory (this also covers hxs and hxi files)
         /// </summary>
         public bool IsResourceOnly
@@ -402,8 +414,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                         peHeader.CopyrightTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_ARCHITECTURE = 7;
                         peHeader.ExceptionTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_EXCEPTION = 3;	
                         peHeader.CorHeaderTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR 14
-                        peHeader.ExportTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_EXPORT = 0;
                         peHeader.ImportTableDirectory.RelativeVirtualAddress == 0); // IMAGE_DIRECTORY_ENTRY_IMPORT = 1;                                                
+
+                if (_isResourceOnly.Value)
+                {
+                    // We require special checks in the event of a non-zero export table directory value
+                    // If the binary only contains forwarders, we should regard it as not containing code
+                    if (peHeader.ExportTableDirectory.RelativeVirtualAddress != 0 && // IMAGE_DIRECTORY_ENTRY_EXPORT = 0;
+                        peHeader.SizeOfCode > 0)
+                    {
+                        _isResourceOnly = false;
+                    }
+                }
 
                 return _isResourceOnly.Value;
 
@@ -411,9 +433,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 // only binaries. We've seen cases where help resource-only DLLs had a bogus
                 // non-empty relocation section. Security digital signatures are ok.
                 //
-                // IMAGE_DIRECTORY_ENTRY_DEBUG = 6;	// Debug Directory
+                // IMAGE_DIRECTORY_ENTRY_SECURITY  = 4;	// Security Directory
                 // IMAGE_DIRECTORY_ENTRY_BASERELOC = 5;	// Base Relocation Table
-                // IMAGE_DIRECTORY_ENTRY_SECURITY = 4;	// Security Directory
+                // IMAGE_DIRECTORY_ENTRY_DEBUG     = 6; // Debug Directory
             }
         }
 

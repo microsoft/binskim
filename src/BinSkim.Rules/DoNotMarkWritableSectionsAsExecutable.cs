@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override string FullDescription
         {
-            get { return RuleResources.BA2019_DoNotMarkWritableSectionsAsShared_Description; }
+            get { return RuleResources.BA2021_DoNotMarkWritableSectionsAsExecutable_Description; }
         }
 
         protected override IEnumerable<string> FormatIds

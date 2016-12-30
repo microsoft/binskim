@@ -120,6 +120,9 @@
   <data name="IllegalContextReuse" xml:space="preserve">
     <value>A binary context object was re-initialized with a new file path.</value>
   </data>
+  <data name="MetadataCondition.ImageIsMixedModeBinary" xml:space="preserve">
+    <value>image is a mixed mode binary</value>
+  </data>
   <data name="MetadataCondition_CouldNotLoadPdb" xml:space="preserve">
     <value>an exception occurred attempting to load its pdb</value>
   </data>
@@ -153,7 +156,7 @@
   <data name="MetadataCondition_ImageIsNotSigned" xml:space="preserve">
     <value>image is not signed </value>
   </data>
-  <data name="MetadataCondition_ImageIsPreV7WindowsCEBinary" xml:space="preserve">
+  <data name="MetadataCondition_ImageIsPreVersion7WindowsCEBinary" xml:space="preserve">
     <value>image is a pre-version 7 Windows CE binary</value>
   </data>
   <data name="MetadataCondition_ImageIsResourceOnlyBinary" xml:space="preserve">

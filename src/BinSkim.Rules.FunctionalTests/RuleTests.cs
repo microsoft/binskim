@@ -252,6 +252,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 result.Add(Path.Combine(testFilesDirectory, "Managed_x86_VS2013_Wpf.exe"));
             }
 
+            if (metadataConditions.Contains(MetadataConditions.ImageIsMixedModeBinary))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "MixedMode_x64_VS2013_Default.dll"));
+                result.Add(Path.Combine(testFilesDirectory, "MixedMode_x64_VS2013_NoPdb.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "MixedMode_x86_VS2013_Default.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "MixedMode_x86_VS2013_MissingPdb.dll"));
+
+                result.Add(Path.Combine(testFilesDirectory, "MixedMode_x64_VS2015_Default.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "MixedMode_x86_VS2015_Default.exe"));
+            }
+
             if (metadataConditions.Contains(MetadataConditions.ImageIsKernelModeBinary))
             {
                 result.Add(Path.Combine(testFilesDirectory, "Native_x64_VS2013_KernelModeDriver.sys"));
@@ -674,9 +685,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             HashSet<string> notApplicableTo = new HashSet<string>();
 
+            notApplicableTo.Add(MetadataConditions.ImageIsMixedModeBinary);
             notApplicableTo.Add(MetadataConditions.ImageIsKernelModeBinary);
-            notApplicableTo.Add(MetadataConditions.ImageIsILOnlyManagedAssembly);
             notApplicableTo.Add(MetadataConditions.ImageIsResourceOnlyBinary);
+            notApplicableTo.Add(MetadataConditions.ImageIsILOnlyManagedAssembly);
 
             VerifyNotApplicable(new EnableControlFlowGuard(), notApplicableTo);
         }

@@ -142,6 +142,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is a mixed mode binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsMixedModeBinary {
+            get {
+                return ResourceManager.GetString("MetadataCondition.ImageIsMixedModeBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is not a 32-bit binary.
         /// </summary>
         internal static string MetadataCondition_ImageIsNot32BitBinary {
@@ -171,9 +180,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         /// <summary>
         ///   Looks up a localized string similar to image is a pre-version 7 Windows CE binary.
         /// </summary>
-        internal static string MetadataCondition_ImageIsPreV7WindowsCEBinary {
+        internal static string MetadataCondition_ImageIsPreVersion7WindowsCEBinary {
             get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsPreV7WindowsCEBinary", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ImageIsPreVersion7WindowsCEBinary", resourceCulture);
             }
         }
         
