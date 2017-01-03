@@ -22,17 +22,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id { get { return RuleIds.DoNotMarkWritableSectionsAsSharedId; } }
 
         /// <summary>
-        /// Code or data sections should not be marked as both shared and writable. Because
-        /// these sections are shared across processes, this condition might permit a
-        /// process with low privilege to mutate memory in a higher privilege process.
-        /// If you do not actually require that a section be both writable and shared,
-        /// remove one or both of these attributes (by modifying your .DEF file, the
-        /// appropriate linker /section switch arguments, etc.). If you are required to
-        /// share common data across processes (for inter-process communication (IPC) or
-        /// other purposes) use CreateFileMapping with proper security attributes or an
-        /// actual IPC mechanism instead (COM, named pipes, LPC, etc.).
-        /// </summary>
-
+        /// PE sections should not be marked as both writable and executable. This condition
+        /// makes it easier for an attacker to exploit memory corruption vulnerabilities, as
+        /// it may provide an attacker executable location(s) to inject shellcode. To resolve
+        /// this issue, configure your tools to not emit memory sections that are writable
+        /// and executable. For example, look for uses of /SECTION on the linker command line
+        /// for C and C++ programs, or #pragma section in C and C++ source code, which mark a
+        /// section with both attributes. Be sure to disable incremental linking in release
+        /// builds, as this feature creates a writable and executable section named '.textbss'
+        /// in order to function.
+        /// </summary>       
         public override string FullDescription
         {
             get { return RuleResources.BA2019_DoNotMarkWritableSectionsAsShared_Description; }
@@ -93,15 +92,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             string badSectionsText = String.Join(";", badSections);
 
-            // {0} contains one or more code or data sections ({1}) which are marked as both
-            // shared and writable. Because these sections are shared across processes, this
-            // condition might permit a process with low privilege to mutate memory in a higher
-            // privilege process. If you do not actually require that the section be both
-            // writable and shared, remove one or both of these attributes (by modifying your
-            // .DEF file, the appropriate linker /section switch arguments, etc.). If you are
-            // required to share common data across processes (for IPC or other purposes) use
-            // CreateFileMapping with proper security attributes or an actual IPC mechanism 
-            // instead (COM, named pipes, LPC, etc.).
+            // '{0}' contains PE section(s) ({1}) that are both writable and executable.
+            // Writable and executable memory segments make it easier for an attacker
+            // to exploit memory corruption vulnerabilities, because it may provide an
+            // attacker executable location(s) to inject shellcode. To resolve this
+            // issue, configure your tools to not emit memory sections that are writable
+            // and executable. For example, look for uses of /SECTION on the linker
+            // command line for C and C++ programs, or #pragma section in C and C++
+            // source code, which mark a section with both attributes. Enabling
+            // incremental linking via the /INCREMENTAL argument (the default for
+            // Microsoft Visual Studio debug build) can also result in a writable and
+            // executable section named 'textbss'. For this case, disable incremental
+            // linking (or analyze an alternate build configuration that disables this
+            // feature) to resolve the problem.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                     nameof(RuleResources.BA2019_Error),

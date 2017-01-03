@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             //exploit memory corruption vulnerabilities, because it may give an attacker 
             // executable location(s) to inject shellcode. To resolve this
             // issue, configure your toolchain to not emit memory sections that are 
-            // writable and executable.For example, look for uses of / SECTION on the 
+            // writable and executable. For example, look for uses of /SECTION on the 
             // linker command line for C and C++ programs, or  #pragma section in C and 
             // C++ source code, which mark a section with both attributes.
             context.Logger.Log(this,
