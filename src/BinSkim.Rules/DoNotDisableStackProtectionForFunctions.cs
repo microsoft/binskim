@@ -61,28 +61,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private const string AnalyzerName = RuleIds.DoNotDisableStackProtectionForFunctionsId + "." + nameof(DoNotDisableStackProtectionForFunctions);
 
-        private static StringSetCollection BuildApprovedFunctionsStringSet()
+        private static StringSet BuildApprovedFunctionsStringSet()
         {
-            var result = new StringSetCollection();
+            var result = new StringSet();
             result.Add("_TlgWrite");
             return result;
         }
 
-        public static PerLanguageOption<StringSetCollection> ApprovedFunctionsThatDisableStackProtection { get; } =
-            new PerLanguageOption<StringSetCollection>(
-                AnalyzerName, nameof(StringSetCollection), defaultValue: () => { return BuildApprovedFunctionsStringSet(); });
+        public static PerLanguageOption<StringSet> ApprovedFunctionsThatDisableStackProtection { get; } =
+            new PerLanguageOption<StringSet>(
+                AnalyzerName, nameof(StringSet), defaultValue: () => { return BuildApprovedFunctionsStringSet(); });
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             AnalysisApplicability applicability = StackProtectionUtilities.CommonCanAnalyze(context, out reasonForNotAnalyzing);
 
-            // Checks for missing policy should always be evaluated as the last action, so that 
-            // we do not raise an error in cases where the analysis would not otherwise be applied.
-            if (applicability == AnalysisApplicability.ApplicableToSpecifiedTarget)
-            {
-                reasonForNotAnalyzing = RuleResources.BA2005_MissingRequiredConfiguration;
-                if (context.Policy == null) { return AnalysisApplicability.NotApplicableDueToMissingConfiguration; }
-            }
             return applicability;
         }
 

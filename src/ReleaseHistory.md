@@ -20,9 +20,10 @@
 * More incidental reporting improvements
 
 ## **v1.3.8** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.3.8
+* Update Sarif dependency to 1.5.40
 * --config argument is now optional
-
-## **v1.3.9** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.3.9
 * Fix false positives of BA2008:EnableControlFlowGuard firing against MC++ mixed mode binaries
 * Fix false positives of BA2008:EnableControlFlowGuard firing against resource-only dll that include exported API forwarders (but no code)
+* XML-based configuration now functional
+* Eliminated compiler tool version false positives for Intel compiler and MASM
 

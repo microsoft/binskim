@@ -70,8 +70,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// Enable namespace import optimization.
         /// </summary>
-        public static PerLanguageOption<IntegerSetCollection> RequiredCompilerWarnings { get; } =
-            new PerLanguageOption<IntegerSetCollection>(
+        public static PerLanguageOption<IntegerSet> RequiredCompilerWarnings { get; } =
+            new PerLanguageOption<IntegerSet>(
                 AnalyzerName, nameof(RequiredCompilerWarnings), defaultValue: () => { return BuildRequiredCompilerWarningsSet(); });
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
@@ -84,11 +84,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
             if (portableExecutable.IsResourceOnly) { return result; }
-
-            // Checks for missing policy should always be evaluated as the last action, so that 
-            // we do not raise an error in cases where the analysis would not otherwise be applied.
-            reasonForNotAnalyzing = RuleResources.BA2005_MissingRequiredConfiguration;
-            if (context.Policy == null) { return AnalysisApplicability.NotApplicableDueToMissingConfiguration; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -282,9 +277,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
         }
-        private static IntegerSetCollection BuildRequiredCompilerWarningsSet()
+        private static IntegerSet BuildRequiredCompilerWarningsSet()
         {
-            var result = new IntegerSetCollection();
+            var result = new IntegerSet();
             result.Add(4018);
             result.Add(4146);
             result.Add(4244);

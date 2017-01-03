@@ -527,7 +527,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             notApplicableTo.Add(MetadataConditions.ImageIsResourceOnlyBinary);
             notApplicableTo.Add(MetadataConditions.ImageIsXBoxBinary);
 
-            VerifyNotApplicable(new DoNotShipVulnerableBinaries(), notApplicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
+            VerifyNotApplicable(new DoNotShipVulnerableBinaries(), notApplicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
         }
 
         [Fact]
@@ -634,7 +634,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-            VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), applicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
+            VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
         }
 
         [Fact]
@@ -665,7 +665,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-            VerifyNotApplicable(new EnableCriticalCompilerWarnings(), applicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
+            VerifyNotApplicable(new EnableCriticalCompilerWarnings(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
         }
 
         [Fact]
@@ -748,7 +748,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-            VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableDueToMissingConfiguration);
+            VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
         }
 
         [Fact]

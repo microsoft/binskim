@@ -57,9 +57,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private const string AnalyzerName = RuleIds.BuildWithSecureToolsId + "." + nameof(BuildWithSecureTools);
 
-        private const string MIN_LINKER_VER = "MinimumLinkerVersion";
         private const string MIN_COMPILER_VER = "MinimumCompilerVersion";
-        private const string MIN_XBOX_LINKER_VER = "MinimumXboxLinkerVersion";
         private const string MIN_XBOX_COMPILER_VER = "MinimumXboxCompilerVersion";
 
         public static PerLanguageOption<StringToVersionMap> MinimumToolVersions { get; } =
@@ -68,7 +66,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public static PerLanguageOption<StringToVersionMap> AllowedLibraries { get; } =
             new PerLanguageOption<StringToVersionMap>(
-                AnalyzerName, nameof(MinimumToolVersions), defaultValue: () => { return BuildAllowedLibraries(); });
+                AnalyzerName, nameof(AllowedLibraries), defaultValue: () => { return BuildAllowedLibraries(); });
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
@@ -80,11 +78,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
             if (portableExecutable.IsResourceOnly) { return result; }
-
-            // Checks for missing policy should always be evaluated as the last action, so that 
-            // we do not raise an error in cases where the analysis would not otherwise be applied.
-            reasonForNotAnalyzing = RuleResources.BA2005_MissingRequiredConfiguration;
-            if (context.Policy == null) { return AnalysisApplicability.NotApplicableDueToMissingConfiguration; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;

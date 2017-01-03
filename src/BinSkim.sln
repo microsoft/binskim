@@ -1,9 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinSkim.Driver", "BinSkim.Driver\BinSkim.Driver.csproj", "{7B4552DC-901C-4569-BFBD-9EA129D53288}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F17E6921-2504-4AE8-AFD3-7ACEED935FEC} = {F17E6921-2504-4AE8-AFD3-7ACEED935FEC}
+		{494AC26C-9591-4137-A3D4-5CD9B8D169DB} = {494AC26C-9591-4137-A3D4-5CD9B8D169DB}
+		{D2EBE67E-6115-4825-9EAD-3DB54672C03E} = {D2EBE67E-6115-4825-9EAD-3DB54672C03E}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinSkim.Sdk", "BinSkim.Sdk\BinSkim.Sdk.csproj", "{D2EBE67E-6115-4825-9EAD-3DB54672C03E}"
 EndProject
