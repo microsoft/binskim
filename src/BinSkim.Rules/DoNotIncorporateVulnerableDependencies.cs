@@ -68,8 +68,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             _files = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _filesToVulnerabilitiesMap = new Dictionary<string, VulnerableDependencyDescriptor>();
 
-            foreach (VulnerableDependencyDescriptor descriptor in context.Policy.GetProperty(VulnerableDependencies).Values)
+            foreach (PropertiesDictionary dictionary in context.Policy.GetProperty(VulnerableDependencies).Values)
             {
+                var descriptor = dictionary as VulnerableDependencyDescriptor;
+
+                // This happens if we have deserialized settings from JSON rather than XML
+                if (descriptor == null)
+                {
+                    descriptor = new VulnerableDependencyDescriptor(dictionary);
+                }
+
                 foreach (string fileHash in descriptor.FileHashes)
                 {
                     _filesToVulnerabilitiesMap[fileHash] = descriptor;
@@ -90,11 +98,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
             if (portableExecutable.IsResourceOnly) { return result; }
-
-            // Checks for missing policy should always be evaluated as the last action, so that 
-            // we do not raise an error in cases where the analysis would not otherwise be applied.
-            reasonForNotAnalyzing = RuleResources.BA2005_MissingRequiredConfiguration;
-            if (context.Policy == null) { return AnalysisApplicability.NotApplicableDueToMissingConfiguration; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -186,8 +189,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             var vulnerabilityDescriptor = new VulnerableDependencyDescriptor();
 
-            vulnerabilityDescriptor.Id = "AtlVulnerability";
             vulnerabilityDescriptor.Name = "the Active Template Library (ATL)";
+            vulnerabilityDescriptor.Id = "AtlVulnerability";
             vulnerabilityDescriptor.VulnerabilityDescription = "contains known remote execution bugs (see https://technet.microsoft.com/en-us/library/security/ms09-035.aspx).";
             vulnerabilityDescriptor.Resolution = "compile your binary using an up-to-date copy of ATL.";
             vulnerabilityDescriptor.FileHashes.Add("atlbase.h#FC-A7-3E-99-8B-D3-CC-E6-D6-28-75-F6-B4-27-DF-6E");

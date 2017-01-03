@@ -8,9 +8,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 {
     internal class VulnerableDependencyDescriptor : PropertiesDictionary
     {
-        private static PerLanguageOption<StringSetCollection> s_fileHashes { get; } =
-            new PerLanguageOption<StringSetCollection>(
-                nameof(VulnerableDependencyDescriptor), nameof(FileHashes), defaultValue: () => { return new StringSetCollection(); });
+        public VulnerableDependencyDescriptor()
+        {
+
+        }
+
+        public VulnerableDependencyDescriptor(PropertiesDictionary dictionary = null)
+        {
+            if (dictionary != null)
+            {
+                foreach (string key in dictionary.Keys)
+                {
+                    this[key] = dictionary[key];
+                }
+            }
+        }
+
+        private static PerLanguageOption<StringSet> s_fileHashes { get; } =
+            new PerLanguageOption<StringSet>(
+                nameof(VulnerableDependencyDescriptor), nameof(FileHashes), defaultValue: () => { return new StringSet(); });
 
         private static PerLanguageOption<string> s_id { get; } =
             new PerLanguageOption<string>(
@@ -28,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<string>(
                 nameof(VulnerableDependencyDescriptor), nameof(Resolution), defaultValue: () => { return String.Empty; });
 
-        public StringSetCollection FileHashes
+        public StringSet FileHashes
         {
             get { return GetProperty(s_fileHashes); }
         }

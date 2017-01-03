@@ -36,9 +36,9 @@ namespace Microsoft.CodeAnalysis.IL
         private IEnumerable<string> _plugInFilePaths;
 
 
-        public override void ConfigureFromOptions(BinaryAnalyzerContext context, AnalyzeOptions analyzeOptions)
+        protected override void InitializeConfiguration(AnalyzeOptions analyzeOptions, BinaryAnalyzerContext context)
         {
-            base.ConfigureFromOptions(context, analyzeOptions);
+            base.InitializeConfiguration(analyzeOptions, context);
 
             if (!string.IsNullOrEmpty(analyzeOptions.SymbolsPath))
             {

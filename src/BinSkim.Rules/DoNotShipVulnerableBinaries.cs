@@ -67,19 +67,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<StringToVersionMap>(
                 AnalyzerName, nameof(VulnerableBinaries), defaultValue: () => { return BuildDefaultVulnerableBinariesMap(); });
 
-        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
-        {
-            // Checks for missing policy should always be evaluated as the last action, so that 
-            // we do not raise an error in cases where the analysis would not otherwise be applied.
-
-            // Missing required configuration: 'vulnerable binary name and version metadata'
-            reasonForNotAnalyzing = RuleResources.BA2005_MissingRequiredConfiguration;
-            if (context.Policy == null) { return AnalysisApplicability.NotApplicableDueToMissingConfiguration; }
-
-            reasonForNotAnalyzing = null;
-            return AnalysisApplicability.ApplicableToSpecifiedTarget;
-        }
-
         // \d+(\.\d+){0,3}
         // 
         // Match a single character that is a “digit” (0–9 in any Unicode script) «\d+»
