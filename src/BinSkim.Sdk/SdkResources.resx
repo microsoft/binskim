@@ -120,14 +120,14 @@
   <data name="IllegalContextReuse" xml:space="preserve">
     <value>A binary context object was re-initialized with a new file path.</value>
   </data>
-  <data name="MetadataCondition.ImageIsMixedModeBinary" xml:space="preserve">
+  <data name="MetadataCondition_ImageIsMixedModeBinary" xml:space="preserve">
     <value>image is a mixed mode binary</value>
   </data>
   <data name="MetadataCondition_CouldNotLoadPdb" xml:space="preserve">
     <value>an exception occurred attempting to load its pdb</value>
   </data>
   <data name="MetadataCondition_ImageCompiledWithOutdatedTools" xml:space="preserve">
-    <value>image was compiled with a toolset version ({0}) that is not sufficiently recent ({1} or newer) to provide relevant settings.</value>
+    <value>image was compiled with a toolset version ({0}) that is not sufficiently recent ({1} or newer) to provide relevant settings</value>
   </data>
   <data name="MetadataCondition_ImageIs64BitBinary" xml:space="preserve">
     <value>image is a 64-bit binary</value>
@@ -164,6 +164,9 @@
   </data>
   <data name="MetadataCondition_ImageIsXboxBinary" xml:space="preserve">
     <value>image is an xbox binary</value>
+  </data>
+  <data name="MetadataCondition_ImageIsKernelModeAndNot64BitBinaryCfgUnsupported" xml:space="preserve">
+    <value>image is not 64-bit (the only architecture that enables CFG for kernel mode binaries)</value>
   </data>
   <data name="RuleWasDisabledDueToMissingPolicy" xml:space="preserve">
     <value>Check '{0}' was disabled for this run as the analysis was not configured with required policy ({1}). To resolve this, configure and provide a policy file on the BinSkim command-line using the --policy argument (recommended), or pass --defaultPolicy to invoke built-in settings. Invoke the BinSkim.exe 'export' command to produce an initial policy file that can be edited if required and passed back into the tool.</value>

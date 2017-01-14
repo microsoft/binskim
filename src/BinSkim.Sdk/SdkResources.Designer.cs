@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to image was compiled with a toolset version ({0}) that is not sufficiently recent ({1} or newer) to provide relevant settings..
+        ///   Looks up a localized string similar to image was compiled with a toolset version ({0}) that is not sufficiently recent ({1} or newer) to provide relevant settings.
         /// </summary>
         internal static string MetadataCondition_ImageCompiledWithOutdatedTools {
             get {
@@ -115,6 +115,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is not 64-bit (the only architecture that enables CFG for kernel mode binaries).
+        /// </summary>
+        internal static string MetadataCondition_ImageIsKernelModeAndNot64BitBinaryCfgUnsupported {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsKernelModeAndNot64BitBinaryCfgUnsupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is a kernel mode binary.
         /// </summary>
         internal static string MetadataCondition_ImageIsKernelModeBinary {
@@ -146,7 +155,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         /// </summary>
         internal static string MetadataCondition_ImageIsMixedModeBinary {
             get {
-                return ResourceManager.GetString("MetadataCondition.ImageIsMixedModeBinary", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ImageIsMixedModeBinary", resourceCulture);
             }
         }
         
