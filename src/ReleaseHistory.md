@@ -27,3 +27,6 @@
 * XML-based configuration now functional
 * Eliminated compiler tool version false positives for Intel compiler and MASM
 
+## **v1.3.9** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.3.9
+* Fix false positives of BA2008:EnableControlFlowGuard firing on x86 kernel mode binaries
+
