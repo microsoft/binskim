@@ -48,13 +48,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        public const UInt32 IMAGE_DLLCHARACTERISTICS_CONTROLFLOWGUARD = 0x4000;
-        public const UInt32 IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG = 10;
         public const UInt32 IMAGE_GUARD_CF_INSTRUMENTED = 0x0100;
-        public const UInt32 IMAGE_GUARD_CF_FUNCTION_TABLE_PRESENT = 0x0400;
-        public const UInt32 IMAGE_GUARD_CF_CHECKS = IMAGE_GUARD_CF_INSTRUMENTED | IMAGE_GUARD_CF_FUNCTION_TABLE_PRESENT;
+        public const UInt32 IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG = 10;
         public const UInt32 IMAGE_LOAD_CONFIG_MINIMUM_SIZE_32 = 0x005C;
         public const UInt32 IMAGE_LOAD_CONFIG_MINIMUM_SIZE_64 = 0x0090;
+        public const UInt32 IMAGE_GUARD_CF_FUNCTION_TABLE_PRESENT = 0x0400;
+        public const UInt32 IMAGE_DLLCHARACTERISTICS_CONTROLFLOWGUARD = 0x4000;
+
+        public const UInt32 IMAGE_GUARD_CF_CHECKS = 
+            IMAGE_GUARD_CF_INSTRUMENTED | IMAGE_GUARD_CF_FUNCTION_TABLE_PRESENT;
 
         public Version MinimumSupportedLinkerVersion = new Version("14.0");
         
@@ -71,6 +73,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsMixedModeBinary;
             if (portableExecutable.IsMixedMode) { return result; }
+
+            reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeAndNot64BitBinaryCfgUnsupported;
+            if (portableExecutable.IsKernelMode && !portableExecutable.Is64Bit) { return result; }
 
             if (portableExecutable.LinkerVersion < MinimumSupportedLinkerVersion)
             {
