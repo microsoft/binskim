@@ -165,7 +165,7 @@
   <data name="MetadataCondition_ImageIsXboxBinary" xml:space="preserve">
     <value>image is an xbox binary</value>
   </data>
-  <data name="MetadataCondition_ImageIsKernelModeAndNot64BitBinaryCfgUnsupported" xml:space="preserve">
+  <data name="MetadataCondition_ImageIsKernelModeAndNot64Bit_CfgUnsupported" xml:space="preserve">
     <value>image is not 64-bit (the only architecture that enables CFG for kernel mode binaries)</value>
   </data>
   <data name="RuleWasDisabledDueToMissingPolicy" xml:space="preserve">
@@ -176,5 +176,8 @@
   </data>
   <data name="TargetNotAnalyzed_NotApplicable" xml:space="preserve">
     <value>'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed binary metadata: {2}.</value>
+  </data>
+  <data name="MetadataCondition_ImageHasNoEntryPoint" xml:space="preserve">
+    <value>image does not have an entry point</value>
   </data>
 </root>

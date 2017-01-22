@@ -88,6 +88,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image does not have an entry point.
+        /// </summary>
+        internal static string MetadataCondition_ImageHasNoEntryPoint {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageHasNoEntryPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is a 64-bit binary.
         /// </summary>
         internal static string MetadataCondition_ImageIs64BitBinary {
@@ -117,9 +126,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         /// <summary>
         ///   Looks up a localized string similar to image is not 64-bit (the only architecture that enables CFG for kernel mode binaries).
         /// </summary>
-        internal static string MetadataCondition_ImageIsKernelModeAndNot64BitBinaryCfgUnsupported {
+        internal static string MetadataCondition_ImageIsKernelModeAndNot64Bit_CfgUnsupported {
             get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsKernelModeAndNot64BitBinaryCfgUnsupported", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ImageIsKernelModeAndNot64Bit_CfgUnsupported", resourceCulture);
             }
         }
         
