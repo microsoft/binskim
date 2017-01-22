@@ -584,7 +584,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 if (optionalHeader != null)
                 {
-                    UInt16 major = optionalHeader.MajorImageVersion;
+                    UInt16 major = optionalHeader.MajorSubsystemVersion;
                     UInt16 minor = optionalHeader.MinorSubsystemVersion;
 
                     return new Version(major, minor);
