@@ -63,8 +63,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsNot64BitBinary;
             if (portableExecutable.PEHeaders.PEHeader.Magic != PEMagic.PE32Plus) { return result; }
 
-            // TODO need to put a check here for verifying that the
-            // compiler that built the target supports high entropy va                       
+            reasonForNotAnalyzing = MetadataConditions.ImageHasNoEntryPoint;
+            if (portableExecutable.PEHeaders.PEHeader.AddressOfEntryPoint == 0) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -77,7 +77,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             CoffHeader coffHeader = context.PE.PEHeaders.CoffHeader;
             Characteristics characteristics = coffHeader.Characteristics;
-
 
             bool highEntropyVA = ((int)dllCharacteristics & 0x0020 /*IMAGE_DLLCHARACTERISTICS_HIGH_ENTROPY_VA*/) == 0x0020;
 

@@ -74,7 +74,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsMixedModeBinary;
             if (portableExecutable.IsMixedMode) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeAndNot64BitBinaryCfgUnsupported;
+            reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeAndNot64Bit_CfgUnsupported;
             if (portableExecutable.IsKernelMode && !portableExecutable.Is64Bit) { return result; }
 
             if (portableExecutable.LinkerVersion < MinimumSupportedLinkerVersion)

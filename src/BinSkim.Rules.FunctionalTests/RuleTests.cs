@@ -235,6 +235,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Assert.True(Directory.Exists(testFilesDirectory));
             HashSet<string> result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
+            if (metadataConditions.Contains(MetadataConditions.ImageHasNoEntryPoint))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "Native_x64_VS2013_Default.dll"));
+                result.Add(Path.Combine(testFilesDirectory, "MixedMode_x64_VS2013_Default.dll"));
+                result.Add(Path.Combine(testFilesDirectory, "ManagedResourcesOnly.dll"));
+            }
+
             if (metadataConditions.Contains(MetadataConditions.CouldNotLoadPdb))
             {
                 result.Add(Path.Combine(testFilesDirectory, "MixedMode_x64_VS2013_NoPdb.exe"));
@@ -402,6 +409,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public void EnableHighEntropyVirtualAddresses_NotApplicable()
         {
             HashSet<string> notApplicableTo = new HashSet<string>();
+            notApplicableTo.Add(MetadataConditions.ImageHasNoEntryPoint);
             notApplicableTo.Add(MetadataConditions.ImageIsNot64BitBinary);
             notApplicableTo.Add(MetadataConditions.ImageIsKernelModeBinary);
 

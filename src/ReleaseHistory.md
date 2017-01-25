@@ -30,3 +30,6 @@
 ## **v1.3.9** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.3.9
 * Fix false positives of BA2008:EnableControlFlowGuard firing on x86 kernel mode binaries
 
+## **v1.4.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.0
+* Eliminate high-entropy VA analysis for binaries with no entry points
+
