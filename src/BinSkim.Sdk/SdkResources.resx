@@ -180,4 +180,7 @@
   <data name="MetadataCondition_ImageHasNoEntryPoint" xml:space="preserve">
     <value>image does not have an entry point</value>
   </data>
+  <data name="MetadataCondition_ImageIsBootBinary" xml:space="preserve">
+    <value>image is a boot binary</value>
+  </data>
 </root>
