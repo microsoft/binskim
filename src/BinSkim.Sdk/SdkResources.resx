@@ -180,4 +180,7 @@
   <data name="MetadataCondition_ImageIsNotExe" xml:space="preserve">
     <value>image is not an executable program</value>
   </data>
+  <data name="MetadataCondition_ImageIsBootBinary" xml:space="preserve">
+    <value>image is a boot binary</value>
+  </data>
 </root>

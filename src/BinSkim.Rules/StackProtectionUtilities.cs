@@ -37,6 +37,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsDotNetNativeBinary;
             if (portableExecutable.IsDotNetNative) { return result; }
 
+            reasonForNotAnalyzing = MetadataConditions.ImageIsBootBinary;
+            if (portableExecutable.IsBoot) { return result; }
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }

@@ -77,6 +77,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeAndNot64Bit_CfgUnsupported;
             if (portableExecutable.IsKernelMode && !portableExecutable.Is64Bit) { return result; }
 
+            reasonForNotAnalyzing = MetadataConditions.ImageIsBootBinary;
+            if (portableExecutable.IsBoot) { return result; }
+
             if (portableExecutable.LinkerVersion < MinimumSupportedLinkerVersion)
             {
                 reasonForNotAnalyzing = string.Format(

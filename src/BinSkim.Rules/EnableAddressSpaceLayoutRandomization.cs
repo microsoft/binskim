@@ -65,6 +65,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsPreVersion7WindowsCEBinary;
             if (OSVersions.IsWindowsCEPriorToV7(portableExecutable)) { return result; }
 
+            reasonForNotAnalyzing = MetadataConditions.ImageIsBootBinary;
+            if (portableExecutable.IsBoot) { return result; }
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }

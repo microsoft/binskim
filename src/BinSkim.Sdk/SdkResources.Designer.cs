@@ -97,6 +97,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is a boot binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsBootBinary {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsBootBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is a binary built by the .NET native toolset.
         /// </summary>
         internal static string MetadataCondition_ImageIsDotNetNativeBinary {

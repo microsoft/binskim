@@ -22,6 +22,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         private bool? _isResourceOnly;
         private FileVersionInfo _version;
         private bool? _isManagedResourceOnly;
+        private bool? _isBoot;
 
         private FileStream _fs;
         private PEReader _peReader;
@@ -519,6 +520,35 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     return PEHeaders.PEHeader.Subsystem == System.Reflection.PortableExecutable.Subsystem.Xbox;
                 }
                 return false;
+            }
+        }
+
+        public bool IsBoot
+        {
+            get
+            {
+                if(_isBoot != null)
+                {
+                    return (bool)_isBoot;
+                }
+
+                _isBoot = false;
+
+                if (PEHeaders.PEHeader != null)
+                {
+                    //
+                    // Currently SubsystemVersion is an optional field but I would hope we can use this in the future
+                    //
+                    //Version ssVer = this.SubsystemVersion;
+
+                    _isBoot =   this.Subsystem == Subsystem.EfiApplication ||
+                                this.Subsystem == Subsystem.EfiBootServiceDriver ||
+                                this.Subsystem == Subsystem.EfiRom ||
+                                this.Subsystem == Subsystem.EfiRuntimeDriver ||
+                                (int)this.Subsystem == 16; // BOOT_APPLICATION
+                }
+
+                return _isBoot.Value;
             }
         }
 
