@@ -158,7 +158,7 @@
             "arguments": [
               "Native_x64_VS2015_CvtresResourceOnly.dll",
               "EnableHighEntropyVirtualAddresses",
-              "image does not have an entry point"
+              "image is not an executable program"
             ]
           },
           "locations": [

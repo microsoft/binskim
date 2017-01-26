@@ -88,15 +88,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to image does not have an entry point.
-        /// </summary>
-        internal static string MetadataCondition_ImageHasNoEntryPoint {
-            get {
-                return ResourceManager.GetString("MetadataCondition_ImageHasNoEntryPoint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to image is a 64-bit binary.
         /// </summary>
         internal static string MetadataCondition_ImageIs64BitBinary {
@@ -183,6 +174,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageIsNot64BitBinary {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsNot64BitBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image is not an executable program.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotExe {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotExe", resourceCulture);
             }
         }
         

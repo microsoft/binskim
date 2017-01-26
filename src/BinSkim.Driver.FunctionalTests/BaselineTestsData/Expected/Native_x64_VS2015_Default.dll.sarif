@@ -18,6 +18,25 @@
       },
       "results": [
         {
+          "ruleId": "BA2015",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Native_x64_VS2015_Default.dll",
+              "EnableHighEntropyVirtualAddresses",
+              "image is not an executable program"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x64_VS2015_Default.dll"
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "BA2018",
           "level": "notApplicable",
           "formattedRuleMessage": {
@@ -282,23 +301,6 @@
           ]
         },
         {
-          "ruleId": "BA2015",
-          "level": "pass",
-          "formattedRuleMessage": {
-            "formatId": "Pass",
-            "arguments": [
-              "Native_x64_VS2015_Default.dll"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x64_VS2015_Default.dll"
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA2013",
           "level": "pass",
           "formattedRuleMessage": {
@@ -344,6 +346,21 @@
         }
       ],
       "rules": {
+        "BA2015": {
+          "id": "BA2015",
+          "name": "EnableHighEntropyVirtualAddresses",
+          "shortDescription": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible.",
+          "fullDescription": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR.",
+          "messageFormats": {
+            "Pass": "'{0}' is high entropy ASLR compatible, reducing an attacker's ability to exploit code in well-known locations.",
+            "Error_NoHighEntropyVA": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.)",
+            "Error_NoLargeAddressAware": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible by supplying /LARGEADDRESSAWARE to the C or C++ linker command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.)",
+            "Error_NeitherHighEntropyVANorLargeAddressAware": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
+        },
         "BA2018": {
           "id": "BA2018",
           "name": "EnableSafeSEH",
@@ -548,21 +565,6 @@
             "Pass": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled for all modules, making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities. ",
             "Error": "'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}",
             "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
-        },
-        "BA2015": {
-          "id": "BA2015",
-          "name": "EnableHighEntropyVirtualAddresses",
-          "shortDescription": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible.",
-          "fullDescription": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR.",
-          "messageFormats": {
-            "Pass": "'{0}' is high entropy ASLR compatible, reducing an attacker's ability to exploit code in well-known locations.",
-            "Error_NoHighEntropyVA": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.)",
-            "Error_NoLargeAddressAware": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible by supplying /LARGEADDRESSAWARE to the C or C++ linker command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.)",
-            "Error_NeitherHighEntropyVANorLargeAddressAware": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line.",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
