@@ -63,8 +63,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsNot64BitBinary;
             if (portableExecutable.PEHeaders.PEHeader.Magic != PEMagic.PE32Plus) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageHasNoEntryPoint;
-            if (portableExecutable.PEHeaders.PEHeader.AddressOfEntryPoint == 0) { return result; }
+            reasonForNotAnalyzing = MetadataConditions.ImageIsNotExe;
+            if (!portableExecutable.PEHeaders.IsExe) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
