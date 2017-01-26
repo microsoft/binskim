@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
-using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
@@ -58,12 +57,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
-            PE portableExecutable = context.PE;
-            AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
-
-            reasonForNotAnalyzing = MetadataConditions.ImageIsBootBinary;
-            if (portableExecutable.IsBoot) { return result; }
-
             return StackProtectionUtilities.CommonCanAnalyze(context, out reasonForNotAnalyzing);
         }
 

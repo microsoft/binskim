@@ -527,7 +527,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if(null != _isBoot)
+                if(_isBoot != null)
                 {
                     return (bool)_isBoot;
                 }
