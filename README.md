@@ -20,7 +20,7 @@ Getting Started as a User
 
 Download BinSkim from Nuget
 
-*Latest stable Nuget version:* [1.2.4-beta](https://www.nuget.org/packages/BinSkim/)
+*Latest stable Nuget version:* [1.3.8](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)
 
 Command-Line Documentation
 ==========================
