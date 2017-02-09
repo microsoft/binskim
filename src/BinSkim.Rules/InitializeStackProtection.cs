@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!bHasGSCheck && !bHasGSInit)
             {
-                // '{0}' is a C or C++ binary that does enable the stack protection buffer
+                // '{0}' is a C or C++ binary that does not enable the stack protection buffer
                 // security feature. It is therefore not required to initialize the stack protector.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.NotApplicable, context, null,
