@@ -17,10 +17,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public BinarySkimmerBase()
         {
             // Set Binscope friendly name for backwards compatibility, if one exists.
-            string altId = BinscopeCompatibility.GetBinscopeFriendlyName(this.Id);
+            string altId = BinScopeCompatibility.GetBinScopeRuleReadableName(this.Id);
             if (!String.IsNullOrEmpty(altId))
             {
-                this.SetProperty<string>(BinscopeCompatibility.EquivalentBinscopeRulePropertyName, altId);
+                this.SetProperty<string>(BinScopeCompatibility.EquivalentBinScopeRulePropertyName, altId);
             }
         }
 

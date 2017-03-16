@@ -72,7 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinarySkimmerBase.cs" />
-    <Compile Include="BinscopeCompatibility.cs" />
+    <Compile Include="BinScopeCompatibility.cs" />
     <Compile Include="BuildWithSecureTools.cs" />
     <Compile Include="CryptoErrors.cs" />
     <Compile Include="DoNotDisableStackProtectionForFunctions.cs" />
