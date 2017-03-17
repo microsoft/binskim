@@ -14,6 +14,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override Uri HelpUri { get { return s_helpUri; } }
 
+        public BinarySkimmerBase()
+        {
+            // Set Binscope friendly name for backwards compatibility, if one exists.
+            string altId = BinScopeCompatibility.GetBinScopeRuleReadableName(this.Id);
+            if (!String.IsNullOrEmpty(altId))
+            {
+                this.SetProperty<string>(BinScopeCompatibility.EquivalentBinScopeRulePropertyName, altId);
+            }
+        }
+
         protected override ResourceManager ResourceManager
         {
             get
