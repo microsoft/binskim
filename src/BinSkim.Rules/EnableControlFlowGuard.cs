@@ -43,7 +43,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return new string[] {
                     nameof(RuleResources.BA2008_Pass),
                     nameof(RuleResources.BA2008_Error),
-                    nameof(RuleResources.NotApplicable_InvalidMetadata)
+                    nameof(RuleResources.NotApplicable_InvalidMetadata),
+                    nameof(RuleResources.BA2008_NotApplicable_UnsupportedKernelModeVersion)
                 };
             }
         }
@@ -109,7 +110,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // guard feature for kernel mode binaries.
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultLevel.NotApplicable, context, null,
-                            nameof(RuleResources.BA2008_NotApplicable_UnsupportKernelModeVersion),
+                            nameof(RuleResources.BA2008_NotApplicable_UnsupportedKernelModeVersion),
                                 context.TargetUri.GetFileName()));
                 }
             }
@@ -184,7 +185,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     return true;
                 }
             }
-
             return false;
         }
     }

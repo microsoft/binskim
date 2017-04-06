@@ -263,9 +263,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries..
         /// </summary>
-        internal static string BA2008_NotApplicable_UnsupportKernelModeVersion {
+        internal static string BA2008_NotApplicable_UnsupportedKernelModeVersion {
             get {
-                return ResourceManager.GetString("BA2008_NotApplicable_UnsupportKernelModeVersion", resourceCulture);
+                return ResourceManager.GetString("BA2008_NotApplicable_UnsupportedKernelModeVersion", resourceCulture);
             }
         }
         
