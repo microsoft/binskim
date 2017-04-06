@@ -322,7 +322,7 @@
             "formatId": "Pass",
             "arguments": [
               "ManagedResourcesOnly.dll",
-              "Cryptographically weak signatures: [digest algorithm: 'sha1NoSign' + digest encryption algorithm: 'RSA'] [digest algorithm: 'sha256NoSign' + digest encryption algorithm: 'RSA']"
+              "Cryptographically weak signatures: [digest algorithm: 'sha1NoSign' + digest encryption algorithm: 'RSA'] Cryptographically strong signatures: [digest algorithm: 'sha256NoSign' + digest encryption algorithm: 'RSA']"
             ]
           },
           "locations": [

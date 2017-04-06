@@ -209,7 +209,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (goodAlgorithms.Count > 0)
             {
                 count = 0;
-                sb.Append(sb.Length > 0 ? " " : "Cryptographically strong signatures: ");
+                sb.Append((sb.Length > 0 ? " " : String.Empty) + "Cryptographically strong signatures: ");
 
                 foreach (Tuple<string, string> tuple in goodAlgorithms)
                 {
