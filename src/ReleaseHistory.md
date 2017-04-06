@@ -32,3 +32,10 @@
 * Eliminate high-entropy VA analysis for binaries with no entry points
 * Update various checks to eliminate noise analyzing boot binaries
 
+## **v1.4.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.0
+* Fix rule crash on firing 'not applicable' message for control flow guard check
+* Add BinScope readable rule name information to SARIF log file output
+* Fix reporting errors when flagging binaries signed with weak cryptogrphic algorithms
+
+
+

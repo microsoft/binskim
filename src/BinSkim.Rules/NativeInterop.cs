@@ -437,5 +437,39 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             /// PCCERT_CHAIN_CONTEXT->CERT_CHAIN_CONTEXT*
             public IntPtr pChainContext;
         }
+
+        [StructLayoutAttribute(LayoutKind.Sequential)]
+        public struct CMSG_SIGNER_INFO
+        {
+            public uint dwVersion;
+            public CERT_NAME_BLOB Issuer;
+            public CRYPT_INTEGER_BLOB SerialNumber;
+            public CRYPT_ALGORITHM_IDENTIFIER HashAlgorithm;
+            public CRYPT_ALGORITHM_IDENTIFIER HashEncryptionAlgorithm;
+            public CRYPT_DATA_BLOB EncryptedHash;
+            public CRYPT_ATTRIBUTES AuthAttrs;
+            public CRYPT_ATTRIBUTES UnauthAttrs;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct CERT_NAME_BLOB
+        {
+            public int cbData;
+            public IntPtr pbData;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct CRYPT_INTEGER_BLOB
+        {
+            public int cbData;
+            public IntPtr pbData;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct CRYPT_DATA_BLOB
+        {
+            public int cbData;
+            public IntPtr pbData;
+        }
     }
 }
