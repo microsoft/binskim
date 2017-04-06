@@ -202,7 +202,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var result = new StringToVersionMap();
 
             result[MIN_COMPILER_VER] = new Version(17, 0, 65501, 17016);
-            result[MIN_XBOX_COMPILER_VER] = new Version("16.0.11886.0");
+            result[MIN_XBOX_COMPILER_VER] = new Version(16, 0, 11886, 0);
 
             return result;
         }

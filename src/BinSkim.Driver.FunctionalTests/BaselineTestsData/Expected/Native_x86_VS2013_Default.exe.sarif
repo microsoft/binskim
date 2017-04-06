@@ -5,9 +5,9 @@
     {
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.3.8.0",
-        "version": "1.3.8.0",
-        "semanticVersion": "1.3.8",
+        "fullName": "BinSkim 1.3.9.0",
+        "version": "1.3.9.0",
+        "semanticVersion": "1.3.9",
         "sarifLoggerVersion": "1.5.40.0",
         "language": "en-US",
         "properties": {
@@ -355,10 +355,14 @@
           "messageFormats": {
             "Pass": "'{0}' enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location.",
             "Error": "'{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /GUARD:CF on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.",
+            "NotApplicable_UnsupportedKernelModeVersion": "'{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
+          }
         },
         "BA2015": {
           "id": "BA2015",
@@ -373,7 +377,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "HighEntropyVACheck"
+          }
         },
         "BA2001": {
           "id": "BA2001",
@@ -386,7 +393,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "FourGbCheck"
+          }
         },
         "BA2006": {
           "id": "BA2006",
@@ -400,7 +410,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "CompilerVersionCheck"
+          }
         },
         "BA2014": {
           "id": "BA2014",
@@ -413,7 +426,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "GSFunctionSafeBuffersCheck"
+          }
         },
         "BA2002": {
           "id": "BA2002",
@@ -426,7 +442,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "ATLVersionCheck"
+          }
         },
         "BA2010": {
           "id": "BA2010",
@@ -439,7 +458,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "ExecutableImportsCheck"
+          }
         },
         "BA2021": {
           "id": "BA2021",
@@ -453,7 +475,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "WXCheck"
+          }
         },
         "BA2019": {
           "id": "BA2019",
@@ -466,7 +491,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "SharedSectionCheck"
+          }
         },
         "BA2012": {
           "id": "BA2012",
@@ -482,7 +510,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
+          }
         },
         "BA2005": {
           "id": "BA2005",
@@ -496,7 +527,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "BinaryVersionsCheck"
+          }
         },
         "BA2022": {
           "id": "BA2022",
@@ -504,8 +538,8 @@
           "shortDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms.",
           "fullDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.",
           "messageFormats": {
-            "Pass": "'{0}' appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The image was signed with '{1}',  cryptographically strong algorithm(s).",
-            "Error_BadSigningAlgorithm": "'{0}' was signed using '{1}', algorithm(s) that WinTrustVerify has flagged as insecure.",
+            "Pass": "'{0}' appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The following digitial signature algorithms were detected: {1}",
+            "Error_BadSigningAlgorithm": "'{0}' was signed exclusively with algorithms that WinTrustVerify has flagged as insecure. {1}",
             "Error_DidNotVerify": "'{0}' signing was flagged as insecure by WinTrustVerify with error code '{1}' ({2})",
             "Error_WinTrustVerifyApiError": "'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'.",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
@@ -526,7 +560,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "DBCheck"
+          }
         },
         "BA2007": {
           "id": "BA2007",
@@ -541,7 +578,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "CompilerWarningsCheck"
+          }
         },
         "BA2011": {
           "id": "BA2011",
@@ -555,7 +595,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "GSCheck"
+          }
         },
         "BA2018": {
           "id": "BA2018",
@@ -569,7 +612,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
+          }
         },
         "BA2013": {
           "id": "BA2013",
@@ -584,7 +630,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
+          }
         },
         "BA2016": {
           "id": "BA2016",
@@ -597,7 +646,10 @@
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "NXCheck"
+          }
         }
       },
       "files": {

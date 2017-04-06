@@ -263,9 +263,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries..
         /// </summary>
-        internal static string BA2008_NotApplicable_UnsupportKernelModeVersion {
+        internal static string BA2008_NotApplicable_UnsupportedKernelModeVersion {
             get {
-                return ResourceManager.GetString("BA2008_NotApplicable_UnsupportKernelModeVersion", resourceCulture);
+                return ResourceManager.GetString("BA2008_NotApplicable_UnsupportedKernelModeVersion", resourceCulture);
             }
         }
         
@@ -729,7 +729,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was signed using &apos;{1}&apos;, algorithm(s) that WinTrustVerify has flagged as insecure..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was signed exclusively with algorithms that WinTrustVerify has flagged as insecure. {1}.
         /// </summary>
         internal static string BA2022_Error_BadSigningAlgorithm {
             get {
@@ -756,7 +756,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The image was signed with &apos;{1}&apos;,  cryptographically strong algorithm(s)..
+        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The following digitial signature algorithms were detected: {1}.
         /// </summary>
         internal static string BA2022_Pass {
             get {

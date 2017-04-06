@@ -34,7 +34,7 @@ Command-Line Documentation
   -r, --recurse       Recurse into subdirectories when evaluating file
                       specifier arguments.
 
-  -p, --policy        Path to policy file that will be used to configure
+  -c, --config        Path to XML file that will be used to configure
                       analysis. Pass value of 'default' to use built-in
                       settings.
 
@@ -58,6 +58,6 @@ Command-Line Documentation
 
 Example Command-Line
 ====================
-`binskim.exe c:\bld\*.dll --recurse --policy default --output MyRun.sarif`
+`binskim.exe c:\bld\*.dll --recurse --output MyRun.sarif`
 
 See the [SARIF](https://github.com/sarif-standard/sarif-spec/) site for more information on the 'Static Analysis Results Interchange Format'
