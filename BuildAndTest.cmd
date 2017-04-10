@@ -26,8 +26,8 @@ echo     }                                                                      
 echo  }                                                                            >> %VERSION_CONSTANTS%
 
 %~dp0.nuget\NuGet.exe restore src\BinSkim.sln 
-msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x64" /filelogger /fileloggerparameters:Verbosity=detailed
-msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x86" /filelogger /fileloggerparameters:Verbosity=detailed
+msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x64" /filelogger /fileloggerparameters:Verbosity=detailed /p:"RunBinSkim=true"
+msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x86" /filelogger /fileloggerparameters:Verbosity=detailed /p:"RunBinSkim=true"
 
 md bld\bin\nuget
 

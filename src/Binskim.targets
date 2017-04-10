@@ -1,0 +1,58 @@
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+  </PropertyGroup>
+
+  <!-- ClCompiler here forces task to run post-compilation for C++ -->
+  <Target Name="Binscope" AfterTargets="Link">
+    <CallTarget Targets="Execute_Binscope" />
+  </Target>
+
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      Binscope
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetExtension>.exe</TargetExtension>
+    
+    <!-- C# library output designation -->
+    <TargetExtension Condition="'$(OutputType)'=='Library'">.dll</TargetExtension>
+
+    <!-- C++ library output designation -->
+    <TargetExtension Condition="'$(ConfigurationType)'=='DynamicLibrary'">.dll</TargetExtension>
+    <TargetName Condition="'$(AssemblyName)'!=''">$(AssemblyName)</TargetName>
+    <TargetName Condition="'$(ProjectName)'!=''">$(ProjectName)</TargetName>
+
+    <BinSkimLogPath>$(OutputPath)</BinSkimLogPath>
+    <BinSkimLogFileName Condition="'$(BinSkimLogFileName)'==''">$(TargetName)$(TargetExtension).sarif</BinSkimLogFileName>
+    <BinSkimConfigurationXml Condition="'$(BinSkimConfigurationXml)'==''">default</BinSkimConfigurationXml>
+    <BinSkimVerboseOutput Condition="'$(BinSkimVerboseOutput)'==''">false</BinSkimVerboseOutput>
+  </PropertyGroup>
+
+  <Target Name="Execute_Binscope">
+    <Message Text="// Task: Run BinSkim... =============================================================" />
+
+    <PropertyGroup>
+      <AnalysisTarget>$(OutputPath)$(AssemblyName)$(TargetExtension)</AnalysisTarget>
+
+      <ConfigurationArg>--config $(BinSkimConfigurationXml)</ConfigurationArg>
+      <VerboseArg Condition="'$(BinSkimVerboseOutput)'=='true'">--verbose</VerboseArg>
+      <AnalysisTargetArg>"$(AnalysisTarget)"</AnalysisTargetArg>
+      <OutputFileArg>-o "$(BinSkimLogPath)$(BinSkimLogFileName)"</OutputFileArg>
+      <CommandLine>"$(BinSkimExePath)" analyze $(AnalysisTargetArg) $(OutputFileArg) $(ConfigurationArg) $(VerboseArg)</CommandLine>
+    </PropertyGroup>
+        
+    <!-- Run BinSkim -->
+    <MakeDir Condition="!Exists('$(BinSkimLogPath)')" Directories="$(BinSkimLogPath)" />
+    <Exec 
+      Command="$(CommandLine)" 
+      WorkingDirectory="$(OutputPath)" 
+      IgnoreStandardErrorWarningFormat="false" 
+      IgnoreExitCode="false" />
+
+    <Message Text="// Task: BinSkim analysis complete. =============================================================" />
+  </Target>
+</Project>

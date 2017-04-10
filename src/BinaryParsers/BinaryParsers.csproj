@@ -113,5 +113,4 @@
       <CustomToolNamespace>Microsoft.CodeAnalysis.BinaryData</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
