@@ -100,7 +100,7 @@
             "formatId": "Pass",
             "arguments": [
               "Uwp_ARM_VS2015_DefaultBlankApp.exe",
-              "17.0.65501.17016"
+              "17.0.65501.17013"
             ]
           },
           "locations": [

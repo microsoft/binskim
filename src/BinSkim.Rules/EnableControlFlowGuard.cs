@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Reflection.PortableExecutable;
 
@@ -14,7 +15,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
-    public class EnableControlFlowGuard : BinarySkimmerBase
+    public class EnableControlFlowGuard : BinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2008
@@ -49,6 +50,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
+        public IEnumerable<IOption> GetOptions()
+        {
+            return new List<IOption>
+            {
+                MinimumRequiredLinkerVersion
+            }.ToImmutableArray();
+        }
+
+        private const string AnalyzerName = RuleIds.EnableControlFlowGuardId + "." + nameof(EnableControlFlowGuard);
+
+        public static PerLanguageOption<Version> MinimumRequiredLinkerVersion { get; } =
+            new PerLanguageOption<Version>(
+                AnalyzerName, nameof(MinimumRequiredLinkerVersion), defaultValue: () => { return new Version("14.0"); });
+
         public const UInt32 IMAGE_GUARD_CF_INSTRUMENTED = 0x0100;
         public const UInt32 IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG = 10;
         public const UInt32 IMAGE_LOAD_CONFIG_MINIMUM_SIZE_32 = 0x005C;
@@ -58,8 +73,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public const UInt32 IMAGE_GUARD_CF_CHECKS = 
             IMAGE_GUARD_CF_INSTRUMENTED | IMAGE_GUARD_CF_FUNCTION_TABLE_PRESENT;
-
-        public Version MinimumSupportedLinkerVersion = new Version("14.0");
         
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
@@ -81,12 +94,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsBootBinary;
             if (portableExecutable.IsBoot) { return result; }
 
-            if (portableExecutable.LinkerVersion < MinimumSupportedLinkerVersion)
+            Version minimumRequiredLinkerVersion = context.Policy.GetProperty(MinimumRequiredLinkerVersion);
+
+            if (portableExecutable.LinkerVersion < minimumRequiredLinkerVersion)
             {
                 reasonForNotAnalyzing = string.Format(
                     MetadataConditions.ImageCompiledWithOutdatedTools,                    
-                    portableExecutable.LinkerVersion, 
-                    MinimumSupportedLinkerVersion);
+                    portableExecutable.LinkerVersion,
+                    minimumRequiredLinkerVersion);
 
                 return result;
             }
