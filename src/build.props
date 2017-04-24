@@ -48,4 +48,10 @@
     </Reference>
   </ItemGroup>
   -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <BinSkimVerboseOutput>false</BinSkimVerboseOutput>
+    <BinSkimExePath>$(SolutionDir)..\bld\bin\BinSkim.Driver\$(Platform)_$(Configuration)\binskim.exe</BinSkimExePath>
+  </PropertyGroup>
+  <Import Project="BinSkim.targets" Condition="'$(RunBinSkim)'=='true'"/>
 </Project>
