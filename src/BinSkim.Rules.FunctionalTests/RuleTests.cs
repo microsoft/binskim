@@ -167,7 +167,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private void VerifyNotApplicable(
             IBinarySkimmer skimmer,
             HashSet<string> notApplicableConditions,
-            AnalysisApplicability expectedApplicability = AnalysisApplicability.NotApplicableToSpecifiedTarget)
+            AnalysisApplicability expectedApplicability = AnalysisApplicability.NotApplicableToSpecifiedTarget,
+            bool useDefaultPolicy = false)
         {
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = ruleName;
@@ -204,6 +205,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 context = CreateContext(logger, null, target);
                 if (!context.PE.IsPEFile) { continue; }
+
+                if (useDefaultPolicy)
+                {
+                    context.Policy = new PropertiesDictionary();
+                }
 
                 context.Rule = skimmer;
 
@@ -673,19 +679,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-            VerifyNotApplicable(new EnableCriticalCompilerWarnings(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
+
+            VerifyNotApplicable(
+                new EnableCriticalCompilerWarnings(), 
+                applicableTo, 
+                AnalysisApplicability.ApplicableToSpecifiedTarget);
         }
 
         [Fact]
         public void EnableControlFlowGuard_Fail()
         {
-            VerifyFail(new EnableControlFlowGuard());
+            VerifyFail(new EnableControlFlowGuard(), useDefaultPolicy : true);
         }
 
         [Fact]
         public void EnableControlFlowGuard_Pass()
         {
-            VerifyPass(new EnableControlFlowGuard());
+            VerifyPass(new EnableControlFlowGuard(), useDefaultPolicy : true);
         }
 
         [Fact]
@@ -698,7 +708,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             notApplicableTo.Add(MetadataConditions.ImageIsResourceOnlyBinary);
             notApplicableTo.Add(MetadataConditions.ImageIsILOnlyManagedAssembly);
 
-            VerifyNotApplicable(new EnableControlFlowGuard(), notApplicableTo);
+            VerifyNotApplicable(new EnableControlFlowGuard(), notApplicableTo, useDefaultPolicy : true);
         }
 
         [Fact]

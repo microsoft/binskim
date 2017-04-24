@@ -35,5 +35,7 @@
 ## **v1.4.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.0
 * Fix rule crash on firing 'not applicable' message for control flow guard check
 * Add BinScope readable rule name information to SARIF log file output
-* Fix reporting errors when flagging binaries signed with weak cryptographic algorithms
-* Add BinSkim.targets files for integrating with MSBUILD
+* Fix reporting errors when flagging binaries signed with weak cryptogrphic algorithms
+* Drop required compiler tools version to 17.0.65501.17013
+* Make minimum required linker configurable for EnableControlFlowGuard check
+

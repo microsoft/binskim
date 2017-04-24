@@ -5,9 +5,9 @@
     {
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.3.9.0",
-        "version": "1.3.9.0",
-        "semanticVersion": "1.3.9",
+        "fullName": "BinSkim 1.4.0.0",
+        "version": "1.4.0.0",
+        "semanticVersion": "1.4.0",
         "sarifLoggerVersion": "1.5.40.0",
         "language": "en-US",
         "properties": {
@@ -100,7 +100,7 @@
             "formatId": "Pass",
             "arguments": [
               "Uwp_ARM_VS2015_DefaultBlankApp.exe",
-              "17.0.65501.17016"
+              "17.0.65501.17013"
             ]
           },
           "locations": [
