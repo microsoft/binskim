@@ -36,6 +36,6 @@
 * Fix rule crash on firing 'not applicable' message for control flow guard check
 * Add BinScope readable rule name information to SARIF log file output
 * Fix reporting errors when flagging binaries signed with weak cryptogrphic algorithms
-
-
+* Drop required compiler tools version to 17.0.65501.17013
+* Make minimum required linker configurable for EnableControlFlowGuard check
 
