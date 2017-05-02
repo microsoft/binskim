@@ -24,6 +24,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         public ImageFieldData(int offset, string name, Type type, int count, ImageHeader h) : this(offset, name, type, count)
         {
             Header = h;
+            ParentHeader = h.ParentHeader;
         }
 
         public ImageFieldData(int offset, string name, Type type, int count, bool b32BitOnly) : this(offset, name, type, count)

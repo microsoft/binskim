@@ -50,10 +50,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 o = sp.SafePointerToType(fi);
                 ((object[])res)[i] = o;
-                if (o is ImageHeader)
-                    len = ((ImageHeader)o).Size;
-                else
-                    len = fi.GetTypeLen();
+                len = (o is ImageHeader)
+                    ? ((ImageHeader)o).Size                
+                    : fi.GetTypeLen();
                 sp = sp + len;
             }
 
@@ -86,11 +85,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 while ((byte)field_end != fi.TrailingByte) field_end++;
                 // if we have a VarLen and a PadTo specified we will make sure
                 // we only skip up to PadTo trailing bytes
-                if (padding != 0)
-                    padding = padding - (field_end.Address - m_pHeader.Address) % padding;
-                else
-                    padding = -1;
-                while (((byte)field_end == fi.TrailingByte) && (padding-- != 0)) field_end++;
+                padding =  (padding != 0)
+                    ? padding - (field_end.Address - m_pHeader.Address) % padding
+                    : -1;
+
+                while (((byte)field_end == fi.TrailingByte) && (padding-- != 0))
+                {
+                    field_end++;
+                }
 
                 return field_end - field_start;
             }
@@ -98,10 +100,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             if (fi.Type == Type.HEADER)
             {
                 object o = GetField(n);
-                if (o is Array)
-                    len = ((ImageHeader)((object[])o)[0]).Size;
-                else
-                    len = ((ImageHeader)o).Size;
+                len = (o is Array)
+                    ? ((ImageHeader)((object[])o)[0]).Size
+                    : ((ImageHeader)o).Size;
             }
             else
                 len = fi.GetTypeLen();

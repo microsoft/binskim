@@ -96,14 +96,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             Version minCompilerVersion;
 
-            if (context.PE.IsXBox)
-            {
-                minCompilerVersion = context.Policy.GetProperty(MinimumToolVersions)[MIN_XBOX_COMPILER_VER];
-            }
-            else
-            {
-                minCompilerVersion = context.Policy.GetProperty(MinimumToolVersions)[MIN_COMPILER_VER];
-            }
+            minCompilerVersion = (context.PE.IsXBox)
+                ?  context.Policy.GetProperty(MinimumToolVersions)[MIN_XBOX_COMPILER_VER]
+                : context.Policy.GetProperty(MinimumToolVersions)[MIN_COMPILER_VER];
 
             TruncatedCompilandRecordList badModuleList = new TruncatedCompilandRecordList();
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
@@ -187,14 +182,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public static Version Minimum(Version lhs, Version rhs)
         {
-            if (lhs < rhs)
-            {
-                return lhs;
-            }
-            else
-            {
-                return rhs;
-            }
+            return (lhs < rhs) ? lhs : rhs;
         }
 
         private static StringToVersionMap BuildMinimumToolVersionsMap()
@@ -210,11 +198,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private static StringToVersionMap BuildAllowedLibraries()
         {
             StringToVersionMap result = new StringToVersionMap();
-            //result["cExample.lib,c"] = new Version("1.0.0.0");
-            //result["cplusplusExample.lib,cxx"] = new Version("1.0.0.0");
-            //result["masmExample.lib,masm"] = new Version("1.0.0.0");
 
-            //result["odbccp32.lib,c"] = new Version("17.0.65501.17013");
+            // Example entries
+            // result["cExample.lib,c"] = new Version("1.0.0.0") 
+            // result["cplusplusExample.lib,cxx"] = new Version("1.0.0.0")
+            // result["masmExample.lib,masm"] = new Version("1.0.0.0")
+
             return result;
         }
     }
