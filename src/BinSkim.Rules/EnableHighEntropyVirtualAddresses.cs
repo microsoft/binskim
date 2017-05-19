@@ -49,8 +49,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 };
             }
         }
-
-        private static readonly Version s_minHighEntropyVersion = new Version(17, 0, 0, 0);
         
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {

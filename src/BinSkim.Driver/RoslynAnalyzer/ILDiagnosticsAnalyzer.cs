@@ -29,11 +29,6 @@ namespace Microsoft.CodeAnalysis.IL
 
         public static ILDiagnosticsAnalyzer Create(params string[] analyzerFilePaths)
         {
-            return Create((IEnumerable<string>)analyzerFilePaths);
-        }
-
-        public static ILDiagnosticsAnalyzer Create(IEnumerable<string> analyzerFilePaths)
-        {
             var analysisContext = new RoslynAnalysisContext();
 
             foreach(string analyzerFilePath in analyzerFilePaths)

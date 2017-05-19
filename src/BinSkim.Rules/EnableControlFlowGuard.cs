@@ -114,20 +114,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             PE pe = context.PE;
 
-            if (pe.IsKernelMode && 
-                (pe.FileVersion.FileMajorPart < 10 ||
-                 pe.FileVersion.FileBuildPart < 15000))
+            if (pe.IsKernelMode &&
+                (pe.FileVersion.FileMajorPart < 10 || pe.FileVersion.FileBuildPart < 15000) &&
+                pe.FileVersion.FileBuildPart < 15000)
             {
-                if (pe.FileVersion.FileBuildPart < 15000)
-                {
-                    // '{0}' is a kernel mode portable executable compiled for a 
-                    // version of Windows that does not support the control flow
-                    // guard feature for kernel mode binaries.
-                    context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultLevel.NotApplicable, context, null,
-                            nameof(RuleResources.BA2008_NotApplicable_UnsupportedKernelModeVersion),
-                                context.TargetUri.GetFileName()));
-                }
+                // '{0}' is a kernel mode portable executable compiled for a 
+                // version of Windows that does not support the control flow
+                // guard feature for kernel mode binaries.
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultLevel.NotApplicable, context, null,
+                        nameof(RuleResources.BA2008_NotApplicable_UnsupportedKernelModeVersion),
+                            context.TargetUri.GetFileName()));
             }
 
             if (!EnablesControlFlowGuard(context))

@@ -54,8 +54,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        private static readonly Version s_winCeVersion70 = new Version(7, 0);
-
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;

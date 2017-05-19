@@ -77,15 +77,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public string GetUndecoratedName()
         {
             string name = this.Name;
-            if (name.Length != 0 && name[0] == '?')
-            {
-                // C++ name, use the C++ undecorated name
-                return this.RawCxxUndecoratedName;
-            }
-            else
-            {
-                return name;
-            }
+            return (name.Length != 0 && name[0] == '?')
+                ? this.RawCxxUndecoratedName
+                : name;
         }
 
         /// <summary>
@@ -107,14 +101,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             string typeName;
             using (Symbol type = this.CreateType())
             {
-                if (type == null)
-                {
-                    typeName = "<none>";
-                }
-                else
-                {
-                    typeName = type.Name;
-                }
+                typeName = (type == null) ? "<none>" : type.Name;
             }
 
             string result = String.Format("Tag:{0} Location:{1} Type:{2} Name:{3}", this.SymbolTag, this.LocationType, typeName, this.Name);

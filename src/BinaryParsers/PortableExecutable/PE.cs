@@ -398,7 +398,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     return _isResourceOnly.Value;
                 }
 
-                // IMAGE_DIRECTORY_ENTRY_RESOURCE = 2;
+                // IMAGE_DIRECTORY_ENTRY_RESOURCE == 2
                 if (peHeader.ResourceTableDirectory.RelativeVirtualAddress == 0)
                 {
                     _isResourceOnly = false;
@@ -406,27 +406,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 }
 
                 _isResourceOnly = 
-                       (peHeader.ThreadLocalStorageTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_TLS = 9;
-                        peHeader.ImportAddressTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_IAT = 12;
-                        peHeader.GlobalPointerTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_GLOBALPTR = 8;
-                        peHeader.DelayImportTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT = 13;
-                        peHeader.BoundImportTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT = 11;
-                        peHeader.LoadConfigTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG = 10;
-                        peHeader.CopyrightTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_ARCHITECTURE = 7;
-                        peHeader.ExceptionTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_EXCEPTION = 3;	
-                        peHeader.CorHeaderTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR 14
-                        peHeader.ImportTableDirectory.RelativeVirtualAddress == 0); // IMAGE_DIRECTORY_ENTRY_IMPORT = 1;                                                
+                       (peHeader.ThreadLocalStorageTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_TLS == 9
+                        peHeader.ImportAddressTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_IAT == 12
+                        peHeader.GlobalPointerTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_GLOBALPTR == 8
+                        peHeader.DelayImportTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT == 13
+                        peHeader.BoundImportTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT == 11
+                        peHeader.LoadConfigTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG == 10
+                        peHeader.CopyrightTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_ARCHITECTURE == 7
+                        peHeader.ExceptionTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_EXCEPTION == 3	
+                        peHeader.CorHeaderTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR == 14
+                        peHeader.ImportTableDirectory.RelativeVirtualAddress == 0); // IMAGE_DIRECTORY_ENTRY_IMPORT == 1
 
-                if (_isResourceOnly.Value)
+                if (_isResourceOnly.Value &&
+                    peHeader.ExportTableDirectory.RelativeVirtualAddress != 0 && // IMAGE_DIRECTORY_ENTRY_EXPORT = 0;
+                    peHeader.SizeOfCode > 0)
                 {
                     // We require special checks in the event of a non-zero export table directory value
                     // If the binary only contains forwarders, we should regard it as not containing code
-                    if (peHeader.ExportTableDirectory.RelativeVirtualAddress != 0 && // IMAGE_DIRECTORY_ENTRY_EXPORT = 0;
-                        peHeader.SizeOfCode > 0)
-                    {
-                        _isResourceOnly = false;
-                    }
+                    _isResourceOnly = false;
                 }
+                   
 
                 return _isResourceOnly.Value;
 
@@ -643,34 +642,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 return null;
             }
-        }
-
-
-        /// <summary>
-        /// Remove all characters <0x20
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        private static string RemoveUnprintableChars(string s)
-        {
-            if (s == null)
-            {
-                return null;
-            }
-
-            StringBuilder sb = new StringBuilder();
-
-            for (int i = 0; i < s.Length; i++)
-            {
-                char c = s[i];
-
-                if (c >= 0x20)
-                {
-                    sb.Append(c);
-                }
-            }
-
-            return sb.ToString();
         }
     }
 }

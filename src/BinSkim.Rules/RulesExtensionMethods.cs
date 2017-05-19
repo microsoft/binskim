@@ -8,6 +8,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     public static class RulesExtensionMethods
     {
         private static Dictionary<CryptoError, string> s_cryptoErrorToDescriptionMap = BuildCryptoErrorDescriptions();
+
         private static Dictionary<CryptoError, string> BuildCryptoErrorDescriptions()
         {
             var result = new Dictionary<CryptoError, string>()

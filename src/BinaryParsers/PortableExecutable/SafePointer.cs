@@ -45,21 +45,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         // required overrides
         public override bool Equals(object o)
         {
+            if (!(o is SafePointer))
+            {
+                return false;
+            }
+
             return ((SafePointer)o == this);
         }
 
         public override int GetHashCode()
         {
-            if (_array != null)
-            {
-                return (_array.GetHashCode() << 16) + _index;
-            }
-            else
-            {
-                return _stream.GetHashCode();
-            }
-
-            throw new InvalidOperationException("Neither _array nor _stream exist");
+            return (_array != null)
+                ? (_array.GetHashCode() << 16) + _index
+                : _stream.GetHashCode();
         }
 
         // conversion

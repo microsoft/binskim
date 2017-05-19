@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
     {
         public static object SafePointerToType(this SafePointer sp, ImageFieldData fi)
         {
-            object res = null;
+            object res;
 
             switch (fi.Type)
             {
@@ -26,12 +26,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 case Type.HEADER: res = fi.Header.Create(fi.ParentHeader, sp); break;
                 case Type.NATIVEINT:
                     PEHeader ioh = fi.ParentHeader;
-                    if ((ioh != null) && (ioh.Magic == PEMagic.PE32Plus))
-                        res = (UInt64)sp;
-                    else
-                        res = (UInt32)sp;
+                    res = ((ioh != null) && (ioh.Magic == PEMagic.PE32Plus))
+                        ? (UInt64)sp
+                        : (UInt32)sp;
                     break;
-                default: throw new Exception("Unknown type");
+                default: throw new InvalidOperationException("Unknown type");
             }
             return res;
         }
