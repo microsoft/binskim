@@ -65,6 +65,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             var result = new StringSet();
             result.Add("_TlgWrite");
+            result.Add("__vcrt_trace_logging_provider::_TlgWrite");
             return result;
         }
 

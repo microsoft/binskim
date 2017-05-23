@@ -39,3 +39,7 @@
 * Drop required compiler tools version to 17.0.65501.17013
 * Make minimum required linker configurable for EnableControlFlowGuard check
 
+## **v1.4.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.1
+* Add response file support
+* Add __vcrt_trace_logging_provider::_TlgWrite exception to BA2014.DoNotDisableStackProtectionForFunctions
+
