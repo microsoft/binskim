@@ -5,9 +5,9 @@
     {
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.4.0.0",
-        "version": "1.4.0.0",
-        "semanticVersion": "1.4.0",
+        "fullName": "BinSkim 1.4.2.0",
+        "version": "1.4.2.0",
+        "semanticVersion": "1.4.2",
         "sarifLoggerVersion": "1.5.46.0",
         "language": "en-US",
         "properties": {
