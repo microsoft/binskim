@@ -57,6 +57,19 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
+        public override int Run(AnalyzeOptions analyzeOptions)
+        {
+            int result = base.Run(analyzeOptions);
+
+            // In BinSkim, no rule is ever applicable to every target type. For example,
+            // we have checks that are only relevant to either 32-bit or 64-bit binaries.
+            // Because of this, the return code bit for RuleNotApplicableToTarget is not
+            // interesting (it will always be set). 
+            return analyzeOptions.RichReturnCode 
+                ? (int)((uint)result & (uint)~RuntimeConditions.RuleNotApplicableToTarget) 
+                : result;
+        }
+
         private void AnalyzeManagedAssembly(string assemblyFilePath, IEnumerable<string> roslynAnalyzerFilePaths, BinaryAnalyzerContext context)
         {
             if (roslynAnalyzerFilePaths == null)

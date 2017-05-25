@@ -8,7 +8,7 @@
         "fullName": "BinSkim 1.4.0.0",
         "version": "1.4.0.0",
         "semanticVersion": "1.4.0",
-        "sarifLoggerVersion": "1.5.40.0",
+        "sarifLoggerVersion": "1.5.46.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -670,9 +670,6 @@
         }
       },
       "invocation": {
-        "commandLine": "\"Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe\" analyze Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Native_x86_VS2015_Default_Debug.dll --output Z:\\src\\BinSkim.Driver.FunctionalTests\\BaselineTestsData\\Expected\\Native_x86_VS2015_Default_Debug.dll.sarif.temp --verbose --hashes --config default",
-        "fileName": "Z:\\bld\\bin\\BinSkim.Driver\\x86_Release\\BinSkim.exe",
-        "workingDirectory": "Z:\\src\\BinSkim.Driver.FunctionalTests"
       }
     }
   ]
