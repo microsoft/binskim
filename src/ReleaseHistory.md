@@ -41,6 +41,7 @@
 
 ## **v1.4.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.1
 * Add response file support
-* Add 'rich' return code (a bitfield value of observed runtime conditions) via SARIF SDK --rich-return-code arg
 * Add __vcrt_trace_logging_provider::_TlgWrite exception to BA2014.DoNotDisableStackProtectionForFunctions
 
+## **v1.4.2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.2
+* Add 'rich' return code (a bitfield value of observed runtime conditions) via SARIF SDK --rich-return-code arg
