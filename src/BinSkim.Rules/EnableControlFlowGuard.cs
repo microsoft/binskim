@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
     public class EnableControlFlowGuard : BinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
