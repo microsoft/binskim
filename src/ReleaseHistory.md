@@ -45,3 +45,6 @@
 
 ## **v1.4.2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.2
 * Add 'rich' return code (a bitfield value of observed runtime conditions) via SARIF SDK --rich-return-code arg
+
+## **v1.4.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.3
+* Fix rich return code return functionality when core command-line parsing breaks
