@@ -120,6 +120,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 switch (cryptoError)
                 {
+                    // The SignSecurely check mostly validates signing algorithm strength. The
+                    // error conditions are expected in some scan contexts, for example, an 
+                    // isolated build environment which hasn't been configured to trust the
+                    // signing root. Providing a more complex signing validation would require
+                    // BinSkim to be significantly more configurable to provide information on
+                    // the scan environment as well as the scan targets.
+                    case CryptoError.CERT_E_UNTRUSTEDROOT:
+                    case CryptoError.CERT_E_CHAINING:
                     case CryptoError.ERROR_SUCCESS:
                     {
                         // Hash that represents the subject is trusted.
