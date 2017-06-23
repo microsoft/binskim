@@ -39,9 +39,10 @@
 * Drop required compiler tools version to 17.0.65501.17013
 * Make minimum required linker configurable for EnableControlFlowGuard check
 
-## **v1.4.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.1
+## **v1.4.2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.2
 * Add response file support
 * Add __vcrt_trace_logging_provider::_TlgWrite exception to BA2014.DoNotDisableStackProtectionForFunctions
-
-## **v1.4.2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.2
 * Add 'rich' return code (a bitfield value of observed runtime conditions) via SARIF SDK --rich-return-code arg
+
+## **v1.4.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.3
+* Export configuration knob to adjust EnableControlFlowGuard linker version check
