@@ -58,6 +58,6 @@ Command-Line Documentation
 
 Example Command-Line
 ====================
-`binskim.exe c:\bld\*.dll --recurse --output MyRun.sarif`
+`binskim.exe analyze c:\bld\*.dll --recurse --output MyRun.sarif`
 
 See the [SARIF](https://github.com/sarif-standard/sarif-spec/) site for more information on the 'Static Analysis Results Interchange Format'
