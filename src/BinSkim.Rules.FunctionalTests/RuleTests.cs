@@ -246,6 +246,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 result.Add(Path.Combine(testFilesDirectory, "Native_x64_VS2013_Default.dll"));
                 result.Add(Path.Combine(testFilesDirectory, "MixedMode_x64_VS2013_Default.dll"));
                 result.Add(Path.Combine(testFilesDirectory, "ManagedResourcesOnly.dll"));
+                result.Add(Path.Combine(testFilesDirectory, "Managed_x86_VS2015_FSharp.dll"));
             }
 
             if (metadataConditions.Contains(MetadataConditions.CouldNotLoadPdb))
@@ -258,11 +259,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 result.Add(Path.Combine(testFilesDirectory, "Native_x64_VS2013_Default.dll"));
                 result.Add(Path.Combine(testFilesDirectory, "MixedMode_x64_VS2013_Default.dll"));
+                result.Add(Path.Combine(testFilesDirectory, "Managed_x64_VS2015_FSharp.exe.exe"));
             }
 
             if (metadataConditions.Contains(MetadataConditions.ImageIsILOnlyManagedAssembly))
             {
                 result.Add(Path.Combine(testFilesDirectory, "Managed_x86_VS2013_Wpf.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "Managed_x86_VS2015_FSharp.dll"));
+                result.Add(Path.Combine(testFilesDirectory, "Managed_x64_VS2015_FSharp.exe.exe"));
             }
 
             if (metadataConditions.Contains(MetadataConditions.ImageIsMixedModeBinary))
@@ -297,6 +301,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 result.Add(Path.Combine(testFilesDirectory, "MixedMode_x64_VS2013_Default.dll"));
                 result.Add(Path.Combine(testFilesDirectory, "Native_x64_VS2013_Default.dll"));
                 result.Add(Path.Combine(testFilesDirectory, "Uwp_ARM_VS2015_DefaultBlankApp.dll"));
+                result.Add(Path.Combine(testFilesDirectory, "Managed_x64_VS2015_FSharp.exe"));
             }
 
             if (metadataConditions.Contains(MetadataConditions.ImageIsNot64BitBinary))
@@ -485,7 +490,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             HashSet<string> notApplicableTo = new HashSet<string>();
             notApplicableTo.Add(MetadataConditions.ImageIsNot64BitBinary);
             notApplicableTo.Add(MetadataConditions.ImageIsKernelModeBinary);
-            notApplicableTo.Add(MetadataConditions.ImageIsResourceOnlyBinary);
+            notApplicableTo.Add(MetadataConditions.ImageIsILOnlyManagedAssembly);
 
             VerifyNotApplicable(new LoadImageAboveFourGigabyteAddress(), notApplicableTo);
         }
