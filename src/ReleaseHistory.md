@@ -50,3 +50,6 @@
 * Fix rich return code return functionality when core command-line parsing breaks
 * Export configuration knob to adjust EnableControlFlowGuard linker version check
 * Loosen SignSecurely rule to prevent errors on WinTrustVerify errors CERT_E_UNTRUSTEDROOT and CERT_E_CHAINING
+
+## **v1.4.4** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.4
+* Do not fire BA2001.LoadImageAboveFourGigabyteAddressId for ILOnly 64-bit assemblies
