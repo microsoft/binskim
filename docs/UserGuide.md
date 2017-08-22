@@ -1,25 +1,3 @@
-<!-- TOC -->
-
-- [Binskim](#binskim)
-    - [Source and Drop Location](#source-and-drop-location)
-    - [Running BinSkim](#running-binskim)
-        - [Quick Start](#quick-start)
-        - [Help Reference](#help-reference)
-        - [Analyze Command](#analyze-command)
-            - [--sympath](#sympath)
-            - [-o, --output](#o---output)
-            - [-v, --verbose](#v---verbose)
-            - [-r, --recurse](#r---recurse)
-            - [-c, --config](#c---config)
-            - [-q, --quiet](#q---quiet)
-            - [-s, --statistics](#s---statistics)
-            - [-h, --hashes](#h---hashes)
-            - [-e, --environment](#e---environment)
-            - [-p, --plug-in](#p---plug-in)
-    - [BinSkim Release History](#binskim-release-history)
-
-<!-- /TOC -->
-
 # Binskim
 
 BinSkim is a checker that examines Portable Executable (PE) files and their associated Program Database File Formats (PDB) to identify various security problems. These include:
@@ -138,4 +116,4 @@ The `-p` or `--plug-in` argument is used to provide a path to a BinSkim plug-in 
 
 ## BinSkim Release History
 
-The latest version is always available on **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**. History is available on **[NuGet Release History](./src/ReleaseHistory.md)**.
+The latest version is always available on **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**. History is available on **[NuGet Release History](../src/ReleaseHistory.md)**.
