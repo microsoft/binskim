@@ -64,7 +64,7 @@ The **`analyze`** command supports the following additional arguments:
 
 | Argument (short form, long form) | Meaning |
 | -------------------------------- | ------- |
-| **`--sympath`** | Symbols path value (e.g. SRV h<span>ttp://</span>msdl.microsoft<span>.com/</span>download/symbols or Cache d:\symbols;Srv h<span>ttp://</span>symweb) |
+| **`--sympath`** | Symbols path value (e.g. `SRV http://msdl.microsoft.com/download/symbols or Cache d:\symbols;Srv http://symweb`) |
 | **`-o, --output`** | File path used to write and output analysis using [SARIF](https://github.com/Microsoft/sarif-sdk) |
 | **`-v, --verbose`** | Emit verbose output. The comprehensive report is designed to provide appropriate evidence for compliance scenarios |
 | **`-r, --recurse`** | Recurse into subdirectories when evaluating file specifier arguments |
