@@ -138,11 +138,4 @@ The `-p` or `--plug-in` argument is used to provide a path to a BinSkim plug-in 
 
 ## BinSkim Release History
 
-The latest version is always available on the main at **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**
-
-| Version | Details |
-| ------- | ------- |
-| **v1.3.3-beta** | <p>**[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.3.3-beta)**</p><p>Update Sarif dependency to Sarif SDK/Driver 1.5.22-beta (Sarif JSON format 1.0.0)</p> |
-| **v1.3.4-beta** | <p>**[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.3.4-beta)**</p><p>Force load PDBs in some circumstances where they have failed to do so</p>
-| **v1.3.5** | <p>**[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.3.5)**</p><ul><li>Fix false positives in 'sign securely' analysis for multi-signed binaries</li><li>Eliminate noise in stack protection analysis against .NET native binaries</li><li>Update Sarif dependency to 1.5.28</li></ul> |
-| **v1.3.6** | <p>**[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.3.6)**</p><ul><li>Update Sarif dependency to 1.5.36</li><li>Improves output in error cases</li></ul> |
+The latest version is always available on **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**. History is available on **[NuGet Release History](./src/ReleaseHistory.md)**.
