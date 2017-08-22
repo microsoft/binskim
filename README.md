@@ -16,7 +16,7 @@ This repository contains the source code for BinSkim, a Portable Executable (PE)
 ## For Users
 
 1. Download BinSkim from **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**
-2. Read the **[User Guide](.\docs\UserGuide.md)**
+2. Read the **[User Guide](./docs/UserGuide.md)**
 3. Find out more about the Static Analysis Results Interchange Format **([SARIF](https://github.com/sarif-standard/sarif-spec/))** used to output Binskim results
 
 ### Command-Line Quick Guide
