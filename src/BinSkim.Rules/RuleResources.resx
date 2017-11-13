@@ -353,7 +353,7 @@ Modules triggering this check were:
     <value>'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'.</value>
   </data>
   <data name="BA2022_Pass" xml:space="preserve">
-    <value>'{0}' appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The following digitial signature algorithms were detected: {1}</value>
+    <value>'{0}' appears to be signed with secure cryptographic algorithms. WinTrustVerify successfully validated the binary but did not attempt to validate certificate chaining or that the root certificate is trusted. The following digitial signature algorithms were detected: {1}</value>
   </data>
   <data name="BA2022_SignCorrectly_Description" xml:space="preserve">
     <value>Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.</value>
