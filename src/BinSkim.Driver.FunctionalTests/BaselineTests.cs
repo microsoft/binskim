@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.IL
             options.OutputFilePath = actualFileName;
             options.Verbose = true;
             options.Recurse = false;
-            options.ComputeTargetsHash = true;
+            options.ComputeFileHashes = true;
             options.ConfigurationFilePath = "default";
 
             int result = command.Run(options);
