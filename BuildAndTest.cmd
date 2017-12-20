@@ -26,12 +26,26 @@ echo     }                                                                      
 echo  }                                                                            >> %VERSION_CONSTANTS%
 
 %~dp0.nuget\NuGet.exe restore src\BinSkim.sln 
-msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x64" /filelogger /fileloggerparameters:Verbosity=detailed
-msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x86" /filelogger /fileloggerparameters:Verbosity=detailed
+msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x64" /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
+msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /p:"Platform=x86" /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
 md bld\bin\nuget
+md bld\bin\LayoutForSigning
 
-.nuget\NuGet.exe pack .\src\Nuget\BinSkim.nuspec -Symbols -Properties id=Microsoft.CodeAnalysis.BinSkim;major=%MAJOR%;minor=%MINOR%;patch=%PATCH%;prerelease=%PRERELEASE% -Verbosity Quiet -BasePath .\bld\bin\BinSkim.Driver -OutputDirectory .\bld\bin\Nuget
+xcopy /Y bld\bin\x86_Release\BinSkim.exe       bld\bin\LayoutForSigning
+xcopy /Y bld\bin\x86_Release\BinaryParsers.dll bld\bin\LayoutForSigning
+xcopy /Y bld\bin\x86_Release\BinSkim.Rules.dll bld\bin\LayoutForSigning
+xcopy /Y bld\bin\x86_Release\BinSkim.Sdk.dll   bld\bin\LayoutForSigning
 
-src\packages\xunit.runner.console.2.1.0\tools\xunit.console.x86.exe bld\bin\BinSkim.Rules.FunctionalTests\x86_Release\BinSkim.Rules.FunctionalTests.dll
-src\packages\xunit.runner.console.2.1.0\tools\xunit.console.x86.exe bld\bin\BinSkim.Driver.FunctionalTests\x86_Release\BinSkim.Driver.FunctionalTests.dll
+call BuildPackages.cmd || goto :ExitFailure
+
+src\packages\xunit.runner.console.2.1.0\tools\xunit.console.x86.exe bld\bin\x86_Release\BinSkim.Rules.FunctionalTests.dll  || goto :ExitFailed
+src\packages\xunit.runner.console.2.1.0\tools\xunit.console.x86.exe bld\bin\x86_Release\BinSkim.Driver.FunctionalTests.dll || goto :ExitFailed
+
+goto :Exit
+
+:ExitFailed
+@echo Build and test did not complete successfully.
+Exit /B 1
+
+:Exit
