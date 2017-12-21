@@ -31,11 +31,18 @@ msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Rele
 
 md bld\bin\nuget
 md bld\bin\LayoutForSigning
+md bld\bin\LayoutForSigning\x86
+md bld\bin\LayoutForSigning\x64
 
-xcopy /Y bld\bin\x86_Release\BinSkim.exe       bld\bin\LayoutForSigning
-xcopy /Y bld\bin\x86_Release\BinaryParsers.dll bld\bin\LayoutForSigning
-xcopy /Y bld\bin\x86_Release\BinSkim.Rules.dll bld\bin\LayoutForSigning
-xcopy /Y bld\bin\x86_Release\BinSkim.Sdk.dll   bld\bin\LayoutForSigning
+xcopy /Y bld\bin\x86_Release\BinSkim.exe       bld\bin\LayoutForSigning\x86
+xcopy /Y bld\bin\x86_Release\BinaryParsers.dll bld\bin\LayoutForSigning\x86
+xcopy /Y bld\bin\x86_Release\BinSkim.Rules.dll bld\bin\LayoutForSigning\x86
+xcopy /Y bld\bin\x86_Release\BinSkim.Sdk.dll   bld\bin\LayoutForSigning\x86
+
+xcopy /Y bld\bin\x64_Release\BinSkim.exe       bld\bin\LayoutForSigning\x64
+xcopy /Y bld\bin\x64_Release\BinaryParsers.dll bld\bin\LayoutForSigning\x64
+xcopy /Y bld\bin\x64_Release\BinSkim.Rules.dll bld\bin\LayoutForSigning\x64
+xcopy /Y bld\bin\x64_Release\BinSkim.Sdk.dll   bld\bin\LayoutForSigning\x64
 
 call BuildPackages.cmd || goto :ExitFailure
 
