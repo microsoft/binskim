@@ -53,3 +53,7 @@
 
 ## **v1.4.4** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.4
 * Do not fire BA2001.LoadImageAboveFourGigabyteAddressId for ILOnly 64-bit assemblies
+
+## **v1.4.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.5
+* Correct signing check pass message to reflect actual analysis
+* Sign all BinSkim binaries
