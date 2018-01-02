@@ -36,18 +36,7 @@
   <!-- Default configurations to help VS understand -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Any CPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Any CPU' " />
-  <!--
-  <ItemGroup>
-    <Reference Include="Sarif, Version=1.5.38.0, Culture=neutral, PublicKeyToken=a567ef0185dba9aa, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\sarif-sdk\bld\bin\Sarif.Driver\AnyCPU_Debug\Sarif.dll</HintPath>
-    </Reference>
-    <Reference Include="Sarif.Driver, Version=1.5.38.0, Culture=neutral, PublicKeyToken=a567ef0185dba9aa, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\sarif-sdk\bld\bin\Sarif.Driver\AnyCPU_Debug\Sarif.Driver.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  -->
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <BinSkimVerboseOutput>false</BinSkimVerboseOutput>
