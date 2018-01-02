@@ -1,19 +1,14 @@
-﻿<Project ToolsVersion="15.0">
+<Project>
+
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., netcore.props))\netcore.props" />
-  <PropertyGroup>
-    <RootNamespace>Microsoft.CodeAnalysis.IL.Sdk</RootNamespace>
-    <ProjectGuid>{D2EBE67E-6115-4825-9EAD-3DB54672C03E}</ProjectGuid>
-    <AssemblyName>BinSkim.Sdk</AssemblyName>
-  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Sarif.Driver" Version="1.7.1-beta" />
     <PackageReference Include="Sarif.Sdk" Version="1.7.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj">
-      <Project>{f17e6921-2504-4ae8-afd3-7aceed935fec}</Project>
-      <Name>BinaryParsers</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
   </ItemGroup>
+
 </Project>

@@ -143,10 +143,6 @@
       <Project>{494ac26c-9591-4137-a3d4-5cd9b8d169db}</Project>
       <Name>BinSkim.Rules</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj">
-      <Project>{d2ebe67e-6115-4825-9ead-3db54672c03e}</Project>
-      <Name>BinSkim.Sdk</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />

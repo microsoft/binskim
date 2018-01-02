@@ -1,10 +1,6 @@
 <Project>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., netcore.props))\netcore.props" />
-  <PropertyGroup>
-    <RootNamespace>Microsoft.CodeAnalysis.BinaryParsers</RootNamespace>
-    <ProjectGuid>{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}</ProjectGuid>
-    <AssemblyName>BinaryParsers</AssemblyName>
-  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.1.1-beta" />
     <PackageReference Include="Microsoft.CodeAnalysis.BinSkim" Version="1.4.5" />
@@ -30,4 +26,5 @@
       <Version>4.3.1</Version>
     </PackageReference>
   </ItemGroup>
+  
 </Project>
