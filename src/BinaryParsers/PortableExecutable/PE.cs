@@ -268,9 +268,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 {
                     using (var bufferedStream = new BufferedStream(stream, 1024 * 32))
                     {
-                        var sha = new SHA256Cng();
-                        byte[] checksum = sha.ComputeHash(bufferedStream);
-                        sha256Hash = BitConverter.ToString(checksum).Replace("-", String.Empty);
+                        using (var algorithm = SHA256.Create())
+                        {
+                            byte[] checksum = algorithm.ComputeHash(bufferedStream);
+                            sha256Hash = BitConverter.ToString(checksum).Replace("-", String.Empty);
+                        }
                     }
                 }
             }
