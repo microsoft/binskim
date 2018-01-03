@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis.IL
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
                 ContractResolver = SarifContractResolver.Instance,
-                Formatting = Formatting.Indented
+                Formatting = Newtonsoft.Json.Formatting.Indented
             };
 
             string expectedText = File.ReadAllText(expectedFileName);

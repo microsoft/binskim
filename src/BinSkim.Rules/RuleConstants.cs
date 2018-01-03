@@ -34,6 +34,5 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public const string DoNotMarkWritableSectionsAsExecutableId = "BA2021";
         public const string SignCorrectly = "BA2022";
-        public const string DoNotMarkImportsSectionAsWritableId = "BA2023";
     }
 }

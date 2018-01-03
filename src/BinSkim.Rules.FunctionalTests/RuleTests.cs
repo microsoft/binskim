@@ -146,8 +146,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             Assert.Equal(0, sb.Length);
-            Assert.Equal(0, expected.Count);
-            Assert.Equal(0, other.Count);
+            Assert.Empty(expected);
+            Assert.Empty(other);
         }
 
         private BinaryAnalyzerContext CreateContext(TestMessageLogger logger, PropertiesDictionary policy, string target)

@@ -1,9 +1,7 @@
-<Project>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., netcore.props))\netcore.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="dia2lib">
       <HintPath>..\..\refs\dia2lib.dll</HintPath>

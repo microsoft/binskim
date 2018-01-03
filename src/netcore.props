@@ -8,7 +8,7 @@
     <OutputPath>$(MsBuildThisFileDirectory)..\bld\bin\$(Platform)_$(Configuration)\</OutputPath>
     <DataModelGeneratorPath>$(MsBuildThisFileDirectory)..\bld\bin\DataModelGenerator\$(Platform)_$(Configuration)\</DataModelGeneratorPath>
     <RootNamespace>Microsoft.CodeAnalysis.BinaryParsers</RootNamespace>
-    <TargetFrameworks>netcoreapp2.0;netstandard2.0;net452;</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;netstandard2.0;net46;</TargetFrameworks>
     <FileAlignment>512</FileAlignment>
     <RestorePackages>true</RestorePackages>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

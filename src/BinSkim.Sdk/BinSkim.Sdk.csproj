@@ -1,4 +1,4 @@
-<Project>
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., netcore.props))\netcore.props" />
 
