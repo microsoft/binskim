@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+<Project>
   <PropertyGroup>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Prefer32Bit>false</Prefer32Bit>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">Any CPU</Platform>
     <IntermediateOutputPath>$(MsBuildThisFileDirectory)..\bld\obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <OutputPath>$(MsBuildThisFileDirectory)..\bld\bin\$(Platform)_$(Configuration)\</OutputPath>
-    <DataModelGeneratorPath>$(MsBuildThisFileDirectory)..\bld\bin\DataModelGenerator\$(Platform)_$(Configuration)\</DataModelGeneratorPath>
-    <RootNamespace>Microsoft.CodeAnalysis.BinaryParsers</RootNamespace>
-    <TargetFrameworks>netcoreapp2.0;netstandard2.0;net46;</TargetFrameworks>
     <FileAlignment>512</FileAlignment>
     <RestorePackages>true</RestorePackages>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+  <!-- Configuration specific properties -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -36,10 +36,12 @@
   <!-- Default configurations to help VS understand -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Any CPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Any CPU' " />
-
+  <ItemGroup>
+    <Compile Include="$(MsBuildThisFileDirectory)Shared\SharedAssemblyInfo.cs" />
+  </ItemGroup>
   <PropertyGroup>
     <BinSkimVerboseOutput>false</BinSkimVerboseOutput>
-    <BinSkimExePath>$(SolutionDir)..\bld\bin\BinSkim.Driver\$(Platform)_$(Configuration)\binskim.exe</BinSkimExePath>
+    <BinSkimExePath>$(SolutionDir)..\bld\bin\$(Platform)_$(Configuration)\$(TargetFramework)\binskim.exe</BinSkimExePath>
   </PropertyGroup>
   <Import Project="BinSkim.targets" Condition="'$(RunBinSkim)'=='true'"/>
 </Project>

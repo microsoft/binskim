@@ -1,4 +1,4 @@
-# BinSkim Binary Analyzer
+﻿# BinSkim Binary Analyzer
 
 This repository contains the source code for BinSkim, a Portable Executable (PE) light-weight scanner that validates compiler/linker settings and other security-relevant binary characteristics.
 
@@ -10,7 +10,7 @@ This repository contains the source code for BinSkim, a Portable Executable (PE)
 
 ### Submit Pull Requests
 
-1. Run `BuildAndTest.cmd` at the root of the enlistment to ensure that all tests pass, and x64 and x86 release builds succeed
+1. Run `BuildAndTest.cmd` at the root of the enlistment to ensure that all tests pass, release build succeeds, and NuGet packages are created
 2. Submit a Pull Request -- **[Need Help?](https://help.github.com/articles/about-pull-requests/)**
 
 ## For Users

@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Driver", "BinSkim.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Rules", "BinSkim.Rules\BinSkim.Rules.csproj", "{494AC26C-9591-4137-A3D4-5CD9B8D169DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinSkim.Rules.FunctionalTests", "BinSkim.Rules.FunctionalTests\BinSkim.Rules.FunctionalTests.csproj", "{F380374A-7861-49C1-9643-B7CC5B0D58B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Rules.FunctionalTests", "BinSkim.Rules.FunctionalTests\BinSkim.Rules.FunctionalTests.csproj", "{F380374A-7861-49C1-9643-B7CC5B0D58B0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinaryParsers", "BinaryParsers\BinaryParsers.csproj", "{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}"
 EndProject
@@ -24,8 +24,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{39DE5DFD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{1C3EA3C9-98CE-4315-A1BE-6BB11847CB04}"
 	ProjectSection(SolutionItems) = preProject
+		build.common.props = build.common.props
+		build.netcore.props = build.netcore.props
 		build.props = build.props
-		netcore.props = netcore.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Sdk", "BinSkim.Sdk\BinSkim.Sdk.csproj", "{81687384-6DA2-4AD5-A889-0727F2EB8C8C}"

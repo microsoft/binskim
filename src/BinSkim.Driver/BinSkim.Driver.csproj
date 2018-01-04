@@ -1,10 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., netcore.props))\netcore.props" />
-	
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
+
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.1.1-beta" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="2.6.1" />
     <PackageReference Include="Microsoft.DiaSymReader" Version="1.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Sarif.Driver" Version="1.7.1-beta" />
@@ -20,6 +19,11 @@
       <HintPath>..\..\refs\dia2lib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.CodeAnalysis">
+      <Version>2.6.1</Version>
+    </PackageReference>
   </ItemGroup>
 
 </Project>
