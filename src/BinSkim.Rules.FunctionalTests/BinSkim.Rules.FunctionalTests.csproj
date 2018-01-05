@@ -1,11 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
-  
-  <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0;netstandard2.0;net46;</TargetFrameworks>
-  </PropertyGroup>
-  
+
   <Target Name="CopyFunctionalTestsData" AfterTargets="Build">
     <ItemGroup>
       <BaselineTestFiles Include="$(SolutionDir)BinSkim.Driver.FunctionalTests\BaselineTestsData\**\*" />

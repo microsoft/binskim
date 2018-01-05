@@ -1,9 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
-
+  <PropertyGroup>
+    <AssemblyName>BinSkim</AssemblyName>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="README.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.1.1-beta" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="2.6.1" />
     <PackageReference Include="Microsoft.DiaSymReader" Version="1.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Sarif.Driver" Version="1.7.1-beta" />
@@ -13,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
     <ProjectReference Include="..\BinSkim.Rules\BinSkim.Rules.csproj" />
+    <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="dia2lib">
@@ -20,10 +34,13 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.CodeAnalysis">
-      <Version>2.6.1</Version>
-    </PackageReference>
+  <ItemGroup>
+    <MsDiaDeps Include="..\..\refs\$(Platform)\msdia140.dll" />
+    <MsDiaDeps Include="..\..\refs\$(Platform)\symsrv.dll" />
+    <MsDiaDeps Include="..\..\refs\msdia140.dll.manifest" />
   </ItemGroup>
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="@(MsDiaDeps)" DestinationFolder="$(OutputPath)" />
+  </Target>
 
 </Project>

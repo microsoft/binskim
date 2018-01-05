@@ -33,15 +33,15 @@
   <PropertyGroup Condition="'$(Platform)' == 'x64'">
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
+  <PropertyGroup>
+    <BinSkimVerboseOutput>false</BinSkimVerboseOutput>
+    <BinSkimExePath>$(SolutionDir)..\bld\bin\$(Platform)_$(Configuration)\$(TargetFramework)\binskim.exe</BinSkimExePath>
+  </PropertyGroup>
+  <Import Project="BinSkim.targets" Condition="'$(RunBinSkim)'=='true'"/>
   <!-- Default configurations to help VS understand -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Any CPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Any CPU' " />
   <ItemGroup>
     <Compile Include="$(MsBuildThisFileDirectory)Shared\SharedAssemblyInfo.cs" />
   </ItemGroup>
-  <PropertyGroup>
-    <BinSkimVerboseOutput>false</BinSkimVerboseOutput>
-    <BinSkimExePath>$(SolutionDir)..\bld\bin\$(Platform)_$(Configuration)\$(TargetFramework)\binskim.exe</BinSkimExePath>
-  </PropertyGroup>
-  <Import Project="BinSkim.targets" Condition="'$(RunBinSkim)'=='true'"/>
 </Project>
