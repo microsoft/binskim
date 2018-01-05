@@ -8,12 +8,14 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.1.1-beta" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Sarif.Driver" Version="1.7.1-beta" />
     <PackageReference Include="Sarif.Sdk" Version="1.7.1" />
   </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
     <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />

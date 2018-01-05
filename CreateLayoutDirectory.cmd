@@ -7,7 +7,7 @@ set Configuration=%2
 set Platform=%3
 
 if "%BinaryOutputDirectory%" EQU "" (
-set BinaryOutputDirectory=.\bld\bin\
+set BinaryOutputDirectory=.\bld\bin
 )
 
 if "%Configuration%" EQU "" (

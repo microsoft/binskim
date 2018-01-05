@@ -5,24 +5,18 @@ SETLOCAL
 @REM create a nuget package for binskim) so must opt-in
 @REM %~dp0.nuget\NuGet.exe update -self
 
-set BinaryOutputDirectory=%1
-set Configuration=%2
-set Platform=%3
-
-if "%BinaryOutputDirectory%" EQU "" (
-set BinaryOutputDirectory=.\bld\bin\
-)
+set Configuration=%1
+set Platform=Any CPU
 
 if "%Configuration%" EQU "" (
 set Configuration=Release
 )
 
-if "%Platform%" EQU "" (
-set Platform=Any CPU
-)
-
 @REM Remove existing build data
 if exist bld (rd /s /q bld)
+
+SET NuGetConfigFile=%~dp0src\NuGet.config
+set NuGetPackageDir=.\src\packages
 set NuGetOutputDirectory=..\..\bld\bin\nuget\
 
 call SetCurrentVersion.cmd
@@ -43,16 +37,19 @@ echo         public const string Version = AssemblyVersion + Prerelease;        
 echo     }                                                                           >> %VERSION_CONSTANTS%
 echo  }                                                                              >> %VERSION_CONSTANTS%
 
-%~dp0.nuget\NuGet.exe restore src\BinSkim.sln 
-msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=Release /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
-
-set Platform=AnyCPU
+%~dp0.nuget\NuGet.exe restore src\BinSkim.sln -ConfigFile "%NuGetConfigFile%" -OutputDirectory "%NuGetPackageDir%"
+ 
+msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
 ::Build NuGet package
 echo BuildPackages.cmd || goto :ExitFailed
 
 ::Create layout directory of assemblies that need to be signed
-call CreateLayoutDirectory.cmd .\bld\bin\ %Configuration% %Platform%
+call CreateLayoutDirectory.cmd .\bld\bin %Configuration% AnyCPU
+
+
+goto :Exit
+
 
 @REM Run all multitargeting xunit tests
 call :RunMultitargetingTests Driver Functional || goto :ExitFailed
@@ -63,7 +60,7 @@ goto :Exit
 :RunMultitargetingTests
 set TestProject=%1
 set TestType=%2
-pushd .\src\BinSkim.%TestProject%.%TestType%Tests && dotnet xunit -nobuild -configuration %Configuration% && popd
+pushd .\src\BinSkim.%TestProject%.%TestType%Tests && dotnet xunit -nobuild -configuration %Configuration% -fxversion 2.0.3 && popd
 if "%ERRORLEVEL%" NEQ "0" (echo %TestProject% %TestType% tests execution FAILED.)
 Exit /B %ERRORLEVEL%
 

@@ -2,6 +2,11 @@
  
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
 
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.0; net46;</TargetFrameworks>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+ 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="4.19.4" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.6.1" />
@@ -11,6 +16,7 @@
     <PackageReference Include="Sarif.Sdk" Version="1.7.1" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.console" Version="2.3.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
   
   <ItemGroup>
@@ -18,12 +24,11 @@
     <ProjectReference Include="..\BinSkim.Driver\BinSkim.Driver.csproj" />
     <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
   </ItemGroup>
-  
-  <Target Name="CopyFunctionalTestsData" AfterTargets="Build">
-    <ItemGroup>
-      <BaselineTestFiles Include="$(SolutionDir)BinSkim.Rules.FunctionalTests\BaselineTestsData\**\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(TestFiles)" DestinationFolder="$(OutputPath)\FunctionalTestsData\%(RecursiveDir)" />
-  </Target>
+
+  <ItemGroup>
+    <None Include="BaselineTestsData\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
