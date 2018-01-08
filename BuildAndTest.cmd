@@ -47,10 +47,6 @@ echo BuildPackages.cmd || goto :ExitFailed
 ::Create layout directory of assemblies that need to be signed
 call CreateLayoutDirectory.cmd .\bld\bin %Configuration% AnyCPU
 
-
-goto :Exit
-
-
 @REM Run all multitargeting xunit tests
 call :RunMultitargetingTests Driver Functional || goto :ExitFailed
 call :RunMultitargetingTests Rules Functional  || goto :ExitFailed

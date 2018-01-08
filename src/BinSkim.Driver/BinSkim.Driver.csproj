@@ -10,6 +10,7 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <RootNamespace>Microsoft.CodeAnalysis.IL</RootNamespace>
   </PropertyGroup>
   
   <ItemGroup>
@@ -19,7 +20,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.1.1-beta" />
+    <PackageReference Include="CommandLineParser" Version="2.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.6.1" />
     <PackageReference Include="Microsoft.DiaSymReader" Version="1.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
@@ -45,6 +46,22 @@
     <MsDiaDeps Include="..\..\refs\$(Platform)\msdia140.dll" />
     <MsDiaDeps Include="..\..\refs\$(Platform)\symsrv.dll" />
     <MsDiaDeps Include="..\..\refs\msdia140.dll.manifest" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="DriverResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DriverResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Update="DriverResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DriverResources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Microsoft.CodeAnalysis.IL</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
   
   <Target Name="AfterBuild">

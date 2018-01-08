@@ -26,14 +26,13 @@ namespace Microsoft.CodeAnalysis.IL
             _testOutputHelper = output;
         }
 
-        private static string TestDirectory = GetTestDirectory(@"BinSkim.Driver.FunctionalTests\BaselineTestsData");
+        private static string TestDirectory = GetTestDirectory(@"BaselineTestsData");
 
         private static string GetTestDirectory(string relativeDirectory)
         {
             var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
             var dirPath = Path.GetDirectoryName(codeBasePath);
-            dirPath = Path.Combine(dirPath, @"..\..\..\src\");
             dirPath = Path.GetFullPath(dirPath);
             return Path.Combine(dirPath, relativeDirectory);
         }

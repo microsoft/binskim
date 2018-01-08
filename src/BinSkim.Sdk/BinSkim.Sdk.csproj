@@ -2,6 +2,10 @@
 
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
 
+  <PropertyGroup>
+    <RootNamespace>Microsoft.CodeAnalysis.IL.Sdk</RootNamespace>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Sarif.Driver" Version="1.7.1-beta" />
@@ -10,6 +14,22 @@
   
   <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="SdkResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SdkResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Update="SdkResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SdkResources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Microsoft.CodeAnalysis.IL.Sdk</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
