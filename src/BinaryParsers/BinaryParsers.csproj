@@ -16,6 +16,13 @@
     <PackageReference Include="Sarif.Sdk" Version="1.7.1" />
     <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="dia2lib">
+      <HintPath>..\..\refs\dia2lib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+  </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
     <PackageReference Include="System.Security.Cryptography.Algorithms">
