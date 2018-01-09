@@ -41,13 +41,18 @@ echo  }                                                                         
  
 msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
+set Platform=AnyCPU
+
 ::Build NuGet package
-echo BuildPackages.cmd || goto :ExitFailed
+echo BuildPackages.cmd
+call BuildPackages.cmd || goto :ExitFailed
 
 ::Create layout directory of assemblies that need to be signed
-call CreateLayoutDirectory.cmd .\bld\bin %Configuration% AnyCPU
+echo CreateLayoutDirectory.cmd .\bld\bin %Configuration% %Platform%
+call CreateLayoutDirectory.cmd .\bld\bin %Configuration% %Platform%
 
-@REM Run all multitargeting xunit tests
+::Run unit tests
+echo Run all multitargeting xunit tests
 call :RunMultitargetingTests Driver Functional || goto :ExitFailed
 call :RunMultitargetingTests Rules Functional  || goto :ExitFailed
 

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
@@ -14,13 +15,6 @@
     <PackageReference Include="Sarif.Driver" Version="1.7.1-beta" />
     <PackageReference Include="Sarif.Sdk" Version="1.7.1" />
     <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Reference Include="dia2lib">
-      <HintPath>..\..\refs\dia2lib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
