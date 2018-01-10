@@ -32,6 +32,13 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Reference Include="dia2lib">
+      <HintPath>..\..\refs\dia2lib.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
     <ProjectReference Include="..\BinSkim.Rules\BinSkim.Rules.csproj" />
     <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
