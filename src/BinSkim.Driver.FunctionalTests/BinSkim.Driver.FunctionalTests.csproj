@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
- 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
+
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.common.props))\build.common.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0; net46;</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0; net461;</TargetFrameworks>
     <OutputType>Library</OutputType>
   </PropertyGroup>
  

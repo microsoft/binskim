@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.common.props))\build.common.props" />
   
   <PropertyGroup>
     <AssemblyName>BinSkim</AssemblyName>
+    <TargetFrameworks>netcoreapp2.0; net461;</TargetFrameworks>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   

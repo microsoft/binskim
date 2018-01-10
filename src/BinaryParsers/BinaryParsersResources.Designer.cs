@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.CodeAnalysis.BinaryData {
+namespace Microsoft.CodeAnalysis.BinaryParsers {
     using System;
     
     

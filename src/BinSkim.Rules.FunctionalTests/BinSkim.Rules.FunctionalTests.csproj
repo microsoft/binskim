@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.common.props))\build.common.props" />
   <Import Project="..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" />
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0; net46;</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0; net461;</TargetFrameworks>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
@@ -20,7 +20,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
     <ProjectReference Include="..\BinSkim.Driver\BinSkim.Driver.csproj" />
