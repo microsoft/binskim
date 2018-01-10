@@ -216,8 +216,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     return null;
                 }
 
-                foreach (IDiaTable table in enumTables)
+                // GetEnumerator() fails in netcoreapp2.0--need to iterate without foreach.
+                for (int i=0; i<enumTables.Count; i++)
                 {
+                    IDiaTable table = enumTables.Item(i);
                     T result = table as T;
                     if (result == null)
                     {
@@ -255,8 +257,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             try
             {
-                foreach (IDiaSegment segment in enumSegments)
+                // GetEnumerator() fails in netcoreapp2.0--need to iterate without foreach.
+                for (uint i=0; i < (uint)enumSegments.Count; i++)
                 {
+                    IDiaSegment segment = enumSegments.Item(i);
                     try
                     {
                         if (segment.write != 0)
@@ -306,8 +310,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             try
             {
-                foreach (IDiaSectionContrib sectionContrib in enumSectionContribs)
+                // GetEnumerator() fails in netcoreapp2.0--need to iterate without foreach.
+                for (uint i=0; i< (uint)enumSectionContribs.Count; i++)
                 {
+                    IDiaSectionContrib sectionContrib = enumSectionContribs.Item(i);
                     try
                     {
                         if (sectionContrib.execute != 0)
