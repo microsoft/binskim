@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.common.props))\build.common.props" />
@@ -37,19 +38,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Reference Include="dia2lib">
-      <HintPath>..\..\refs\dia2lib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <MsDiaDeps Include="..\..\refs\$(Platform)\msdia140.dll" />
-    <MsDiaDeps Include="..\..\refs\$(Platform)\symsrv.dll" />
-    <MsDiaDeps Include="..\..\refs\msdia140.dll.manifest" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <Compile Update="DriverResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -65,8 +53,11 @@
     </EmbeddedResource>
   </ItemGroup>
   
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="@(MsDiaDeps)" DestinationFolder="$(OutputPath)" />
+  <Target Name="CopyMsDiaLibs" AfterTargets="build">
+    <ItemGroup>
+      <MsDiaLibs Include="..\..\refs\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(OutputPath)\MsDia\%(RecursiveDir)" />
   </Target>
 
 </Project>
