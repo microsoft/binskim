@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.common.props))\build.common.props" />
-  
   <PropertyGroup>
     <AssemblyName>BinSkim</AssemblyName>
-    <TargetFrameworks>netcoreapp2.0; net461;</TargetFrameworks>
+    <TargetFrameworks>$(NetCoreVersion); $(NetRuntimeVersion);</TargetFrameworks>
+    <RuntimeIdentifiers>win-x86; win-x64; linux-x64;</RuntimeIdentifiers>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   
@@ -59,12 +59,19 @@
       <CustomToolNamespace>Microsoft.CodeAnalysis.IL</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
-  
-  <Target Name="CopyMsDiaLibs" AfterTargets="build">
-    <ItemGroup>
-      <MsDiaLibs Include="..\..\refs\**\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(OutputPath)\MsDia\%(RecursiveDir)" />
-  </Target>
 
+  <ItemGroup>
+    <MsDiaLibs Include="..\..\refs\x86\*" Condition="'$(TargetFramework)'=='$(NetRuntimeVersion)'" />
+    <MsDiaLibs Include="..\..\refs\x86\*" Condition="'$(TargetFramework)'=='$(NetCoreVersion)' And '$(RuntimeIdentifier)'==''" />
+    <MsDiaLibs Include="..\..\refs\x86\*" Condition="'$(RuntimeIdentifier)'=='win-x86'" />
+    <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(RuntimeIdentifier)'=='win-x64'" />
+    <MsDiaLibs Include="..\..\refs\msdia140.dll.manifest" />
+  </ItemGroup>
+
+  <Target Name="CopyMsDiaLibs" AfterTargets="build">
+    <Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(OutputPath)\" />
+  </Target>
+  <Target Name="PubMsDiaLibs" AfterTargets="publish">
+    <Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(PublishDir)\" />
+  </Target>
 </Project>

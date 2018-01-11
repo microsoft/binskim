@@ -7,6 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">Any CPU</Platform>
     <IntermediateOutputPath>$(MsBuildThisFileDirectory)..\bld\obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <OutputPath>$(MsBuildThisFileDirectory)..\bld\bin\$(Platform)_$(Configuration)\</OutputPath>
+    <PublishDir>$(MsBuildThisFileDirectory)..\bld\bin\Publish\$(TargetFramework)\$(RuntimeIdentifier)\</PublishDir>
     <FileAlignment>512</FileAlignment>
     <RestorePackages>true</RestorePackages>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
