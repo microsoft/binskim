@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Prefer32Bit>false</Prefer32Bit>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">Any CPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <IntermediateOutputPath>$(MsBuildThisFileDirectory)..\bld\obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <OutputPath>$(MsBuildThisFileDirectory)..\bld\bin\$(Platform)_$(Configuration)\</OutputPath>
-    <PublishDir>$(MsBuildThisFileDirectory)..\bld\bin\Publish\$(TargetFramework)\$(RuntimeIdentifier)\</PublishDir>
+    <PublishDir>$(MsBuildThisFileDirectory)..\bld\bin\$(Platform)_$(Configuration)\Publish\$(TargetFramework)\$(RuntimeIdentifier)\</PublishDir>
     <FileAlignment>512</FileAlignment>
     <RestorePackages>true</RestorePackages>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -48,8 +48,8 @@
   <Import Project="BinSkim.targets" Condition="'$(RunBinSkim)'=='true'"/>
   
   <!-- Default configurations to help VS understand -->
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Any CPU' " />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Any CPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
   
   <ItemGroup>
     <Compile Include="$(MsBuildThisFileDirectory)Shared\SharedAssemblyInfo.cs" />

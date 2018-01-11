@@ -6,7 +6,7 @@ SETLOCAL
 @REM %~dp0.nuget\NuGet.exe update -self
 
 set Configuration=%1
-set Platform=Any CPU
+set Platform=AnyCPU
 
 if "%Configuration%" EQU "" (
 set Configuration=Release
@@ -38,8 +38,22 @@ echo     }                                                                      
 echo  }                                                                              >> %VERSION_CONSTANTS%
 
 %~dp0.nuget\NuGet.exe restore src\BinSkim.sln -ConfigFile "%NuGetConfigFile%" -OutputDirectory "%NuGetPackageDir%"
- 
-msbuild /verbosity:minimal /target:rebuild src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
+
+:: Build the solution 
+dotnet clean /verbosity:minimal src\BinSkim.sln /p:Configuration=%Configuration% || goto :ExitFailed
+dotnet build /verbosity:minimal src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
+
+::Run unit tests
+echo Run all multitargeting xunit tests
+call :RunMultitargetingTests Driver Functional || goto :ExitFailed
+call :RunMultitargetingTests Rules Functional  || goto :ExitFailed
+
+::Create the BinSkim platform specific publish packages
+echo Creating Packages
+call :CreatePublishPackage net461 || goto :ExitFailed
+call :CreatePublishPackage netcoreapp2.0 "--runtime win-x86" || goto :ExitFailed
+call :CreatePublishPackage netcoreapp2.0 "--runtime win-x64" || goto :ExitFailed
+call :CreatePublishPackage netcoreapp2.0 "--runtime linux-x64" || goto :ExitFailed
 
 set Platform=AnyCPU
 
@@ -51,18 +65,19 @@ call BuildPackages.cmd || goto :ExitFailed
 echo CreateLayoutDirectory.cmd .\bld\bin %Configuration% %Platform%
 call CreateLayoutDirectory.cmd .\bld\bin %Configuration% %Platform%
 
-::Run unit tests
-echo Run all multitargeting xunit tests
-call :RunMultitargetingTests Driver Functional || goto :ExitFailed
-call :RunMultitargetingTests Rules Functional  || goto :ExitFailed
-
 goto :Exit
 
 :RunMultitargetingTests
 set TestProject=%1
 set TestType=%2
-pushd .\src\BinSkim.%TestProject%.%TestType%Tests && dotnet xunit -nobuild -configuration %Configuration% -fxversion 2.0.3 && popd
+pushd .\src\BinSkim.%TestProject%.%TestType%Tests && dotnet test --no-build -c %Configuration% && popd
 if "%ERRORLEVEL%" NEQ "0" (echo %TestProject% %TestType% tests execution FAILED.)
+Exit /B %ERRORLEVEL%
+
+:CreatePublishPackage
+set Framework=%~1
+set RuntimeArg=%~2
+dotnet publish .\src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework% %RuntimeArg%
 Exit /B %ERRORLEVEL%
 
 :ExitFailed
