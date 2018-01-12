@@ -49,11 +49,12 @@ call :RunMultitargetingTests Driver Functional || goto :ExitFailed
 call :RunMultitargetingTests Rules Functional  || goto :ExitFailed
 
 ::Create the BinSkim platform specific publish packages
-echo Creating Packages
-call :CreatePublishPackage net461 || goto :ExitFailed
-call :CreatePublishPackage netcoreapp2.0 "--runtime win-x86" || goto :ExitFailed
-call :CreatePublishPackage netcoreapp2.0 "--runtime win-x64" || goto :ExitFailed
-call :CreatePublishPackage netcoreapp2.0 "--runtime linux-x64" || goto :ExitFailed
+echo Creating Platform Specific BinSkim 'Publish' Packages
+call :CreatePublishPackage net461 win-x86 || goto :ExitFailed
+call :CreatePublishPackage net461 win-x64 || goto :ExitFailed
+call :CreatePublishPackage netcoreapp2.0 win-x86 || goto :ExitFailed
+call :CreatePublishPackage netcoreapp2.0 win-x64 || goto :ExitFailed
+call :CreatePublishPackage netcoreapp2.0 linux-x64 || goto :ExitFailed
 
 set Platform=AnyCPU
 
@@ -77,7 +78,7 @@ Exit /B %ERRORLEVEL%
 :CreatePublishPackage
 set Framework=%~1
 set RuntimeArg=%~2
-dotnet publish .\src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework% %RuntimeArg%
+dotnet publish .\src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework% --runtime %RuntimeArg%
 Exit /B %ERRORLEVEL%
 
 :ExitFailed

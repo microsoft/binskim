@@ -61,7 +61,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <MsDiaLibs Include="..\..\refs\x86\*" Condition="'$(TargetFramework)'=='$(NetRuntimeVersion)'" />
+    <MsDiaLibs Include="..\..\refs\x86\*" Condition="'$(TargetFramework)'=='$(NetRuntimeVersion)' And '$(RuntimeIdentifier)'==''" />
     <MsDiaLibs Include="..\..\refs\x86\*" Condition="'$(TargetFramework)'=='$(NetCoreVersion)' And '$(RuntimeIdentifier)'==''" />
     <MsDiaLibs Include="..\..\refs\x86\*" Condition="'$(RuntimeIdentifier)'=='win-x86'" />
     <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(RuntimeIdentifier)'=='win-x64'" />
