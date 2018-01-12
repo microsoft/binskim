@@ -93,29 +93,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             try
             {
                 PlatformSpecificHelpers.ThrowIfNotOnWindows();
-                DiaSource diaSource = new DiaSource();
-                Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
-
-                if (symbolPath == null)
-                {
-                    string pdbPath = Path.ChangeExtension(peOrPdbPath, ".pdb");
-                    if (File.Exists(pdbPath))
-                    {
-                        peOrPdbPath = pdbPath;
-                    }
-                }
-
-                // load the debug info depending on the file type
-                if (peOrPdbPath.EndsWith(".pdb", StringComparison.OrdinalIgnoreCase))
-                {
-                    diaSource.loadDataFromPdb(peOrPdbPath);
-                }
-                else
-                {
-                    diaSource.loadDataForExe(peOrPdbPath, symbolPath, IntPtr.Zero);
-                }
-
-                diaSource.openSession(out _session);
+                WindowsNativeLoadPdbUsingDia(peOrPdbPath, symbolPath);
             }
             catch (PlatformNotSupportedException ex)
             {
@@ -125,6 +103,33 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 throw new PdbParseException(ce);
             }
+        }
+
+        private void WindowsNativeLoadPdbUsingDia(string peOrPdbPath, string symbolPath)
+        {
+            DiaSource diaSource = new DiaSource();
+            Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
+
+            if (symbolPath == null)
+            {
+                string pdbPath = Path.ChangeExtension(peOrPdbPath, ".pdb");
+                if (File.Exists(pdbPath))
+                {
+                    peOrPdbPath = pdbPath;
+                }
+            }
+
+            // load the debug info depending on the file type
+            if (peOrPdbPath.EndsWith(".pdb", StringComparison.OrdinalIgnoreCase))
+            {
+                diaSource.loadDataFromPdb(peOrPdbPath);
+            }
+            else
+            {
+                diaSource.loadDataForExe(peOrPdbPath, symbolPath, IntPtr.Zero);
+            }
+
+            diaSource.openSession(out _session);
         }
 
         /// <summary>
