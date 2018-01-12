@@ -78,6 +78,7 @@ namespace Microsoft.CodeAnalysis.IL
                 "Symbol encountered in MSIL 'global::<Module>'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.BinaryParsersResources'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.Packer'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PdbParseErrorCode'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.ImageLoadConfigDirectory64.Fields'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.ImageLoadConfigDirectory64'",

@@ -45,12 +45,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             ExceptionCode = code;
         }
-
+        
         public PdbParseException(string message) : base(message)
         {
             ExceptionCode = PdbParseErrorCode.E_PDB_MAX;
         }
-
+        
+        public PdbParseException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+            ExceptionCode = PdbParseErrorCode.E_PDB_MAX;
+        }
 
         public static string[] PdbParseExceptionStrings = {
                                                                BinaryParsersResources.Ok,

@@ -92,6 +92,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             try
             {
+                PlatformSpecificHelpers.ThrowIfNotOnWindows();
                 DiaSource diaSource = new DiaSource();
                 Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
 
@@ -115,6 +116,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 }
 
                 diaSource.openSession(out _session);
+            }
+            catch (PlatformNotSupportedException ex)
+            {
+                throw new PdbParseException(BinaryParsersResources.PdbPlatformUnsupported, ex);
             }
             catch (COMException ce)
             {

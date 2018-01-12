@@ -223,11 +223,29 @@ namespace Microsoft.CodeAnalysis.BinaryParsers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot parse pdb on this platform..
+        /// </summary>
+        internal static string PdbPlatformUnsupported {
+            get {
+                return ResourceManager.GetString("PdbPlatformUnsupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pdb is stripped of cv info.
         /// </summary>
         internal static string PdbStripped {
             get {
                 return ResourceManager.GetString("PdbStripped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This feature is not supported on the {0} platform, it is only supported on the {1} platform(s)..
+        /// </summary>
+        internal static string PlatformUnsupportedFormat {
+            get {
+                return ResourceManager.GetString("PlatformUnsupportedFormat", resourceCulture);
             }
         }
         

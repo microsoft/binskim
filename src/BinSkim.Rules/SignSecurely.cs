@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // First, we retrieve the signature count
             winTrustData = InitializeWinTrustDataStruct(filePath, WinTrustDataKind.SignatureCount);
-            Native.WinVerifyTrust(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
+            Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
 
             if (winTrustData.pSignatureSettings != IntPtr.Zero)
             {
@@ -116,7 +116,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 string hashAlgorithm, hashEncryptionAlgorithm;
                 winTrustData = InitializeWinTrustDataStruct(filePath, WinTrustDataKind.EnforcePolicy, i);
 
-                cryptoError = (CryptoError)Native.WinVerifyTrust(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
+                cryptoError = (CryptoError)Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
 
                 switch (cryptoError)
                 {
@@ -151,7 +151,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         // the stringent WinTrustVerify security check. We therefore start
                         // a new call chain with looser validation criteria.
                         winTrustData = InitializeWinTrustDataStruct(filePath, WinTrustDataKind.Normal);
-                        Native.WinVerifyTrust(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
+                        Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
 
                         if (GetSignerHashAlgorithms(context, winTrustData, out hashAlgorithm, out hashEncryptionAlgorithm))
                         {
@@ -278,7 +278,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             Guid action = Native.ActionGenericVerifyV2;
             winTrustData.StateAction = Native.StateAction.WTD_STATEACTION_CLOSE;
-            Native.WinVerifyTrust(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
+            Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
 
             if (winTrustData.pFile != IntPtr.Zero)
             {
@@ -348,14 +348,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             hashAlgorithm = hashEncryptionAlgorithm = null;
 
             failedApiName = "WTHelperProvDataFromStateData";
-            IntPtr providerData = Native.WTHelperProvDataFromStateData(hWVTStateData);
+            IntPtr providerData = Native.WTHelperProvDataFromStateDataWrapper(hWVTStateData);
             if (providerData == IntPtr.Zero)
             {
                 return (CryptoError)Marshal.GetLastWin32Error();
             }
 
             failedApiName = "WTHelperGetProvSignerFromChain";
-            IntPtr providerSigner = Native.WTHelperGetProvSignerFromChain(providerData, 0, false, 0);
+            IntPtr providerSigner = Native.WTHelperGetProvSignerFromChainWrapper(providerData, 0, false, 0);
 
             if (providerSigner == IntPtr.Zero)
             {
