@@ -8,6 +8,7 @@ using System.Reflection.PortableExecutable;
 
 using Dia2Lib;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -51,6 +52,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
+            if(!PlatformSpecificHelpers.RunningOnWindows())
+            {
+                //TODO--move to the resources file.
+                reasonForNotAnalyzing = 
+                    string.Format("This check is not supported on the {0} platform, as it requires interoperability with a native windows library.", 
+                        PlatformSpecificHelpers.GetCurrentOSDescription());
+                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
+            }
+
             return StackProtectionUtilities.CommonCanAnalyze(context, out reasonForNotAnalyzing);
         }
 

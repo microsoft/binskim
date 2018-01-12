@@ -7,6 +7,8 @@ using System.Composition;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -50,6 +52,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
+            if(!PlatformSpecificHelpers.RunningOnWindows())
+            {
+                //TODO--move to the resources file.
+                reasonForNotAnalyzing = 
+                    string.Format("This check is not supported on the {0} platform, as it requires interoperability with a native windows library.", 
+                        PlatformSpecificHelpers.GetCurrentOSDescription());
+                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
+            }
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }

@@ -8,6 +8,7 @@ using System.Composition;
 using System.IO;
 using System.Reflection.PortableExecutable;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -90,6 +91,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
+            if(!PlatformSpecificHelpers.RunningOnWindows())
+            {
+                //TODO--move to the resources file.
+                reasonForNotAnalyzing = 
+                    string.Format("This check is not supported on the {0} platform, as it requires interoperability with a native windows library.", 
+                        PlatformSpecificHelpers.GetCurrentOSDescription());
+                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
+            }
             PE portableExecutable = context.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 

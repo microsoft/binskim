@@ -20,5 +20,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     string.Format(BinaryParsersResources.PlatformUnsupportedFormat, RuntimeInformation.OSDescription, OSPlatform.Windows));
             }
         }
+
+        public static string GetCurrentOSDescription()
+        {
+            return RuntimeInformation.OSDescription;
+        }
     }
 }
