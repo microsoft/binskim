@@ -26,7 +26,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 	ProjectSection(SolutionItems) = preProject
 		build.common.props = build.common.props
 		build.netcore.props = build.netcore.props
-		build.props = build.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Sdk", "BinSkim.Sdk\BinSkim.Sdk.csproj", "{81687384-6DA2-4AD5-A889-0727F2EB8C8C}"

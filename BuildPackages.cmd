@@ -4,7 +4,7 @@ SETLOCAL
 
 call SetCurrentVersion.cmd
 
-.nuget\NuGet.exe pack .\src\Nuget\BinSkim.nuspec -Symbols -Properties configuration=%Configuration%;version=%MAJOR%.%MINOR%.%PATCH%%PRERELEASE% -Verbosity Quiet -BasePath .\ -OutputDirectory .\bld\bin\Nuget || goto :ExitFailed
+%~dp0.nuget\NuGet.exe pack %~dp0src\Nuget\BinSkim.nuspec -Symbols -Properties configuration=%Configuration%;version=%MAJOR%.%MINOR%.%PATCH%%PRERELEASE% -Verbosity Quiet -BasePath %~dp0 -OutputDirectory %~dp0bld\bin\Nuget || goto :ExitFailed
 
 goto Exit
 

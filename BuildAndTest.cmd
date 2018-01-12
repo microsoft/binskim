@@ -16,12 +16,12 @@ set Configuration=Release
 if exist bld (rd /s /q bld)
 
 SET NuGetConfigFile=%~dp0src\NuGet.config
-set NuGetPackageDir=.\src\packages
-set NuGetOutputDirectory=..\..\bld\bin\nuget\
+set NuGetPackageDir=%~dp0src\packages
+set NuGetOutputDirectory=%~dp0bld\bin\nuget\
 
 call SetCurrentVersion.cmd
 
-set VERSION_CONSTANTS=src\BinaryParsers\VersionConstants.cs
+set VERSION_CONSTANTS=%~dp0src\BinaryParsers\VersionConstants.cs
 
 @REM Rewrite VersionConstants.cs
 echo // Copyright (c) Microsoft. All rights reserved. Licensed under the MIT         >  %VERSION_CONSTANTS%
@@ -37,11 +37,11 @@ echo         public const string Version = AssemblyVersion + Prerelease;        
 echo     }                                                                           >> %VERSION_CONSTANTS%
 echo  }                                                                              >> %VERSION_CONSTANTS%
 
-%~dp0.nuget\NuGet.exe restore src\BinSkim.sln -ConfigFile "%NuGetConfigFile%" -OutputDirectory "%NuGetPackageDir%"
+%~dp0.nuget\NuGet.exe restore %~dp0src\BinSkim.sln -ConfigFile "%NuGetConfigFile%" -OutputDirectory "%NuGetPackageDir%"
 
 :: Build the solution 
-dotnet clean /verbosity:minimal src\BinSkim.sln /p:Configuration=%Configuration% || goto :ExitFailed
-dotnet build /verbosity:minimal src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
+dotnet clean /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% || goto :ExitFailed
+dotnet build /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
 ::Run unit tests
 echo Run all multitargeting xunit tests
@@ -56,29 +56,27 @@ call :CreatePublishPackage netcoreapp2.0 win-x86 || goto :ExitFailed
 call :CreatePublishPackage netcoreapp2.0 win-x64 || goto :ExitFailed
 call :CreatePublishPackage netcoreapp2.0 linux-x64 || goto :ExitFailed
 
-set Platform=AnyCPU
-
 ::Build NuGet package
 echo BuildPackages.cmd
 call BuildPackages.cmd || goto :ExitFailed
 
 ::Create layout directory of assemblies that need to be signed
-echo CreateLayoutDirectory.cmd .\bld\bin %Configuration% %Platform%
-call CreateLayoutDirectory.cmd .\bld\bin %Configuration% %Platform%
+echo CreateLayoutDirectory.cmd %~dp0bld\bin %Configuration% %Platform%
+call CreateLayoutDirectory.cmd %~dp0bld\bin %Configuration% %Platform%
 
 goto :Exit
 
 :RunMultitargetingTests
 set TestProject=%1
 set TestType=%2
-pushd .\src\BinSkim.%TestProject%.%TestType%Tests && dotnet test --no-build -c %Configuration% && popd
+pushd %~dp0src\BinSkim.%TestProject%.%TestType%Tests && dotnet test --no-build -c %Configuration% && popd
 if "%ERRORLEVEL%" NEQ "0" (echo %TestProject% %TestType% tests execution FAILED.)
 Exit /B %ERRORLEVEL%
 
 :CreatePublishPackage
 set Framework=%~1
 set RuntimeArg=%~2
-dotnet publish .\src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework% --runtime %RuntimeArg%
+dotnet publish %~dp0src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework% --runtime %RuntimeArg%
 Exit /B %ERRORLEVEL%
 
 :ExitFailed

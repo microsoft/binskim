@@ -5,7 +5,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public enum Packer
     {
-        UnknownOrNotPacked, 
+        UnknownOrNotPacked,
         Upx
     }
 }

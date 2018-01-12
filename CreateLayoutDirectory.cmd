@@ -7,7 +7,7 @@ set Configuration=%2
 set Platform=%3
 
 if "%BinaryOutputDirectory%" EQU "" (
-set BinaryOutputDirectory=.\bld\bin
+set BinaryOutputDirectory=%~dp0bld\bin
 )
 
 if "%Configuration%" EQU "" (
@@ -38,8 +38,8 @@ call :CopyFilesForMultitargeting BinSkim.Sdk.dll   || goto :ExitFailed
 goto :Exit
 
 :CopyFilesForMultitargeting
-xcopy /Y %BinaryOutputDirectory%\net461\%1 %LayoutForSigningDirectory%\net461\win-x86\
-xcopy /Y %BinaryOutputDirectory%\net461\%1 %LayoutForSigningDirectory%\net461\win-x64\
+xcopy /Y %BinaryOutputDirectory%\net461\win-x86\%1 %LayoutForSigningDirectory%\net461\win-x86\
+xcopy /Y %BinaryOutputDirectory%\net461\win-x64\%1 %LayoutForSigningDirectory%\net461\win-x64\
 :: For .NET core, .exes are renamed to .dlls due to packaging conventions
 xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\win-x86\%~n1.dll  %LayoutForSigningDirectory%\netcoreapp2.0\win-x86\
 xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\win-x64\%~n1.dll  %LayoutForSigningDirectory%\netcoreapp2.0\win-x64\

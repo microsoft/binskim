@@ -4,15 +4,14 @@ Param(
 
 $tool = "BinSkim"
 $repoRoot = ( Resolve-Path "$PSScriptRoot\..\..\" ).ToString()
-$utility = "$repoRoot\bld\bin\AnyCPU_Release\net46\$tool.exe"
-$msbuild = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\msbuild.exe"
+$utility = "$repoRoot\bld\bin\AnyCPU_Release\net461\$tool.exe"
 
 function Build-Tool()
 {
     Write-Host "Building the tool..."  -NoNewline
     # Out-Null *and* /noconsolelogger here because our scripts call out to batch files and similar
     # that don't respect msbuild's /noconsolelogger switch.
-    &$msbuild $PSScriptRoot\..\$tool.Driver\$tool.Driver.csproj /p:"Configuration=Release" /m /verbosity:minimal
+    &dotnet build $PSScriptRoot\..\$tool.Driver\$tool.Driver.csproj -c Release /m /verbosity:minimal
     Write-Host " done."
 }
 

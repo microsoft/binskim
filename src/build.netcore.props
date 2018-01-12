@@ -7,6 +7,4 @@
     <NetRuntimeVersion>net461</NetRuntimeVersion>
     <NetStandardVersion>netstandard2.0</NetStandardVersion>
   </PropertyGroup>
-  
-  
 </Project>

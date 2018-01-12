@@ -22,7 +22,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.2.0" />
+    <PackageReference Include="CommandLineParser" Version="2.2.1" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.6.1" />
     <PackageReference Include="Microsoft.DiaSymReader" Version="1.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
@@ -71,7 +71,7 @@
   <Target Name="CopyMsDiaLibs" AfterTargets="build">
     <Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(OutputPath)\" />
   </Target>
-  <Target Name="PubMsDiaLibs" AfterTargets="publish">
+  <Target Name="PublishMsDiaLibs" AfterTargets="publish">
     <Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(PublishDir)\" />
   </Target>
 </Project>
