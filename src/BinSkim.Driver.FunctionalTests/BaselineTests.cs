@@ -26,14 +26,14 @@ namespace Microsoft.CodeAnalysis.IL
             _testOutputHelper = output;
         }
 
-        private static string TestDirectory = GetTestDirectory(@"BinSkim.Driver.FunctionalTests\BaselineTestsData");
+        private static string TestDirectory = GetTestDirectory(@"BinSkim.Driver.FunctionalTests"+Path.DirectorySeparatorChar+"BaselineTestsData");
 
         private static string GetTestDirectory(string relativeDirectory)
         {
             var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
             var dirPath = Path.GetDirectoryName(codeBasePath);
-            dirPath = Path.Combine(dirPath, @"..\..\..\..\src\");
+            dirPath = Path.Combine(dirPath, string.Format(@"..{0}..{0}..{0}..{0}src{0}", Path.DirectorySeparatorChar));
             dirPath = Path.GetFullPath(dirPath);
             return Path.Combine(dirPath, relativeDirectory);
         }
@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.IL
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
         {
             var sb = new StringBuilder();
-            string testDirectory = BuiltInRuleFunctionalTests.TestDirectory + "\\" + ruleName;
+            string testDirectory = BuiltInRuleFunctionalTests.TestDirectory + Path.DirectorySeparatorChar + ruleName;
 
             foreach (string inputFilter in inputFilters)
             {
