@@ -16,5 +16,5 @@ src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Actual/
 *.log
 *.sdf
 
-# Workaround for an msbuild bug
-src/BinSkimLinux.sln 
+# Workaround for an msbuild/dotnet bug on Linux
+src/BinSkimLinux.sln
