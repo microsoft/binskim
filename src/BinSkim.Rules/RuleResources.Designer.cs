@@ -781,5 +781,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("NotApplicable_InvalidMetadata", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;This check is not supported on the {0} platform, as it requires interoperability with a native windows library.&quot;.
+        /// </summary>
+        internal static string NotApplicable_PlatformUnsupported {
+            get {
+                return ResourceManager.GetString("NotApplicable_PlatformUnsupported", resourceCulture);
+            }
+        }
     }
 }

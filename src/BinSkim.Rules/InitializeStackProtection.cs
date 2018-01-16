@@ -60,9 +60,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if(!PlatformSpecificHelpers.RunningOnWindows())
             {
-                //TODO--move to the resources file.
                 reasonForNotAnalyzing = 
-                    string.Format("This check is not supported on the {0} platform, as it requires interoperability with a native windows library.", 
+                    string.Format(RuleResources.NotApplicable_PlatformUnsupported, 
                         PlatformSpecificHelpers.GetCurrentOSDescription());
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
