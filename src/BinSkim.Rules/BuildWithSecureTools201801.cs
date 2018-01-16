@@ -16,7 +16,7 @@ using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    public class MitigatedVersion
+    public class MitigatedVersion 
     {
         public MitigatedVersion()
         {
@@ -47,6 +47,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return compilerVersion.GetHashCode();
         }
 
+
         public static bool operator ==(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion == ver2.compilerVersion;  }
         public static bool operator !=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion != ver2.compilerVersion; }
 
@@ -55,8 +56,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public static bool operator <=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion <= ver2.compilerVersion; }
         public static bool operator >=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion >= ver2.compilerVersion; }
-
-
     }
 
     public class StringToMitigatedVersionMap : TypedPropertiesDictionary<MitigatedVersion>
@@ -154,8 +153,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
             StringToMitigatedVersionMap minimumCompilers = context.Policy.GetProperty(MinimumToolVersions);
 
-            var sortedCompilerVersions = minimumCompilers.ToImmutableSortedSet();
-
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
@@ -213,7 +210,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 else
                 {
                     // Now check the patched versions (and the release!
-                    foreach (var compilerVersionEntry in sortedCompilerVersions)
+                    foreach (var compilerVersionEntry in minimumCompilers)
                     {
                         Version ver = compilerVersionEntry.Value.compilerVersion;
 
