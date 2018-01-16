@@ -147,6 +147,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 return _hasDebugInfo;
             }
         }
+        public SwitchState GetSwitchState(string switchName, OrderOfPrecedence precedence)
+        {
+            return _commandLine.GetSwitchState(switchName, precedence);
+        }
+
     }
 
     public enum Language : uint

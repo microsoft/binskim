@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class RuleResources {
@@ -770,6 +770,69 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2022_SignCorrectly_Description {
             get {
                 return ResourceManager.GetString("BA2022_SignCorrectly_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it..
+        /// </summary>
+        internal static string BA2024_BuildWithSpectreMitigation_Description {
+            get {
+                return ResourceManager.GetString("BA2024_BuildWithSpectreMitigation_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules which were not built using tool versions containing the Spectre mitigation switches. More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. Modules built outside of policy: {1}.
+        /// </summary>
+        internal static string BA2024_Error {
+            get {
+                return ResourceManager.GetString("BA2024_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to built with a compiler version {0} that does not support the Spectre mitigations switch (/Qspectre)..
+        /// </summary>
+        internal static string BA2024_Error_BuildWithSpectreMitigation_BadCompilerVersion {
+            get {
+                return ResourceManager.GetString("BA2024_Error_BuildWithSpectreMitigation_BadCompilerVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to built with the Spectre mitigations explicitly disabled (/Qspectre-)..
+        /// </summary>
+        internal static string BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled {
+            get {
+                return ResourceManager.GetString("BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All modules linked into {0} have been verified to be compiled with Spectre mitigations enabled..
+        /// </summary>
+        internal static string BA2024_Pass {
+            get {
+                return ResourceManager.GetString("BA2024_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All C/C++ modules linked into {0} have been verified to be compiled with Spectre mitigations enabled, but MASM files were also detected.  MASM code cannot be verified by this tool.  MASM modules: {1}.
+        /// </summary>
+        internal static string BA2024_Pass_WithMASM {
+            get {
+                return ResourceManager.GetString("BA2024_Pass_WithMASM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to built with a Microsoft assembler, BinSkim cannot verify this file, please manually verify all code has the appropriate mitigations.
+        /// </summary>
+        internal static string BA2024_Warning_BuildWithSpectreMitigation_MASMDetected {
+            get {
+                return ResourceManager.GetString("BA2024_Warning_BuildWithSpectreMitigation_MASMDetected", resourceCulture);
             }
         }
         

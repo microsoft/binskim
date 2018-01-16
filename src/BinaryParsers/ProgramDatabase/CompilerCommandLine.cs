@@ -10,6 +10,19 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 {
+    public enum SwitchState
+    {
+        SwitchNotFound = 0,
+        SwitchEnabled = 1,
+        SwitchDisabled = -1
+    }
+
+    public enum OrderOfPrecedence
+    {
+        FirstWins = 0,
+        LastWins = 1
+    }
+
     /// <summary>Processes command lines stored by compilers in PDBs.</summary>
     internal struct CompilerCommandLine
     {
@@ -210,6 +223,45 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             char c = candidate[0];
             return c == '/' || c == '-';
+        }
+
+        // Determine if a switch is set,unset or not present on the command-line
+        // Case matters
+        public SwitchState GetSwitchState(string switchName, OrderOfPrecedence precedence)
+        {
+            SwitchState currentState = SwitchState.SwitchNotFound;
+
+            string realSwitch = switchName;
+
+            // if present remove the slash or minus
+            realSwitch = switchName.TrimStart('-', '/');
+
+            foreach (string arg in ArgumentSplitter.CommandLineToArgvW(Raw))
+            {
+                if (IsSwitch(arg))
+                {
+                    string realArg = arg.TrimStart('-', '/');
+
+                    if (realArg.StartsWith(realSwitch))
+                    {
+                        // partial stem match - now check if this is a full match or a match with a "-" on the end
+                        if (realArg.Equals(realSwitch))
+                        {
+                            currentState = SwitchState.SwitchEnabled;
+                        }
+
+                        if (realArg[realSwitch.Length] == '-')
+                        {
+                            currentState = SwitchState.SwitchDisabled;
+                        }
+
+                        if (precedence == OrderOfPrecedence.FirstWins)
+                            break;
+                    }
+                }
+            }
+
+            return currentState;
         }
     }
 }

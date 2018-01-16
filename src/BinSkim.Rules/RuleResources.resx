@@ -358,6 +358,27 @@ Modules triggering this check were:
   <data name="BA2022_SignCorrectly_Description" xml:space="preserve">
     <value>Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.</value>
   </data>
+  <data name="BA2024_BuildWithSpectreMitigation_Description" xml:space="preserve">
+    <value>Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it.</value>
+  </data>
+  <data name="BA2024_Error" xml:space="preserve">
+    <value>'{0}' was compiled with one or more modules which were not built using tool versions containing the Spectre mitigation switches. More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. Modules built outside of policy: {1}</value>
+  </data>
+  <data name="BA2024_Error_BuildWithSpectreMitigation_BadCompilerVersion" xml:space="preserve">
+    <value>built with a compiler version {0} that does not support the Spectre mitigations switch (/Qspectre).</value>
+  </data>
+  <data name="BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled" xml:space="preserve">
+    <value>built with the Spectre mitigations explicitly disabled (/Qspectre-).</value>
+  </data>
+  <data name="BA2024_Pass" xml:space="preserve">
+    <value>All modules linked into {0} have been verified to be compiled with Spectre mitigations enabled.</value>
+  </data>
+  <data name="BA2024_Pass_WithMASM" xml:space="preserve">
+    <value>All C/C++ modules linked into {0} have been verified to be compiled with Spectre mitigations enabled, but MASM files were also detected.  MASM code cannot be verified by this tool.  MASM modules: {1}</value>
+  </data>
+  <data name="BA2024_Warning_BuildWithSpectreMitigation_MASMDetected" xml:space="preserve">
+    <value>built with a Microsoft assembler, BinSkim cannot verify this file, please manually verify all code has the appropriate mitigations</value>
+  </data>
   <data name="NotApplicable_InvalidMetadata" xml:space="preserve">
     <value>'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.</value>
   </data>

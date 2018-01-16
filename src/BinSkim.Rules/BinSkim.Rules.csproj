@@ -66,6 +66,7 @@
     <Compile Include="BinarySkimmerBase.cs" />
     <Compile Include="BinScopeCompatibility.cs" />
     <Compile Include="BuildWithSecureTools.cs" />
+    <Compile Include="BuildWithSecureTools201801.cs" />
     <Compile Include="CryptoErrors.cs" />
     <Compile Include="DoNotDisableStackProtectionForFunctions.cs" />
     <Compile Include="DoNotIncorporateVulnerableDependencies.cs" />
