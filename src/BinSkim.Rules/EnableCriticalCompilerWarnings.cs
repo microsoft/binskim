@@ -77,13 +77,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
-            if(!PlatformSpecificHelpers.RunningOnWindows())
-            {
-                reasonForNotAnalyzing = 
-                    string.Format(RuleResources.NotApplicable_PlatformUnsupported, 
-                        PlatformSpecificHelpers.GetCurrentOSDescription());
-                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
-            }
             PE portableExecutable = context.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
@@ -99,6 +92,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
+            // Uses PDB Parsing.
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
 
             if (context.Pdb == null)

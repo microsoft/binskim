@@ -52,13 +52,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
-            if(!PlatformSpecificHelpers.RunningOnWindows())
-            {
-                reasonForNotAnalyzing = 
-                    string.Format(RuleResources.NotApplicable_PlatformUnsupported, 
-                        PlatformSpecificHelpers.GetCurrentOSDescription());
-                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
-            }
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
@@ -92,6 +85,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             out Native.WINTRUST_DATA winTrustData,
             out string algorithmsText)
         {
+            // Uses PDB Parsing.
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+
             Guid action;
             CryptoError cryptoError;
             var badAlgorithms  = new List<Tuple<string, string>>();

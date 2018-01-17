@@ -80,6 +80,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
+            // Throw a platform unsupported exception--FileVersionInfo does not behave "correctly" on Linux.
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+            
             string fileName = Path.GetFileName(context.PE.FileName);
 
             Version minimumVersion;
