@@ -792,6 +792,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to built with unrecognized compiler..
+        /// </summary>
+        internal static string BA2024_Error_BuiildWithSpectreMitigation_UnrecognizedCompiler {
+            get {
+                return ResourceManager.GetString("BA2024_Error_BuiildWithSpectreMitigation_UnrecognizedCompiler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to built with a compiler version {0} that does not support the Spectre mitigations switch (/Qspectre)..
         /// </summary>
         internal static string BA2024_Error_BuildWithSpectreMitigation_BadCompilerVersion {
@@ -828,7 +837,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to built with a Microsoft assembler, BinSkim cannot verify this file, please manually verify all code has the appropriate mitigations.
+        ///   Looks up a localized string similar to built with an assembler, BinSkim cannot verify this file, please manually verify all code has the appropriate mitigations.
         /// </summary>
         internal static string BA2024_Warning_BuildWithSpectreMitigation_MASMDetected {
             get {
