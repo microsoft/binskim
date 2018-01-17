@@ -91,6 +91,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2024_Error_BuildWithSpectreMitigation_BadCompilerVersion),
                     nameof(RuleResources.BA2024_Error_BuiildWithSpectreMitigation_UnrecognizedCompiler),
                     nameof(RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled),
+                    nameof(RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing),
                     nameof(RuleResources.BA2024_Pass),
                     nameof(RuleResources.BA2024_Pass_WithMASM),
                     nameof(RuleResources.BA2024_Warning_BuildWithSpectreMitigation_MASMDetected),
@@ -216,6 +217,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.LINK:
                         // Linker is not involved in the mitigations, so no need to check version or switches at this time.
                         continue;
+                    case Language.CVTRES:
+                        // Resource compiler is not involved in the mitigations, so no need to check version or switches at this time.
+                        continue;
+                    case Language.HLSL:
+                        // HLSL compiler is not involved in the mitigations, so no need to check version or switches at this time.
+                        continue;
+
+                        // Can mixed binaries (/clr) can contain non C++ compilands if they are linked in via netmodules
+                        // .NET IL should be mitigated by the runtime if any mitigations are necessary
+                        // At this point simply accept them as safe until this is disproven
+                    case Language.CSharp:
+                    case Language.MSIL:
+                    case Language.ILASM:
+                        continue;
+
+                    case Language.Unknown:
+                        // The linker may emit debug information for modules from static libraries that do not contribute to actual code.
+                        // Currently these come back as Language.Unknown :(
+                        // TODO-paddymcd-MSFT: Update the PDB handler to distinguish between empty contributions and an actual unknown Languages
+                        continue;
 
                     default:
                         // Can mixed binaries (/clr) contain non C++ compilands?  I don't think so.  
@@ -296,13 +317,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     effectiveState = SwitchState.SwitchEnabled;
                 }
 
-                if(effectiveState != SwitchState.SwitchEnabled)
+                if (effectiveState == SwitchState.SwitchDisabled)
                 {
-                    // built with the Spectre mitigations explicitly disabled (/Qspectre-).
+                    // built with the Spectre mitigations explicitly disabled.
                     badModuleList.Add(
                         om.CreateCompilandRecordWithSuffix(
                             string.Format(CultureInfo.InvariantCulture,
                             RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled)));
+                }
+                else if(effectiveState == SwitchState.SwitchNotFound)
+                {
+                    // built with tools that support the Spectre mitigations but these have not been enabled.
+                    badModuleList.Add(
+                        om.CreateCompilandRecordWithSuffix(
+                            string.Format(CultureInfo.InvariantCulture,
+                            RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing)));
                 }
             }
 
@@ -310,9 +339,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!masmModuleList.Empty)
             {
-                // All C/C++ modules linked into {0} have been verified to be compiled with Spectre mitigations enabled, but MASM files were also detected.  
-                // MASM code cannot be verified by this tool.  
-                // MASM modules: {1}	
+                // MASM files were detected in {0}.  MASM code cannot be verified by this tool.
+                // MASM modules: {1}
 
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Warning, context, null,
@@ -326,10 +354,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!badModuleList.Empty)
             {
-                // '{0}' was compiled with one or more modules which were not built using tool versions containing the Spectre mitigation switches.
-                // More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce.
-                // To resolve this issue, compile and/or link your binary with more recent tools.
-                // Modules built outside of policy: {1} 
+                // '{0}' was compiled with one or more modules without the Spectre mitigations enabled or were not built using tool versions containing the Spectre mitigations. 
+                // More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. 
+                // To resolve this issue, compile and/or link your binary with more recent tools. 
+                // Modules built outside of policy: {1}
                 context.Logger.Log(this, 
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                     nameof(RuleResources.BA2024_Error),

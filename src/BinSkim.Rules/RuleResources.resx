@@ -362,22 +362,25 @@ Modules triggering this check were:
     <value>Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it.</value>
   </data>
   <data name="BA2024_Error" xml:space="preserve">
-    <value>'{0}' was compiled with one or more modules which were not built using tool versions containing the Spectre mitigation switches. More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. Modules built outside of policy: {1}</value>
+    <value>'{0}' was compiled with one or more modules without the Spectre mitigations enabled or  were not built using tool versions containing the Spectre mitigations. More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. Modules built outside of policy: {1}</value>
   </data>
   <data name="BA2024_Error_BuiildWithSpectreMitigation_UnrecognizedCompiler" xml:space="preserve">
     <value>built with unrecognized compiler.</value>
   </data>
   <data name="BA2024_Error_BuildWithSpectreMitigation_BadCompilerVersion" xml:space="preserve">
-    <value>built with a compiler version {0} that does not support the Spectre mitigations switch (/Qspectre).</value>
+    <value>built with a compiler version {0} that does not support the Spectre mitigations switch.</value>
   </data>
   <data name="BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled" xml:space="preserve">
-    <value>built with the Spectre mitigations explicitly disabled (/Qspectre-).</value>
+    <value>built with the Spectre mitigations explicitly disabled.</value>
+  </data>
+  <data name="BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing" xml:space="preserve">
+    <value>built with tools that support the Spectre mitigations but these have not been enabled.</value>
   </data>
   <data name="BA2024_Pass" xml:space="preserve">
     <value>All modules linked into {0} have been verified to be compiled with Spectre mitigations enabled.</value>
   </data>
   <data name="BA2024_Pass_WithMASM" xml:space="preserve">
-    <value>All C/C++ modules linked into {0} have been verified to be compiled with Spectre mitigations enabled, but MASM files were also detected.  MASM code cannot be verified by this tool.  MASM modules: {1}</value>
+    <value>MASM files were detected in {0}.  MASM code cannot be verified by this tool.  MASM modules: {1}</value>
   </data>
   <data name="BA2024_Warning_BuildWithSpectreMitigation_MASMDetected" xml:space="preserve">
     <value>built with an assembler, BinSkim cannot verify this file, please manually verify all code has the appropriate mitigations</value>
