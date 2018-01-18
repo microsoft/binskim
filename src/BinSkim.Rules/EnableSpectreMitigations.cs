@@ -175,7 +175,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         // HLSL compiler is not involved in the mitigations, so no need to check version or switches at this time.
                         continue;
 
-                        // Can mixed binaries (/clr) can contain non C++ compilands if they are linked in via netmodules
+                        // Mixed binaries (/clr) can contain non C++ compilands if they are linked in via netmodules
                         // .NET IL should be mitigated by the runtime if any mitigations are necessary
                         // At this point simply accept them as safe until this is disproven
                     case Language.CSharp:
@@ -190,9 +190,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         continue;
 
                     default:
-                        // Can mixed binaries (/clr) contain non C++ compilands?  I don't think so.  
-                        // If this turns out to be the case we will have to accept those modules that we 
-                        // know can only produce .NET IL as mitigated
                         // TODO-paddymcd-MSFT: Add warning for unrecognized languages
                         // built with unrecognized compiler.
                         badModuleList.Add(
