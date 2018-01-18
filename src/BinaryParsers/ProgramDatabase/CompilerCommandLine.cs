@@ -248,12 +248,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                         if (realArg.Equals(realSwitch))
                         {
                             currentState = SwitchState.SwitchEnabled;
-                        }
-
-                        if (realArg[realSwitch.Length] == '-')
+                        } 
+                        else if (realArg[realSwitch.Length] == '-')
                         {
                             currentState = SwitchState.SwitchDisabled;
                         }
+                        // Else we have a stem match
 
                         if (precedence == OrderOfPrecedence.FirstWins)
                             break;
