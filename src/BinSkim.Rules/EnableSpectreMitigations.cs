@@ -252,7 +252,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if(supportsd2guardspecload)
                 {
-                    d2guardspecloadState = omDetails.GetSwitchState("/d2guardspecload", OrderOfPrecedence.LastWins);
+                    // /d2xxxx options show up in the PDB without the d2 string
+                    // So search for just /guardspecload
+                    d2guardspecloadState = omDetails.GetSwitchState("/guardspecload", OrderOfPrecedence.LastWins);
                 }
 
                 // TODO-paddymcd-MSFT: Check all the /O optimization flags to determine if we are /Od or not
