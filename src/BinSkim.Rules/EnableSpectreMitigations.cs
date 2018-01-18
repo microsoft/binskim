@@ -16,61 +16,13 @@ using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    public class MitigatedVersion 
-    {
-        public MitigatedVersion()
-        {
-            compilerVersion = new Version(20, 0, 0, 0);
-            QSpectre = false;
-            d2specguard = false;
-            debugCodeMitigated = false;
-        }
-
-        public MitigatedVersion(Version ver, bool spectre, bool d2, bool debug)
-        {
-            compilerVersion = ver;
-            QSpectre = spectre;
-            d2specguard = d2;
-            debugCodeMitigated = debug;
-        }
-        
-        public Version compilerVersion;
-        public bool QSpectre;
-        public bool d2specguard;
-        public bool debugCodeMitigated;
-
-        public override bool Equals(object obj)
-        {
-            return compilerVersion.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return compilerVersion.GetHashCode();
-        }
-
-
-        public static bool operator ==(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion == ver2.compilerVersion;  }
-        public static bool operator !=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion != ver2.compilerVersion; }
-
-        public static bool operator <(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion < ver2.compilerVersion; }
-        public static bool operator >(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion > ver2.compilerVersion; }
-
-        public static bool operator <=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion <= ver2.compilerVersion; }
-        public static bool operator >=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion >= ver2.compilerVersion; }
-    }
-
-    public class StringToMitigatedVersionMap : TypedPropertiesDictionary<MitigatedVersion>
-    {
-    }
-
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
-    public class BuildWithSpectreMitigation : BinarySkimmerBase, IOptionsProvider
+    public class EnableSpectreMitigations : BinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2024
         /// </summary>
-        public override string Id { get { return RuleIds.BuildWithSpectreMitigationId; } }
+        public override string Id { get { return RuleIds.EnableSpectreMitigiations; } }
 
         /// <summary>
         /// Application code should be compiled with the most up-to-date toolsets possible
@@ -90,15 +42,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2024_Error),
                     nameof(RuleResources.BA2024_Error_BuildWithSpectreMitigation_BadCompilerVersion),
                     nameof(RuleResources.BA2024_Error_BuiildWithSpectreMitigation_UnrecognizedCompiler),
-                    nameof(RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled),
                     nameof(RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing),
+                    nameof(RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled),
                     nameof(RuleResources.BA2024_Pass),
                     nameof(RuleResources.BA2024_Pass_WithMASM),
                     nameof(RuleResources.BA2024_Warning_BuildWithSpectreMitigation_MASMDetected),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)};
             }
         }
-
 
         public IEnumerable<IOption> GetOptions()
         {
@@ -109,7 +60,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleIds.BuildWithSpectreMitigationId + "." + nameof(BuildWithSpectreMitigation);
+        private const string AnalyzerName = RuleIds.EnableSpectreMitigiations + "." + nameof(EnableSpectreMitigations);
 
         // /Qspectre support
         private const string VS2017_15_6_PREV4         = "VS2017_15.6_PREVIEW4";
@@ -411,6 +362,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // Only support /d2guardspecload
             result[VS2017_15_5] = new MitigatedVersion(new Version(19, 12, 25830, 2), false, true, false);
+
             // 15.6 preview 1 went out with the minor version not bumped: 19.12.25907.0
             // This will be caught by the 15.5 rtw check - we need the first 19.13 version (preview 2)
             result[VS2017_15_6_PREV1] = new MitigatedVersion(new Version(19, 13, 26029, 0), false, true, false);
@@ -419,11 +371,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // TODO-paddymcd-MSFT: VS2017_15_6_PREV4 19.13.26115 is a placeholder internal build that doesn't yet support
             //                     /Qspectre.  Update this once we have the official build
             result[VS2017_15_6_PREV4] = new MitigatedVersion(new Version(19, 13, 26115, 0), true, true, false);
+
             // Add patched versions of the compiler as they become available.
             // result[VS2017_15_5_QSPECTREPATCH] = new MitigatedVersion(new Version(19, 12, ?, ?), true, true, false);
             // result[VS2017_15_0_PATCH] = new MitigatedVersion(new Version(19, 10, ?, ?), true, true, false);
             // result[VS2015_UPDATE3_PATCH] = new MitigatedVersion(new Version(19, 0, ?, ?), true, true, false);
-
 
             return result;
         }
@@ -439,5 +391,53 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             return result;
         }
+    }
+
+    public class MitigatedVersion
+    {
+        public MitigatedVersion()
+        {
+            compilerVersion = new Version(20, 0, 0, 0);
+            QSpectre = false;
+            d2specguard = false;
+            debugCodeMitigated = false;
+        }
+
+        public MitigatedVersion(Version ver, bool spectre, bool d2, bool debug)
+        {
+            compilerVersion = ver;
+            QSpectre = spectre;
+            d2specguard = d2;
+            debugCodeMitigated = debug;
+        }
+
+        public Version compilerVersion;
+        public bool QSpectre;
+        public bool d2specguard;
+        public bool debugCodeMitigated;
+
+        public override bool Equals(object obj)
+        {
+            return compilerVersion.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return compilerVersion.GetHashCode();
+        }
+
+
+        public static bool operator ==(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion == ver2.compilerVersion; }
+        public static bool operator !=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion != ver2.compilerVersion; }
+
+        public static bool operator <(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion < ver2.compilerVersion; }
+        public static bool operator >(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion > ver2.compilerVersion; }
+
+        public static bool operator <=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion <= ver2.compilerVersion; }
+        public static bool operator >=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion >= ver2.compilerVersion; }
+    }
+
+    public class StringToMitigatedVersionMap : TypedPropertiesDictionary<MitigatedVersion>
+    {
     }
 }
