@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
+using System.Text;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -31,7 +32,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string FullDescription
         {
             // Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it.
-            get { return RuleResources.BA2024_BuildWithSpectreMitigation_Description; }
+            get { return RuleResources.BA2024_EnableSpectreMitigations_Description; }
         }
 
         protected override IEnumerable<string> FormatIds
@@ -40,13 +41,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2024_Error),
-                    nameof(RuleResources.BA2024_Error_BuildWithSpectreMitigation_BadCompilerVersion),
-                    nameof(RuleResources.BA2024_Error_BuiildWithSpectreMitigation_UnrecognizedCompiler),
-                    nameof(RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing),
-                    nameof(RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled),
+                    nameof(RuleResources.BA2024_Error_SpectreMitigationNotEnabled),
+                    nameof(RuleResources.BA2024_Error_SpectreMitigationExplicitlyDisabled),
                     nameof(RuleResources.BA2024_Pass),
-                    nameof(RuleResources.BA2024_Pass_WithMASM),
-                    nameof(RuleResources.BA2024_Warning_BuildWithSpectreMitigation_MASMDetected),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)};
             }
         }
@@ -63,13 +60,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private const string AnalyzerName = RuleIds.EnableSpectreMitigiations + "." + nameof(EnableSpectreMitigations);
 
         // /Qspectre support
-        private const string VS2017_15_6_PREV4         = "VS2017_15.6_PREVIEW4";
+        private const string VS2017_15_6_PREV4 = "VS2017_15.6_PREVIEW4";
         private const string VS2017_15_5_QSPECTREPATCH = "VS2017_15.5_/QSPECTRE_PATCH";
-        private const string VS2017_15_0_PATCH         = "VS2017_15.0_PATCH";
-        private const string VS2015_UPDATE3_PATCH      = "VS2015_UPDATE3_PATCH";
+        private const string VS2017_15_0_PATCH = "VS2017_15.0_PATCH";
+        private const string VS2015_UPDATE3_PATCH = "VS2015_UPDATE3_PATCH";
 
         // /d2guardspecload support
-        private const string VS2017_15_5       = "VS2017_15.5";
+        private const string VS2017_15_5 = "VS2017_15.5";
         private const string VS2017_15_6_PREV1 = "VS2017_15.6_PREVIEW1";
 
 
@@ -107,8 +104,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            TruncatedCompilandRecordList badModuleList = new TruncatedCompilandRecordList();
-            TruncatedCompilandRecordList masmModuleList = new TruncatedCompilandRecordList();
+            TruncatedCompilandRecordList mitigationNotEnabledModules = new TruncatedCompilandRecordList();
+            TruncatedCompilandRecordList mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
             StringToMitigatedVersionMap minimumCompilers = context.Policy.GetProperty(MinimumToolVersions);
@@ -118,7 +115,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                // See if the item is in our skip list
+                // See if the item is in our skip list.
                 if (!string.IsNullOrEmpty(om.Lib))
                 {
                     string libFileName = string.Concat(System.IO.Path.GetFileName(om.Lib), ",", omDetails.Language.ToString()).ToLowerInvariant();
@@ -135,20 +132,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Language omLanguage = omDetails.Language;
 
                 // We already opted-out of IL Only binaries, so only check for native languages
-                // or those that can appear in mixed binaries
+                // or those that can appear in mixed binaries.
                 switch (omLanguage)
                 {
                     case Language.C:
                     case Language.Cxx:
+                    {
                         if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftNativeCompiler)
                         {
-                            // TODO-paddymcd-MSFT: Add error for a non Microsoft C / C++ Compiler
-                            // Add a place holder bad compiler record
-                            // built with unrecognized compiler.
-                            badModuleList.Add(
-                                om.CreateCompilandRecordWithSuffix(
-                                    String.Format(CultureInfo.InvariantCulture,
-                                    RuleResources.BA2024_Error_BuiildWithSpectreMitigation_UnrecognizedCompiler)));
+                            // TODO: https://github.com/Microsoft/binskim/issues/114
                             continue;
                         }
                         else
@@ -156,112 +148,122 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             actualVersion = omDetails.CompilerVersion;
                         }
                         break;
+                    }
 
                     case Language.MASM:
-                        // built with an assembler, BinSkim cannot verify this file, please manually verify all code has the appropriate mitigations
-                        masmModuleList.Add(
-                            om.CreateCompilandRecordWithSuffix(
-                                String.Format(CultureInfo.InvariantCulture,
-                                              RuleResources.BA2024_Warning_BuildWithSpectreMitigation_MASMDetected)));
+                    {
+                        // TODO: https://github.com/Microsoft/binskim/issues/115
                         continue;
+                    }
 
                     case Language.LINK:
+                    {
                         // Linker is not involved in the mitigations, so no need to check version or switches at this time.
                         continue;
+                    }
+
                     case Language.CVTRES:
+                    {
                         // Resource compiler is not involved in the mitigations, so no need to check version or switches at this time.
                         continue;
+                    }
+
                     case Language.HLSL:
+                    {
                         // HLSL compiler is not involved in the mitigations, so no need to check version or switches at this time.
                         continue;
+                    }
 
-                        // Mixed binaries (/clr) can contain non C++ compilands if they are linked in via netmodules
-                        // .NET IL should be mitigated by the runtime if any mitigations are necessary
-                        // At this point simply accept them as safe until this is disproven
+                    // Mixed binaries (/clr) can contain non C++ compilands if they are linked in via netmodules
+                    // .NET IL should be mitigated by the runtime if any mitigations are necessary
+                    // At this point simply accept them as safe until this is disproven.
                     case Language.CSharp:
                     case Language.MSIL:
                     case Language.ILASM:
+                    {
                         continue;
+                    }
 
                     case Language.Unknown:
+                    {
                         // The linker may emit debug information for modules from static libraries that do not contribute to actual code.
-                        // Currently these come back as Language.Unknown :(
-                        // TODO-paddymcd-MSFT: Update the PDB handler to distinguish between empty contributions and an actual unknown Languages
+                        // do not contribute to actual code. Currently these come back as Language.Unknown :(
+                        // TODO: https://github.com/Microsoft/binskim/issues/116
                         continue;
+                    }
 
                     default:
-                        // TODO-paddymcd-MSFT: Add warning for unrecognized languages
-                        // built with unrecognized compiler.
-                        badModuleList.Add(
-                            om.CreateCompilandRecordWithSuffix(
-                                String.Format(CultureInfo.InvariantCulture,
-                                RuleResources.BA2024_Error_BuiildWithSpectreMitigation_UnrecognizedCompiler)));
-                        continue;
+                    {
+                        // TODO: https://github.com/Microsoft/binskim/issues/117
+                        // Review unknown languages for this and all checks
+                    }
+                    continue;
                 }
 
-                // Get the appropriate compiler Version against which to check this compiland
+                // Get the appropriate compiler version against which to check this compiland.
                 bool supportsQspectre = false;
                 bool supportsd2guardspecload = false;
 
                 // check that we are greater than or equal to the first fully supported release: 15.6 first
                 Version omVer = omDetails.CompilerVersion;
-                if (omVer >= minimumCompilers[VS2017_15_6_PREV4].compilerVersion)
+                if (omVer >= minimumCompilers[VS2017_15_6_PREV4].CompilerVersion)
                 {
                     supportsQspectre = minimumCompilers[VS2017_15_6_PREV4].QSpectre;
-                    supportsd2guardspecload = minimumCompilers[VS2017_15_6_PREV4].d2specguard;
+                    supportsd2guardspecload = minimumCompilers[VS2017_15_6_PREV4].D2SpecGuard;
                 }
                 else
                 {
                     // Now check the patched versions that we match on the major, minor versions and then are greater than or equal to on the rest...
                     foreach (var compilerVersionEntry in minimumCompilers)
                     {
-                        Version ver = compilerVersionEntry.Value.compilerVersion;
+                        Version version = compilerVersionEntry.Value.CompilerVersion;
 
-                        if (ver.Major == omVer.Major
-                            && ver.Minor == omVer.Minor 
-                            && ver >= omVer)
+                        if (version.Major == omVer.Major &&
+                            version.Minor == omVer.Minor &&
+                            version >= omVer)
                         {
                             supportsQspectre = compilerVersionEntry.Value.QSpectre;
-                            supportsd2guardspecload = compilerVersionEntry.Value.d2specguard;
+                            supportsd2guardspecload = compilerVersionEntry.Value.D2SpecGuard;
                         }
                     }
                 }
 
                 if (!supportsd2guardspecload && !supportsQspectre)
                 {
-                    // built with a compiler version {0} that does not support the Spectre mitigations switch (/Qspectre).
-                    badModuleList.Add(
-                        om.CreateCompilandRecordWithSuffix(
-                            String.Format(CultureInfo.InvariantCulture,
-                            RuleResources.BA2024_Error_BuildWithSpectreMitigation_BadCompilerVersion,
-                            omDetails.CompilerVersion)));
+                    // Built with a compiler version {0} that does not support the Spectre mitigations
+                    // switch (/Qspectre). We do not report here. BA2006 will fire instead.
                     continue;
                 }
 
                 SwitchState QSpectreState = SwitchState.SwitchNotFound;
                 SwitchState d2guardspecloadState = SwitchState.SwitchNotFound;
 
-                // Go process the command line to check for switches
+                // Go process the command line to check for switches.
                 if (supportsQspectre)
                 {
                     QSpectreState = omDetails.GetSwitchState("/Qspectre", OrderOfPrecedence.LastWins);
                 }
 
-                if(supportsd2guardspecload)
+                if (supportsd2guardspecload)
                 {
-                    // /d2xxxx options show up in the PDB without the d2 string
-                    // So search for just /guardspecload
+                    // /d2xxxx options show up in the PDB without the d2 string.
+                    // So search for just /guardspecload.
                     d2guardspecloadState = omDetails.GetSwitchState("/guardspecload", OrderOfPrecedence.LastWins);
                 }
 
-                // TODO-paddymcd-MSFT: Check all the /O optimization flags to determine if we are /Od or not
+                // TODO: https://github.com/Microsoft/binskim/issues/118
+                // Check all the /O optimization flags to determine if we are /Od or not
                 // /Od may disable the Spectre Mitigations.
+
+                // TODO: https://github.com/Microsoft/binskim/issues/119
+                // We should flag cases where /d2guardspecload is enabled but the 
+                // toolset supports /qSpectre (which should be preferred).
 
                 SwitchState effectiveState = SwitchState.SwitchNotFound;
 
                 // if either QSpectre or d2guardspecload are enabled AND neither is explicitly disabled then we are protected
                 //      (use of both is confusing so issue an error in this scenario even though they are effectively the same switch)
-                if ((QSpectreState == SwitchState.SwitchEnabled || d2guardspecloadState == SwitchState.SwitchEnabled) && 
+                if ((QSpectreState == SwitchState.SwitchEnabled || d2guardspecloadState == SwitchState.SwitchEnabled) &&
                     (QSpectreState != SwitchState.SwitchDisabled && d2guardspecloadState != SwitchState.SwitchDisabled))
                 {
                     effectiveState = SwitchState.SwitchEnabled;
@@ -269,62 +271,58 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (effectiveState == SwitchState.SwitchDisabled)
                 {
-                    // built with the Spectre mitigations explicitly disabled.
-                    badModuleList.Add(
-                        om.CreateCompilandRecordWithSuffix(
-                            string.Format(CultureInfo.InvariantCulture,
-                            RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled)));
+                    // Built with the Spectre mitigations explicitly disabled.
+                    mitigationExplicitlyDisabledModules.Add(om.CreateCompilandRecord());
                 }
-                else if(effectiveState == SwitchState.SwitchNotFound)
+                else if (effectiveState == SwitchState.SwitchNotFound)
                 {
-                    // built with tools that support the Spectre mitigations but these have not been enabled.
-                    badModuleList.Add(
-                        om.CreateCompilandRecordWithSuffix(
-                            string.Format(CultureInfo.InvariantCulture,
-                            RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing)));
+                    // Built with the Spectre mitigations explicitly disabled.
+                    mitigationNotEnabledModules.Add(om.CreateCompilandRecord());
                 }
             }
 
-            ResultLevel analysisResult = ResultLevel.Pass;
+            string line;
+            var sb = new StringBuilder();
 
-            if (!masmModuleList.Empty)
+            if (!mitigationExplicitlyDisabledModules.Empty)
             {
-                // MASM files were detected in {0}.  MASM code cannot be verified by this tool.
-                // MASM modules: {1}
-
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Warning, context, null,
-                    nameof(RuleResources.BA2024_Pass_WithMASM),
-                    context.TargetUri.GetFileName(),
-                    masmModuleList.CreateSortedObjectList()));
-
-                // fall through in case we have errors as well
-                analysisResult = ResultLevel.Warning;
+                line = string.Format(
+                        RuleResources.BA2024_Error_SpectreMitigationExplicitlyDisabled,
+                        mitigationExplicitlyDisabledModules.CreateSortedObjectList());
+                sb.AppendLine(line);
             }
 
-            if (!badModuleList.Empty)
+            if (!mitigationNotEnabledModules.Empty)
             {
-                // '{0}' was compiled with one or more modules without the Spectre mitigations enabled or were not built using tool versions containing the Spectre mitigations. 
-                // More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. 
-                // To resolve this issue, compile and/or link your binary with more recent tools. 
-                // Modules built outside of policy: {1}
-                context.Logger.Log(this, 
+                line = string.Format(
+                        RuleResources.BA2024_Error_SpectreMitigationNotEnabled,
+                        mitigationNotEnabledModules.CreateSortedObjectList());
+                sb.AppendLine(line);
+            }
+
+            if (sb.Length > 0)
+            {
+                // '{0}' was compiled with one or more modules that do not properly enable code
+                // generation mitigations for speculative execution side-channel attack (Spectre)
+                // vulnerabilities. Spectre attacks can compromise hardware-based isolation,
+                // allowing non-privileged users to retrieve potentially sensitive data from the
+                // CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler
+                // command-line (or /d2guardspecload in cases where your compiler supports this
+                // switch and it is not possible to update to a toolset that supports /Qspectre).
+                // The following modules are out of policy: {1}
+                context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                     nameof(RuleResources.BA2024_Error),
                         context.TargetUri.GetFileName(),
-                        badModuleList.CreateSortedObjectList()));
+                        sb.ToString()));
                 return;
             }
 
-            if (analysisResult == ResultLevel.Pass)
-            {
-                // Only issue a Pass if there were no warnings
-                // All modules linked into {0} have been verified to be compiled with Spectre mitigations enabled.
-                context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                        nameof(RuleResources.BA2024_Pass),
-                            context.TargetUri.GetFileName()));
-            }
+            // All linked modules ‘{0}’ were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.
+            context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                    nameof(RuleResources.BA2024_Pass),
+                        context.TargetUri.GetFileName()));
         }
 
         private static StringToMitigatedVersionMap BuildMinimumToolVersionsMap()
@@ -396,44 +394,44 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         public MitigatedVersion()
         {
-            compilerVersion = new Version(20, 0, 0, 0);
+            CompilerVersion = new Version(20, 0, 0, 0);
             QSpectre = false;
-            d2specguard = false;
-            debugCodeMitigated = false;
+            D2SpecGuard = false;
+            DebugCodeMitigated = false;
         }
 
         public MitigatedVersion(Version ver, bool spectre, bool d2, bool debug)
         {
-            compilerVersion = ver;
+            CompilerVersion = ver;
             QSpectre = spectre;
-            d2specguard = d2;
-            debugCodeMitigated = debug;
+            D2SpecGuard = d2;
+            DebugCodeMitigated = debug;
         }
 
-        public Version compilerVersion;
         public bool QSpectre;
-        public bool d2specguard;
-        public bool debugCodeMitigated;
+        public bool D2SpecGuard;
+        public bool DebugCodeMitigated;
+        public Version CompilerVersion;
 
         public override bool Equals(object obj)
         {
-            return compilerVersion.Equals(obj);
+            return CompilerVersion.Equals(obj);
         }
 
         public override int GetHashCode()
         {
-            return compilerVersion.GetHashCode();
+            return CompilerVersion.GetHashCode();
         }
 
 
-        public static bool operator ==(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion == ver2.compilerVersion; }
-        public static bool operator !=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion != ver2.compilerVersion; }
+        public static bool operator ==(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.CompilerVersion == ver2.CompilerVersion; }
+        public static bool operator !=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.CompilerVersion != ver2.CompilerVersion; }
 
-        public static bool operator <(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion < ver2.compilerVersion; }
-        public static bool operator >(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion > ver2.compilerVersion; }
+        public static bool operator <(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.CompilerVersion < ver2.CompilerVersion; }
+        public static bool operator >(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.CompilerVersion > ver2.CompilerVersion; }
 
-        public static bool operator <=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion <= ver2.compilerVersion; }
-        public static bool operator >=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.compilerVersion >= ver2.compilerVersion; }
+        public static bool operator <=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.CompilerVersion <= ver2.CompilerVersion; }
+        public static bool operator >=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.CompilerVersion >= ver2.CompilerVersion; }
     }
 
     public class StringToMitigatedVersionMap : TypedPropertiesDictionary<MitigatedVersion>

@@ -25,8 +25,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id { get { return RuleIds.BuildWithSecureToolsId; } }
 
         /// <summary>
-        /// Application code should be compiled with the most up-to-date toolsets possible
-        /// in order to take advantage of the most current compile-time security features.
+        /// Application code should be compiled with the most up-to-date tool sets
+        /// possible to take advantage of the most current compile-time security
+        /// features. Among other things, these features provide address space
+        /// layout randomization, help prevent arbitrary code execution and enable
+        /// code generation that can help prevent speculative execution side-channel
+        /// attacks.
         /// </summary>
         public override string FullDescription
         {

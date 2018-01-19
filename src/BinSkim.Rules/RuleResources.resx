@@ -151,7 +151,7 @@
     <value>'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems.</value>
   </data>
   <data name="BA2006_BuildWithSecureTools_Description" xml:space="preserve">
-    <value>Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features.</value>
+    <value>Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks.</value>
   </data>
   <data name="BA2006_Error" xml:space="preserve">
     <value>'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}). More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning. Modules built outside of policy: 
@@ -358,32 +358,26 @@ Modules triggering this check were:
   <data name="BA2022_SignCorrectly_Description" xml:space="preserve">
     <value>Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.</value>
   </data>
-  <data name="BA2024_BuildWithSpectreMitigation_Description" xml:space="preserve">
+  <data name="BA2024_EnableSpectreMitigations_Description" xml:space="preserve">
     <value>Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it.</value>
   </data>
   <data name="BA2024_Error" xml:space="preserve">
-    <value>'{0}' was compiled with one or more modules without the Spectre mitigations enabled or  were not built using tool versions containing the Spectre mitigations. More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. Modules built outside of policy: {1}</value>
+    <value>'{0}' was compiled with one or more modules that do not properly enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). The following modules are out of policy:
+{1}</value>
   </data>
-  <data name="BA2024_Error_BuiildWithSpectreMitigation_UnrecognizedCompiler" xml:space="preserve">
-    <value>built with unrecognized compiler.</value>
+  <data name="BA2024_Error_SpectreMitigationExplicitlyDisabled" xml:space="preserve">
+    <value>The following modules were compiled with the Spectre mitigations explicitly disabled:
+{0}</value>
   </data>
-  <data name="BA2024_Error_BuildWithSpectreMitigation_BadCompilerVersion" xml:space="preserve">
-    <value>built with a compiler version {0} that does not support the Spectre mitigations switch.</value>
-  </data>
-  <data name="BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled" xml:space="preserve">
-    <value>built with the Spectre mitigations explicitly disabled.</value>
-  </data>
-  <data name="BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing" xml:space="preserve">
-    <value>built with tools that support the Spectre mitigations but these have not been enabled.</value>
+  <data name="BA2024_Error_SpectreMitigationNotEnabled" xml:space="preserve">
+    <value>The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:
+{0}</value>
   </data>
   <data name="BA2024_Pass" xml:space="preserve">
-    <value>All modules linked into {0} have been verified to be compiled with Spectre mitigations enabled.</value>
+    <value>All linked modules ‘{0}’ were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.</value>
   </data>
-  <data name="BA2024_Pass_WithMASM" xml:space="preserve">
-    <value>MASM files were detected in {0}.  MASM code cannot be verified by this tool.  MASM modules: {1}</value>
-  </data>
-  <data name="BA2024_Warning_BuildWithSpectreMitigation_MASMDetected" xml:space="preserve">
-    <value>built with an assembler, BinSkim cannot verify this file, please manually verify all code has the appropriate mitigations</value>
+  <data name="BA2024_Warning_DeprecatedMitigationEnabled" xml:space="preserve">
+    <value>The following modules were compiled with a toolset that supports /Qspectre but the deprecated /d2guardspecload argument was specified on the command-line instead: {0}</value>
   </data>
   <data name="NotApplicable_InvalidMetadata" xml:space="preserve">
     <value>'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.</value>
