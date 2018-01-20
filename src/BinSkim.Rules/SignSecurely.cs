@@ -16,7 +16,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
-    public class SignSecurely : BinarySkimmerBase
+    public class SignSecurely : WindowsBinarySkimmerBase
     {
         /// <summary>
         /// BA2022
@@ -85,7 +85,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             out Native.WINTRUST_DATA winTrustData,
             out string algorithmsText)
         {
-            // Uses PDB Parsing.
+            // Uses Windows Certificate Interop
             BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
 
             Guid action;

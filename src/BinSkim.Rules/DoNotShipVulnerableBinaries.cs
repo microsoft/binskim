@@ -16,7 +16,7 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
-    public class DoNotShipVulnerableBinaries : BinarySkimmerBase, IOptionsProvider
+    public class DoNotShipVulnerableBinaries : WindowsBinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2005

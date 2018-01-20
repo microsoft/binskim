@@ -15,7 +15,7 @@ using System.Collections.Generic;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
-    public class InitializeStackProtection : BinarySkimmerBase
+    public class InitializeStackProtection : WindowsBinarySkimmerBase
     {
         /// <summary>
         /// BA2013

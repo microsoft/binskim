@@ -22,7 +22,7 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
-    public class EnableCriticalCompilerWarnings : BinarySkimmerBase, IOptionsProvider
+    public class EnableCriticalCompilerWarnings : WindowsBinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2007

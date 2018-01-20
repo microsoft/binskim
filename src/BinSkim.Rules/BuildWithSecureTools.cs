@@ -18,7 +18,7 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
-    public class BuildWithSecureTools : BinarySkimmerBase, IOptionsProvider
+    public class BuildWithSecureTools : WindowsBinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2006

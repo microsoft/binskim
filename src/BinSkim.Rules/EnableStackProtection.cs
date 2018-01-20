@@ -17,7 +17,7 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
-    public class EnableStackProtection : BinarySkimmerBase
+    public class EnableStackProtection : WindowsBinarySkimmerBase
     {
         /// <summary>
         /// BA2011
