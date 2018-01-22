@@ -376,6 +376,9 @@ Modules triggering this check were:
   <data name="BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing" xml:space="preserve">
     <value>built with tools that support the Spectre mitigations but these have not been enabled.</value>
   </data>
+  <data name="BA2024_Error_BuiltWithSpectreMitigation_OdUsedAndUnsupported" xml:space="preserve">
+    <value>built with /Od which disables Spectre mitigations in the compiler version {0}.</value>
+  </data>
   <data name="BA2024_Pass" xml:space="preserve">
     <value>All modules linked into {0} have been verified to be compiled with Spectre mitigations enabled.</value>
   </data>

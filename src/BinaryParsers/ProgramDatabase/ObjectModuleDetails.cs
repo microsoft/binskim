@@ -152,6 +152,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             return _commandLine.GetSwitchState(switchName, precedence);
         }
 
+        public SwitchState GetSwitchStateFactoringOverrides(string[] switchNames, SwitchState defaultStateOfFirst, OrderOfPrecedence precedence)
+        {
+            return _commandLine.GetSwitchStateFactoringOverrides(switchNames, defaultStateOfFirst, precedence);
+        }
+
+        public SwitchState GetSwitchStateWithAliases(string[] switchNames, SwitchState defaultState, OrderOfPrecedence precedence)
+        {
+            return _commandLine.GetSwitchStateWithAliases(switchNames, defaultState, precedence);
+        }
+
     }
 
     public enum Language : uint
