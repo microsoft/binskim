@@ -23,6 +23,39 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         LastWins = 1
     }
 
+    public struct CommandLineSwitch
+    {
+        CommandLineSwitch(string name, SwitchState state)
+        {
+            Name = name;
+            State = state;
+        }
+
+        public string Name;
+        public SwitchState State;
+    };
+
+    public struct CompositeSwitchState
+    {
+        CompositeSwitchState(CommandLineSwitch[] switchArray)
+        {
+            compositeSwitch = switchArray;
+        }
+        public CommandLineSwitch[] compositeSwitch;
+
+        SwitchState State()
+        {
+            if (compositeSwitch.Length >= 1)
+            {
+                return compositeSwitch[0].State;
+            }
+            else
+            {
+                return SwitchState.SwitchNotFound;
+            }
+        }
+    }
+
     /// <summary>Processes command lines stored by compilers in PDBs.</summary>
     internal struct CompilerCommandLine
     {
@@ -47,6 +80,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             Once,
             Disabled
         }
+
+        static private char[] switchPrefix = new char[] { '-', '/' };
 
         /// <summary>
         /// The raw, unadulterated command line before processing.
@@ -231,37 +266,138 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             SwitchState currentState = SwitchState.SwitchNotFound;
 
-            string realSwitch = switchName;
+            string[] realSwitch = new string[] { switchName };
 
-            // if present remove the slash or minus
-            realSwitch = switchName.TrimStart('-', '/');
+            currentState = GetSwitchStateFactoringOverrides(realSwitch, currentState, precedence);
+
+            return currentState;
+        }
+
+        public SwitchState GetSwitchStateWithAliases(string[] switchNames, SwitchState defaultState, OrderOfPrecedence precedence)
+        {
+            SwitchState state = SwitchState.SwitchNotFound;
+
+            string[] realSwitches = new string[switchNames.Length];
+
+            for (int index = 0; index < switchNames.Length; index++)
+            {
+                realSwitches[index] = switchNames[index].TrimStart(switchPrefix);
+            }
 
             foreach (string arg in ArgumentSplitter.CommandLineToArgvW(Raw))
             {
                 if (IsSwitch(arg))
                 {
-                    string realArg = arg.TrimStart('-', '/');
+                    string realArg = arg.TrimStart(switchPrefix);
 
-                    if (realArg.StartsWith(realSwitch))
+                    for (int index = 0; index < realSwitches.Length; index++)
                     {
-                        // partial stem match - now check if this is a full match or a match with a "-" on the end
-                        if (realArg.Equals(realSwitch))
+                        if (realArg.StartsWith(realSwitches[index]))
                         {
-                            currentState = SwitchState.SwitchEnabled;
-                        } 
-                        else if (realArg[realSwitch.Length] == '-')
-                        {
-                            currentState = SwitchState.SwitchDisabled;
-                        }
-                        // Else we have a stem match
+                            // partial stem match - now check if this is a full match or a match with a "-" on the end
+                            if (realArg.Equals(realSwitches[index]))
+                            {
+                                state = SwitchState.SwitchEnabled;
+                            }
+                            else if (realArg[realSwitches[index].Length] == '-')
+                            {
+                                state = SwitchState.SwitchDisabled;
+                            }
+                            // Else we have a stem match
 
-                        if (precedence == OrderOfPrecedence.FirstWins)
-                            break;
+                            if (precedence == OrderOfPrecedence.FirstWins)
+                                break;
+                        }
                     }
                 }
             }
 
-            return currentState;
+            if(state == SwitchState.SwitchNotFound)
+            {
+                state = defaultState;
+            }
+
+            return state;
+        }
+        // Get the state of the initial switch in the array if it and the subsequent switches override eachother
+        public SwitchState GetSwitchStateFactoringOverrides(string[] switchNames, SwitchState defaultStateOfFirst, OrderOfPrecedence precedence)
+        {
+            SwitchState compositeState = SwitchState.SwitchNotFound;
+
+            if (switchNames.Length > 0)
+            {
+                // convert string array to CommandLineSwitch objects for search
+                CommandLineSwitch[] switchArray = new CommandLineSwitch[switchNames.Length];
+
+                for (int index = 0; index < switchNames.Length; index++)
+                {
+                    // if present remove the slash or minus
+                    switchArray[index].Name = switchNames[index].TrimStart(switchPrefix);
+                    switchArray[index].State = SwitchState.SwitchNotFound;
+                }
+
+                foreach (string arg in ArgumentSplitter.CommandLineToArgvW(Raw))
+                {
+                    if (IsSwitch(arg))
+                    {
+                        string realArg = arg.TrimStart(switchPrefix);
+
+                        for (int index = 0; index < switchArray.Length; index++)
+                        {
+                            if (realArg.StartsWith(switchArray[index].Name))
+                            {
+                                // partial stem match - now check if this is a full match or a match with a "-" on the end
+                                if (realArg.Equals(switchArray[index].Name))
+                                {
+                                    switchArray[index].State = SwitchState.SwitchEnabled;
+
+                                    if (index != 0)
+                                    {
+                                        switchArray[0].State = SwitchState.SwitchDisabled;
+                                    }
+                                }
+                                else if (realArg[switchArray[index].Name.Length] == '-')
+                                {
+                                    switchArray[index].State = SwitchState.SwitchDisabled;
+                                }
+                                // Else we have a stem match
+
+                                if (precedence == OrderOfPrecedence.FirstWins)
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                if (switchArray[0].State == SwitchState.SwitchNotFound)
+                {
+                    bool anyOtherSwitchSet = false;
+
+                    for (int index = 1 /*skip the initial switch*/ ; index < switchArray.Length; index++)
+                    {
+                        if (switchArray[index].State == SwitchState.SwitchEnabled)
+                        {
+                            anyOtherSwitchSet = true;
+                            break;
+                        }
+                    }
+
+                    if (anyOtherSwitchSet)
+                    {
+                        compositeState = SwitchState.SwitchDisabled;
+                    }
+                    else
+                    {
+                        compositeState = defaultStateOfFirst;
+                    }
+                }
+                else
+                {
+                    compositeState = switchArray[0].State;
+                }
+            }
+
+            return compositeState;
         }
     }
 }

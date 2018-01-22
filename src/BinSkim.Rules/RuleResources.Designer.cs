@@ -828,6 +828,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to built with /Od which disables Spectre mitigations in the compiler version {0}..
+        /// </summary>
+        internal static string BA2024_Error_BuiltWithSpectreMitigation_OdUsedAndUnsupported {
+            get {
+                return ResourceManager.GetString("BA2024_Error_BuiltWithSpectreMitigation_OdUsedAndUnsupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All modules linked into {0} have been verified to be compiled with Spectre mitigations enabled..
         /// </summary>
         internal static string BA2024_Pass {

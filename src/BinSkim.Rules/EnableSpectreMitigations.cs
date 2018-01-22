@@ -44,6 +44,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2024_Error_BuiildWithSpectreMitigation_UnrecognizedCompiler),
                     nameof(RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing),
                     nameof(RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled),
+                    nameof(RuleResources.BA2024_Error_BuiltWithSpectreMitigation_OdUsedAndUnsupported),
                     nameof(RuleResources.BA2024_Pass),
                     nameof(RuleResources.BA2024_Pass_WithMASM),
                     nameof(RuleResources.BA2024_Warning_BuildWithSpectreMitigation_MASMDetected),
@@ -202,6 +203,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // Get the appropriate compiler Version against which to check this compiland
                 bool supportsQspectre = false;
                 bool supportsd2guardspecload = false;
+                bool supportsOd = false;
+                bool onbyDefault = false;
 
                 // check that we are greater than or equal to the first fully supported release: 15.6 first
                 Version omVer = omDetails.CompilerVersion;
@@ -209,6 +212,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     supportsQspectre = minimumCompilers[VS2017_15_6_PREV4].QSpectre;
                     supportsd2guardspecload = minimumCompilers[VS2017_15_6_PREV4].d2specguard;
+                    supportsOd = minimumCompilers[VS2017_15_6_PREV4].debugCodeMitigated;
+                    onbyDefault = minimumCompilers[VS2017_15_6_PREV4].EnabledByDefault;
                 }
                 else
                 {
@@ -223,6 +228,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         {
                             supportsQspectre = compilerVersionEntry.Value.QSpectre;
                             supportsd2guardspecload = compilerVersionEntry.Value.d2specguard;
+                            supportsOd = compilerVersionEntry.Value.debugCodeMitigated;
+                            onbyDefault = compilerVersionEntry.Value.EnabledByDefault;
                         }
                     }
                 }
@@ -238,50 +245,73 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
-                SwitchState QSpectreState = SwitchState.SwitchNotFound;
-                SwitchState d2guardspecloadState = SwitchState.SwitchNotFound;
+
+                string[] mitigationSwitches = new string[] { "/Qspectre", "/guardspecload" };
+
+                SwitchState effectiveState;
 
                 // Go process the command line to check for switches
-                if (supportsQspectre)
-                {
-                    QSpectreState = omDetails.GetSwitchState("/Qspectre", OrderOfPrecedence.LastWins);
-                }
-
-                if(supportsd2guardspecload)
-                {
-                    // /d2xxxx options show up in the PDB without the d2 string
-                    // So search for just /guardspecload
-                    d2guardspecloadState = omDetails.GetSwitchState("/guardspecload", OrderOfPrecedence.LastWins);
-                }
-
-                // TODO-paddymcd-MSFT: Check all the /O optimization flags to determine if we are /Od or not
-                // /Od may disable the Spectre Mitigations.
-
-                SwitchState effectiveState = SwitchState.SwitchNotFound;
-
-                // if either QSpectre or d2guardspecload are enabled AND neither is explicitly disabled then we are protected
-                //      (use of both is confusing so issue an error in this scenario even though they are effectively the same switch)
-                if ((QSpectreState == SwitchState.SwitchEnabled || d2guardspecloadState == SwitchState.SwitchEnabled) && 
-                    (QSpectreState != SwitchState.SwitchDisabled && d2guardspecloadState != SwitchState.SwitchDisabled))
-                {
-                    effectiveState = SwitchState.SwitchEnabled;
-                }
+                effectiveState = omDetails.GetSwitchStateWithAliases(mitigationSwitches, onbyDefault == true ? SwitchState.SwitchEnabled : SwitchState.SwitchDisabled, OrderOfPrecedence.LastWins);
 
                 if (effectiveState == SwitchState.SwitchDisabled)
                 {
-                    // built with the Spectre mitigations explicitly disabled.
-                    badModuleList.Add(
-                        om.CreateCompilandRecordWithSuffix(
-                            string.Format(CultureInfo.InvariantCulture,
-                            RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled)));
+                    SwitchState QSpectreState = SwitchState.SwitchNotFound;
+                    SwitchState d2guardspecloadState = SwitchState.SwitchNotFound;
+
+                    if (supportsQspectre)
+                    {
+                        QSpectreState = omDetails.GetSwitchState(mitigationSwitches[0] /*"/Qspectre"*/ , OrderOfPrecedence.LastWins);
+                    }
+
+                    if (supportsd2guardspecload)
+                    {
+                        // /d2xxxx options show up in the PDB without the d2 string
+                        // So search for just /guardspecload
+                        d2guardspecloadState = omDetails.GetSwitchState(mitigationSwitches[1] /*"/guardspecload"*/, OrderOfPrecedence.LastWins);
+                    }
+
+                    if (QSpectreState == SwitchState.SwitchNotFound && d2guardspecloadState == SwitchState.SwitchNotFound)
+                    {
+                        // built with tools that support the Spectre mitigations but these have not been enabled.
+                        badModuleList.Add(
+                            om.CreateCompilandRecordWithSuffix(
+                                string.Format(CultureInfo.InvariantCulture,
+                                RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing)));
+                        continue;
+                    }
+                    else
+                    {
+                        // built with the Spectre mitigations explicitly disabled.
+                        badModuleList.Add(
+                            om.CreateCompilandRecordWithSuffix(
+                                string.Format(CultureInfo.InvariantCulture,
+                                RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled)));
+                    }
+
+                    continue;
                 }
-                else if(effectiveState == SwitchState.SwitchNotFound)
+
+                if (supportsOd == false)
                 {
-                    // built with tools that support the Spectre mitigations but these have not been enabled.
-                    badModuleList.Add(
-                        om.CreateCompilandRecordWithSuffix(
-                            string.Format(CultureInfo.InvariantCulture,
-                            RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing)));
+                    string[] OptimizerSwitches = { "/Od", "/O1", "/O2", "/Ox", "/Og" };
+
+                    bool debugEnabled = false;
+
+                    if (omDetails.GetSwitchStateFactoringOverrides(OptimizerSwitches, SwitchState.SwitchEnabled, OrderOfPrecedence.LastWins) == SwitchState.SwitchEnabled)
+                    {
+                        debugEnabled = true;
+                    }
+
+                    if (debugEnabled)
+                    {
+                        // built with /Od which disables Spectre mitigations in the compiler version {0}.
+                        badModuleList.Add(
+                            om.CreateCompilandRecordWithSuffix(
+                                String.Format(CultureInfo.InvariantCulture,
+                                RuleResources.BA2024_Error_BuiltWithSpectreMitigation_OdUsedAndUnsupported,
+                                omDetails.CompilerVersion)));
+                        continue;
+                    }
                 }
             }
 
@@ -360,21 +390,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var result = new StringToMitigatedVersionMap();
 
             // Only support /d2guardspecload
-            result[VS2017_15_5] = new MitigatedVersion(new Version(19, 12, 25830, 2), false, true, false);
+            result[VS2017_15_5] = new MitigatedVersion(new Version(19, 12, 25830, 2), false, true, false, false);
 
             // 15.6 preview 1 went out with the minor version not bumped: 19.12.25907.0
             // This will be caught by the 15.5 rtw check - we need the first 19.13 version (preview 2)
-            result[VS2017_15_6_PREV1] = new MitigatedVersion(new Version(19, 13, 26029, 0), false, true, false);
+            result[VS2017_15_6_PREV1] = new MitigatedVersion(new Version(19, 13, 26029, 0), false, true, false, false);
 
             // /Qspectre and /d2guardspecload
             // TODO-paddymcd-MSFT: VS2017_15_6_PREV4 19.13.26115 is a placeholder internal build that doesn't yet support
             //                     /Qspectre.  Update this once we have the official build
-            result[VS2017_15_6_PREV4] = new MitigatedVersion(new Version(19, 13, 26115, 0), true, true, false);
+            result[VS2017_15_6_PREV4] = new MitigatedVersion(new Version(19, 13, 26115, 0), true, true, false, false);
 
             // Add patched versions of the compiler as they become available.
-            // result[VS2017_15_5_QSPECTREPATCH] = new MitigatedVersion(new Version(19, 12, ?, ?), true, true, false);
-            // result[VS2017_15_0_PATCH] = new MitigatedVersion(new Version(19, 10, ?, ?), true, true, false);
-            // result[VS2015_UPDATE3_PATCH] = new MitigatedVersion(new Version(19, 0, ?, ?), true, true, false);
+            // result[VS2017_15_5_QSPECTREPATCH] = new MitigatedVersion(new Version(19, 12, ?, ?), true, true, false, false);
+            // result[VS2017_15_0_PATCH] = new MitigatedVersion(new Version(19, 10, ?, ?), true, true, false, false);
+            // result[VS2015_UPDATE3_PATCH] = new MitigatedVersion(new Version(19, 0, ?, ?), true, true, false, false);
 
             return result;
         }
@@ -400,20 +430,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             QSpectre = false;
             d2specguard = false;
             debugCodeMitigated = false;
+            EnabledByDefault = false;
         }
 
-        public MitigatedVersion(Version ver, bool spectre, bool d2, bool debug)
+        public MitigatedVersion(Version ver, bool spectre, bool d2, bool debug, bool enabled)
         {
             compilerVersion = ver;
             QSpectre = spectre;
             d2specguard = d2;
             debugCodeMitigated = debug;
+            EnabledByDefault = enabled;
         }
 
         public Version compilerVersion;
         public bool QSpectre;
         public bool d2specguard;
         public bool debugCodeMitigated;
+        public bool EnabledByDefault;
 
         public override bool Equals(object obj)
         {
