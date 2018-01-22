@@ -38,12 +38,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 _fs = File.OpenRead(FileName);
 
-                byte byteRead = (byte)_fs.ReadByte();
-                if (byteRead != 'M') { return; }
-
-                byteRead = (byte)_fs.ReadByte();
-                if (byteRead != 'Z') { return; }
-                _fs.Seek(0, SeekOrigin.Begin);
+                if(!CheckPEMagicBytes(_fs)) { return; }
 
                 _peReader = new PEReader(_fs);
                 PEHeaders = _peReader.PEHeaders;
@@ -59,6 +54,24 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             catch (IOException e) { LoadException = e; }
             catch (BadImageFormatException e) { LoadException = e; }
             catch (UnauthorizedAccessException e) { LoadException = e; }
+        }
+
+        public static bool CheckPEMagicBytes(FileStream fs)
+        {
+            try
+            {
+                byte byteRead = (byte)fs.ReadByte();
+                if (byteRead != 'M') { return false; }
+
+                byteRead = (byte)fs.ReadByte();
+                if (byteRead != 'Z') { return false; }
+
+                return true;
+            }
+            finally
+            {
+                fs.Seek(0, SeekOrigin.Begin);
+            }
         }
 
         public void Dispose()

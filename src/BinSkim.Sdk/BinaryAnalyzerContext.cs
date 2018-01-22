@@ -2,55 +2,29 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-
-using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class BinaryAnalyzerContext : IAnalysisContext
     {
-        private PE _pe;
         private Uri _uri;
-        private Pdb _pdb;
-        private bool _pdbResolved;
 
-        public bool IsManagedAssembly { get; internal set; }
+        public IBinary Binary { get; private set; }
 
         public Exception TargetLoadException
         {
-            get { return PE.LoadException; }
+            get { return Binary.LoadException; }
             set { throw new InvalidOperationException(); }
         }
 
         public bool IsValidAnalysisTarget
         {
-            get { return PE.IsPEFile; }
+            get { return Binary != null && Binary.Valid ; }
             set { throw new InvalidOperationException(); }
         }
-
-        public PE PE
-        {
-            get
-            {
-                if (_pe == null)
-                {
-                    PE = new PE(TargetUri.LocalPath);
-                    IsManagedAssembly = _pe.IsManaged;
-                }
-                return _pe;
-            }
-            set
-            {
-                if (value != null && _pdbResolved)
-                {
-                    throw new InvalidOperationException("Attempt to access a previously disposed PE object.");
-                }
-                _pe = value;
-            }
-        }
-
+        
         public Uri TargetUri
         {
             get
@@ -64,67 +38,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     throw new InvalidOperationException(SdkResources.IllegalContextReuse);
                 }
                 _uri = value;
+                Binary = BinaryTargetManager.GetBinaryFromFile(_uri); // TODO--binary parser manager.
             }
         }
-
-        public Pdb Pdb
-        {
-            get
-            {
-                if (_pdbResolved)
-                {
-                    return _pdb;
-                }
-
-                try
-                {
-                    Pdb = new Pdb(PE.FileName, Pdb.SymbolPath);
-                }
-                catch (PdbParseException ex)
-                {
-                    PdbParseException = ex;
-                }
-
-                _pdbResolved = true;
-                return _pdb;
-            }
-            set
-            {
-                if (value != null && _pdbResolved)
-                {
-                    throw new InvalidOperationException("Attempt to access a previously disposed PE object.");
-                }
-                _pdb = value;
-            }
-        }
-
-        public void DisposePortableExecutableData()
-        {
-            if (_pdb != null)
-            {
-                _pdb.Dispose();
-                _pdb = null;
-            }
-
-            if (_pe != null)
-            {
-                _pe.Dispose();
-                _pe = null;
-            }
-        }
-
-        public void Dispose()
-        {
-            DisposePortableExecutableData();
-        }
-
-        public PdbParseException PdbParseException { get; internal set; }
 
         public IAnalysisLogger Logger { get; set; }
 
         public IRule Rule { get; set; }
-
-        public Version MinimumSupportedCompilerVersion { get; internal set; }
 
         public PropertiesDictionary Policy { get; set; }
 
@@ -135,5 +55,29 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         }
 
         public RuntimeConditions RuntimeErrors { get; set; }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    Binary.Dispose();
+                    Binary = null;
+                }
+                disposedValue = true;
+            }
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+        }
+        #endregion
     }
 }

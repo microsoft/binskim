@@ -51,9 +51,12 @@ namespace Microsoft.CodeAnalysis.IL
         {
             base.AnalyzeTarget(skimmers, context, disabledSkimmers);
 
-            if (context.PE.IsManaged && !context.PE.IsManagedResourceOnly)
+            if (context.IsPE())
             {
-                AnalyzeManagedAssembly(context.TargetUri.LocalPath, _plugInFilePaths, context);
+                if (context.PEBinary().PE.IsManaged && !context.PEBinary().PE.IsManagedResourceOnly)
+                {
+                    AnalyzeManagedAssembly(context.TargetUri.LocalPath, _plugInFilePaths, context);
+                }
             }
         }
 

@@ -70,6 +70,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attempted to access PEBinary representation of a non-PE binary target.  This indicates a programmer error..
+        /// </summary>
+        internal static string IllegalPEBinaryAccess {
+            get {
+                return ResourceManager.GetString("IllegalPEBinaryAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to an exception occurred attempting to load its pdb.
         /// </summary>
         internal static string MetadataCondition_CouldNotLoadPdb {

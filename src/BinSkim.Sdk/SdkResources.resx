@@ -183,4 +183,7 @@
   <data name="MetadataCondition_ImageIsBootBinary" xml:space="preserve">
     <value>image is a boot binary</value>
   </data>
+  <data name="IllegalPEBinaryAccess" xml:space="preserve">
+    <value>Attempted to access PEBinary representation of a non-PE binary target.  This indicates a programmer error.</value>
+  </data>
 </root>

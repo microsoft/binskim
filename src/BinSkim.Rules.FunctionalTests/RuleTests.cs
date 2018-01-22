@@ -265,7 +265,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
 
                 context = CreateContext(logger, null, target);
-                if (!context.PE.IsPEFile) { continue; }
+                if (!context.IsValidAnalysisTarget || !context.PEBinary().PE.IsPEFile) { continue; }
 
                 if (useDefaultPolicy)
                 {
