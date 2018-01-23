@@ -87,6 +87,8 @@ namespace Microsoft.CodeAnalysis.IL
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PE'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.SafePointer'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.CompilandRecord'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.SwitchState'",
+                "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.OrderOfPrecedence'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.CompilerCommandLine.WarningState'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.CompilerCommandLine'",
                 "Symbol encountered in MSIL 'global::Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.<CreateSourceFileIteratorImpl>d__21'",

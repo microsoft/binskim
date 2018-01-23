@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 {
+    /// <summary>Possible status for commandline switches when searching the PDB (no default state is given).</summary>
     public enum SwitchState
     {
         SwitchNotFound = 0,
@@ -17,43 +18,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         SwitchDisabled = -1
     }
 
+    /// <summary>Order of precendence for the provided switches to clarify what to do in the presence of multiple disagreeing copies of the switch.</summary>
     public enum OrderOfPrecedence
     {
         FirstWins = 0,
         LastWins = 1
-    }
-
-    public struct CommandLineSwitch
-    {
-        CommandLineSwitch(string name, SwitchState state)
-        {
-            Name = name;
-            State = state;
-        }
-
-        public string Name;
-        public SwitchState State;
-    };
-
-    public struct CompositeSwitchState
-    {
-        CompositeSwitchState(CommandLineSwitch[] switchArray)
-        {
-            compositeSwitch = switchArray;
-        }
-        public CommandLineSwitch[] compositeSwitch;
-
-        SwitchState State()
-        {
-            if (compositeSwitch.Length >= 1)
-            {
-                return compositeSwitch[0].State;
-            }
-            else
-            {
-                return SwitchState.SwitchNotFound;
-            }
-        }
     }
 
     /// <summary>Processes command lines stored by compilers in PDBs.</summary>
@@ -260,80 +229,44 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             return c == '/' || c == '-';
         }
 
-        // Determine if a switch is set,unset or not present on the command-line
-        // Case matters
-        public SwitchState GetSwitchState(string switchName, OrderOfPrecedence precedence)
+        /// <summary>
+        /// Determine if a switch is set,unset or not present on the command-line.
+        /// </summary>
+        /// <param name="switchNames">Array of switches that alias each other and all set the same compiler state.</param>
+        /// <param name="overrideNames">Array of switches that invalidate the state of the switches in switchNames.</param>
+        /// <param name="defaultState">The default state of the switch should no instance of the switch or its overrides be found.</param>
+        /// <param name="precedence">The precedence rules for this set of switches.</param>
+        public SwitchState GetSwitchState(string[] switchNames, string[] overrideNames, SwitchState defaultState, OrderOfPrecedence precedence)
         {
-            SwitchState currentState = SwitchState.SwitchNotFound;
+            // TODO-paddymcd-MSFT - This is an OK first pass.
+            // Unfortunately composite switches get tricky and not all switches support the '-' semantics 
+            // e.g. /O1- gets translated to /O1 /O-, the second of which is not supported.
+            // Additionally, currently /d2guardspecload is translated into /guardspecload, which may be a bug for ENC
+            SwitchState namedswitchesState = SwitchState.SwitchNotFound;
 
-            string[] realSwitch = new string[] { switchName };
-
-            currentState = GetSwitchStateFactoringOverrides(realSwitch, currentState, precedence);
-
-            return currentState;
-        }
-
-        public SwitchState GetSwitchStateWithAliases(string[] switchNames, SwitchState defaultState, OrderOfPrecedence precedence)
-        {
-            SwitchState state = SwitchState.SwitchNotFound;
-
-            string[] realSwitches = new string[switchNames.Length];
-
-            for (int index = 0; index < switchNames.Length; index++)
+            if (switchNames != null && switchNames.Length > 0)
             {
-                realSwitches[index] = switchNames[index].TrimStart(switchPrefix);
-            }
+                // array of strings for the switch name without the preceding switchPrefix to make comparison easier
+                string[] switchArray = new string[switchNames.Length];
+                string[] overridesArray = null;
 
-            foreach (string arg in ArgumentSplitter.CommandLineToArgvW(Raw))
-            {
-                if (IsSwitch(arg))
-                {
-                    string realArg = arg.TrimStart(switchPrefix);
-
-                    for (int index = 0; index < realSwitches.Length; index++)
-                    {
-                        if (realArg.StartsWith(realSwitches[index]))
-                        {
-                            // partial stem match - now check if this is a full match or a match with a "-" on the end
-                            if (realArg.Equals(realSwitches[index]))
-                            {
-                                state = SwitchState.SwitchEnabled;
-                            }
-                            else if (realArg[realSwitches[index].Length] == '-')
-                            {
-                                state = SwitchState.SwitchDisabled;
-                            }
-                            // Else we have a stem match
-
-                            if (precedence == OrderOfPrecedence.FirstWins)
-                                break;
-                        }
-                    }
-                }
-            }
-
-            if(state == SwitchState.SwitchNotFound)
-            {
-                state = defaultState;
-            }
-
-            return state;
-        }
-        // Get the state of the initial switch in the array if it and the subsequent switches override eachother
-        public SwitchState GetSwitchStateFactoringOverrides(string[] switchNames, SwitchState defaultStateOfFirst, OrderOfPrecedence precedence)
-        {
-            SwitchState compositeState = SwitchState.SwitchNotFound;
-
-            if (switchNames.Length > 0)
-            {
-                // convert string array to CommandLineSwitch objects for search
-                CommandLineSwitch[] switchArray = new CommandLineSwitch[switchNames.Length];
+                SwitchState namedoverridesState = SwitchState.SwitchNotFound;
 
                 for (int index = 0; index < switchNames.Length; index++)
                 {
                     // if present remove the slash or minus
-                    switchArray[index].Name = switchNames[index].TrimStart(switchPrefix);
-                    switchArray[index].State = SwitchState.SwitchNotFound;
+                    switchArray[index] = switchNames[index].TrimStart(switchPrefix);
+                }
+
+                if (overrideNames != null && overrideNames.Length > 0)
+                {
+                    overridesArray = new string[overrideNames.Length];
+
+                    for (int index = 0; index < overrideNames.Length; index++)
+                    {
+                        // if present remove the slash or minus
+                        overridesArray[index] = overrideNames[index].TrimStart(switchPrefix);
+                    }
                 }
 
                 foreach (string arg in ArgumentSplitter.CommandLineToArgvW(Raw))
@@ -342,62 +275,73 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     {
                         string realArg = arg.TrimStart(switchPrefix);
 
+                        // Check if this matches one of the names switches
                         for (int index = 0; index < switchArray.Length; index++)
                         {
-                            if (realArg.StartsWith(switchArray[index].Name))
+                            if (realArg.StartsWith(switchArray[index]))
                             {
                                 // partial stem match - now check if this is a full match or a match with a "-" on the end
-                                if (realArg.Equals(switchArray[index].Name))
+                                if (realArg.Equals(switchArray[index]))
                                 {
-                                    switchArray[index].State = SwitchState.SwitchEnabled;
-
-                                    if (index != 0)
-                                    {
-                                        switchArray[0].State = SwitchState.SwitchDisabled;
-                                    }
+                                    namedswitchesState = SwitchState.SwitchEnabled;
+                                    // not necessary at this time, but here for completeness...
+                                    namedoverridesState = SwitchState.SwitchDisabled;
                                 }
-                                else if (realArg[switchArray[index].Name.Length] == '-')
+                                else if (realArg[switchArray[index].Length] == '-')
                                 {
-                                    switchArray[index].State = SwitchState.SwitchDisabled;
+                                    namedswitchesState = SwitchState.SwitchDisabled;
                                 }
-                                // Else we have a stem match
-
-                                if (precedence == OrderOfPrecedence.FirstWins)
-                                    break;
+                                // Else we have a stem match - do nothing
                             }
                         }
-                    }
-                }
 
-                if (switchArray[0].State == SwitchState.SwitchNotFound)
-                {
-                    bool anyOtherSwitchSet = false;
-
-                    for (int index = 1 /*skip the initial switch*/ ; index < switchArray.Length; index++)
-                    {
-                        if (switchArray[index].State == SwitchState.SwitchEnabled)
+                        // check if this matches one of the named overrides
+                        if (overridesArray != null)
                         {
-                            anyOtherSwitchSet = true;
+                            for (int index = 0; index < overridesArray.Length; index++)
+                            {
+                                if (realArg.StartsWith(overridesArray[index]))
+                                {
+                                    // partial stem match - now check if this is a full match or a match with a "-" on the end
+                                    if (realArg.Equals(overridesArray[index]))
+                                    {
+                                        namedoverridesState = SwitchState.SwitchEnabled;
+                                        namedswitchesState = SwitchState.SwitchDisabled;
+                                    }
+                                    else if (realArg[overridesArray[index].Length] == '-')
+                                    {
+                                        namedoverridesState = SwitchState.SwitchDisabled;
+                                        // Unsetting an override has no impact upon the named switches
+                                    }
+                                    // Else we have a stem match - do nothing
+                                }
+                            }
+                        }
+
+                        if (namedswitchesState != SwitchState.SwitchNotFound &&
+                            namedoverridesState != SwitchState.SwitchNotFound &&
+                            precedence == OrderOfPrecedence.FirstWins)
+                        {
+                            // we found a switch that impacts the desired state and FirstWins is set
                             break;
                         }
                     }
+                }
 
-                    if (anyOtherSwitchSet)
+                if (namedswitchesState == SwitchState.SwitchNotFound)
+                {
+                    if (namedoverridesState == SwitchState.SwitchEnabled)
                     {
-                        compositeState = SwitchState.SwitchDisabled;
+                        namedswitchesState = SwitchState.SwitchDisabled;
                     }
                     else
                     {
-                        compositeState = defaultStateOfFirst;
+                        namedswitchesState = defaultState;
                     }
-                }
-                else
-                {
-                    compositeState = switchArray[0].State;
                 }
             }
 
-            return compositeState;
+            return namedswitchesState;
         }
     }
 }

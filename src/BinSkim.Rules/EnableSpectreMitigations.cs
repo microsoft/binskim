@@ -254,7 +254,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 SwitchState effectiveState;
 
                 // Go process the command line to check for switches
-                effectiveState = omDetails.GetSwitchStateWithAliases(mitigationSwitches, onbyDefault == true ? SwitchState.SwitchEnabled : SwitchState.SwitchDisabled, OrderOfPrecedence.LastWins);
+                effectiveState = omDetails.GetSwitchState(mitigationSwitches, null, onbyDefault == true ? SwitchState.SwitchEnabled : SwitchState.SwitchDisabled, OrderOfPrecedence.LastWins);
 
                 if (effectiveState == SwitchState.SwitchDisabled)
                 {
@@ -295,11 +295,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (supportsOd == false)
                 {
-                    string[] OptimizerSwitches = { "/Od", "/O1", "/O2", "/Ox", "/Og" };
+                    string[] OdSwitches = { "/Od" };
+                    // These switches override /Od - there is no one place to find this information on msdn at this time.
+                    string[] OptimizeSwitches = { "/O1", "/O2", "/Ox", "/Og" };
 
                     bool debugEnabled = false;
 
-                    if (omDetails.GetSwitchStateFactoringOverrides(OptimizerSwitches, SwitchState.SwitchEnabled, OrderOfPrecedence.LastWins) == SwitchState.SwitchEnabled)
+                    if (omDetails.GetSwitchState(OdSwitches, OptimizeSwitches, SwitchState.SwitchEnabled, OrderOfPrecedence.LastWins) == SwitchState.SwitchEnabled)
                     {
                         debugEnabled = true;
                     }

@@ -147,19 +147,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 return _hasDebugInfo;
             }
         }
+
+        /// <summary>
+        /// Determine the state of a single switch
+        /// </summary>
+        /// <param name="switchName">Switch name to check.</param>
+        /// <param name="precedence">The precedence rules for this switch.</param>
         public SwitchState GetSwitchState(string switchName, OrderOfPrecedence precedence)
         {
-            return _commandLine.GetSwitchState(switchName, precedence);
+            string[] switchNames = new string[1] { switchName };
+            return _commandLine.GetSwitchState(switchNames, null, SwitchState.SwitchNotFound, precedence);
         }
 
-        public SwitchState GetSwitchStateFactoringOverrides(string[] switchNames, SwitchState defaultStateOfFirst, OrderOfPrecedence precedence)
+        /// <summary>
+        /// Determine if a switch is set,unset or not present on the command-line.
+        /// </summary>
+        /// <param name="switchNames">Array of switches that alias each other and all set the same compiler state.</param>
+        /// <param name="overrideNames">Array of switches that invalidate the state of the switches in switchNames.</param>
+        /// <param name="defaultState">The default state of the switch should no instance of the switch or its overrides be found.</param>
+        /// <param name="precedence">The precedence rules for this set of switches.</param>
+        public SwitchState GetSwitchState(string[] switchNames, string[] overrideNames, SwitchState defaultStateOfFirst, OrderOfPrecedence precedence)
         {
-            return _commandLine.GetSwitchStateFactoringOverrides(switchNames, defaultStateOfFirst, precedence);
-        }
-
-        public SwitchState GetSwitchStateWithAliases(string[] switchNames, SwitchState defaultState, OrderOfPrecedence precedence)
-        {
-            return _commandLine.GetSwitchStateWithAliases(switchNames, defaultState, precedence);
+            return _commandLine.GetSwitchState(switchNames, overrideNames, defaultStateOfFirst, precedence);
         }
 
     }
