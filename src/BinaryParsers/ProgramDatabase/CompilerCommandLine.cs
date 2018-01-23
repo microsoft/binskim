@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Globalization;
+
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
@@ -40,9 +41,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         private enum WarningState
         {
             Level1 = 1,
-            Level2 = 2,
-            Level3 = 3,
-            Level4 = 4,
+            Level2,
+            Level3,
+            Level4,
             AsError,
             Once,
             Disabled

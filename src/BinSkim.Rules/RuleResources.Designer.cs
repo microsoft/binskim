@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class RuleResources {
@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features..
+        ///   Looks up a localized string similar to Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks..
         /// </summary>
         internal static string BA2006_BuildWithSecureTools_Description {
             get {
@@ -776,14 +776,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// <summary>
         ///   Looks up a localized string similar to Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it..
         /// </summary>
-        internal static string BA2024_BuildWithSpectreMitigation_Description {
+        internal static string BA2024_EnableSpectreMitigations_Description {
             get {
-                return ResourceManager.GetString("BA2024_BuildWithSpectreMitigation_Description", resourceCulture);
+                return ResourceManager.GetString("BA2024_EnableSpectreMitigations_Description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules without the Spectre mitigations enabled or  were not built using tool versions containing the Spectre mitigations. More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. Modules built outside of policy: {1}.
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules that do not properly enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a tool [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2024_Error {
             get {
@@ -792,43 +792,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to built with unrecognized compiler..
+        ///   Looks up a localized string similar to The following modules were compiled with the Spectre mitigations explicitly disabled:
+        ///{0}.
         /// </summary>
-        internal static string BA2024_Error_BuiildWithSpectreMitigation_UnrecognizedCompiler {
+        internal static string BA2024_Error_SpectreMitigationExplicitlyDisabled {
             get {
-                return ResourceManager.GetString("BA2024_Error_BuiildWithSpectreMitigation_UnrecognizedCompiler", resourceCulture);
+                return ResourceManager.GetString("BA2024_Error_SpectreMitigationExplicitlyDisabled", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to built with a compiler version {0} that does not support the Spectre mitigations switch..
+        ///   Looks up a localized string similar to The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:
+        ///{0}.
         /// </summary>
-        internal static string BA2024_Error_BuildWithSpectreMitigation_BadCompilerVersion {
+        internal static string BA2024_Error_SpectreMitigationNotEnabled {
             get {
-                return ResourceManager.GetString("BA2024_Error_BuildWithSpectreMitigation_BadCompilerVersion", resourceCulture);
+                return ResourceManager.GetString("BA2024_Error_SpectreMitigationNotEnabled", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to built with the Spectre mitigations explicitly disabled..
-        /// </summary>
-        internal static string BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled {
-            get {
-                return ResourceManager.GetString("BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationDisabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to built with tools that support the Spectre mitigations but these have not been enabled..
-        /// </summary>
-        internal static string BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing {
-            get {
-                return ResourceManager.GetString("BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All modules linked into {0} have been verified to be compiled with Spectre mitigations enabled..
+        ///   Looks up a localized string similar to All linked modules ‘{0}’ were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities..
         /// </summary>
         internal static string BA2024_Pass {
             get {
@@ -837,20 +821,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MASM files were detected in {0}.  MASM code cannot be verified by this tool.  MASM modules: {1}.
+        ///   Looks up a localized string similar to The following modules were compiled with a toolset that supports /Qspectre but the deprecated /d2guardspecload argument was specified on the command-line instead: {0}.
         /// </summary>
-        internal static string BA2024_Pass_WithMASM {
+        internal static string BA2024_Warning_DeprecatedMitigationEnabled {
             get {
-                return ResourceManager.GetString("BA2024_Pass_WithMASM", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to built with an assembler, BinSkim cannot verify this file, please manually verify all code has the appropriate mitigations.
-        /// </summary>
-        internal static string BA2024_Warning_BuildWithSpectreMitigation_MASMDetected {
-            get {
-                return ResourceManager.GetString("BA2024_Warning_BuildWithSpectreMitigation_MASMDetected", resourceCulture);
+                return ResourceManager.GetString("BA2024_Warning_DeprecatedMitigationEnabled", resourceCulture);
             }
         }
         
