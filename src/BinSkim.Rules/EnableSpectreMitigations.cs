@@ -220,6 +220,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // Now check the patched versions that we match on the major, minor versions and then are greater than or equal to on the rest...
                     foreach (var compilerVersionEntry in minimumCompilers)
                     {
+                        // TODO - This code currently assumes a sorted order of the array and that there are not multiple versions (major/minor) 
+                        // that support different sets of switches (something that will probably break very soon).
+                        // This logic needs to be updated to be more robust.
                         Version ver = compilerVersionEntry.Value.compilerVersion;
 
                         if (ver.Major == omVer.Major
@@ -277,7 +280,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             om.CreateCompilandRecordWithSuffix(
                                 string.Format(CultureInfo.InvariantCulture,
                                 RuleResources.BA2024_Error_BuildWithSpectreMitigation_SpectreMitigationMissing)));
-                        continue;
                     }
                     else
                     {
