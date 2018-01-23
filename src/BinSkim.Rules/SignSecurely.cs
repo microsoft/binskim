@@ -58,6 +58,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
+            // Uses Windows Certificate Interop
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+
             Native.WINTRUST_DATA winTrustData;
             string algorithmName, filePath;
 
@@ -85,9 +88,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             out Native.WINTRUST_DATA winTrustData,
             out string algorithmsText)
         {
-            // Uses Windows Certificate Interop
-            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
-
             Guid action;
             CryptoError cryptoError;
             var badAlgorithms  = new List<Tuple<string, string>>();
