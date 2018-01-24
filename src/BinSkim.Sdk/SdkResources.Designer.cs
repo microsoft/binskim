@@ -61,20 +61,20 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attempted to cast a binary target to a &apos;{0}&apos;, but was unable to.  This indicates a programmer error in rules evaluating that sort of target..
+        /// </summary>
+        internal static string IllegalBinaryCast {
+            get {
+                return ResourceManager.GetString("IllegalBinaryCast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A binary context object was re-initialized with a new file path..
         /// </summary>
         internal static string IllegalContextReuse {
             get {
                 return ResourceManager.GetString("IllegalContextReuse", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attempted to access PEBinary representation of a non-PE binary target.  This indicates a programmer error..
-        /// </summary>
-        internal static string IllegalPEBinaryAccess {
-            get {
-                return ResourceManager.GetString("IllegalPEBinaryAccess", resourceCulture);
             }
         }
         

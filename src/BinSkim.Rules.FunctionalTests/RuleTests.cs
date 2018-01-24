@@ -86,10 +86,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (string target in targets)
             {
-                PE pe = new PE(target);
-                if (!pe.IsPEFile) { continue; }
-
                 context = CreateContext(logger, policy, target);
+
+                if(!context.IsValidAnalysisTarget) { continue; }
 
                 context.Rule = skimmer;
 
@@ -188,10 +187,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     foreach (string target in Directory.GetFiles(testDirectory, "*", SearchOption.AllDirectories))
                     {
-                        if (AnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
-                        {
-                            targets.Add(target);
-                        }
+                        targets.Add(target);
                     }
                 }
             }
@@ -210,9 +206,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (string target in targets)
             {
-                PE pe = new PE(target);
-                if (!pe.IsPEFile) { continue; }
-
                 context = CreateContext(logger, policy, target);
 
                 context.Rule = skimmer;
@@ -259,13 +252,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             foreach (string target in targets)
             {
                 string extension = Path.GetExtension(target);
-                if (!AnalyzeCommand.ValidAnalysisFileExtensions.Contains(extension))
-                {
-                    Assert.True(false, "Test file with unexpected extension encountered: " + target);
-                }
-
+                
                 context = CreateContext(logger, null, target);
-                if (!context.IsValidAnalysisTarget || !context.PEBinary().PE.IsPEFile) { continue; }
+                if (!context.IsValidAnalysisTarget) { continue; }
 
                 if (useDefaultPolicy)
                 {
@@ -981,6 +970,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIsNotSigned);
             VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableToSpecifiedTarget);
+        }
+
+
+        [Fact]
+        public void EnablePIEOnExecutables_Pass()
+        {
+            VerifyPass(new EnablePIEOnExecutables());
+        }
+
+        [Fact]
+        public void EnablePIEOnExecutables_Fail()
+        {
+            VerifyFail(new EnablePIEOnExecutables());
+        }
+
+        [Fact]
+        public void EnablePIEOnExecutables_NotApplicable()
+        {
+            // TODO--generate core dump, reloc, etc. for testing.
+            //VerifyNotApplicable(new EnablePIEOnExecutables());
         }
     }
 }

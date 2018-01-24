@@ -790,5 +790,41 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("NotApplicable_PlatformUnsupported", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc.&quot;.
+        /// </summary>
+        internal static string TBDBA3009_EnablePIEOnExecutables_Description {
+            get {
+                return ResourceManager.GetString("TBDBA3009_EnablePIEOnExecutables_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PIE disabled on {0}, fail. // todo.
+        /// </summary>
+        internal static string TBDBA3009_Error {
+            get {
+                return ResourceManager.GetString("TBDBA3009_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PIE enabled on {0}, pass // todo.
+        /// </summary>
+        internal static string TBDBA3009_Pass_Executable {
+            get {
+                return ResourceManager.GetString("TBDBA3009_Pass_Executable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is a library rather than an executable, so it is automatically position independent. // todo.
+        /// </summary>
+        internal static string TBDBA3009_Pass_Library {
+            get {
+                return ResourceManager.GetString("TBDBA3009_Pass_Library", resourceCulture);
+            }
+        }
     }
 }

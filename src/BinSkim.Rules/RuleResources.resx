@@ -364,4 +364,16 @@ Modules triggering this check were:
   <data name="NotApplicable_PlatformUnsupported" xml:space="preserve">
     <value>"This check is not supported on the {0} platform, as it requires interoperability with a native windows library."</value>
   </data>
+  <data name="TBDBA3009_EnablePIEOnExecutables_Description" xml:space="preserve">
+    <value>A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."</value>
+  </data>
+  <data name="TBDBA3009_Error" xml:space="preserve">
+    <value>PIE disabled on {0}, fail. // todo</value>
+  </data>
+  <data name="TBDBA3009_Pass_Executable" xml:space="preserve">
+    <value>PIE enabled on {0}, pass // todo</value>
+  </data>
+  <data name="TBDBA3009_Pass_Library" xml:space="preserve">
+    <value>{0} is a library rather than an executable, so it is automatically position independent. // todo</value>
+  </data>
 </root>

@@ -36,4 +36,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FunctionalTestsData\EnablePIEOnExecutables\Fail\" />
+    <Folder Include="FunctionalTestsData\EnablePIEOnExecutables\Pass\" />
+  </ItemGroup>
+
 </Project>

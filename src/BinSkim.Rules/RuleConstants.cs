@@ -34,5 +34,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public const string DoNotMarkWritableSectionsAsExecutableId = "BA2021";
         public const string SignCorrectly = "BA2022";
+
+        // ELF Checks
+        public const string EnablePIEOnExecutables = "TBDBA3009";
     }
 }
