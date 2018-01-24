@@ -5,10 +5,10 @@
     {
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.4.4.0",
-        "version": "1.4.4.0",
-        "semanticVersion": "1.4.4",
-        "sarifLoggerVersion": "1.5.46.0",
+        "fullName": "BinSkim 1.4.5.0",
+        "version": "1.4.5.0",
+        "semanticVersion": "1.4.5",
+        "sarifLoggerVersion": "1.7.2.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -16,6 +16,7 @@
           "ProductName": "BinSkim Portable Executable Analyzer"
         }
       },
+      "results": [],
       "configurationNotifications": [
         {
           "id": "ERR997.ExceptionLoadingAnalysisTarget",
@@ -26,25 +27,6 @@
           "level": "error"
         }
       ],
-      "files": {
-        "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe": {
-          "mimeType": "application/octet-stream",
-          "hashes": [
-            {
-              "value": "992F5D2554195F9F19B9480A0E11AC78",
-              "algorithm": "md5"
-            },
-            {
-              "value": "A88412258FFEAC619F3FD960AD9A48AC2F29CBAE",
-              "algorithm": "sha1"
-            },
-            {
-              "value": "9F92EDE722DC8740BFDF02CD199090B249BFBBF268DE3CD541FE9400A5652166",
-              "algorithm": "sha256"
-            }
-          ]
-        }
-      },
       "invocation": {
       }
     }

@@ -374,7 +374,7 @@ Modules triggering this check were:
 {0}</value>
   </data>
   <data name="BA2024_Pass" xml:space="preserve">
-    <value>All linked modules ‘{0}’ were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.</value>
+    <value>All linked modules '{0}' were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.</value>
   </data>
   <data name="BA2024_Warning_DeprecatedMitigationEnabled" xml:space="preserve">
     <value>The following modules were compiled with a toolset that supports /Qspectre but the deprecated /d2guardspecload argument was specified on the command-line instead: {0}</value>

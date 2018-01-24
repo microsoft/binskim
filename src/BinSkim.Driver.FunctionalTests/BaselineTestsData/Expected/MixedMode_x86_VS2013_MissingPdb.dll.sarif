@@ -5,10 +5,10 @@
     {
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.4.4.0",
-        "version": "1.4.4.0",
-        "semanticVersion": "1.4.4",
-        "sarifLoggerVersion": "1.5.46.0",
+        "fullName": "BinSkim 1.4.5.0",
+        "version": "1.4.5.0",
+        "semanticVersion": "1.4.5",
+        "sarifLoggerVersion": "1.7.2.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -242,6 +242,15 @@
         },
         {
           "id": "ERR997.ExceptionLoadingPdb",
+          "ruleId": "BA2024",
+          "physicalLocation": {
+            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll"
+          },
+          "message": "'MixedMode_x86_VS2013_MissingPdb.dll' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))",
+          "level": "error"
+        },
+        {
+          "id": "ERR997.ExceptionLoadingPdb",
           "ruleId": "BA2014",
           "physicalLocation": {
             "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x86_VS2013_MissingPdb.dll"
@@ -439,7 +448,7 @@
           "shortDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms.",
           "fullDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.",
           "messageFormats": {
-            "Pass": "'{0}' appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The following digitial signature algorithms were detected: {1}",
+            "Pass": "'{0}' appears to be signed with secure cryptographic algorithms. WinTrustVerify successfully validated the binary but did not attempt to validate certificate chaining or that the root certificate is trusted. The following digitial signature algorithms were detected: {1}",
             "Error_BadSigningAlgorithm": "'{0}' was signed exclusively with algorithms that WinTrustVerify has flagged as insecure. {1}",
             "Error_DidNotVerify": "'{0}' signing was flagged as insecure by WinTrustVerify with error code '{1}' ({2})",
             "Error_WinTrustVerifyApiError": "'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'.",

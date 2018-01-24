@@ -98,12 +98,13 @@ namespace Microsoft.CodeAnalysis.IL
             AnalyzeCommand command = new AnalyzeCommand();
             AnalyzeOptions options = new AnalyzeOptions();
 
-            options.TargetFileSpecifiers = new string[] { inputFileName };
-            options.OutputFilePath = actualFileName;
             options.Verbose = true;
             options.Recurse = false;
+            options.PrettyPrint = true;
             options.ComputeFileHashes = true;
+            options.OutputFilePath = actualFileName;
             options.ConfigurationFilePath = "default";
+            options.TargetFileSpecifiers = new string[] { inputFileName };
 
             int result = command.Run(options);
 
@@ -126,6 +127,23 @@ namespace Microsoft.CodeAnalysis.IL
 
             // Remove stack traces as they can change due to inlining differences by configuration and runtime.
             actualText = Regex.Replace(actualText, @"\\r\\n   at [^""]+", "");
+
+            actualText = actualText.Replace(@"""Sarif""", @"""BinSkim""");
+
+            actualText = Regex.Replace(actualText, @"\s*""fullName""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""semanticVersion""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""sarifLoggerVersion""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""Comments""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""CompanyName""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""ProductName""[^\n]+?\n", Environment.NewLine);
+
+            actualText = Regex.Replace(actualText, @"\s*""time""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""endTime""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""startTime""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""processId""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"      ""id""[^,]+,\s+""tool""", @"      ""tool""", RegexOptions.Multiline);
+           
+
 
             // Write back the normalized actual text so that the diff command given on failure shows what was actually compared.
             File.WriteAllText(actualFileName, actualText);
