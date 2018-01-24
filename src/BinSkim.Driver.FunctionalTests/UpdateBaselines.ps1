@@ -4,7 +4,7 @@ Param(
 
 $tool = "BinSkim"
 $repoRoot = ( Resolve-Path "$PSScriptRoot\..\..\" ).ToString()
-$utility = "$repoRoot\bld\bin\$tool.Driver\x86_Release\$tool.exe"
+$utility = "$repoRoot\bld\bin\x86_Release\$tool.exe"
 $msbuild = "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe"
 
 function Build-Tool()
