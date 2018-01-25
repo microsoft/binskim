@@ -89,13 +89,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (context.Policy.GetProperty(VulnerableBinaries).TryGetValue(fileName, out minimumVersion))
             {
                 FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Path.GetFullPath(context.PE.FileName));
-                string rawVersion = fvi.FileVersion;
-                // Version is sometimes null on non-Windows platforms.
-                // We may instead be able to get the data from the PE header in this case, but for now we'll fail them.
-                if(rawVersion == null)
-                {
-                    rawVersion="";
-                }
+                string rawVersion = fvi.FileVersion ?? string.Empty;
                 Match sanitizedVersion = s_versionRegex.Match(rawVersion);
                 if (!sanitizedVersion.Success)
                 {
