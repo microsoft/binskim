@@ -37,5 +37,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         // ELF Checks
         public const string EnablePIEOnExecutables = "TBDBA3009";
+        public const string DoNotMarkStackAsExecutable = "TBDBA3016";
+        public const string EnableReadOnlyRelocations = "TBDBA3020";
+        public const string EnableStackProtector = "TBDBA3011";
     }
 }

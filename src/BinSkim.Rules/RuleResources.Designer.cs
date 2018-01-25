@@ -783,7 +783,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;This check is not supported on the {0} platform, as it requires interoperability with a native windows library.&quot;.
+        ///   Looks up a localized string similar to This check is not supported on the {0} platform, as it requires interoperability with a native Windows library..
         /// </summary>
         internal static string NotApplicable_PlatformUnsupported {
             get {
@@ -824,6 +824,98 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string TBDBA3009_Pass_Library {
             get {
                 return ResourceManager.GetString("TBDBA3009_Pass_Library", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The stack protector ensures that all functions that use buffers over a certain size will
+        ///use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack
+        ///smashing is detected. Use &apos;--fstack-protector-strong&apos; (all buffers of 4 bytes or more) or &apos;--fstack-protector-all&apos; (all functions) to enable this..
+        /// </summary>
+        internal static string TBDBA3011_EnableStackProtector_Description {
+            get {
+                return ResourceManager.GetString("TBDBA3011_EnableStackProtector_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The stack protector was not found in {0}.  This may be because the binary has no stack-based arrays, or because &apos;--stack-protector-strong&apos; was not used..
+        /// </summary>
+        internal static string TBDBA3011_Error {
+            get {
+                return ResourceManager.GetString("TBDBA3011_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stack protector was found on {0}.  However, if you are not compiling with &apos;--stack-protector-strong&apos;, it may provide additional protections..
+        /// </summary>
+        internal static string TBDBA3011_Pass {
+            get {
+                return ResourceManager.GetString("TBDBA3011_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with &apos;-z noexecstack&apos; to mark the stack as non-executable..
+        /// </summary>
+        internal static string TBDBA3016_DoNotMarkStackAsExecutable_Description {
+            get {
+                return ResourceManager.GetString("TBDBA3016_DoNotMarkStackAsExecutable_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GNU_STACK segment on {0} is missing, which means the stack will likely be loaded as executable.  //todo.
+        /// </summary>
+        internal static string TBDBA3016_Error_NoStackSeg {
+            get {
+                return ResourceManager.GetString("TBDBA3016_Error_NoStackSeg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stack on {0} is executable. // todo.
+        /// </summary>
+        internal static string TBDBA3016_Error_StackExec {
+            get {
+                return ResourceManager.GetString("TBDBA3016_Error_StackExec", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GNU_STACK segment marked as non-executable on {0}. // todo.
+        /// </summary>
+        internal static string TBDBA3016_Pass {
+            get {
+                return ResourceManager.GetString("TBDBA3016_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only, and moved below the .data section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this. // todo.
+        /// </summary>
+        internal static string TBDBA3020_EnableReadOnlyRelocations_Description {
+            get {
+                return ResourceManager.GetString("TBDBA3020_EnableReadOnlyRelocations_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The GNU_RELRO segment is missing from this binary, so {0} is missing these mitigations. // todo.
+        /// </summary>
+        internal static string TBDBA3020_Error {
+            get {
+                return ResourceManager.GetString("TBDBA3020_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The GNU_RELRO segment was present, so {0} is protected. //todo.
+        /// </summary>
+        internal static string TBDBA3020_Pass {
+            get {
+                return ResourceManager.GetString("TBDBA3020_Pass", resourceCulture);
             }
         }
     }

@@ -971,8 +971,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             applicableTo.Add(MetadataConditions.ImageIsNotSigned);
             VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableToSpecifiedTarget);
         }
-
-
+        
         [Fact]
         public void EnablePIEOnExecutables_Pass()
         {
@@ -991,5 +990,63 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // TODO--generate core dump, reloc, etc. for testing.
             //VerifyNotApplicable(new EnablePIEOnExecutables());
         }
+
+        [Fact]
+        public void DoNotMarkStackAsExecutable_Pass()
+        {
+            VerifyPass(new DoNotMarkStackAsExecutable());
+        }
+
+        [Fact]
+        public void DoNotMarkStackAsExecutable_Fail()
+        {
+            VerifyFail(new DoNotMarkStackAsExecutable());
+        }
+
+        [Fact]
+        public void DoNotMarkStackAsExecutable_NotApplicable()
+        {
+            // TODO--generate core dump, reloc, etc. for testing.
+            //VerifyNotApplicable(new EnablePIEOnExecutables());
+        }
+
+        [Fact]
+        public void EnableReadOnlyRelocations_Pass()
+        {
+            VerifyPass(new EnableReadOnlyRelocations());
+        }
+
+        [Fact]
+        public void EnableReadOnlyRelocations_Fail()
+        {
+            VerifyFail(new EnableReadOnlyRelocations());
+        }
+
+        [Fact]
+        public void EnableReadOnlyRelocations_NotApplicable()
+        {
+            // TODO--generate core dump, reloc, etc. for testing.
+            //VerifyNotApplicable(new EnablePIEOnExecutables());
+        }
+
+        [Fact]
+        public void EnableStackProtector_Pass()
+        {
+            VerifyPass(new EnableStackProtector());
+        }
+
+        [Fact]
+        public void EnableStackProtector_Fail()
+        {
+            VerifyFail(new EnableStackProtector());
+        }
+
+        [Fact]
+        public void EnableStackProtector_NotApplicable()
+        {
+            // TODO--generate core dump, reloc, etc. for testing.
+            //VerifyNotApplicable(new EnablePIEOnExecutables());
+        }
+
     }
 }

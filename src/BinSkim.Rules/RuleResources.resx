@@ -362,7 +362,7 @@ Modules triggering this check were:
     <value>'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.</value>
   </data>
   <data name="NotApplicable_PlatformUnsupported" xml:space="preserve">
-    <value>"This check is not supported on the {0} platform, as it requires interoperability with a native windows library."</value>
+    <value>This check is not supported on the {0} platform, as it requires interoperability with a native Windows library.</value>
   </data>
   <data name="TBDBA3009_EnablePIEOnExecutables_Description" xml:space="preserve">
     <value>A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."</value>
@@ -375,5 +375,37 @@ Modules triggering this check were:
   </data>
   <data name="TBDBA3009_Pass_Library" xml:space="preserve">
     <value>{0} is a library rather than an executable, so it is automatically position independent. // todo</value>
+  </data>
+  <data name="TBDBA3011_EnableStackProtector_Description" xml:space="preserve">
+    <value>The stack protector ensures that all functions that use buffers over a certain size will
+use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack
+smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this.</value>
+  </data>
+  <data name="TBDBA3011_Error" xml:space="preserve">
+    <value>The stack protector was not found in {0}.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used.</value>
+  </data>
+  <data name="TBDBA3011_Pass" xml:space="preserve">
+    <value>Stack protector was found on {0}.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections.</value>
+  </data>
+  <data name="TBDBA3016_DoNotMarkStackAsExecutable_Description" xml:space="preserve">
+    <value>This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable.</value>
+  </data>
+  <data name="TBDBA3016_Error_NoStackSeg" xml:space="preserve">
+    <value>GNU_STACK segment on {0} is missing, which means the stack will likely be loaded as executable.  //todo</value>
+  </data>
+  <data name="TBDBA3016_Error_StackExec" xml:space="preserve">
+    <value>Stack on {0} is executable. // todo</value>
+  </data>
+  <data name="TBDBA3016_Pass" xml:space="preserve">
+    <value>GNU_STACK segment marked as non-executable on {0}. // todo</value>
+  </data>
+  <data name="TBDBA3020_EnableReadOnlyRelocations_Description" xml:space="preserve">
+    <value>This check ensures that some relocation data is marked as read only, and moved below the .data section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this. // todo</value>
+  </data>
+  <data name="TBDBA3020_Error" xml:space="preserve">
+    <value>The GNU_RELRO segment is missing from this binary, so {0} is missing these mitigations. // todo</value>
+  </data>
+  <data name="TBDBA3020_Pass" xml:space="preserve">
+    <value>The GNU_RELRO segment was present, so {0} is protected. //todo</value>
   </data>
 </root>

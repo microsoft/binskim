@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             else
             {
                 // TODO--Resources file
-                reasonForNotAnalyzing = "TODO--Resources file \"Not supported on this binary type.\"";
+                reasonForNotAnalyzing = "not an ELF binary";
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
         }

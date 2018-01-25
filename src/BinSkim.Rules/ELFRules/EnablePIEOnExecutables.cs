@@ -67,6 +67,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                         nameof(RuleResources.TBDBA3009_Error),
                         context.TargetUri.GetFileName()));
+                return;
             }
             else if (elf.Type == FileType.SharedObject)
             {
@@ -75,17 +76,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (elf.Segments.Where(seg => seg.Type == SegmentType.ProgramHeader).Any())
                 {
                     context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                        nameof(RuleResources.TBDBA3009_Pass_Executable),
-                        context.TargetUri.GetFileName()));
+                        RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                            nameof(RuleResources.TBDBA3009_Pass_Executable),
+                            context.TargetUri.GetFileName()));
+                    return;
                 }
                 else
                 {
                     // '{0}' does not have an imports section that is marked as executable.
                     context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                        nameof(RuleResources.TBDBA3009_Pass_Library),
-                        context.TargetUri.GetFileName()));
+                        RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                            nameof(RuleResources.TBDBA3009_Pass_Library),
+                            context.TargetUri.GetFileName()));
+                    return;
                 }
             }
         }

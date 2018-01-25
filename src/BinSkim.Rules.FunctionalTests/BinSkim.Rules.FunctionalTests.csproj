@@ -37,8 +37,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="FunctionalTestsData\DoNotMarkStackAsExecutable\Fail\" />
+    <Folder Include="FunctionalTestsData\DoNotMarkStackAsExecutable\Pass\" />
     <Folder Include="FunctionalTestsData\EnablePIEOnExecutables\Fail\" />
     <Folder Include="FunctionalTestsData\EnablePIEOnExecutables\Pass\" />
+    <Folder Include="FunctionalTestsData\EnableReadOnlyRelocations\Fail\" />
+    <Folder Include="FunctionalTestsData\EnableReadOnlyRelocations\Pass\" />
+    <Folder Include="FunctionalTestsData\EnableStackProtector\Fail\" />
+    <Folder Include="FunctionalTestsData\EnableStackProtector\Pass\" />
   </ItemGroup>
 
 </Project>
