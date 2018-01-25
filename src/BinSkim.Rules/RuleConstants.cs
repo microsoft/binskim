@@ -36,6 +36,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string SignCorrectly = "BA2022";
         public const string DoNotMarkImportsSectionAsWritableId = "BA2023";
 
-        public const string EnableSpectreMitigiations = "BA2024";
+        public const string EnableSpectreMitigations = "BA2024";
     }
 }
