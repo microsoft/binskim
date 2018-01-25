@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2024
         /// </summary>
-        public override string Id { get { return RuleIds.EnableSpectreMitigiations; } }
+        public override string Id { get { return RuleIds.EnableSpectreMitigations; } }
 
         /// <summary>
         /// Application code should be compiled with the most up-to-date toolsets possible
@@ -52,12 +52,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             return new List<IOption>
             {
-                MinimumToolVersions,
-                AllowedLibraries
+                Reporting,
+                AllowedLibraries,
+                //MinimumToolVersions
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleIds.EnableSpectreMitigiations + "." + nameof(EnableSpectreMitigations);
+        private const string AnalyzerName = RuleIds.EnableSpectreMitigations + "." + nameof(EnableSpectreMitigations);
 
         // /Qspectre support
         private const string VS2017_15_6_PREV4 = "VS2017_15.6_PREVIEW4";
@@ -70,13 +71,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private const string VS2017_15_6_PREV1 = "VS2017_15.6_PREVIEW1";
 
 
-        internal static PerLanguageOption<StringToMitigatedVersionMap> MinimumToolVersions { get; } =
-            new PerLanguageOption<StringToMitigatedVersionMap>(
-                AnalyzerName, nameof(MinimumToolVersions), defaultValue: () => { return BuildMinimumToolVersionsMap(); });
+        //internal static PerLanguageOption<StringToMitigatedVersionMap> MinimumToolVersions { get; } =
+        //    new PerLanguageOption<StringToMitigatedVersionMap>(
+        //        AnalyzerName, nameof(MinimumToolVersions), defaultValue: () => { return BuildMinimumToolVersionsMap(); });
 
         internal static PerLanguageOption<StringToVersionMap> AllowedLibraries { get; } =
             new PerLanguageOption<StringToVersionMap>(
                 AnalyzerName, nameof(AllowedLibraries), defaultValue: () => { return BuildAllowedLibraries(); });
+
+        internal static PerLanguageOption<ReportingOptions> Reporting { get; } =
+            new PerLanguageOption<ReportingOptions>(
+                AnalyzerName, nameof(Reporting), defaultValue: () => { return CodeAnalysis.Sarif.ReportingOptions.Default; });
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
@@ -104,11 +109,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
+            TruncatedCompilandRecordList masmModules = new TruncatedCompilandRecordList();
             TruncatedCompilandRecordList mitigationNotEnabledModules = new TruncatedCompilandRecordList();
             TruncatedCompilandRecordList mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
-            StringToMitigatedVersionMap minimumCompilers = context.Policy.GetProperty(MinimumToolVersions);
+            //StringToMitigatedVersionMap minimumCompilers = context.Policy.GetProperty(MinimumToolVersions);
+            StringToMitigatedVersionMap minimumCompilers = BuildMinimumToolVersionsMap();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -152,7 +159,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     case Language.MASM:
                     {
-                        // TODO: https://github.com/Microsoft/binskim/issues/115
+                        masmModules.Add(om.CreateCompilandRecord());
                         continue;
                     }
 
@@ -300,6 +307,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 sb.AppendLine(line);
             }
 
+            if ((context.Policy.GetProperty(Reporting) & ReportingOptions.MasmModulesPresent) == ReportingOptions.MasmModulesPresent &&
+                !masmModules.Empty)
+            {
+                line = string.Format(
+                        RuleResources.BA2024_Error_MasmModulesDetected,
+                        masmModules.CreateSortedObjectList());
+                sb.AppendLine(line);
+            }
+
             if (sb.Length > 0)
             {
                 // '{0}' was compiled with one or more modules that do not properly enable code
@@ -401,14 +417,28 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return result;
         }
     }
+}
+
+// Currently the SARIF SDK requires this namespace in order to deserialize custom context object types
+// The SDK needs to provide a mechanism for consumers to specify their own namespaces
+// https://github.com/Microsoft/sarif-sdk/issues/758
+namespace Microsoft.CodeAnalysis.Sarif
+{
+    [Flags]
+    public enum ReportingOptions
+    {
+        Default = 0x0,
+        MasmModulesPresent = 0x1
+    }
+
 
     [Flags]
-    internal enum  CompilerMitigationSupport
+    internal enum CompilerMitigationSupport
     {
-        None = 0x1,
-        QSpectreAvailable = 0x2,
-        D2GuardSpecLoadAvailable = 0x4,
-        NonoptimizedCodeMitigated = 0x8,
+        None = 0x0,
+        QSpectreAvailable = 0x1,
+        D2GuardSpecLoadAvailable = 0x2,
+        NonoptimizedCodeMitigated = 0x4,
     }
 
     internal class MitigatedVersion
@@ -476,4 +506,5 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     internal class StringToMitigatedVersionMap : TypedPropertiesDictionary<MitigatedVersion>
     {
     }
+
 }
