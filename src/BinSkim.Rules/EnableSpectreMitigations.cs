@@ -52,8 +52,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             return new List<IOption>
             {
-                MinimumToolVersions,
-                AllowedLibraries
+                Reporting,
+                AllowedLibraries,
+                //MinimumToolVersions
             }.ToImmutableArray();
         }
 
@@ -70,17 +71,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private const string VS2017_15_6_PREV1 = "VS2017_15.6_PREVIEW1";
 
 
-        internal static PerLanguageOption<StringToMitigatedVersionMap> MinimumToolVersions { get; } =
-            new PerLanguageOption<StringToMitigatedVersionMap>(
-                AnalyzerName, nameof(MinimumToolVersions), defaultValue: () => { return BuildMinimumToolVersionsMap(); });
+        //internal static PerLanguageOption<StringToMitigatedVersionMap> MinimumToolVersions { get; } =
+        //    new PerLanguageOption<StringToMitigatedVersionMap>(
+        //        AnalyzerName, nameof(MinimumToolVersions), defaultValue: () => { return BuildMinimumToolVersionsMap(); });
 
         internal static PerLanguageOption<StringToVersionMap> AllowedLibraries { get; } =
             new PerLanguageOption<StringToVersionMap>(
                 AnalyzerName, nameof(AllowedLibraries), defaultValue: () => { return BuildAllowedLibraries(); });
 
-        internal static PerLanguageOption<ReportingOptions> ReportingOptions { get; } =
+        internal static PerLanguageOption<ReportingOptions> Reporting { get; } =
             new PerLanguageOption<ReportingOptions>(
-                AnalyzerName, nameof(AllowedLibraries), defaultValue: () => { return Rules.ReportingOptions.Default; });
+                AnalyzerName, nameof(Reporting), defaultValue: () => { return CodeAnalysis.Sarif.ReportingOptions.Default; });
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
@@ -113,7 +114,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             TruncatedCompilandRecordList mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
-            StringToMitigatedVersionMap minimumCompilers = context.Policy.GetProperty(MinimumToolVersions);
+            //StringToMitigatedVersionMap minimumCompilers = context.Policy.GetProperty(MinimumToolVersions);
+            StringToMitigatedVersionMap minimumCompilers = BuildMinimumToolVersionsMap();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -305,7 +307,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 sb.AppendLine(line);
             }
 
-            if ((context.Policy.GetProperty(ReportingOptions) & Rules.ReportingOptions.MasmModules) == Rules.ReportingOptions.MasmModules &&
+            if ((context.Policy.GetProperty(Reporting) & ReportingOptions.MasmModulesPresent) == ReportingOptions.MasmModulesPresent &&
                 !masmModules.Empty)
             {
                 line = string.Format(
@@ -415,17 +417,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return result;
         }
     }
+}
 
+// Currently the SARIF SDK requires this namespace in order to deserialize custom context object types
+// The SDK needs to provide a mechanism for consumers to specify their own namespaces
+// https://github.com/Microsoft/sarif-sdk/issues/758
+namespace Microsoft.CodeAnalysis.Sarif
+{
     [Flags]
-    internal enum ReportingOptions
+    public enum ReportingOptions
     {
-        None = 0x0,
-        Default = 0x1,
-        MasmModules = 0x2
+        Default = 0x0,
+        MasmModulesPresent = 0x1
     }
 
+
     [Flags]
-    internal enum  CompilerMitigationSupport
+    internal enum CompilerMitigationSupport
     {
         None = 0x0,
         QSpectreAvailable = 0x1,
@@ -498,4 +506,5 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     internal class StringToMitigatedVersionMap : TypedPropertiesDictionary<MitigatedVersion>
     {
     }
+
 }
