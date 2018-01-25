@@ -3,7 +3,8 @@
 
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
   <PropertyGroup>
-    <TargetFrameworks>$(NetCoreVersion); $(NetRuntimeVersion);</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">$(NetCoreVersion); $(NetRuntimeVersion);</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)'!='Windows_NT'">$(NetCoreVersion);</TargetFrameworks>
     <OutputType>Library</OutputType>
   </PropertyGroup>
  

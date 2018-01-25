@@ -12,6 +12,7 @@ using System.Reflection.PortableExecutable;
 
 using Dia2Lib;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -21,7 +22,7 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
-    public class EnableCriticalCompilerWarnings : BinarySkimmerBase, IOptionsProvider
+    public class EnableCriticalCompilerWarnings : WindowsBinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2007
@@ -91,6 +92,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
+            // Uses PDB Parsing.
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
 
             if (context.Pdb == null)

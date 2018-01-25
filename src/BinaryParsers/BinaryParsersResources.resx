@@ -171,8 +171,14 @@
   <data name="PdbHasNoSymbols" xml:space="preserve">
     <value>Pdb has no symbols</value>
   </data>
+  <data name="PdbPlatformUnsupported" xml:space="preserve">
+    <value>Cannot parse pdb on this platform.</value>
+  </data>
   <data name="PdbStripped" xml:space="preserve">
     <value>Pdb is stripped of cv info</value>
+  </data>
+  <data name="PlatformUnsupportedFormat" xml:space="preserve">
+    <value>This feature is not supported on the {0} platform, it is only supported on the {1} platform(s).</value>
   </data>
   <data name="UnexpectedHashLength" xml:space="preserve">
     <value>Unexpected hash length for file: </value>

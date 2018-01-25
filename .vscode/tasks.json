@@ -1,0 +1,18 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            // If developing in VSCode, build only the netcoreapp version
+            "taskName": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/BinSkim.Driver/BinSkim.Driver.csproj",
+                "--framework",
+                "netcoreapp2.0"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

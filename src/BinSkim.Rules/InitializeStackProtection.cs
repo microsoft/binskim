@@ -5,6 +5,7 @@ using System.Composition;
 using System.Linq;
 using System.Reflection.PortableExecutable;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -14,7 +15,7 @@ using System.Collections.Generic;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
-    public class InitializeStackProtection : BinarySkimmerBase
+    public class InitializeStackProtection : WindowsBinarySkimmerBase
     {
         /// <summary>
         /// BA2013
@@ -62,6 +63,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
+            // Uses PDB Parsing.
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
 
             if (context.Pdb == null)

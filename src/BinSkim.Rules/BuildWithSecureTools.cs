@@ -8,6 +8,7 @@ using System.Composition;
 using System.Globalization;
 using System.Reflection.PortableExecutable;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -17,7 +18,7 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
-    public class BuildWithSecureTools : BinarySkimmerBase, IOptionsProvider
+    public class BuildWithSecureTools : WindowsBinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2006

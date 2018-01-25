@@ -16,7 +16,7 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
-    public class DoNotShipVulnerableBinaries : BinarySkimmerBase, IOptionsProvider
+    public class DoNotShipVulnerableBinaries : WindowsBinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2005
@@ -80,13 +80,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
+            // Throw a platform unsupported exception--FileVersionInfo does not behave "correctly" on Linux.
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+            
             string fileName = Path.GetFileName(context.PE.FileName);
 
             Version minimumVersion;
             if (context.Policy.GetProperty(VulnerableBinaries).TryGetValue(fileName, out minimumVersion))
             {
                 FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Path.GetFullPath(context.PE.FileName));
-                string rawVersion = fvi.FileVersion;
+                string rawVersion = fvi.FileVersion ?? string.Empty;
                 Match sanitizedVersion = s_versionRegex.Match(rawVersion);
                 if (!sanitizedVersion.Success)
                 {
