@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.IL
             _testOutputHelper = output;
         }
 
-        private static string TestDirectory = GetTestDirectory(@"BinSkim.Driver.FunctionalTests"+Path.DirectorySeparatorChar+"BaselineTestsData");
+        private static string TestDirectory = GetTestDirectory(@"BinSkim.Driver.FunctionalTests" + Path.DirectorySeparatorChar + "BaselineTestsData");
 
         private static string GetTestDirectory(string relativeDirectory)
         {
@@ -87,9 +87,11 @@ namespace Microsoft.CodeAnalysis.IL
             string fileName = Path.GetFileName(inputFileName);
             string actualDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "Actual");
             string expectedDirectory;
-            if(PlatformSpecificHelpers.RunningOnWindows()){
+            if (PlatformSpecificHelpers.RunningOnWindows())
+            {
                 expectedDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "Expected");
-            } else 
+            }
+            else 
             {
                 expectedDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "NonWindowsExpected");
             }
@@ -163,7 +165,7 @@ namespace Microsoft.CodeAnalysis.IL
                 return String.Format(CultureInfo.InvariantCulture, "\"{0}\" \"{1}\" \"{2}\" /title1=Expected /title2=Actual", beyondCompare, expected, actual);
             }
 
-            if(PlatformSpecificHelpers.RunningOnWindows())
+            if (PlatformSpecificHelpers.RunningOnWindows())
             {
                 return String.Format(CultureInfo.InvariantCulture, "windiff \"{0}\" \"{1}\"", expected, actual);
             } 
