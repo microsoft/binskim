@@ -514,10 +514,9 @@ namespace Microsoft.CodeAnalysis.Sarif
             {
                 case ExtendedMachine.Arm:
                 case ExtendedMachine.Arm64:
+                case ExtendedMachine.ArmThumb2:
                     isFamily = true;
                     break;
-                // case ExtendedMachine.ArmThumb2: 
-                // TODO - Not sure if this is supported, go check with compiler team
                 default:
                     break;
             }
