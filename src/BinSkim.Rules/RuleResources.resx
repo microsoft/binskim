@@ -365,6 +365,10 @@ Modules triggering this check were:
     <value>'{0}' was compiled with one or more modules that do not properly enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). The following modules are out of policy:
 {1}</value>
   </data>
+  <data name="BA2024_Error_MasmModulesDetected" xml:space="preserve">
+    <value>The following MASM modules were detected. The MASM compiler does not currently mitigate against speculative execution attacks:
+{0}</value>
+  </data>
   <data name="BA2024_Error_SpectreMitigationExplicitlyDisabled" xml:space="preserve">
     <value>The following modules were compiled with the Spectre mitigations explicitly disabled:
 {0}</value>
