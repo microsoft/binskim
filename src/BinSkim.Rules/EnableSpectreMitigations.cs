@@ -102,6 +102,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             PEHeader peHeader = context.PE.PEHeaders.PEHeader;
 
+            Machine reflectionMachineType = context.PE.Machine;
+
+            // The current Machine enum does not have support for Arm64, so translate to our Machine enum
+            ExtendedMachine machineType = (ExtendedMachine)reflectionMachineType;
+
+            if(!MitigatedVersion.CanBeMitigated(machineType))
+            {
+                // QUESTION:
+                // Machine HW is unsupported for mitigations...
+                // should this be in the CanAnalyze() method or here and issue a warning?
+                return;
+            }
+
             Pdb pdb = context.Pdb;
             if (pdb == null)
             {
@@ -114,8 +127,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             TruncatedCompilandRecordList mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
-            //StringToMitigatedVersionMap minimumCompilers = context.Policy.GetProperty(MinimumToolVersions);
-            StringToMitigatedVersionMap minimumCompilers = BuildMinimumToolVersionsMap();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -208,35 +219,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
 
                 // Get the appropriate compiler version against which to check this compiland.
-                bool supportsQspectre = false;
-                bool supportsd2guardspecload = false;
-
                 // check that we are greater than or equal to the first fully supported release: 15.6 first
                 Version omVer = omDetails.CompilerVersion;
-                if (omVer >= minimumCompilers[VS2017_15_6_PREV4].CompilerVersion)
-                {
-                    supportsQspectre = minimumCompilers[VS2017_15_6_PREV4].QSpectreArgumentAvailable;
-                    supportsd2guardspecload = minimumCompilers[VS2017_15_6_PREV4].D2GuardSpeclLoadArgumentAvailable;
-                }
-                else
-                {
-                    // Now check the patched versions that we match on the major, minor versions and then are greater than or equal to on the rest...
-                    foreach (var compilerVersionEntry in minimumCompilers)
-                    {
-                        Version version = compilerVersionEntry.Value.CompilerVersion;
 
-                        if (version.Major == omVer.Major &&
-                            version.Minor == omVer.Minor &&
-                            version >= omVer)
-                        {
-                            supportsQspectre = compilerVersionEntry.Value.QSpectreArgumentAvailable;
-                            supportsd2guardspecload = compilerVersionEntry.Value.D2GuardSpeclLoadArgumentAvailable;
-                        }
-                    }
-                }
+                MitigatedVersion compilerVer = null;
 
-                if (!supportsd2guardspecload && !supportsQspectre)
-                {
+                if (TryGetMitigatedVersion(context, omVer, out compilerVer)  != true || 
+                    !(compilerVer.QSpectreMitigationsAvailable(machineType)))
+                { 
                     // Built with a compiler version {0} that does not support the Spectre mitigations
                     // switch (/Qspectre). We do not report here. BA2006 will fire instead.
                     continue;
@@ -246,12 +236,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 SwitchState d2guardspecloadState = SwitchState.SwitchNotFound;
 
                 // Go process the command line to check for switches.
-                if (supportsQspectre)
+                if (compilerVer.QSpectreArgumentAvailable(machineType))
                 {
                     QSpectreState = omDetails.GetSwitchState("/Qspectre", OrderOfPrecedence.LastWins);
                 }
 
-                if (supportsd2guardspecload)
+                if (compilerVer.D2GuardSpeclLoadArgumentAvailable(machineType))
                 {
                     // /d2xxxx options show up in the PDB without the d2 string.
                     // So search for just /guardspecload.
@@ -341,6 +331,32 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.TargetUri.GetFileName()));
         }
 
+        internal bool TryGetMitigatedVersion(BinaryAnalyzerContext context, Version omVer, out MitigatedVersion supportedVersion)
+        {
+            bool foundIt = false;
+            supportedVersion = null;
+
+            //StringToMitigatedVersionMap minimumCompilers = context.Policy.GetProperty(MinimumToolVersions);
+            StringToMitigatedVersionMap minimumCompilers = BuildMinimumToolVersionsMap();
+
+            // Now check the patched versions that we match on the major, minor versions and then are greater than or equal to on the rest...
+            foreach (var compilerVersionEntry in minimumCompilers)
+            {
+                Version version = compilerVersionEntry.Value.CompilerVersion;
+
+                if (version.Major == omVer.Major &&
+                    version.Minor == omVer.Minor &&
+                    omVer >= version)
+                {
+                    supportedVersion = compilerVersionEntry.Value;
+                    foundIt = true;
+                    break;
+                }
+            }
+
+            return foundIt;
+        }
+
         private static StringToMitigatedVersionMap BuildMinimumToolVersionsMap()
         {
             // As per https://blogs.msdn.microsoft.com/vcblog/2018/01/15/spectre-mitigations-in-msvc/ 
@@ -373,34 +389,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             var result = new StringToMitigatedVersionMap();
 
-            // Only support /d2guardspecload
-            result[VS2017_15_5] = new MitigatedVersion(new Version(19, 12, 25830, 2), CompilerMitigationSupport.D2GuardSpecLoadAvailable);
+            ////
+            // PLEASE NOTE:
+            // This needs to be in version descending order to make look up easier (i.e. we do not have to sort this later)
+            // Does this need to be an array / vector instead of a map....
+            // 
 
-            // 15.6 preview 1 went out with the minor version not bumped: 19.12.25907.0
-            // This will be caught by the 15.5 rtw check - we need the first 19.13 version (preview 2)
-            result[VS2017_15_6_PREV1] = new MitigatedVersion(new Version(19, 13, 26029, 0), CompilerMitigationSupport.D2GuardSpecLoadAvailable);
+            // Add patched versions of the compiler as they become available.
 
             // /Qspectre and /d2guardspecload
             // TODO-paddymcd-MSFT: VS2017_15_6_PREV4 19.13.26115 is a placeholder internal build that doesn't yet support
             //                     /Qspectre.  Update this once we have the official build
             result[VS2017_15_6_PREV4] = new MitigatedVersion(
                 new Version(19, 13, 26115, 0),
-                CompilerMitigationSupport.QSpectreAvailable | CompilerMitigationSupport.D2GuardSpecLoadAvailable);
+                CompilerMitigationSupport.QSpectreAvailable | CompilerMitigationSupport.D2GuardSpecLoadAvailable, CompilerMitigationSupport.None);
 
-            // Add patched versions of the compiler as they become available.
-/*
-            result[VS2017_15_5_QSPECTREPATCH] = new MitigatedVersion(
-                new Version(19, 10, ?, ?),
-                CompilerMitigationSupport.QSpectreAvailable | CompilerMitigationSupport.D2GuardSpecLoadAvailable);
+            // 15.6 preview 1 went out with the minor version not bumped: 19.12.25907.0
+            // This will be caught by the 15.5 rtw check - we need the first 19.13 version (preview 2)
+            result[VS2017_15_6_PREV1] = new MitigatedVersion(new Version(19, 13, 26029, 0), CompilerMitigationSupport.D2GuardSpecLoadAvailable, CompilerMitigationSupport.None);
 
-            result[VS2017_15_0_PATCH] = new MitigatedVersion(
-                new Version(19, 10, ?, ?),
-                CompilerMitigationSupport.QSpectreAvailable | CompilerMitigationSupport.D2GuardSpecLoadAvailable);
+            //result[VS2017_15_5_QSPECTREPATCH] = new MitigatedVersion(
+            //    new Version(19, 10, ?, ?),
+            //    CompilerMitigationSupport.QSpectreAvailable | CompilerMitigationSupport.D2GuardSpecLoadAvailable, CompilerMitigationSupport.None);
 
-            result[VS2015_UPDATE3_PATCH] = new MitigatedVersion(
-                new Version(19, 0, ?, ?),
-                CompilerMitigationSupport.QSpectreAvailable | CompilerMitigationSupport.D2GuardSpecLoadAvailable);
-*/
+            // Only support /d2guardspecload
+            result[VS2017_15_5] = new MitigatedVersion(new Version(19, 12, 25830, 2), CompilerMitigationSupport.D2GuardSpecLoadAvailable, CompilerMitigationSupport.None);
+
+            /*
+            // Down-level patches
+                        result[VS2017_15_0_PATCH] = new MitigatedVersion(
+                            new Version(19, 10, ?, ?),
+                            CompilerMitigationSupport.QSpectreAvailable | CompilerMitigationSupport.D2GuardSpecLoadAvailable, CompilerMitigationSupport.None);
+
+                        result[VS2015_UPDATE3_PATCH] = new MitigatedVersion(
+                            new Version(19, 0, ?, ?),
+                            CompilerMitigationSupport.QSpectreAvailable | CompilerMitigationSupport.D2GuardSpecLoadAvailable, CompilerMitigationSupport.None);
+            */
 
             return result;
         }
@@ -424,6 +448,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 // https://github.com/Microsoft/sarif-sdk/issues/758
 namespace Microsoft.CodeAnalysis.Sarif
 {
+    // ARM64 is not a supported type in System.Reflection.PortableExecutable.Machine, so we need a way to express this.
+    // We only care about machine types where the mitigations are available so this enum is very narrow.
+    // Make this as source compatible as possible so we can remove this with minimal code changes
+    // IMAGE_MACHINE_* values from winnt.h and
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/ms680547(v=vs.85).aspx#optional_header__image_only_
+
+    public enum ExtendedMachine : ushort
+    {
+        Amd64 = 0x8664,
+        Arm = 0x1c0,
+        Arm64 = 0xaa64,
+        ArmThumb2 = 0x1c4,
+        I386 = 0x14c,
+    }
+
+
     [Flags]
     public enum ReportingOptions
     {
@@ -441,46 +481,99 @@ namespace Microsoft.CodeAnalysis.Sarif
         NonoptimizedCodeMitigated = 0x4,
     }
 
-    internal class MitigatedVersion
+    internal class MitigatedVersion 
     {
         public MitigatedVersion()
         {
-            CompilerVersion = new Version(20, 0, 0, 0);
-            _compiledMitigationSupport = CompilerMitigationSupport.None;
+            CompilerVersion = new Version(0, 0, 0, 0);
+            _compiledMitigationSupport_x86Family = CompilerMitigationSupport.None;
         }
 
-        public MitigatedVersion(Version version, CompilerMitigationSupport compilerMitigationSupport)
+        public MitigatedVersion(Version version, CompilerMitigationSupport compilerMitigationSupport_x86Family, CompilerMitigationSupport compilerMitigationSupport_ARMFamily)
         {
             CompilerVersion = version;
-            _compiledMitigationSupport = compilerMitigationSupport;
+            _compiledMitigationSupport_x86Family = compilerMitigationSupport_x86Family;
+            _compiledMitigationSupport_ARMFamily = compilerMitigationSupport_ARMFamily;
         }
 
-        CompilerMitigationSupport _compiledMitigationSupport;
+        CompilerMitigationSupport _compiledMitigationSupport_x86Family;
+        CompilerMitigationSupport _compiledMitigationSupport_ARMFamily;
 
         public Version CompilerVersion { get; private set; }
 
-        public bool QSpectreArgumentAvailable
+        public static bool CanBeMitigated(ExtendedMachine machine)
         {
-            get
-            {
-                return (_compiledMitigationSupport & CompilerMitigationSupport.QSpectreAvailable) == CompilerMitigationSupport.QSpectreAvailable;
-            }
+            return IsARMFamily(machine) || Isx8664Family(machine);
         }
 
-        public bool D2GuardSpeclLoadArgumentAvailable
+        public static bool IsARMFamily(ExtendedMachine machine)
         {
-            get
+            bool isFamily = false;
+
+            switch (machine)
             {
-                return (_compiledMitigationSupport & CompilerMitigationSupport.D2GuardSpecLoadAvailable) == CompilerMitigationSupport.D2GuardSpecLoadAvailable;
+                case ExtendedMachine.Arm:
+                case ExtendedMachine.Arm64:
+                case ExtendedMachine.ArmThumb2:
+                    isFamily = true;
+                    break;
+                default:
+                    break;
             }
+
+            return isFamily;
         }
 
-        public bool NonoptimizedCodeMitigation
+        public static bool Isx8664Family(ExtendedMachine machine)
         {
-            get
+            bool isFamily = false;
+
+            switch (machine)
             {
-                return (_compiledMitigationSupport & CompilerMitigationSupport.NonoptimizedCodeMitigated) == CompilerMitigationSupport.NonoptimizedCodeMitigated;
+                case ExtendedMachine.Amd64:
+                case ExtendedMachine.I386:
+                    isFamily = true;
+                    break;
+                default:
+                    break;
             }
+
+            return isFamily;
+        }
+
+        private CompilerMitigationSupport GetCompilerMitigationSupport(ExtendedMachine machine)
+        {
+            CompilerMitigationSupport support = CompilerMitigationSupport.None;
+
+            if (Isx8664Family(machine))
+            {
+                support = _compiledMitigationSupport_x86Family;
+            }
+            else if (IsARMFamily(machine))
+            {
+                support = _compiledMitigationSupport_ARMFamily;
+            }
+            return support;
+        }
+
+        public bool QSpectreMitigationsAvailable(ExtendedMachine machine)
+        {
+            return (GetCompilerMitigationSupport(machine) != CompilerMitigationSupport.None);
+        }
+
+        public bool QSpectreArgumentAvailable(ExtendedMachine machine)
+        {
+            return (GetCompilerMitigationSupport(machine) & CompilerMitigationSupport.QSpectreAvailable) == CompilerMitigationSupport.QSpectreAvailable;
+        }
+
+        public bool D2GuardSpeclLoadArgumentAvailable(ExtendedMachine machine)
+        {
+            return (GetCompilerMitigationSupport(machine) & CompilerMitigationSupport.D2GuardSpecLoadAvailable) == CompilerMitigationSupport.D2GuardSpecLoadAvailable;
+        }
+
+        public bool NonoptimizedCodeMitigation(ExtendedMachine machine)
+        {
+            return (GetCompilerMitigationSupport(machine) & CompilerMitigationSupport.NonoptimizedCodeMitigated) == CompilerMitigationSupport.NonoptimizedCodeMitigated;
         }
 
         public override bool Equals(object obj)
@@ -492,15 +585,6 @@ namespace Microsoft.CodeAnalysis.Sarif
         {
             return CompilerVersion.GetHashCode();
         }
-
-        public static bool operator ==(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.CompilerVersion == ver2.CompilerVersion; }
-        public static bool operator !=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.CompilerVersion != ver2.CompilerVersion; }
-
-        public static bool operator <(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.CompilerVersion < ver2.CompilerVersion; }
-        public static bool operator >(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.CompilerVersion > ver2.CompilerVersion; }
-
-        public static bool operator <=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.CompilerVersion <= ver2.CompilerVersion; }
-        public static bool operator >=(MitigatedVersion ver1, MitigatedVersion ver2) { return ver1.CompilerVersion >= ver2.CompilerVersion; }
     }
 
     internal class StringToMitigatedVersionMap : TypedPropertiesDictionary<MitigatedVersion>
