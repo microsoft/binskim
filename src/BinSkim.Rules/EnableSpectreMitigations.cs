@@ -17,21 +17,6 @@ using System.Text;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    // ARM64 is not a supported type in System.Reflection.PortableExecutable.Machine, so we need a way to express this.
-    // We only care about machine types where the mitigations are available so this enum is very narrow.
-    // Make this as source compatible as possible so we can remove this with minimal code changes
-    // IMAGE_MACHINE_* values from winnt.h and
-    // https://msdn.microsoft.com/en-us/library/windows/desktop/ms680547(v=vs.85).aspx#optional_header__image_only_
-
-    public enum ExtendedMachine : ushort
-    {
-        Amd64 = 0x8664,
-        Arm = 0x1c0,
-        Arm64 = 0xaa64,
-        ArmThumb2 = 0x1c4,
-        I386 = 0x14c,
-    }
-
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
     public class EnableSpectreMitigations : BinarySkimmerBase, IOptionsProvider
     {
@@ -142,8 +127,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             TruncatedCompilandRecordList mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
-            //StringToMitigatedVersionMap minimumCompilers = context.Policy.GetProperty(MinimumToolVersions);
-            StringToMitigatedVersionMap minimumCompilers = BuildMinimumToolVersionsMap();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -353,7 +336,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             bool foundIt = false;
             supportedVersion = null;
 
-            StringToMitigatedVersionMap minimumCompilers = context.Policy.GetProperty(MinimumToolVersions);
+            //StringToMitigatedVersionMap minimumCompilers = context.Policy.GetProperty(MinimumToolVersions);
+            StringToMitigatedVersionMap minimumCompilers = BuildMinimumToolVersionsMap();
 
             // Now check the patched versions that we match on the major, minor versions and then are greater than or equal to on the rest...
             foreach (var compilerVersionEntry in minimumCompilers)
@@ -464,6 +448,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 // https://github.com/Microsoft/sarif-sdk/issues/758
 namespace Microsoft.CodeAnalysis.Sarif
 {
+    // ARM64 is not a supported type in System.Reflection.PortableExecutable.Machine, so we need a way to express this.
+    // We only care about machine types where the mitigations are available so this enum is very narrow.
+    // Make this as source compatible as possible so we can remove this with minimal code changes
+    // IMAGE_MACHINE_* values from winnt.h and
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/ms680547(v=vs.85).aspx#optional_header__image_only_
+
+    public enum ExtendedMachine : ushort
+    {
+        Amd64 = 0x8664,
+        Arm = 0x1c0,
+        Arm64 = 0xaa64,
+        ArmThumb2 = 0x1c4,
+        I386 = 0x14c,
+    }
+
+
     [Flags]
     public enum ReportingOptions
     {
