@@ -369,6 +369,10 @@ Modules triggering this check were:
     <value>The following MASM modules were detected. The MASM compiler does not currently mitigate against speculative execution attacks:
 {0}</value>
   </data>
+  <data name="BA2024_Error_SpectreMitigationDisabledByOd" xml:space="preserve">
+    <value>The following modules were compiled /Od which disables /Qspectre:
+{0}</value>
+  </data>
   <data name="BA2024_Error_SpectreMitigationExplicitlyDisabled" xml:space="preserve">
     <value>The following modules were compiled with the Spectre mitigations explicitly disabled:
 {0}</value>
