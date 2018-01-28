@@ -365,7 +365,36 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.TargetUri.GetFileName()));
         }
 
-        private bool TryGetMitigatedVersion(
+        internal static Version GetMostCurrentCompilerWithSpectreMitigations(
+            BinaryAnalyzerContext context, ExtendedMachine extendedMachine)
+        {
+            Version result = new Version(0, 0);
+
+            PropertiesDictionary compilersData = context.Policy.GetProperty(MitigatedCompilers);
+            string familyKey = extendedMachine.GetMachineFamily().ToString();
+
+            foreach (string key in compilersData.Keys)
+            {
+                var properties = (PropertiesDictionary)compilersData[key];
+
+                // If we have no compiler family support for this
+                // versioning chain, disregard it.
+                if (!properties.ContainsKey(familyKey)) { continue; }
+
+                properties = (PropertiesDictionary)properties[familyKey];
+
+                // TODO: Right now, we report out the most current version that supports 
+                // /d2GuardSpecLoad. In the future, we should recommend the minimal
+                // /qSpectre supporting compiler.
+                // https://github.com/Microsoft/binskim/issues/138
+                var currentVersion = (Version)properties[MinimumD2GuardSpecLoadAvailableVersion.Name];
+                if (currentVersion > result) { result = currentVersion; }
+            }
+
+            return result;
+        }
+
+        internal static bool TryGetMitigatedVersion(
             BinaryAnalyzerContext context,
             ExtendedMachine extendedMachine,
             Version omVersion, 
