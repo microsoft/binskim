@@ -5,16 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-using System.Globalization;
+using System.Diagnostics;
 using System.Reflection.PortableExecutable;
+using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
-using System.Text;
-using System.Diagnostics;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -42,6 +41,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2024_Error),
+                    nameof(RuleResources.BA2024_Error_OptimizationsDisabled),
                     nameof(RuleResources.BA2024_Error_SpectreMitigationNotEnabled),
                     nameof(RuleResources.BA2024_Error_SpectreMitigationExplicitlyDisabled),
                     nameof(RuleResources.BA2024_Pass),
@@ -125,6 +125,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             TruncatedCompilandRecordList masmModules = new TruncatedCompilandRecordList();
             TruncatedCompilandRecordList mitigationNotEnabledModules = new TruncatedCompilandRecordList();
+            TruncatedCompilandRecordList mitigationDisabledInDebugBuild = new TruncatedCompilandRecordList();
             TruncatedCompilandRecordList mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
@@ -233,50 +234,67 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // mitigations. We do not report here. BA2006 will fire instead.
                     continue;
                 }
-                
-                SwitchState QSpectreState = SwitchState.SwitchNotFound;
-                SwitchState d2guardspecloadState = SwitchState.SwitchNotFound;
+                string[] mitigationSwitches = new string[] { "/Qspectre", "/guardspecload" };
 
-                // Go process the command line to check for switches.
-                if (compilerVersion.QSpectreMitigationAvailable(omVersion))
-                {
-                    QSpectreState = omDetails.GetSwitchState("/Qspectre", OrderOfPrecedence.LastWins);
-                }
+                SwitchState effectiveState;
 
-                if (compilerVersion.D2GuardSpecLoadAvailable(omVersion))
-                {
-                    // /d2xxxx options show up in the PDB without the d2 string.
-                    // So search for just /guardspecload.
-                    d2guardspecloadState = omDetails.GetSwitchState("/guardspecload", OrderOfPrecedence.LastWins);
-                }
-
-                // TODO: https://github.com/Microsoft/binskim/issues/118
-                // Check all the /O optimization flags to determine if we are /Od or not
-                // /Od may disable the Spectre Mitigations.
-
-                // TODO: https://github.com/Microsoft/binskim/issues/119
-                // We should flag cases where /d2guardspecload is enabled but the 
-                // toolset supports /qSpectre (which should be preferred).
-
-                SwitchState effectiveState = SwitchState.SwitchNotFound;
-
-                // if either QSpectre or d2guardspecload are enabled AND neither is explicitly disabled then we are protected
-                //      (use of both is confusing so issue an error in this scenario even though they are effectively the same switch)
-                if ((QSpectreState == SwitchState.SwitchEnabled || d2guardspecloadState == SwitchState.SwitchEnabled) &&
-                    (QSpectreState != SwitchState.SwitchDisabled && d2guardspecloadState != SwitchState.SwitchDisabled))
-                {
-                    effectiveState = SwitchState.SwitchEnabled;
-                }
+                // Go process the command line to check for switches
+                effectiveState = omDetails.GetSwitchState(mitigationSwitches, null, SwitchState.SwitchDisabled, OrderOfPrecedence.LastWins);
 
                 if (effectiveState == SwitchState.SwitchDisabled)
                 {
-                    // Built with the Spectre mitigations explicitly disabled.
-                    mitigationExplicitlyDisabledModules.Add(om.CreateCompilandRecord());
+                    SwitchState QSpectreState = SwitchState.SwitchNotFound;
+                    SwitchState d2guardspecloadState = SwitchState.SwitchNotFound;
+
+                    if (compilerVersion.QSpectreMitigationAvailable(omVersion))
+                    {
+                        QSpectreState = omDetails.GetSwitchState(mitigationSwitches[0] /*"/Qspectre"*/ , OrderOfPrecedence.LastWins);
+                    }
+
+                    if (compilerVersion.D2GuardSpecLoadAvailable(omVersion))
+                    {
+                        // /d2xxxx options show up in the PDB without the d2 string
+                        // So search for just /guardspecload
+                        d2guardspecloadState = omDetails.GetSwitchState(mitigationSwitches[1] /*"/guardspecload"*/, OrderOfPrecedence.LastWins);
+                    }
+
+                    // TODO: https://github.com/Microsoft/binskim/issues/119
+                    // We should flag cases where /d2guardspecload is enabled but the 
+                    // toolset supports /qSpectre (which should be preferred).
+
+                    if (QSpectreState == SwitchState.SwitchNotFound && d2guardspecloadState == SwitchState.SwitchNotFound)
+                    {
+                        // Built with tools that support the Spectre mitigations but these have not been enabled.
+                        mitigationNotEnabledModules.Add(om.CreateCompilandRecord());
+                    }
+                    else
+                    {
+                        // Built with the Spectre mitigations explicitly disabled.
+                        mitigationExplicitlyDisabledModules.Add(om.CreateCompilandRecord());
+                    }
+
+                    continue;
                 }
-                else if (effectiveState == SwitchState.SwitchNotFound)
+
+                if (!compilerVersion.NonoptimizedCodeIsMitigated)
                 {
-                    // Built with the Spectre mitigations explicitly disabled.
-                    mitigationNotEnabledModules.Add(om.CreateCompilandRecord());
+                    string[] OdSwitches = { "/Od" };
+                    // These switches override /Od - there is no one place to find this information on msdn at this time.
+                    string[] OptimizeSwitches = { "/O1", "/O2", "/Ox", "/Og" };
+
+                    bool debugEnabled = false;
+
+                    if (omDetails.GetSwitchState(OdSwitches, OptimizeSwitches, SwitchState.SwitchEnabled, OrderOfPrecedence.LastWins) == SwitchState.SwitchEnabled)
+                    {
+                        debugEnabled = true;
+                    }
+
+                    if (debugEnabled)
+                    {
+                        // Built with /Od which disables Spectre mitigations.
+                        mitigationDisabledInDebugBuild.Add(om.CreateCompilandRecord());
+                        continue;
+                    }
                 }
             }
 
@@ -285,6 +303,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!mitigationExplicitlyDisabledModules.Empty)
             {
+                // The following modules were compiled with Spectre
+                // mitigations explicitly disabled: {0}
                 line = string.Format(
                         RuleResources.BA2024_Error_SpectreMitigationExplicitlyDisabled,
                         mitigationExplicitlyDisabledModules.CreateSortedObjectList());
@@ -293,9 +313,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!mitigationNotEnabledModules.Empty)
             {
+                // The following modules were compiled with a toolset that supports 
+                // /Qspectre but the switch was not enabled on the command-line: {0}
                 line = string.Format(
                         RuleResources.BA2024_Error_SpectreMitigationNotEnabled,
                         mitigationNotEnabledModules.CreateSortedObjectList());
+                sb.AppendLine(line);
+            }
+
+            if (!mitigationDisabledInDebugBuild.Empty)
+            {
+                // The following modules were compiled with optimizations disabled(/ Od),
+                // a condition that disables Spectre mitigations: {0}
+                line = string.Format(
+                        RuleResources.BA2024_Error_OptimizationsDisabled,
+                        mitigationDisabledInDebugBuild.CreateSortedObjectList());
                 sb.AppendLine(line);
             }
 
@@ -642,9 +674,9 @@ namespace Microsoft.CodeAnalysis.Sarif
 
         // All current toolchains required optimizations to be 
         // enabled in order to function.
-        public bool NonoptimizedCodeMitigation(ExtendedMachine machine)
+        public bool NonoptimizedCodeIsMitigated
         {
-            return false;
+            get { return false; }
         }
 
         private void ValidateInputVersion(Version omVersion)
