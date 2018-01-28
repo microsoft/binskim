@@ -43,6 +43,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2024_Error),
                     nameof(RuleResources.BA2024_Error_SpectreMitigationNotEnabled),
                     nameof(RuleResources.BA2024_Error_SpectreMitigationExplicitlyDisabled),
+                    nameof(RuleResources.BA2024_Error_SpectreMitigationDisabledByOd),
                     nameof(RuleResources.BA2024_Pass),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)};
             }
@@ -107,7 +108,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // The current Machine enum does not have support for Arm64, so translate to our Machine enum
             ExtendedMachine machineType = (ExtendedMachine)reflectionMachineType;
 
-            if(!MitigatedVersion.CanBeMitigated(machineType))
+            if (!MitigatedVersion.CanBeMitigated(machineType))
             {
                 // QUESTION:
                 // Machine HW is unsupported for mitigations...
@@ -125,6 +126,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             TruncatedCompilandRecordList masmModules = new TruncatedCompilandRecordList();
             TruncatedCompilandRecordList mitigationNotEnabledModules = new TruncatedCompilandRecordList();
             TruncatedCompilandRecordList mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
+            TruncatedCompilandRecordList mitigationDisabledInDebugBuild = new TruncatedCompilandRecordList();
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
 
@@ -155,42 +157,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     case Language.C:
                     case Language.Cxx:
-                    {
-                        if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftNativeCompiler)
                         {
-                            // TODO: https://github.com/Microsoft/binskim/issues/114
-                            continue;
+                            if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftNativeCompiler)
+                            {
+                                // TODO: https://github.com/Microsoft/binskim/issues/114
+                                continue;
+                            }
+                            else
+                            {
+                                actualVersion = omDetails.CompilerVersion;
+                            }
+                            break;
                         }
-                        else
-                        {
-                            actualVersion = omDetails.CompilerVersion;
-                        }
-                        break;
-                    }
 
                     case Language.MASM:
-                    {
-                        masmModules.Add(om.CreateCompilandRecord());
-                        continue;
-                    }
+                        {
+                            masmModules.Add(om.CreateCompilandRecord());
+                            continue;
+                        }
 
                     case Language.LINK:
-                    {
-                        // Linker is not involved in the mitigations, so no need to check version or switches at this time.
-                        continue;
-                    }
+                        {
+                            // Linker is not involved in the mitigations, so no need to check version or switches at this time.
+                            continue;
+                        }
 
                     case Language.CVTRES:
-                    {
-                        // Resource compiler is not involved in the mitigations, so no need to check version or switches at this time.
-                        continue;
-                    }
+                        {
+                            // Resource compiler is not involved in the mitigations, so no need to check version or switches at this time.
+                            continue;
+                        }
 
                     case Language.HLSL:
-                    {
-                        // HLSL compiler is not involved in the mitigations, so no need to check version or switches at this time.
-                        continue;
-                    }
+                        {
+                            // HLSL compiler is not involved in the mitigations, so no need to check version or switches at this time.
+                            continue;
+                        }
 
                     // Mixed binaries (/clr) can contain non C++ compilands if they are linked in via netmodules
                     // .NET IL should be mitigated by the runtime if any mitigations are necessary
@@ -198,24 +200,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.CSharp:
                     case Language.MSIL:
                     case Language.ILASM:
-                    {
-                        continue;
-                    }
+                        {
+                            continue;
+                        }
 
                     case Language.Unknown:
-                    {
-                        // The linker may emit debug information for modules from static libraries that do not contribute to actual code.
-                        // do not contribute to actual code. Currently these come back as Language.Unknown :(
-                        // TODO: https://github.com/Microsoft/binskim/issues/116
-                        continue;
-                    }
+                        {
+                            // The linker may emit debug information for modules from static libraries that do not contribute to actual code.
+                            // do not contribute to actual code. Currently these come back as Language.Unknown :(
+                            // TODO: https://github.com/Microsoft/binskim/issues/116
+                            continue;
+                        }
 
                     default:
-                    {
-                        // TODO: https://github.com/Microsoft/binskim/issues/117
-                        // Review unknown languages for this and all checks
-                    }
-                    continue;
+                        {
+                            // TODO: https://github.com/Microsoft/binskim/issues/117
+                            // Review unknown languages for this and all checks
+                        }
+                        continue;
                 }
 
                 // Get the appropriate compiler version against which to check this compiland.
@@ -224,57 +226,75 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 MitigatedVersion compilerVer = null;
 
-                if (TryGetMitigatedVersion(context, omVer, out compilerVer)  != true || 
+                if (TryGetMitigatedVersion(context, omVer, out compilerVer) != true ||
                     !(compilerVer.QSpectreMitigationsAvailable(machineType)))
-                { 
+                {
                     // Built with a compiler version {0} that does not support the Spectre mitigations
                     // switch (/Qspectre). We do not report here. BA2006 will fire instead.
                     continue;
                 }
 
-                SwitchState QSpectreState = SwitchState.SwitchNotFound;
-                SwitchState d2guardspecloadState = SwitchState.SwitchNotFound;
+                string[] mitigationSwitches = new string[] { "/Qspectre", "/guardspecload" };
 
-                // Go process the command line to check for switches.
-                if (compilerVer.QSpectreArgumentAvailable(machineType))
-                {
-                    QSpectreState = omDetails.GetSwitchState("/Qspectre", OrderOfPrecedence.LastWins);
-                }
+                SwitchState effectiveState;
 
-                if (compilerVer.D2GuardSpeclLoadArgumentAvailable(machineType))
-                {
-                    // /d2xxxx options show up in the PDB without the d2 string.
-                    // So search for just /guardspecload.
-                    d2guardspecloadState = omDetails.GetSwitchState("/guardspecload", OrderOfPrecedence.LastWins);
-                }
-
-                // TODO: https://github.com/Microsoft/binskim/issues/118
-                // Check all the /O optimization flags to determine if we are /Od or not
-                // /Od may disable the Spectre Mitigations.
-
-                // TODO: https://github.com/Microsoft/binskim/issues/119
-                // We should flag cases where /d2guardspecload is enabled but the 
-                // toolset supports /qSpectre (which should be preferred).
-
-                SwitchState effectiveState = SwitchState.SwitchNotFound;
-
-                // if either QSpectre or d2guardspecload are enabled AND neither is explicitly disabled then we are protected
-                //      (use of both is confusing so issue an error in this scenario even though they are effectively the same switch)
-                if ((QSpectreState == SwitchState.SwitchEnabled || d2guardspecloadState == SwitchState.SwitchEnabled) &&
-                    (QSpectreState != SwitchState.SwitchDisabled && d2guardspecloadState != SwitchState.SwitchDisabled))
-                {
-                    effectiveState = SwitchState.SwitchEnabled;
-                }
+                // Go process the command line to check for switches
+                effectiveState = omDetails.GetSwitchState(mitigationSwitches, null, compilerVer.MitigationsEnabledByDefault(machineType) == true ? SwitchState.SwitchEnabled : SwitchState.SwitchDisabled, OrderOfPrecedence.LastWins);
 
                 if (effectiveState == SwitchState.SwitchDisabled)
                 {
-                    // Built with the Spectre mitigations explicitly disabled.
-                    mitigationExplicitlyDisabledModules.Add(om.CreateCompilandRecord());
+                    SwitchState QSpectreState = SwitchState.SwitchNotFound;
+                    SwitchState d2guardspecloadState = SwitchState.SwitchNotFound;
+
+                    if (compilerVer.QSpectreArgumentAvailable(machineType))
+                    {
+                        QSpectreState = omDetails.GetSwitchState(mitigationSwitches[0] /*"/Qspectre"*/ , OrderOfPrecedence.LastWins);
+                    }
+
+                    if (compilerVer.D2GuardSpeclLoadArgumentAvailable(machineType))
+                    {
+                        // /d2xxxx options show up in the PDB without the d2 string
+                        // So search for just /guardspecload
+                        d2guardspecloadState = omDetails.GetSwitchState(mitigationSwitches[1] /*"/guardspecload"*/, OrderOfPrecedence.LastWins);
+                    }
+
+                    // TODO: https://github.com/Microsoft/binskim/issues/119
+                    // We should flag cases where /d2guardspecload is enabled but the 
+                    // toolset supports /qSpectre (which should be preferred).
+
+                    if (QSpectreState == SwitchState.SwitchNotFound && d2guardspecloadState == SwitchState.SwitchNotFound)
+                    {
+                        // Built with tools that support the Spectre mitigations but these have not been enabled.
+                        mitigationNotEnabledModules.Add(om.CreateCompilandRecord());
+                    }
+                    else
+                    {
+                        // Built with the Spectre mitigations explicitly disabled.
+                        mitigationExplicitlyDisabledModules.Add(om.CreateCompilandRecord());
+                    }
+
+                    continue;
                 }
-                else if (effectiveState == SwitchState.SwitchNotFound)
+
+                if (compilerVer.NonoptimizedCodeMitigation(machineType) == false)
                 {
-                    // Built with the Spectre mitigations explicitly disabled.
-                    mitigationNotEnabledModules.Add(om.CreateCompilandRecord());
+                    string[] OdSwitches = { "/Od" };
+                    // These switches override /Od - there is no one place to find this information on msdn at this time.
+                    string[] OptimizeSwitches = { "/O1", "/O2", "/Ox", "/Og" };
+
+                    bool debugEnabled = false;
+
+                    if (omDetails.GetSwitchState(OdSwitches, OptimizeSwitches, SwitchState.SwitchEnabled, OrderOfPrecedence.LastWins) == SwitchState.SwitchEnabled)
+                    {
+                        debugEnabled = true;
+                    }
+
+                    if (debugEnabled)
+                    {
+                        // Built with /Od which disables Spectre mitigations.
+                        mitigationDisabledInDebugBuild.Add(om.CreateCompilandRecord());
+                        continue;
+                    }
                 }
             }
 
@@ -294,6 +314,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 line = string.Format(
                         RuleResources.BA2024_Error_SpectreMitigationNotEnabled,
                         mitigationNotEnabledModules.CreateSortedObjectList());
+                sb.AppendLine(line);
+            }
+
+            if (!mitigationDisabledInDebugBuild.Empty)
+            {
+                line = string.Format(
+                        RuleResources.BA2024_Error_SpectreMitigationDisabledByOd,
+                        mitigationDisabledInDebugBuild.CreateSortedObjectList());
                 sb.AppendLine(line);
             }
 
@@ -479,9 +507,10 @@ namespace Microsoft.CodeAnalysis.Sarif
         QSpectreAvailable = 0x1,
         D2GuardSpecLoadAvailable = 0x2,
         NonoptimizedCodeMitigated = 0x4,
+        MitigationsEnabledByDefault = 0x8,
     }
 
-    internal class MitigatedVersion 
+    internal class MitigatedVersion
     {
         public MitigatedVersion()
         {
@@ -574,6 +603,11 @@ namespace Microsoft.CodeAnalysis.Sarif
         public bool NonoptimizedCodeMitigation(ExtendedMachine machine)
         {
             return (GetCompilerMitigationSupport(machine) & CompilerMitigationSupport.NonoptimizedCodeMitigated) == CompilerMitigationSupport.NonoptimizedCodeMitigated;
+        }
+
+        public bool MitigationsEnabledByDefault(ExtendedMachine machine)
+        {
+            return (GetCompilerMitigationSupport(machine) & CompilerMitigationSupport.MitigationsEnabledByDefault) == CompilerMitigationSupport.MitigationsEnabledByDefault;
         }
 
         public override bool Equals(object obj)

@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class RuleResources {
@@ -798,6 +798,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2024_Error_MasmModulesDetected {
             get {
                 return ResourceManager.GetString("BA2024_Error_MasmModulesDetected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following modules were compiled /Od which disables /Qspectre:
+        ///{0}.
+        /// </summary>
+        internal static string BA2024_Error_SpectreMitigationDisabledByOd {
+            get {
+                return ResourceManager.GetString("BA2024_Error_SpectreMitigationDisabledByOd", resourceCulture);
             }
         }
         
