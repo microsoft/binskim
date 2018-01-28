@@ -41,6 +41,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 return new string[] {
                     nameof(RuleResources.BA2024_Error),
+                    nameof(RuleResources.BA2024_Error_OptimizationsDisabled),
                     nameof(RuleResources.BA2024_Error_SpectreMitigationNotEnabled),
                     nameof(RuleResources.BA2024_Error_SpectreMitigationExplicitlyDisabled),
                     nameof(RuleResources.BA2024_Pass),
