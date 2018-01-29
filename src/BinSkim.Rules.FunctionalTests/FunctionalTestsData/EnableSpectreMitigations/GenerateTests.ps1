@@ -3,7 +3,6 @@ param(
 [ValidateNotNullOrEmpty()][string]$TargetMachineArch
 )
 
-
 class TestVariant
 {
     [ValidateNotNullOrEmpty()][string]$Name
@@ -26,18 +25,12 @@ function CompileTest()
     [TestVariant]$Variant,
     [string]$TargetPlatform
     )
-
-    
-
-    $outputdir = "."
+   
+    $outputdir = ".\Fail"
 
     if ($Variant.PassExpected -eq $true)
     {
         $outputdir = ".\Pass"
-    }
-    else
-    {
-        $outputdir = ".\Fail"
     }
     
     if ((Test-Path -Path $outputdir) -eq $false)
@@ -96,7 +89,6 @@ My set of questions for test binaries would be:
 4)	Do we correctly detect an unsupported major version
 # These will depend on producing binaries with the correct set of compilers
 
-
 5)	Do we independently recognize the compiler switches as valid when thrown
 # Will require compiler drops that support /QSpectre 
 
@@ -123,7 +115,6 @@ My set of questions for test binaries would be:
 # This will depend on compiler versions
 
 15) Do we correctly identify functions where mitigations are disabled via  
-
 #>
 
 #Simple compile for version checking (Questions 1 through 4)
@@ -177,7 +168,6 @@ $FunctionMitigationVariants = @()
 $FunctionMitigationVariants += [TestVariant]::new("d2guardspecload_declspec_detection", "/d2guardspecload /O2 /DTESTDISABLESPECTREBYDECLSPEC", $false)
 $FunctionMitigationVariants += [TestVariant]::new("d2guardspecload_pragmaoptoff_detection", "/d2guardspecload /O2 /DTESTDISABLESPECTREBYPRAGMA", $false)
 
-
 class CL_Version
 {
     #[ValidateNotNullOrEmpty()][string]$Version
@@ -200,8 +190,6 @@ $ClVersions += [CL_Version]::new("14.13.26029.0", $true, $false)
 $ClVersions += [CL_Version]::new("14.12.25830.0", $true, $false)
 $ClVersions += [CL_Version]::new("0.0.0.0", $false, $false)
 
-
-
 $inputfile = ".\donkey.cpp"
 
 # Get the version of cl.exe
@@ -216,7 +204,7 @@ if ($cl -ne $null)
     #Get the features for this compiler
     $clVersion = $null
 
-    foreach($clversion in $ClVersions)
+    foreach ($clversion in $ClVersions)
     {
         $ver = $clVersion.Version
         # Write-Host "Checking if  $ProdVer -ge $ver"
@@ -256,7 +244,7 @@ if ($cl -ne $null)
         $TestsToGenerate += $FunctionMitigationVariants
     }
 
-    if($dospectre)
+    if ($dospectre)
     {
         $TestsToGenerate += $SupportsSpectre
 

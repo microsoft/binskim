@@ -363,6 +363,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void EnableSpectreMitigations_Pass()
+        {
+            VerifyPass(new EnableSpectreMitigations(), useDefaultPolicy: true);
+        }
+
+        [Fact]
+        public void EnableSpectreMitigations_Fail()
+        {
+            VerifyFail(new EnableSpectreMitigations(), useDefaultPolicy: true);
+        }
+
+        [Fact]
         public void DoNotMarkWritableSectionsAsShared_Pass()
         {
             VerifyPass(new DoNotMarkWritableSectionsAsShared());
