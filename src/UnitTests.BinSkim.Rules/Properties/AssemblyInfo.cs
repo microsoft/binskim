@@ -6,5 +6,5 @@ using System.Reflection;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BinSkim.Driver.FunctionalTests")]
-[assembly: AssemblyDescription("Functional tests for binskim driver and its rules")]
+[assembly: AssemblyTitle("UnitTests.BinSkim.Rules")]
+[assembly: AssemblyDescription("Unit tests for binskim rules")]
