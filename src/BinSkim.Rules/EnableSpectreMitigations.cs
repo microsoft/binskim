@@ -365,10 +365,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.TargetUri.GetFileName()));
         }
 
-        internal static Version GetMostCurrentCompilerWithSpectreMitigations(
+        internal static Version GetMostCurrentCompilerVersionsWithSpectreMitigations(
             BinaryAnalyzerContext context, ExtendedMachine extendedMachine)
         {
-            Version result = new Version(0, 0);
+            Version result = context.Policy.GetProperty(MostCurrentSpectreSupportingCompilerVersion);
+
+            if (result != new Version(0, 0))
+            {
+                return result;
+            }
 
             PropertiesDictionary compilersData = context.Policy.GetProperty(MitigatedCompilers);
             string familyKey = extendedMachine.GetMachineFamily().ToString();
@@ -390,6 +395,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 var currentVersion = (Version)properties[MinimumD2GuardSpecLoadAvailableVersion.Name];
                 if (currentVersion > result) { result = currentVersion; }
             }
+
+            context.Policy.SetProperty(MostCurrentSpectreSupportingCompilerVersion, result);
 
             return result;
         }
@@ -451,6 +458,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         internal static PerLanguageOption<Version> MinimumD2GuardSpecLoadAvailableVersion { get; } =
             new PerLanguageOption<Version>(
                 AnalyzerName, nameof(MinimumD2GuardSpecLoadAvailableVersion), defaultValue: () => { return new Version(Int32.MaxValue, Int32.MaxValue); });
+
+        internal static PerLanguageOption<Version> MostCurrentSpectreSupportingCompilerVersion { get; } =
+            new PerLanguageOption<Version>(
+                AnalyzerName, nameof(MostCurrentSpectreSupportingCompilerVersion), defaultValue: () => { return new Version(0, 0); });
 
         private static PropertiesDictionary BuildMitigatedCompilersData()
         {
@@ -565,7 +576,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             compilerData.SetProperty(MinimumD2GuardSpecLoadAvailableVersion, minimumD2GuardSpecLoadVersion);
         }
 
-        private static string BuildPropertiesKeyFromVersion(Version version)
+        internal static string BuildPropertiesKeyFromVersion(Version version)
         {
             // Servicing of compilers occurs by patching Major + Minor 
             // versioning vectors. So our mitigations data is keyed 
@@ -573,7 +584,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return new Version(
                 version.Major,
                 version.Minor, 0, 0).ToString();
-        }
+        }        
     }
 }
 

@@ -161,7 +161,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // If this module was compiled with a version that exceeds all baseline
                     // toolchains documented in BA2024, then we can assume the OM toolchain is ok.
                     Version mostCurrentSpectreSupportingCompilerVersion =
-                        EnableSpectreMitigations.GetMostCurrentCompilerWithSpectreMitigations(
+                        EnableSpectreMitigations.GetMostCurrentCompilerVersionsWithSpectreMitigations(
                             context,
                             machineType);
 
