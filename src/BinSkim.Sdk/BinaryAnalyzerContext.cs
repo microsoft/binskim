@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public Exception TargetLoadException
         {
-            get { return Binary.LoadException; }
+            get { return Binary != null ? Binary.LoadException : null; }
             set { throw new InvalidOperationException(); }
         }
 
@@ -65,8 +65,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 if (disposing)
                 {
-                    Binary.Dispose();
-                    Binary = null;
+                    if(Binary != null)
+                    {
+                        Binary.Dispose();
+                        Binary = null;
+                    }
                 }
                 disposedValue = true;
             }
