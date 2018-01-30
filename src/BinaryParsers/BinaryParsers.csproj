@@ -14,17 +14,13 @@
     <PackageReference Include="Sarif.Driver" Version="1.7.2" />
     <PackageReference Include="Sarif.Sdk" Version="1.7.2" />
     <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
-    <!-- Uncomment when the package is working. See: https://github.com/konrad-kruczynski/elfsharp/issues/39
-    <PackageReference Include="ELFSharp" Version="1.1.0" />-->
+    <PackageReference Include="ELFSharp" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="dia2lib">
       <HintPath>..\..\refs\dia2lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="ELFSharp">
-      <HintPath>..\..\refs\ELFSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   
