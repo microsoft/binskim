@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "76ef4ff7-103f-4d60-b55d-94075057c99a",
+      "id": "b87969f4-97c0-4356-8c6b-26d5f78f11fb",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -26,7 +26,7 @@
             "arguments": [
               "clang.default_compilation",
               "BuildWithSecureTools",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -45,7 +45,7 @@
             "arguments": [
               "clang.default_compilation",
               "DoNotDisableStackProtectionForFunctions",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -64,7 +64,7 @@
             "arguments": [
               "clang.default_compilation",
               "DoNotIncorporateVulnerableDependencies",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -83,7 +83,7 @@
             "arguments": [
               "clang.default_compilation",
               "DoNotMarkImportsSectionAsExecutable",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -102,7 +102,7 @@
             "arguments": [
               "clang.default_compilation",
               "DoNotMarkWritableSectionsAsExecutable",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -121,7 +121,7 @@
             "arguments": [
               "clang.default_compilation",
               "DoNotMarkWritableSectionsAsShared",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -140,7 +140,7 @@
             "arguments": [
               "clang.default_compilation",
               "DoNotModifyStackProtectionCookie",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -159,7 +159,7 @@
             "arguments": [
               "clang.default_compilation",
               "DoNotShipVulnerableBinaries",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -178,7 +178,7 @@
             "arguments": [
               "clang.default_compilation",
               "EnableAddressSpaceLayoutRandomization",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -197,7 +197,7 @@
             "arguments": [
               "clang.default_compilation",
               "EnableControlFlowGuard",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -216,7 +216,7 @@
             "arguments": [
               "clang.default_compilation",
               "EnableCriticalCompilerWarnings",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -235,7 +235,7 @@
             "arguments": [
               "clang.default_compilation",
               "EnableHighEntropyVirtualAddresses",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -254,7 +254,7 @@
             "arguments": [
               "clang.default_compilation",
               "EnableSafeSEH",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -273,7 +273,7 @@
             "arguments": [
               "clang.default_compilation",
               "EnableStackProtection",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -292,7 +292,7 @@
             "arguments": [
               "clang.default_compilation",
               "InitializeStackProtection",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -311,7 +311,7 @@
             "arguments": [
               "clang.default_compilation",
               "LoadImageAboveFourGigabyteAddress",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -330,7 +330,7 @@
             "arguments": [
               "clang.default_compilation",
               "MarkImageAsNXCompatible",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -349,7 +349,7 @@
             "arguments": [
               "clang.default_compilation",
               "SignSecurely",
-              "not a PE binary"
+              "image is not a PE binary"
             ]
           },
           "locations": [
@@ -361,7 +361,7 @@
           ]
         },
         {
-          "ruleId": "TBDBA3016",
+          "ruleId": "BA3002",
           "level": "pass",
           "formattedRuleMessage": {
             "formatId": "Pass",
@@ -378,7 +378,7 @@
           ]
         },
         {
-          "ruleId": "TBDBA3009",
+          "ruleId": "BA3001",
           "level": "error",
           "formattedRuleMessage": {
             "formatId": "Error",
@@ -395,7 +395,7 @@
           ]
         },
         {
-          "ruleId": "TBDBA3020",
+          "ruleId": "BA3010",
           "level": "pass",
           "formattedRuleMessage": {
             "formatId": "Pass",
@@ -412,7 +412,7 @@
           ]
         },
         {
-          "ruleId": "TBDBA3011",
+          "ruleId": "BA3003",
           "level": "error",
           "formattedRuleMessage": {
             "formatId": "Error",
@@ -437,7 +437,7 @@
           },
           "message": "Analyzing 'clang.default_compilation'...",
           "level": "note",
-          "time": "2018-01-30T20:59:40.645Z"
+          "time": "2018-01-30T22:03:17.918Z"
         }
       ],
       "rules": {
@@ -745,52 +745,52 @@
           "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         },
-        "TBDBA3016": {
-          "id": "TBDBA3016",
+        "BA3002": {
+          "id": "BA3002",
           "name": "DoNotMarkStackAsExecutable",
           "shortDescription": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode.",
           "fullDescription": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable.",
           "messageFormats": {
-            "Pass": "GNU_STACK segment marked as non-executable on {0}. // todo",
-            "Error_StackExec": "Stack on {0} is executable. // todo",
-            "Error_NoStackSeg": "GNU_STACK segment on {0} is missing, which means the stack will likely be loaded as executable.  //todo",
+            "Pass": "GNU_STACK segment marked as non-executable on {0}.",
+            "Error_StackExec": "Stack on {0} is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable.",
+            "Error_NoStackSeg": "GNU_STACK segment on {0} is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing '-z noexecstack' to the compiler.",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         },
-        "TBDBA3009": {
-          "id": "TBDBA3009",
+        "BA3001": {
+          "id": "BA3001",
           "name": "EnablePIEOnExecutables",
           "shortDescription": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).",
-          "fullDescription": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.\"",
+          "fullDescription": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.",
           "messageFormats": {
-            "Pass_Executable": "PIE enabled on {0}, pass // todo",
-            "Pass_Library": "{0} is a library rather than an executable, so it is automatically position independent. // todo",
-            "Error": "PIE disabled on {0}, fail. // todo",
+            "Pass_Executable": "PIE enabled on executable {0}.",
+            "Pass_Library": "{0} is a shared object library rather than an executable, and is automatically position independent.",
+            "Error": "PIE disabled on executable {0}.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-f pie' when using clang/gcc.",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         },
-        "TBDBA3020": {
-          "id": "TBDBA3020",
+        "BA3010": {
+          "id": "BA3010",
           "name": "EnableReadOnlyRelocations",
-          "shortDescription": "This check ensures that some relocation data is marked as read only, and moved below the .",
-          "fullDescription": "This check ensures that some relocation data is marked as read only, and moved below the .data section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this. // todo",
+          "shortDescription": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the .",
+          "fullDescription": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the .data section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this.",
           "messageFormats": {
-            "Pass": "The GNU_RELRO segment was present, so {0} is protected. //todo",
-            "Error": "The GNU_RELRO segment is missing from this binary, so {0} is missing these mitigations. // todo",
+            "Pass": "The GNU_RELRO segment was present, so {0} is protected.",
+            "Error": "The GNU_RELRO segment is missing from this binary, so relocation sections in {0} will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,relro' to address this.",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         },
-        "TBDBA3011": {
-          "id": "TBDBA3011",
+        "BA3003": {
+          "id": "BA3003",
           "name": "EnableStackProtector",
-          "shortDescription": "The stack protector ensures that all functions that use buffers over a certain size will\nuse a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack\nsmashing is detected.",
-          "fullDescription": "The stack protector ensures that all functions that use buffers over a certain size will\nuse a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack\nsmashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this.",
+          "shortDescription": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected.",
+          "fullDescription": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this.",
           "messageFormats": {
             "Pass": "Stack protector was found on {0}.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections.",
             "Error": "The stack protector was not found in {0}.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used.",
@@ -806,8 +806,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-01-30T20:59:40.474Z",
-        "endTime": "2018-01-30T20:59:40.734Z"
+        "startTime": "2018-01-30T22:03:17.733Z",
+        "endTime": "2018-01-30T22:03:18.014Z"
       }
     }
   ]
