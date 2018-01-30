@@ -987,8 +987,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnablePIEOnExecutables_NotApplicable()
         {
-            // TODO--generate core dump, reloc, etc. for testing.
-            //VerifyNotApplicable(new EnablePIEOnExecutables());
+            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
         }
 
         [Fact]
@@ -1006,8 +1005,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotMarkStackAsExecutable_NotApplicable()
         {
-            // TODO--generate core dump, reloc, etc. for testing.
-            //VerifyNotApplicable(new EnablePIEOnExecutables());
+            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
         }
 
         [Fact]
@@ -1025,8 +1023,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableReadOnlyRelocations_NotApplicable()
         {
-            // TODO--generate core dump, reloc, etc. for testing.
-            //VerifyNotApplicable(new EnablePIEOnExecutables());
+            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
         }
 
         [Fact]
@@ -1044,8 +1041,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableStackProtector_NotApplicable()
         {
-            // TODO--generate core dump, reloc, etc. for testing.
-            //VerifyNotApplicable(new EnablePIEOnExecutables());
+            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
         }
 
     }

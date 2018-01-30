@@ -59,5 +59,7 @@ function Build-Baselines($sourceExtension)
 Build-Tool
 Build-Baselines "*.dll"
 Build-Baselines "*.exe"
+Build-Baselines "gcc.*"
+Build-Baselines "clang.*"
 
 Write-Host "Finished! Terminate."
