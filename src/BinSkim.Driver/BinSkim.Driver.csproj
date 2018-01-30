@@ -4,7 +4,8 @@
 
   <PropertyGroup>
     <AssemblyName>BinSkim</AssemblyName>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">$(NetCoreVersion); $(NetRuntimeVersion);</TargetFrameworks>
+    <!--  Condition="'$(OS)'=='Windows_NT'" -->
+    <TargetFrameworks>$(NetCoreVersion); $(NetRuntimeVersion);</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)'!='Windows_NT'">$(NetCoreVersion);</TargetFrameworks>
     <RuntimeIdentifiers>win-x86; win-x64; linux-x64;</RuntimeIdentifiers>
     <OutputType>Exe</OutputType>
@@ -36,6 +37,9 @@
     <Reference Include="dia2lib">
       <HintPath>..\..\refs\dia2lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ELFSharp">
+      <HintPath>..\..\refs\ELFSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   

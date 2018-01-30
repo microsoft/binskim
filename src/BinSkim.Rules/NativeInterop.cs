@@ -223,7 +223,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         internal static void HashPublicKeyInfoWrapper(IntPtr certContext, byte[] publicKeyInfoHashed, ref uint sizePublicKeyInfoHashed)
         {
             BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
-            return HashPublicKeyInfo(certContext, publicKeyInfoHashed, sizePublicKeyInfoHashed);
+            HashPublicKeyInfo(certContext, publicKeyInfoHashed, ref sizePublicKeyInfoHashed);
         }
 
         [DllImport("crypt32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
@@ -247,7 +247,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             [In, Out] ref uint pcbComputedHash)
         {
             BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
-            return CryptHashPublicKeyInfo(hCryptProv, Algid, dwFlags, dwCertEncodingType, pInfo, pbComputedHash, pcbComputedHash);
+            return CryptHashPublicKeyInfo(hCryptProv, Algid, dwFlags, dwCertEncodingType, ref pInfo, pbComputedHash, ref pcbComputedHash);
         }
 
 

@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Version minimumVersion;
             if (context.Policy.GetProperty(VulnerableBinaries).TryGetValue(fileName, out minimumVersion))
             {
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Path.GetFullPath(context.PE.FileName));
+                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Path.GetFullPath(target.PE.FileName));
                 string rawVersion = fvi.FileVersion ?? string.Empty;
                 Match sanitizedVersion = s_versionRegex.Match(rawVersion);
                 if (!sanitizedVersion.Success)

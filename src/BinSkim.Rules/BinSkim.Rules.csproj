@@ -12,6 +12,10 @@
       <HintPath>..\..\refs\dia2lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+
+    <Reference Include="ELFSharp">
+      <HintPath>..\..\refs\ELFSharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   
   <ItemGroup>
@@ -19,6 +23,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Sarif.Driver" Version="1.7.1-beta" />
     <PackageReference Include="Sarif.Sdk" Version="1.7.1" />
+    <!-- Uncomment when the package is working. See: https://github.com/konrad-kruczynski/elfsharp/issues/39
+    <PackageReference Include="ELFSharp" Version="1.1.0" />-->
   </ItemGroup>
   
   <ItemGroup>
