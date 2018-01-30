@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public void Driver_BuiltInRuleFunctionalTests()
         {
-            BatchRuleRules(string.Empty, "*.dll", "*.exe");
+            BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*");
         }
 
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
