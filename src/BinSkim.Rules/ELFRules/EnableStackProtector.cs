@@ -65,7 +65,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-
             IELF elf = context.ELFBinary().ELF;
             
             HashSet<string> symbolNames =

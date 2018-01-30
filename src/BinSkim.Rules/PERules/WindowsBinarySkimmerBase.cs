@@ -8,7 +8,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     // Windows specific binary skimmers.
     public abstract class WindowsBinarySkimmerBase : PEBinarySkimmerBase
     {
-        // Placeholder until SARIF 1.7.2 releases with SupportedPlatform.
+        // Placeholder until SARIF 1.7.3 releases with SupportedPlatform.
         public bool SupportedPlatforms => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
     }
 }
