@@ -38,9 +38,6 @@
       <HintPath>..\..\refs\dia2lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="ELFSharp">
-      <HintPath>..\..\refs\ELFSharp.dll</HintPath>
-    </Reference>
   </ItemGroup>
   
   <ItemGroup>
