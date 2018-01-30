@@ -18,8 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                // TODO--Resources file
-                reasonForNotAnalyzing = "not a PE binary";
+                reasonForNotAnalyzing = MetadataConditions.ImageIsNotPE;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
         }

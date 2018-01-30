@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     throw new InvalidOperationException(SdkResources.IllegalContextReuse);
                 }
                 _uri = value;
-                Binary = BinaryTargetManager.GetBinaryFromFile(_uri); // TODO--binary parser manager.
+                Binary = BinaryTargetManager.GetBinaryFromFile(_uri);
             }
         }
 

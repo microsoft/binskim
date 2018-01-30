@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         };
 
         /// <summary>
-        /// TBDBA3020
+        /// BA3003
         /// </summary>
         public override string Id { get { return RuleIds.EnableStackProtector; } }
 
@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string FullDescription
         {
-            get { return RuleResources.TBDBA3011_EnableStackProtector_Description; }
+            get { return RuleResources.BA3003_EnableStackProtector_Description; }
         }
 
         protected override IEnumerable<string> FormatIds
@@ -42,8 +42,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             get
             {
                 return new string[] {
-                    nameof(RuleResources.TBDBA3011_Pass),
-                    nameof(RuleResources.TBDBA3011_Error),
+                    nameof(RuleResources.BA3003_Pass),
+                    nameof(RuleResources.BA3003_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
             }
@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable)
             {
-                reasonForNotAnalyzing = "ELF is not a shared object or executable";
+                reasonForNotAnalyzing = MetadataConditions.ELFIsCoreNoneOrObject;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 
@@ -80,16 +80,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                            nameof(RuleResources.TBDBA3011_Pass),
+                            nameof(RuleResources.BA3003_Pass),
                             context.TargetUri.GetFileName()));
                     return;
                 }
             }
             // If we haven't found the stack protector, we assume it wasn't used.
-            // Fail
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                    nameof(RuleResources.TBDBA3011_Error),
+                    nameof(RuleResources.BA3003_Error),
                     context.TargetUri.GetFileName()));
         }
     }

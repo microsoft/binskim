@@ -18,8 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                // TODO--Resources file
-                reasonForNotAnalyzing = "not an ELF binary";
+                reasonForNotAnalyzing = MetadataConditions.ImageIsNotELF;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
         }

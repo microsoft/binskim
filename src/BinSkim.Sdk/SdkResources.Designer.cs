@@ -88,6 +88,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ELF is not a shared object or executable.
+        /// </summary>
+        internal static string MetadataCondition_ELFIsCoreNoneOrObject {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ELFIsCoreNoneOrObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image was compiled with a toolset version ({0}) that is not sufficiently recent ({1} or newer) to provide relevant settings.
         /// </summary>
         internal static string MetadataCondition_ImageCompiledWithOutdatedTools {
@@ -196,11 +205,29 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is not an ELF binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotELF {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotELF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is not an executable program.
         /// </summary>
         internal static string MetadataCondition_ImageIsNotExe {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsNotExe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image is not a PE binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotPE {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotPE", resourceCulture);
             }
         }
         

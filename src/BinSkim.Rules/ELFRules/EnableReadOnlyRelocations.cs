@@ -19,18 +19,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private const uint GNU_RELRO_ID = 0x6474e552;
         
         /// <summary>
-        /// TBDBA3020
+        /// BA3010
         /// </summary>
         public override string Id { get { return RuleIds.EnableReadOnlyRelocations; } }
 
         /// <summary>
-        /// This check ensures that some relocation data is marked as read only, and moved below 
-        /// the .data section in memory. This prevents them from being overwritten, 
-        /// which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this. // todo
+        /// This check ensures that some relocation data is marked as read only after 
+        /// the executable is loaded, and moved below the .data section in memory. 
+        /// This prevents them from being overwritten, which can redirect control flow. 
+        /// Use the compiler flags '-Wl,z,relro' to enable this.
         /// </summary>
         public override string FullDescription
         {
-            get { return RuleResources.TBDBA3020_EnableReadOnlyRelocations_Description; }
+            get { return RuleResources.BA3010_EnableReadOnlyRelocations_Description; }
         }
 
         protected override IEnumerable<string> FormatIds
@@ -38,8 +39,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             get
             {
                 return new string[] {
-                    nameof(RuleResources.TBDBA3020_Pass),
-                    nameof(RuleResources.TBDBA3020_Error),
+                    nameof(RuleResources.BA3010_Pass),
+                    nameof(RuleResources.BA3010_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
             }
@@ -51,7 +52,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable)
             {
-                reasonForNotAnalyzing = "ELF is not a shared object or executable";
+                reasonForNotAnalyzing = MetadataConditions.ELFIsCoreNoneOrObject;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 
@@ -70,7 +71,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // Pass
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                            nameof(RuleResources.TBDBA3020_Pass),
+                            nameof(RuleResources.BA3010_Pass),
                             context.TargetUri.GetFileName()));
                     return;
                 }
@@ -79,7 +80,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // Fail
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                    nameof(RuleResources.TBDBA3020_Error),
+                    nameof(RuleResources.BA3010_Error),
                     context.TargetUri.GetFileName()));
         }
     }

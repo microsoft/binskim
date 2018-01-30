@@ -19,16 +19,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private const uint GNU_STACK_ID = 0x6474e551;
 
         /// <summary>
-        /// ""
+        /// "BA3002"
         /// </summary>
         public override string Id { get { return RuleIds.DoNotMarkStackAsExecutable; } }
 
         /// <summary>
-        /// ""
+        /// "This checks if a binary has an executable stack; an 
+        /// executable stack allows attackers to redirect code flow 
+        /// into stack memory, which is an easy place for an attacker 
+        /// to store shellcode. Ensure you are compiling with '-z noexecstack'
+        /// to mark the stack as non-executable."
         /// </summary>
         public override string FullDescription
         {
-            get { return RuleResources.TBDBA3016_DoNotMarkStackAsExecutable_Description; }
+            get { return RuleResources.BA3002_DoNotMarkStackAsExecutable_Description; }
         }
 
         protected override IEnumerable<string> FormatIds
@@ -36,9 +40,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             get
             {
                 return new string[] {
-                    nameof(RuleResources.TBDBA3016_Pass),
-                    nameof(RuleResources.TBDBA3016_Error_StackExec),
-                    nameof(RuleResources.TBDBA3016_Error_NoStackSeg),
+                    nameof(RuleResources.BA3002_Pass),
+                    nameof(RuleResources.BA3002_Error_StackExec),
+                    nameof(RuleResources.BA3002_Error_NoStackSeg),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
             }
@@ -50,7 +54,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable)
             {
-                reasonForNotAnalyzing = "ELF is not a shared object or executable";
+                reasonForNotAnalyzing = reasonForNotAnalyzing = MetadataConditions.ELFIsCoreNoneOrObject;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 
@@ -72,7 +76,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         //Fail execstack
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                                nameof(RuleResources.TBDBA3016_Error_StackExec),
+                                nameof(RuleResources.BA3002_Error_StackExec),
                                 context.TargetUri.GetFileName()));
                         return;
                     }
@@ -81,7 +85,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         // Pass
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                                nameof(RuleResources.TBDBA3016_Pass),
+                                nameof(RuleResources.BA3002_Pass),
                                 context.TargetUri.GetFileName()));
                         return;
                     }
@@ -91,7 +95,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // If the GNU_STACK isn't present, the stack is probably loaded as executable
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                    nameof(RuleResources.TBDBA3016_Error_NoStackSeg),
+                    nameof(RuleResources.BA3002_Error_NoStackSeg),
                     context.TargetUri.GetFileName()));
         }
     }

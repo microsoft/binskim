@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     public class EnablePIEOnExecutables : ELFBinarySkimmerBase
     {
         /// <summary>
-        /// TBDBA3009
+        /// BA3001
         /// </summary>
         public override string Id { get { return RuleIds.EnablePIEOnExecutables; } }
 
@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string FullDescription
         {
-            get { return RuleResources.TBDBA3009_EnablePIEOnExecutables_Description; }
+            get { return RuleResources.BA3001_EnablePIEOnExecutables_Description; }
         }
 
         protected override IEnumerable<string> FormatIds
@@ -36,9 +36,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             get
             {
                 return new string[] {
-                    nameof(RuleResources.TBDBA3009_Pass_Executable),
-                    nameof(RuleResources.TBDBA3009_Pass_Library),
-                    nameof(RuleResources.TBDBA3009_Error),
+                    nameof(RuleResources.BA3001_Pass_Executable),
+                    nameof(RuleResources.BA3001_Pass_Library),
+                    nameof(RuleResources.BA3001_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
             }
@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             
             if(elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable )
             {
-                reasonForNotAnalyzing = "ELF is not a shared object or executable";
+                reasonForNotAnalyzing = reasonForNotAnalyzing = MetadataConditions.ELFIsCoreNoneOrObject;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
             
@@ -65,7 +65,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                        nameof(RuleResources.TBDBA3009_Error),
+                        nameof(RuleResources.BA3001_Error),
                         context.TargetUri.GetFileName()));
                 return;
             }
@@ -77,7 +77,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                            nameof(RuleResources.TBDBA3009_Pass_Executable),
+                            nameof(RuleResources.BA3001_Pass_Executable),
                             context.TargetUri.GetFileName()));
                     return;
                 }
@@ -86,7 +86,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // '{0}' does not have an imports section that is marked as executable.
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
-                            nameof(RuleResources.TBDBA3009_Pass_Library),
+                            nameof(RuleResources.BA3001_Pass_Library),
                             context.TargetUri.GetFileName()));
                     return;
                 }
