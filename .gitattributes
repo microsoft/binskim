@@ -1,0 +1,5 @@
+# SLN files should have clrf endings
+*.sln text eol=crlf
+
+# Shell scripts should always have lf endings
+text eol=lf
