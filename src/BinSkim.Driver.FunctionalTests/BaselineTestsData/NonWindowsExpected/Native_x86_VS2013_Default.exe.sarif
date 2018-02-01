@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "ac3c137f-5107-44e0-86ce-7f440c30ca70",
+      "id": "2bbe0fc6-f780-4e71-b260-cebeae9801a5",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
         "version": "1.5.0.0",
         "semanticVersion": "1.5.0",
-        "sarifLoggerVersion": "1.7.2.0",
+        "sarifLoggerVersion": "1.7.3.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -275,22 +275,52 @@
       ],
       "configurationNotifications": [
         {
-          "id": "ERR997.ExceptionLoadingPdb",
-          "ruleId": "BA2006",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
-          },
-          "message": "'Native_x86_VS2013_Default.exe' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. (Cannot parse pdb on this platform.)",
-          "level": "error"
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
         },
         {
-          "id": "ERR997.ExceptionLoadingPdb",
-          "ruleId": "BA2002",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
-          },
-          "message": "'Native_x86_VS2013_Default.exe' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. (Cannot parse pdb on this platform.)",
-          "level": "error"
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotIncorporateVulnerableDependencies' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotShipVulnerableBinaries' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableCriticalCompilerWarnings' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'InitializeStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'SignSecurely' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
         }
       ],
       "toolNotifications": [
@@ -301,169 +331,7 @@
           },
           "message": "Analyzing 'Native_x86_VS2013_Default.exe'...",
           "level": "note",
-          "time": "2018-01-30T22:02:38.099Z"
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2014",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
-          },
-          "message": "An exception was raised analyzing 'Native_x86_VS2013_Default.exe' for check 'DoNotDisableStackProtectionForFunctions' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.DoNotDisableStackProtectionForFunctions.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2005",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
-          },
-          "message": "An exception was raised analyzing 'Native_x86_VS2013_Default.exe' for check 'DoNotShipVulnerableBinaries' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.DoNotShipVulnerableBinaries.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2007",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
-          },
-          "message": "An exception was raised analyzing 'Native_x86_VS2013_Default.exe' for check 'EnableCriticalCompilerWarnings' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.EnableCriticalCompilerWarnings.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2011",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
-          },
-          "message": "An exception was raised analyzing 'Native_x86_VS2013_Default.exe' for check 'EnableStackProtection' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.EnableStackProtection.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2013",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
-          },
-          "message": "An exception was raised analyzing 'Native_x86_VS2013_Default.exe' for check 'InitializeStackProtection' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.InitializeStackProtection.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2022",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Native_x86_VS2013_Default.exe"
-          },
-          "message": "An exception was raised analyzing 'Native_x86_VS2013_Default.exe' for check 'SignSecurely' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.SignSecurely.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
+          "time": "2018-02-01T18:56:04.391Z"
         }
       ],
       "rules": {
@@ -698,8 +566,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-01-30T22:02:37.934Z",
-        "endTime": "2018-01-30T22:02:38.316Z"
+        "startTime": "2018-02-01T18:56:04.146Z",
+        "endTime": "2018-02-01T18:56:04.657Z"
       }
     }
   ]

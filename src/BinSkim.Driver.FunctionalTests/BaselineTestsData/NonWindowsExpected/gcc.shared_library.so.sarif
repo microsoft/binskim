@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "35a335ff-10d9-4116-8848-9d490d90db27",
+      "id": "7cc9c9ea-441c-4e42-8589-193d168bc582",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
         "version": "1.5.0.0",
         "semanticVersion": "1.5.0",
-        "sarifLoggerVersion": "1.7.2.0",
+        "sarifLoggerVersion": "1.7.3.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -18,63 +18,6 @@
         }
       },
       "results": [
-        {
-          "ruleId": "BA2006",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "gcc.shared_library.so",
-              "BuildWithSecureTools",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/gcc.shared_library.so"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2014",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "gcc.shared_library.so",
-              "DoNotDisableStackProtectionForFunctions",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/gcc.shared_library.so"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2002",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "gcc.shared_library.so",
-              "DoNotIncorporateVulnerableDependencies",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/gcc.shared_library.so"
-              }
-            }
-          ]
-        },
         {
           "ruleId": "BA2010",
           "level": "notApplicable",
@@ -152,25 +95,6 @@
           ]
         },
         {
-          "ruleId": "BA2005",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "gcc.shared_library.so",
-              "DoNotShipVulnerableBinaries",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/gcc.shared_library.so"
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA2009",
           "level": "notApplicable",
           "formattedRuleMessage": {
@@ -197,25 +121,6 @@
             "arguments": [
               "gcc.shared_library.so",
               "EnableControlFlowGuard",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/gcc.shared_library.so"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2007",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "gcc.shared_library.so",
-              "EnableCriticalCompilerWarnings",
               "image is not a PE binary"
             ]
           },
@@ -266,44 +171,6 @@
           ]
         },
         {
-          "ruleId": "BA2011",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "gcc.shared_library.so",
-              "EnableStackProtection",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/gcc.shared_library.so"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2013",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "gcc.shared_library.so",
-              "InitializeStackProtection",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/gcc.shared_library.so"
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA2001",
           "level": "notApplicable",
           "formattedRuleMessage": {
@@ -330,25 +197,6 @@
             "arguments": [
               "gcc.shared_library.so",
               "MarkImageAsNXCompatible",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/gcc.shared_library.so"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2022",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "gcc.shared_library.so",
-              "SignSecurely",
               "image is not a PE binary"
             ]
           },
@@ -429,6 +277,56 @@
           ]
         }
       ],
+      "configurationNotifications": [
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotIncorporateVulnerableDependencies' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotShipVulnerableBinaries' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableCriticalCompilerWarnings' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'InitializeStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'SignSecurely' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        }
+      ],
       "toolNotifications": [
         {
           "id": "MSG001.AnalyzingTarget",
@@ -437,59 +335,10 @@
           },
           "message": "Analyzing 'gcc.shared_library.so'...",
           "level": "note",
-          "time": "2018-01-30T22:03:11.429Z"
+          "time": "2018-02-01T18:56:38.901Z"
         }
       ],
       "rules": {
-        "BA2006": {
-          "id": "BA2006",
-          "name": "BuildWithSecureTools",
-          "shortDescription": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features.",
-          "fullDescription": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features.",
-          "messageFormats": {
-            "Error_BadModule": "built with {0} compiler version {1} (Front end version {2})",
-            "Pass": "All linked modules of '{0}' generated by the Microsoft front-end satisfy configured policy (compiler minimum version {1}).",
-            "Error": "'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}). More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning. Modules built outside of policy: \n{2}",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "CompilerVersionCheck"
-          }
-        },
-        "BA2014": {
-          "id": "BA2014",
-          "name": "DoNotDisableStackProtectionForFunctions",
-          "shortDescription": "Application code should not disable stack protection for individual functions.",
-          "fullDescription": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.",
-          "messageFormats": {
-            "Pass": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled which does not disable protection for any individual functions (via __declspec(safebuffers), making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities.",
-            "Error": "'{0}' is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "GSFunctionSafeBuffersCheck"
-          }
-        },
-        "BA2002": {
-          "id": "BA2002",
-          "name": "DoNotIncorporateVulnerableDependencies",
-          "shortDescription": "Binaries should not take dependencies on code with known security vulnerabilities.",
-          "fullDescription": "Binaries should not take dependencies on code with known security vulnerabilities.",
-          "messageFormats": {
-            "Pass": "'{0}' does not incorporate any known vulnerable dependencies, as configured by current policy.",
-            "Error": "'{0}' was built with a version of {1} which is subject to the following issues: {2}. To resolve this, {3}. The source files that triggered this were: {4}",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "ATLVersionCheck"
-          }
-        },
         "BA2010": {
           "id": "BA2010",
           "name": "DoNotMarkImportsSectionAsExecutable",
@@ -558,23 +407,6 @@
             "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
           }
         },
-        "BA2005": {
-          "id": "BA2005",
-          "name": "DoNotShipVulnerableBinaries",
-          "shortDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
-          "fullDescription": "Do not ship obsolete libraries for which there are known security vulnerabilities.",
-          "messageFormats": {
-            "Pass": "'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems.",
-            "Error": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.",
-            "Error_CouldNotParseVersion": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "BinaryVersionsCheck"
-          }
-        },
         "BA2009": {
           "id": "BA2009",
           "name": "EnableAddressSpaceLayoutRandomization",
@@ -608,24 +440,6 @@
           "helpUri": "https://github.com/microsoft/binskim",
           "properties": {
             "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
-          }
-        },
-        "BA2007": {
-          "id": "BA2007",
-          "name": "EnableCriticalCompilerWarnings",
-          "shortDescription": "Binaries should be compiled with a warning level that enables all critical security-relevant checks.",
-          "fullDescription": "Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted.",
-          "messageFormats": {
-            "Pass": "'{0}' was compiled at a secure warning level ({1}) and does not include any modules that disable specific warnings that are required by policy. As a result, it is less likely that memory corruption, information disclosure, double-free and other security-related vulnerabilities exist in code.",
-            "Error_WarningsDisabled": "'{0}' disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation. An example compiler command line triggering this check was: {1}\nModules triggering this check were:\n{2}",
-            "Error_InsufficientWarningLevel": "'{0}' was compiled at too low a warning level (effective warning level {1} for one or more modules). Warning level 3 enables important static analysis in the compiler to flag bugs that can lead to memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted. An example compiler command line triggering this check: {2}\nModules triggering this check: {3}",
-            "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the compiler warning settings. The language could not be identified for the following modules: {1}",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "CompilerWarningsCheck"
           }
         },
         "BA2015": {
@@ -663,41 +477,6 @@
             "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
           }
         },
-        "BA2011": {
-          "id": "BA2011",
-          "name": "EnableStackProtection",
-          "shortDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.",
-          "fullDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line.",
-          "messageFormats": {
-            "Pass": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled for all modules, making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities. ",
-            "Error": "'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}",
-            "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "GSCheck"
-          }
-        },
-        "BA2013": {
-          "id": "BA2013",
-          "name": "InitializeStackProtection",
-          "shortDescription": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.",
-          "fullDescription": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.",
-          "messageFormats": {
-            "Pass": "'{0}' is a C or C++ binary built with the buffer security feature that properly initializes the stack protecter. This has the effect of increasing the effectiveness of the feature and reducing spurious detections.",
-            "Pass_NoCode": "'{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code.",
-            "NotApplicable_FeatureNotEnabled": "'{0}' is a C or C++ binary that does not enable the stack protection buffer security feature. It is therefore not required to initialize the stack protector.",
-            "Error": "'{0}' is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
-          }
-        },
         "BA2001": {
           "id": "BA2001",
           "name": "LoadImageAboveFourGigabyteAddress",
@@ -729,21 +508,6 @@
           "properties": {
             "equivalentBinScopeRuleReadableName": "NXCheck"
           }
-        },
-        "BA2022": {
-          "id": "BA2022",
-          "name": "SignSecurely",
-          "shortDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms.",
-          "fullDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.",
-          "messageFormats": {
-            "Pass": "'{0}' appears to be signed with secure cryptographic algorithms. WinTrustVerify successfully validated the binary but did not attempt to validate certificate chaining or that the root certificate is trusted. The following digitial signature algorithms were detected: {1}",
-            "Error_BadSigningAlgorithm": "'{0}' was signed exclusively with algorithms that WinTrustVerify has flagged as insecure. {1}",
-            "Error_DidNotVerify": "'{0}' signing was flagged as insecure by WinTrustVerify with error code '{1}' ({2})",
-            "Error_WinTrustVerifyApiError": "'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
         },
         "BA3002": {
           "id": "BA3002",
@@ -806,8 +570,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-01-30T22:03:11.208Z",
-        "endTime": "2018-01-30T22:03:11.526Z"
+        "startTime": "2018-02-01T18:56:38.720Z",
+        "endTime": "2018-02-01T18:56:39.002Z"
       }
     }
   ]

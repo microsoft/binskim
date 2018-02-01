@@ -33,8 +33,8 @@ function Build-Baselines($sourceExtension)
 
         # Actually run the tool
         Remove-Item $outputTemp -ErrorAction SilentlyContinue
-        Write-Host "$utility analyze "$input" --output "$outputTemp" --pretty --verbose --hashes --config default"
-        &$utility analyze "$input" --output "$outputTemp" --pretty --verbose --hashes --config default
+        Write-Host "$utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default"
+        &$utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default
 
         # Replace repository root absolute path with Z:\ for machine and enlistment independence
         $text = [IO.File]::ReadAllText($outputTemp)
