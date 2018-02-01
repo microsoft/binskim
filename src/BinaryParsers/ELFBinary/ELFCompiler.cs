@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
@@ -16,57 +15,61 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         GCC = 2
     }
 
+    /// <summary>
+    /// Many compilers on Linux note which compiler and version was used to build that code
+    /// by adding an entry to the '.comment' section (represented as a series of null terminated ascii strings).
+    /// 
+    /// This class takes those strings and attempts to match them with a known toolchain & version.
+    /// </summary>
     public class ELFCompiler
     {
-        static Dictionary<Regex, ELFCompilerType> compilerRegexes = new Dictionary<Regex, ELFCompilerType>()
+        // Regular expressions for extracting compiler types.
+        // These should be ordered so that the generic "catch all" mapping to unknown is last.
+        static List<(Regex Regex, ELFCompilerType Compiler)> compilerRegexes = new List<(Regex, ELFCompilerType)>
         {
-            {
-                new Regex(@"GCC:.+"), ELFCompilerType.GCC
-            },
-            {
-                new Regex(@".*clang version.*"), ELFCompilerType.Clang
-            },
-            {
-                new Regex(@".*"), ELFCompilerType.Unknown
-            }
+            (new Regex(@"GCC:.+"), ELFCompilerType.GCC),
+            (new Regex(@".*clang version.*"), ELFCompilerType.Clang),
+            (new Regex(@".*"), ELFCompilerType.Unknown)
+            
         };
+        
+        // Regex for extracting something that looks like a version number--Goal is to match at least w.x, and up to w.x.y.z
+        static Regex versionRegex = new Regex(@"\d+(\.\d+){1,3}");
 
         /// <summary>
-        /// Regular expressions for extracting the version number from the compiler string
+        /// Construct a ELFCompiler from a string from the .comments section.
         /// </summary>
-        static Dictionary<ELFCompilerType, Regex> versionNumberRegex = new Dictionary<ELFCompilerType, Regex>()
-        {
-            {
-                ELFCompilerType.GCC, new Regex(@"\d+\.\d+\.\d+[\-|~|A-Z|a-z|\.|\d]+")
-            },
-            {
-                ELFCompilerType.Clang, new Regex(@"[\d+]\.[\d+]\.[\d+][\-|A-Z|a-z|\d]*")
-            },
-            {
-                ELFCompilerType.Unknown, new Regex("")
-            }
-        };
-
+        /// <param name="fullDescription">Compiler entry from the .comments section of an ELF binary.</param>
         public ELFCompiler(string fullDescription)
         {
-            FullDescription = fullDescription;
-            Compiler = compilerRegexes.First(s => s.Key.IsMatch(fullDescription)).Value;
-
-            try
+            // If for some reason we get a null string, we will simply return an unknown compiler.
+            if (fullDescription == null)
             {
-                Match result = versionNumberRegex[Compiler].Match(fullDescription);
-                if (result.Success)
+                FullDescription = string.Empty;
+                Compiler = ELFCompilerType.Unknown;
+                Version = new Version(0, 0, 0, 0);
+            }
+            else
+            {
+                FullDescription = fullDescription;
+                Compiler = compilerRegexes.First(s => s.Regex.IsMatch(fullDescription)).Compiler;
+
+                try
                 {
-                    Version = new Version(result.Value);
+                    Match versionStr = versionRegex.Match(fullDescription);
+                    if (versionStr.Success)
+                    {
+                        Version = new Version(versionStr.Value);
+                    }
+                    else
+                    {
+                        Version = new Version(0, 0, 0, 0);
+                    }
                 }
-                else
+                catch (FormatException) // Version we recovered wasn't well formed.
                 {
                     Version = new Version(0, 0, 0, 0);
                 }
-            }
-            catch (ArgumentException) // Version wasn't well formed.
-            {
-                Version = new Version(0, 0, 0, 0);
             }
         }
 
