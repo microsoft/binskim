@@ -3,6 +3,7 @@
 
 using ELFSharp.ELF;
 using ELFSharp.ELF.Sections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,6 +27,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                         return agg;
                     }
                 );
+        }
+
+        /// <summary>
+        /// Get the compilers used to create an ELF binary.
+        /// </summary>
+        /// <param name="elf">ELF binary</param>
+        /// <returns>List of compiler tools from the .note section</returns>
+        internal static ELFCompiler[] GetELFCompilers(IELF elf)
+        {
+            throw new NotImplementedException();
         }
     }
 }
