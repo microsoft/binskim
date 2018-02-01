@@ -9,8 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Sarif.Driver" Version="1.7.2" />
-    <PackageReference Include="Sarif.Sdk" Version="1.7.2" />
+    <PackageReference Include="Sarif.Driver" Version="1.7.3" />
+    <PackageReference Include="Sarif.Sdk" Version="1.7.3" />
   </ItemGroup>
   
   <ItemGroup>
