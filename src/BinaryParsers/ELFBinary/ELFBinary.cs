@@ -18,8 +18,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 ELF = ELFReader.Load(Path.GetFullPath(uri.LocalPath));
                 Valid = true;
             }
-            // TODO--we may want to better enumerate the possible exceptions.
-            // For now, though, we'll generically catch any of them.
+            // At some point, we may want to better enumerate expected vs. unexpected exceptions.
+            // For now, though, we'll generically catch any of them--ELFSharp can throw a number of different exceptions
+            // if given an invalid ELF file.
             catch (Exception e)
             {
                 LoadException = e;

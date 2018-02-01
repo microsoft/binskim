@@ -73,7 +73,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // if we find it, we'll check if it's NX...
                     if ((seg.Flags & SegmentFlags.Execute) != 0)
                     {
-                        //Fail execstack
+                        // Fail -- stack seg is marked executable
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(ResultLevel.Error, context, null,
                                 nameof(RuleResources.BA3002_Error_StackExec),
@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                     else
                     {
-                        // Pass
+                        // Pass -- stack segment isn't executable
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
                                 nameof(RuleResources.BA3002_Pass),

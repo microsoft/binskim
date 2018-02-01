@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 _fs = File.OpenRead(FileName);
 
-                if(!CheckPEMagicBytes(_fs)) { return; }
+                if (!CheckPEMagicBytes(_fs)) { return; }
 
                 _peReader = new PEReader(_fs);
                 PEHeaders = _peReader.PEHeaders;
@@ -60,10 +60,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             try
             {
-                byte byteRead = (byte)fs.ReadByte();
+                byte byteRead = (byte) fs.ReadByte();
                 if (byteRead != 'M') { return false; }
 
-                byteRead = (byte)fs.ReadByte();
+                byteRead = (byte) fs.ReadByte();
                 if (byteRead != 'Z') { return false; }
 
                 return true;
