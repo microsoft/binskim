@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "203582fe-22a4-41e3-b86f-1ebdebc5316b",
+      "id": "17e422b3-9e3c-4598-ac9b-2d968e3d5457",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
         "version": "1.5.0.0",
         "semanticVersion": "1.5.0",
-        "sarifLoggerVersion": "1.7.2.0",
+        "sarifLoggerVersion": "1.7.3.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -95,14 +95,14 @@
           ]
         },
         {
-          "ruleId": "BA2014",
+          "ruleId": "BA3030",
           "level": "notApplicable",
           "formattedRuleMessage": {
             "formatId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Uwp_x64_VS2015_DefaultBlankApp.dll",
-              "DoNotDisableStackProtectionForFunctions",
-              "image is a binary built by the .NET native toolset"
+              "UseCheckedFunctionsWithGCC",
+              "image is not an ELF binary"
             ]
           },
           "locations": [
@@ -179,44 +179,6 @@
               "Uwp_x64_VS2015_DefaultBlankApp.dll",
               "EnableSafeSEH",
               "image is not a 32-bit binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Uwp_x64_VS2015_DefaultBlankApp.dll"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2011",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "Uwp_x64_VS2015_DefaultBlankApp.dll",
-              "EnableStackProtection",
-              "image is a binary built by the .NET native toolset"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Uwp_x64_VS2015_DefaultBlankApp.dll"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2013",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "Uwp_x64_VS2015_DefaultBlankApp.dll",
-              "InitializeStackProtection",
-              "image is a binary built by the .NET native toolset"
             ]
           },
           "locations": [
@@ -334,22 +296,52 @@
       ],
       "configurationNotifications": [
         {
-          "id": "ERR997.ExceptionLoadingPdb",
-          "ruleId": "BA2006",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Uwp_x64_VS2015_DefaultBlankApp.dll"
-          },
-          "message": "'Uwp_x64_VS2015_DefaultBlankApp.dll' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. (Cannot parse pdb on this platform.)",
-          "level": "error"
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
         },
         {
-          "id": "ERR997.ExceptionLoadingPdb",
-          "ruleId": "BA2002",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Uwp_x64_VS2015_DefaultBlankApp.dll"
-          },
-          "message": "'Uwp_x64_VS2015_DefaultBlankApp.dll' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. (Cannot parse pdb on this platform.)",
-          "level": "error"
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotIncorporateVulnerableDependencies' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotShipVulnerableBinaries' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableCriticalCompilerWarnings' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'InitializeStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'SignSecurely' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
         }
       ],
       "toolNotifications": [
@@ -360,88 +352,7 @@
           },
           "message": "Analyzing 'Uwp_x64_VS2015_DefaultBlankApp.dll'...",
           "level": "note",
-          "time": "2018-01-30T22:02:19.833Z"
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2005",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Uwp_x64_VS2015_DefaultBlankApp.dll"
-          },
-          "message": "An exception was raised analyzing 'Uwp_x64_VS2015_DefaultBlankApp.dll' for check 'DoNotShipVulnerableBinaries' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.DoNotShipVulnerableBinaries.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2007",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Uwp_x64_VS2015_DefaultBlankApp.dll"
-          },
-          "message": "An exception was raised analyzing 'Uwp_x64_VS2015_DefaultBlankApp.dll' for check 'EnableCriticalCompilerWarnings' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.EnableCriticalCompilerWarnings.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2022",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Uwp_x64_VS2015_DefaultBlankApp.dll"
-          },
-          "message": "An exception was raised analyzing 'Uwp_x64_VS2015_DefaultBlankApp.dll' for check 'SignSecurely' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.SignSecurely.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
+          "time": "2018-02-02T21:24:24.131Z"
         }
       ],
       "rules": {
@@ -499,21 +410,20 @@
           "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         },
-        "BA2014": {
-          "id": "BA2014",
-          "name": "DoNotDisableStackProtectionForFunctions",
-          "shortDescription": "Application code should not disable stack protection for individual functions.",
-          "fullDescription": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.",
+        "BA3030": {
+          "id": "BA3030",
+          "name": "UseCheckedFunctionsWithGCC",
+          "shortDescription": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string.",
+          "fullDescription": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2').",
           "messageFormats": {
-            "Pass": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled which does not disable protection for any individual functions (via __declspec(safebuffers), making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities.",
-            "Error": "'{0}' is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.",
+            "Pass_AllFunctionsChecked": "All functions that can be checked in '{0}' are using the checked versions, so this binary is protected from overflows caused by those function's use.",
+            "Pass_SomeFunctionsChecked": "Some checked functions were found in '{0}'; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy.",
+            "Pass_NoCheckableFunctions": "No unsafe functions which can be replaced with checked versions are used in '{0}'.",
+            "Error": "No checked functions are present/used when compiling '{0}', and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 ('-O2') is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings.",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "GSFunctionSafeBuffersCheck"
-          }
+          "helpUri": "https://github.com/microsoft/binskim"
         },
         "BA2012": {
           "id": "BA2012",
@@ -584,41 +494,6 @@
           "helpUri": "https://github.com/microsoft/binskim",
           "properties": {
             "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
-          }
-        },
-        "BA2011": {
-          "id": "BA2011",
-          "name": "EnableStackProtection",
-          "shortDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.",
-          "fullDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line.",
-          "messageFormats": {
-            "Pass": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled for all modules, making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities. ",
-            "Error": "'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}",
-            "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "GSCheck"
-          }
-        },
-        "BA2013": {
-          "id": "BA2013",
-          "name": "InitializeStackProtection",
-          "shortDescription": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.",
-          "fullDescription": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.",
-          "messageFormats": {
-            "Pass": "'{0}' is a C or C++ binary built with the buffer security feature that properly initializes the stack protecter. This has the effect of increasing the effectiveness of the feature and reducing spurious detections.",
-            "Pass_NoCode": "'{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code.",
-            "NotApplicable_FeatureNotEnabled": "'{0}' is a C or C++ binary that does not enable the stack protection buffer security feature. It is therefore not required to initialize the stack protector.",
-            "Error": "'{0}' is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
           }
         },
         "BA2016": {
@@ -727,8 +602,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-01-30T22:02:19.666Z",
-        "endTime": "2018-01-30T22:02:20.075Z"
+        "startTime": "2018-02-02T21:24:23.860Z",
+        "endTime": "2018-02-02T21:24:24.267Z"
       }
     }
   ]

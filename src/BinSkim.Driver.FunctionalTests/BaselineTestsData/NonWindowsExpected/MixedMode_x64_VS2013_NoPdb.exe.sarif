@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "abafb7d2-bf37-431b-b6bd-3e7f5f00319f",
+      "id": "6e17639d-1210-44a0-96ec-c2e1084885e9",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
         "version": "1.5.0.0",
         "semanticVersion": "1.5.0",
-        "sarifLoggerVersion": "1.7.2.0",
+        "sarifLoggerVersion": "1.7.3.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -83,6 +83,25 @@
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe",
               "EnableStackProtector",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe",
+              "UseCheckedFunctionsWithGCC",
               "image is not an ELF binary"
             ]
           },
@@ -273,22 +292,52 @@
       ],
       "configurationNotifications": [
         {
-          "id": "ERR997.ExceptionLoadingPdb",
-          "ruleId": "BA2006",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"
-          },
-          "message": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. (Cannot parse pdb on this platform.)",
-          "level": "error"
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
         },
         {
-          "id": "ERR997.ExceptionLoadingPdb",
-          "ruleId": "BA2002",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"
-          },
-          "message": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. (Cannot parse pdb on this platform.)",
-          "level": "error"
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotIncorporateVulnerableDependencies' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotShipVulnerableBinaries' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableCriticalCompilerWarnings' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'InitializeStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'SignSecurely' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
         }
       ],
       "toolNotifications": [
@@ -299,169 +348,7 @@
           },
           "message": "Analyzing 'MixedMode_x64_VS2013_NoPdb.exe'...",
           "level": "note",
-          "time": "2018-01-30T22:02:28.566Z"
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2014",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"
-          },
-          "message": "An exception was raised analyzing 'MixedMode_x64_VS2013_NoPdb.exe' for check 'DoNotDisableStackProtectionForFunctions' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.DoNotDisableStackProtectionForFunctions.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2005",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"
-          },
-          "message": "An exception was raised analyzing 'MixedMode_x64_VS2013_NoPdb.exe' for check 'DoNotShipVulnerableBinaries' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.DoNotShipVulnerableBinaries.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2007",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"
-          },
-          "message": "An exception was raised analyzing 'MixedMode_x64_VS2013_NoPdb.exe' for check 'EnableCriticalCompilerWarnings' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.EnableCriticalCompilerWarnings.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2011",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"
-          },
-          "message": "An exception was raised analyzing 'MixedMode_x64_VS2013_NoPdb.exe' for check 'EnableStackProtection' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.EnableStackProtection.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2013",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"
-          },
-          "message": "An exception was raised analyzing 'MixedMode_x64_VS2013_NoPdb.exe' for check 'InitializeStackProtection' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.InitializeStackProtection.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
-        },
-        {
-          "id": "ERR998.ExceptionInAnalyze",
-          "ruleId": "BA2022",
-          "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"
-          },
-          "message": "An exception was raised analyzing 'MixedMode_x64_VS2013_NoPdb.exe' for check 'SignSecurely' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however. (This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).)",
-          "level": "error",
-          "exception": {
-            "kind": "PlatformNotSupportedException",
-            "message": "This feature is not supported on the Linux 4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017 platform, it is only supported on the WINDOWS platform(s).",
-            "stack": {
-              "frames": [
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows()"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.IL.Rules.SignSecurely.Analyze(BinaryAnalyzerContext context)"
-                },
-                {
-                  "fullyQualifiedLogicalName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.AnalyzeTarget(IEnumerable`1 skimmers, TContext context, HashSet`1 disabledSkimmers)"
-                }
-              ]
-            },
-            "innerExceptions": []
-          }
+          "time": "2018-02-02T21:24:34.643Z"
         }
       ],
       "rules": {
@@ -514,6 +401,21 @@
           "messageFormats": {
             "Pass": "Stack protector was found on {0}.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections.",
             "Error": "The stack protector was not found in {0}.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
+        },
+        "BA3030": {
+          "id": "BA3030",
+          "name": "UseCheckedFunctionsWithGCC",
+          "shortDescription": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string.",
+          "fullDescription": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2').",
+          "messageFormats": {
+            "Pass_AllFunctionsChecked": "All functions that can be checked in '{0}' are using the checked versions, so this binary is protected from overflows caused by those function's use.",
+            "Pass_SomeFunctionsChecked": "Some checked functions were found in '{0}'; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy.",
+            "Pass_NoCheckableFunctions": "No unsafe functions which can be replaced with checked versions are used in '{0}'.",
+            "Error": "No checked functions are present/used when compiling '{0}', and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 ('-O2') is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings.",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
@@ -696,8 +598,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-01-30T22:02:28.400Z",
-        "endTime": "2018-01-30T22:02:29.254Z"
+        "startTime": "2018-02-02T21:24:34.203Z",
+        "endTime": "2018-02-02T21:24:36.277Z"
       }
     }
   ]
