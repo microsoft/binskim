@@ -1044,5 +1044,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
         }
 
+        [Fact]
+        public void UseCheckedFunctionsWithGCC_Pass()
+        {
+            VerifyPass(new UseCheckedFunctionsWithGCC());
+        }
+
+        [Fact]
+        public void UseCheckedFunctionsWithGCC_Fail()
+        {
+            VerifyFail(new UseCheckedFunctionsWithGCC());
+        }
+
+        [Fact]
+        public void UseCheckedFunctionsWithGCC_NotApplicable()
+        {
+            VerifyNotApplicable(new UseCheckedFunctionsWithGCC(), new HashSet<string>());
+        }
     }
 }
