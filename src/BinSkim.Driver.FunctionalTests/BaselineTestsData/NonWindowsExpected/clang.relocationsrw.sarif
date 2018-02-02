@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "3ddf2eea-32ef-4813-8f87-fa9e6339dbfc",
+      "id": "6314f06f-9a54-4222-a032-5a53064cc2cf",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -354,7 +354,7 @@
           },
           "message": "Analyzing 'clang.relocationsrw'...",
           "level": "note",
-          "time": "2018-02-02T21:25:57.917Z"
+          "time": "2018-02-02T23:48:41.364Z"
         }
       ],
       "rules": {
@@ -604,8 +604,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:25:57.385Z",
-        "endTime": "2018-02-02T21:25:58.104Z"
+        "startTime": "2018-02-02T23:48:41.008Z",
+        "endTime": "2018-02-02T23:48:41.520Z"
       }
     }
   ]

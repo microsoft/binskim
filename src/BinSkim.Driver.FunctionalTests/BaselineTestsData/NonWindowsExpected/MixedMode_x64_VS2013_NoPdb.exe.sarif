@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "6e17639d-1210-44a0-96ec-c2e1084885e9",
+      "id": "ca056d97-2812-4dc7-bbbc-54e585362241",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -348,7 +348,7 @@
           },
           "message": "Analyzing 'MixedMode_x64_VS2013_NoPdb.exe'...",
           "level": "note",
-          "time": "2018-02-02T21:24:34.643Z"
+          "time": "2018-02-02T23:47:23.523Z"
         }
       ],
       "rules": {
@@ -598,8 +598,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:24:34.203Z",
-        "endTime": "2018-02-02T21:24:36.277Z"
+        "startTime": "2018-02-02T23:47:23.184Z",
+        "endTime": "2018-02-02T23:47:24.770Z"
       }
     }
   ]

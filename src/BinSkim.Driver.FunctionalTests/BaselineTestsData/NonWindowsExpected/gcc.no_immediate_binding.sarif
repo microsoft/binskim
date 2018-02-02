@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "bff3d773-5027-4493-88a8-6d3166440f70",
+      "id": "0e51c99a-4e84-4599-9d30-fae9df99abbc",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -352,7 +352,7 @@
           },
           "message": "Analyzing 'gcc.no_immediate_binding'...",
           "level": "note",
-          "time": "2018-02-02T21:25:12.198Z"
+          "time": "2018-02-02T23:47:58.977Z"
         }
       ],
       "rules": {
@@ -602,8 +602,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:25:11.997Z",
-        "endTime": "2018-02-02T21:25:12.308Z"
+        "startTime": "2018-02-02T23:47:58.596Z",
+        "endTime": "2018-02-02T23:47:59.271Z"
       }
     }
   ]

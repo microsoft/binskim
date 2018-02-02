@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "1bb098ac-61d0-4a78-916b-8ceffe13293e",
+      "id": "0c37cd3d-3a20-437e-95a8-c5b07ba14a1a",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -348,7 +348,7 @@
           },
           "message": "Analyzing 'Native_x86_VS2015_Default_Debug.dll'...",
           "level": "note",
-          "time": "2018-02-02T21:24:20.302Z"
+          "time": "2018-02-02T23:47:09.429Z"
         }
       ],
       "rules": {
@@ -598,8 +598,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:24:19.857Z",
-        "endTime": "2018-02-02T21:24:20.548Z"
+        "startTime": "2018-02-02T23:47:09.258Z",
+        "endTime": "2018-02-02T23:47:09.607Z"
       }
     }
   ]

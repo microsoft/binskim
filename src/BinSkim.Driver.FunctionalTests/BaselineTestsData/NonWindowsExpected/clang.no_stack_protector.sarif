@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "b21df68e-65ba-4e40-bb32-ffd37b014499",
+      "id": "c6716e25-7b21-48d8-b3db-90c5ba51e2eb",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -354,7 +354,7 @@
           },
           "message": "Analyzing 'clang.no_stack_protector'...",
           "level": "note",
-          "time": "2018-02-02T21:25:49.839Z"
+          "time": "2018-02-02T23:48:34.647Z"
         }
       ],
       "rules": {
@@ -604,8 +604,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:25:49.612Z",
-        "endTime": "2018-02-02T21:25:50.088Z"
+        "startTime": "2018-02-02T23:48:34.379Z",
+        "endTime": "2018-02-02T23:48:34.758Z"
       }
     }
   ]

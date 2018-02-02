@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "0af008e9-e5d8-4a2f-b6e5-c97b6d449982",
+      "id": "28e7c48d-1df3-4ed8-880a-b36c9234b59a",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -350,7 +350,7 @@
           },
           "message": "Analyzing 'MixedMode_x64_VS2013_Default.dll'...",
           "level": "note",
-          "time": "2018-02-02T21:24:02.230Z"
+          "time": "2018-02-02T23:46:55.052Z"
         }
       ],
       "rules": {
@@ -600,8 +600,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:24:01.833Z",
-        "endTime": "2018-02-02T21:24:03.116Z"
+        "startTime": "2018-02-02T23:46:54.812Z",
+        "endTime": "2018-02-02T23:46:55.721Z"
       }
     }
   ]

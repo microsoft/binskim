@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "83a3fd3c-b7df-4c3d-8710-9f2ed7384dbd",
+      "id": "2f489dfb-9118-4db6-b039-22616f000884",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -352,7 +352,7 @@
           },
           "message": "Analyzing 'gcc.shared_library.so'...",
           "level": "note",
-          "time": "2018-02-02T21:25:25.052Z"
+          "time": "2018-02-02T23:48:12.273Z"
         }
       ],
       "rules": {
@@ -602,8 +602,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:25:24.738Z",
-        "endTime": "2018-02-02T21:25:25.260Z"
+        "startTime": "2018-02-02T23:48:12.070Z",
+        "endTime": "2018-02-02T23:48:12.380Z"
       }
     }
   ]

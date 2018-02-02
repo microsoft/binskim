@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "4144e6de-df9c-43a7-be99-8af777c62e44",
+      "id": "58a0ec3e-66be-4435-b86c-b2a0e7de2f2c",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -350,7 +350,7 @@
           },
           "message": "Analyzing 'Uwp_x86_VS2015_DefaultBlankApp.dll'...",
           "level": "note",
-          "time": "2018-02-02T21:24:25.701Z"
+          "time": "2018-02-02T23:47:15.161Z"
         }
       ],
       "rules": {
@@ -600,8 +600,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:24:25.499Z",
-        "endTime": "2018-02-02T21:24:25.829Z"
+        "startTime": "2018-02-02T23:47:14.951Z",
+        "endTime": "2018-02-02T23:47:15.302Z"
       }
     }
   ]

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "f571bda0-ecc9-4311-bc5a-951ab5fc3c3c",
+      "id": "fbf7330f-0927-4cbc-90d4-379de4d2fd81",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -346,7 +346,7 @@
           },
           "message": "Analyzing 'Native_x86_VS2015_AtlProxyStubPS.dll'...",
           "level": "note",
-          "time": "2018-02-02T21:24:16.031Z"
+          "time": "2018-02-02T23:47:06.792Z"
         }
       ],
       "rules": {
@@ -596,8 +596,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:24:15.857Z",
-        "endTime": "2018-02-02T21:24:16.344Z"
+        "startTime": "2018-02-02T23:47:06.625Z",
+        "endTime": "2018-02-02T23:47:06.938Z"
       }
     }
   ]

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "0ec1e961-0e69-4ce6-8fa6-89f4509a7c3a",
+      "id": "40090c26-d81e-4cd4-8de4-a58061c66a9a",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -354,7 +354,7 @@
           },
           "message": "Analyzing 'Native_x86_VS2013_ResourceOnly.dll'...",
           "level": "note",
-          "time": "2018-02-02T21:24:14.450Z"
+          "time": "2018-02-02T23:47:05.686Z"
         }
       ],
       "rules": {
@@ -604,8 +604,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:24:14.258Z",
-        "endTime": "2018-02-02T21:24:14.563Z"
+        "startTime": "2018-02-02T23:47:05.513Z",
+        "endTime": "2018-02-02T23:47:05.788Z"
       }
     }
   ]

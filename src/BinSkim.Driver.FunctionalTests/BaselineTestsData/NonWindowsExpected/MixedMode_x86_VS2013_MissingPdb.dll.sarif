@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "d5ac29ef-a2c9-4649-a22d-641258676abd",
+      "id": "31a049df-e914-45e8-bd43-e819de617637",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -348,7 +348,7 @@
           },
           "message": "Analyzing 'MixedMode_x86_VS2013_MissingPdb.dll'...",
           "level": "note",
-          "time": "2018-02-02T21:24:04.435Z"
+          "time": "2018-02-02T23:46:56.867Z"
         }
       ],
       "rules": {
@@ -598,8 +598,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:24:04.265Z",
-        "endTime": "2018-02-02T21:24:05.517Z"
+        "startTime": "2018-02-02T23:46:56.665Z",
+        "endTime": "2018-02-02T23:46:57.545Z"
       }
     }
   ]

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "76cac680-e2a1-498d-bdfa-5c44950db7a3",
+      "id": "d14e171e-5e41-452b-87ac-7f748aa403cb",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -362,7 +362,7 @@
           },
           "message": "Analyzing 'clang.object_file.o'...",
           "level": "note",
-          "time": "2018-02-02T21:25:51.695Z"
+          "time": "2018-02-02T23:48:36.265Z"
         }
       ],
       "rules": {
@@ -612,8 +612,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:25:51.435Z",
-        "endTime": "2018-02-02T21:25:51.887Z"
+        "startTime": "2018-02-02T23:48:36.068Z",
+        "endTime": "2018-02-02T23:48:36.352Z"
       }
     }
   ]

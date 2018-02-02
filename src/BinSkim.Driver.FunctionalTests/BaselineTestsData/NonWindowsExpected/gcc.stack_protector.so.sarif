@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "f59efdb5-18a6-4675-9eca-d732d346a68e",
+      "id": "a4a306bd-15cf-46f7-b210-cdfd355b4962",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -352,7 +352,7 @@
           },
           "message": "Analyzing 'gcc.stack_protector.so'...",
           "level": "note",
-          "time": "2018-02-02T21:25:32.051Z"
+          "time": "2018-02-02T23:48:16.757Z"
         }
       ],
       "rules": {
@@ -602,8 +602,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:25:31.569Z",
-        "endTime": "2018-02-02T21:25:32.203Z"
+        "startTime": "2018-02-02T23:48:16.551Z",
+        "endTime": "2018-02-02T23:48:16.866Z"
       }
     }
   ]

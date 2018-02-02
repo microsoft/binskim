@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "0c659396-042e-4131-941d-999f39df29ca",
+      "id": "d30b3a9d-f304-457b-b4d4-b7e2a15726b0",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -352,7 +352,7 @@
           },
           "message": "Analyzing 'ManagedInteropAssemblyForAtlTestLibrary.dll'...",
           "level": "note",
-          "time": "2018-02-02T21:23:53.794Z"
+          "time": "2018-02-02T23:46:48.986Z"
         }
       ],
       "rules": {
@@ -602,8 +602,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:23:53.211Z",
-        "endTime": "2018-02-02T21:23:55.557Z"
+        "startTime": "2018-02-02T23:46:48.808Z",
+        "endTime": "2018-02-02T23:46:49.846Z"
       }
     }
   ]

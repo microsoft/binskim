@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "74d4d5d4-18d7-4120-a1bc-fb76d01b8c4a",
+      "id": "69d27f3b-2f4b-48d7-bca6-7177f13fda81",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -352,7 +352,7 @@
           },
           "message": "Analyzing 'Managed_x86_VS2013_Wpf.exe'...",
           "level": "note",
-          "time": "2018-02-02T21:24:31.849Z"
+          "time": "2018-02-02T23:47:20.902Z"
         }
       ],
       "rules": {
@@ -602,8 +602,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:24:31.372Z",
-        "endTime": "2018-02-02T21:24:32.724Z"
+        "startTime": "2018-02-02T23:47:20.728Z",
+        "endTime": "2018-02-02T23:47:21.466Z"
       }
     }
   ]

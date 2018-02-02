@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "5adac473-ef2b-4c90-8433-6c56808c2fd7",
+      "id": "413afce2-d4ac-4092-8406-03cc4f2d0aeb",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -350,7 +350,7 @@
           },
           "message": "Analyzing 'Native_x86_VS2013_PdbMissing.exe'...",
           "level": "note",
-          "time": "2018-02-02T21:24:47.584Z"
+          "time": "2018-02-02T23:47:35.429Z"
         }
       ],
       "rules": {
@@ -600,8 +600,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:24:47.371Z",
-        "endTime": "2018-02-02T21:24:47.932Z"
+        "startTime": "2018-02-02T23:47:35.253Z",
+        "endTime": "2018-02-02T23:47:35.584Z"
       }
     }
   ]

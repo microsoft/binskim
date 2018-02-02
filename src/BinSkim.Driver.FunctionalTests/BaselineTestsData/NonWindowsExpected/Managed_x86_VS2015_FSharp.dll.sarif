@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "e70381d2-bdb3-4d45-afa7-8d92c70b3619",
+      "id": "b6839447-73e0-4e42-9792-981ab5d2e060",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -352,7 +352,7 @@
           },
           "message": "Analyzing 'Managed_x86_VS2015_FSharp.dll'...",
           "level": "note",
-          "time": "2018-02-02T21:23:59.251Z"
+          "time": "2018-02-02T23:46:52.711Z"
         }
       ],
       "rules": {
@@ -602,8 +602,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:23:59.023Z",
-        "endTime": "2018-02-02T21:24:00.163Z"
+        "startTime": "2018-02-02T23:46:52.477Z",
+        "endTime": "2018-02-02T23:46:53.729Z"
       }
     }
   ]

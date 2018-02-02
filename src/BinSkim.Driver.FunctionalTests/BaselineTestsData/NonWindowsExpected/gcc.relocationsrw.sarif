@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "7f3bd6ea-7d43-4950-a29e-fd376edfe589",
+      "id": "46b42bdc-510f-45ea-a68c-043379a323db",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -352,7 +352,7 @@
           },
           "message": "Analyzing 'gcc.relocationsrw'...",
           "level": "note",
-          "time": "2018-02-02T21:25:22.391Z"
+          "time": "2018-02-02T23:48:10.837Z"
         }
       ],
       "rules": {
@@ -602,8 +602,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:25:22.116Z",
-        "endTime": "2018-02-02T21:25:22.675Z"
+        "startTime": "2018-02-02T23:48:10.293Z",
+        "endTime": "2018-02-02T23:48:10.988Z"
       }
     }
   ]

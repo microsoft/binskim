@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "f3f69e54-36ac-4180-9efc-36d014eedc16",
+      "id": "9e76244f-1b80-4445-b679-af8727ceea72",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -354,7 +354,7 @@
           },
           "message": "Analyzing 'Native_x64_VS2015_CvtresResourceOnly.dll'...",
           "level": "note",
-          "time": "2018-02-02T21:24:10.524Z"
+          "time": "2018-02-02T23:47:01.715Z"
         }
       ],
       "rules": {
@@ -604,8 +604,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:24:10.133Z",
-        "endTime": "2018-02-02T21:24:10.674Z"
+        "startTime": "2018-02-02T23:47:01.545Z",
+        "endTime": "2018-02-02T23:47:01.849Z"
       }
     }
   ]

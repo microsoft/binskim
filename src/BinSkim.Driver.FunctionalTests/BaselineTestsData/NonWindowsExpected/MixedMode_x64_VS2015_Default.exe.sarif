@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "0f236112-77cd-4eb1-b9bf-1abc757d31d8",
+      "id": "a80659c3-2a31-4212-9914-5d0aa2c4b27a",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -348,7 +348,7 @@
           },
           "message": "Analyzing 'MixedMode_x64_VS2015_Default.exe'...",
           "level": "note",
-          "time": "2018-02-02T21:24:38.953Z"
+          "time": "2018-02-02T23:47:26.591Z"
         }
       ],
       "rules": {
@@ -598,8 +598,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:24:38.630Z",
-        "endTime": "2018-02-02T21:24:40.105Z"
+        "startTime": "2018-02-02T23:47:26.421Z",
+        "endTime": "2018-02-02T23:47:27.201Z"
       }
     }
   ]

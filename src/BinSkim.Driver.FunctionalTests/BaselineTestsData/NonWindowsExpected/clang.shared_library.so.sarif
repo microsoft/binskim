@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "5fe9b5a2-913d-4e65-9333-14ae65a99927",
+      "id": "172afa7e-5cf8-44eb-98ae-020f2859058a",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -354,7 +354,7 @@
           },
           "message": "Analyzing 'clang.shared_library.so'...",
           "level": "note",
-          "time": "2018-02-02T21:25:59.481Z"
+          "time": "2018-02-02T23:48:43.337Z"
         }
       ],
       "rules": {
@@ -604,8 +604,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:25:59.276Z",
-        "endTime": "2018-02-02T21:25:59.581Z"
+        "startTime": "2018-02-02T23:48:43.136Z",
+        "endTime": "2018-02-02T23:48:43.439Z"
       }
     }
   ]

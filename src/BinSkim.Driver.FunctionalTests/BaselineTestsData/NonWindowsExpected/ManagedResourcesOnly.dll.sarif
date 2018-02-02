@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "93865f31-f121-44a2-be6e-d2e0b174e22e",
+      "id": "f795824b-4ba9-49b7-b691-8498d6a89942",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -356,7 +356,7 @@
           },
           "message": "Analyzing 'ManagedResourcesOnly.dll'...",
           "level": "note",
-          "time": "2018-02-02T21:23:57.554Z"
+          "time": "2018-02-02T23:46:51.160Z"
         }
       ],
       "rules": {
@@ -606,8 +606,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:23:57.231Z",
-        "endTime": "2018-02-02T21:23:57.817Z"
+        "startTime": "2018-02-02T23:46:50.981Z",
+        "endTime": "2018-02-02T23:46:51.275Z"
       }
     }
   ]

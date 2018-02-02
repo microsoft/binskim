@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "d6f7789d-9473-4ed2-b2f9-96f6d40d35f9",
+      "id": "3e456416-05ed-4f5b-a3c5-772479607433",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -352,7 +352,7 @@
           },
           "message": "Analyzing 'gcc.unfortified'...",
           "level": "note",
-          "time": "2018-02-02T21:25:34.409Z"
+          "time": "2018-02-02T23:48:18.805Z"
         }
       ],
       "rules": {
@@ -602,8 +602,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:25:33.979Z",
-        "endTime": "2018-02-02T21:25:34.566Z"
+        "startTime": "2018-02-02T23:48:18.338Z",
+        "endTime": "2018-02-02T23:48:19.058Z"
       }
     }
   ]

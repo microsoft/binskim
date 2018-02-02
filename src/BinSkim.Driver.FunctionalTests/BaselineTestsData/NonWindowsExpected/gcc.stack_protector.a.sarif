@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "3e983010-14d6-47c8-9b29-ca9b5050431c",
+      "id": "c37d893a-abd5-4da0-b95e-7b761bb0e25e",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -77,8 +77,8 @@
         }
       ],
       "invocation": {
-        "startTime": "2018-02-02T21:25:29.423Z",
-        "endTime": "2018-02-02T21:25:29.725Z"
+        "startTime": "2018-02-02T23:48:14.831Z",
+        "endTime": "2018-02-02T23:48:15.081Z"
       }
     }
   ]

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "bb9d8756-ccc8-44b4-97d7-3e9500c814c1",
+      "id": "25d9a8f5-0c26-46fe-8c64-dac2f1015eb6",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -350,7 +350,7 @@
           },
           "message": "Analyzing 'Native_x86_VS2013_Default.exe'...",
           "level": "note",
-          "time": "2018-02-02T21:24:45.948Z"
+          "time": "2018-02-02T23:47:33.788Z"
         }
       ],
       "rules": {
@@ -600,8 +600,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T21:24:45.775Z",
-        "endTime": "2018-02-02T21:24:46.105Z"
+        "startTime": "2018-02-02T23:47:33.532Z",
+        "endTime": "2018-02-02T23:47:34.055Z"
       }
     }
   ]
