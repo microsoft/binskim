@@ -25,7 +25,7 @@
             "arguments": [
               "clang.relocationsrw",
               "UseCheckedFunctionsWithGCC",
-              "not compiled with gcc"
+              "not compiled solely with gcc"
             ]
           },
           "locations": [
