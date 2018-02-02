@@ -54,6 +54,7 @@ The **`analyze`** command supports the following additional arguments:
 | **`-p, --plug-in`** | Path to plug-in that will be invoked against all targets in the analysis set. |
 | **`--help`** | Table of argument information. |
 | **`--version`** | BinSkim version details. |
+| **`--rich-return-code`** | Output a more detailed exit code consisting of a series of flags about execution, rather than outputting '0' for success/'1' for failure (see codes below) |
 
 In addition to the named arguments above, BinSkim accepts one or more specifiers to a file, directory, or filter pattern that resolves to one or more binaries to analyze. Arguments can include wild cards, relative paths (in which case the file or directory path is resolved relative to the current working directory), and environment variables.
 
@@ -109,6 +110,36 @@ The `-h` or `--hashes` argument configures BinSkim to emit MD5, SHA1 and SHA256 
 #### -e, --environment
 
 The `-e` or `--environment` argument configures BinSkim to emit machine environment details to the SARIF log file specified via the -o argument. This information includes the user account, machine name, working directory and complete set of environment variables and definitions that were present during the analysis run. This information may be useful in some tool troubleshooting scenarios. WARNING: the information emitted by the -e argument may represent unwanted information disclosure.
+
+#### --rich-return-code
+
+The `--rich-return-code` argument configures BinSkim to exit with a detailed exit code consisting of a series of flags about possible exit states, rather than exiting with a simple `0` for success/`1` for failure.  Note that multiple errors may occur in a single run--for instance, if one or more errors fired (`0x80000000`) one or more warnings fired (`0x4000000`), and we encountered an exception in then Analyze() function for a skimmer (`0x8`), the exit code would be `0xC0000008`.
+
+Non-fatal warnings correspond to behaviors that should be expected during normal successful operation of the tool--for instance, the tool can execute successfully and still find errors.
+
+| Name | Value	| Explanation |
+| -- | ---- | ------------- |
+| **InvalidCommandLineOption** | `0x1` | Invalid command line options were passed to BinSkim. |
+| **ExceptionInSkimmerInitialize** | `0x2` | A Skimmer/Rule was unable to initialize.  That rule will be disabled during this run. Please report this to the BinSkim team. |
+| **ExceptionRaisedInSkimmerCanAnalyze** | `0x4` | A Skimmer/Rule encountered an exception when attempting to determine if it applied to a target file.  That rule will be disabled for the remainder of the run.  Please report this to the BinSkim team. |
+| **ExceptionInSkimmerAnalyze** | `0x8` | An exception was raised when a skimmer attempted to analyze a file.  That rule will be disabled for the remainder of the run.  Please report this to the BinSkim team. |
+| **ExceptionCreatingLogFile** | ` 0x10` | BinSkim was unable to write to the log file you specified on the command line.  The file may already exist, or you may not have permission to write to the folder you specified. |
+| **ExceptionLoadingPdb** | `0x20` | BinSkim encountered an exception loading a Pdb.  This can occur if a PDB is missing, or if it's malformed.  |
+| **ExceptionInEngine** | `0x40` | The BinSkim engine encountered an unexpected exception and execution could not continue.  Please report this to the BinSkim team. |
+| **ExceptionLoadingTargetFile** | `0x80` | BinSkim failed to load/parse one of the input files. |
+| **ExceptionLoadingAnalysisPlugin** | `0x100` | BinSkim was unable to load an analysis plugin specified at the command line.  |
+| **NoRulesLoaded** | `0x200` | No rules were loaded when BinSkim was started.  This likely indicates you are missing the library containing the rules, or we encountered exceptions while trying to instantiate all of the rules. (BinSkim.Rules.dll). |
+| **NoValidAnalysisTargets** | `0x400` | No targets provided at the command line were valid for analysis by BinSkim.  |
+| **RuleMissingRequiredConfiguration** | `0x800` | Configuration for a rule is missing/incorrect.  Check the configuration file you provided. |
+| **TargetParseError** | `0x1000` | (Unused at the moment.) |
+| **MissingFile** | `0x2000` | A file provided on the command line was not present--for instance, the configuration file specified is missing. |
+| **ExceptionAccessingFile** | `0x4000` |  BinSkim was unable to load a file provided on the command line, but it exists--for instance, it could not read the configuration file you specified.  |
+| **ExceptionInstantiatingSkimmers** | `0x8000` | BinSkim encountered an unexpected error instantiating the rules, and could not recover.  Please report this to the BinSkim team. |
+| **RuleCannotRunOnPlatform** | `0x08000000` | A rule could not execute on the current platform/operating system.  Some rules require Windows specific APIs, so if you are executing on non-Windows platforms this exit code will be set. (Non-Fatal) (**Not Yet Used**) |
+| **RuleNotApplicableToTarget** | `0x10000000` | A rule did not apply to a particular target. (Non-Fatal) |
+| **TargetNotValidToAnalyze** | `0x20000000` | A target was not valid to analyze (for instance, if you pass a .txt file to BinSkim). (Non-Fatal) |
+| **OneOrMoreWarningsFired** | `0x40000000` | The tool's results included one or more Warnings. (Non-Fatal) |
+| **OneOrMoreErrorsFired** | `0x80000000` | The tool's results included one or more Errors. (Non-Fatal) |
 
 #### -p, --plug-in
 
