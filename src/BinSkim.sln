@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Sdk", "BinSkim.Sdk\BinSkim.Sdk.csproj", "{81687384-6DA2-4AD5-A889-0727F2EB8C8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryParsers.UnitTests", "BinaryParsers.UnitTests\BinaryParsers.UnitTests.csproj", "{6DA91714-422E-4681-8454-F91BB8EEF3DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.UnitTests.BinaryParsers", "Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj", "{6DA91714-422E-4681-8454-F91BB8EEF3DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
