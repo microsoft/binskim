@@ -18,7 +18,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         // This list comes from listing all of the functions available in glibc (using readelf), 
         // then filtering to ones with a checked variant (_*_chk).
-        // See example in ../C-Test-Files/build_test_binaries.sh script.
         private static string[] fortifiableFunctionNames = new string[]{
             "asprintf",
             "confstr",
@@ -138,13 +137,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 
-            // We check for "any usage of non-gcc" as many binaries are compiled
-            // with clang but link cstdlib compiled with GCC, which leads
-            // to detected compilers = [GCC, Clang]
+            // We check for "any usage of non-gcc" as a default/standard compilation with clang leads to [GCC, Clang]
+            // either because it links with a gcc-compiled object (cstdlib) or the linker also reading as GCC.
             // This has a potential for a False Negative if teams are using GCC and other tools.
             if (target.Compilers.Any(c => c.Compiler != ELFCompilerType.GCC))
             {
-                reasonForNotAnalyzing = "not compiled with gcc";
+                reasonForNotAnalyzing = MetadataConditions.ELFNotBuiltWithGCC;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 

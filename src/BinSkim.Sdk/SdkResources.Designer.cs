@@ -97,6 +97,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to not compiled solely with gcc.
+        /// </summary>
+        internal static string MetadataCondition_ELFNotBuiltWithGCC {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ELFNotBuiltWithGCC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image was compiled with a toolset version ({0}) that is not sufficiently recent ({1} or newer) to provide relevant settings.
         /// </summary>
         internal static string MetadataCondition_ImageCompiledWithOutdatedTools {

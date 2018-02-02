@@ -195,4 +195,7 @@
   <data name="MetadataCondition_ImageIsNotPE" xml:space="preserve">
     <value>image is not a PE binary</value>
   </data>
+  <data name="MetadataCondition_ELFNotBuiltWithGCC" xml:space="preserve">
+    <value>not compiled solely with gcc</value>
+  </data>
 </root>
