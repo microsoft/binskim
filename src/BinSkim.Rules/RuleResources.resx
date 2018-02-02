@@ -400,6 +400,21 @@ Modules triggering this check were:
   <data name="BA3010_Pass" xml:space="preserve">
     <value>The GNU_RELRO segment was present, so {0} is protected.</value>
   </data>
+  <data name="BA3030_Error" xml:space="preserve">
+    <value>No checked functions are present/used when compiling '{0}', and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 ('-O2') is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings.</value>
+  </data>
+  <data name="BA3030_Pass_AllFunctionsChecked" xml:space="preserve">
+    <value>All functions that can be checked in '{0}' are using the checked versions, so this binary is protected from overflows caused by those function's use.</value>
+  </data>
+  <data name="BA3030_Pass_NoCheckableFunctions" xml:space="preserve">
+    <value>No unsafe functions which can be replaced with checked versions are used in '{0}'.</value>
+  </data>
+  <data name="BA3030_Pass_SomeFunctionsChecked" xml:space="preserve">
+    <value>Some checked functions were found in '{0}'; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy.</value>
+  </data>
+  <data name="BA3030_UseCheckedFunctionsWithGCC_Description" xml:space="preserve">
+    <value>GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2').</value>
+  </data>
   <data name="NotApplicable_InvalidMetadata" xml:space="preserve">
     <value>'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.</value>
   </data>

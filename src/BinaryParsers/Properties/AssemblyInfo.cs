@@ -4,7 +4,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("BinSkim Data")]
-[assembly: AssemblyDescription("BinSkim")]
+[assembly: AssemblyTitle("BinSkim Binary Parsers")]
+[assembly: AssemblyDescription("BinSkim's library for parsing various binary formats.")]
 
-[assembly: InternalsVisibleTo("BinaryParsers.UnitTests")]
+[assembly: InternalsVisibleTo("Test.UnitTests.BinaryParsers")]

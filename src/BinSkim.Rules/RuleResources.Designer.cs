@@ -900,6 +900,51 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No checked functions are present/used when compiling &apos;{0}&apos;, and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing &apos;-D_FORTIFY_SOURCE=2&apos; when optimization level 2 (&apos;-O2&apos;) is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings..
+        /// </summary>
+        internal static string BA3030_Error {
+            get {
+                return ResourceManager.GetString("BA3030_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All functions that can be checked in &apos;{0}&apos; are using the checked versions, so this binary is protected from overflows caused by those function&apos;s use..
+        /// </summary>
+        internal static string BA3030_Pass_AllFunctionsChecked {
+            get {
+                return ResourceManager.GetString("BA3030_Pass_AllFunctionsChecked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No unsafe functions which can be replaced with checked versions are used in &apos;{0}&apos;..
+        /// </summary>
+        internal static string BA3030_Pass_NoCheckableFunctions {
+            get {
+                return ResourceManager.GetString("BA3030_Pass_NoCheckableFunctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some checked functions were found in &apos;{0}&apos;; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy..
+        /// </summary>
+        internal static string BA3030_Pass_SomeFunctionsChecked {
+            get {
+                return ResourceManager.GetString("BA3030_Pass_SomeFunctionsChecked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing &apos;-DFortify_Source=2&apos; when optimization level 2 is enabled (&apos;-O2&apos;)..
+        /// </summary>
+        internal static string BA3030_UseCheckedFunctionsWithGCC_Description {
+            get {
+                return ResourceManager.GetString("BA3030_UseCheckedFunctionsWithGCC_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; as the analysis is not relevant based on observed metadata: {2}..
         /// </summary>
         internal static string NotApplicable_InvalidMetadata {
