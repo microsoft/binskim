@@ -34,5 +34,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public const string DoNotMarkWritableSectionsAsExecutableId = "BA2021";
         public const string SignCorrectly = "BA2022";
+
+        // ELF Checks
+        public const string EnablePIEOnExecutables = "BA3001";
+        public const string DoNotMarkStackAsExecutable = "BA3002";
+        public const string EnableStackProtector = "BA3003";
+        public const string EnableReadOnlyRelocations = "BA3010";
     }
 }

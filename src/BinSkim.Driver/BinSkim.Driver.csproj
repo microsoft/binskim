@@ -4,7 +4,8 @@
 
   <PropertyGroup>
     <AssemblyName>BinSkim</AssemblyName>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">$(NetCoreVersion); $(NetRuntimeVersion);</TargetFrameworks>
+    <!--  Condition="'$(OS)'=='Windows_NT'" -->
+    <TargetFrameworks>$(NetCoreVersion); $(NetRuntimeVersion);</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)'!='Windows_NT'">$(NetCoreVersion);</TargetFrameworks>
     <RuntimeIdentifiers>win-x86; win-x64; linux-x64;</RuntimeIdentifiers>
     <OutputType>Exe</OutputType>
@@ -27,8 +28,8 @@
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.6.1" />
     <PackageReference Include="Microsoft.DiaSymReader" Version="1.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Sarif.Driver" Version="1.7.1-beta" />
-    <PackageReference Include="Sarif.Sdk" Version="1.7.1" />
+    <PackageReference Include="Sarif.Driver" Version="1.7.3" />
+    <PackageReference Include="Sarif.Sdk" Version="1.7.3" />
     <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
   </ItemGroup>
   

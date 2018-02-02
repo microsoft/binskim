@@ -13,8 +13,8 @@
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.6.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Sarif.Driver" Version="1.7.1-beta" />
-    <PackageReference Include="Sarif.Sdk" Version="1.7.1" />
+    <PackageReference Include="Sarif.Driver" Version="1.7.3" />
+    <PackageReference Include="Sarif.Sdk" Version="1.7.3" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.console" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />

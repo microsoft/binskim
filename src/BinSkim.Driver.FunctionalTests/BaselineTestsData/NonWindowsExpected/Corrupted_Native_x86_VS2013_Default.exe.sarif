@@ -1,1 +1,85 @@
-{"$schema":"http://json.schemastore.org/sarif-1.0.0","version":"1.0.0","runs":[{"id":"22691344-89fa-4fdf-b03c-db1a387980c5","tool":{"name":"BinSkim","fullName":"BinSkim 1.5.0.0","version":"1.5.0.0","semanticVersion":"1.5.0","sarifLoggerVersion":"1.7.1.0","language":"en-US","properties":{"Comments":"A security and correctness analyzer for portable executable and MSIL formats.","CompanyName":"Microsoft","ProductName":"BinSkim Portable Executable Analyzer"}},"results":[],"configurationNotifications":[{"id":"ERR997.ExceptionLoadingAnalysisTarget","physicalLocation":{"uri":"file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"},"message":"Could not load analysis target 'Corrupted_Native_x86_VS2013_Default.exe'. (Image is either too small or contains an invalid byte offset or count.)","level":"error"}],"invocation":{"startTime":"2018-01-17T00:34:44.418Z","endTime":"2018-01-17T00:34:44.647Z"}}]}
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "id": "dc6e620a-10d3-4f9b-b356-d409b65c08f5",
+      "tool": {
+        "name": "BinSkim",
+        "fullName": "BinSkim 1.5.0.0",
+        "version": "1.5.0.0",
+        "semanticVersion": "1.5.0",
+        "sarifLoggerVersion": "1.7.3.0",
+        "language": "en-US",
+        "properties": {
+          "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
+          "CompanyName": "Microsoft",
+          "ProductName": "BinSkim Portable Executable Analyzer"
+        }
+      },
+      "results": [],
+      "configurationNotifications": [
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotIncorporateVulnerableDependencies' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotShipVulnerableBinaries' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableCriticalCompilerWarnings' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'InitializeStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'SignSecurely' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "ERR997.ExceptionLoadingAnalysisTarget",
+          "physicalLocation": {
+            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
+          },
+          "message": "Could not load analysis target 'Corrupted_Native_x86_VS2013_Default.exe'. (Image is either too small or contains an invalid byte offset or count.)",
+          "level": "error"
+        }
+      ],
+      "invocation": {
+        "startTime": "2018-02-01T18:55:49.146Z",
+        "endTime": "2018-02-01T18:55:49.344Z"
+      }
+    }
+  ]
+}

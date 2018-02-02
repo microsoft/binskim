@@ -774,6 +774,132 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
+        /// </summary>
+        internal static string BA3001_EnablePIEOnExecutables_Description {
+            get {
+                return ResourceManager.GetString("BA3001_EnablePIEOnExecutables_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PIE disabled on executable {0}.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with &apos;-f pie&apos; when using clang/gcc..
+        /// </summary>
+        internal static string BA3001_Error {
+            get {
+                return ResourceManager.GetString("BA3001_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PIE enabled on executable {0}..
+        /// </summary>
+        internal static string BA3001_Pass_Executable {
+            get {
+                return ResourceManager.GetString("BA3001_Pass_Executable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is a shared object library rather than an executable, and is automatically position independent..
+        /// </summary>
+        internal static string BA3001_Pass_Library {
+            get {
+                return ResourceManager.GetString("BA3001_Pass_Library", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with &apos;-z noexecstack&apos; to mark the stack as non-executable..
+        /// </summary>
+        internal static string BA3002_DoNotMarkStackAsExecutable_Description {
+            get {
+                return ResourceManager.GetString("BA3002_DoNotMarkStackAsExecutable_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GNU_STACK segment on {0} is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing &apos;-z noexecstack&apos; to the compiler..
+        /// </summary>
+        internal static string BA3002_Error_NoStackSeg {
+            get {
+                return ResourceManager.GetString("BA3002_Error_NoStackSeg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stack on {0} is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are compiling with &apos;-z noexecstack&apos; to mark the stack as non-executable..
+        /// </summary>
+        internal static string BA3002_Error_StackExec {
+            get {
+                return ResourceManager.GetString("BA3002_Error_StackExec", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GNU_STACK segment marked as non-executable on {0}..
+        /// </summary>
+        internal static string BA3002_Pass {
+            get {
+                return ResourceManager.GetString("BA3002_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use &apos;--fstack-protector-strong&apos; (all buffers of 4 bytes or more) or &apos;--fstack-protector-all&apos; (all functions) to enable this..
+        /// </summary>
+        internal static string BA3003_EnableStackProtector_Description {
+            get {
+                return ResourceManager.GetString("BA3003_EnableStackProtector_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The stack protector was not found in {0}.  This may be because the binary has no stack-based arrays, or because &apos;--stack-protector-strong&apos; was not used..
+        /// </summary>
+        internal static string BA3003_Error {
+            get {
+                return ResourceManager.GetString("BA3003_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stack protector was found on {0}.  However, if you are not compiling with &apos;--stack-protector-strong&apos;, it may provide additional protections..
+        /// </summary>
+        internal static string BA3003_Pass {
+            get {
+                return ResourceManager.GetString("BA3003_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the .data section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
+        /// </summary>
+        internal static string BA3010_EnableReadOnlyRelocations_Description {
+            get {
+                return ResourceManager.GetString("BA3010_EnableReadOnlyRelocations_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The GNU_RELRO segment is missing from this binary, so relocation sections in {0} will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,relro&apos; to address this..
+        /// </summary>
+        internal static string BA3010_Error {
+            get {
+                return ResourceManager.GetString("BA3010_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The GNU_RELRO segment was present, so {0} is protected..
+        /// </summary>
+        internal static string BA3010_Pass {
+            get {
+                return ResourceManager.GetString("BA3010_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; as the analysis is not relevant based on observed metadata: {2}..
         /// </summary>
         internal static string NotApplicable_InvalidMetadata {
@@ -783,7 +909,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;This check is not supported on the {0} platform, as it requires interoperability with a native windows library.&quot;.
+        ///   Looks up a localized string similar to This check is not supported on the {0} platform, as it requires interoperability with a native Windows library..
         /// </summary>
         internal static string NotApplicable_PlatformUnsupported {
             get {

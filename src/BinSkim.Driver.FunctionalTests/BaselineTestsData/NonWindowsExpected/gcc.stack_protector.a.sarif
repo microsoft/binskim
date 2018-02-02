@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "id": "ab35e855-7b20-4de6-9372-d94bef6e9c91",
+      "tool": {
+        "name": "BinSkim",
+        "fullName": "BinSkim 1.5.0.0",
+        "version": "1.5.0.0",
+        "semanticVersion": "1.5.0",
+        "sarifLoggerVersion": "1.7.3.0",
+        "language": "en-US",
+        "properties": {
+          "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
+          "CompanyName": "Microsoft",
+          "ProductName": "BinSkim Portable Executable Analyzer"
+        }
+      },
+      "results": [],
+      "configurationNotifications": [
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotIncorporateVulnerableDependencies' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'DoNotShipVulnerableBinaries' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableCriticalCompilerWarnings' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'InitializeStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'SignSecurely' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN997.InvalidTarget",
+          "physicalLocation": {
+            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/gcc.stack_protector.a"
+          },
+          "message": "'gcc.stack_protector.a' was not analyzed as it does not appear to be a valid file type for analysis.",
+          "level": "note"
+        }
+      ],
+      "invocation": {
+        "startTime": "2018-02-01T18:56:41.697Z",
+        "endTime": "2018-02-01T18:56:41.876Z"
+      }
+    }
+  ]
+}

@@ -5,10 +5,10 @@
     {
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.4.4.0",
-        "version": "1.4.4.0",
-        "semanticVersion": "1.4.4",
-        "sarifLoggerVersion": "1.5.46.0",
+        "fullName": "BinSkim 1.5.0.0",
+        "version": "1.5.0.0",
+        "semanticVersion": "1.5.0",
+        "sarifLoggerVersion": "1.7.2.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -17,6 +17,82 @@
         }
       },
       "results": [
+        {
+          "ruleId": "BA3002",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "ManagedInteropAssemblyForAtlTestLibrary.dll",
+              "DoNotMarkStackAsExecutable",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3001",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "ManagedInteropAssemblyForAtlTestLibrary.dll",
+              "EnablePIEOnExecutables",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "ManagedInteropAssemblyForAtlTestLibrary.dll",
+              "EnableReadOnlyRelocations",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3003",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "ManagedInteropAssemblyForAtlTestLibrary.dll",
+              "EnableStackProtector",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll"
+              }
+            }
+          ]
+        },
         {
           "ruleId": "BA2006",
           "level": "notApplicable",
@@ -151,14 +227,14 @@
           ]
         },
         {
-          "ruleId": "BA2011",
+          "ruleId": "BA2015",
           "level": "notApplicable",
           "formattedRuleMessage": {
             "formatId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
-              "EnableStackProtection",
-              "image is an IL-only managed assembly"
+              "EnableHighEntropyVirtualAddresses",
+              "image is not a 64-bit binary"
             ]
           },
           "locations": [
@@ -170,14 +246,14 @@
           ]
         },
         {
-          "ruleId": "BA2015",
+          "ruleId": "BA2011",
           "level": "notApplicable",
           "formattedRuleMessage": {
             "formatId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
-              "EnableHighEntropyVirtualAddresses",
-              "image is not a 64-bit binary"
+              "EnableStackProtection",
+              "image is an IL-only managed assembly"
             ]
           },
           "locations": [
@@ -278,25 +354,6 @@
           ]
         },
         {
-          "ruleId": "BA2022",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "ManagedInteropAssemblyForAtlTestLibrary.dll",
-              "SignSecurely",
-              "image is not signed "
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll"
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA2009",
           "level": "pass",
           "formattedRuleMessage": {
@@ -346,6 +403,25 @@
               }
             }
           ]
+        },
+        {
+          "ruleId": "BA2022",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "ManagedInteropAssemblyForAtlTestLibrary.dll",
+              "SignSecurely",
+              "image is not signed "
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/ManagedInteropAssemblyForAtlTestLibrary.dll"
+              }
+            }
+          ]
         }
       ],
       "toolNotifications": [
@@ -359,6 +435,60 @@
         }
       ],
       "rules": {
+        "BA3002": {
+          "id": "BA3002",
+          "name": "DoNotMarkStackAsExecutable",
+          "shortDescription": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode.",
+          "fullDescription": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable.",
+          "messageFormats": {
+            "Pass": "GNU_STACK segment marked as non-executable on {0}.",
+            "Error_StackExec": "Stack on {0} is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable.",
+            "Error_NoStackSeg": "GNU_STACK segment on {0} is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing '-z noexecstack' to the compiler.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
+        },
+        "BA3001": {
+          "id": "BA3001",
+          "name": "EnablePIEOnExecutables",
+          "shortDescription": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).",
+          "fullDescription": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.",
+          "messageFormats": {
+            "Pass_Executable": "PIE enabled on executable {0}.",
+            "Pass_Library": "{0} is a shared object library rather than an executable, and is automatically position independent.",
+            "Error": "PIE disabled on executable {0}.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-f pie' when using clang/gcc.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
+        },
+        "BA3010": {
+          "id": "BA3010",
+          "name": "EnableReadOnlyRelocations",
+          "shortDescription": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the .",
+          "fullDescription": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the .data section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this.",
+          "messageFormats": {
+            "Pass": "The GNU_RELRO segment was present, so {0} is protected.",
+            "Error": "The GNU_RELRO segment is missing from this binary, so relocation sections in {0} will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,relro' to address this.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
+        },
+        "BA3003": {
+          "id": "BA3003",
+          "name": "EnableStackProtector",
+          "shortDescription": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected.",
+          "fullDescription": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this.",
+          "messageFormats": {
+            "Pass": "Stack protector was found on {0}.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections.",
+            "Error": "The stack protector was not found in {0}.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
+        },
         "BA2006": {
           "id": "BA2006",
           "name": "BuildWithSecureTools",
@@ -367,7 +497,7 @@
           "messageFormats": {
             "Error_BadModule": "built with {0} compiler version {1} (Front end version {2})",
             "Pass": "All linked modules of '{0}' generated by the Microsoft front-end satisfy configured policy (compiler minimum version {1}).",
-            "Error": "'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}). More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning. Modules built outside of policy: \r\n{2}",
+            "Error": "'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}). More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning. Modules built outside of policy: \n{2}",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
@@ -467,8 +597,8 @@
           "fullDescription": "Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted.",
           "messageFormats": {
             "Pass": "'{0}' was compiled at a secure warning level ({1}) and does not include any modules that disable specific warnings that are required by policy. As a result, it is less likely that memory corruption, information disclosure, double-free and other security-related vulnerabilities exist in code.",
-            "Error_WarningsDisabled": "'{0}' disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation. An example compiler command line triggering this check was: {1}\r\nModules triggering this check were:\r\n{2}",
-            "Error_InsufficientWarningLevel": "'{0}' was compiled at too low a warning level (effective warning level {1} for one or more modules). Warning level 3 enables important static analysis in the compiler to flag bugs that can lead to memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted. An example compiler command line triggering this check: {2}\r\nModules triggering this check: {3}",
+            "Error_WarningsDisabled": "'{0}' disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation. An example compiler command line triggering this check was: {1}\nModules triggering this check were:\n{2}",
+            "Error_InsufficientWarningLevel": "'{0}' was compiled at too low a warning level (effective warning level {1} for one or more modules). Warning level 3 enables important static analysis in the compiler to flag bugs that can lead to memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted. An example compiler command line triggering this check: {2}\nModules triggering this check: {3}",
             "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the compiler warning settings. The language could not be identified for the following modules: {1}",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
@@ -476,23 +606,6 @@
           "helpUri": "https://github.com/microsoft/binskim",
           "properties": {
             "equivalentBinScopeRuleReadableName": "CompilerWarningsCheck"
-          }
-        },
-        "BA2011": {
-          "id": "BA2011",
-          "name": "EnableStackProtection",
-          "shortDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.",
-          "fullDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line.",
-          "messageFormats": {
-            "Pass": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled for all modules, making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities. ",
-            "Error": "'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}",
-            "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "GSCheck"
           }
         },
         "BA2015": {
@@ -511,6 +624,23 @@
           "helpUri": "https://github.com/microsoft/binskim",
           "properties": {
             "equivalentBinScopeRuleReadableName": "HighEntropyVACheck"
+          }
+        },
+        "BA2011": {
+          "id": "BA2011",
+          "name": "EnableStackProtection",
+          "shortDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.",
+          "fullDescription": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line.",
+          "messageFormats": {
+            "Pass": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled for all modules, making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities. ",
+            "Error": "'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}",
+            "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "GSCheck"
           }
         },
         "BA2013": {
@@ -597,21 +727,6 @@
             "equivalentBinScopeRuleReadableName": "BinaryVersionsCheck"
           }
         },
-        "BA2022": {
-          "id": "BA2022",
-          "name": "SignSecurely",
-          "shortDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms.",
-          "fullDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.",
-          "messageFormats": {
-            "Pass": "'{0}' appears to be signed securely by a trusted publisher with no verification or time stamp errors. Revocation checking was performed on the entire certificate chain, excluding the root certificate. The following digitial signature algorithms were detected: {1}",
-            "Error_BadSigningAlgorithm": "'{0}' was signed exclusively with algorithms that WinTrustVerify has flagged as insecure. {1}",
-            "Error_DidNotVerify": "'{0}' signing was flagged as insecure by WinTrustVerify with error code '{1}' ({2})",
-            "Error_WinTrustVerifyApiError": "'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
-        },
         "BA2009": {
           "id": "BA2009",
           "name": "EnableAddressSpaceLayoutRandomization",
@@ -662,6 +777,21 @@
           "properties": {
             "equivalentBinScopeRuleReadableName": "NXCheck"
           }
+        },
+        "BA2022": {
+          "id": "BA2022",
+          "name": "SignSecurely",
+          "shortDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms.",
+          "fullDescription": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.",
+          "messageFormats": {
+            "Pass": "'{0}' appears to be signed with secure cryptographic algorithms. WinTrustVerify successfully validated the binary but did not attempt to validate certificate chaining or that the root certificate is trusted. The following digitial signature algorithms were detected: {1}",
+            "Error_BadSigningAlgorithm": "'{0}' was signed exclusively with algorithms that WinTrustVerify has flagged as insecure. {1}",
+            "Error_DidNotVerify": "'{0}' signing was flagged as insecure by WinTrustVerify with error code '{1}' ({2})",
+            "Error_WinTrustVerifyApiError": "'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
         }
       },
       "files": {

@@ -86,10 +86,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (string target in targets)
             {
-                PE pe = new PE(target);
-                if (!pe.IsPEFile) { continue; }
-
                 context = CreateContext(logger, policy, target);
+
+                if(!context.IsValidAnalysisTarget) { continue; }
 
                 context.Rule = skimmer;
 
@@ -188,10 +187,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     foreach (string target in Directory.GetFiles(testDirectory, "*", SearchOption.AllDirectories))
                     {
-                        if (AnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
-                        {
-                            targets.Add(target);
-                        }
+                        targets.Add(target);
                     }
                 }
             }
@@ -210,9 +206,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (string target in targets)
             {
-                PE pe = new PE(target);
-                if (!pe.IsPEFile) { continue; }
-
                 context = CreateContext(logger, policy, target);
 
                 context.Rule = skimmer;
@@ -259,13 +252,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             foreach (string target in targets)
             {
                 string extension = Path.GetExtension(target);
-                if (!AnalyzeCommand.ValidAnalysisFileExtensions.Contains(extension))
-                {
-                    Assert.True(false, "Test file with unexpected extension encountered: " + target);
-                }
-
+                
                 context = CreateContext(logger, null, target);
-                if (!context.PE.IsPEFile) { continue; }
+                if (!context.IsValidAnalysisTarget) { continue; }
 
                 if (useDefaultPolicy)
                 {
@@ -982,5 +971,78 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             applicableTo.Add(MetadataConditions.ImageIsNotSigned);
             VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableToSpecifiedTarget);
         }
+        
+        [Fact]
+        public void EnablePIEOnExecutables_Pass()
+        {
+            VerifyPass(new EnablePIEOnExecutables());
+        }
+
+        [Fact]
+        public void EnablePIEOnExecutables_Fail()
+        {
+            VerifyFail(new EnablePIEOnExecutables());
+        }
+
+        [Fact]
+        public void EnablePIEOnExecutables_NotApplicable()
+        {
+            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void DoNotMarkStackAsExecutable_Pass()
+        {
+            VerifyPass(new DoNotMarkStackAsExecutable());
+        }
+
+        [Fact]
+        public void DoNotMarkStackAsExecutable_Fail()
+        {
+            VerifyFail(new DoNotMarkStackAsExecutable());
+        }
+
+        [Fact]
+        public void DoNotMarkStackAsExecutable_NotApplicable()
+        {
+            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void EnableReadOnlyRelocations_Pass()
+        {
+            VerifyPass(new EnableReadOnlyRelocations());
+        }
+
+        [Fact]
+        public void EnableReadOnlyRelocations_Fail()
+        {
+            VerifyFail(new EnableReadOnlyRelocations());
+        }
+
+        [Fact]
+        public void EnableReadOnlyRelocations_NotApplicable()
+        {
+            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void EnableStackProtector_Pass()
+        {
+            VerifyPass(new EnableStackProtector());
+        }
+
+        [Fact]
+        public void EnableStackProtector_Fail()
+        {
+            VerifyFail(new EnableStackProtector());
+        }
+
+        [Fact]
+        public void EnableStackProtector_NotApplicable()
+        {
+            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
+        }
+
     }
 }

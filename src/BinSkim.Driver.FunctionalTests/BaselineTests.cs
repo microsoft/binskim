@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public void Driver_BuiltInRuleFunctionalTests()
         {
-            BatchRuleRules(string.Empty, "*.dll", "*.exe");
+            BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*");
         }
 
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
@@ -132,7 +132,6 @@ namespace Microsoft.CodeAnalysis.IL
             actualText = actualText.Replace(repoRoot.Replace(@"\", @"\\"), @"Z:");
             actualText = actualText.Replace(repoRoot.Replace(@"\", @"/"), @"Z:");
             
-    
             // Remove stack traces as they can change due to inlining differences by configuration and runtime.
             actualText = Regex.Replace(actualText, @"\\r\\n   at [^""]+", "");
 

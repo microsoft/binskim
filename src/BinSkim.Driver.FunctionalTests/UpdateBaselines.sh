@@ -27,8 +27,8 @@ RunBaseline ()
         output="$expectedDirectory/$outputFile.sarif"
         outputTemp="$output.temp"
 
-        echo "$TOOLPATH analyze $targetFile -o $outputTemp --verbose --config default"
-        $TOOLPATH analyze $targetFile -o $outputTemp --verbose --config default
+        echo "$TOOLPATH analyze $targetFile -o $outputTemp --pretty-print --verbose --config default"
+        $TOOLPATH analyze $targetFile -o $outputTemp --pretty-print --verbose --config default
 
         # Normalize paths--replace the repository root with '/'
         echo "Normalizing file output"
@@ -45,3 +45,5 @@ RunBaseline ()
 BuildTool
 RunBaseline *.dll
 RunBaseline *.exe
+RunBaseline gcc.*
+RunBaseline clang.*
