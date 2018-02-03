@@ -30,7 +30,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             (new Regex(@"GCC:.+"), ELFCompilerType.GCC),
             (new Regex(@".*clang version.*"), ELFCompilerType.Clang),
             (new Regex(@".*"), ELFCompilerType.Unknown)
-            
         };
         
         // Regex for extracting something that looks like a version number--Goal is to match at least w.x, and up to w.x.y.z

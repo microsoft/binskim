@@ -39,10 +39,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string EnablePIEOnExecutables = "BA3001";
         public const string DoNotMarkStackAsExecutable = "BA3002";
         public const string EnableStackProtector = "BA3003";
-        // Skipping some check namespace (BA3004-3009) for any future stack/ASLR related checks.
+        // Skipping some check namespace (BA3004-3009) for future checks
         public const string EnableReadOnlyRelocations = "BA3010";
         // BA3011 -- saved for a future check.
-        // BA3012-3029 -- saved for future non-compiler specific checks.
+        // BA3012-3029 -- saved for future non-compiler/language specific checks.
         // Compiler/Language specific checks follow.
         public const string UseCheckedFunctionsWithGCC = "BA3030";
     }

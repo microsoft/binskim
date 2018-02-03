@@ -42,6 +42,5 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
         {
             Assert.Throws<ArgumentNullException>(() => ELFUtility.NullTermAsciiToStrings(null));
         }
-
     }
 }

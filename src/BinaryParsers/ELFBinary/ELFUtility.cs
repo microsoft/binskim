@@ -73,7 +73,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 throw new ArgumentNullException(nameof(data));
             } 
-            if(data.Length == 0)
+            if (data.Length == 0)
             {
                 throw new ArgumentException("Data passed to NullTermAsciiToStrings() must be a list of null terminated ascii strings, but the parameter was empty.", nameof(data));    
             }
