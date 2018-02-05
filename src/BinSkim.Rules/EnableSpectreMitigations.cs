@@ -103,7 +103,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             var compilersData = new PropertiesDictionary();
 
-            // Test Data -- x86
+            // Fake Test Data -- x86
             var x86Data = new PropertiesDictionary();
             x86Data.Add("1.0.0.0 - 1.*.*.*", (CompilerMitigations.None).ToString());
             x86Data.Add("2.0.0.0 - 2.5.*.*", (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
