@@ -117,27 +117,27 @@ The `--rich-return-code` argument configures BinSkim to exit with a detailed exi
 
 Non-fatal warnings correspond to behaviors that should be expected during normal successful operation of the tool--for instance, the tool can execute successfully and still find errors.
 
-| Name | Value	| Explanation |
+| Name | Value	| Explanation/Guidance |
 | -- | ---- | ------------- |
-| **InvalidCommandLineOption** | `0x1` | Invalid command line options were passed to BinSkim. |
-| **ExceptionInSkimmerInitialize** | `0x2` | A Skimmer/Rule was unable to initialize.  That rule will be disabled during this run. Please report this to the BinSkim team. |
-| **ExceptionRaisedInSkimmerCanAnalyze** | `0x4` | A Skimmer/Rule encountered an exception when attempting to determine if it applied to a target file.  That rule will be disabled for the remainder of the run.  Please report this to the BinSkim team. |
-| **ExceptionInSkimmerAnalyze** | `0x8` | An exception was raised when a skimmer attempted to analyze a file.  That rule will be disabled for the remainder of the run.  Please report this to the BinSkim team. |
-| **ExceptionCreatingLogFile** | ` 0x10` | BinSkim was unable to write to the log file you specified on the command line.  The file may already exist, or you may not have permission to write to the folder you specified. |
-| **ExceptionLoadingPdb** | `0x20` | BinSkim encountered an exception loading a Pdb.  This can occur if a PDB is missing, or if it's malformed.  |
-| **ExceptionInEngine** | `0x40` | The BinSkim engine encountered an unexpected exception and execution could not continue.  Please report this to the BinSkim team. |
-| **ExceptionLoadingTargetFile** | `0x80` | BinSkim failed to load/parse one of the input files. |
-| **ExceptionLoadingAnalysisPlugin** | `0x100` | BinSkim was unable to load an analysis plugin specified at the command line.  |
-| **NoRulesLoaded** | `0x200` | No rules were loaded when BinSkim was started.  This likely indicates you are missing the library containing the rules, or we encountered exceptions while trying to instantiate all of the rules. (BinSkim.Rules.dll). |
-| **NoValidAnalysisTargets** | `0x400` | No targets provided at the command line were valid for analysis by BinSkim.  |
+| **InvalidCommandLineOption** | `0x1` | Invalid command line options were passed to BinSkim. Please check your command line options.  |
+| **ExceptionInSkimmerInitialize** | `0x2` | A Skimmer/Rule was unable to initialize. That rule will be disabled during this run. Please report this to the BinSkim team. |
+| **ExceptionRaisedInSkimmerCanAnalyze** | `0x4` | A Skimmer/Rule encountered an exception when attempting to determine if it applied to a target file. That rule will be disabled for the remainder of the run. Please report this to the BinSkim team. |
+| **ExceptionInSkimmerAnalyze** | `0x8` | An exception was raised when a skimmer attempted to analyze a file. That rule will be disabled for the remainder of the run. Please report this to the BinSkim team. |
+| **ExceptionCreatingLogFile** | ` 0x10` | BinSkim was unable to write to the log file you specified on the command line. The file may already exist, or you may not have permission to write to the folder you specified. |
+| **ExceptionLoadingPdb** | `0x20` | BinSkim encountered an exception loading a Pdb. This can occur if a PDB is missing, or if it's malformed. Ensure that valid .PDB files are present for each PE binary you wish to scan--BinSkim cannot evaluate some of its rules if they are missing. |
+| **ExceptionInEngine** | `0x40` | The BinSkim engine encountered an unexpected exception and execution could not continue. Please report this to the BinSkim team. |
+| **ExceptionLoadingTargetFile** | `0x80` | BinSkim failed to load/parse one of the input files. Ensure your input files are valid binaries that BinSkim can parse, and reach out to the BinSkim team if they are.  |
+| **ExceptionLoadingAnalysisPlugin** | `0x100` | (**Not Currently Used**) |
+| **NoRulesLoaded** | `0x200` | No rules were loaded when BinSkim was started. This likely indicates you are missing the library containing the rules, or we encountered exceptions while trying to instantiate all of the rules. (BinSkim.Rules.dll). Please check your BinSkim installation, and if you're certain it's correct, reach out to the BinSkim team. |
+| **NoValidAnalysisTargets** | `0x400` | No targets provided at the command line were valid for analysis by BinSkim.  Check that the path you provided to BinSkim exists and contains valid binaries that BinSkim can analyze. |
 | **RuleMissingRequiredConfiguration** | `0x800` | Configuration for a rule is missing/incorrect.  Check the configuration file you provided. |
-| **TargetParseError** | `0x1000` | (Unused at the moment.) |
-| **MissingFile** | `0x2000` | A file provided on the command line was not present--for instance, the configuration file specified is missing. |
-| **ExceptionAccessingFile** | `0x4000` |  BinSkim was unable to load a file provided on the command line, but it exists--for instance, it could not read the configuration file you specified.  |
+| **TargetParseError** | `0x1000` | (**Not Currently Used**) |
+| **MissingFile** | `0x2000` | A file provided on the command line was not present--for instance, the configuration file specified is missing.  Check that any configuration or plugin files you provided are present. |
+| **ExceptionAccessingFile** | `0x4000` |  BinSkim was unable to load a file provided on the command line, but it exists--for instance, it could not read the configuration file you specified.  Check the permissions to any configuration or plugin files you provided. |
 | **ExceptionInstantiatingSkimmers** | `0x8000` | BinSkim encountered an unexpected error instantiating the rules, and could not recover.  Please report this to the BinSkim team. |
-| **RuleCannotRunOnPlatform** | `0x08000000` | A rule could not execute on the current platform/operating system.  Some rules require Windows specific APIs, so if you are executing on non-Windows platforms this exit code will be set. (Non-Fatal) (**Not Yet Used**) |
+| **RuleCannotRunOnPlatform** | `0x08000000` | A rule could not execute on the current platform/operating system.  Some rules require Windows specific APIs, so if you are executing on non-Windows platforms this is expected. (Non-Fatal) (**Not Yet Used**) |
 | **RuleNotApplicableToTarget** | `0x10000000` | A rule did not apply to a particular target. (Non-Fatal) |
-| **TargetNotValidToAnalyze** | `0x20000000` | A target was not valid to analyze (for instance, if you pass a .txt file to BinSkim). (Non-Fatal) |
+| **TargetNotValidToAnalyze** | `0x20000000` | A target passed to BinSkim was not valid to analyze (for instance, if you pass a .txt file to BinSkim). (Non-Fatal) |
 | **OneOrMoreWarningsFired** | `0x40000000` | The tool's results included one or more Warnings. (Non-Fatal) |
 | **OneOrMoreErrorsFired** | `0x80000000` | The tool's results included one or more Errors. (Non-Fatal) |
 
