@@ -45,6 +45,9 @@
     <Folder Include="FunctionalTestsData\EnableReadOnlyRelocations\Pass\" />
     <Folder Include="FunctionalTestsData\EnableStackProtector\Fail\" />
     <Folder Include="FunctionalTestsData\EnableStackProtector\Pass\" />
+    <Folder Include="FunctionalTestsData\UseCheckedFunctionsWithGCC\Fail\" />
+    <Folder Include="FunctionalTestsData\UseCheckedFunctionsWithGCC\NotApplicable\" />
+    <Folder Include="FunctionalTestsData\UseCheckedFunctionsWithGCC\Pass\" />
   </ItemGroup>
 
 </Project>

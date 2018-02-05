@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2020
@@ -29,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Sdk", "BinSkim.Sdk\BinSkim.Sdk.csproj", "{81687384-6DA2-4AD5-A889-0727F2EB8C8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.UnitTests.BinaryParsers", "Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj", "{6DA91714-422E-4681-8454-F91BB8EEF3DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -112,6 +113,18 @@ Global
 		{81687384-6DA2-4AD5-A889-0727F2EB8C8C}.Release|x64.Build.0 = Release|Any CPU
 		{81687384-6DA2-4AD5-A889-0727F2EB8C8C}.Release|x86.ActiveCfg = Release|Any CPU
 		{81687384-6DA2-4AD5-A889-0727F2EB8C8C}.Release|x86.Build.0 = Release|Any CPU
+		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Debug|AnyCPU.ActiveCfg = Debug|Any CPU
+		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Debug|AnyCPU.Build.0 = Debug|Any CPU
+		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Debug|x64.Build.0 = Debug|Any CPU
+		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Debug|x86.Build.0 = Debug|Any CPU
+		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Release|AnyCPU.ActiveCfg = Release|Any CPU
+		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Release|AnyCPU.Build.0 = Release|Any CPU
+		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Release|x64.ActiveCfg = Release|Any CPU
+		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Release|x64.Build.0 = Release|Any CPU
+		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Release|x86.ActiveCfg = Release|Any CPU
+		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

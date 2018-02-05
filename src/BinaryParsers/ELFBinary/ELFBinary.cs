@@ -16,6 +16,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             try
             {
                 ELF = ELFReader.Load(Path.GetFullPath(uri.LocalPath));
+                Compilers = ELFUtility.GetELFCompilers(ELF);
                 Valid = true;
             }
             // At some point, we may want to better enumerate expected vs. unexpected exceptions.
@@ -39,5 +40,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         public IELF ELF { get; private set; }
+
+        public ELFCompiler[] Compilers { get; private set; }
     }
 }

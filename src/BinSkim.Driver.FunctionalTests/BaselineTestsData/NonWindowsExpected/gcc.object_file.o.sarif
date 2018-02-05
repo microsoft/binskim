@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "ca068123-26aa-4932-887d-5c814a94f0c8",
+      "id": "da6361f5-22c2-46a7-98b9-55e11c5979ea",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -83,6 +83,25 @@
             "arguments": [
               "gcc.object_file.o",
               "EnableStackProtector",
+              "ELF is not a shared object or executable"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/gcc.object_file.o"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "gcc.object_file.o",
+              "UseCheckedFunctionsWithGCC",
               "ELF is not a shared object or executable"
             ]
           },
@@ -343,7 +362,7 @@
           },
           "message": "Analyzing 'gcc.object_file.o'...",
           "level": "note",
-          "time": "2018-02-01T18:56:32.939Z"
+          "time": "2018-02-02T23:48:05.145Z"
         }
       ],
       "rules": {
@@ -396,6 +415,21 @@
           "messageFormats": {
             "Pass": "Stack protector was found on {0}.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections.",
             "Error": "The stack protector was not found in {0}.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
+        },
+        "BA3030": {
+          "id": "BA3030",
+          "name": "UseCheckedFunctionsWithGCC",
+          "shortDescription": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string.",
+          "fullDescription": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2').",
+          "messageFormats": {
+            "Pass_AllFunctionsChecked": "All functions that can be checked in '{0}' are using the checked versions, so this binary is protected from overflows caused by those function's use.",
+            "Pass_SomeFunctionsChecked": "Some checked functions were found in '{0}'; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy.",
+            "Pass_NoCheckableFunctions": "No unsafe functions which can be replaced with checked versions are used in '{0}'.",
+            "Error": "No checked functions are present/used when compiling '{0}', and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 ('-O2') is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings.",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
@@ -578,8 +612,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-01T18:56:32.701Z",
-        "endTime": "2018-02-01T18:56:33.030Z"
+        "startTime": "2018-02-02T23:48:04.779Z",
+        "endTime": "2018-02-02T23:48:05.325Z"
       }
     }
   ]

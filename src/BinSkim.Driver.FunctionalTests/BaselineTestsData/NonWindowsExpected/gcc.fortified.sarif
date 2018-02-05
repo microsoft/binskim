@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "83fe36be-3801-422a-a2e5-d60708bedb98",
+      "id": "5fb95fdd-7ee9-4363-b9a0-2f28042287d4",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -275,6 +275,23 @@
               }
             }
           ]
+        },
+        {
+          "ruleId": "BA3030",
+          "level": "pass",
+          "formattedRuleMessage": {
+            "formatId": "Pass_AllFunctionsChecked",
+            "arguments": [
+              "gcc.fortified"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/gcc.fortified"
+              }
+            }
+          ]
         }
       ],
       "configurationNotifications": [
@@ -335,7 +352,7 @@
           },
           "message": "Analyzing 'gcc.fortified'...",
           "level": "note",
-          "time": "2018-02-01T18:56:20.488Z"
+          "time": "2018-02-02T23:47:50.098Z"
         }
       ],
       "rules": {
@@ -562,6 +579,21 @@
           },
           "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
+        },
+        "BA3030": {
+          "id": "BA3030",
+          "name": "UseCheckedFunctionsWithGCC",
+          "shortDescription": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string.",
+          "fullDescription": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2').",
+          "messageFormats": {
+            "Pass_AllFunctionsChecked": "All functions that can be checked in '{0}' are using the checked versions, so this binary is protected from overflows caused by those function's use.",
+            "Pass_SomeFunctionsChecked": "Some checked functions were found in '{0}'; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy.",
+            "Pass_NoCheckableFunctions": "No unsafe functions which can be replaced with checked versions are used in '{0}'.",
+            "Error": "No checked functions are present/used when compiling '{0}', and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 ('-O2') is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
         }
       },
       "files": {
@@ -570,8 +602,8 @@
         }
       },
       "invocation": {
-        "startTime": "2018-02-01T18:56:20.282Z",
-        "endTime": "2018-02-01T18:56:20.578Z"
+        "startTime": "2018-02-02T23:47:49.720Z",
+        "endTime": "2018-02-02T23:47:50.240Z"
       }
     }
   ]
