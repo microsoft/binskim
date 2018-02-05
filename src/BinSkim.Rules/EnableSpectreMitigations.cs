@@ -14,9 +14,18 @@ using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
+using System.Runtime;
+using System.Linq;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
+    internal struct CompilerVersionToMitigation
+    {
+        public Version Start;
+        public Version End;
+        public CompilerMitigations MitigationState;
+    }
+
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
     public class EnableSpectreMitigations : BinarySkimmerBase, IOptionsProvider
     {
@@ -56,6 +65,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Reporting,
                 AllowedLibraries,
                 MitigatedCompilers,
+                NewMitigatedCompilers,
             }.ToImmutableArray();
         }
 
@@ -84,6 +94,80 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<ReportingOptions>(
                 AnalyzerName, nameof(Reporting), defaultValue: () => { return CodeAnalysis.Sarif.ReportingOptions.Default; });
 
+        internal static PerLanguageOption<PropertiesDictionary> NewMitigatedCompilers { get; } =
+            new PerLanguageOption<PropertiesDictionary>(AnalyzerName, nameof(NewMitigatedCompilers), defaultValue: () => { return NewBuildMitigatedCompilersData(); });
+
+        private static Dictionary<ExtendedMachine, CompilerVersionToMitigation[]> compilerData = null;
+        
+        private static PropertiesDictionary NewBuildMitigatedCompilersData()
+        {
+            var compilersData = new PropertiesDictionary();
+
+            // Test Data -- x86
+            var x86Data = new PropertiesDictionary();
+            x86Data.Add("1.0.0.0 - 1.*.*.*", (CompilerMitigations.None).ToString());
+            x86Data.Add("2.0.0.0 - 2.5.*.*", (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+
+            compilersData.Add(ExtendedMachine.I386.ToString(), x86Data);
+
+            // test data -- amd64
+            compilersData.Add(ExtendedMachine.Amd64.ToString(), new PropertiesDictionary());
+            
+            return compilersData;
+        }
+
+
+        // TODO cleanup
+        private static Dictionary<ExtendedMachine, CompilerVersionToMitigation[]> GetNewCompilerData(PropertiesDictionary policy)
+        {
+            if(compilerData == null)
+            {
+                compilerData = new Dictionary<ExtendedMachine, CompilerVersionToMitigation[]>();
+                PropertiesDictionary configData = policy.GetProperty(NewMitigatedCompilers);
+                foreach(var key in configData.Keys)
+                {
+                    ExtendedMachine machine = (ExtendedMachine)Enum.Parse(typeof(ExtendedMachine), key); // Neaten this up.
+                    compilerData.Add(machine, CreateSortedVersionDictionary((PropertiesDictionary)configData[key]));
+                }
+            }
+            return compilerData;
+        }
+
+        // TODO -- Clean up.
+        private static CompilerVersionToMitigation[] CreateSortedVersionDictionary(PropertiesDictionary versionList)
+        {
+            List<CompilerVersionToMitigation> mitigatedCompilerList = new List<CompilerVersionToMitigation>();
+            foreach(var key in versionList.Keys)
+            {
+                string[] versions = key.Split('-').Select((s) => { return s.Replace("*", int.MaxValue.ToString()); } ).ToArray();
+                var mitigationData = new CompilerVersionToMitigation()
+                {
+                    Start = new Version(versions[0]),
+                    End = new Version(versions[1]),
+                    MitigationState = (CompilerMitigations)Enum.Parse(typeof(CompilerMitigations), versionList[key].ToString()),
+                };
+
+                // Validate--we should not go from a larger end to a smaller start.
+                if (mitigationData.End < mitigationData.Start) throw new InvalidOperationException();
+
+                mitigatedCompilerList.Add(mitigationData);
+            }
+            mitigatedCompilerList.Sort((a, b) => a.Start.CompareTo(b.Start));
+            // Validate--we should not have overlapping ranges. (Move to another function?)
+            if (mitigatedCompilerList.Count > 1)
+            {
+                for (int i = 1; i < mitigatedCompilerList.Count; i++)
+                {
+                    if(mitigatedCompilerList[i-1].End > mitigatedCompilerList[i].Start)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                }
+            }
+
+            return mitigatedCompilerList.ToArray();
+        }
+
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
@@ -107,6 +191,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // The current Machine enum does not have support for Arm64, so translate to our Machine enum
             ExtendedMachine machineType = (ExtendedMachine)reflectionMachineType;
+
+            var dict = GetNewCompilerData(context.Policy);
 
             if (!machineType.CanBeMitigated())
             {
