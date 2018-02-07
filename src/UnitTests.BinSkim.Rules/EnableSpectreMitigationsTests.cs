@@ -29,56 +29,157 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void GetMostCurrentCompilerVersionWithSpectreMitigations()
         {
-            Version result;
-
             var context = new BinaryAnalyzerContext();
             context.Policy = new PropertiesDictionary();
 
+            AddFakeConfigTestData(context.Policy);
+            Version result;
 
-            Version latestVersion = new Version(19, 13, 26029, 0);
+            Version latestVersion = new Version(1, 0, 100, 5);
 
             result = EnableSpectreMitigations.GetMostCurrentCompilerVersionsWithSpectreMitigations(
                         context, ExtendedMachine.I386);
 
             result.Should().Equals(latestVersion);
+        }
 
-            // Version should now be cached in context object
-            PropertiesDictionary properties;
+        [Fact]
+        public void LoadCompilerDataFromConfig_ParsesAndCachesAsExpected()
+        {
+            var context = new BinaryAnalyzerContext();
+            context.Policy = new PropertiesDictionary();
 
-            var newVersion = new Version(20, 1, 1, 1);
-            string versionKey = EnableSpectreMitigations.BuildPropertiesKeyFromVersion(newVersion);
+            AddFakeConfigTestData(context.Policy);
 
-            properties = context.Policy.GetProperty(EnableSpectreMitigations.MitigatedCompilers);
+            Dictionary<MachineFamily, CompilerVersionToMitigation[]> result = EnableSpectreMitigations.LoadCompilerDataFromConfig(context.Policy);
 
-            // Create new data rooted by new Major.Minor versioning vector
-            properties[versionKey] = new PropertiesDictionary();
-            properties = (PropertiesDictionary)properties[versionKey];
+            ValidateResultFromFakeTestData(result[MachineFamily.X86]);
+            result.Should().ContainKeys(new MachineFamily[] { MachineFamily.X86, MachineFamily.Arm });
+        }
 
-            // Insert mitigation data for x86 family
-            properties["X86"] = new PropertiesDictionary();
-            properties = (PropertiesDictionary)properties["X86"];
+        [Fact]
+        public void CreateSortedVersionDictionary_ParsesAsExpected()
+        {
+            var versionList = GenerateMachineFamilyData();
 
-            // We only get minimum D2GuardSpecLoadAvailableVersion data
-            // As this value represents the minimal supported version for
-            // the most recent compiler toolchain. This logic will need to
-            // be adjusted once /qSpectre support is broadly available.
-            properties[EnableSpectreMitigations.MinimumD2GuardSpecLoadAvailableVersion.Name] = latestVersion;
+            CompilerVersionToMitigation[] result = EnableSpectreMitigations.CreateSortedVersionDictionary(versionList);
 
-            // Verify that insertion of more recent compiler doesn't impact helper,
-            // because we should be retrieving the cached data.
-            result = EnableSpectreMitigations.GetMostCurrentCompilerVersionsWithSpectreMitigations(
-                        context, ExtendedMachine.I386);
+            ValidateResultFromFakeTestData(result);
+        }
 
-            result.Should().Equals(latestVersion);
+        private void ValidateResultFromFakeTestData(CompilerVersionToMitigation[] results)
+        {
+            results.ShouldAllBeEquivalentTo(testData, "Loaded from test data.");
+        }
 
-            // Now clear the cached value and verify the more recent compiler 
-            // version is returned.
-            context.Policy.Remove(EnableSpectreMitigations.MostCurrentSpectreSupportingCompilerVersion.Name);
+        [Theory]
+        [InlineData("1.0.0.0 - 1.*.*.*", "1.11.0.0 - 2.5.0.0")]
+        [InlineData("1.0.0.0 - 1.8.0.0", "0.9.0.0 - 1.9.0.0")]
+        [InlineData("1.0.0.0 - 1.8.0.0", "1.1.0.0 - 1.7.0.0")]
+        public void CreateSortedVersionDictionary_OverlappingVersionRange_ThrowsException(string firstRange, string secondRange)
+        {
+            var versionList = new PropertiesDictionary();
 
-            result = EnableSpectreMitigations.GetMostCurrentCompilerVersionsWithSpectreMitigations(
-                        context, ExtendedMachine.I386);
+            versionList.Add(firstRange, (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+            versionList.Add(secondRange, (CompilerMitigations.QSpectreAvailable).ToString());
 
-            result.Should().Equals(newVersion);
+            Assert.Throws<InvalidOperationException>(() => EnableSpectreMitigations.CreateSortedVersionDictionary(versionList));
+        }
+
+        [Fact]
+        public void CreateSortedVersionDictionary_BadVersionRange_ThrowsException()
+        {
+            var versionList = new PropertiesDictionary();
+
+            versionList.Add("8.0.0.0 - 1.0.0.0", (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+
+            Assert.Throws<InvalidOperationException>(() => EnableSpectreMitigations.CreateSortedVersionDictionary(versionList));
+        }
+
+        [Theory]
+        [InlineData("0.0.0.1", ExtendedMachine.I386, CompilerMitigations.None)]
+        [InlineData("0.0.0.1", ExtendedMachine.Amd64, CompilerMitigations.None)]
+        [InlineData("2.0.0.500", ExtendedMachine.Arm, (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable))]
+        [InlineData("2.0.1.0", ExtendedMachine.Arm64, (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable))]
+        [InlineData("1.11.250.502", ExtendedMachine.I386, (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.D2GuardSpecLoadAvailable))]
+        [InlineData("2.500.0.0", ExtendedMachine.I386, (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable))]
+        [InlineData("100.0.0.0", ExtendedMachine.I386, CompilerMitigations.None)]
+        public void GetCompilerData_VersionPresent_WorksAsExpected(string versionStr, ExtendedMachine machine, CompilerMitigations expectedMitgations)
+        {
+            var context = new BinaryAnalyzerContext();
+            context.Policy = new PropertiesDictionary();
+
+            AddFakeConfigTestData(context.Policy);
+
+            CompilerMitigations actualMitigations = EnableSpectreMitigations.GetAvailableMitigations(context, machine, new Version(versionStr));
+            Assert.Equal(expectedMitgations, actualMitigations);
+        }
+
+        private void AddFakeConfigTestData(PropertiesDictionary policy)
+        {
+            PropertiesDictionary BA2024Config = new PropertiesDictionary();
+            PropertiesDictionary mitigatedCompilers = new PropertiesDictionary();
+            PropertiesDictionary fakeX86Data = GenerateMachineFamilyData();
+
+            PropertiesDictionary fakeArmData = new PropertiesDictionary();
+            fakeArmData.Add("1.0.0.0 - 1.8.*.*", (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString());
+            fakeArmData.Add("2.0.0.0 - 2.0.0.*", (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable).ToString());
+            fakeArmData.Add("2.0.1.0 - 2.*.*.*", (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable).ToString());
+
+            mitigatedCompilers.Add(MachineFamily.X86.ToString(), fakeX86Data);
+            mitigatedCompilers.Add(MachineFamily.Arm.ToString(), fakeArmData);
+
+
+            BA2024Config.Add("MitigatedCompilers", mitigatedCompilers);
+            policy.Add("BA2024.EnableSpectreMitigations.Options", BA2024Config);
+        }
+
+        private PropertiesDictionary GenerateMachineFamilyData()
+        {
+            PropertiesDictionary data = new PropertiesDictionary();
+
+            foreach(var entry in testData)
+            {
+                AddCompilerMitigationDataToDictionary(data, entry);
+            }
+
+            return data;
+        }
+
+        private CompilerVersionToMitigation[] testData = new CompilerVersionToMitigation[]
+        {
+            new CompilerVersionToMitigation()
+            {
+                Start = new Version(1, 0, 100, 5),
+                End = new Version(1, 10, int.MaxValue, int.MaxValue),
+                MitigationState = CompilerMitigations.QSpectreAvailable,
+            },
+            new CompilerVersionToMitigation()
+            {
+                Start = new Version(1, 11, 250, 0),
+                End = new Version(1, 11, 250, 500),
+                MitigationState = CompilerMitigations.QSpectreAvailable,
+            },
+            new CompilerVersionToMitigation()
+            {
+                Start = new Version(1, 11, 250, 501),
+                End = new Version(1, 11, 250, int.MaxValue),
+                MitigationState = CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.D2GuardSpecLoadAvailable,
+            },
+            new CompilerVersionToMitigation()
+            {
+                Start = new Version(2, 0, 0, 0),
+                End = new Version(2, int.MaxValue, int.MaxValue, int.MaxValue),
+                MitigationState = (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable),
+            }
+        };
+        
+        private void AddCompilerMitigationDataToDictionary(PropertiesDictionary dictionary, CompilerVersionToMitigation data)
+        {
+            string start = data.Start.ToString().Replace(int.MaxValue.ToString(), "*");
+            string end = data.End.ToString().Replace(int.MaxValue.ToString(), "*");
+            string key = start + " - " + end;
+            dictionary.Add(key, data.MitigationState.ToString());
         }
     }
 }
