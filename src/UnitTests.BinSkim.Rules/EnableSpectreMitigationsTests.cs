@@ -3,13 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
-
 using Xunit;
 using Xunit.Abstractions;
 using Microsoft.CodeAnalysis.Sarif;

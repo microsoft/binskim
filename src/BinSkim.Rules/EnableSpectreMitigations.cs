@@ -401,7 +401,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// Get the lowest compiler version that supports Spectre mitigations.
         /// 
-        ///  Potential TODO: Update QSpectre minimum version once we have the official build. 
+        /// Potential TODO during Update QSpectre minimum version once we have the official build. 
         ///       https://github.com/Microsoft/binskim/issues/134
         /// Should we instead be getting the minimum for a particular Visual Studio release?
         /// E.x. minimum compiler version for VS2015 if they are using a compiler below 2015.3 once those are released
@@ -556,8 +556,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             return mitigatedCompilerList.ToArray();
         }
-
-        // TODO--Improve error reporting.
+        
         private static void ThrowIfMitigationDataIsInvalid(List<CompilerVersionToMitigation> compilerVersionToMitigation)
         {
             for (int i = 0; i < compilerVersionToMitigation.Count; i++)
