@@ -141,6 +141,15 @@ Non-fatal warnings correspond to behaviors that should be expected during normal
 | **OneOrMoreWarningsFired** | `0x40000000` | The tool's results included one or more Warnings. (Non-Fatal) |
 | **OneOrMoreErrorsFired** | `0x80000000` | The tool's results included one or more Errors. (Non-Fatal) |
 
+This leads to these masks being helpful when determining what to do with a rich exit code:
+
+| Name | Value	| Explanation/Guidance |
+| -- | ---- | ------------- |
+| **NonFatalExitCode** | 0xF8000000 | These are the currently explicitly reserved non-fatal exit codes--they will occur during normal execution of the tool.  They may be helpful for checking if the tool found any issues or similar during its execution. |
+| **FatalExitCode** | 0x0000FFFF | These are all the explicitly reserved fatal exit codes--they indicate something unexpected went wrong during execution, or that a target that we expected to be able to analyze could not be fully analyzed (for example, the .PDB file was missing, or the file was incorrectly formatted).  This may be helpful for checking during any tool run. |
+
+Note--In the future we may add add new fatal or non-fatal exit codes to this command.  They will be documented here and in the release documentation.
+
 #### -p, --plug-in
 
 The `-p` or `--plug-in` argument is used to provide a path to a BinSkim plug-in that will be loaded and invoked at analysis time, in addition to the built-in checks. This argument can be specified multiple times on the command-line.
