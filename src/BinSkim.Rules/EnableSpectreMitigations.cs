@@ -14,9 +14,18 @@ using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
+using System.Runtime;
+using System.Linq;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
+    internal struct CompilerVersionToMitigation
+    {
+        public Version Start;
+        public Version End;
+        public CompilerMitigations MitigationState;
+    }
+
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
     public class EnableSpectreMitigations : BinarySkimmerBase, IOptionsProvider
     {
@@ -70,12 +79,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // /d2guardspecload support
         private const string VS2017_15_5 = "VS2017_15.5";
         private const string VS2017_15_6_PREV1 = "VS2017_15.6_PREVIEW1";
-
-
-        internal static PerLanguageOption<PropertiesDictionary> MitigatedCompilers { get; } =
-            new PerLanguageOption<PropertiesDictionary>(
-                AnalyzerName, nameof(MitigatedCompilers), defaultValue: () => { return BuildMitigatedCompilersData(); });
-
+        
         internal static PerLanguageOption<StringToVersionMap> AllowedLibraries { get; } =
             new PerLanguageOption<StringToVersionMap>(
                 AnalyzerName, nameof(AllowedLibraries), defaultValue: () => { return BuildAllowedLibraries(); });
@@ -84,6 +88,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<ReportingOptions>(
                 AnalyzerName, nameof(Reporting), defaultValue: () => { return CodeAnalysis.Sarif.ReportingOptions.Default; });
 
+        internal static PerLanguageOption<PropertiesDictionary> MitigatedCompilers { get; } =
+            new PerLanguageOption<PropertiesDictionary>(AnalyzerName, nameof(MitigatedCompilers), defaultValue: () => { return BuildMitigatedCompilersData(); });
+
+        private static Dictionary<MachineFamily, CompilerVersionToMitigation[]> compilerData = null;
+        
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = context.PE;
@@ -107,7 +116,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // The current Machine enum does not have support for Arm64, so translate to our Machine enum
             ExtendedMachine machineType = (ExtendedMachine)reflectionMachineType;
-
+            
             if (!machineType.CanBeMitigated())
             {
                 // QUESTION:
@@ -223,12 +232,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // Get the appropriate compiler version against which to check this compiland.
                 // check that we are greater than or equal to the first fully supported release: 15.6 first
                 Version omVersion = omDetails.CompilerVersion;
-
-                MitigatedVersion compilerVersion = null;
-
-                if (!TryGetMitigatedVersion(context, machineType, omVersion, out compilerVersion) || 
-                    (!compilerVersion.QSpectreMitigationAvailable(omVersion) &&
-                     !compilerVersion.D2GuardSpecLoadAvailable(omVersion)))
+                
+                CompilerMitigations availableMitigations = GetAvailableMitigations(context, machineType, omVersion);
+                
+                if (availableMitigations == CompilerMitigations.None)
                 { 
                     // Built with a compiler version {0} that does not support any Spectre
                     // mitigations. We do not report here. BA2006 will fire instead.
@@ -246,12 +253,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     SwitchState QSpectreState = SwitchState.SwitchNotFound;
                     SwitchState d2guardspecloadState = SwitchState.SwitchNotFound;
 
-                    if (compilerVersion.QSpectreMitigationAvailable(omVersion))
+                    if (availableMitigations.HasFlag(CompilerMitigations.QSpectreAvailable))
                     {
                         QSpectreState = omDetails.GetSwitchState(mitigationSwitches[0] /*"/Qspectre"*/ , OrderOfPrecedence.LastWins);
                     }
 
-                    if (compilerVersion.D2GuardSpecLoadAvailable(omVersion))
+                    if (availableMitigations.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable))
                     {
                         // /d2xxxx options show up in the PDB without the d2 string
                         // So search for just /guardspecload
@@ -276,7 +283,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
-                if (!compilerVersion.NonoptimizedCodeIsMitigated)
+                if (!availableMitigations.HasFlag(CompilerMitigations.NonoptimizedCodeMitigated))
                 {
                     string[] OdSwitches = { "/Od" };
                     // These switches override /Od - there is no one place to find this information on msdn at this time.
@@ -365,76 +372,64 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.TargetUri.GetFileName()));
         }
 
-        internal static Version GetMostCurrentCompilerVersionsWithSpectreMitigations(
-            BinaryAnalyzerContext context, ExtendedMachine extendedMachine)
+        /// <summary>
+        /// Get the Spectre compiler compiler mitigations available for a particular compiler version and machine type.
+        /// </summary>
+        internal static CompilerMitigations GetAvailableMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)
         {
-            Version result = context.Policy.GetProperty(MostCurrentSpectreSupportingCompilerVersion);
+            var compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
+            var machineFamily = machine.GetMachineFamily();
 
-            if (result != new Version(0, 0))
+            if (!compilerMitigationData.ContainsKey(machineFamily))
             {
-                return result;
+                return CompilerMitigations.None;
             }
-
-            PropertiesDictionary compilersData = context.Policy.GetProperty(MitigatedCompilers);
-            string familyKey = extendedMachine.GetMachineFamily().ToString();
-
-            foreach (string key in compilersData.Keys)
+            else
             {
-                var properties = (PropertiesDictionary)compilersData[key];
-
-                // If we have no compiler family support for this
-                // versioning chain, disregard it.
-                if (!properties.ContainsKey(familyKey)) { continue; }
-
-                properties = (PropertiesDictionary)properties[familyKey];
-
-                // TODO: Right now, we report out the most current version that supports 
-                // /d2GuardSpecLoad. In the future, we should recommend the minimal
-                // /qSpectre supporting compiler.
-                // https://github.com/Microsoft/binskim/issues/138
-                var currentVersion = (Version)properties[MinimumD2GuardSpecLoadAvailableVersion.Name];
-                if (currentVersion > result) { result = currentVersion; }
-            }
-
-            context.Policy.SetProperty(MostCurrentSpectreSupportingCompilerVersion, result);
-
-            return result;
-        }
-
-        internal static bool TryGetMitigatedVersion(
-            BinaryAnalyzerContext context,
-            ExtendedMachine extendedMachine,
-            Version omVersion, 
-            out MitigatedVersion mitigatedVersion)
-        {
-            mitigatedVersion = null;
-            string key = BuildPropertiesKeyFromVersion(omVersion);
-
-            PropertiesDictionary compilersData = context.Policy.GetProperty(MitigatedCompilers);
-
-            object data;
-            if (compilersData.TryGetValue(key, out data))
-            {
-                PropertiesDictionary compilerData = (PropertiesDictionary)data;
-
-                key = extendedMachine.GetMachineFamily().ToString();
-                if (compilerData.TryGetValue(key, out data))
+                var listOfMitigatedCompilers = compilerMitigationData[machineFamily];
+                for (int i = 0; i < listOfMitigatedCompilers.Length; i++)
                 {
-                    compilerData = (PropertiesDictionary)data;
-
-                    Version minimumQSpectreVersion;
-                    Version minimumD2GuardSpecLoadversion;
-
-                    minimumQSpectreVersion = (Version)compilerData[MinimumQSpectreAvailableVersion.Name];
-                    minimumD2GuardSpecLoadversion = (Version)compilerData[MinimumD2GuardSpecLoadAvailableVersion.Name];
-
-                    mitigatedVersion = new MitigatedVersion(minimumQSpectreVersion, minimumD2GuardSpecLoadversion);
-                }        
+                    if (omVersion >= listOfMitigatedCompilers[i].Start && omVersion < listOfMitigatedCompilers[i].End)
+                    {
+                        return listOfMitigatedCompilers[i].MitigationState;
+                    }
+                }
             }
-
-            return mitigatedVersion != null;
+            return CompilerMitigations.None;
         }
-        
+
+        /// <summary>
+        /// Get the lowest compiler version that supports Spectre mitigations.
+        /// 
+        /// Potential TODO during Update QSpectre minimum version once we have the official build. 
+        ///       https://github.com/Microsoft/binskim/issues/134
+        /// Should we instead be getting the minimum for a particular Visual Studio release?
+        /// E.x. minimum compiler version for VS2015 if they are using a compiler below 2015.3 once those are released
+        /// otherwise minimum compiler in VS2017 that supports these mitigations?
+        /// </summary>
+        internal static Version GetMostCurrentCompilerVersionsWithSpectreMitigations(BinaryAnalyzerContext context, ExtendedMachine machine)
+        {
+            var compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
+            if (!compilerMitigationData.ContainsKey(machine.GetMachineFamily()))
+            {
+                // No compiler data for a compiler that supports the mitigations on this architecture.
+                return new Version(0, 0, 0, 0);
+            }
+            else
+            {
+                var listOfCompilers = compilerMitigationData[machine.GetMachineFamily()];
+                for (int i = 0; i < listOfCompilers.Length; i++)
+                {
+                    if (listOfCompilers[i].MitigationState != CompilerMitigations.None)
+                    {
+                        return listOfCompilers[i].Start;
+                    }
+                }
+                // No compiler data for a compiler that supports the mitigations on this architecture
+                return new Version(0, 0, 0, 0);
+            }
+        }
+
         private static StringToVersionMap BuildAllowedLibraries()
         {
             StringToVersionMap result = new StringToVersionMap();
@@ -450,19 +445,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         internal static PerLanguageOption<string> Description { get; } =
             new PerLanguageOption<string>(
                 AnalyzerName, nameof(Description), defaultValue: () => { return String.Empty; });
-
-        internal static PerLanguageOption<Version> MinimumQSpectreAvailableVersion { get; } =
-            new PerLanguageOption<Version>(
-                AnalyzerName, nameof(MinimumQSpectreAvailableVersion), defaultValue: () => { return new Version(Int32.MaxValue, Int32.MaxValue); });
-
-        internal static PerLanguageOption<Version> MinimumD2GuardSpecLoadAvailableVersion { get; } =
-            new PerLanguageOption<Version>(
-                AnalyzerName, nameof(MinimumD2GuardSpecLoadAvailableVersion), defaultValue: () => { return new Version(Int32.MaxValue, Int32.MaxValue); });
-
-        internal static PerLanguageOption<Version> MostCurrentSpectreSupportingCompilerVersion { get; } =
-            new PerLanguageOption<Version>(
-                AnalyzerName, nameof(MostCurrentSpectreSupportingCompilerVersion), defaultValue: () => { return new Version(0, 0); });
-
+        
         private static PropertiesDictionary BuildMitigatedCompilersData()
         {
             // As per https://blogs.msdn.microsoft.com/vcblog/2018/01/15/spectre-mitigations-in-msvc/ 
@@ -495,96 +478,106 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             var compilersData = new PropertiesDictionary();
 
-            // VS2017 15.6 Versions
-            // TODO: Update QSpectre minimum version once we have the official build. 
-            //       https://github.com/Microsoft/binskim/issues/134
-            //
-            //      15.6 preview 1 (which has d2GuardSpecLoad support) went out with the
-            //      minor version not bumped: 19.12.25907.0. This will be covered by the 
-            //      15.5 RTW check. For 15.6, we need the first support 19.13 version
-            //      (which was preview 2);
-            AddCompilerMitigationsData(
-                    compilersData,
-                    MachineFamily.X86,
-                    minimumQSpectreVersion:        new Version(19, 13, Int32.MaxValue, Int32.MaxValue),
-                    minimumD2GuardSpecLoadVersion: new Version(19, 13, 26029, 0)
-                    );
-
-            // VS 2017 15.5 Versions
-            // TODO: Update QSpectre minimum version once we have the official build. 
-            //       https://github.com/Microsoft/binskim/issues/134
-            AddCompilerMitigationsData(
-                    compilersData,
-                    MachineFamily.X86,
-                    minimumQSpectreVersion:        new Version(19, 12, Int32.MaxValue, Int32.MaxValue),
-                    minimumD2GuardSpecLoadVersion: new Version(19, 12, 25830, 2)
-                    );
-
-            // VS2017 15.0 Versions
-            // TODO: Update QSpectre minimum version once we have the official build. 
-            //       https://github.com/Microsoft/binskim/issues/134
-            //    
-            //       D2GuardSpecLoad version will not be updated as this switch will
-            //       not be back-ported
-            AddCompilerMitigationsData(
-                    compilersData,
-                    MachineFamily.X86,
-                    minimumQSpectreVersion: new Version(19, 10, Int32.MaxValue, Int32.MaxValue),
-                    minimumD2GuardSpecLoadVersion: new Version(19, 10, Int32.MaxValue, Int32.MaxValue)
-                    );
+            // Mitigations for x86 family of processors
+            var x86Data = new PropertiesDictionary();
 
             // VS2015 15.0 Update 3 Versions
             // TODO: Update QSpectre minimum version once we have the official build. 
             //       https://github.com/Microsoft/binskim/issues/134
             //    
-            //       D2GuardSpecLoad version will not be updated as this switch will
-            //       not be back-ported
-            AddCompilerMitigationsData(
-                    compilersData,
-                    MachineFamily.X86,
-                    minimumQSpectreVersion:        new Version(19, 0, Int32.MaxValue, Int32.MaxValue),
-                    minimumD2GuardSpecLoadVersion: new Version(19, 0, Int32.MaxValue, Int32.MaxValue)
-                    );
+            //       D2GuardSpecLoad version will not be back-ported
+            x86Data.Add("19.0.*.* - 19.0.*.*", 
+                (CompilerMitigations.QSpectreAvailable).ToString());
+
+            // VS2017 RTM
+            // TODO: Update QSpectre minimum version once we have the official build. 
+            //       https://github.com/Microsoft/binskim/issues/134
+            //    
+            //       D2GuardSpecLoad version will not be back-ported
+            x86Data.Add("19.10.*.* - 19.10.*.*", 
+                (CompilerMitigations.QSpectreAvailable).ToString());
+
+            // VS2017 - 15.5
+            // TODO: Update QSpectre minimum version once we have the official build. 
+            //       https://github.com/Microsoft/binskim/issues/134
+            x86Data.Add("19.12.25830.2-19.12.*.*", 
+                (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+            x86Data.Add("19.12.*.* - 19.12.*.*", 
+                (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+
+            // VS2017 - 15.6 Preview
+            x86Data.Add("19.13.26029.0 - 19.13.26029.*", 
+                (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+
+            // Update when we have an official build supporting QSpectre.
+            x86Data.Add("19.13.*.* - 19.13.*.*", 
+                (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+
+            compilersData.Add(MachineFamily.X86.ToString(), x86Data);
+
+            // TODO--Update when ARM mitigations are available.
+            compilersData.Add(MachineFamily.Arm.ToString(), new PropertiesDictionary());
 
             return compilersData;
         }
 
-        private static void AddCompilerMitigationsData(
-            PropertiesDictionary parentPropertiesDictionary, 
-            MachineFamily machineFamily, 
-            Version minimumQSpectreVersion, 
-            Version minimumD2GuardSpecLoadVersion)
+        internal static Dictionary<MachineFamily, CompilerVersionToMitigation[]> LoadCompilerDataFromConfig(PropertiesDictionary policy)
         {
-            string key = BuildPropertiesKeyFromVersion(minimumQSpectreVersion);
-
-            var compilerData = new PropertiesDictionary();
-            compilerData.Name = key;
-
-            // Create new properties dictionary that is rooted by Major.Minor version
-            parentPropertiesDictionary[key] = compilerData;
-            parentPropertiesDictionary = compilerData;
-            
-            // Next, create properties dictionary qualified by machine family
-            key = machineFamily.ToString();
-            compilerData = new PropertiesDictionary();
-            compilerData.Name = key;
-            parentPropertiesDictionary[key] = compilerData;
-
-            // Set minimum mitigations versions for this machine family by major.minor version
-            // E.g., 19.10.XXX.XXX for ARM or 19.0.XXX.XXX for X86/Amd64 family
-            compilerData.SetProperty(MinimumQSpectreAvailableVersion, minimumQSpectreVersion);
-            compilerData.SetProperty(MinimumD2GuardSpecLoadAvailableVersion, minimumD2GuardSpecLoadVersion);
+            if (compilerData == null)
+            {
+                compilerData = new Dictionary<MachineFamily, CompilerVersionToMitigation[]>();
+                PropertiesDictionary configData = policy.GetProperty(MitigatedCompilers);
+                foreach (var key in configData.Keys)
+                {
+                    MachineFamily machine = (MachineFamily)Enum.Parse(typeof(MachineFamily), key); // Neaten this up.
+                    compilerData.Add(machine, CreateSortedVersionDictionary((PropertiesDictionary)configData[key]));
+                }
+            }
+            return compilerData;
         }
-
-        internal static string BuildPropertiesKeyFromVersion(Version version)
+        
+        internal static CompilerVersionToMitigation[] CreateSortedVersionDictionary(PropertiesDictionary versionList)
         {
-            // Servicing of compilers occurs by patching Major + Minor 
-            // versioning vectors. So our mitigations data is keyed 
-            // only from this information.
-            return new Version(
-                version.Major,
-                version.Minor, 0, 0).ToString();
-        }        
+            List<CompilerVersionToMitigation> mitigatedCompilerList = new List<CompilerVersionToMitigation>();
+            foreach (var key in versionList.Keys)
+            {
+                string[] versions = key.Split('-').Select((s) => { return s.Replace("*", int.MaxValue.ToString()); }).ToArray();
+                var mitigationData = new CompilerVersionToMitigation()
+                {
+                    Start = new Version(versions[0]),
+                    End = new Version(versions[1]),
+                    MitigationState = (CompilerMitigations)Enum.Parse(typeof(CompilerMitigations), versionList[key].ToString()),
+                };
+                mitigatedCompilerList.Add(mitigationData);
+            }
+            mitigatedCompilerList.Sort((a, b) => a.Start.CompareTo(b.Start));
+
+            ThrowIfMitigationDataIsInvalid(mitigatedCompilerList);
+
+            return mitigatedCompilerList.ToArray();
+        }
+        
+        private static void ThrowIfMitigationDataIsInvalid(List<CompilerVersionToMitigation> compilerVersionToMitigation)
+        {
+            for (int i = 0; i < compilerVersionToMitigation.Count; i++)
+            {
+                // The start of each mitigation should be before the end.
+                if (compilerVersionToMitigation[i].End < compilerVersionToMitigation[i].Start)
+                {
+                    throw new InvalidOperationException(RuleResources.BA2024_InitializationException);
+                }
+
+                // Validate--we should not have overlapping ranges.
+                // This intentionally allows for overlap of 1 version, as 'end' is not inclusive.
+                if (i < compilerVersionToMitigation.Count - 1)
+                {
+                    if (compilerVersionToMitigation[i].End > compilerVersionToMitigation[i + 1].Start)
+                    {
+                        throw new InvalidOperationException(RuleResources.BA2024_InitializationException);
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -675,60 +668,11 @@ namespace Microsoft.CodeAnalysis.Sarif
     }
 
     [Flags]
-    internal enum CompilerMitigations
+    public enum CompilerMitigations
     {
         None = 0x0,
         QSpectreAvailable = 0x1,
         D2GuardSpecLoadAvailable = 0x2,
         NonoptimizedCodeMitigated = 0x4,
-    }
-
-    internal class MitigatedVersion 
-    {
-        public MitigatedVersion()
-        {
-            _minimumQSpectreVersion = new Version(Int32.MaxValue, Int32.MaxValue);
-            _minimumD2GuardSpecLoadVersion = new Version(Int32.MaxValue, Int32.MaxValue);
-        }
-
-        public MitigatedVersion(Version minimumD2GuardSpecLoadVersion, Version minimumQSpectreVersion) : base()
-        {
-            _minimumQSpectreVersion = minimumQSpectreVersion;
-            _minimumD2GuardSpecLoadVersion = minimumD2GuardSpecLoadVersion;
-        }
-
-        Version _minimumQSpectreVersion;
-        Version _minimumD2GuardSpecLoadVersion;
-
-        public bool QSpectreMitigationAvailable(Version omVersion)
-        {
-            ValidateInputVersion(omVersion);
-            return omVersion >= _minimumQSpectreVersion;
-        }
-
-        public bool D2GuardSpecLoadAvailable(Version omVersion)
-        {
-            ValidateInputVersion(omVersion);
-            return omVersion >= _minimumQSpectreVersion;
-        }
-
-        // All current toolchains required optimizations to be 
-        // enabled in order to function.
-        public bool NonoptimizedCodeIsMitigated
-        {
-            get { return false; }
-        }
-
-        private void ValidateInputVersion(Version omVersion)
-        {
-            // All input modules Major and Minor versions should match
-            // the data in this MitigatedVersion instance, as the
-            // Major and Minor versions are used to store/retrieve 
-            // relevant wrapper objects for this data.
-            Debug.Assert(omVersion.Major == _minimumQSpectreVersion.Major);
-            Debug.Assert(omVersion.Minor == _minimumQSpectreVersion.Minor);
-            Debug.Assert(omVersion.Major == _minimumD2GuardSpecLoadVersion.Major);
-            Debug.Assert(omVersion.Minor == _minimumD2GuardSpecLoadVersion.Minor);
-        }
     }
 }
