@@ -161,7 +161,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // If this module was compiled with a version that exceeds all baseline
                     // toolchains documented in BA2024, then we can assume the OM toolchain is ok.
                     Version mostCurrentSpectreSupportingCompilerVersion =
-                        EnableSpectreMitigations.GetMostCurrentCompilerWithSpectreMitigations(
+                        EnableSpectreMitigations.GetMostCurrentCompilerVersionsWithSpectreMitigations(
                             context,
                             machineType);
 
@@ -171,13 +171,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         // Now we'll retrieve relevant compiler mitigation details to
                         // ensure this object module's build and revision meet
                         // expectations.
-                        MitigatedVersion mitigationData;
+                        CompilerMitigations newMitigationData = 
+                            EnableSpectreMitigations.GetAvailableMitigations(context, machineType, actualVersion);
 
-                        if (!EnableSpectreMitigations.TryGetMitigatedVersion(
-                            context,
-                            machineType,
-                            actualVersion,
-                            out mitigationData))
+                        if(newMitigationData == CompilerMitigations.None)
                         {
                             // Indicates compilation with some toolchain the Spectre rule
                             // does not know about, which indicates a problem;
@@ -185,8 +182,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         }
                         else
                         {
-                            foundIssue = !mitigationData.D2GuardSpecLoadAvailable(actualVersion) &&
-                                         !mitigationData.QSpectreMitigationAvailable(actualVersion);
+                            foundIssue = !newMitigationData.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable) &&
+                                         !newMitigationData.HasFlag(CompilerMitigations.QSpectreAvailable);
                         }
 
                         if (foundIssue)

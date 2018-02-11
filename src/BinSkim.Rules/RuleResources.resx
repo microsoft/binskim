@@ -381,6 +381,9 @@ Modules triggering this check were:
     <value>The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:
 {0}</value>
   </data>
+  <data name="BA2024_InitializationException" xml:space="preserve">
+    <value>The MitigatedCompilers configuration entry was incorrect, either because version numbers overlapped or because a starting version number was higher than an ending version number.</value>
+  </data>
   <data name="BA2024_Pass" xml:space="preserve">
     <value>All linked modules '{0}' were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.</value>
   </data>

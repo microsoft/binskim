@@ -832,6 +832,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The MitigatedCompilers configuration entry was incorrect, either because version numbers overlapped or because a starting version number was higher than an ending version number..
+        /// </summary>
+        internal static string BA2024_InitializationException {
+            get {
+                return ResourceManager.GetString("BA2024_InitializationException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All linked modules &apos;{0}&apos; were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities..
         /// </summary>
         internal static string BA2024_Pass {
