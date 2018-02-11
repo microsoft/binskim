@@ -144,36 +144,36 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             new CompilerVersionToMitigation()
             {
-                Start = new Version(1, 0, 100, 5),
-                End = new Version(1, 10, int.MaxValue, int.MaxValue),
-                MitigationState = CompilerMitigations.QSpectreAvailable,
+                MinimalSupportedVersion = new Version(1, 0, 100, 5),
+                MaximumSupportedVersion = new Version(1, 10, int.MaxValue, int.MaxValue),
+                SupportedMitigations = CompilerMitigations.QSpectreAvailable,
             },
             new CompilerVersionToMitigation()
             {
-                Start = new Version(1, 11, 250, 0),
-                End = new Version(1, 11, 250, 500),
-                MitigationState = CompilerMitigations.QSpectreAvailable,
+                MinimalSupportedVersion = new Version(1, 11, 250, 0),
+                MaximumSupportedVersion = new Version(1, 11, 250, 500),
+                SupportedMitigations = CompilerMitigations.QSpectreAvailable,
             },
             new CompilerVersionToMitigation()
             {
-                Start = new Version(1, 11, 250, 501),
-                End = new Version(1, 11, 250, int.MaxValue),
-                MitigationState = CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.D2GuardSpecLoadAvailable,
+                MinimalSupportedVersion = new Version(1, 11, 250, 501),
+                MaximumSupportedVersion = new Version(1, 11, 250, int.MaxValue),
+                SupportedMitigations = CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.D2GuardSpecLoadAvailable,
             },
             new CompilerVersionToMitigation()
             {
-                Start = new Version(2, 0, 0, 0),
-                End = new Version(2, int.MaxValue, int.MaxValue, int.MaxValue),
-                MitigationState = (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable),
+                MinimalSupportedVersion = new Version(2, 0, 0, 0),
+                MaximumSupportedVersion = new Version(2, int.MaxValue, int.MaxValue, int.MaxValue),
+                SupportedMitigations = (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable),
             }
         };
         
         private void AddCompilerMitigationDataToDictionary(PropertiesDictionary dictionary, CompilerVersionToMitigation data)
         {
-            string start = data.Start.ToString().Replace(int.MaxValue.ToString(), "*");
-            string end = data.End.ToString().Replace(int.MaxValue.ToString(), "*");
+            string start = data.MinimalSupportedVersion.ToString().Replace(int.MaxValue.ToString(), "*");
+            string end = data.MaximumSupportedVersion.ToString().Replace(int.MaxValue.ToString(), "*");
             string key = start + " - " + end;
-            dictionary.Add(key, data.MitigationState.ToString());
+            dictionary.Add(key, data.SupportedMitigations.ToString());
         }
     }
 }

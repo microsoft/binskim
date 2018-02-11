@@ -21,9 +21,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 {
     internal struct CompilerVersionToMitigation
     {
-        public Version Start;
-        public Version End;
-        public CompilerMitigations MitigationState;
+        public Version MinimalSupportedVersion;
+        public Version MaximumSupportedVersion;
+        public CompilerMitigations SupportedMitigations;
     }
 
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         internal static PerLanguageOption<PropertiesDictionary> MitigatedCompilers { get; } =
             new PerLanguageOption<PropertiesDictionary>(AnalyzerName, nameof(MitigatedCompilers), defaultValue: () => { return BuildMitigatedCompilersData(); });
 
-        private static Dictionary<MachineFamily, CompilerVersionToMitigation[]> compilerData = null;
+        private static Dictionary<MachineFamily, CompilerVersionToMitigation[]> _compilerData = null;
         
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
@@ -389,9 +389,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 var listOfMitigatedCompilers = compilerMitigationData[machineFamily];
                 for (int i = 0; i < listOfMitigatedCompilers.Length; i++)
                 {
-                    if (omVersion >= listOfMitigatedCompilers[i].Start && omVersion < listOfMitigatedCompilers[i].End)
+                    if (omVersion >= listOfMitigatedCompilers[i].MinimalSupportedVersion && omVersion < listOfMitigatedCompilers[i].MaximumSupportedVersion)
                     {
-                        return listOfMitigatedCompilers[i].MitigationState;
+                        return listOfMitigatedCompilers[i].SupportedMitigations;
                     }
                 }
             }
@@ -420,9 +420,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 var listOfCompilers = compilerMitigationData[machine.GetMachineFamily()];
                 for (int i = 0; i < listOfCompilers.Length; i++)
                 {
-                    if (listOfCompilers[i].MitigationState != CompilerMitigations.None)
+                    if (listOfCompilers[i].SupportedMitigations != CompilerMitigations.None)
                     {
-                        return listOfCompilers[i].Start;
+                        return listOfCompilers[i].MinimalSupportedVersion;
                     }
                 }
                 // No compiler data for a compiler that supports the mitigations on this architecture
@@ -523,17 +523,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         internal static Dictionary<MachineFamily, CompilerVersionToMitigation[]> LoadCompilerDataFromConfig(PropertiesDictionary policy)
         {
-            if (compilerData == null)
+            if (_compilerData == null)
             {
-                compilerData = new Dictionary<MachineFamily, CompilerVersionToMitigation[]>();
+                _compilerData = new Dictionary<MachineFamily, CompilerVersionToMitigation[]>();
                 PropertiesDictionary configData = policy.GetProperty(MitigatedCompilers);
                 foreach (var key in configData.Keys)
                 {
                     MachineFamily machine = (MachineFamily)Enum.Parse(typeof(MachineFamily), key); // Neaten this up.
-                    compilerData.Add(machine, CreateSortedVersionDictionary((PropertiesDictionary)configData[key]));
+                    _compilerData.Add(machine, CreateSortedVersionDictionary((PropertiesDictionary)configData[key]));
                 }
             }
-            return compilerData;
+            return _compilerData;
         }
         
         internal static CompilerVersionToMitigation[] CreateSortedVersionDictionary(PropertiesDictionary versionList)
@@ -544,13 +544,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 string[] versions = key.Split('-').Select((s) => { return s.Replace("*", int.MaxValue.ToString()); }).ToArray();
                 var mitigationData = new CompilerVersionToMitigation()
                 {
-                    Start = new Version(versions[0]),
-                    End = new Version(versions[1]),
-                    MitigationState = (CompilerMitigations)Enum.Parse(typeof(CompilerMitigations), versionList[key].ToString()),
+                    MinimalSupportedVersion = new Version(versions[0]),
+                    MaximumSupportedVersion = new Version(versions[1]),
+                    SupportedMitigations = (CompilerMitigations)Enum.Parse(typeof(CompilerMitigations), versionList[key].ToString()),
                 };
                 mitigatedCompilerList.Add(mitigationData);
             }
-            mitigatedCompilerList.Sort((a, b) => a.Start.CompareTo(b.Start));
+            mitigatedCompilerList.Sort((a, b) => a.MinimalSupportedVersion.CompareTo(b.MinimalSupportedVersion));
 
             ThrowIfMitigationDataIsInvalid(mitigatedCompilerList);
 
@@ -562,7 +562,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             for (int i = 0; i < compilerVersionToMitigation.Count; i++)
             {
                 // The start of each mitigation should be before the end.
-                if (compilerVersionToMitigation[i].End < compilerVersionToMitigation[i].Start)
+                if (compilerVersionToMitigation[i].MaximumSupportedVersion < compilerVersionToMitigation[i].MinimalSupportedVersion)
                 {
                     throw new InvalidOperationException(RuleResources.BA2024_InitializationException);
                 }
@@ -571,7 +571,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // This intentionally allows for overlap of 1 version, as 'end' is not inclusive.
                 if (i < compilerVersionToMitigation.Count - 1)
                 {
-                    if (compilerVersionToMitigation[i].End > compilerVersionToMitigation[i + 1].Start)
+                    if (compilerVersionToMitigation[i].MaximumSupportedVersion > compilerVersionToMitigation[i + 1].MinimalSupportedVersion)
                     {
                         throw new InvalidOperationException(RuleResources.BA2024_InitializationException);
                     }
