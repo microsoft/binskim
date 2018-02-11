@@ -159,7 +159,7 @@ $OptimizationFlagVariants += [TestVariant]::new("d2guardspecloadOptimizationFlag
 
 #Optimization Flags testing (Question 14 variant of Questions 7 and 8)
 $MultiOptFlagVariants = @()
-$MultiOptFlagVariants += [TestVariant]::new("d2guardspecloadOptimizationFlags_O1Od", "/d2guardspecload/O1 /Od", $false)
+$MultiOptFlagVariants += [TestVariant]::new("d2guardspecloadOptimizationFlags_O1Od", "/d2guardspecload /O1 /Od", $false)
 $MultiOptFlagVariants += [TestVariant]::new("d2guardspecloadOptimizationFlags_OdO1", "/d2guardspecload /Od /O1", $true)
 $MultiOptFlagVariants += [TestVariant]::new("d2guardspecloadOptimizationFlags_OdO1Od", "/d2guardspecload /Od /O1 /Od", $false)
 
