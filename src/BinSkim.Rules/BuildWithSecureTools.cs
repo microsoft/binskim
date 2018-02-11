@@ -11,8 +11,8 @@ using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -25,8 +25,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id { get { return RuleIds.BuildWithSecureToolsId; } }
 
         /// <summary>
-        /// Application code should be compiled with the most up-to-date toolsets possible
-        /// in order to take advantage of the most current compile-time security features.
+        /// Application code should be compiled with the most up-to-date tool sets
+        /// possible to take advantage of the most current compile-time security
+        /// features. Among other things, these features provide address space
+        /// layout randomization, help prevent arbitrary code execution and enable
+        /// code generation that can help prevent speculative execution side-channel
+        /// attacks.
         /// </summary>
         public override string FullDescription
         {
@@ -38,9 +42,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             get
             {
                 return new string[] {
+                    nameof(RuleResources.BA2006_Error),
                     nameof(RuleResources.BA2006_Error_BadModule),
                     nameof(RuleResources.BA2006_Pass),
-                    nameof(RuleResources.BA2006_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)};
             }
         }
@@ -50,8 +54,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             return new List<IOption>
             {
+                AllowedLibraries,
                 MinimumToolVersions,
-                AllowedLibraries
+                AdvancedMitigationsEnforced
             }.ToImmutableArray();
         }
 
@@ -67,6 +72,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public static PerLanguageOption<StringToVersionMap> AllowedLibraries { get; } =
             new PerLanguageOption<StringToVersionMap>(
                 AnalyzerName, nameof(AllowedLibraries), defaultValue: () => { return BuildAllowedLibraries(); });
+
+        public static PerLanguageOption<AdvancedMitigations> AdvancedMitigationsEnforced { get; } =
+            new PerLanguageOption<AdvancedMitigations>(
+                AnalyzerName, nameof(AdvancedMitigationsEnforced), defaultValue: () => { return AdvancedMitigations.None; });
 
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
@@ -141,7 +150,50 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         continue;
                 }
 
-                if (actualVersion < minimumVersion)
+                bool foundIssue = actualVersion < minimumVersion;
+
+                AdvancedMitigations advancedMitigations = context.Policy.GetProperty(AdvancedMitigationsEnforced);
+                if (!foundIssue &&
+                    (advancedMitigations & AdvancedMitigations.Spectre) == AdvancedMitigations.Spectre)
+                {
+                    ExtendedMachine machineType = (ExtendedMachine)context.PE.Machine;
+
+                    // If this module was compiled with a version that exceeds all baseline
+                    // toolchains documented in BA2024, then we can assume the OM toolchain is ok.
+                    Version mostCurrentSpectreSupportingCompilerVersion =
+                        EnableSpectreMitigations.GetMostCurrentCompilerVersionsWithSpectreMitigations(
+                            context,
+                            machineType);
+
+                    if (actualVersion <= mostCurrentSpectreSupportingCompilerVersion)
+                    {
+                        // Current toolchain is within the version range to validate.
+                        // Now we'll retrieve relevant compiler mitigation details to
+                        // ensure this object module's build and revision meet
+                        // expectations.
+                        CompilerMitigations newMitigationData = 
+                            EnableSpectreMitigations.GetAvailableMitigations(context, machineType, actualVersion);
+
+                        if(newMitigationData == CompilerMitigations.None)
+                        {
+                            // Indicates compilation with some toolchain the Spectre rule
+                            // does not know about, which indicates a problem;
+                            foundIssue = true;
+                        }
+                        else
+                        {
+                            foundIssue = !newMitigationData.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable) &&
+                                         !newMitigationData.HasFlag(CompilerMitigations.QSpectreAvailable);
+                        }
+
+                        if (foundIssue)
+                        {
+                            minCompilerVersion = mostCurrentSpectreSupportingCompilerVersion;
+                        }
+                    }
+                }
+
+                if (foundIssue)
                 {
                     // built with {0} compiler version {1} (Front end version: {2})
                     badModuleList.Add(
@@ -206,5 +258,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             return result;
         }
+    }
+}
+
+namespace Microsoft.CodeAnalysis
+{
+    [Flags]
+    public enum AdvancedMitigations
+    {
+        None = 0x0,
+        Spectre = 0x1
     }
 }
