@@ -8,6 +8,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.Sarif.Readers;
 using Microsoft.CodeAnalysis.Sarif;
 using Newtonsoft.Json;
@@ -26,14 +27,14 @@ namespace Microsoft.CodeAnalysis.IL
             _testOutputHelper = output;
         }
 
-        private static string TestDirectory = GetTestDirectory(@"BinSkim.Driver.FunctionalTests\BaselineTestsData");
+        private static string TestDirectory = GetTestDirectory(@"BinSkim.Driver.FunctionalTests" + Path.DirectorySeparatorChar + "BaselineTestsData");
 
         private static string GetTestDirectory(string relativeDirectory)
         {
             var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
             var dirPath = Path.GetDirectoryName(codeBasePath);
-            dirPath = Path.Combine(dirPath, @"..\..\..\src\");
+            dirPath = Path.Combine(dirPath, string.Format(@"..{0}..{0}..{0}..{0}src{0}", Path.DirectorySeparatorChar));
             dirPath = Path.GetFullPath(dirPath);
             return Path.Combine(dirPath, relativeDirectory);
         }
@@ -41,13 +42,13 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public void Driver_BuiltInRuleFunctionalTests()
         {
-            BatchRuleRules(string.Empty, "*.dll", "*.exe");
+            BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*");
         }
 
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
         {
             var sb = new StringBuilder();
-            string testDirectory = BuiltInRuleFunctionalTests.TestDirectory + "\\" + ruleName;
+            string testDirectory = BuiltInRuleFunctionalTests.TestDirectory + Path.DirectorySeparatorChar + ruleName;
 
             foreach (string inputFilter in inputFilters)
             {
@@ -85,8 +86,15 @@ namespace Microsoft.CodeAnalysis.IL
         {
             string fileName = Path.GetFileName(inputFileName);
             string actualDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "Actual");
-            string expectedDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "Expected");
-
+            string expectedDirectory;
+            if (PlatformSpecificHelpers.RunningOnWindows())
+            {
+                expectedDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "Expected");
+            }
+            else 
+            {
+                expectedDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "NonWindowsExpected");
+            }
             if (!Directory.Exists(actualDirectory))
             {
                 Directory.CreateDirectory(actualDirectory);
@@ -114,7 +122,7 @@ namespace Microsoft.CodeAnalysis.IL
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
                 ContractResolver = SarifContractResolver.Instance,
-                Formatting = Formatting.Indented
+                Formatting = Newtonsoft.Json.Formatting.Indented
             };
 
             string expectedText = File.ReadAllText(expectedFileName);
@@ -124,7 +132,7 @@ namespace Microsoft.CodeAnalysis.IL
             string repoRoot = Path.GetFullPath(Path.Combine(actualDirectory, "..", "..", "..", ".."));
             actualText = actualText.Replace(repoRoot.Replace(@"\", @"\\"), @"Z:");
             actualText = actualText.Replace(repoRoot.Replace(@"\", @"/"), @"Z:");
-
+            
             // Remove stack traces as they can change due to inlining differences by configuration and runtime.
             actualText = Regex.Replace(actualText, @"\\r\\n   at [^""]+", "");
 
@@ -174,7 +182,14 @@ namespace Microsoft.CodeAnalysis.IL
                 return String.Format(CultureInfo.InvariantCulture, "\"{0}\" \"{1}\" \"{2}\" /title1=Expected /title2=Actual", beyondCompare, expected, actual);
             }
 
-            return String.Format(CultureInfo.InvariantCulture, "windiff \"{0}\" \"{1}\"", expected, actual);
+            if (PlatformSpecificHelpers.RunningOnWindows())
+            {
+                return String.Format(CultureInfo.InvariantCulture, "windiff \"{0}\" \"{1}\"", expected, actual);
+            } 
+            else
+            {
+                return String.Format(CultureInfo.InvariantCulture, "diff \"{0}\", \"{1}\"", expected, actual);
+            }
         }
 
         private static string TryFindBeyondCompare()

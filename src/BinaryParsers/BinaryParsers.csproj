@@ -1,107 +1,55 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
   <PropertyGroup>
-    <RootNamespace>Microsoft.CodeAnalysis.BinaryParsers</RootNamespace>
-    <ProjectGuid>{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}</ProjectGuid>
+    <RootNamespace>Microsoft.CodeAnalysis.BinaryParsers</RootNamespace> 
+    <TargetFramework>$(NetStandardVersion)</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyName>BinaryParsers</AssemblyName>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.props))\build.props" />
+
   <ItemGroup>
-    <Reference Include="CommandLine, Version=2.2.1.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommandLineParser.2.2.1\lib\net45\CommandLine.dll</HintPath>
-    </Reference>
+    <PackageReference Include="CommandLineParser" Version="2.2.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.BinSkim" Version="1.4.5" />
+    <PackageReference Include="Microsoft.DiaSymReader" Version="1.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Sarif.Driver" Version="1.7.3" />
+    <PackageReference Include="Sarif.Sdk" Version="1.7.3" />
+    <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
+    <PackageReference Include="ELFSharp" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="dia2lib">
       <HintPath>..\..\refs\dia2lib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Sarif, Version=1.7.2.0, Culture=neutral, PublicKeyToken=21a5e83f6f5bb844, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Sdk.1.7.2\lib\net452\Sarif.dll</HintPath>
-    </Reference>
-    <Reference Include="Sarif.Driver, Version=1.7.2.0, Culture=neutral, PublicKeyToken=21a5e83f6f5bb844, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sarif.Driver.1.7.2\lib\net452\Sarif.Driver.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Composition.AttributedModel, Version=1.0.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.AttributedModel.1.1.0\lib\portable-net45+win8+wp8+wpa81\System.Composition.AttributedModel.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.Convention, Version=1.0.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.Convention.1.1.0\lib\portable-net45+win8+wp8+wpa81\System.Composition.Convention.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.Hosting, Version=1.0.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.Hosting.1.1.0\lib\portable-net45+win8+wp8+wpa81\System.Composition.Hosting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.Runtime, Version=1.0.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.Runtime.1.1.0\lib\portable-net45+win8+wp8+wpa81\System.Composition.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.TypedParts, Version=1.0.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.TypedParts.1.1.0\lib\portable-net45+win8+wp8+wpa81\System.Composition.TypedParts.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Reflection.Metadata, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reflection.Metadata.1.1.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
+    <PackageReference Include="System.Security.Cryptography.Algorithms">
+      <Version>4.3.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Security.Cryptography.Algorithms">
+      <Version>4.3.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  
   <ItemGroup>
-    <Compile Include="..\DefaultProject\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Packer.cs" />
-    <Compile Include="PortableExecutable\ImageLoadConfigDirectory64.cs" />
-    <Compile Include="PortableExecutable\ImageType.cs" />
-    <Compile Include="PortableExecutable\ImageHeader.cs" />
-    <Compile Include="PortableExecutable\ImageFieldData.cs" />
-    <Compile Include="PortableExecutable\ImageLoadConfigDirectory32.cs" />
-    <Compile Include="PortableExecutable\PEExtensionMethods.cs" />
-    <Compile Include="ProgramDatabase\PdbParseErrorCode.cs" />
-    <Compile Include="PortableExecutable\PE.cs" />
-    <Compile Include="PortableExecutable\SafePointer.cs" />
-    <Compile Include="ProgramDatabase\CompilandRecord.cs" />
-    <Compile Include="ProgramDatabase\CompilerCommandLine.cs" />
-    <Compile Include="ProgramDatabase\Pdb.cs" />
-    <Compile Include="ProgramDatabase\PdbParseException.cs" />
-    <Compile Include="ProgramDatabase\ObjectModuleDetails.cs" />
-    <Compile Include="ProgramDatabase\SourceFile.cs" />
-    <Compile Include="ProgramDatabase\Symbol.cs" />
-    <Compile Include="ProgramDatabase\TruncatedCompilandRecordList.cs" />
-    <Compile Include="..\Shared\SharedAssemblyInfo.cs" />
-    <Compile Include="BinaryParsersResources.Designer.cs">
-      <AutoGen>True</AutoGen>
+    <Compile Update="BinaryParsersResources.Designer.cs">
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>BinaryParsersResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="VersionConstants.cs" />
   </ItemGroup>
+  
   <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="BinaryParsersResources.resx">
+    <EmbeddedResource Update="BinaryParsersResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>BinaryParsersResources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Microsoft.CodeAnalysis.BinaryData</CustomToolNamespace>
+      <CustomToolNamespace>Microsoft.CodeAnalysis.BinaryParsers</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
+  
 </Project>

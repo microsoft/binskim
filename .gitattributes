@@ -1,0 +1,9 @@
+# SLN files should have clrf endings
+*.sln text eol=crlf
+
+# Keep linux line on shell scripts, even on windows
+*.sh text eol=lf
+
+# Linux Binaries
+gcc.* binary
+clang.* binary

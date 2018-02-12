@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.CodeAnalysis.BinaryData {
+namespace Microsoft.CodeAnalysis.BinaryParsers {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.BinaryData {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class BinaryParsersResources {
@@ -223,11 +223,29 @@ namespace Microsoft.CodeAnalysis.BinaryData {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot parse pdb on this platform..
+        /// </summary>
+        internal static string PdbPlatformUnsupported {
+            get {
+                return ResourceManager.GetString("PdbPlatformUnsupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pdb is stripped of cv info.
         /// </summary>
         internal static string PdbStripped {
             get {
                 return ResourceManager.GetString("PdbStripped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This feature is not supported on the {0} platform, it is only supported on the {1} platform(s)..
+        /// </summary>
+        internal static string PlatformUnsupportedFormat {
+            get {
+                return ResourceManager.GetString("PlatformUnsupportedFormat", resourceCulture);
             }
         }
         

@@ -23,5 +23,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageIsPreVersion7WindowsCEBinary = SdkResources.MetadataCondition_ImageIsPreVersion7WindowsCEBinary;
         public static readonly string ImageIsManagedResourceOnlyAssembly = SdkResources.MetadataCondition_ImageIsManagedResourceOnlyAssembly;
         public static readonly string ImageIsKernelModeAndNot64Bit_CfgUnsupported = SdkResources.MetadataCondition_ImageIsKernelModeAndNot64Bit_CfgUnsupported;
+        public static readonly string ImageIsNotPE = SdkResources.MetadataCondition_ImageIsNotPE;
+        public static readonly string ImageIsNotELF = SdkResources.MetadataCondition_ImageIsNotELF;
+        public static readonly string ELFIsCoreNoneOrObject = SdkResources.MetadataCondition_ELFIsCoreNoneOrObject;
+        public static readonly string ELFNotBuiltWithGCC = SdkResources.MetadataCondition_ELFNotBuiltWithGCC;
     }
 }

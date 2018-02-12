@@ -7,6 +7,7 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -16,9 +17,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>Name of the gs check function.</summary>
         public static readonly string GSCheckFunctionName = "__security_check_cookie";
 
-        internal static AnalysisApplicability CommonCanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        internal static AnalysisApplicability CommonCanAnalyze(PEBinary target, out string reasonForNotAnalyzing)
         {
-            PE portableExecutable = context.PE;
+            PE portableExecutable = target.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;

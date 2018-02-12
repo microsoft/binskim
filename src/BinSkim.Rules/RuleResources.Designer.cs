@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks..
+        ///   Looks up a localized string similar to Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features..
         /// </summary>
         internal static string BA2006_BuildWithSecureTools_Description {
             get {
@@ -774,87 +774,173 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it..
+        ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
-        internal static string BA2024_EnableSpectreMitigations_Description {
+        internal static string BA3001_EnablePIEOnExecutables_Description {
             get {
-                return ResourceManager.GetString("BA2024_EnableSpectreMitigations_Description", resourceCulture);
+                return ResourceManager.GetString("BA3001_EnablePIEOnExecutables_Description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules that do not properly enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a tool [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to PIE disabled on executable {0}.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with &apos;-f pie&apos; when using clang/gcc..
         /// </summary>
-        internal static string BA2024_Error {
+        internal static string BA3001_Error {
             get {
-                return ResourceManager.GetString("BA2024_Error", resourceCulture);
+                return ResourceManager.GetString("BA3001_Error", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following MASM modules were detected. The MASM compiler does not currently mitigate against speculative execution attacks:
-        ///{0}.
+        ///   Looks up a localized string similar to PIE enabled on executable {0}..
         /// </summary>
-        internal static string BA2024_Error_MasmModulesDetected {
+        internal static string BA3001_Pass_Executable {
             get {
-                return ResourceManager.GetString("BA2024_Error_MasmModulesDetected", resourceCulture);
+                return ResourceManager.GetString("BA3001_Pass_Executable", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following modules were compiled with optimizations disabled (/Od), a condition that disables Spectre mitigations:
-        ///{0}.
+        ///   Looks up a localized string similar to {0} is a shared object library rather than an executable, and is automatically position independent..
         /// </summary>
-        internal static string BA2024_Error_OptimizationsDisabled {
+        internal static string BA3001_Pass_Library {
             get {
-                return ResourceManager.GetString("BA2024_Error_OptimizationsDisabled", resourceCulture);
+                return ResourceManager.GetString("BA3001_Pass_Library", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following modules were compiled with Spectre mitigations explicitly disabled:
-        ///{0}.
+        ///   Looks up a localized string similar to This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with &apos;-z noexecstack&apos; to mark the stack as non-executable..
         /// </summary>
-        internal static string BA2024_Error_SpectreMitigationExplicitlyDisabled {
+        internal static string BA3002_DoNotMarkStackAsExecutable_Description {
             get {
-                return ResourceManager.GetString("BA2024_Error_SpectreMitigationExplicitlyDisabled", resourceCulture);
+                return ResourceManager.GetString("BA3002_DoNotMarkStackAsExecutable_Description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:
-        ///{0}.
+        ///   Looks up a localized string similar to GNU_STACK segment on {0} is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing &apos;-z noexecstack&apos; to the compiler..
         /// </summary>
-        internal static string BA2024_Error_SpectreMitigationNotEnabled {
+        internal static string BA3002_Error_NoStackSeg {
             get {
-                return ResourceManager.GetString("BA2024_Error_SpectreMitigationNotEnabled", resourceCulture);
+                return ResourceManager.GetString("BA3002_Error_NoStackSeg", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The MitigatedCompilers configuration entry was incorrect, either because version numbers overlapped or because a starting version number was higher than an ending version number..
+        ///   Looks up a localized string similar to Stack on {0} is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are compiling with &apos;-z noexecstack&apos; to mark the stack as non-executable..
         /// </summary>
-        internal static string BA2024_InitializationException {
+        internal static string BA3002_Error_StackExec {
             get {
-                return ResourceManager.GetString("BA2024_InitializationException", resourceCulture);
+                return ResourceManager.GetString("BA3002_Error_StackExec", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All linked modules &apos;{0}&apos; were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities..
+        ///   Looks up a localized string similar to GNU_STACK segment marked as non-executable on {0}..
         /// </summary>
-        internal static string BA2024_Pass {
+        internal static string BA3002_Pass {
             get {
-                return ResourceManager.GetString("BA2024_Pass", resourceCulture);
+                return ResourceManager.GetString("BA3002_Pass", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following modules were compiled with a toolset that supports /Qspectre but the deprecated /d2guardspecload argument was specified on the command-line instead: {0}.
+        ///   Looks up a localized string similar to The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use &apos;--fstack-protector-strong&apos; (all buffers of 4 bytes or more) or &apos;--fstack-protector-all&apos; (all functions) to enable this..
         /// </summary>
-        internal static string BA2024_Warning_DeprecatedMitigationEnabled {
+        internal static string BA3003_EnableStackProtector_Description {
             get {
-                return ResourceManager.GetString("BA2024_Warning_DeprecatedMitigationEnabled", resourceCulture);
+                return ResourceManager.GetString("BA3003_EnableStackProtector_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The stack protector was not found in {0}.  This may be because the binary has no stack-based arrays, or because &apos;--stack-protector-strong&apos; was not used..
+        /// </summary>
+        internal static string BA3003_Error {
+            get {
+                return ResourceManager.GetString("BA3003_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stack protector was found on {0}.  However, if you are not compiling with &apos;--stack-protector-strong&apos;, it may provide additional protections..
+        /// </summary>
+        internal static string BA3003_Pass {
+            get {
+                return ResourceManager.GetString("BA3003_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the .data section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
+        /// </summary>
+        internal static string BA3010_EnableReadOnlyRelocations_Description {
+            get {
+                return ResourceManager.GetString("BA3010_EnableReadOnlyRelocations_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The GNU_RELRO segment is missing from this binary, so relocation sections in {0} will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,relro&apos; to address this..
+        /// </summary>
+        internal static string BA3010_Error {
+            get {
+                return ResourceManager.GetString("BA3010_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The GNU_RELRO segment was present, so {0} is protected..
+        /// </summary>
+        internal static string BA3010_Pass {
+            get {
+                return ResourceManager.GetString("BA3010_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No checked functions are present/used when compiling &apos;{0}&apos;, and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing &apos;-D_FORTIFY_SOURCE=2&apos; when optimization level 2 (&apos;-O2&apos;) is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings..
+        /// </summary>
+        internal static string BA3030_Error {
+            get {
+                return ResourceManager.GetString("BA3030_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All functions that can be checked in &apos;{0}&apos; are using the checked versions, so this binary is protected from overflows caused by those function&apos;s use..
+        /// </summary>
+        internal static string BA3030_Pass_AllFunctionsChecked {
+            get {
+                return ResourceManager.GetString("BA3030_Pass_AllFunctionsChecked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No unsafe functions which can be replaced with checked versions are used in &apos;{0}&apos;..
+        /// </summary>
+        internal static string BA3030_Pass_NoCheckableFunctions {
+            get {
+                return ResourceManager.GetString("BA3030_Pass_NoCheckableFunctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some checked functions were found in &apos;{0}&apos;; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy..
+        /// </summary>
+        internal static string BA3030_Pass_SomeFunctionsChecked {
+            get {
+                return ResourceManager.GetString("BA3030_Pass_SomeFunctionsChecked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing &apos;-DFortify_Source=2&apos; when optimization level 2 is enabled (&apos;-O2&apos;)..
+        /// </summary>
+        internal static string BA3030_UseCheckedFunctionsWithGCC_Description {
+            get {
+                return ResourceManager.GetString("BA3030_UseCheckedFunctionsWithGCC_Description", resourceCulture);
             }
         }
         
@@ -864,6 +950,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string NotApplicable_InvalidMetadata {
             get {
                 return ResourceManager.GetString("NotApplicable_InvalidMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This check is not supported on the {0} platform, as it requires interoperability with a native Windows library..
+        /// </summary>
+        internal static string NotApplicable_PlatformUnsupported {
+            get {
+                return ResourceManager.GetString("NotApplicable_PlatformUnsupported", resourceCulture);
             }
         }
     }

@@ -86,10 +86,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (string target in targets)
             {
-                PE pe = new PE(target);
-                if (!pe.IsPEFile) { continue; }
-
                 context = CreateContext(logger, policy, target);
+
+                if(!context.IsValidAnalysisTarget) { continue; }
 
                 context.Rule = skimmer;
 
@@ -146,8 +145,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             Assert.Equal(0, sb.Length);
-            Assert.Equal(0, expected.Count);
-            Assert.Equal(0, other.Count);
+            Assert.Empty(expected);
+            Assert.Empty(other);
         }
 
         private BinaryAnalyzerContext CreateContext(TestMessageLogger logger, PropertiesDictionary policy, string target)
@@ -162,6 +161,61 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             return context;
+        }
+
+        private void VerifyThrows<ExceptionType>(
+            IBinarySkimmer skimmer,
+            IEnumerable<string> additionalTestFiles = null,
+            bool useDefaultPolicy = false) where ExceptionType : Exception
+        {
+            var targets = new List<string>();
+            string ruleName = skimmer.GetType().Name;
+            string baseFilesDirectory = ruleName;
+            baseFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", baseFilesDirectory);
+
+            string[] testFilesDirectories =
+                new string[]
+                {
+                    Path.Combine(baseFilesDirectory, "Pass"),
+                    Path.Combine(baseFilesDirectory, "Fail"),
+                    Path.Combine(baseFilesDirectory, "NotApplicable")
+                };
+
+            foreach(var testDirectory in testFilesDirectories)
+            {
+                if(Directory.Exists(testDirectory))
+                {
+                    foreach (string target in Directory.GetFiles(testDirectory, "*", SearchOption.AllDirectories))
+                    {
+                        targets.Add(target);
+                    }
+                }
+            }
+            var context = new BinaryAnalyzerContext();
+            var logger = new TestMessageLogger();
+            context.Logger = logger;
+            PropertiesDictionary policy = null;
+
+            if (useDefaultPolicy)
+            {
+                policy = new PropertiesDictionary();
+            }
+            context.Policy = policy;
+
+            skimmer.Initialize(context);
+
+            foreach (string target in targets)
+            {
+                context = CreateContext(logger, policy, target);
+
+                context.Rule = skimmer;
+
+                if (skimmer.CanAnalyze(context, out string reasonForNotAnalyzing) != AnalysisApplicability.ApplicableToSpecifiedTarget)
+                {
+                    continue;
+                }
+                Assert.Throws<ExceptionType>(() => skimmer.Analyze(context));
+            }
         }
 
         private void VerifyNotApplicable(
@@ -198,13 +252,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             foreach (string target in targets)
             {
                 string extension = Path.GetExtension(target);
-                if (!AnalyzeCommand.ValidAnalysisFileExtensions.Contains(extension))
-                {
-                    Assert.True(false, "Test file with unexpected extension encountered: " + target);
-                }
-
+                
                 context = CreateContext(logger, null, target);
-                if (!context.PE.IsPEFile) { continue; }
+                if (!context.IsValidAnalysisTarget) { continue; }
 
                 if (useDefaultPolicy)
                 {
@@ -533,13 +583,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotShipVulnerableBinaries_Fail()
         {
-            VerifyFail(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                VerifyFail(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+            } 
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void DoNotShipVulnerableBinaries_Pass()
         {
-            VerifyPass(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                VerifyPass(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
@@ -563,14 +627,28 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         [Fact]
         public void EnableStackProtection_Fail()
-        {
-            VerifyFail(new EnableStackProtection());
+        { 
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                VerifyFail(new EnableStackProtection()); 
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void EnableStackProtection_Pass()
-        {
-            VerifyPass(new EnableStackProtection());
+        { 
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                VerifyPass(new EnableStackProtection());
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
@@ -584,17 +662,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void InitializeStackProtection_Fail()
         {
-            HashSet<string> failureConditions = new HashSet<string>(new string[] { MetadataConditions.CouldNotLoadPdb });
-            VerifyFail(
-                new InitializeStackProtection(),
-                GetTestFilesMatchingConditions(failureConditions),
-                useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                HashSet<string> failureConditions = new HashSet<string>(new string[] { MetadataConditions.CouldNotLoadPdb });
+                VerifyFail(
+                    new InitializeStackProtection(),
+                    GetTestFilesMatchingConditions(failureConditions),
+                    useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void InitializeStackProtection_Pass()
         {
-            VerifyPass(new InitializeStackProtection());
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                VerifyPass(new InitializeStackProtection());
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
@@ -606,19 +694,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void DoNotModifyStackProtectionCooke_Fail()
+        public void DoNotModifyStackProtectionCookie_Fail()
         {
             VerifyFail(new DoNotModifyStackProtectionCookie());
         }
 
         [Fact]
-        public void DoNotModifyStackProtectionCooke_Pass()
+        public void DoNotModifyStackProtectionCookie_Pass()
         {
             VerifyPass(new DoNotModifyStackProtectionCookie());
         }
 
         [Fact]
-        public void DoNotModifyStackProtectionCooke_NotApplicable()
+        public void DoNotModifyStackProtectionCookie_NotApplicable()
         {
             HashSet<string> notApplicableTo = GetNotApplicableBinariesForStackProtectionFeature();
 
@@ -639,17 +727,31 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotDisableStackProtectionForFunctions_Fail()
         {
-            HashSet<string> failureConditions = new HashSet<string>(new string[] { MetadataConditions.CouldNotLoadPdb });
-            VerifyFail(
-                new DoNotDisableStackProtectionForFunctions(),
-                GetTestFilesMatchingConditions(failureConditions),
-                useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                HashSet<string> failureConditions = new HashSet<string>(new string[] { MetadataConditions.CouldNotLoadPdb });
+                VerifyFail(
+                    new DoNotDisableStackProtectionForFunctions(),
+                    GetTestFilesMatchingConditions(failureConditions),
+                    useDefaultPolicy: true);
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void DoNotDisableStackProtectionForFunctions_Pass()
         {
-            VerifyPass(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                VerifyPass(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
@@ -662,45 +764,74 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             notApplicableTo.Add(MetadataConditions.ImageIsXBoxBinary);
 
             VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), notApplicableTo);
-
-            HashSet<string> applicableTo = new HashSet<string>();
-            applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-            VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
+            
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                HashSet<string> applicableTo = new HashSet<string>();
+                applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
+                VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
+            }
+            
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void EnableCriticalCompilerWarnings_Fail()
         {
-            HashSet<string> failureConditions = new HashSet<string>(new string[] { MetadataConditions.CouldNotLoadPdb });
-            VerifyFail(
-                new EnableCriticalCompilerWarnings(),
-                GetTestFilesMatchingConditions(failureConditions),
-                useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                HashSet<string> failureConditions = new HashSet<string>(new string[] { MetadataConditions.CouldNotLoadPdb });
+                VerifyFail(
+                    new EnableCriticalCompilerWarnings(),
+                    GetTestFilesMatchingConditions(failureConditions),
+                    useDefaultPolicy: true);
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void EnableCriticalCompilerWarnings_Pass()
         {
-            VerifyPass(new EnableCriticalCompilerWarnings(), useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                VerifyPass(new EnableCriticalCompilerWarnings(), useDefaultPolicy: true);
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void EnableCriticalCompilerWarnings_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>();
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            { 
+                HashSet<string> notApplicableTo = new HashSet<string>();
 
-            notApplicableTo.Add(MetadataConditions.ImageIsILOnlyManagedAssembly);
-            notApplicableTo.Add(MetadataConditions.ImageIsResourceOnlyBinary);
+                notApplicableTo.Add(MetadataConditions.ImageIsILOnlyManagedAssembly);
+                notApplicableTo.Add(MetadataConditions.ImageIsResourceOnlyBinary);
 
-            VerifyNotApplicable(new EnableCriticalCompilerWarnings(), notApplicableTo);
+                VerifyNotApplicable(new EnableCriticalCompilerWarnings(), notApplicableTo);
 
-            HashSet<string> applicableTo = new HashSet<string>();
-            applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
+                HashSet<string> applicableTo = new HashSet<string>();
+                applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
 
-            VerifyNotApplicable(
-                new EnableCriticalCompilerWarnings(), 
-                applicableTo, 
-                AnalysisApplicability.ApplicableToSpecifiedTarget);
+                VerifyNotApplicable(
+                    new EnableCriticalCompilerWarnings(), 
+                    applicableTo, 
+                    AnalysisApplicability.ApplicableToSpecifiedTarget);
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
@@ -731,17 +862,31 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BuildWithSecureTools_Fail()
         {
-            HashSet<string> failureConditions = new HashSet<string>(new string[] { MetadataConditions.CouldNotLoadPdb });
-            VerifyFail(
-                new BuildWithSecureTools(),
-                GetTestFilesMatchingConditions(failureConditions),
-                useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {    
+                HashSet<string> failureConditions = new HashSet<string>(new string[] { MetadataConditions.CouldNotLoadPdb });
+                VerifyFail(
+                    new BuildWithSecureTools(),
+                    GetTestFilesMatchingConditions(failureConditions),
+                    useDefaultPolicy: true);
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void BuildWithSecureTools_Pass()
         {
-            VerifyPass(new BuildWithSecureTools(), useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {    
+                VerifyPass(new BuildWithSecureTools(), useDefaultPolicy: true);
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
@@ -758,17 +903,31 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotIncorporateVulnerableDependencies_Fail()
         {
-            HashSet<string> failureConditions = new HashSet<string>(new string[] { MetadataConditions.CouldNotLoadPdb });
-            VerifyFail(
-                new DoNotIncorporateVulnerableDependencies(),
-                GetTestFilesMatchingConditions(failureConditions),
-                useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            { 
+                HashSet<string> failureConditions = new HashSet<string>(new string[] { MetadataConditions.CouldNotLoadPdb });
+                VerifyFail(
+                    new DoNotIncorporateVulnerableDependencies(),
+                    GetTestFilesMatchingConditions(failureConditions),
+                    useDefaultPolicy: true);
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void DoNotIncorporateVulnerableDependencies_Pass()
         {
-            VerifyPass(new DoNotIncorporateVulnerableDependencies(), useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            { 
+                VerifyPass(new DoNotIncorporateVulnerableDependencies(), useDefaultPolicy: true);
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
@@ -780,25 +939,41 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             notApplicableTo.Add(MetadataConditions.ImageIsResourceOnlyBinary);
 
             VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), notApplicableTo);
-
-            HashSet<string> applicableTo = new HashSet<string>();
-            applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-            VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                HashSet<string> applicableTo = new HashSet<string>();
+                applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
+                VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void SignSecurely_Fail()
         {
-            VerifyFail(new SignSecurely());
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                VerifyFail(new SignSecurely());
+            }
+            else 
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void SignSecurely_Pass()
         {
-            string kernel32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
-            kernel32Path = Path.Combine(kernel32Path, "kernel32.dll");
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {    
+                string kernel32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
+                kernel32Path = Path.Combine(kernel32Path, "kernel32.dll");
 
-            VerifyPass(new SignSecurely(), additionalTestFiles : new[] { kernel32Path });
+                VerifyPass(new SignSecurely(), additionalTestFiles : new[] { kernel32Path });
+            }
         }
 
         [Fact]
@@ -807,6 +982,96 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             HashSet<string> applicableTo = new HashSet<string>();
             applicableTo.Add(MetadataConditions.ImageIsNotSigned);
             VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableToSpecifiedTarget);
+        }
+        
+        [Fact]
+        public void EnablePIEOnExecutables_Pass()
+        {
+            VerifyPass(new EnablePIEOnExecutables());
+        }
+
+        [Fact]
+        public void EnablePIEOnExecutables_Fail()
+        {
+            VerifyFail(new EnablePIEOnExecutables());
+        }
+
+        [Fact]
+        public void EnablePIEOnExecutables_NotApplicable()
+        {
+            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void DoNotMarkStackAsExecutable_Pass()
+        {
+            VerifyPass(new DoNotMarkStackAsExecutable());
+        }
+
+        [Fact]
+        public void DoNotMarkStackAsExecutable_Fail()
+        {
+            VerifyFail(new DoNotMarkStackAsExecutable());
+        }
+
+        [Fact]
+        public void DoNotMarkStackAsExecutable_NotApplicable()
+        {
+            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void EnableReadOnlyRelocations_Pass()
+        {
+            VerifyPass(new EnableReadOnlyRelocations());
+        }
+
+        [Fact]
+        public void EnableReadOnlyRelocations_Fail()
+        {
+            VerifyFail(new EnableReadOnlyRelocations());
+        }
+
+        [Fact]
+        public void EnableReadOnlyRelocations_NotApplicable()
+        {
+            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void EnableStackProtector_Pass()
+        {
+            VerifyPass(new EnableStackProtector());
+        }
+
+        [Fact]
+        public void EnableStackProtector_Fail()
+        {
+            VerifyFail(new EnableStackProtector());
+        }
+
+        [Fact]
+        public void EnableStackProtector_NotApplicable()
+        {
+            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void UseCheckedFunctionsWithGCC_Pass()
+        {
+            VerifyPass(new UseCheckedFunctionsWithGCC());
+        }
+
+        [Fact]
+        public void UseCheckedFunctionsWithGCC_Fail()
+        {
+            VerifyFail(new UseCheckedFunctionsWithGCC());
+        }
+
+        [Fact]
+        public void UseCheckedFunctionsWithGCC_NotApplicable()
+        {
+            VerifyNotApplicable(new UseCheckedFunctionsWithGCC(), new HashSet<string>());
         }
     }
 }

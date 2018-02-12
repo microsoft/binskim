@@ -218,10 +218,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         internal const string szOID_CERT_STRONG_KEY_OS_1 = "1.3.6.1.4.1.311.72.2.1";
 
         [DllImport("winterop.dll", EntryPoint = "HashPublicKeyInfo", CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = false)]
-        internal static extern void HashPublicKeyInfo(IntPtr certContext, byte[] publicKeyInfoHashed, ref uint sizePublicKeyInfoHashed);
+        private static extern void HashPublicKeyInfo(IntPtr certContext, byte[] publicKeyInfoHashed, ref uint sizePublicKeyInfoHashed);
+
+        internal static void HashPublicKeyInfoWrapper(IntPtr certContext, byte[] publicKeyInfoHashed, ref uint sizePublicKeyInfoHashed)
+        {
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+            HashPublicKeyInfo(certContext, publicKeyInfoHashed, ref sizePublicKeyInfoHashed);
+        }
 
         [DllImport("crypt32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        internal extern static
+        private extern static
         bool CryptHashPublicKeyInfo(
             [In]      IntPtr hCryptProv, // HCRYPTPROV
             [In]      uint Algid,      // ALG_ID
@@ -231,8 +237,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             [Out]     byte[] pbComputedHash,
             [In, Out] ref uint pcbComputedHash);
 
+        internal static bool CryptHashPublicKeyInfoWrapper(
+            [In]      IntPtr hCryptProv, // HCRYPTPROV
+            [In]      uint Algid,      // ALG_ID
+            [In]      uint dwFlags,
+            [In]      uint dwCertEncodingType,
+            [In]      ref CERT_PUBLIC_KEY_INFO pInfo,
+            [Out]     byte[] pbComputedHash,
+            [In, Out] ref uint pcbComputedHash)
+        {
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+            return CryptHashPublicKeyInfo(hCryptProv, Algid, dwFlags, dwCertEncodingType, ref pInfo, pbComputedHash, ref pcbComputedHash);
+        }
+
+
         [DllImport("crypt32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        internal extern static
+        private extern static
         bool CryptHashToBeSigned(
             [In]      IntPtr hCryptProv, // HCRYPTPROV
             [In]      uint dwCertEncodingType,
@@ -241,22 +261,65 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             [Out]     byte[] pbComputedHash,
             [In, Out] ref uint pcbComputedHash);
 
+        internal static bool CryptHashToBeSignedWrapper(
+            [In]      IntPtr hCryptProv, // HCRYPTPROV
+            [In]      uint dwCertEncodingType,
+            [In]      byte[] pbEncoded,
+            [In]      uint cbEncoded,
+            [Out]     byte[] pbComputedHash,
+            [In, Out] ref uint pcbComputedHash)
+        {
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+            return CryptHashToBeSignedWrapper(hCryptProv,
+                dwCertEncodingType,
+                pbEncoded,
+                cbEncoded,
+                pbComputedHash,
+                ref pcbComputedHash);
+        }
+
+
         [DllImport("wintrust.dll")]
-        public static extern UInt32 WinVerifyTrust(
+        private static extern UInt32 WinVerifyTrust(
             IntPtr hwnd,
             ref Guid action,
             [In, Out] ref WINTRUST_DATA winVerifyTrustData);
 
-        [DllImport("wintrust.dll")]
-        public static extern IntPtr WTHelperProvDataFromStateData(
-            IntPtr hStateData);
+        public static UInt32 WinVerifyTrustWrapper(
+            IntPtr hwnd,
+            ref Guid action,
+            [In, Out] ref WINTRUST_DATA winVerifyTrustData)
+        {
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+            return WinVerifyTrust(hwnd, ref action, ref winVerifyTrustData);
+        }
 
         [DllImport("wintrust.dll")]
-        public static extern IntPtr WTHelperGetProvSignerFromChain(
+        private static extern IntPtr WTHelperProvDataFromStateData(
+            IntPtr hStateData);
+
+        public static IntPtr WTHelperProvDataFromStateDataWrapper(IntPtr hStateData)
+        {
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+            return WTHelperProvDataFromStateData(hStateData);
+        }
+        
+        [DllImport("wintrust.dll")]
+        private static extern IntPtr WTHelperGetProvSignerFromChain(
             IntPtr pProvData,
             uint idxSigner,
             [MarshalAsAttribute(UnmanagedType.Bool)]bool fCounterSigner,
             uint idxCounterSigner);
+
+        public static IntPtr WTHelperGetProvSignerFromChainWrapper(
+            IntPtr pProvData,
+            uint idxSigner,
+            [MarshalAsAttribute(UnmanagedType.Bool)]bool fCounterSigner,
+            uint idxCounterSigner)
+        {
+            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
+            return WTHelperGetProvSignerFromChain(pProvData, idxSigner, fCounterSigner, idxCounterSigner);
+        }
 
         public enum UIChoice : uint
         {

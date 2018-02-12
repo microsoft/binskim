@@ -84,12 +84,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        public void LogToolNotification(Notification notification)
+        public void LogToolNotification(Sarif.Notification notification)
         {
             throw new NotImplementedException();
         }
 
-        public void LogConfigurationNotification(Notification notification)
+        public void LogConfigurationNotification(Sarif.Notification notification)
         {
             ConfigurationErrorTargets.Add(notification.PhysicalLocation.Uri.LocalPath);
         }

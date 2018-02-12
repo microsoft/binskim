@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class SdkResources {
@@ -61,6 +61,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attempted to cast a binary target to a &apos;{0}&apos;, but was unable to.  This indicates a programmer error in rules evaluating that sort of target..
+        /// </summary>
+        internal static string IllegalBinaryCast {
+            get {
+                return ResourceManager.GetString("IllegalBinaryCast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A binary context object was re-initialized with a new file path..
         /// </summary>
         internal static string IllegalContextReuse {
@@ -75,6 +84,24 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_CouldNotLoadPdb {
             get {
                 return ResourceManager.GetString("MetadataCondition_CouldNotLoadPdb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ELF is not a shared object or executable.
+        /// </summary>
+        internal static string MetadataCondition_ELFIsCoreNoneOrObject {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ELFIsCoreNoneOrObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to not compiled solely with gcc.
+        /// </summary>
+        internal static string MetadataCondition_ELFNotBuiltWithGCC {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ELFNotBuiltWithGCC", resourceCulture);
             }
         }
         
@@ -187,11 +214,29 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is not an ELF binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotELF {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotELF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is not an executable program.
         /// </summary>
         internal static string MetadataCondition_ImageIsNotExe {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsNotExe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image is not a PE binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotPE {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotPE", resourceCulture);
             }
         }
         

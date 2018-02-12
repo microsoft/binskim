@@ -1,79 +1,27 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
-    <version>$major$.$minor$.$patch$$prerelease$</version>
-    <title>Microsoft BinSkim Binary Analysis Tool (x86/x64)</title>
+    <id>Microsoft.CodeAnalysis.BinSkim</id>
+    <version>$version$</version>
+    <title>Microsoft BinSkim Binary Analysis Tool</title>
     <authors>@michaelcfanning,@nguerrera,@billyoneal</authors>
     <owners>@michaelcfanning,@nguerrera</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A correctness and security checker for Windows portable executables</description>
-    <releaseNotes>Version $major$.$minor$.$patch$$prerelease$ of BinSkim</releaseNotes>
+    <releaseNotes>Version $version$ of BinSkim</releaseNotes>
     <copyright>Copyright Microsoft 2015</copyright>    
     <licenseUrl>https://github.com/microsoft/binskim/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/microsoft/binskim</projectUrl>
     <tags>Binary,Analysis,binskim,binscope</tags>
   </metadata>
   <files>
-    <file src="..\..\src\ReleaseHistory.md" target="tools\ReleaseHistory.md" />
+	<!-- NOTE: the exclude attribute must be on a single line -->
+    <file src="bld\bin\AnyCPU_$configuration$\Publish\**\*.*" target="tools"/>
     
-    <!-- tools\x64 -->
-    <file src="x64_Release\BinSkim.exe" target="tools\x64" />
-    <file src="x64_Release\BinSkim.pdb" target="tools\x64" />
-    <file src="x64_Release\README.TXT" target="tools\x64" />
-    <file src="x64_Release\BinaryParsers.dll" target="tools\x64" />
-    <file src="x64_Release\BinaryParsers.pdb" target="tools\x64" />
-    <file src="x64_Release\BinSkim.Sdk.dll" target="tools\x64" />
-    <file src="x64_Release\BinSkim.Sdk.pdb" target="tools\x64" />
-    <file src="x64_Release\BinSkim.Rules.dll" target="tools\x64" />
-    <file src="x64_Release\BinSkim.Rules.pdb" target="tools\x64" />
-    <file src="x64_Release\CommandLine.dll" target="tools\x64" />
-    <file src="x64_Release\Sarif.dll" target="tools\x64" />
-    <file src="x64_Release\Sarif.Driver.dll" target="tools\x64" />
-    <file src="x64_Release\NewtonSoft.Json.dll" target="tools\x64" />
-    <file src="x64_Release\System.Collections.Immutable.dll" target="tools\x64" />
-    <file src="x64_Release\System.Composition.AttributedModel.dll" target="tools\x64" />
-    <file src="x64_Release\System.Composition.Convention.dll" target="tools\x64" />
-    <file src="x64_Release\System.Composition.Hosting.dll" target="tools\x64" />
-    <file src="x64_Release\System.Composition.Runtime.dll" target="tools\x64" />
-    <file src="x64_Release\System.Composition.TypedParts.dll" target="tools\x64" />
-    <file src="x64_Release\System.Reflection.Metadata.dll" target="tools\x64" />
-    <file src="x64_Release\msdia140.dll.manifest" target="tools\x64" />
-    <file src="x64_Release\msdia140.dll" target="tools\x64" />
-    <file src="x64_Release\symsrv.dll" target="tools\x64" />
-    <file src="x64_Release\Microsoft.CodeAnalysis.dll" target="tools\x64" />
-    <file src="x64_Release\Microsoft.CodeAnalysis.CSharp.dll" target="tools\x64" />
-
-    <!-- tools\x86 -->
-    <file src="x86_Release\BinSkim.exe" target="tools\x86" />
-    <file src="x86_Release\BinSkim.pdb" target="tools\x86" />
-    <file src="x86_Release\README.TXT" target="tools\x86" />
-    <file src="x86_Release\BinaryParsers.dll" target="tools\x86" />
-    <file src="x86_Release\BinaryParsers.pdb" target="tools\x86" />
-    <file src="x86_Release\BinSkim.Sdk.dll" target="tools\x86" />
-    <file src="x86_Release\BinSkim.Sdk.pdb" target="tools\x86" />
-    <file src="x86_Release\BinSkim.Rules.dll" target="tools\x86" />
-    <file src="x86_Release\BinSkim.Rules.pdb" target="tools\x86" />
-    <file src="x86_Release\CommandLine.dll" target="tools\x86" />
-    <file src="x86_Release\Sarif.dll" target="tools\x86" />
-    <file src="x86_Release\Sarif.Driver.dll" target="tools\x86" />
-    <file src="x86_Release\NewtonSoft.Json.dll" target="tools\x86" />
-    <file src="x86_Release\System.Collections.Immutable.dll" target="tools\x86" />
-    <file src="x86_Release\System.Composition.AttributedModel.dll" target="tools\x86" />
-    <file src="x86_Release\System.Composition.Convention.dll" target="tools\x86" />
-    <file src="x86_Release\System.Composition.Hosting.dll" target="tools\x86" />
-    <file src="x86_Release\System.Composition.Runtime.dll" target="tools\x86" />
-    <file src="x86_Release\System.Composition.TypedParts.dll" target="tools\x86" />
-    <file src="x86_Release\System.Reflection.Metadata.dll" target="tools\x86" />
-    <file src="x86_Release\msdia140.dll.manifest" target="tools\x86" />
-    <file src="x86_Release\msdia140.dll" target="tools\x86" />
-    <file src="x64_Release\symsrv.dll" target="tools\x86" />
-    <file src="x64_Release\Microsoft.CodeAnalysis.dll" target="tools\x86" />
-    <file src="x64_Release\Microsoft.CodeAnalysis.CSharp.dll" target="tools\x86" />
-
-    <file src="..\..\src\BinaryParsers\**\*.cs" target="src\BinaryParsers" />
-    <file src="..\..\src\BinSkim.Driver\**\*.cs" target="src\BinSkim.Driver" />
-    <file src="..\..\src\BinSkim.Rules\**\*.cs" target="src\BinSkim.Rules" />
-    <file src="..\..\src\BinSkim.Sdk\**\*.cs" target="src\BinSkim.Sdk" />
+    <file src="src\ReleaseHistory.md" target="tools\ReleaseHistory.md" />
+    <file src="src\BinaryParsers\**\*.cs" target="src\BinaryParsers" />
+    <file src="src\BinSkim.Driver\**\*.cs" target="src\BinSkim.Driver" />
+    <file src="src\BinSkim.Rules\**\*.cs" target="src\BinSkim.Rules" />
+    <file src="src\BinSkim.Sdk\**\*.cs" target="src\BinSkim.Sdk" />
   </files>
 </package>

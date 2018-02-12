@@ -4,15 +4,14 @@ Param(
 
 $tool = "BinSkim"
 $repoRoot = ( Resolve-Path "$PSScriptRoot\..\..\" ).ToString()
-$utility = "$repoRoot\bld\bin\x86_Release\$tool.exe"
-$msbuild = "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe"
+$utility = "$repoRoot\bld\bin\AnyCPU_Release\net461\win-x64\$tool.exe"
 
 function Build-Tool()
 {
     Write-Host "Building the tool..."  -NoNewline
     # Out-Null *and* /noconsolelogger here because our scripts call out to batch files and similar
     # that don't respect msbuild's /noconsolelogger switch.
-    &$msbuild $PSScriptRoot\..\$tool.Driver\$tool.Driver.csproj /p:"Platform=x86`;Configuration=Release" /m 
+    &dotnet build $PSScriptRoot\..\$tool.Driver\$tool.Driver.csproj -c Release --runtime win-x64 /m /verbosity:minimal
     Write-Host " done."
 }
 
@@ -34,8 +33,8 @@ function Build-Baselines($sourceExtension)
 
         # Actually run the tool
         Remove-Item $outputTemp -ErrorAction SilentlyContinue
-	Write-Host "$utility analyze "$input" --output "$outputTemp" --verbose --config default"
-        &$utility analyze "$input" --output "$outputTemp" --verbose --hashes --config default
+        Write-Host "$utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default"
+        &$utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default
 
         # Replace repository root absolute path with Z:\ for machine and enlistment independence
         $text = [IO.File]::ReadAllText($outputTemp)
@@ -60,5 +59,7 @@ function Build-Baselines($sourceExtension)
 Build-Tool
 Build-Baselines "*.dll"
 Build-Baselines "*.exe"
+Build-Baselines "gcc.*"
+Build-Baselines "clang.*"
 
 Write-Host "Finished! Terminate."
