@@ -7,7 +7,7 @@ using System.Collections.Immutable;
 using System.Composition;
 using System.Globalization;
 using System.Reflection.PortableExecutable;
-
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -17,7 +17,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
-    public class BuildWithSecureTools : BinarySkimmerBase, IOptionsProvider
+    public class BuildWithSecureTools : WindowsBinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2006
@@ -77,9 +77,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<AdvancedMitigations>(
                 AnalyzerName, nameof(AdvancedMitigationsEnforced), defaultValue: () => { return AdvancedMitigations.None; });
 
-        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
-            PE portableExecutable = context.PE;
+            PE portableExecutable = target.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyManagedAssembly;
@@ -94,18 +94,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            PEHeader peHeader = context.PE.PEHeaders.PEHeader;
+            PEBinary target = context.PEBinary();
+            PEHeader peHeader = target.PE.PEHeaders.PEHeader;
 
-            Pdb pdb = context.Pdb;
+            Pdb pdb = target.Pdb;
             if (pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
+                Errors.LogExceptionLoadingPdb(context, target.PdbParseException);
                 return;
             }
 
             Version minCompilerVersion;
 
-            minCompilerVersion = (context.PE.IsXBox)
+            minCompilerVersion = (target.PE.IsXBox)
                 ?  context.Policy.GetProperty(MinimumToolVersions)[MIN_XBOX_COMPILER_VER]
                 : context.Policy.GetProperty(MinimumToolVersions)[MIN_COMPILER_VER];
 
@@ -156,7 +157,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (!foundIssue &&
                     (advancedMitigations & AdvancedMitigations.Spectre) == AdvancedMitigations.Spectre)
                 {
-                    ExtendedMachine machineType = (ExtendedMachine)context.PE.Machine;
+                    ExtendedMachine machineType = (ExtendedMachine)target.PE.Machine;
 
                     // If this module was compiled with a version that exceeds all baseline
                     // toolchains documented in BA2024, then we can assume the OM toolchain is ok.

@@ -151,7 +151,7 @@
     <value>'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems.</value>
   </data>
   <data name="BA2006_BuildWithSecureTools_Description" xml:space="preserve">
-    <value>Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features.</value>
+    <value>Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks.</value>
   </data>
   <data name="BA2006_Error" xml:space="preserve">
     <value>'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}). More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning. Modules built outside of policy: 
@@ -357,6 +357,38 @@ Modules triggering this check were:
   </data>
   <data name="BA2022_SignCorrectly_Description" xml:space="preserve">
     <value>Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds.</value>
+  </data>
+  <data name="BA2024_EnableSpectreMitigations_Description" xml:space="preserve">
+    <value>Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it.</value>
+  </data>
+  <data name="BA2024_Error" xml:space="preserve">
+    <value>'{0}' was compiled with one or more modules that do not properly enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). The following modules are out of policy:
+{1}</value>
+  </data>
+  <data name="BA2024_Error_MasmModulesDetected" xml:space="preserve">
+    <value>The following MASM modules were detected. The MASM compiler does not currently mitigate against speculative execution attacks:
+{0}</value>
+  </data>
+  <data name="BA2024_Error_OptimizationsDisabled" xml:space="preserve">
+    <value>The following modules were compiled with optimizations disabled (/Od), a condition that disables Spectre mitigations:
+{0}</value>
+  </data>
+  <data name="BA2024_Error_SpectreMitigationExplicitlyDisabled" xml:space="preserve">
+    <value>The following modules were compiled with Spectre mitigations explicitly disabled:
+{0}</value>
+  </data>
+  <data name="BA2024_Error_SpectreMitigationNotEnabled" xml:space="preserve">
+    <value>The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:
+{0}</value>
+  </data>
+  <data name="BA2024_InitializationException" xml:space="preserve">
+    <value>The MitigatedCompilers configuration entry was incorrect, either because version numbers overlapped or because a starting version number was higher than an ending version number.</value>
+  </data>
+  <data name="BA2024_Pass" xml:space="preserve">
+    <value>All linked modules '{0}' were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.</value>
+  </data>
+  <data name="BA2024_Warning_DeprecatedMitigationEnabled" xml:space="preserve">
+    <value>The following modules were compiled with a toolset that supports /Qspectre but the deprecated /d2guardspecload argument was specified on the command-line instead: {0}</value>
   </data>
   <data name="BA3001_EnablePIEOnExecutables_Description" xml:space="preserve">
     <value>A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.</value>

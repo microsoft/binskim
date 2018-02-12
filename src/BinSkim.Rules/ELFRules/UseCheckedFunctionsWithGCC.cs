@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA3030
         /// </summary>
-        public override string Id { get { return RuleIds.UseCheckedFunctionsWithGCC; } }
+        public override string Id { get { return RuleIds.UseCheckedFunctionsWithGcc; } }
 
         /// <summary>
         /// The stack protector ensures that all functions that use buffers over a certain size will

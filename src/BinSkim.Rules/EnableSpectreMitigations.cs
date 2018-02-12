@@ -16,6 +16,7 @@ using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 using System.Runtime;
 using System.Linq;
+using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -27,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     }
 
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
-    public class EnableSpectreMitigations : BinarySkimmerBase, IOptionsProvider
+    public class EnableSpectreMitigations : WindowsBinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2024
@@ -92,10 +93,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<PropertiesDictionary>(AnalyzerName, nameof(MitigatedCompilers), defaultValue: () => { return BuildMitigatedCompilersData(); });
 
         private static Dictionary<MachineFamily, CompilerVersionToMitigation[]> _compilerData = null;
-        
-        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+
+        public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
-            PE portableExecutable = context.PE;
+            PE portableExecutable = target.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyManagedAssembly;
@@ -110,9 +111,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            PEHeader peHeader = context.PE.PEHeaders.PEHeader;
+            PEBinary target = context.PEBinary();
+            PEHeader peHeader = target.PE.PEHeaders.PEHeader;
 
-            Machine reflectionMachineType = context.PE.Machine;
+            Machine reflectionMachineType = target.PE.Machine;
 
             // The current Machine enum does not have support for Arm64, so translate to our Machine enum
             ExtendedMachine machineType = (ExtendedMachine)reflectionMachineType;
@@ -125,10 +127,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            Pdb pdb = context.Pdb;
+            Pdb pdb = target.Pdb;
             if (pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, context.PdbParseException);
+                Errors.LogExceptionLoadingPdb(context, target.PdbParseException);
                 return;
             }
 

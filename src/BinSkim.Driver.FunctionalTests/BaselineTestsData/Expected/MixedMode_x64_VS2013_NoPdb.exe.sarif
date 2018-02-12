@@ -328,6 +328,15 @@
       "configurationNotifications": [
         {
           "id": "ERR997.ExceptionLoadingPdb",
+          "ruleId": "BA2024",
+          "physicalLocation": {
+            "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"
+          },
+          "message": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))",
+          "level": "error"
+        },
+        {
+          "id": "ERR997.ExceptionLoadingPdb",
           "ruleId": "BA2006",
           "physicalLocation": {
             "uri": "file:///Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"

@@ -35,8 +35,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string DoNotMarkWritableSectionsAsExecutableId = "BA2021";
         public const string SignCorrectly = "BA2022";
 
+        public const string EnableSpectreMitigations = "BA2024";
+
+
         // ELF Checks
-        public const string EnablePIEOnExecutables = "BA3001";
+        public const string EnablePieOnExecutables = "BA3001";
         public const string DoNotMarkStackAsExecutable = "BA3002";
         public const string EnableStackProtector = "BA3003";
         // Skipping some check namespace (BA3004-3009) for future checks
@@ -44,6 +47,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // BA3011 -- saved for a future check.
         // BA3012-3029 -- saved for future non-compiler/language specific checks.
         // Compiler/Language specific checks follow.
-        public const string UseCheckedFunctionsWithGCC = "BA3030";
+        public const string UseCheckedFunctionsWithGcc = "BA3030";
     }
 }
