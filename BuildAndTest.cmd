@@ -45,9 +45,10 @@ dotnet build /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configura
 
 ::Run unit tests
 echo Run all multitargeting xunit tests
-call :RunMultitargetingTests Driver Functional || goto :ExitFailed
-call :RunMultitargetingTests Rules Functional  || goto :ExitFailed
-call :RunNewTestFormat BinaryParsers Unit || goto :ExitFailed
+call :RunTestProject BinaryParsers Unit || goto :ExitFailed
+call :RunTestProject BinSkim.Rules Unit || goto :ExitFailed
+call :RunTestProject BinSkim.Driver Functional || goto :ExitFailed
+call :RunTestProject BinSkim.Rules Functional  || goto :ExitFailed
 
 ::Create the BinSkim platform specific publish packages
 echo Creating Platform Specific BinSkim 'Publish' Packages
@@ -67,14 +68,7 @@ call CreateLayoutDirectory.cmd %~dp0bld\bin %Configuration% %Platform%
 
 goto :Exit
 
-:RunMultitargetingTests
-set TestProject=%1
-set TestType=%2
-pushd %~dp0src\BinSkim.%TestProject%.%TestType%Tests && dotnet test --no-build -c %Configuration% && popd
-if "%ERRORLEVEL%" NEQ "0" (echo %TestProject% %TestType% tests execution FAILED.)
-Exit /B %ERRORLEVEL%
-
-:RunNewTestFormat
+:RunTestProject
 set TestProject=%1
 set TestType=%2
 pushd %~dp0src\Test.%TestType%Tests.%TestProject% && dotnet test --no-build -c %Configuration% && popd

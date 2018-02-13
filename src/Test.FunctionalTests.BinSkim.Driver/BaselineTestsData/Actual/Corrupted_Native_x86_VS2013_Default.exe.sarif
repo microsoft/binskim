@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "BinSkim",
+        "version": "1.7.3.0",
+        "language": "en-US",
+        "properties": {
+        }
+      },
+      "results": [],
+      "configurationNotifications": [
+        {
+          "id": "ERR997.ExceptionLoadingAnalysisTarget",
+          "physicalLocation": {
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
+          },
+          "message": "Could not load analysis target 'Corrupted_Native_x86_VS2013_Default.exe'. (Image is either too small or contains an invalid byte offset or count.)",
+          "level": "error"
+        }
+      ],
+      "invocation": {
+      }
+    }
+  ]
+}

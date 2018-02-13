@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "BinSkim",
+        "version": "1.7.3.0",
+        "language": "en-US",
+        "properties": {
+        }
+      },
+      "results": [],
+      "configurationNotifications": [
+        {
+          "id": "WRN997.InvalidTarget",
+          "physicalLocation": {
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.stack_protector.a"
+          },
+          "message": "'gcc.stack_protector.a' was not analyzed as it does not appear to be a valid file type for analysis.",
+          "level": "note"
+        }
+      ],
+      "invocation": {
+      }
+    }
+  ]
+}

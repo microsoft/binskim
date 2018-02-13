@@ -7,5 +7,5 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("BinSkim PE/MSIL Analysis Driver")]
 [assembly: AssemblyDescription("A security and correctness analyzer for portable executable and MSIL formats.")]
 
-[assembly: InternalsVisibleTo("BinSkim.Driver.FunctionalTests")]
-[assembly: InternalsVisibleTo("BinSkim.Rules.FunctionalTests")]
+[assembly: InternalsVisibleTo("Test.FunctionalTests.BinSkim.Driver")]
+[assembly: InternalsVisibleTo("Test.FunctionalTests.BinSkim.Rules")]
