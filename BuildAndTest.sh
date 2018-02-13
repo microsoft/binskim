@@ -7,6 +7,7 @@ fi
 
 dotnet build src/BinSkimLinux.sln
 
-dotnet test src/BinSkim.Driver.FunctionalTests/BinSkim.Driver.FunctionalTests.csproj --no-build
-dotnet test src/BinSkim.Rules.FunctionalTests/BinSkim.Rules.FunctionalTests.csproj --no-build
+dotnet test src/Test.FunctionalTests.BinSkim.Driver/Test.FunctionalTests.BinSkim.Driver.csproj --no-build
+dotnet test src/Test.FunctionalTests.BinSkim.Rules/Test.FunctionalTests.BinSkim.Rules.csproj --no-build
 dotnet test src/Test.UnitTests.BinaryParsers/Test.UnitTests.BinaryParsers.csproj --no-build
+dotnet test src/Test.UnitTests.BinSkim.Rules/Test.UnitTests.BinSkim.Rules.csproj --no-build

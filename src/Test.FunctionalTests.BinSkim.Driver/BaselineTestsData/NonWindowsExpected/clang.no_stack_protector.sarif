@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "c6716e25-7b21-48d8-b3db-90c5ba51e2eb",
+      "id": "0c09917f-e0c7-41c1-af0f-c56d1305e870",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -32,159 +32,7 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "clang.no_stack_protector",
-              "DoNotMarkImportsSectionAsExecutable",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2021",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "clang.no_stack_protector",
-              "DoNotMarkWritableSectionsAsExecutable",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2019",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "clang.no_stack_protector",
-              "DoNotMarkWritableSectionsAsShared",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2012",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "clang.no_stack_protector",
-              "DoNotModifyStackProtectionCookie",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "clang.no_stack_protector",
-              "EnableAddressSpaceLayoutRandomization",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2008",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "clang.no_stack_protector",
-              "EnableControlFlowGuard",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2015",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "clang.no_stack_protector",
-              "EnableHighEntropyVirtualAddresses",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2018",
-          "level": "notApplicable",
-          "formattedRuleMessage": {
-            "formatId": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "clang.no_stack_protector",
-              "EnableSafeSEH",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
               }
             }
           ]
@@ -203,7 +51,102 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2008",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "clang.no_stack_protector",
+              "EnableControlFlowGuard",
+              "image is not a PE binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2009",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "clang.no_stack_protector",
+              "EnableAddressSpaceLayoutRandomization",
+              "image is not a PE binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2010",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "clang.no_stack_protector",
+              "DoNotMarkImportsSectionAsExecutable",
+              "image is not a PE binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2012",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "clang.no_stack_protector",
+              "DoNotModifyStackProtectionCookie",
+              "image is not a PE binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2015",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "clang.no_stack_protector",
+              "EnableHighEntropyVirtualAddresses",
+              "image is not a PE binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
               }
             }
           ]
@@ -222,24 +165,64 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
               }
             }
           ]
         },
         {
-          "ruleId": "BA3002",
-          "level": "pass",
+          "ruleId": "BA2018",
+          "level": "notApplicable",
           "formattedRuleMessage": {
-            "formatId": "Pass",
+            "formatId": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "clang.no_stack_protector"
+              "clang.no_stack_protector",
+              "EnableSafeSEH",
+              "image is not a PE binary"
             ]
           },
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "clang.no_stack_protector",
+              "DoNotMarkWritableSectionsAsShared",
+              "image is not a PE binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "level": "notApplicable",
+          "formattedRuleMessage": {
+            "formatId": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "clang.no_stack_protector",
+              "DoNotMarkWritableSectionsAsExecutable",
+              "image is not a PE binary"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
               }
             }
           ]
@@ -256,13 +239,13 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
               }
             }
           ]
         },
         {
-          "ruleId": "BA3010",
+          "ruleId": "BA3002",
           "level": "pass",
           "formattedRuleMessage": {
             "formatId": "Pass",
@@ -273,7 +256,7 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
               }
             }
           ]
@@ -290,25 +273,30 @@
           "locations": [
             {
               "analysisTarget": {
-                "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "level": "pass",
+          "formattedRuleMessage": {
+            "formatId": "Pass",
+            "arguments": [
+              "clang.no_stack_protector"
+            ]
+          },
+          "locations": [
+            {
+              "analysisTarget": {
+                "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
               }
             }
           ]
         }
       ],
       "configurationNotifications": [
-        {
-          "id": "WRN998.NotSupportedPlatform",
-          "physicalLocation": {},
-          "message": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
-        },
-        {
-          "id": "WRN998.NotSupportedPlatform",
-          "physicalLocation": {},
-          "message": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
-        },
         {
           "id": "WRN998.NotSupportedPlatform",
           "physicalLocation": {},
@@ -319,6 +307,12 @@
           "id": "WRN998.NotSupportedPlatform",
           "physicalLocation": {},
           "message": "Rule 'DoNotShipVulnerableBinaries' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
           "level": "note"
         },
         {
@@ -342,7 +336,19 @@
         {
           "id": "WRN998.NotSupportedPlatform",
           "physicalLocation": {},
+          "message": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
           "message": "Rule 'SignSecurely' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableSpectreMitigations' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
           "level": "note"
         }
       ],
@@ -350,11 +356,11 @@
         {
           "id": "MSG001.AnalyzingTarget",
           "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector"
+            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector"
           },
           "message": "Analyzing 'clang.no_stack_protector'...",
           "level": "note",
-          "time": "2018-02-02T23:48:34.647Z"
+          "time": "2018-02-13T01:14:37.080Z"
         }
       ],
       "rules": {
@@ -373,6 +379,57 @@
           "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         },
+        "BA2001": {
+          "id": "BA2001",
+          "name": "LoadImageAboveFourGigabyteAddress",
+          "shortDescription": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security.",
+          "fullDescription": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.",
+          "messageFormats": {
+            "Pass": "'{0}' is a 64-bit image with a base address that is >= 4 gigabytes, increasing the effectiveness of Address Space Layout Randomization (which helps prevent attackers from executing security-sensitive code in well-known locations).",
+            "Error": "'{0}' is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "FourGbCheck"
+          }
+        },
+        "BA2008": {
+          "id": "BA2008",
+          "name": "EnableControlFlowGuard",
+          "shortDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations.",
+          "fullDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program.",
+          "messageFormats": {
+            "Pass": "'{0}' enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location.",
+            "Error": "'{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /GUARD:CF on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.",
+            "NotApplicable_UnsupportedKernelModeVersion": "'{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
+          }
+        },
+        "BA2009": {
+          "id": "BA2009",
+          "name": "EnableAddressSpaceLayoutRandomization",
+          "shortDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR).",
+          "fullDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
+          "messageFormats": {
+            "Pass": "'{0}' is properly compiled to enable Address Space Layout Randomization, reducing an attacker's ability to exploit code in well-known locations.",
+            "Error_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
+            "Error_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
+            "Error_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing Address Space Layout Randomization.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "DBCheck"
+          }
+        },
         "BA2010": {
           "id": "BA2010",
           "name": "DoNotMarkImportsSectionAsExecutable",
@@ -387,39 +444,6 @@
           "helpUri": "https://github.com/microsoft/binskim",
           "properties": {
             "equivalentBinScopeRuleReadableName": "ExecutableImportsCheck"
-          }
-        },
-        "BA2021": {
-          "id": "BA2021",
-          "name": "DoNotMarkWritableSectionsAsExecutable",
-          "shortDescription": "PE sections should not be marked as both writable and executable.",
-          "fullDescription": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function.",
-          "messageFormats": {
-            "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities.",
-            "Error": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Enabling incremental linking via the /INCREMENTAL argument (the default for Microsoft Visual Studio debug build) can also result in a writable and executable section named 'textbss'. For this case, disable incremental linking (or analyze an alternate build configuration that disables this feature) to resolve the problem.",
-            "Error_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2}).",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "WXCheck"
-          }
-        },
-        "BA2019": {
-          "id": "BA2019",
-          "name": "DoNotMarkWritableSectionsAsShared",
-          "shortDescription": "Code or data sections should not be marked as both shared and writable.",
-          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
-          "messageFormats": {
-            "Pass": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitation of code vulnerabilities.",
-            "Error": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "SharedSectionCheck"
           }
         },
         "BA2012": {
@@ -441,41 +465,6 @@
             "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
           }
         },
-        "BA2009": {
-          "id": "BA2009",
-          "name": "EnableAddressSpaceLayoutRandomization",
-          "shortDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR).",
-          "fullDescription": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
-          "messageFormats": {
-            "Pass": "'{0}' is properly compiled to enable Address Space Layout Randomization, reducing an attacker's ability to exploit code in well-known locations.",
-            "Error_NotDynamicBase": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.",
-            "Error_RelocsStripped": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. ",
-            "Error_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing Address Space Layout Randomization.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "DBCheck"
-          }
-        },
-        "BA2008": {
-          "id": "BA2008",
-          "name": "EnableControlFlowGuard",
-          "shortDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations.",
-          "fullDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program.",
-          "messageFormats": {
-            "Pass": "'{0}' enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location.",
-            "Error": "'{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /GUARD:CF on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.",
-            "NotApplicable_UnsupportedKernelModeVersion": "'{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim",
-          "properties": {
-            "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
-          }
-        },
         "BA2015": {
           "id": "BA2015",
           "name": "EnableHighEntropyVirtualAddresses",
@@ -492,6 +481,22 @@
           "helpUri": "https://github.com/microsoft/binskim",
           "properties": {
             "equivalentBinScopeRuleReadableName": "HighEntropyVACheck"
+          }
+        },
+        "BA2016": {
+          "id": "BA2016",
+          "name": "MarkImageAsNXCompatible",
+          "shortDescription": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code.",
+          "fullDescription": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker.",
+          "messageFormats": {
+            "Pass": "'{0}' is marked as NX compatible, helping to prevent attackers from executing code that is injected into data segments.",
+            "Error": "'{0}' is not marked NX compatible. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "NXCheck"
           }
         },
         "BA2018": {
@@ -511,51 +516,38 @@
             "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
           }
         },
-        "BA2001": {
-          "id": "BA2001",
-          "name": "LoadImageAboveFourGigabyteAddress",
-          "shortDescription": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security.",
-          "fullDescription": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.",
+        "BA2019": {
+          "id": "BA2019",
+          "name": "DoNotMarkWritableSectionsAsShared",
+          "shortDescription": "Code or data sections should not be marked as both shared and writable.",
+          "fullDescription": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
           "messageFormats": {
-            "Pass": "'{0}' is a 64-bit image with a base address that is >= 4 gigabytes, increasing the effectiveness of Address Space Layout Randomization (which helps prevent attackers from executing security-sensitive code in well-known locations).",
-            "Error": "'{0}' is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.",
+            "Pass": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitation of code vulnerabilities.",
+            "Error": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim",
           "properties": {
-            "equivalentBinScopeRuleReadableName": "FourGbCheck"
+            "equivalentBinScopeRuleReadableName": "SharedSectionCheck"
           }
         },
-        "BA2016": {
-          "id": "BA2016",
-          "name": "MarkImageAsNXCompatible",
-          "shortDescription": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code.",
-          "fullDescription": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker.",
+        "BA2021": {
+          "id": "BA2021",
+          "name": "DoNotMarkWritableSectionsAsExecutable",
+          "shortDescription": "PE sections should not be marked as both writable and executable.",
+          "fullDescription": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function.",
           "messageFormats": {
-            "Pass": "'{0}' is marked as NX compatible, helping to prevent attackers from executing code that is injected into data segments.",
-            "Error": "'{0}' is not marked NX compatible. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker.",
+            "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities.",
+            "Error": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Enabling incremental linking via the /INCREMENTAL argument (the default for Microsoft Visual Studio debug build) can also result in a writable and executable section named 'textbss'. For this case, disable incremental linking (or analyze an alternate build configuration that disables this feature) to resolve the problem.",
+            "Error_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2}).",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim",
           "properties": {
-            "equivalentBinScopeRuleReadableName": "NXCheck"
+            "equivalentBinScopeRuleReadableName": "WXCheck"
           }
-        },
-        "BA3002": {
-          "id": "BA3002",
-          "name": "DoNotMarkStackAsExecutable",
-          "shortDescription": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode.",
-          "fullDescription": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable.",
-          "messageFormats": {
-            "Pass": "GNU_STACK segment marked as non-executable on {0}.",
-            "Error_StackExec": "Stack on {0} is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable.",
-            "Error_NoStackSeg": "GNU_STACK segment on {0} is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing '-z noexecstack' to the compiler.",
-            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-          },
-          "defaultLevel": "warning",
-          "helpUri": "https://github.com/microsoft/binskim"
         },
         "BA3001": {
           "id": "BA3001",
@@ -571,14 +563,15 @@
           "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
         },
-        "BA3010": {
-          "id": "BA3010",
-          "name": "EnableReadOnlyRelocations",
-          "shortDescription": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the .",
-          "fullDescription": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the .data section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this.",
+        "BA3002": {
+          "id": "BA3002",
+          "name": "DoNotMarkStackAsExecutable",
+          "shortDescription": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode.",
+          "fullDescription": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable.",
           "messageFormats": {
-            "Pass": "The GNU_RELRO segment was present, so {0} is protected.",
-            "Error": "The GNU_RELRO segment is missing from this binary, so relocation sections in {0} will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,relro' to address this.",
+            "Pass": "GNU_STACK segment marked as non-executable on {0}.",
+            "Error_StackExec": "Stack on {0} is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable.",
+            "Error_NoStackSeg": "GNU_STACK segment on {0} is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing '-z noexecstack' to the compiler.",
             "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
           },
           "defaultLevel": "warning",
@@ -596,16 +589,29 @@
           },
           "defaultLevel": "warning",
           "helpUri": "https://github.com/microsoft/binskim"
+        },
+        "BA3010": {
+          "id": "BA3010",
+          "name": "EnableReadOnlyRelocations",
+          "shortDescription": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the .",
+          "fullDescription": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the .data section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this.",
+          "messageFormats": {
+            "Pass": "The GNU_RELRO segment was present, so {0} is protected.",
+            "Error": "The GNU_RELRO segment is missing from this binary, so relocation sections in {0} will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,relro' to address this.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/microsoft/binskim"
         }
       },
       "files": {
-        "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.no_stack_protector": {
+        "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector": {
           "mimeType": "application/octet-stream"
         }
       },
       "invocation": {
-        "startTime": "2018-02-02T23:48:34.379Z",
-        "endTime": "2018-02-02T23:48:34.758Z"
+        "startTime": "2018-02-13T01:14:36.741Z",
+        "endTime": "2018-02-13T01:14:37.299Z"
       }
     }
   ]

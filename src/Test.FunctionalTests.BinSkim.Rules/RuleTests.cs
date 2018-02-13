@@ -415,13 +415,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableSpectreMitigations_Pass()
         {
-            VerifyPass(new EnableSpectreMitigations(), useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {   
+                VerifyPass(new EnableSpectreMitigations(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void EnableSpectreMitigations_Fail()
         {
-            VerifyFail(new EnableSpectreMitigations(), useDefaultPolicy: true);
+            if(BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {   
+                VerifyFail(new EnableSpectreMitigations(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "runs": [
     {
-      "id": "003ea801-7f71-4515-8a1b-efe452180093",
+      "id": "cd5639ce-d6bf-4176-99e9-0ec7e613688a",
       "tool": {
         "name": "BinSkim",
         "fullName": "BinSkim 1.5.0.0",
@@ -22,18 +22,6 @@
         {
           "id": "WRN998.NotSupportedPlatform",
           "physicalLocation": {},
-          "message": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
-        },
-        {
-          "id": "WRN998.NotSupportedPlatform",
-          "physicalLocation": {},
-          "message": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
-        },
-        {
-          "id": "WRN998.NotSupportedPlatform",
-          "physicalLocation": {},
           "message": "Rule 'DoNotIncorporateVulnerableDependencies' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
           "level": "note"
         },
@@ -41,6 +29,12 @@
           "id": "WRN998.NotSupportedPlatform",
           "physicalLocation": {},
           "message": "Rule 'DoNotShipVulnerableBinaries' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
           "level": "note"
         },
         {
@@ -64,21 +58,33 @@
         {
           "id": "WRN998.NotSupportedPlatform",
           "physicalLocation": {},
+          "message": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
           "message": "Rule 'SignSecurely' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
+          "level": "note"
+        },
+        {
+          "id": "WRN998.NotSupportedPlatform",
+          "physicalLocation": {},
+          "message": "Rule 'EnableSpectreMitigations' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
           "level": "note"
         },
         {
           "id": "WRN997.InvalidTarget",
           "physicalLocation": {
-            "uri": "file://Z:/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/clang.stack_protector.a"
+            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.stack_protector.a"
           },
           "message": "'clang.stack_protector.a' was not analyzed as it does not appear to be a valid file type for analysis.",
           "level": "note"
         }
       ],
       "invocation": {
-        "startTime": "2018-02-02T23:48:46.716Z",
-        "endTime": "2018-02-02T23:48:47.103Z"
+        "startTime": "2018-02-13T01:14:49.431Z",
+        "endTime": "2018-02-13T01:14:49.731Z"
       }
     }
   ]
