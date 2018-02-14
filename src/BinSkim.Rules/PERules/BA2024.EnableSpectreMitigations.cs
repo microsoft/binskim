@@ -94,6 +94,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static Dictionary<MachineFamily, CompilerVersionToMitigation[]> _compilerData = null;
 
+        // Used only for testing.
+        internal static Dictionary<MachineFamily, CompilerVersionToMitigation[]> _compilerDataCache
+        {
+            set
+            {
+                _compilerData = value;
+            }
+        }
+
+
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
@@ -397,7 +407,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     if(omVersion > previousMaximum
                         && omVersion <= listOfMitigatedCompilers[i].MinimalSupportedVersion 
-                        && (listOfMitigatedCompilers[i].SupportedMitigations & (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable)) != 0)
+                        && (listOfMitigatedCompilers[i].SupportedMitigations 
+                            & (CompilerMitigations.QSpectreAvailable 
+                            | CompilerMitigations.D2GuardSpecLoadAvailable)) != 0)
                     {
                         return listOfMitigatedCompilers[i].MinimalSupportedVersion;
                     }

@@ -40,6 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void LoadCompilerDataFromConfig_ParsesAndCachesAsExpected()
         {
+            EnableSpectreMitigations._compilerDataCache = null;
             var context = new BinaryAnalyzerContext();
             context.Policy = new PropertiesDictionary();
 
@@ -100,6 +101,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [InlineData("100.0.0.0", ExtendedMachine.I386, CompilerMitigations.None)]
         public void GetCompilerData_VersionPresent_WorksAsExpected(string versionStr, ExtendedMachine machine, CompilerMitigations expectedMitgations)
         {
+            EnableSpectreMitigations._compilerDataCache = null;
+
             var context = new BinaryAnalyzerContext();
             context.Policy = new PropertiesDictionary();
 
@@ -107,6 +110,48 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             CompilerMitigations actualMitigations = EnableSpectreMitigations.GetAvailableMitigations(context, machine, new Version(versionStr));
             Assert.Equal(expectedMitgations, actualMitigations);
+        }
+        
+        [Theory]
+        [InlineData("0.0.0.1", ExtendedMachine.I386, "1.0.100.5")]
+        [InlineData("1.12.0.0", ExtendedMachine.Amd64, "2.0.0.0")]
+        [InlineData("3.0.0.0", ExtendedMachine.I386, "2.0.0.0")]
+        [InlineData("0.0.0.1", ExtendedMachine.Arm, "1.0.0.0")]
+        [InlineData("1.9.0.0", ExtendedMachine.Arm, "2.0.0.0")]
+        [InlineData("3.0.0.0", ExtendedMachine.Arm, "2.0.1.0")]
+        public void GetNextCompilerVersionUp_WithSpectreMitigations_WorksAsExpected(string firstVersionStr, ExtendedMachine machine, string expectedVersionStr)
+        {
+            EnableSpectreMitigations._compilerDataCache = null;
+
+            Version actualVersion = new Version(firstVersionStr);
+
+            var context = new BinaryAnalyzerContext();
+            context.Policy = new PropertiesDictionary();
+
+            AddFakeConfigTestData(context.Policy);
+
+            Version nextUp = EnableSpectreMitigations.GetClosestCompilerVersionWithSpectreMitigations(context, machine, actualVersion);
+
+            nextUp.ShouldBeEquivalentTo(new Version(expectedVersionStr));
+        }
+
+        [Fact]
+        public void GetClosestCompilerVersionWithSpectreMitigations_UnsupportedOnMachine()
+        {
+            EnableSpectreMitigations._compilerDataCache = null;
+
+            BinaryAnalyzerContext context = new BinaryAnalyzerContext();
+            context.Policy = new PropertiesDictionary();
+            PropertiesDictionary BA2024Config = new PropertiesDictionary();
+            PropertiesDictionary mitigatedCompilers = new PropertiesDictionary();
+            PropertiesDictionary fakeX86Data = GenerateMachineFamilyData();
+            
+            mitigatedCompilers.Add(MachineFamily.X86.ToString(), fakeX86Data);
+            
+            BA2024Config.Add("MitigatedCompilers", mitigatedCompilers);
+            context.Policy.Add("BA2024.EnableSpectreMitigations.Options", BA2024Config);
+
+            Assert.Null(EnableSpectreMitigations.GetClosestCompilerVersionWithSpectreMitigations(context, ExtendedMachine.Arm, new Version(1, 0, 100, 5)));
         }
 
         private void AddFakeConfigTestData(PropertiesDictionary policy)
