@@ -374,6 +374,44 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.TargetUri.GetFileName()));
         }
 
+        internal static Version GetClosestCompilerVersionWithSpectreMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)
+        {
+            var compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
+            var machineFamily = machine.GetMachineFamily();
+
+            if (!compilerMitigationData.ContainsKey(machineFamily))
+            {
+                // Mitigations are not supported on this platform at all.  No appropriate 'closest compiler version'.
+                return null;
+            }
+            else
+            {
+                var listOfMitigatedCompilers = compilerMitigationData[machineFamily];
+                // If the compiler version is not supported, then either:
+                // 1) it is earlier than any supported compiler version
+                // 2) it is in-between two supported compiler versions (e.x. VS2017.1-4)--it is larger than some supported version numbers and smaller than others.
+                // 3) it's greater than any of them.
+                // We want the next greatest compiler version that supports one of the spectre mitigations.
+                Version previousMaximum = new Version(0, 0, 0, 0);
+                for (int i = 0; i < listOfMitigatedCompilers.Length; i++)
+                {
+                    if(omVersion > previousMaximum
+                        && omVersion <= listOfMitigatedCompilers[i].MinimalSupportedVersion 
+                        && (listOfMitigatedCompilers[i].SupportedMitigations & (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable)) != 0)
+                    {
+                        return listOfMitigatedCompilers[i].MinimalSupportedVersion;
+                    }
+                    else
+                    {
+                        previousMaximum = listOfMitigatedCompilers[i].MaximumSupportedVersion;
+                    }
+                }
+
+                // Is this correct?
+                return listOfMitigatedCompilers[listOfMitigatedCompilers.Length - 1].MinimalSupportedVersion;
+            }
+        }
+        
         /// <summary>
         /// Get the Spectre compiler compiler mitigations available for a particular compiler version and machine type.
         /// </summary>
@@ -488,24 +526,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             //       https://github.com/Microsoft/binskim/issues/134
             //    
             //       D2GuardSpecLoad version will not be back-ported
-            x86Data.Add("19.0.*.* - 19.0.*.*", 
-                (CompilerMitigations.QSpectreAvailable).ToString());
+            //x86Data.Add("19.0.*.* - 19.0.*.*", 
+            //    (CompilerMitigations.QSpectreAvailable).ToString());
 
             // VS2017 RTM
             // TODO: Update QSpectre minimum version once we have the official build. 
             //       https://github.com/Microsoft/binskim/issues/134
             //    
             //       D2GuardSpecLoad version will not be back-ported
-            x86Data.Add("19.10.*.* - 19.10.*.*", 
-                (CompilerMitigations.QSpectreAvailable).ToString());
+            //x86Data.Add("19.10.*.* - 19.10.*.*", 
+            //    (CompilerMitigations.QSpectreAvailable).ToString());
 
             // VS2017 - 15.5
             // TODO: Update QSpectre minimum version once we have the official build. 
             //       https://github.com/Microsoft/binskim/issues/134
             x86Data.Add("19.12.25830.2-19.12.*.*", 
                 (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
-            x86Data.Add("19.12.*.* - 19.12.*.*", 
-                (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+            //x86Data.Add("19.12.*.* - 19.12.*.*", 
+            //    (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
 
             // VS2017 - 15.6 Preview
             x86Data.Add("19.13.26029.0 - 19.13.26029.*", 

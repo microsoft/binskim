@@ -158,38 +158,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     (advancedMitigations & AdvancedMitigations.Spectre) == AdvancedMitigations.Spectre)
                 {
                     ExtendedMachine machineType = (ExtendedMachine)target.PE.Machine;
+                    
+                    // Current toolchain is within the version range to validate.
+                    // Now we'll retrieve relevant compiler mitigation details to
+                    // ensure this object module's build and revision meet
+                    // expectations.
+                    CompilerMitigations newMitigationData = 
+                        EnableSpectreMitigations.GetAvailableMitigations(context, machineType, actualVersion);
 
-                    // If this module was compiled with a version that exceeds all baseline
-                    // toolchains documented in BA2024, then we can assume the OM toolchain is ok.
-                    Version mostCurrentSpectreSupportingCompilerVersion =
-                        EnableSpectreMitigations.GetMostCurrentCompilerVersionsWithSpectreMitigations(
-                            context,
-                            machineType);
+                    foundIssue = !newMitigationData.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable) &&
+                                        !newMitigationData.HasFlag(CompilerMitigations.QSpectreAvailable);
+                    
 
-                    if (actualVersion <= mostCurrentSpectreSupportingCompilerVersion)
+                    if (foundIssue)
                     {
-                        // Current toolchain is within the version range to validate.
-                        // Now we'll retrieve relevant compiler mitigation details to
-                        // ensure this object module's build and revision meet
-                        // expectations.
-                        CompilerMitigations newMitigationData = 
-                            EnableSpectreMitigations.GetAvailableMitigations(context, machineType, actualVersion);
-
-                        if(newMitigationData == CompilerMitigations.None)
+                        minCompilerVersion = EnableSpectreMitigations.GetClosestCompilerVersionWithSpectreMitigations(context, machineType, actualVersion);
+                        
+                        // Indicates the platform does not support Spectre mitigations.  No guidance at this time.
+                        // TODO--file an issue tracking this.
+                        if (minCompilerVersion == null)
                         {
-                            // Indicates compilation with some toolchain the Spectre rule
-                            // does not know about, which indicates a problem;
-                            foundIssue = true;
-                        }
-                        else
-                        {
-                            foundIssue = !newMitigationData.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable) &&
-                                         !newMitigationData.HasFlag(CompilerMitigations.QSpectreAvailable);
-                        }
-
-                        if (foundIssue)
-                        {
-                            minCompilerVersion = mostCurrentSpectreSupportingCompilerVersion;
+                            foundIssue = false;
                         }
                     }
                 }
