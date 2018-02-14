@@ -27,6 +27,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             try
             {
                 Pdb = new Pdb(PE.FileName, Pdb.SymbolPath);
+
+                if (Pdb.IsStripped) throw new PdbParseException(BinaryParsersResources.PdbHasNoSymbols);
+
             }
             catch (PdbParseException ex)
             {
