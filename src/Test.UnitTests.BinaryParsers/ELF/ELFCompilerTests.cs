@@ -5,7 +5,7 @@ using System;
 using Xunit;
 using FluentAssertions;
 
-namespace Microsoft.CodeAnalysis.BinaryParsers.UnitTests
+namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public class ELFCompilerTests
     {

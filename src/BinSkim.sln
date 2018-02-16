@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Driver", "BinSkim.Driver\BinSkim.Driver.csproj", "{7B4552DC-901C-4569-BFBD-9EA129D53288}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -10,11 +10,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Driver", "BinSkim.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Rules", "BinSkim.Rules\BinSkim.Rules.csproj", "{494AC26C-9591-4137-A3D4-5CD9B8D169DB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Rules.FunctionalTests", "BinSkim.Rules.FunctionalTests\BinSkim.Rules.FunctionalTests.csproj", "{F380374A-7861-49C1-9643-B7CC5B0D58B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.FunctionalTests.BinSkim.Rules", "Test.FunctionalTests.BinSkim.Rules\Test.FunctionalTests.BinSkim.Rules.csproj", "{F380374A-7861-49C1-9643-B7CC5B0D58B0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinaryParsers", "BinaryParsers\BinaryParsers.csproj", "{F17E6921-2504-4AE8-AFD3-7ACEED935FEC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Driver.FunctionalTests", "BinSkim.Driver.FunctionalTests\BinSkim.Driver.FunctionalTests.csproj", "{8BD5CB5D-1A7C-4286-86D3-82D95524BE8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.FunctionalTests.BinSkim.Driver", "Test.FunctionalTests.BinSkim.Driver\Test.FunctionalTests.BinSkim.Driver.csproj", "{8BD5CB5D-1A7C-4286-86D3-82D95524BE8B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{39DE5DFD-3349-46F7-BE5D-56D4AF8B2736}"
 	ProjectSection(SolutionItems) = preProject
@@ -29,7 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Sdk", "BinSkim.Sdk\BinSkim.Sdk.csproj", "{81687384-6DA2-4AD5-A889-0727F2EB8C8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.UnitTests.BinaryParsers", "Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj", "{6DA91714-422E-4681-8454-F91BB8EEF3DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTests.BinaryParsers", "Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj", "{6DA91714-422E-4681-8454-F91BB8EEF3DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.UnitTests.BinSkim.Rules", "Test.UnitTests.BinSkim.Rules\Test.UnitTests.BinSkim.Rules.csproj", "{BDB5E58E-7B62-4BCB-B032-D86E18193E78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,6 +127,18 @@ Global
 		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Release|x64.Build.0 = Release|Any CPU
 		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Release|x86.ActiveCfg = Release|Any CPU
 		{6DA91714-422E-4681-8454-F91BB8EEF3DB}.Release|x86.Build.0 = Release|Any CPU
+		{BDB5E58E-7B62-4BCB-B032-D86E18193E78}.Debug|AnyCPU.ActiveCfg = Debug|Any CPU
+		{BDB5E58E-7B62-4BCB-B032-D86E18193E78}.Debug|AnyCPU.Build.0 = Debug|Any CPU
+		{BDB5E58E-7B62-4BCB-B032-D86E18193E78}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BDB5E58E-7B62-4BCB-B032-D86E18193E78}.Debug|x64.Build.0 = Debug|Any CPU
+		{BDB5E58E-7B62-4BCB-B032-D86E18193E78}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDB5E58E-7B62-4BCB-B032-D86E18193E78}.Debug|x86.Build.0 = Debug|Any CPU
+		{BDB5E58E-7B62-4BCB-B032-D86E18193E78}.Release|AnyCPU.ActiveCfg = Release|Any CPU
+		{BDB5E58E-7B62-4BCB-B032-D86E18193E78}.Release|AnyCPU.Build.0 = Release|Any CPU
+		{BDB5E58E-7B62-4BCB-B032-D86E18193E78}.Release|x64.ActiveCfg = Release|Any CPU
+		{BDB5E58E-7B62-4BCB-B032-D86E18193E78}.Release|x64.Build.0 = Release|Any CPU
+		{BDB5E58E-7B62-4BCB-B032-D86E18193E78}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDB5E58E-7B62-4BCB-B032-D86E18193E78}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

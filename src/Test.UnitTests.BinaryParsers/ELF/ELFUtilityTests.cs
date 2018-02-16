@@ -6,7 +6,7 @@ using Xunit;
 using FluentAssertions;
 using System.Collections.Generic;
 
-namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
+namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public class ELFUtilityTests
     {
