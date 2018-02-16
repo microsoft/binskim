@@ -27,16 +27,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             try
             {
                 Pdb = new Pdb(PE.FileName, Pdb.SymbolPath);
-
-                if (Pdb.IsStripped) throw new PdbParseException(BinaryParsersResources.PdbHasNoSymbols);
-
             }
             catch (PdbParseException ex)
             {
                 PdbParseException = ex;
             }
+
+            if (Pdb.IsStripped) throw new PdbParseException(BinaryParsersResources.PdbHasNoSymbols);
         }
-        
+
         public PdbParseException PdbParseException { get; internal set; }
 
         public bool IsManagedAssembly { get; internal set; }
