@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 PdbParseException = ex;
             }
 
-            if (Pdb.IsStripped) throw new PdbParseException(BinaryParsersResources.PdbHasNoSymbols);
+            if (Pdb != null && Pdb.IsStripped) throw new PdbParseException(BinaryParsersResources.PdbHasNoSymbols);
         }
 
         public PdbParseException PdbParseException { get; internal set; }
