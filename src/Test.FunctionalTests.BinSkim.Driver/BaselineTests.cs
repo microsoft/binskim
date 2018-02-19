@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.Sarif.Readers;
@@ -14,7 +14,6 @@ using Microsoft.CodeAnalysis.Sarif;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
-using System.Text.RegularExpressions;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -27,17 +26,6 @@ namespace Microsoft.CodeAnalysis.IL
             _testOutputHelper = output;
         }
 
-        private static string TestDirectory = GetTestDirectory(@"Test.FunctionalTests.BinSkim.Driver" + Path.DirectorySeparatorChar + "BaselineTestsData");
-
-        private static string GetTestDirectory(string relativeDirectory)
-        {
-            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
-            var dirPath = Path.GetDirectoryName(codeBasePath);
-            dirPath = Path.Combine(dirPath, string.Format(@"..{0}..{0}..{0}..{0}src{0}", Path.DirectorySeparatorChar));
-            dirPath = Path.GetFullPath(dirPath);
-            return Path.Combine(dirPath, relativeDirectory);
-        }
 
         [Fact]
         public void Driver_BuiltInRuleFunctionalTests()
@@ -48,7 +36,7 @@ namespace Microsoft.CodeAnalysis.IL
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
         {
             var sb = new StringBuilder();
-            string testDirectory = BuiltInRuleFunctionalTests.TestDirectory + Path.DirectorySeparatorChar + ruleName;
+            string testDirectory = PEBinaryTests.BaselineTestsDataDirectory + Path.DirectorySeparatorChar + ruleName;
 
             foreach (string inputFilter in inputFilters)
             {
