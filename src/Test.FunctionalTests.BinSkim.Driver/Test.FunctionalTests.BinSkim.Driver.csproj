@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
   <PropertyGroup>
     <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">$(NetCoreVersion); $(NetRuntimeVersion);</TargetFrameworks>
@@ -26,6 +25,7 @@
     <ProjectReference Include="..\BinSkim.Driver\BinSkim.Driver.csproj" />
     <ProjectReference Include="..\BinSkim.Rules\BinSkim.Rules.csproj" />
     <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
+    <ProjectReference Include="..\Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

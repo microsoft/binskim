@@ -151,7 +151,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mismatched PDB (age).
+        ///   Looks up a localized string similar to Mismatched pdb (age).
         /// </summary>
         internal static string MismatchedPdbAge {
             get {
@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mismatched PDB (signature).
+        ///   Looks up a localized string similar to Mismatched pdb (signature).
         /// </summary>
         internal static string MismatchedPdbSig {
             get {
@@ -232,7 +232,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pdb is stripped of cv info.
+        ///   Looks up a localized string similar to Pdb is stripped of cv (CodeView) info.
         /// </summary>
         internal static string PdbStripped {
             get {

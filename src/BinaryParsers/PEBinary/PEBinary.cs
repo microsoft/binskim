@@ -32,8 +32,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 PdbParseException = ex;
             }
+
+            if (Pdb != null && Pdb.IsStripped)
+            {
+                StrippedPdb = Pdb;
+                Pdb = null;
+                PdbParseException = new PdbParseException(BinaryParsersResources.PdbStripped);
+            }
         }
-        
+
         public PdbParseException PdbParseException { get; internal set; }
 
         public bool IsManagedAssembly { get; internal set; }
@@ -41,6 +48,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public PE PE { get; private set; }
 
         public Pdb Pdb { get; private set; }
+
+        public Pdb StrippedPdb { get; private set; }
 
         public void DisposePortableExecutableData()
         {

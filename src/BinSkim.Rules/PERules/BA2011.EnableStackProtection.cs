@@ -17,7 +17,7 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
-    public class EnableStackProtection : WindowsBinarySkimmerBase
+    public class EnableStackProtection : WindowsBinaryAndPdbSkimmerBase
     {
         /// <summary>
         /// BA2011
@@ -55,20 +55,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return StackProtectionUtilities.CommonCanAnalyze(target, out reasonForNotAnalyzing);
         }
 
-        public override void Analyze(BinaryAnalyzerContext context)
+        public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
-            // Uses PDB Parsing.
-            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
-
             PEBinary target = context.PEBinary();
-            PEHeader peHeader = target.PE.PEHeaders.PEHeader;
             Pdb pdb = target.Pdb;
-
-            if (pdb == null)
-            {
-                Errors.LogExceptionLoadingPdb(context, target.PdbParseException);
-                return;
-            }
 
             TruncatedCompilandRecordList noGsModules = new TruncatedCompilandRecordList();
             TruncatedCompilandRecordList unknownLanguageModules = new TruncatedCompilandRecordList();

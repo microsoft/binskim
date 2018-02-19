@@ -18,7 +18,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
-    public class DoNotIncorporateVulnerableDependencies : WindowsBinarySkimmerBase, IOptionsProvider
+    public class DoNotIncorporateVulnerableDependencies : WindowsBinaryAndPdbSkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2002
@@ -104,19 +104,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
-        public override void Analyze(BinaryAnalyzerContext context)
+        public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
-
-            PEHeader peHeader = target.PE.PEHeaders.PEHeader;
-
             Pdb pdb = target.Pdb;
-            if (pdb == null)
-            {
-                Errors.LogExceptionLoadingPdb(context, target.PdbParseException);
-                return;
-            }
-
+            
             Dictionary<string, TruncatedCompilandRecordList> vulnerabilityToModules = new Dictionary<string, TruncatedCompilandRecordList>();
             TruncatedCompilandRecordList moduleList;
 

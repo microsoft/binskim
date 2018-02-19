@@ -72,12 +72,13 @@ The following table lists all BinSkim rules by ID and Name, detailing specific P
 
 | ID | Name	| Data Examined |
 | -- | ---- | ------------- |
-| **BA2006** | `BuildWithSecureTools` | Compiler version of all linked object modules |
-| **BA2014** | `DoNotDisableStackProtectionForFunctions` | `IDiaSymbol::get_isSafeBuffers` value for all binary functions |
 | **BA2002** | `DoNotIncorporateVulnerableDependencies` | Source files for all linked object modules |
+| **BA2006** | `BuildWithSecureTools` | Compiler version of all linked object modules |
 | **BA2007** | `EnableCriticalCompilerWarnings` | Compiler warning level and explicitly disabled warnings for all linked object modules |
 | **BA2011** | `EnableStackProtection` | `IDiaSymbol::get_hasSecurityChecks` for all linked object modules |
 | **BA2013** | `InitializeStackProtection` | Scans PDB for /GS feature function name |
+| **BA2014** | `DoNotDisableStackProtectionForFunctions` | `IDiaSymbol::get_isSafeBuffers` value for all binary functions |
+| **BA2024** | `EnableSpectreMitigations` | Compiler version of all linked object modules |
 
 #### -o, --output
 

@@ -308,6 +308,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
         }
 
+        public bool IsStripped
+        {
+            get
+            {
+                this.AssertNotDisposed();
+                return _sym.isStripped != 0;
+            }
+        }
+
         /// <summary>
         /// Data kind
         /// </summary>

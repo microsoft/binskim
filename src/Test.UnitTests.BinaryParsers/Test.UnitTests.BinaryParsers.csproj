@@ -5,7 +5,8 @@
   
   <PropertyGroup>
     <RootNamespace>Microsoft.CodeAnalysis.BinaryParsers</RootNamespace>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">$(NetCoreVersion); $(NetRuntimeVersion);</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)'!='Windows_NT'">$(NetCoreVersion);</TargetFrameworks>
     <OutputType>Library</OutputType>
   </PropertyGroup>
   

@@ -145,6 +145,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
         }
 
+        public bool IsStripped
+        {
+            get
+            {
+                return GlobalScope.IsStripped;
+            }
+        }
+
 
         /// <summary>
         /// Get the list of modules in this executable
