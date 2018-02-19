@@ -148,10 +148,10 @@
     <value>Malformed debug info or unrecognized format</value>
   </data>
   <data name="MismatchedPdbAge" xml:space="preserve">
-    <value>Mismatched PDB (age)</value>
+    <value>Mismatched pdb (age)</value>
   </data>
   <data name="MismatchedPdbSig" xml:space="preserve">
-    <value>Mismatched PDB (signature)</value>
+    <value>Mismatched pdb (signature)</value>
   </data>
   <data name="NonOwningDisposableViewAccess" xml:space="preserve">
     <value>Attempted to access a DisposableEnumerable which is non-owning.</value>
@@ -175,7 +175,7 @@
     <value>Cannot parse pdb on this platform.</value>
   </data>
   <data name="PdbStripped" xml:space="preserve">
-    <value>Pdb is stripped of cv info</value>
+    <value>Pdb is stripped of cv (CodeView) info</value>
   </data>
   <data name="PlatformUnsupportedFormat" xml:space="preserve">
     <value>This feature is not supported on the {0} platform, it is only supported on the {1} platform(s).</value>

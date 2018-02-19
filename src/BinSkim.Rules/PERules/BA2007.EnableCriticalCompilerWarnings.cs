@@ -22,7 +22,7 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
-    public class EnableCriticalCompilerWarnings : WindowsBinarySkimmerBase, IOptionsProvider
+    public class EnableCriticalCompilerWarnings : WindowsBinaryAndPdbSkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2007
@@ -90,20 +90,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
-        public override void Analyze(BinaryAnalyzerContext context)
+        public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
-            // Uses PDB Parsing.
-            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
             PEBinary target = context.PEBinary();
-
-            PEHeader peHeader = target.PE.PEHeaders.PEHeader;
-
-            if (target.Pdb == null)
-            {
-                Errors.LogExceptionLoadingPdb(context, target.PdbParseException);
-                return;
-            }
-
             Pdb di = target.Pdb;
 
             TruncatedCompilandRecordList warningTooLowModules = new TruncatedCompilandRecordList();

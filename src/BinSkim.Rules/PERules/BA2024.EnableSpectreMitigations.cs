@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     }
 
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
-    public class EnableSpectreMitigations : WindowsBinarySkimmerBase, IOptionsProvider
+    public class EnableSpectreMitigations : WindowsBinaryAndPdbSkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA2024
@@ -109,10 +109,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
-        public override void Analyze(BinaryAnalyzerContext context)
+        public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
-            PEHeader peHeader = target.PE.PEHeaders.PEHeader;
 
             Machine reflectionMachineType = target.PE.Machine;
 
@@ -128,11 +127,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             Pdb pdb = target.Pdb;
-            if (pdb == null)
-            {
-                Errors.LogExceptionLoadingPdb(context, target.PdbParseException);
-                return;
-            }
 
             TruncatedCompilandRecordList masmModules = new TruncatedCompilandRecordList();
             TruncatedCompilandRecordList mitigationNotEnabledModules = new TruncatedCompilandRecordList();

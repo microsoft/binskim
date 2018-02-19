@@ -15,7 +15,7 @@ using System.Collections.Generic;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
-    public class InitializeStackProtection : WindowsBinarySkimmerBase
+    public class InitializeStackProtection : WindowsBinaryAndPdbSkimmerBase
     {
         /// <summary>
         /// BA2013
@@ -61,21 +61,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return StackProtectionUtilities.CommonCanAnalyze(target, out reasonForNotAnalyzing);
         }
 
-        public override void Analyze(BinaryAnalyzerContext context)
+        public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
-            // Uses PDB Parsing.
-            BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
-
             PEBinary target = context.PEBinary();
-
-            PEHeader peHeader = target.PE.PEHeaders.PEHeader;
-
-            if (target.Pdb == null)
-            {
-                Errors.LogExceptionLoadingPdb(context, target.PdbParseException);
-                return;
-            }
-
             Pdb di = target.Pdb;
 
             bool noCode = !di.CreateGlobalFunctionIterator().Any() && !di.ContainsExecutableSectionContribs();
