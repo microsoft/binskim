@@ -17,8 +17,7 @@ src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Actual/
 *.sdf
 *.db
 *.opendb
+launchsettings.json
 
 # Workaround for an msbuild/dotnet bug on Linux
 src/BinSkimLinux.sln
-launchsettings.json
-/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/Actual

@@ -57,3 +57,7 @@
 ## **v1.4.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.5
 * Correct signing check pass message to reflect actual analysis
 * Sign all BinSkim binaries
+
+## **v1.5.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.5.0
+* Provide preliminary BA2024.EnableSpectreMitigations analysis
+* Identify and fire configuration errors when located PDBs are stripped
