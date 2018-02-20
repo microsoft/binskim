@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BinSkim.Driver": {
+      "commandName": "Project",
+      "commandLineArgs": "analyze E:\\Source\\GitHub\\binskim\\src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestsData\\*.exe --config E:\\Source\\Internal\\evmaus-personal\\BinSkim-Config\\BinSkim-Internal-Compilers.xml"
+    }
+  }
+}

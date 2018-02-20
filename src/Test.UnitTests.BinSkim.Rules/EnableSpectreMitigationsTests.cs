@@ -18,6 +18,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public EnableSpectreMitigationsTests(ITestOutputHelper output)
         {
             _testOutputHelper = output;
+
+            // Reset the static cache of compiler data before each test, because
+            // we use a couple of different Policy configurations in testing.
+            EnableSpectreMitigations._compilerDataCache = null;
         }
 
         [Fact]
@@ -40,7 +44,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void LoadCompilerDataFromConfig_ParsesAndCachesAsExpected()
         {
-            EnableSpectreMitigations._compilerDataCache = null;
             var context = new BinaryAnalyzerContext();
             context.Policy = new PropertiesDictionary();
 
@@ -101,8 +104,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [InlineData("100.0.0.0", ExtendedMachine.I386, CompilerMitigations.None)]
         public void GetCompilerData_VersionPresent_WorksAsExpected(string versionStr, ExtendedMachine machine, CompilerMitigations expectedMitgations)
         {
-            EnableSpectreMitigations._compilerDataCache = null;
-
             var context = new BinaryAnalyzerContext();
             context.Policy = new PropertiesDictionary();
 
@@ -121,8 +122,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [InlineData("3.0.0.0", ExtendedMachine.Arm, "2.0.1.0")]
         public void GetNextCompilerVersionUp_WithSpectreMitigations_WorksAsExpected(string firstVersionStr, ExtendedMachine machine, string expectedVersionStr)
         {
-            EnableSpectreMitigations._compilerDataCache = null;
-
             Version actualVersion = new Version(firstVersionStr);
 
             var context = new BinaryAnalyzerContext();
@@ -138,8 +137,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void GetClosestCompilerVersionWithSpectreMitigations_UnsupportedOnMachine()
         {
-            EnableSpectreMitigations._compilerDataCache = null;
-
             BinaryAnalyzerContext context = new BinaryAnalyzerContext();
             context.Policy = new PropertiesDictionary();
             PropertiesDictionary BA2024Config = new PropertiesDictionary();

@@ -48,8 +48,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.NotApplicable_InvalidMetadata)};
             }
         }
-
-
+        
         public IEnumerable<IOption> GetOptions()
         {
             return new List<IOption>
@@ -166,16 +165,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     CompilerMitigations newMitigationData = 
                         EnableSpectreMitigations.GetAvailableMitigations(context, machineType, actualVersion);
 
-                    foundIssue = !newMitigationData.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable) &&
-                                        !newMitigationData.HasFlag(CompilerMitigations.QSpectreAvailable);
+                    // Current compiler version does not support Spectre mitigations.
+                    foundIssue = !newMitigationData.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable) 
+                                 && !newMitigationData.HasFlag(CompilerMitigations.QSpectreAvailable);
                     
-
                     if (foundIssue)
                     {
+                        // Get the closest compiler version that has mitigations--i.e. if the user is using a 19.0 (VS2015) compiler, we should be recommending an upgrade to the 
+                        // 19.0 version that has the mitigations, not an upgrade to a 19.10+ (VS2017) compiler.
+                        // Limitation--if there are multiple 'upgrade to' versions to recommend, this just going to give users the last one we see in the error.
                         minCompilerVersion = EnableSpectreMitigations.GetClosestCompilerVersionWithSpectreMitigations(context, machineType, actualVersion);
                         
-                        // Indicates the platform does not support Spectre mitigations.  No guidance at this time.
-                        // TODO--file an issue tracking this.
+                        // Indicates Spectre mitigations are not supported on this platform.  We won't flag this case.
                         if (minCompilerVersion == null)
                         {
                             foundIssue = false;

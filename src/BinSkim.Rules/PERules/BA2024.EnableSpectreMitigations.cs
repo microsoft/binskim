@@ -103,7 +103,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
@@ -401,7 +400,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // 1) it is earlier than any supported compiler version
                 // 2) it is in-between two supported compiler versions (e.x. VS2017.1-4)--it is larger than some supported version numbers and smaller than others.
                 // 3) it's greater than any of them.
-                // We want the next greatest compiler version that supports one of the spectre mitigations.
+                // We want to give users the 'next greatest' compiler version that supports the spectre mitigations--this should be the "smallest available upgrade."
                 Version previousMaximum = new Version(0, 0, 0, 0);
                 for (int i = 0; i < listOfMitigatedCompilers.Length; i++)
                 {
@@ -419,7 +418,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
 
-                // Is this correct?
+                // If we're here, we're in situation (3)--the compiler is greater than any we recognize.  We'll return the largest compiler we know supports Spectre mitigations.
+                // With appropriate configuration (i.e. a catch-all entry with a maximum of *.*.*.* is present), we should never really hit this case.
                 return listOfMitigatedCompilers[listOfMitigatedCompilers.Length - 1].MinimalSupportedVersion;
             }
         }
@@ -534,36 +534,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var x86Data = new PropertiesDictionary();
 
             // VS2015 15.0 Update 3 Versions
-            // TODO: Update QSpectre minimum version once we have the official build. 
+            // TODO: Uncomment and update QSpectre minimum version once we have the official build. 
             //       https://github.com/Microsoft/binskim/issues/134
             //    
             //       D2GuardSpecLoad version will not be back-ported
-            //x86Data.Add("19.0.*.* - 19.0.*.*", 
+            // x86Data.Add("19.0.*.* - 19.0.*.*", 
             //    (CompilerMitigations.QSpectreAvailable).ToString());
 
             // VS2017 RTM
-            // TODO: Update QSpectre minimum version once we have the official build. 
+            // TODO: Uncomment and update QSpectre minimum version once we have the official build. 
             //       https://github.com/Microsoft/binskim/issues/134
             //    
             //       D2GuardSpecLoad version will not be back-ported
-            //x86Data.Add("19.10.*.* - 19.10.*.*", 
+            // 
+            // x86Data.Add("19.10.*.* - 19.10.*.*", 
             //    (CompilerMitigations.QSpectreAvailable).ToString());
 
             // VS2017 - 15.5
-            // TODO: Update QSpectre minimum version once we have the official build. 
             //       https://github.com/Microsoft/binskim/issues/134
             x86Data.Add("19.12.25830.2-19.12.*.*", 
                 (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
-            //x86Data.Add("19.12.*.* - 19.12.*.*", 
+            // 
+            // TODO: Update QSpectre minimum version once we have the official build. 
+            // x86Data.Add("19.12.*.* - 19.12.*.*", 
             //    (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
 
             // VS2017 - 15.6 Preview
             x86Data.Add("19.13.26029.0 - 19.13.26029.*", 
                 (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
 
-            // Update when we have an official build supporting QSpectre.
-            x86Data.Add("19.13.*.* - 19.13.*.*", 
-                (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+            // TODO:  Update when we have an official build supporting QSpectre.
+            // x86Data.Add("19.13.*.* - 19.13.*.*", 
+            //    (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+
+            // This assumes that future versions of Visual Studio (post 15.6) will always have these mitigations available.
+            x86Data.Add("19.14.0.0 - *.*.*.*", 
+                (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString());
 
             compilersData.Add(MachineFamily.X86.ToString(), x86Data);
 
