@@ -14,7 +14,7 @@
     <PackageReference Include="Sarif.Driver" Version="1.7.3" />
     <PackageReference Include="Sarif.Sdk" Version="1.7.3" />
     <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
-    <PackageReference Include="ELFSharp" Version="1.1.1" />
+    <PackageReference Include="ELFSharp" Version="1.2.1" />
   </ItemGroup>
 
   <ItemGroup>
