@@ -23,24 +23,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // we use a couple of different Policy configurations in testing.
             EnableSpectreMitigations._compilerDataCache = null;
         }
-
-        [Fact]
-        public void GetMostCurrentCompilerVersionWithSpectreMitigations()
-        {
-            var context = new BinaryAnalyzerContext();
-            context.Policy = new PropertiesDictionary();
-
-            AddFakeConfigTestData(context.Policy);
-            Version result;
-
-            Version latestVersion = new Version(1, 0, 100, 5);
-
-            result = EnableSpectreMitigations.GetMostCurrentCompilerVersionsWithSpectreMitigations(
-                        context, ExtendedMachine.I386);
-
-            result.Should().Equals(latestVersion);
-        }
-
+        
         [Fact]
         public void LoadCompilerDataFromConfig_ParsesAndCachesAsExpected()
         {

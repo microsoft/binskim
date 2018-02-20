@@ -450,38 +450,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return CompilerMitigations.None;
         }
 
-        /// <summary>
-        /// Get the lowest compiler version that supports Spectre mitigations.
-        /// 
-        /// Potential TODO during Update QSpectre minimum version once we have the official build. 
-        ///       https://github.com/Microsoft/binskim/issues/134
-        /// Should we instead be getting the minimum for a particular Visual Studio release?
-        /// E.x. minimum compiler version for VS2015 if they are using a compiler below 2015.3 once those are released
-        /// otherwise minimum compiler in VS2017 that supports these mitigations?
-        /// </summary>
-        internal static Version GetMostCurrentCompilerVersionsWithSpectreMitigations(BinaryAnalyzerContext context, ExtendedMachine machine)
-        {
-            var compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
-            if (!compilerMitigationData.ContainsKey(machine.GetMachineFamily()))
-            {
-                // No compiler data for a compiler that supports the mitigations on this architecture.
-                return new Version(0, 0, 0, 0);
-            }
-            else
-            {
-                var listOfCompilers = compilerMitigationData[machine.GetMachineFamily()];
-                for (int i = 0; i < listOfCompilers.Length; i++)
-                {
-                    if (listOfCompilers[i].SupportedMitigations != CompilerMitigations.None)
-                    {
-                        return listOfCompilers[i].MinimalSupportedVersion;
-                    }
-                }
-                // No compiler data for a compiler that supports the mitigations on this architecture
-                return new Version(0, 0, 0, 0);
-            }
-        }
-
         private static StringToVersionMap BuildAllowedLibraries()
         {
             StringToVersionMap result = new StringToVersionMap();
