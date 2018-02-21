@@ -60,8 +60,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (portableExecutable.IsKernelMode) { return result; }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsNot64BitBinary;
-            if (portableExecutable.PEHeaders.PEHeader.Magic != PEMagic.PE32Plus) { return result; }
-
+            if (portableExecutable.PEHeaders.PEHeader.Magic != PEMagic.PE32Plus
+                && (!portableExecutable.IsManaged ||
+                    portableExecutable.IsManaged &&
+                    (portableExecutable.PEHeaders.CorHeader.Flags.HasFlag(CorFlags.Prefers32Bit)
+                    | portableExecutable.PEHeaders.CorHeader.Flags.HasFlag(CorFlags.Requires32Bit)))
+                )
+            {
+                return result;
+            }
+            
             reasonForNotAnalyzing = MetadataConditions.ImageIsNotExe;
             if (!portableExecutable.PEHeaders.IsExe) { return result; }
 
