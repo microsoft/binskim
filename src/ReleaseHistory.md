@@ -59,5 +59,8 @@
 * Sign all BinSkim binaries
 
 ## **v1.5.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.5.0
+* Cross platform (Windows/Linux) support.
 * Provide preliminary BA2024.EnableSpectreMitigations analysis
 * Identify and fire configuration errors when located PDBs are stripped
+* New rules for ELF Binaries
+* False negative removed:  Correctly flags an AnyCPU binary with HighEntropyVA and Prefer32Bit disabled
