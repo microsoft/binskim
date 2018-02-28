@@ -198,4 +198,7 @@
   <data name="MetadataCondition_ELFNotBuiltWithGCC" xml:space="preserve">
     <value>not compiled solely with gcc</value>
   </data>
+  <data name="MetadataCondition_ImageLikelyLoads32BitProcess" xml:space="preserve">
+    <value>image will likely load as a 32-bit process</value>
+  </data>
 </root>

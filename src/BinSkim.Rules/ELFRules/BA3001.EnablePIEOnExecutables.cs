@@ -14,7 +14,7 @@ using ELFSharp.ELF.Segments;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
-    public class EnablePIEOnExecutables : ELFBinarySkimmerBase
+    public class EnablePieOnExecutables : ELFBinarySkimmerBase
     {
         /// <summary>
         /// BA3001
@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string FullDescription
         {
-            get { return RuleResources.BA3001_EnablePIEOnExecutables_Description; }
+            get { return RuleResources.BA3001_EnablePieOnExecutables_Description; }
         }
 
         protected override IEnumerable<string> FormatIds

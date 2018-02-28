@@ -861,9 +861,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// <summary>
         ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
-        internal static string BA3001_EnablePIEOnExecutables_Description {
+        internal static string BA3001_EnablePieOnExecutables_Description {
             get {
-                return ResourceManager.GetString("BA3001_EnablePIEOnExecutables_Description", resourceCulture);
+                return ResourceManager.GetString("BA3001_EnablePieOnExecutables_Description", resourceCulture);
             }
         }
         
@@ -1023,9 +1023,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// <summary>
         ///   Looks up a localized string similar to GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing &apos;-DFortify_Source=2&apos; when optimization level 2 is enabled (&apos;-O2&apos;)..
         /// </summary>
-        internal static string BA3030_UseCheckedFunctionsWithGCC_Description {
+        internal static string BA3030_UseCheckedFunctionsWithGcc_Description {
             get {
-                return ResourceManager.GetString("BA3030_UseCheckedFunctionsWithGCC_Description", resourceCulture);
+                return ResourceManager.GetString("BA3030_UseCheckedFunctionsWithGcc_Description", resourceCulture);
             }
         }
         
