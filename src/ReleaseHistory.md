@@ -60,7 +60,7 @@
 
 ## **v1.5.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.5.0
 * Cross platform (Windows/Linux) support.
-* Provide preliminary BA2024.EnableSpectreMitigations analysis
-* Identify and fire configuration errors when located PDBs are stripped
-* New rules for ELF Binaries
-* False negative removed:  Correctly flags an AnyCPU binary with HighEntropyVA and Prefer32Bit disabled
+* **Possibly Breaking:** New Results: Identify and fire configuration errors when located PDBs are stripped
+* **Possibly Breaking:** New Results: False negative removed for BA2015.EnableHighEntropyVA:  Correctly flags an AnyCPU binary with HighEntropyVA and Prefer32Bit disabled
+* **Possibly Breaking:** New Rules: New rules for ELF Binaries (BA3001.EnablePieOnExecutables, BA3002.DoNotMarkStackAsExecutable, BA3003.EnableStackProtector, BA3010.EnableReadOnlyRelocations, and BA3030.UseCheckedFunctionsWithGCC)
+* **Possibly Breaking:** New Rules: Provide preliminary BA2024.EnableSpectreMitigations analysis

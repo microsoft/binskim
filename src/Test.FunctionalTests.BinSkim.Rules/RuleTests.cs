@@ -991,21 +991,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
         
         [Fact]
-        public void EnablePIEOnExecutables_Pass()
+        public void EnablePieOnExecutables_Pass()
         {
-            VerifyPass(new EnablePIEOnExecutables());
+            VerifyPass(new EnablePieOnExecutables());
         }
 
         [Fact]
-        public void EnablePIEOnExecutables_Fail()
+        public void EnablePieOnExecutables_Fail()
         {
-            VerifyFail(new EnablePIEOnExecutables());
+            VerifyFail(new EnablePieOnExecutables());
         }
 
         [Fact]
-        public void EnablePIEOnExecutables_NotApplicable()
+        public void EnablePieOnExecutables_NotApplicable()
         {
-            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
+            VerifyNotApplicable(new EnablePieOnExecutables(), new HashSet<string>());
         }
 
         [Fact]
@@ -1023,7 +1023,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotMarkStackAsExecutable_NotApplicable()
         {
-            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
+            VerifyNotApplicable(new EnablePieOnExecutables(), new HashSet<string>());
         }
 
         [Fact]
@@ -1041,7 +1041,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableReadOnlyRelocations_NotApplicable()
         {
-            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
+            VerifyNotApplicable(new EnablePieOnExecutables(), new HashSet<string>());
         }
 
         [Fact]
@@ -1059,25 +1059,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableStackProtector_NotApplicable()
         {
-            VerifyNotApplicable(new EnablePIEOnExecutables(), new HashSet<string>());
+            VerifyNotApplicable(new EnablePieOnExecutables(), new HashSet<string>());
         }
 
         [Fact]
         public void UseCheckedFunctionsWithGCC_Pass()
         {
-            VerifyPass(new UseCheckedFunctionsWithGCC());
+            VerifyPass(new UseCheckedFunctionsWithGcc());
         }
 
         [Fact]
         public void UseCheckedFunctionsWithGCC_Fail()
         {
-            VerifyFail(new UseCheckedFunctionsWithGCC());
+            VerifyFail(new UseCheckedFunctionsWithGcc());
         }
 
         [Fact]
         public void UseCheckedFunctionsWithGCC_NotApplicable()
         {
-            VerifyNotApplicable(new UseCheckedFunctionsWithGCC(), new HashSet<string>());
+            VerifyNotApplicable(new UseCheckedFunctionsWithGcc(), new HashSet<string>());
         }
     }
 }

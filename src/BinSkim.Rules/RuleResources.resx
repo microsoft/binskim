@@ -390,7 +390,7 @@ Modules triggering this check were:
   <data name="BA2024_Warning_DeprecatedMitigationEnabled" xml:space="preserve">
     <value>The following modules were compiled with a toolset that supports /Qspectre but the deprecated /d2guardspecload argument was specified on the command-line instead: {0}</value>
   </data>
-  <data name="BA3001_EnablePIEOnExecutables_Description" xml:space="preserve">
+  <data name="BA3001_EnablePieOnExecutables_Description" xml:space="preserve">
     <value>A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.</value>
   </data>
   <data name="BA3001_Error" xml:space="preserve">
@@ -444,7 +444,7 @@ Modules triggering this check were:
   <data name="BA3030_Pass_SomeFunctionsChecked" xml:space="preserve">
     <value>Some checked functions were found in '{0}'; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy.</value>
   </data>
-  <data name="BA3030_UseCheckedFunctionsWithGCC_Description" xml:space="preserve">
+  <data name="BA3030_UseCheckedFunctionsWithGcc_Description" xml:space="preserve">
     <value>GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2').</value>
   </data>
   <data name="NotApplicable_InvalidMetadata" xml:space="preserve">

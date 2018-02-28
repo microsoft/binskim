@@ -14,7 +14,7 @@ using ELFSharp.ELF.Sections;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
-    public class UseCheckedFunctionsWithGCC : ELFBinarySkimmerBase
+    public class UseCheckedFunctionsWithGcc : ELFBinarySkimmerBase
     {
         // This list comes from listing all of the functions available in glibc (using readelf), 
         // then filtering to ones with a checked variant (_*_chk).
@@ -110,7 +110,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string FullDescription
         {
-            get { return RuleResources.BA3030_UseCheckedFunctionsWithGCC_Description; }
+            get { return RuleResources.BA3030_UseCheckedFunctionsWithGcc_Description; }
         }
 
         protected override IEnumerable<string> FormatIds

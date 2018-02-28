@@ -24,7 +24,7 @@
             "formatId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
-              "EnablePIEOnExecutables",
+              "EnablePieOnExecutables",
               "image is not an ELF binary"
             ]
           },
@@ -100,7 +100,7 @@
             "formatId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "ManagedInteropAssemblyForAtlTestLibrary.dll",
-              "UseCheckedFunctionsWithGCC",
+              "UseCheckedFunctionsWithGcc",
               "image is not an ELF binary"
             ]
           },
@@ -475,7 +475,7 @@
       "rules": {
         "BA3001": {
           "id": "BA3001",
-          "name": "EnablePIEOnExecutables",
+          "name": "EnablePieOnExecutables",
           "shortDescription": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).",
           "fullDescription": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.",
           "messageFormats": {
@@ -529,7 +529,7 @@
         },
         "BA3030": {
           "id": "BA3030",
-          "name": "UseCheckedFunctionsWithGCC",
+          "name": "UseCheckedFunctionsWithGcc",
           "shortDescription": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string.",
           "fullDescription": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2').",
           "messageFormats": {

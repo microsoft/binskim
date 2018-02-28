@@ -27,5 +27,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageIsNotELF = SdkResources.MetadataCondition_ImageIsNotELF;
         public static readonly string ELFIsCoreNoneOrObject = SdkResources.MetadataCondition_ELFIsCoreNoneOrObject;
         public static readonly string ELFNotBuiltWithGCC = SdkResources.MetadataCondition_ELFNotBuiltWithGCC;
+        public static readonly string ImageLikelyLoads32BitProcess = SdkResources.MetadataCondition_ImageLikelyLoads32BitProcess;
     }
 }

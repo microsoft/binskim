@@ -59,15 +59,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeBinary;
             if (portableExecutable.IsKernelMode) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsNot64BitBinary;
-            if (portableExecutable.PEHeaders.PEHeader.Magic != PEMagic.PE32Plus
-                && (!portableExecutable.IsManaged ||
-                    portableExecutable.IsManaged &&
-                    (portableExecutable.PEHeaders.CorHeader.Flags.HasFlag(CorFlags.Prefers32Bit)
-                    | portableExecutable.PEHeaders.CorHeader.Flags.HasFlag(CorFlags.Requires32Bit)))
-                )
+            reasonForNotAnalyzing = MetadataConditions.ImageLikelyLoads32BitProcess;
+            if (portableExecutable.PEHeaders.PEHeader.Magic != PEMagic.PE32Plus)
             {
-                return result;
+                // If the image's magic bytes are 'PE32', it is either a 32 bit binary (rule does not apply), or it is a managed binary compiled as AnyCpu.
+                // If it's an AnyCPU managed binary, we need to do a bit more checking--if it has 'Prefers32Bit'/'Requires32Bit' flagged, it will probably
+                // load as a 32 bit process.  If it doesn't, we're likely to load in a 64 bit process space on a 64 bit arch & want to ensure HighEntropyVA is enabled.
+                if (!portableExecutable.IsManaged ||
+                        portableExecutable.IsManaged &&
+                        (portableExecutable.PEHeaders.CorHeader.Flags.HasFlag(CorFlags.Prefers32Bit)
+                        | portableExecutable.PEHeaders.CorHeader.Flags.HasFlag(CorFlags.Requires32Bit)))
+                {
+                    return result;
+                }
             }
             
             reasonForNotAnalyzing = MetadataConditions.ImageIsNotExe;
