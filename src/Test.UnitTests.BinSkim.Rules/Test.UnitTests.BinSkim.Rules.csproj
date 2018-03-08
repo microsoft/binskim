@@ -13,8 +13,8 @@
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-    <PackageReference Include="Sarif.Sdk" Version="1.7.3" />
-    <PackageReference Include="Sarif.Driver" Version="1.7.3" />
+    <PackageReference Include="Sarif.Sdk" Version="1.7.4" />
+    <PackageReference Include="Sarif.Driver" Version="1.7.4" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
   <ItemGroup>
