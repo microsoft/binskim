@@ -92,17 +92,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         internal static PerLanguageOption<PropertiesDictionary> MitigatedCompilers { get; } =
             new PerLanguageOption<PropertiesDictionary>(AnalyzerName, nameof(MitigatedCompilers), defaultValue: () => { return BuildMitigatedCompilersData(); });
 
-        private static Dictionary<MachineFamily, CompilerVersionToMitigation[]> _compilerData = null;
 
-        // Used only for testing.
-        internal static Dictionary<MachineFamily, CompilerVersionToMitigation[]> _compilerDataCache
-        {
-            set
-            {
-                _compilerData = value;
-            }
-        }
-
+        // Internal so that we can reset this during testing.  In practice this should never get reset, but we use several different configs during unit tests.
+        // Please do not access this field outside of this class and unit tests.
+        internal static Dictionary<MachineFamily, CompilerVersionToMitigation[]> _compilerData = null;
+        
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
