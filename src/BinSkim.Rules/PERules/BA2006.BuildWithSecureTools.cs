@@ -48,8 +48,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.NotApplicable_InvalidMetadata)};
             }
         }
-
-
+        
         public IEnumerable<IOption> GetOptions()
         {
             return new List<IOption>
@@ -151,38 +150,29 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     (advancedMitigations & AdvancedMitigations.Spectre) == AdvancedMitigations.Spectre)
                 {
                     ExtendedMachine machineType = (ExtendedMachine)target.PE.Machine;
+                    
+                    // Current toolchain is within the version range to validate.
+                    // Now we'll retrieve relevant compiler mitigation details to
+                    // ensure this object module's build and revision meet
+                    // expectations.
+                    CompilerMitigations newMitigationData = 
+                        EnableSpectreMitigations.GetAvailableMitigations(context, machineType, actualVersion);
 
-                    // If this module was compiled with a version that exceeds all baseline
-                    // toolchains documented in BA2024, then we can assume the OM toolchain is ok.
-                    Version mostCurrentSpectreSupportingCompilerVersion =
-                        EnableSpectreMitigations.GetMostCurrentCompilerVersionsWithSpectreMitigations(
-                            context,
-                            machineType);
-
-                    if (actualVersion <= mostCurrentSpectreSupportingCompilerVersion)
+                    // Current compiler version does not support Spectre mitigations.
+                    foundIssue = !newMitigationData.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable) 
+                                 && !newMitigationData.HasFlag(CompilerMitigations.QSpectreAvailable);
+                    
+                    if (foundIssue)
                     {
-                        // Current toolchain is within the version range to validate.
-                        // Now we'll retrieve relevant compiler mitigation details to
-                        // ensure this object module's build and revision meet
-                        // expectations.
-                        CompilerMitigations newMitigationData = 
-                            EnableSpectreMitigations.GetAvailableMitigations(context, machineType, actualVersion);
-
-                        if(newMitigationData == CompilerMitigations.None)
+                        // Get the closest compiler version that has mitigations--i.e. if the user is using a 19.0 (VS2015) compiler, we should be recommending an upgrade to the 
+                        // 19.0 version that has the mitigations, not an upgrade to a 19.10+ (VS2017) compiler.
+                        // Limitation--if there are multiple 'upgrade to' versions to recommend, this just going to give users the last one we see in the error.
+                        minCompilerVersion = EnableSpectreMitigations.GetClosestCompilerVersionWithSpectreMitigations(context, machineType, actualVersion);
+                        
+                        // Indicates Spectre mitigations are not supported on this platform.  We won't flag this case.
+                        if (minCompilerVersion == null)
                         {
-                            // Indicates compilation with some toolchain the Spectre rule
-                            // does not know about, which indicates a problem;
-                            foundIssue = true;
-                        }
-                        else
-                        {
-                            foundIssue = !newMitigationData.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable) &&
-                                         !newMitigationData.HasFlag(CompilerMitigations.QSpectreAvailable);
-                        }
-
-                        if (foundIssue)
-                        {
-                            minCompilerVersion = mostCurrentSpectreSupportingCompilerVersion;
+                            foundIssue = false;
                         }
                     }
                 }

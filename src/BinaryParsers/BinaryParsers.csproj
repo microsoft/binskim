@@ -11,10 +11,10 @@
     <PackageReference Include="Microsoft.CodeAnalysis.BinSkim" Version="1.4.5" />
     <PackageReference Include="Microsoft.DiaSymReader" Version="1.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Sarif.Driver" Version="1.7.3" />
-    <PackageReference Include="Sarif.Sdk" Version="1.7.3" />
+    <PackageReference Include="Sarif.Driver" Version="$(SarifSDKVersion)" />
+    <PackageReference Include="Sarif.Sdk" Version="$(SarifSDKVersion)" />
     <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
-    <PackageReference Include="ELFSharp" Version="1.1.1" />
+    <PackageReference Include="ELFSharp" Version="1.2.1" />
   </ItemGroup>
 
   <ItemGroup>
