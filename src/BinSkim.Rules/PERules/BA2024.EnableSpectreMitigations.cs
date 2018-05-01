@@ -488,26 +488,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // Mitigations for x86 family of processors
             var x86Data = new PropertiesDictionary();
+            var armData = new PropertiesDictionary();
 
             // VS2015 15.0 Update 3 Versions
-            // TODO: Uncomment and update QSpectre minimum version once we have the official build. 
-            //       https://github.com/Microsoft/binskim/issues/134
-            //    
             //       D2GuardSpecLoad version will not be back-ported
-            // x86Data.Add("19.0.*.* - 19.0.*.*", 
-            //    (CompilerMitigations.QSpectreAvailable).ToString());
+            x86Data.Add("19.00.24232.0 - 19.0.*.*", 
+                (CompilerMitigations.QSpectreAvailable).ToString());
 
             // VS2017 RTM
-            // TODO: Uncomment and update QSpectre minimum version once we have the official build. 
             //       https://github.com/Microsoft/binskim/issues/134
-            //    
-            //       D2GuardSpecLoad version will not be back-ported
             // 
+            //       D2GuardSpecLoad version will not be back-ported
             // x86Data.Add("19.10.*.* - 19.10.*.*", 
             //    (CompilerMitigations.QSpectreAvailable).ToString());
 
             // VS2017 - 15.5
-            //       https://github.com/Microsoft/binskim/issues/134
             x86Data.Add("19.12.25830.2-19.12.*.*", 
                 (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
             // 
@@ -516,21 +511,30 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             //    (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
 
             // VS2017 - 15.6 Preview
-            x86Data.Add("19.13.26029.0 - 19.13.26029.*", 
+            x86Data.Add("19.13.26029.0 - 19.13.*.*", 
                 (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+            armData.Add("19.13.26214.0 - 19.13.*.*",
+                (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+
 
             // TODO:  Update when we have an official build supporting QSpectre.
             // x86Data.Add("19.13.*.* - 19.13.*.*", 
             //    (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
 
             // This assumes that future versions of Visual Studio (post 15.6) will always have these mitigations available.
-            x86Data.Add("19.14.0.0 - *.*.*.*", 
+            x86Data.Add("19.14.26215.0 - *.*.*.*", 
+                (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString());
+            armData.Add("19.14.26215.0 - *.*.*.*",
                 (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString());
 
-            compilersData.Add(MachineFamily.X86.ToString(), x86Data);
+            // Add first support for mitigation under /Od as per https://blogs.msdn.microsoft.com/vcblog/2018/04/09/spectre-mitigation-changes-in-visual-studio-2017-version-15-7-preview-3/
+            x86Data.Add("19.14.26329.0 - *.*.*.*",
+                (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable | CompilerMitigations.NonoptimizedCodeMitigated).ToString());
+            armData.Add("19.14.26329.0 - *.*.*.*",
+                (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable | CompilerMitigations.NonoptimizedCodeMitigated).ToString());
 
-            // TODO--Update when ARM mitigations are available.
-            compilersData.Add(MachineFamily.Arm.ToString(), new PropertiesDictionary());
+            compilersData.Add(MachineFamily.X86.ToString(), x86Data);
+            compilersData.Add(MachineFamily.Arm.ToString(), armData);
 
             return compilersData;
         }
