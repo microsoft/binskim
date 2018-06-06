@@ -71,16 +71,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private const string AnalyzerName = RuleIds.EnableSpectreMitigations + "." + nameof(EnableSpectreMitigations);
 
-        // /Qspectre support
-        private const string VS2017_15_6_PREV4 = "VS2017_15.6_PREVIEW4";
-        private const string VS2017_15_5_QSPECTREPATCH = "VS2017_15.5_/QSPECTRE_PATCH";
-        private const string VS2017_15_0_PATCH = "VS2017_15.0_PATCH";
-        private const string VS2015_UPDATE3_PATCH = "VS2015_UPDATE3_PATCH";
+        ////// /Qspectre support
+        //private const string vs2017_15_6_prev4 = "vs2017_15.6_preview4";
+        //private const string vs2017_15_5_qspectrepatch = "vs2017_15.5_/qspectre_patch";
+        //private const string vs2017_15_0_patch = "vs2017_15.0_patch";
+        //private const string vs2015_update3_patch = "vs2015_update3_patch";
 
-        // /d2guardspecload support
-        private const string VS2017_15_5 = "VS2017_15.5";
-        private const string VS2017_15_6_PREV1 = "VS2017_15.6_PREVIEW1";
-        
+        ////// /d2guardspecload support
+        //private const string VS2017_15_5 = "VS2017_15.5";
+        //private const string VS2017_15_6_PREV1 = "VS2017_15.6_PREVIEW1";
+
         internal static PerLanguageOption<StringToVersionMap> AllowedLibraries { get; } =
             new PerLanguageOption<StringToVersionMap>(
                 AnalyzerName, nameof(AllowedLibraries), defaultValue: () => { return BuildAllowedLibraries(); });
@@ -512,11 +512,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 (CompilerMitigations.QSpectreAvailable).ToString());
 
             // VS2017 RTM
-            //       https://github.com/Microsoft/binskim/issues/134
-            // 
-            //       D2GuardSpecLoad version will not be back-ported
-            // x86Data.Add("19.10.*.* - 19.10.*.*", 
-            //    (CompilerMitigations.QSpectreAvailable).ToString());
+            // This terminates at 19.10.25099 due to gaps in support in unreleased compilers
+            x86Data.Add("19.10.25024.0 - 19.10.25099.*",
+                (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString());
 
             // VS2017 - 15.5.x
             x86Data.Add("19.12.25830.2 - 19.12.25834.*", 
