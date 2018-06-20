@@ -71,16 +71,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private const string AnalyzerName = RuleIds.EnableSpectreMitigations + "." + nameof(EnableSpectreMitigations);
 
-        // /Qspectre support
-        private const string VS2017_15_6_PREV4 = "VS2017_15.6_PREVIEW4";
-        private const string VS2017_15_5_QSPECTREPATCH = "VS2017_15.5_/QSPECTRE_PATCH";
-        private const string VS2017_15_0_PATCH = "VS2017_15.0_PATCH";
-        private const string VS2015_UPDATE3_PATCH = "VS2015_UPDATE3_PATCH";
+        ////// /Qspectre support
+        //private const string vs2017_15_6_prev4 = "vs2017_15.6_preview4";
+        //private const string vs2017_15_5_qspectrepatch = "vs2017_15.5_/qspectre_patch";
+        //private const string vs2017_15_0_patch = "vs2017_15.0_patch";
+        //private const string vs2015_update3_patch = "vs2015_update3_patch";
 
-        // /d2guardspecload support
-        private const string VS2017_15_5 = "VS2017_15.5";
-        private const string VS2017_15_6_PREV1 = "VS2017_15.6_PREVIEW1";
-        
+        ////// /d2guardspecload support
+        //private const string VS2017_15_5 = "VS2017_15.5";
+        //private const string VS2017_15_6_PREV1 = "VS2017_15.6_PREVIEW1";
+
         internal static PerLanguageOption<StringToVersionMap> AllowedLibraries { get; } =
             new PerLanguageOption<StringToVersionMap>(
                 AnalyzerName, nameof(AllowedLibraries), defaultValue: () => { return BuildAllowedLibraries(); });
@@ -482,55 +482,73 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             If you’re using an older version of MSVC we strongly encourage you to upgrade to a more recent compiler for this and other security improvements that have been developed in the last few years. 
             Additionally, you’ll benefit from increased conformance, code quality, and faster compile times as well as many productivity improvements in Visual Studio.
+
+             */
+
+            // UPDATED version and support information: https://blogs.msdn.microsoft.com/vcblog/2018/04/09/spectre-mitigation-changes-in-visual-studio-2017-version-15-7-preview-3/
+            /* 
+             * 
+            With Visual Studio 2017 version 15.7 Preview 3 we have two new features to announce with regards to our Spectre mitigations. 
+            First, the /Qspectre switch is now supported regardless of the selected optimization level. 
+            Second, we have provided Spectre-mitigated implementations of the Microsoft Visual C++ libraries.
+
              */
 
             var compilersData = new PropertiesDictionary();
 
             // Mitigations for x86 family of processors
             var x86Data = new PropertiesDictionary();
+            var armData = new PropertiesDictionary();
 
+            // Format of this data and the ranges:
+            // ThrowIfMitigationDataIsInvalid requires a range here from the start of this support 
+            //     to a version less than the compiler that implements the next level of mitigation support.
+
+            // X86\X64 support
             // VS2015 15.0 Update 3 Versions
-            // TODO: Uncomment and update QSpectre minimum version once we have the official build. 
-            //       https://github.com/Microsoft/binskim/issues/134
-            //    
             //       D2GuardSpecLoad version will not be back-ported
-            // x86Data.Add("19.0.*.* - 19.0.*.*", 
-            //    (CompilerMitigations.QSpectreAvailable).ToString());
+            // This terminates at 19.0 due to gaps in support in the 19.10 and 19.11 compilers
+            x86Data.Add("19.00.24232.0 - 19.0.*.*", 
+                (CompilerMitigations.QSpectreAvailable).ToString());
 
             // VS2017 RTM
-            // TODO: Uncomment and update QSpectre minimum version once we have the official build. 
-            //       https://github.com/Microsoft/binskim/issues/134
-            //    
-            //       D2GuardSpecLoad version will not be back-ported
-            // 
-            // x86Data.Add("19.10.*.* - 19.10.*.*", 
-            //    (CompilerMitigations.QSpectreAvailable).ToString());
-
-            // VS2017 - 15.5
-            //       https://github.com/Microsoft/binskim/issues/134
-            x86Data.Add("19.12.25830.2-19.12.*.*", 
-                (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
-            // 
-            // TODO: Update QSpectre minimum version once we have the official build. 
-            // x86Data.Add("19.12.*.* - 19.12.*.*", 
-            //    (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
-
-            // VS2017 - 15.6 Preview
-            x86Data.Add("19.13.26029.0 - 19.13.26029.*", 
-                (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
-
-            // TODO:  Update when we have an official build supporting QSpectre.
-            // x86Data.Add("19.13.*.* - 19.13.*.*", 
-            //    (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
-
-            // This assumes that future versions of Visual Studio (post 15.6) will always have these mitigations available.
-            x86Data.Add("19.14.0.0 - *.*.*.*", 
+            // This terminates at 19.10.25099 due to gaps in support in unreleased compilers
+            x86Data.Add("19.10.25024.0 - 19.10.25099.*",
                 (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString());
 
-            compilersData.Add(MachineFamily.X86.ToString(), x86Data);
+            // VS2017 - 15.5.x
+            x86Data.Add("19.12.25830.2 - 19.12.25834.*", 
+                (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
 
-            // TODO--Update when ARM mitigations are available.
-            compilersData.Add(MachineFamily.Arm.ToString(), new PropertiesDictionary());
+            // This terminates at 19.12.*.* due to a gap in support for 15.6 early previews
+            x86Data.Add("19.12.25835.0 - 19.12.*.*",
+                (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString());
+
+            // VS2017 - 15.6 Preview 3
+            x86Data.Add("19.13.26029.0 - 19.13.26117.*", 
+                (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+
+            // Version flows into 15.7 as there is no gap in support for these switches moving forwards
+            x86Data.Add("19.13.26118.0 - 19.14.26328.*",
+                (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString());
+
+            // VS2017 15.7 Preview 3
+            // Add first support for mitigation under /Od as per https://blogs.msdn.microsoft.com/vcblog/2018/04/09/spectre-mitigation-changes-in-visual-studio-2017-version-15-7-preview-3/
+            // This assumes that future versions of Visual Studio (post 15.6) will always have these mitigations available.
+            x86Data.Add("19.14.26329.0 - *.*.*.*",
+                (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable | CompilerMitigations.NonoptimizedCodeMitigated).ToString());
+
+            // ARM\ARM64 support
+            // VS2017 - 15.6 Preview 4
+            armData.Add("19.13.26214.0 - 19.14.26328.*",
+                (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString());
+
+            // VS2017 15.7 Preview 3
+            armData.Add("19.14.26329.0 - *.*.*.*",
+                (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable | CompilerMitigations.NonoptimizedCodeMitigated).ToString());
+
+            compilersData.Add(MachineFamily.X86.ToString(), x86Data);
+            compilersData.Add(MachineFamily.Arm.ToString(), armData);
 
             return compilersData;
         }
