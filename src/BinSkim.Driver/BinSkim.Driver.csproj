@@ -64,8 +64,8 @@
 
   <ItemGroup>
     <!-- May need to be changed to x86 on a 32 bit machine. -->
-    <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(Configuration)' == 'Debug' And '$(TargetFramework)'=='$(NetRuntimeVersion)' And '$(RuntimeIdentifier)'=='win7-x86'" />
-    <MsDiaLibs Include="..\..\refs\x86\*" Condition="'$(Configuration)' == 'Debug' And '$(TargetFramework)'=='$(NetCoreVersion)' And '$(RuntimeIdentifier)'==''" />
+    <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(TargetFramework)'=='$(NetRuntimeVersion)' And '$(RuntimeIdentifier)'=='win7-x86'" />
+    <MsDiaLibs Include="..\..\refs\x86\*" Condition="'$(TargetFramework)'=='$(NetCoreVersion)' And '$(RuntimeIdentifier)'==''" />
     <!-- Note: Official Release builds on Windows should specify a RID. Build using the BuildAndTest.cmd script. -->
     <MsDiaLibs Include="..\..\refs\x86\*" Condition="'$(RuntimeIdentifier)'=='win-x86'" />
     <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(RuntimeIdentifier)'=='win-x64'" />
