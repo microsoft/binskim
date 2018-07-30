@@ -22,9 +22,6 @@ set BinaryOutputDirectory=%BinaryOutputDirectory%\%Platform%_%Configuration%\Pub
 set LayoutForSigningDirectory=%BinaryOutputDirectory%\..\LayoutForSigning
 
 call :CreateDirIfNotExist %LayoutForSigningDirectory%
-call :CreateDirIfNotExist %LayoutForSigningDirectory%\net461
-call :CreateDirIfNotExist %LayoutForSigningDirectory%\net461\win-x86\
-call :CreateDirIfNotExist %LayoutForSigningDirectory%\net461\win-x64\
 call :CreateDirIfNotExist %LayoutForSigningDirectory%\netcoreapp2.0
 call :CreateDirIfNotExist %LayoutForSigningDirectory%\netcoreapp2.0\win-x86\
 call :CreateDirIfNotExist %LayoutForSigningDirectory%\netcoreapp2.0\win-x64\
@@ -38,9 +35,6 @@ call :CopyFilesForMultitargeting BinSkim.Sdk.dll   || goto :ExitFailed
 goto :Exit
 
 :CopyFilesForMultitargeting
-xcopy /Y %BinaryOutputDirectory%\net461\win-x86\%1 %LayoutForSigningDirectory%\net461\win-x86\
-xcopy /Y %BinaryOutputDirectory%\net461\win-x64\%1 %LayoutForSigningDirectory%\net461\win-x64\
-:: For .NET core, .exes are renamed to .dlls due to packaging conventions
 xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\win-x86\%~n1.dll  %LayoutForSigningDirectory%\netcoreapp2.0\win-x86\
 xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\win-x64\%~n1.dll  %LayoutForSigningDirectory%\netcoreapp2.0\win-x64\
 xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\linux-x64\%~n1.dll  %LayoutForSigningDirectory%\netcoreapp2.0\linux-x64\

@@ -4,8 +4,7 @@
 
   <PropertyGroup>
     <NetCoreVersion>netcoreapp2.0</NetCoreVersion>
-    <NetRuntimeVersion>net461</NetRuntimeVersion>
     <NetStandardVersion>netstandard2.0</NetStandardVersion>
-	<SarifSDKVersion>1.7.5</SarifSDKVersion>
+	  <SarifSDKVersion>1.7.5</SarifSDKVersion>
   </PropertyGroup>
 </Project>

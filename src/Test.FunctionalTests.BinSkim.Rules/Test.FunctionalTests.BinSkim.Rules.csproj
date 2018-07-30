@@ -5,8 +5,7 @@
   <Import Project="..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" />
 
   <PropertyGroup>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">$(NetCoreVersion); $(NetRuntimeVersion);</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)'!='Windows_NT'">$(NetCoreVersion);</TargetFrameworks>
+    <TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
