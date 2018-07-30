@@ -108,7 +108,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private void WindowsNativeLoadPdbUsingDia(string peOrPdbPath, string symbolPath)
         {
-            IDiaDataSource diaSource = MSDiaComWrapper.GetDiaSource();
+            IDiaDataSource diaSource = MsdiaComWrapper.GetDiaSource();
             Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
 
             if (symbolPath == null)

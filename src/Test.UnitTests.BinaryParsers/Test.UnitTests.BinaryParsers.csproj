@@ -21,4 +21,10 @@
   <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="Dia2Lib">
+      <HintPath>..\..\refs\dia2lib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
