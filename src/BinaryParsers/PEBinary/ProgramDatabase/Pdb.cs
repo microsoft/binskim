@@ -108,7 +108,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private void WindowsNativeLoadPdbUsingDia(string peOrPdbPath, string symbolPath)
         {
-            IDiaDataSource diaSource = GetDiaSource();
+            IDiaDataSource diaSource = MSDiaComWrapper.GetDiaSource();
             Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
 
             if (symbolPath == null)
@@ -131,22 +131,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
 
             diaSource.openSession(out _session);
-        }
-
-        private const string IDiaDataSourceRIId = "79F1BB5F-B66E-48E5-B6A9-1545C323CA3D";
-        private const string DiaSourceCLSID = "E6756135-1E65-4D17-8576-610761398C3C";
-
-        private IDiaDataSource GetDiaSource()
-        {
-            object objectForIUnknown = null;
-            IDiaDataSource diaSourceInstance = null;
-            IntPtr diaSourcePtr = IntPtr.Zero;
-            string msdiaPath = Path.Combine(Path.GetDirectoryName(typeof(Pdb).Assembly.Location), "msdia140.dll");
-            FakeComActivator.CoCreateFromFile(msdiaPath, new Guid(DiaSourceCLSID), new Guid(IDiaDataSourceRIId), out diaSourcePtr);
-            objectForIUnknown = Marshal.GetObjectForIUnknown(diaSourcePtr);
-            diaSourceInstance = objectForIUnknown as IDiaDataSource;
-
-            return diaSourceInstance;
         }
 
         /// <summary>
