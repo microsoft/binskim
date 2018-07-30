@@ -37,11 +37,11 @@ echo         public const string Version = AssemblyVersion + Prerelease;        
 echo     }                                                                           >> %VERSION_CONSTANTS%
 echo  }                                                                              >> %VERSION_CONSTANTS%
 
-%~dp0.nuget\NuGet.exe restore %~dp0src\BinSkim.sln -ConfigFile "%NuGetConfigFile%" -OutputDirectory "%NuGetPackageDir%"
+dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --configfile "%NuGetConfigFile%" --packages "%NuGetPackageDir%"
 
 :: Build the solution 
 dotnet clean /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% || goto :ExitFailed
-dotnet build /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
+dotnet build --no-restore /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
 ::Run unit tests
 echo Run all multitargeting xunit tests
