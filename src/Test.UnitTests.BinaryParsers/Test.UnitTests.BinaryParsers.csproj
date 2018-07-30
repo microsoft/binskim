@@ -7,7 +7,7 @@
     <RootNamespace>Microsoft.CodeAnalysis.BinaryParsers</RootNamespace>
     <TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
     <OutputType>Library</OutputType>
-	<Prefer32Bit>false</Prefer32Bit>
+    <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
   </PropertyGroup>
   
   <ItemGroup>

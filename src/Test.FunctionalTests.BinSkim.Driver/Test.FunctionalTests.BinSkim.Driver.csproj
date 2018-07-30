@@ -4,6 +4,7 @@
   <PropertyGroup>
     <TargetFrameworks>$(NetCoreVersion);</TargetFrameworks>
     <OutputType>Library</OutputType>
+    <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
   </PropertyGroup>
  
   <ItemGroup>

@@ -6,6 +6,7 @@
     <RootNamespace>Microsoft.CodeAnalysis.BinSkim.Rules</RootNamespace>
     <TargetFramework>$(NetCoreVersion)</TargetFramework>
     <OutputType>Library</OutputType>
+    <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="4.19.4" />
