@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Dia2Lib;
@@ -107,7 +108,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private void WindowsNativeLoadPdbUsingDia(string peOrPdbPath, string symbolPath)
         {
-            DiaSource diaSource = new DiaSource();
+            IDiaDataSource diaSource = MsdiaComWrapper.GetDiaSource();
             Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
 
             if (symbolPath == null)

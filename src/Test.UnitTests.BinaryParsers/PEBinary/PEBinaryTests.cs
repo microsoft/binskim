@@ -6,6 +6,7 @@ using Xunit;
 using FluentAssertions;
 using System.Reflection;
 using System.IO;
+using Dia2Lib;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
@@ -52,6 +53,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             peBinary.Pdb.Should().BeNull();
             peBinary.StrippedPdb.Should().NotBeNull();
             peBinary.PdbParseException.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void CanCreateIDiaSourceFromMsdia()
+        {
+            IDiaDataSource source = ProgramDatabase.MsdiaComWrapper.GetDiaSource();
         }
     }
 }

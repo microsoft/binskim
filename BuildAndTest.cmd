@@ -37,11 +37,11 @@ echo         public const string Version = AssemblyVersion + Prerelease;        
 echo     }                                                                           >> %VERSION_CONSTANTS%
 echo  }                                                                              >> %VERSION_CONSTANTS%
 
-%~dp0.nuget\NuGet.exe restore %~dp0src\BinSkim.sln -ConfigFile "%NuGetConfigFile%" -OutputDirectory "%NuGetPackageDir%"
+dotnet restore --runtime win-x86 --runtime win-x64 --runtime linux-x64 %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --configfile "%NuGetConfigFile%" --packages "%NuGetPackageDir%"
 
 :: Build the solution 
 dotnet clean /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% || goto :ExitFailed
-dotnet build /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
+dotnet build --no-restore /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
 ::Run unit tests
 echo Run all multitargeting xunit tests
@@ -52,8 +52,6 @@ call :RunTestProject BinSkim.Rules Functional  || goto :ExitFailed
 
 ::Create the BinSkim platform specific publish packages
 echo Creating Platform Specific BinSkim 'Publish' Packages
-call :CreatePublishPackage net461 win-x86 || goto :ExitFailed
-call :CreatePublishPackage net461 win-x64 || goto :ExitFailed
 call :CreatePublishPackage netcoreapp2.0 win-x86 || goto :ExitFailed
 call :CreatePublishPackage netcoreapp2.0 win-x64 || goto :ExitFailed
 call :CreatePublishPackage netcoreapp2.0 linux-x64 || goto :ExitFailed
