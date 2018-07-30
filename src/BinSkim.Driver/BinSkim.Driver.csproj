@@ -7,6 +7,7 @@
     <!--  Condition="'$(OS)'=='Windows_NT'" -->
     <TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
     <RuntimeIdentifiers>win-x86; win-x64; linux-x64;</RuntimeIdentifiers>
+    <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   
