@@ -27,19 +27,30 @@ call :CreateDirIfNotExist %LayoutForSigningDirectory%\netcoreapp2.0\win-x86\
 call :CreateDirIfNotExist %LayoutForSigningDirectory%\netcoreapp2.0\win-x64\
 call :CreateDirIfNotExist %LayoutForSigningDirectory%\netcoreapp2.0\linux-x64\
 
-call :CopyFilesForMultitargeting BinSkim.exe       || goto :ExitFailed
+call :CopyExeForSigning BinSkim.exe                || goto :ExitFailed
+call :CopyFilesForMultitargeting BinSkim.dll      || goto :ExitFailed
 call :CopyFilesForMultitargeting BinaryParsers.dll || goto :ExitFailed
 call :CopyFilesForMultitargeting BinSkim.Rules.dll || goto :ExitFailed
 call :CopyFilesForMultitargeting BinSkim.Sdk.dll   || goto :ExitFailed
 
 goto :Exit
 
+:CopyExeForSigning
+xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\win-x86\%~n1.exe  %LayoutForSigningDirectory%\netcoreapp2.0\win-x86\
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :ExeFilesExit)
+xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\win-x64\%~n1.exe  %LayoutForSigningDirectory%\netcoreapp2.0\win-x64\
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :ExeFilesExit)
+:ExeFilesExit
+Exit /B %ERRORLEVEL%
+
 :CopyFilesForMultitargeting
 xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\win-x86\%~n1.dll  %LayoutForSigningDirectory%\netcoreapp2.0\win-x86\
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :CopyFilesExit)
 xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\win-x64\%~n1.dll  %LayoutForSigningDirectory%\netcoreapp2.0\win-x64\
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :CopyFilesExit)
 xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\linux-x64\%~n1.dll  %LayoutForSigningDirectory%\netcoreapp2.0\linux-x64\
-
-if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed.)
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :CopyFilesExit)
+:CopyFilesExit
 Exit /B %ERRORLEVEL%
 
 :CreateDirIfNotExist
