@@ -5,13 +5,13 @@ This repository contains the source code for BinSkim, a Portable Executable (PE)
 ## For Developers
 
 1. Fork the repository -- **[Need Help?](https://help.github.com/articles/fork-a-repo/)**
-2. Load and compile `src\BinSkim.sln`
-3. Execute output in `bld\bin\BinSkim.Driver` for testing
+2. Load and compile `src\BinSkim.sln` to develop changes for contribution.
+3. Execute BuildAndTest.cmd at the root of the enlistment to validate before submitting a PR.
 
 ### Submit Pull Requests
 
 1. Run `BuildAndTest.cmd` at the root of the enlistment to ensure that all tests pass, release build succeeds, and NuGet packages are created
-2. Submit a Pull Request -- **[Need Help?](https://help.github.com/articles/about-pull-requests/)**
+2. Submit a Pull Request to the 'develop' branch -- **[Need Help?](https://help.github.com/articles/about-pull-requests/)**
 
 ## For Users
 
