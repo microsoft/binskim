@@ -22,7 +22,8 @@ set BinaryOutputDirectory=%BinaryOutputDirectory%\%Platform%_%Configuration%\Pub
 set LayoutForSigningDirectory=%BinaryOutputDirectory%\..\LayoutForSigning
 
 :: Copy all multitargeted assemblies to their locations
-call :CopyFilesForMultitargeting BinSkim.exe       || goto :ExitFailed
+call :CopyExeForSigning BinSkim.exe
+call :CopyFilesForMultitargeting BinSkim.dll       || goto :ExitFailed
 call :CopyFilesForMultitargeting BinaryParsers.dll || goto :ExitFailed
 call :CopyFilesForMultitargeting BinSkim.Rules.dll || goto :ExitFailed
 call :CopyFilesForMultitargeting BinSkim.Sdk.dll   || goto :ExitFailed
@@ -34,12 +35,22 @@ call BuildPackages.cmd %Configuration% %Platform% %NuGetOutputDirectory% %Versio
 
 goto :Exit
 
-:CopyFilesForMultitargeting
-xcopy /Y  %LayoutForSigningDirectory%\netcoreapp2.0\win-x86\%~n1.dll %BinaryOutputDirectory%\netcoreapp2.0\win-x86\
-xcopy /Y %LayoutForSigningDirectory%\netcoreapp2.0\win-x64\%~n1.dll %BinaryOutputDirectory%\netcoreapp2.0\win-x64\
-xcopy /Y %LayoutForSigningDirectory%\netcoreapp2.0\linux-x64\%~n1.dll %BinaryOutputDirectory%\netcoreapp2.0\linux-x64\
+:CopyExeForSigning
+xcopy /Y %LayoutForSigningDirectory%\netcoreapp2.0\win-x86\%~n1.exe %BinaryOutputDirectory%\netcoreapp2.0\win-x86\ 
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :ExeFilesExit)
+xcopy /Y %LayoutForSigningDirectory%\netcoreapp2.0\win-x64\%~n1.exe %BinaryOutputDirectory%\netcoreapp2.0\win-x64\ 
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :ExeFilesExit)
+:ExeFilesExit
+Exit /B %ERRORLEVEL%
 
-if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed.)
+:CopyFilesForMultitargeting
+xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\win-x86\%~n1.dll %LayoutForSigningDirectory%\netcoreapp2.0\win-x86\ 
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :CopyFilesExit)
+xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\win-x64\%~n1.dll %LayoutForSigningDirectory%\netcoreapp2.0\win-x64\ 
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :CopyFilesExit)
+xcopy /Y %BinaryOutputDirectory%\netcoreapp2.0\linux-x64\%~n1.dll  %LayoutForSigningDirectory%\netcoreapp2.0\linux-x64\
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :CopyFilesExit)
+:CopyFilesExit
 Exit /B %ERRORLEVEL%
 
 :ExitFailed
