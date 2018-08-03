@@ -36,10 +36,12 @@ goto :Exit
 
 :CopyFilesForMultitargeting
 xcopy /Y  %LayoutForSigningDirectory%\netcoreapp2.0\win-x86\%~n1.dll %BinaryOutputDirectory%\netcoreapp2.0\win-x86\
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :CopyFilesExit)
 xcopy /Y %LayoutForSigningDirectory%\netcoreapp2.0\win-x64\%~n1.dll %BinaryOutputDirectory%\netcoreapp2.0\win-x64\
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :CopyFilesExit)
 xcopy /Y %LayoutForSigningDirectory%\netcoreapp2.0\linux-x64\%~n1.dll %BinaryOutputDirectory%\netcoreapp2.0\linux-x64\
-
-if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed.)
+if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :CopyFilesExit)
+:CopyFilesExit
 Exit /B %ERRORLEVEL%
 
 :ExitFailed
