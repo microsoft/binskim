@@ -868,7 +868,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PIE disabled on executable {0}.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with &apos;-f pie&apos; when using clang/gcc..
+        ///   Looks up a localized string similar to PIE disabled on executable &apos;{0}&apos;.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with &apos;-fpie&apos; when using clang/gcc..
         /// </summary>
         internal static string BA3001_Error {
             get {
@@ -877,7 +877,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PIE enabled on executable {0}..
+        ///   Looks up a localized string similar to PIE enabled on executable &apos;{0}&apos;..
         /// </summary>
         internal static string BA3001_Pass_Executable {
             get {
@@ -886,7 +886,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} is a shared object library rather than an executable, and is automatically position independent..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a shared object library rather than an executable, and is automatically position independent..
         /// </summary>
         internal static string BA3001_Pass_Library {
             get {
@@ -904,7 +904,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to GNU_STACK segment on {0} is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing &apos;-z noexecstack&apos; to the compiler..
+        ///   Looks up a localized string similar to GNU_STACK segment on &apos;{0}&apos; is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing &apos;-z noexecstack&apos; to the compiler..
         /// </summary>
         internal static string BA3002_Error_NoStackSeg {
             get {
@@ -913,7 +913,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stack on {0} is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are compiling with &apos;-z noexecstack&apos; to mark the stack as non-executable..
+        ///   Looks up a localized string similar to Stack on &apos;{0}&apos; is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are compiling with &apos;-z noexecstack&apos; to mark the stack as non-executable..
         /// </summary>
         internal static string BA3002_Error_StackExec {
             get {
@@ -922,7 +922,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to GNU_STACK segment marked as non-executable on {0}..
+        ///   Looks up a localized string similar to GNU_STACK segment marked as non-executable on &apos;{0}&apos;..
         /// </summary>
         internal static string BA3002_Pass {
             get {
@@ -940,7 +940,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The stack protector was not found in {0}.  This may be because the binary has no stack-based arrays, or because &apos;--stack-protector-strong&apos; was not used..
+        ///   Looks up a localized string similar to The stack protector was not found in &apos;{0}&apos;.  This may be because the binary has no stack-based arrays, or because &apos;--stack-protector-strong&apos; was not used..
         /// </summary>
         internal static string BA3003_Error {
             get {
@@ -949,7 +949,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stack protector was found on {0}.  However, if you are not compiling with &apos;--stack-protector-strong&apos;, it may provide additional protections..
+        ///   Looks up a localized string similar to Stack protector was found on &apos;{0}&apos;.  However, if you are not compiling with &apos;--stack-protector-strong&apos;, it may provide additional protections..
         /// </summary>
         internal static string BA3003_Pass {
             get {
@@ -967,7 +967,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The GNU_RELRO segment is missing from this binary, so relocation sections in {0} will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,relro&apos; to address this..
+        ///   Looks up a localized string similar to The GNU_RELRO segment is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,relro&apos; to address this..
         /// </summary>
         internal static string BA3010_Error {
             get {
@@ -976,7 +976,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The GNU_RELRO segment was present, so {0} is protected..
+        ///   Looks up a localized string similar to The GNU_RELRO segment was present, so &apos;{0}&apos; is protected..
         /// </summary>
         internal static string BA3010_Pass {
             get {
@@ -1039,7 +1039,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This check is not supported on the {0} platform, as it requires interoperability with a native Windows library..
+        ///   Looks up a localized string similar to This check is not supported on the &apos;{0}&apos; platform, as it requires interoperability with a native Windows library..
         /// </summary>
         internal static string NotApplicable_PlatformUnsupported {
             get {
