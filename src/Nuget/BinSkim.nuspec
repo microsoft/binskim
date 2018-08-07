@@ -4,13 +4,13 @@
     <id>Microsoft.SecurityTools.BinSkim</id>
     <version>$version$</version>
     <title>Microsoft BinSkim Binary Analysis Security Tool</title>
-    <authors>@Microsoft</authors>
-    <owners>@Microsoft,@TSE-SecurityTools,@michaelcfanning</owners>
+    <authors>Microsoft</authors>
+    <owners>Microsoft,TSE-SecurityTools</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A correctness and security checker for Windows portable executables and Linux ELF binaries. BinSkim scans binaries to ensure they have been compiled in a secure way, e.g., by opting into data execution prevention, address layout randomization and other features. </description>
     <summary>A correctness and security checker for Windows portable executables and Linux ELF binaries.</summary>
     <releaseNotes>Version $version$ of BinSkim</releaseNotes>
-    <copyright>© Microsoft Corporation. All rights reserved.</copyright>    
+    <copyright>Â© Microsoft Corporation. All rights reserved.</copyright>    
     <licenseUrl>https://github.com/microsoft/binskim/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/microsoft/binskim</projectUrl>
     <tags>binary analysis binskim binscope security portable executable linkable format sdl devops devsecops</tags>
