@@ -1,7 +1,7 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Microsoft.SecurityTools.BinSkim</id>
+    <id>Microsoft.CodeAnalysis.BinSkim</id>
     <version>$version$</version>
     <title>Microsoft BinSkim Binary Analysis Security Tool</title>
     <authors>Microsoft</authors>
