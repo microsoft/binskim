@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Microsoft.CodeAnalysis.BinSkim</id>
+    <id>Microsoft.SecurityTools.BinSkim</id>
     <version>$version$</version>
-    <title>Microsoft BinSkim Binary Analysis Tool</title>
-    <authors>@michaelcfanning,@nguerrera,@billyoneal</authors>
-    <owners>@michaelcfanning,@nguerrera</owners>
+    <title>Microsoft BinSkim Binary Analysis Security Tool</title>
+    <authors>@Microsoft</authors>
+    <owners>@Microsoft,@TSE-SecurityTools,@michaelcfanning</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A correctness and security checker for Windows portable executables</description>
+    <description>A correctness and security checker for Windows portable executables and Linux ELF binaries. BinSkim scans binaries to ensure they have been compiled in a secure way, e.g., by opting into data execution prevention, address layout randomization and other features. </description>
+    <summary>A correctness and security checker for Windows portable executables and Linux ELF binaries.</summary>
     <releaseNotes>Version $version$ of BinSkim</releaseNotes>
-    <copyright>Copyright Microsoft 2015</copyright>    
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>    
     <licenseUrl>https://github.com/microsoft/binskim/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/microsoft/binskim</projectUrl>
-    <tags>Binary,Analysis,binskim,binscope</tags>
+    <tags>binary analysis binskim binscope security portable executable linkable format sdl devops devsecops</tags>
+    <iconUrl>https://github.com/Microsoft/binskim/raw/binskim/binskim.png</iconUrl>
   </metadata>
   <files>
-	<!-- NOTE: the exclude attribute must be on a single line -->
-    <file src="bld\bin\AnyCPU_$configuration$\Publish\**\*.*" target="tools"/>
-    
+    <file src="bld\bin\AnyCPU_$configuration$\Publish\**\*.*" target="tools"/>   
     <file src="src\ReleaseHistory.md" target="tools\ReleaseHistory.md" />
     <file src="src\BinaryParsers\**\*.cs" target="src\BinaryParsers" />
     <file src="src\BinSkim.Driver\**\*.cs" target="src\BinSkim.Driver" />
