@@ -14,7 +14,7 @@
     <licenseUrl>https://github.com/microsoft/binskim/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/microsoft/binskim</projectUrl>
     <tags>binary analysis binskim binscope security portable executable linkable format sdl devops devsecops</tags>
-    <iconUrl>https://github.com/Microsoft/binskim/raw/binskim/binskim.png</iconUrl>
+    <iconUrl>https://github.com/Microsoft/binskim/blob/master/BinSkim.png</iconUrl>
   </metadata>
   <files>
     <file src="bld\bin\AnyCPU_$configuration$\Publish\**\*.*" target="tools"/>   
