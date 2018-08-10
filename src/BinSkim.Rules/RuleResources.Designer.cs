@@ -958,7 +958,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the .data section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
+        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
         /// </summary>
         internal static string BA3010_EnableReadOnlyRelocations_Description {
             get {

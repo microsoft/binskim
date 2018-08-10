@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA3001
         /// </summary>
-        public override string Id { get { return RuleIds.EnablePieOnExecutables; } }
+        public override string Id { get { return RuleIds.EnablePositionIndependentExecutable; } }
 
         /// <summary>
         /// "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section,

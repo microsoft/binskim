@@ -1,6 +1,6 @@
 ﻿{
-  "$schema": "http://json.schemastore.org/sarif-1.0.0",
-  "version": "1.0.0",
+  "$schema": "http://json.schemastore.org/sarif-2.0.0",
+  "version": "2.0.0",
   "runs": [
     {
       "tool": {
@@ -8,7 +8,7 @@
         "fullName": "BinSkim 1.5.0.0",
         "version": "1.5.0.0",
         "semanticVersion": "1.5.0",
-        "sarifLoggerVersion": "1.7.3.0",
+        "sarifLoggerVersion": "2.0.0.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -17,18 +17,24 @@
         }
       },
       "results": [],
-      "configurationNotifications": [
+      "invocations": [
         {
-          "id": "ERR997.ExceptionLoadingAnalysisTarget",
-          "physicalLocation": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
-          },
-          "message": "Could not load analysis target 'Corrupted_Native_x86_VS2013_Default.exe'. (Image is either too small or contains an invalid byte offset or count.)",
-          "level": "error"
+          "configurationNotifications": [
+            {
+              "id": "ERR997.ExceptionLoadingAnalysisTarget",
+              "physicalLocation": {
+                "fileLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
+                }
+              },
+              "message": {
+                "text": "Could not load analysis target 'Corrupted_Native_x86_VS2013_Default.exe'. (Image is either too small or contains an invalid byte offset or count.)"
+              },
+              "level": "error"
+            }
+          ]
         }
-      ],
-      "invocation": {
-      }
+      ]
     }
   ]
 }

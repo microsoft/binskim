@@ -1,6 +1,6 @@
 ﻿{
-  "$schema": "http://json.schemastore.org/sarif-1.0.0",
-  "version": "1.0.0",
+  "$schema": "http://json.schemastore.org/sarif-2.0.0",
+  "version": "2.0.0",
   "runs": [
     {
       "tool": {
@@ -8,7 +8,7 @@
         "fullName": "BinSkim 1.5.0.0",
         "version": "1.5.0.0",
         "semanticVersion": "1.5.0",
-        "sarifLoggerVersion": "1.7.3.0",
+        "sarifLoggerVersion": "2.0.0.0",
         "language": "en-US",
         "properties": {
           "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
@@ -17,18 +17,24 @@
         }
       },
       "results": [],
-      "configurationNotifications": [
+      "invocations": [
         {
-          "id": "WRN997.InvalidTarget",
-          "physicalLocation": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.stack_protector.a"
-          },
-          "message": "'gcc.stack_protector.a' was not analyzed as it does not appear to be a valid file type for analysis.",
-          "level": "note"
+          "configurationNotifications": [
+            {
+              "id": "WRN997.InvalidTarget",
+              "physicalLocation": {
+                "fileLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.stack_protector.a"
+                }
+              },
+              "message": {
+                "text": "'gcc.stack_protector.a' was not analyzed as it does not appear to be a valid file type for analysis."
+              },
+              "level": "note"
+            }
+          ]
         }
-      ],
-      "invocation": {
-      }
+      ]
     }
   ]
 }
