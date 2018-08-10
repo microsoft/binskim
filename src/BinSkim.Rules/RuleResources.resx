@@ -390,7 +390,7 @@ Modules triggering this check were:
   <data name="BA2024_Warning_DeprecatedMitigationEnabled" xml:space="preserve">
     <value>The following modules were compiled with a toolset that supports /Qspectre but the deprecated /d2guardspecload argument was specified on the command-line instead: {0}</value>
   </data>
-  <data name="BA3001_EnablePieOnExecutables_Description" xml:space="preserve">
+  <data name="BA3001_EnablePositionIndependentExecutable_Description" xml:space="preserve">
     <value>A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.</value>
   </data>
   <data name="BA3001_Error" xml:space="preserve">

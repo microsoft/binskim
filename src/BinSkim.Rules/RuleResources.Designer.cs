@@ -861,9 +861,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// <summary>
         ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
-        internal static string BA3001_EnablePieOnExecutables_Description {
+        internal static string BA3001_EnablePositionIndependentExecutable_Description {
             get {
-                return ResourceManager.GetString("BA3001_EnablePieOnExecutables_Description", resourceCulture);
+                return ResourceManager.GetString("BA3001_EnablePositionIndependentExecutable_Description", resourceCulture);
             }
         }
         

@@ -25,7 +25,7 @@
             "formatId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
-              "EnablePIEOnExecutables",
+              "EnablePositionIndepedentExecutable",
               "image is not an ELF binary"
             ]
           },
@@ -366,7 +366,7 @@
       "rules": {
         "BA3001": {
           "id": "BA3001",
-          "name": "EnablePIEOnExecutables",
+          "name": "EnablePositionIndepedentExecutable",
           "shortDescription": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).",
           "fullDescription": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.",
           "messageFormats": {

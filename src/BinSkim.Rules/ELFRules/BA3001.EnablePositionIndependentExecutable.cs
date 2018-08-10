@@ -14,7 +14,7 @@ using ELFSharp.ELF.Segments;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
-    public class EnablePieOnExecutables : ELFBinarySkimmerBase
+    public class EnablePositionIndependentExecutable : ELFBinarySkimmerBase
     {
         /// <summary>
         /// BA3001
@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override Message FullDescription
         {
-            get { return  new Message { Text = RuleResources.BA3001_EnablePieOnExecutables_Description }; }
+            get { return  new Message { Text = RuleResources.BA3001_EnablePositionIndependentExecutable_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames

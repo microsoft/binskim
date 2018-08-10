@@ -23,7 +23,7 @@
           "message": {
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll",
-              "EnablePieOnExecutables",
+              "EnablePositionIndependentExecutable",
               "image is not an ELF binary"
             ]
           },
@@ -362,7 +362,7 @@
           "BA3001": {
             "id": "BA3001",
             "name": {
-              "text": "EnablePieOnExecutables"
+              "text": "EnablePositionIndependentExecutable"
             },
             "shortDescription": {
               "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap)."
