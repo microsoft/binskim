@@ -33,12 +33,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// which merge the ".rdata" segment into an executable section.
         /// </summary>
 
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA2010_DoNotMarkImportsSectionAsExecutable_Description; }
+            get { return new Message { Text = RuleResources.BA2010_DoNotMarkImportsSectionAsExecutable_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

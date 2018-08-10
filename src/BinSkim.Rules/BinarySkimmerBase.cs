@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using System;
 using System.Resources;
+using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -13,6 +14,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private static Uri s_helpUri = new Uri("https://github.com/microsoft/binskim");
 
         public override Uri HelpUri { get { return s_helpUri; } }
+
+        // TODO: author good help text
+        // https://github.com/Microsoft/binskim/issues/192
+        public override Message Help {  get { return this.FullDescription; } }
 
         public BinarySkimmerBase()
         {

@@ -32,12 +32,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// compiled into the binary are compiled with the stack protector
         /// enabled by supplying /GS on the Visual C++ compiler command line.
         /// </summary>
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA2011_EnableStackProtection_Description; }
+            get { return new Message { Text = RuleResources.BA2011_EnableStackProtection_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

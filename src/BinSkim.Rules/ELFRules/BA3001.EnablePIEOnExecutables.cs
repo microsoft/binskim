@@ -26,12 +26,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         ///  if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult.
         ///  This can be enabled by passing '-f pie' to clang/gcc."
         /// </summary>
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA3001_EnablePieOnExecutables_Description; }
+            get { return  new Message { Text = RuleResources.BA3001_EnablePieOnExecutables_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {
