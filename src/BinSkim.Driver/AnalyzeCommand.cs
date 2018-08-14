@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis.IL
                 // 0. Populate various members
                 var result = new Result();
                 result.Level = diagnostic.Severity.ConvertToResultLevel();
-                result.Message = diagnostic.GetMessage();
+                result.Message = new Message { Text = diagnostic.GetMessage() };
 
                 if (diagnostic.IsSuppressed)
                 {
@@ -139,10 +139,7 @@ namespace Microsoft.CodeAnalysis.IL
                 result.Locations = new List<Sarif.Location>();
 
                 // 1. Record the assembly under analysis
-                PhysicalLocation analysisTarget = new PhysicalLocation()
-                {
-                    Uri = new Uri(assemblyFilePath)
-                };
+                result.AnalysisTarget = new FileLocation { Uri = new Uri(assemblyFilePath) };
 
                 // 2. Record the actual location associated with the result
                 var region = diagnostic.Location.ConvertToRegion();
@@ -155,15 +152,14 @@ namespace Microsoft.CodeAnalysis.IL
 
                     resultFile = new PhysicalLocation
                     {
-                        Uri = new Uri(filePath),
+                        FileLocation = { Uri = new Uri(filePath) },
                         Region = region
                     };
                 }
 
                 result.Locations.Add(new Sarif.Location()
                 {
-                    AnalysisTarget = analysisTarget,
-                    ResultFile = resultFile,
+                    PhysicalLocation = resultFile         
                 });
                 
 
@@ -174,19 +170,19 @@ namespace Microsoft.CodeAnalysis.IL
 
                 if (diagnostic.AdditionalLocations != null && diagnostic.AdditionalLocations.Count > 0)
                 {
-                    result.RelatedLocations = new List<AnnotatedCodeLocation>();
+                    result.RelatedLocations = new List<Sarif.Location>();
 
                     foreach(Location location in diagnostic.AdditionalLocations)
                     {
                         filePath = location.GetLineSpan().Path;
                         region = location.ConvertToRegion();
 
-                        result.RelatedLocations.Add(new AnnotatedCodeLocation
-                        {
-                            Message = "Additional location",
+                        result.RelatedLocations.Add(new Sarif.Location
+                        {                            
+                            Message = new Message { Text = "Additional location" },
                             PhysicalLocation = new PhysicalLocation
                                 {
-                                    Uri = new Uri(filePath),
+                                    FileLocation = new FileLocation { Uri = new Uri(filePath) },
                                     Region = region
                                 }
                         });

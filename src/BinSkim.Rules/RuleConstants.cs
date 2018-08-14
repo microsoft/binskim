@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
 
         // ELF Checks
-        public const string EnablePieOnExecutables = "BA3001";
+        public const string EnablePositionIndependentExecutable = "BA3001";
         public const string DoNotMarkStackAsExecutable = "BA3002";
         public const string EnableStackProtector = "BA3003";
         // Skipping some check namespace (BA3004-3009) for future checks

@@ -32,12 +32,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// high entropy ASLR.
         /// </summary>
 
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA2015_EnableHighEntropyVirtualAddresses_Description; }
+            get { return new Message { Text = RuleResources.BA2015_EnableHighEntropyVirtualAddresses_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

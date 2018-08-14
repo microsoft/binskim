@@ -31,12 +31,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// that key sizes meet acceptable size thresholds.
         /// </summary>
 
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA2022_SignCorrectly_Description; }
+            get { return new Message { Text = RuleResources.BA2022_SignCorrectly_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

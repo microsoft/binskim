@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void Log(IRule rule, Result result)
         {
-            NoteTestResult(result.Level, result.Locations.First().AnalysisTarget.Uri.LocalPath);
+            NoteTestResult(result.Level, result.Locations.First().PhysicalLocation.FileLocation.Uri.LocalPath);
         }
 
         public void NoteTestResult(ResultLevel messageKind, string targetPath)
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void LogConfigurationNotification(Sarif.Notification notification)
         {
-            ConfigurationErrorTargets.Add(notification.PhysicalLocation.Uri.LocalPath);
+            ConfigurationErrorTargets.Add(notification.PhysicalLocation.FileLocation.Uri.LocalPath);
         }
     }
 }

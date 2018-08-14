@@ -10,8 +10,8 @@ namespace Microsoft.CodeAnalysis.IL
         public static IRule InvalidPE = new Rule()
         {
             Id = "BA1001",
-            Name = nameof(InvalidPE),
-            FullDescription = DriverResources.InvalidPE_Description
+            Name = new Message { Text = nameof(InvalidPE) },
+            FullDescription = new Message { Text = DriverResources.InvalidPE_Description }
         };
     }
 }
