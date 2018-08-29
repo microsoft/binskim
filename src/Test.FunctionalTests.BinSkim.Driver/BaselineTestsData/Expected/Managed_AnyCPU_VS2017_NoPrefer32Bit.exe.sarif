@@ -21,13 +21,13 @@
           "ruleId": "BA3001",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "EnablePositionIndependentExecutable",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -42,13 +42,13 @@
           "ruleId": "BA3002",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "DoNotMarkStackAsExecutable",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -63,13 +63,13 @@
           "ruleId": "BA3003",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "EnableStackProtector",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -84,13 +84,13 @@
           "ruleId": "BA3010",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "EnableReadOnlyRelocations",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -105,13 +105,13 @@
           "ruleId": "BA3030",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "UseCheckedFunctionsWithGcc",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -126,13 +126,13 @@
           "ruleId": "BA2001",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "LoadImageAboveFourGigabyteAddress",
               "image is not a 64-bit binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -147,13 +147,13 @@
           "ruleId": "BA2002",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "DoNotIncorporateVulnerableDependencies",
               "image is an IL-only managed assembly"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -168,13 +168,13 @@
           "ruleId": "BA2006",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "BuildWithSecureTools",
               "image is an IL-only managed assembly"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -189,13 +189,13 @@
           "ruleId": "BA2007",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "EnableCriticalCompilerWarnings",
               "image is an IL-only managed assembly"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -210,13 +210,13 @@
           "ruleId": "BA2008",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "EnableControlFlowGuard",
               "image is an IL-only managed assembly"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -231,13 +231,13 @@
           "ruleId": "BA2010",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "DoNotMarkImportsSectionAsExecutable",
               "image is an IL-only managed assembly"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -252,13 +252,13 @@
           "ruleId": "BA2011",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "EnableStackProtection",
               "image is an IL-only managed assembly"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -273,13 +273,13 @@
           "ruleId": "BA2012",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "DoNotModifyStackProtectionCookie",
               "image is an IL-only managed assembly"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -294,13 +294,13 @@
           "ruleId": "BA2013",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "InitializeStackProtection",
               "image is an IL-only managed assembly"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -315,13 +315,13 @@
           "ruleId": "BA2014",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "DoNotDisableStackProtectionForFunctions",
               "image is an IL-only managed assembly"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -336,13 +336,13 @@
           "ruleId": "BA2024",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "EnableSpectreMitigations",
               "image is an IL-only managed assembly"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -357,11 +357,11 @@
           "ruleId": "BA2005",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -376,11 +376,11 @@
           "ruleId": "BA2009",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -395,11 +395,11 @@
           "ruleId": "BA2015",
           "level": "error",
           "message": {
+            "messageId": "Error_NoHighEntropyVA",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe"
             ]
           },
-          "ruleMessageId": "Error_NoHighEntropyVA",
           "locations": [
             {
               "physicalLocation": {
@@ -414,11 +414,11 @@
           "ruleId": "BA2016",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -433,11 +433,11 @@
           "ruleId": "BA2018",
           "level": "pass",
           "message": {
+            "messageId": "Pass_NoSEH",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe"
             ]
           },
-          "ruleMessageId": "Pass_NoSEH",
           "locations": [
             {
               "physicalLocation": {
@@ -452,11 +452,11 @@
           "ruleId": "BA2019",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -471,11 +471,11 @@
           "ruleId": "BA2021",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -490,13 +490,13 @@
           "ruleId": "BA2022",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
               "SignSecurely",
               "image is not signed "
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -1022,6 +1022,21 @@
         }
       },
       "files": {
+        "EVMAUS-MAIN": {
+          "mimeType": "application/octet-stream"
+        },
+        "evmaus": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND.CORP.MICROSOFT.COM": {
+          "mimeType": "application/octet-stream"
+        },
+        "file://co1-red-dc-29/": {
+          "mimeType": "application/octet-stream"
+        },
         "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_NoPrefer32Bit.exe": {
           "mimeType": "application/octet-stream",
           "hashes": [

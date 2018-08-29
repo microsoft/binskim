@@ -17,6 +17,23 @@
         }
       },
       "results": [],
+      "files": {
+        "EVMAUS-MAIN": {
+          "mimeType": "application/octet-stream"
+        },
+        "evmaus": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND.CORP.MICROSOFT.COM": {
+          "mimeType": "application/octet-stream"
+        },
+        "file://co1-red-dc-29/": {
+          "mimeType": "application/octet-stream"
+        }
+      },
       "invocations": [
         {
           "configurationNotifications": [

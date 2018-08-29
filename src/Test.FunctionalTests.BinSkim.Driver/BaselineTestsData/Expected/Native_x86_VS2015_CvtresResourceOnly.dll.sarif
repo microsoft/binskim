@@ -21,13 +21,13 @@
           "ruleId": "BA3001",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "EnablePositionIndependentExecutable",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -42,13 +42,13 @@
           "ruleId": "BA3002",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "DoNotMarkStackAsExecutable",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -63,13 +63,13 @@
           "ruleId": "BA3003",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "EnableStackProtector",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -84,13 +84,13 @@
           "ruleId": "BA3010",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "EnableReadOnlyRelocations",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -105,13 +105,13 @@
           "ruleId": "BA3030",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "UseCheckedFunctionsWithGcc",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -126,13 +126,13 @@
           "ruleId": "BA2001",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "LoadImageAboveFourGigabyteAddress",
               "image is not a 64-bit binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -147,13 +147,13 @@
           "ruleId": "BA2002",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "DoNotIncorporateVulnerableDependencies",
               "image is a resource-only binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -168,13 +168,13 @@
           "ruleId": "BA2006",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "BuildWithSecureTools",
               "image is a resource-only binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -189,13 +189,13 @@
           "ruleId": "BA2007",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "EnableCriticalCompilerWarnings",
               "image is a resource-only binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -210,13 +210,13 @@
           "ruleId": "BA2008",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "EnableControlFlowGuard",
               "image is a resource-only binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -231,13 +231,13 @@
           "ruleId": "BA2011",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "EnableStackProtection",
               "image is a resource-only binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -252,13 +252,13 @@
           "ruleId": "BA2012",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "DoNotModifyStackProtectionCookie",
               "image is a resource-only binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -273,13 +273,13 @@
           "ruleId": "BA2013",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "InitializeStackProtection",
               "image is a resource-only binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -294,13 +294,13 @@
           "ruleId": "BA2014",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "DoNotDisableStackProtectionForFunctions",
               "image is a resource-only binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -315,13 +315,13 @@
           "ruleId": "BA2015",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "EnableHighEntropyVirtualAddresses",
               "image will likely load as a 32-bit process"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -336,13 +336,13 @@
           "ruleId": "BA2016",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "MarkImageAsNXCompatible",
               "image is a resource-only binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -357,13 +357,13 @@
           "ruleId": "BA2018",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "EnableSafeSEH",
               "image is a resource-only binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -378,13 +378,13 @@
           "ruleId": "BA2024",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "EnableSpectreMitigations",
               "image is a resource-only binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -399,11 +399,11 @@
           "ruleId": "BA2005",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -418,11 +418,11 @@
           "ruleId": "BA2009",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -437,11 +437,11 @@
           "ruleId": "BA2010",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -456,11 +456,11 @@
           "ruleId": "BA2019",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -475,11 +475,11 @@
           "ruleId": "BA2021",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -494,13 +494,13 @@
           "ruleId": "BA2022",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_CvtresResourceOnly.dll",
               "SignSecurely",
               "image is not signed "
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -1026,6 +1026,21 @@
         }
       },
       "files": {
+        "EVMAUS-MAIN": {
+          "mimeType": "application/octet-stream"
+        },
+        "evmaus": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND.CORP.MICROSOFT.COM": {
+          "mimeType": "application/octet-stream"
+        },
+        "file://co1-red-dc-29/": {
+          "mimeType": "application/octet-stream"
+        },
         "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2015_CvtresResourceOnly.dll": {
           "mimeType": "application/octet-stream",
           "hashes": [

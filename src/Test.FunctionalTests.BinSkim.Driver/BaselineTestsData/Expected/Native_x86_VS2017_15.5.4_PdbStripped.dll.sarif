@@ -21,13 +21,13 @@
           "ruleId": "BA3001",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll",
               "EnablePositionIndependentExecutable",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -42,13 +42,13 @@
           "ruleId": "BA3002",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll",
               "DoNotMarkStackAsExecutable",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -63,13 +63,13 @@
           "ruleId": "BA3003",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll",
               "EnableStackProtector",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -84,13 +84,13 @@
           "ruleId": "BA3010",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll",
               "EnableReadOnlyRelocations",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -105,13 +105,13 @@
           "ruleId": "BA3030",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll",
               "UseCheckedFunctionsWithGcc",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -126,13 +126,13 @@
           "ruleId": "BA2001",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll",
               "LoadImageAboveFourGigabyteAddress",
               "image is not a 64-bit binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -147,13 +147,13 @@
           "ruleId": "BA2015",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll",
               "EnableHighEntropyVirtualAddresses",
               "image will likely load as a 32-bit process"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -168,11 +168,11 @@
           "ruleId": "BA2005",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -187,11 +187,11 @@
           "ruleId": "BA2008",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -206,11 +206,11 @@
           "ruleId": "BA2009",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -225,11 +225,11 @@
           "ruleId": "BA2010",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -244,11 +244,11 @@
           "ruleId": "BA2012",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -263,11 +263,11 @@
           "ruleId": "BA2016",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -282,11 +282,11 @@
           "ruleId": "BA2018",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -301,11 +301,11 @@
           "ruleId": "BA2019",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -320,11 +320,11 @@
           "ruleId": "BA2021",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -339,13 +339,13 @@
           "ruleId": "BA2022",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2017_15.5.4_PdbStripped.dll",
               "SignSecurely",
               "image is not signed "
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -718,6 +718,21 @@
         }
       },
       "files": {
+        "EVMAUS-MAIN": {
+          "mimeType": "application/octet-stream"
+        },
+        "evmaus": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND.CORP.MICROSOFT.COM": {
+          "mimeType": "application/octet-stream"
+        },
+        "file://co1-red-dc-29/": {
+          "mimeType": "application/octet-stream"
+        },
         "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2017_15.5.4_PdbStripped.dll": {
           "mimeType": "application/octet-stream",
           "hashes": [
@@ -762,7 +777,7 @@
                 }
               },
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
               },
               "level": "error"
             },
@@ -775,7 +790,7 @@
                 }
               },
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
               },
               "level": "error"
             },
@@ -788,7 +803,7 @@
                 }
               },
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
               },
               "level": "error"
             },
@@ -801,7 +816,7 @@
                 }
               },
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
               },
               "level": "error"
             },
@@ -814,7 +829,7 @@
                 }
               },
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
               },
               "level": "error"
             },
@@ -827,7 +842,7 @@
                 }
               },
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
               },
               "level": "error"
             },
@@ -840,7 +855,7 @@
                 }
               },
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded. (Pdb is stripped of cv (CodeView) info)"
               },
               "level": "error"
             }

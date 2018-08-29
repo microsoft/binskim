@@ -21,13 +21,13 @@
           "ruleId": "BA3001",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "EnablePositionIndependentExecutable",
               "ELF is not a shared object or executable"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -42,13 +42,13 @@
           "ruleId": "BA3002",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "DoNotMarkStackAsExecutable",
               "ELF is not a shared object or executable"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -63,13 +63,13 @@
           "ruleId": "BA3003",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "EnableStackProtector",
               "ELF is not a shared object or executable"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -84,13 +84,13 @@
           "ruleId": "BA3010",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "EnableReadOnlyRelocations",
               "ELF is not a shared object or executable"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -105,13 +105,13 @@
           "ruleId": "BA3030",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "UseCheckedFunctionsWithGcc",
               "ELF is not a shared object or executable"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -126,13 +126,13 @@
           "ruleId": "BA2001",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "LoadImageAboveFourGigabyteAddress",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -147,13 +147,13 @@
           "ruleId": "BA2002",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "DoNotIncorporateVulnerableDependencies",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -168,13 +168,13 @@
           "ruleId": "BA2005",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "DoNotShipVulnerableBinaries",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -189,13 +189,13 @@
           "ruleId": "BA2006",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "BuildWithSecureTools",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -210,13 +210,13 @@
           "ruleId": "BA2007",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "EnableCriticalCompilerWarnings",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -231,13 +231,13 @@
           "ruleId": "BA2008",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "EnableControlFlowGuard",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -252,13 +252,13 @@
           "ruleId": "BA2009",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "EnableAddressSpaceLayoutRandomization",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -273,13 +273,13 @@
           "ruleId": "BA2010",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "DoNotMarkImportsSectionAsExecutable",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -294,13 +294,13 @@
           "ruleId": "BA2011",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "EnableStackProtection",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -315,13 +315,13 @@
           "ruleId": "BA2012",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "DoNotModifyStackProtectionCookie",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -336,13 +336,13 @@
           "ruleId": "BA2013",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "InitializeStackProtection",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -357,13 +357,13 @@
           "ruleId": "BA2014",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "DoNotDisableStackProtectionForFunctions",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -378,13 +378,13 @@
           "ruleId": "BA2015",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "EnableHighEntropyVirtualAddresses",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -399,13 +399,13 @@
           "ruleId": "BA2016",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "MarkImageAsNXCompatible",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -420,13 +420,13 @@
           "ruleId": "BA2018",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "EnableSafeSEH",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -441,13 +441,13 @@
           "ruleId": "BA2019",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "DoNotMarkWritableSectionsAsShared",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -462,13 +462,13 @@
           "ruleId": "BA2021",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "DoNotMarkWritableSectionsAsExecutable",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -483,13 +483,13 @@
           "ruleId": "BA2022",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "SignSecurely",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -504,13 +504,13 @@
           "ruleId": "BA2024",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.object_file.o",
               "EnableSpectreMitigations",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -1036,6 +1036,21 @@
         }
       },
       "files": {
+        "EVMAUS-MAIN": {
+          "mimeType": "application/octet-stream"
+        },
+        "evmaus": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND.CORP.MICROSOFT.COM": {
+          "mimeType": "application/octet-stream"
+        },
+        "file://co1-red-dc-29/": {
+          "mimeType": "application/octet-stream"
+        },
         "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.object_file.o": {
           "mimeType": "application/octet-stream",
           "hashes": [

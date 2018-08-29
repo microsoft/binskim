@@ -21,13 +21,13 @@
           "ruleId": "BA3001",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe",
               "EnablePositionIndependentExecutable",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -42,13 +42,13 @@
           "ruleId": "BA3002",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe",
               "DoNotMarkStackAsExecutable",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -63,13 +63,13 @@
           "ruleId": "BA3003",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe",
               "EnableStackProtector",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -84,13 +84,13 @@
           "ruleId": "BA3010",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe",
               "EnableReadOnlyRelocations",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -105,13 +105,13 @@
           "ruleId": "BA3030",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe",
               "UseCheckedFunctionsWithGcc",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -126,13 +126,13 @@
           "ruleId": "BA2008",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe",
               "EnableControlFlowGuard",
               "image is a mixed mode binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -147,13 +147,13 @@
           "ruleId": "BA2016",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe",
               "MarkImageAsNXCompatible",
               "image is a 64-bit binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -168,13 +168,13 @@
           "ruleId": "BA2018",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe",
               "EnableSafeSEH",
               "image is not a 32-bit binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -189,11 +189,11 @@
           "ruleId": "BA2001",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -208,11 +208,11 @@
           "ruleId": "BA2005",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -227,11 +227,11 @@
           "ruleId": "BA2009",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -246,11 +246,11 @@
           "ruleId": "BA2010",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -265,11 +265,11 @@
           "ruleId": "BA2012",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -284,11 +284,11 @@
           "ruleId": "BA2015",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -303,11 +303,11 @@
           "ruleId": "BA2019",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -322,11 +322,11 @@
           "ruleId": "BA2021",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -341,13 +341,13 @@
           "ruleId": "BA2022",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "MixedMode_x64_VS2013_NoPdb.exe",
               "SignSecurely",
               "image is not signed "
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -720,6 +720,21 @@
         }
       },
       "files": {
+        "EVMAUS-MAIN": {
+          "mimeType": "application/octet-stream"
+        },
+        "evmaus": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND.CORP.MICROSOFT.COM": {
+          "mimeType": "application/octet-stream"
+        },
+        "file://co1-red-dc-29/": {
+          "mimeType": "application/octet-stream"
+        },
         "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe": {
           "mimeType": "application/octet-stream",
           "hashes": [
@@ -764,7 +779,7 @@
                 }
               },
               "message": {
-                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
               },
               "level": "error"
             },
@@ -777,7 +792,7 @@
                 }
               },
               "message": {
-                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
               },
               "level": "error"
             },
@@ -790,7 +805,7 @@
                 }
               },
               "message": {
-                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
               },
               "level": "error"
             },
@@ -803,7 +818,7 @@
                 }
               },
               "message": {
-                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
               },
               "level": "error"
             },
@@ -816,7 +831,7 @@
                 }
               },
               "message": {
-                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
               },
               "level": "error"
             },
@@ -829,7 +844,7 @@
                 }
               },
               "message": {
-                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
               },
               "level": "error"
             },
@@ -842,7 +857,7 @@
                 }
               },
               "message": {
-                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'Microsoft.CodeAnalysis.Sarif.Message' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'MixedMode_x64_VS2013_NoPdb.exe' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
               },
               "level": "error"
             }

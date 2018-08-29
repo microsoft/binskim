@@ -21,13 +21,13 @@
           "ruleId": "BA3030",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "UseCheckedFunctionsWithGcc",
               "not compiled solely with gcc"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -42,13 +42,13 @@
           "ruleId": "BA2001",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "LoadImageAboveFourGigabyteAddress",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -63,13 +63,13 @@
           "ruleId": "BA2002",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "DoNotIncorporateVulnerableDependencies",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -84,13 +84,13 @@
           "ruleId": "BA2005",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "DoNotShipVulnerableBinaries",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -105,13 +105,13 @@
           "ruleId": "BA2006",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "BuildWithSecureTools",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -126,13 +126,13 @@
           "ruleId": "BA2007",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "EnableCriticalCompilerWarnings",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -147,13 +147,13 @@
           "ruleId": "BA2008",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "EnableControlFlowGuard",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -168,13 +168,13 @@
           "ruleId": "BA2009",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "EnableAddressSpaceLayoutRandomization",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -189,13 +189,13 @@
           "ruleId": "BA2010",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "DoNotMarkImportsSectionAsExecutable",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -210,13 +210,13 @@
           "ruleId": "BA2011",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "EnableStackProtection",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -231,13 +231,13 @@
           "ruleId": "BA2012",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "DoNotModifyStackProtectionCookie",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -252,13 +252,13 @@
           "ruleId": "BA2013",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "InitializeStackProtection",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -273,13 +273,13 @@
           "ruleId": "BA2014",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "DoNotDisableStackProtectionForFunctions",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -294,13 +294,13 @@
           "ruleId": "BA2015",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "EnableHighEntropyVirtualAddresses",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -315,13 +315,13 @@
           "ruleId": "BA2016",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "MarkImageAsNXCompatible",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -336,13 +336,13 @@
           "ruleId": "BA2018",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "EnableSafeSEH",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -357,13 +357,13 @@
           "ruleId": "BA2019",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "DoNotMarkWritableSectionsAsShared",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -378,13 +378,13 @@
           "ruleId": "BA2021",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "DoNotMarkWritableSectionsAsExecutable",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -399,13 +399,13 @@
           "ruleId": "BA2022",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "SignSecurely",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -420,13 +420,13 @@
           "ruleId": "BA2024",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.no_stack_protector",
               "EnableSpectreMitigations",
               "image is not a PE binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -441,11 +441,11 @@
           "ruleId": "BA3001",
           "level": "error",
           "message": {
+            "messageId": "Error",
             "arguments": [
               "clang.no_stack_protector"
             ]
           },
-          "ruleMessageId": "Error",
           "locations": [
             {
               "physicalLocation": {
@@ -460,11 +460,11 @@
           "ruleId": "BA3002",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "clang.no_stack_protector"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -479,11 +479,11 @@
           "ruleId": "BA3003",
           "level": "error",
           "message": {
+            "messageId": "Error",
             "arguments": [
               "clang.no_stack_protector"
             ]
           },
-          "ruleMessageId": "Error",
           "locations": [
             {
               "physicalLocation": {
@@ -498,11 +498,11 @@
           "ruleId": "BA3010",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "clang.no_stack_protector"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -1028,6 +1028,21 @@
         }
       },
       "files": {
+        "EVMAUS-MAIN": {
+          "mimeType": "application/octet-stream"
+        },
+        "evmaus": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND.CORP.MICROSOFT.COM": {
+          "mimeType": "application/octet-stream"
+        },
+        "file://co1-red-dc-29/": {
+          "mimeType": "application/octet-stream"
+        },
         "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.no_stack_protector": {
           "mimeType": "application/octet-stream",
           "hashes": [

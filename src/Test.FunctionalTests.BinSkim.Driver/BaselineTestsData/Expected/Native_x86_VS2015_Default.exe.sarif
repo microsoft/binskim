@@ -21,13 +21,13 @@
           "ruleId": "BA3001",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
               "EnablePositionIndependentExecutable",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -42,13 +42,13 @@
           "ruleId": "BA3002",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
               "DoNotMarkStackAsExecutable",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -63,13 +63,13 @@
           "ruleId": "BA3003",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
               "EnableStackProtector",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -84,13 +84,13 @@
           "ruleId": "BA3010",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
               "EnableReadOnlyRelocations",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -105,13 +105,13 @@
           "ruleId": "BA3030",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
               "UseCheckedFunctionsWithGcc",
               "image is not an ELF binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -126,13 +126,13 @@
           "ruleId": "BA2001",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
               "LoadImageAboveFourGigabyteAddress",
               "image is not a 64-bit binary"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -147,13 +147,13 @@
           "ruleId": "BA2015",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
               "EnableHighEntropyVirtualAddresses",
               "image will likely load as a 32-bit process"
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -168,11 +168,11 @@
           "ruleId": "BA2002",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -187,11 +187,11 @@
           "ruleId": "BA2005",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -206,12 +206,12 @@
           "ruleId": "BA2006",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
               "17.0.65501.17013"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -226,12 +226,12 @@
           "ruleId": "BA2007",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
               "2147483647"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -246,11 +246,11 @@
           "ruleId": "BA2008",
           "level": "error",
           "message": {
+            "messageId": "Error",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
             ]
           },
-          "ruleMessageId": "Error",
           "locations": [
             {
               "physicalLocation": {
@@ -265,11 +265,11 @@
           "ruleId": "BA2009",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -284,11 +284,11 @@
           "ruleId": "BA2010",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -303,11 +303,11 @@
           "ruleId": "BA2011",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -322,11 +322,11 @@
           "ruleId": "BA2012",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -341,11 +341,11 @@
           "ruleId": "BA2013",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -360,11 +360,11 @@
           "ruleId": "BA2014",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -379,11 +379,11 @@
           "ruleId": "BA2016",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -398,12 +398,12 @@
           "ruleId": "BA2018",
           "level": "error",
           "message": {
+            "messageId": "Error",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
               "has an empty SE handler table in the load configuration table"
             ]
           },
-          "ruleMessageId": "Error",
           "locations": [
             {
               "physicalLocation": {
@@ -418,11 +418,11 @@
           "ruleId": "BA2019",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -437,12 +437,12 @@
           "ruleId": "BA2021",
           "level": "error",
           "message": {
+            "messageId": "Error",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
               ".textbss"
             ]
           },
-          "ruleMessageId": "Error",
           "locations": [
             {
               "physicalLocation": {
@@ -457,13 +457,13 @@
           "ruleId": "BA2022",
           "level": "notApplicable",
           "message": {
+            "messageId": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
               "SignSecurely",
               "image is not signed "
             ]
           },
-          "ruleMessageId": "NotApplicable_InvalidMetadata",
           "locations": [
             {
               "physicalLocation": {
@@ -478,11 +478,11 @@
           "ruleId": "BA2024",
           "level": "pass",
           "message": {
+            "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe"
             ]
           },
-          "ruleMessageId": "Pass",
           "locations": [
             {
               "physicalLocation": {
@@ -1008,6 +1008,21 @@
         }
       },
       "files": {
+        "EVMAUS-MAIN": {
+          "mimeType": "application/octet-stream"
+        },
+        "evmaus": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND": {
+          "mimeType": "application/octet-stream"
+        },
+        "REDMOND.CORP.MICROSOFT.COM": {
+          "mimeType": "application/octet-stream"
+        },
+        "file://co1-red-dc-29/": {
+          "mimeType": "application/octet-stream"
+        },
         "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2015_Default.exe": {
           "mimeType": "application/octet-stream",
           "hashes": [
