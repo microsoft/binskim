@@ -29,12 +29,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// This prevents them from being overwritten, which can redirect control flow. 
         /// Use the compiler flags '-Wl,z,relro' to enable this.
         /// </summary>
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA3010_EnableReadOnlyRelocations_Description; }
+            get { return new Message { Text = RuleResources.BA3010_EnableReadOnlyRelocations_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

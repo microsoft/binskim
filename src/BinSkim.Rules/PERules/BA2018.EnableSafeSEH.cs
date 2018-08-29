@@ -34,12 +34,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// as the /SafeSEH flag is invalid when linking for ARM and x64.
         /// </summary>
 
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA2018_EnableSafeSEH_Description; }
+            get { return new Message { Text = RuleResources.BA2018_EnableSafeSEH_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

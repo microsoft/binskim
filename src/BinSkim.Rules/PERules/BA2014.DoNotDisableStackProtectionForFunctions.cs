@@ -35,12 +35,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// inserting stack protector checks in these locations rather than disabling the
         /// stack protector altogether.
         /// </summary>
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA2014_DoNotDisableStackProtectionForFunctions_Description; }
+            get { return new Message { Text = RuleResources.BA2014_DoNotDisableStackProtectionForFunctions_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

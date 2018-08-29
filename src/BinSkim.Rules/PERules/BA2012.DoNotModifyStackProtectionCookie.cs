@@ -41,12 +41,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// __security_cookie_complement.
         /// </summary>
 
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA2012_DoNotModifyStackProtectionCookie_Description; }
+            get { return new Message { Text = RuleResources.BA2012_DoNotModifyStackProtectionCookie_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

@@ -37,12 +37,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// custom entry point.
         /// </summary>
 
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA2013_InitializeStackProtection_Description; }
+            get { return new Message { Text = RuleResources.BA2013_InitializeStackProtection_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

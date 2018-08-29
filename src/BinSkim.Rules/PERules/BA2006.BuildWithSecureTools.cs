@@ -32,12 +32,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// code generation that can help prevent speculative execution side-channel
         /// attacks.
         /// </summary>
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA2006_BuildWithSecureTools_Description; }
+            get { return new Message { Text = RuleResources.BA2006_BuildWithSecureTools_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

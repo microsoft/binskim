@@ -39,13 +39,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// Application code should be compiled with the most up-to-date toolsets possible
         /// in order to take advantage of the most current compile-time security features.
         /// </summary>
-        public override string FullDescription
+        public override Message FullDescription
         {
             // Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it.
-            get { return RuleResources.BA2024_EnableSpectreMitigations_Description; }
+            get { return new Message { Text = RuleResources.BA2024_EnableSpectreMitigations_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {
