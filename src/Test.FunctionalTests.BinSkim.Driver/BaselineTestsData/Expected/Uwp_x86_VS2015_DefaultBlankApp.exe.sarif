@@ -513,7 +513,6 @@
               "Error": "PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim"
           },
           "BA3002": {
@@ -533,7 +532,6 @@
               "Error_NoStackSeg": "GNU_STACK segment on '{0}' is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing '-z noexecstack' to the compiler.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim"
           },
           "BA3003": {
@@ -552,7 +550,6 @@
               "Error": "The stack protector was not found in '{0}'.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim"
           },
           "BA3010": {
@@ -571,7 +568,6 @@
               "Error": "The GNU_RELRO segment is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,relro' to address this.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim"
           },
           "BA3030": {
@@ -592,7 +588,6 @@
               "Error": "No checked functions are present/used when compiling '{0}', and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 ('-O2') is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim"
           },
           "BA2001": {
@@ -611,7 +606,6 @@
               "Error": "'{0}' is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "FourGbCheck"
@@ -634,7 +628,6 @@
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.",
               "NotApplicable_UnsupportedKernelModeVersion": "'{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
@@ -658,7 +651,6 @@
               "Error_NeitherHighEntropyVANorLargeAddressAware": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "HighEntropyVACheck"
@@ -680,7 +672,6 @@
               "Error": "'{0}' was built with a version of {1} which is subject to the following issues: {2}. To resolve this, {3}. The source files that triggered this were: {4}",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "ATLVersionCheck"
@@ -703,7 +694,6 @@
               "Error_CouldNotParseVersion": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "BinaryVersionsCheck"
@@ -726,7 +716,6 @@
               "Pass": "All linked modules of '{0}' generated by the Microsoft front-end satisfy configured policy (compiler minimum version {1}).",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "CompilerVersionCheck"
@@ -750,7 +739,6 @@
               "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the compiler warning settings. The language could not be identified for the following modules: {1}",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "CompilerWarningsCheck"
@@ -774,7 +762,6 @@
               "Error_WinCENoRelocationSection": "'{0}' is a Windows CE image but does not contain any relocation data, preventing Address Space Layout Randomization.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "DBCheck"
@@ -796,7 +783,6 @@
               "Error": "'{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here. To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "ExecutableImportsCheck"
@@ -819,7 +805,6 @@
               "Error_UnknownModuleLanguage": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "GSCheck"
@@ -844,7 +829,6 @@
               "Warning_InvalidSecurityCookieOffset": "'{0}' appears to be a packed C or C++ binary that reports a security cookie offset that exceeds the size of the packed file. Use of the stack protector (/GS) feature therefore could not be verified. The file was possibly packed by: {1}.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
@@ -868,7 +852,6 @@
               "Error": "'{0}' is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
@@ -890,7 +873,6 @@
               "Error": "'{0}' is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "GSFunctionSafeBuffersCheck"
@@ -912,7 +894,6 @@
               "Error": "'{0}' is not marked NX compatible. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "NXCheck"
@@ -935,7 +916,6 @@
               "Error": "'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
@@ -957,7 +937,6 @@
               "Error": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "SharedSectionCheck"
@@ -980,7 +959,6 @@
               "Error_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than page size ({2}).",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim",
             "properties": {
               "equivalentBinScopeRuleReadableName": "WXCheck"
@@ -1004,7 +982,6 @@
               "Error_WinTrustVerifyApiError": "'{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim"
           },
           "BA2024": {
@@ -1026,7 +1003,6 @@
               "Pass": "All linked modules '{0}' were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
-            "richMessageStrings": {},
             "helpUri": "https://github.com/microsoft/binskim"
           }
         }
