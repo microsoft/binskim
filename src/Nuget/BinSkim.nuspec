@@ -17,7 +17,7 @@
     <iconUrl>https://github.com/Microsoft/binskim/blob/master/BinSkim.png</iconUrl>
   </metadata>
   <files>
-    <file src="bld\bin\AnyCPU_$configuration$\Publish\**\*.*" target="tools"/>   
+    <file src="bld\bin\AnyCPU_$configuration$\Publish\**\*" target="tools"/>   
     <file src="src\ReleaseHistory.md" target="tools\ReleaseHistory.md" />
     <file src="src\BinaryParsers\**\*.cs" target="src\BinaryParsers" />
     <file src="src\BinSkim.Driver\**\*.cs" target="src\BinSkim.Driver" />
