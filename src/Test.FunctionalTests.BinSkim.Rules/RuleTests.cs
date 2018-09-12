@@ -991,21 +991,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
         
         [Fact]
-        public void EnablePieOnExecutables_Pass()
+        public void EnablePositionIndependentExecutable_Pass()
         {
-            VerifyPass(new EnablePieOnExecutables());
+            VerifyPass(new EnablePositionIndependentExecutable());
         }
 
         [Fact]
-        public void EnablePieOnExecutables_Fail()
+        public void EnablePositionIndepedentExecutable_Fail()
         {
-            VerifyFail(new EnablePieOnExecutables());
+            VerifyFail(new EnablePositionIndependentExecutable());
         }
 
         [Fact]
-        public void EnablePieOnExecutables_NotApplicable()
+        public void EnablePositionIndepedentExecutable_NotApplicable()
         {
-            VerifyNotApplicable(new EnablePieOnExecutables(), new HashSet<string>());
+            VerifyNotApplicable(new EnablePositionIndependentExecutable(), new HashSet<string>());
         }
 
         [Fact]
@@ -1023,7 +1023,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotMarkStackAsExecutable_NotApplicable()
         {
-            VerifyNotApplicable(new EnablePieOnExecutables(), new HashSet<string>());
+            VerifyNotApplicable(new EnablePositionIndependentExecutable(), new HashSet<string>());
         }
 
         [Fact]
@@ -1041,7 +1041,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableReadOnlyRelocations_NotApplicable()
         {
-            VerifyNotApplicable(new EnablePieOnExecutables(), new HashSet<string>());
+            VerifyNotApplicable(new EnablePositionIndependentExecutable(), new HashSet<string>());
         }
 
         [Fact]
@@ -1059,7 +1059,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableStackProtector_NotApplicable()
         {
-            VerifyNotApplicable(new EnablePieOnExecutables(), new HashSet<string>());
+            VerifyNotApplicable(new EnablePositionIndependentExecutable(), new HashSet<string>());
         }
 
         [Fact]

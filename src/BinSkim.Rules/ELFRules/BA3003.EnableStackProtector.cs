@@ -32,12 +32,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // smashing is detected.Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or 
         // '--fstack-protector-all' (all functions) to enable this.
         /// </summary>
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA3003_EnableStackProtector_Description; }
+            get { return new Message { Text = RuleResources.BA3003_EnableStackProtector_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

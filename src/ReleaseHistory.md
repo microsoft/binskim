@@ -67,3 +67,7 @@
 
 ## **v1.5.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.5.1
 * Fix Linux NuGet packaging to include BinSkim executable missing in 1.5.0.
+
+
+## **v1.6.0-beta.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.6.0-beta.1)
+* **Breaking** Output is now Sarif V2-CSD1 compliant rather than Sarif V1  

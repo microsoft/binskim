@@ -39,12 +39,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// resolve the warnings emitted.
         /// </summary>
 
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA2007_EnableCriticalCompilerWarnings_Description; }
+            get { return new Message { Text = RuleResources.BA2007_EnableCriticalCompilerWarnings_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

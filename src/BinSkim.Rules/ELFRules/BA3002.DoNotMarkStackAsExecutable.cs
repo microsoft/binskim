@@ -30,12 +30,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// to store shellcode. Ensure you are compiling with '-z noexecstack'
         /// to mark the stack as non-executable."
         /// </summary>
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA3002_DoNotMarkStackAsExecutable_Description; }
+            get { return new Message { Text = RuleResources.BA3002_DoNotMarkStackAsExecutable_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

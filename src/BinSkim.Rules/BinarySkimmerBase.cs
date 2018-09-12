@@ -1,10 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.IL.Sdk;
 using System;
 using System.Resources;
+using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -13,6 +14,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private static Uri s_helpUri = new Uri("https://github.com/microsoft/binskim");
 
         public override Uri HelpUri { get { return s_helpUri; } }
+
+        // TODO: author good help text
+        // https://github.com/Microsoft/binskim/issues/192
+        public override Message Help {  get { return this.FullDescription; } }
 
         public BinarySkimmerBase()
         {
@@ -23,6 +28,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 this.SetProperty<string>(BinScopeCompatibility.EquivalentBinScopeRulePropertyName, altId);
             }
         }
+
+        // BA2012.DoNotModifyStackProtectionCookie is the only rule
+        // that potentially fires warnings (and its default is error).
+        public override ResultLevel DefaultLevel => ResultLevel.Error;
 
         protected override ResourceManager ResourceManager
         {

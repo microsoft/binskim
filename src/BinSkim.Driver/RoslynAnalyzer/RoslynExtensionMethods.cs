@@ -16,26 +16,27 @@ namespace Microsoft.CodeAnalysis.IL
             DiagnosticDescriptor diagnosticDescriptor = diagnostic.Descriptor;
 
             var rule = new Rule();
-            rule.MessageFormats = new Dictionary<string, string>();
-            rule.MessageFormats["Default"] = diagnosticDescriptor.MessageFormat.ToString();
-            rule.FullDescription = diagnosticDescriptor.Description.ToString();
+            rule.MessageStrings = new Dictionary<string, string>();
+            rule.MessageStrings["Default"] = diagnosticDescriptor.MessageFormat.ToString();
+            rule.FullDescription = new Message { Text = diagnosticDescriptor.Description.ToString() };
             rule.HelpUri = new Uri(diagnosticDescriptor.HelpLinkUri);
             rule.Id = diagnosticDescriptor.Id;
 
             // TODO: review this decision
-            rule.Name = diagnostic.GetType().Name;
+            rule.Name = new Message { Text = diagnostic.GetType().Name };
 
             foreach (string tag in diagnosticDescriptor.CustomTags)
             {
                 rule.Tags.Add(tag);
             }
 
-            rule.DefaultLevel = diagnosticDescriptor.DefaultSeverity.ConvertToResultLevel();
+            rule.Configuration = new RuleConfiguration();
+            rule.Configuration.DefaultLevel = diagnosticDescriptor.DefaultSeverity.ConvertToRuleConfigurationDefaultLevel();
 
             rule.SetProperty("Category", diagnosticDescriptor.Category);
             rule.SetProperty("IsEnabledByDefault", diagnosticDescriptor.IsEnabledByDefault.ToString());
 
-            rule.ShortDescription = diagnosticDescriptor.Title.ToString();
+            rule.ShortDescription = new Message { Text = diagnosticDescriptor.Title.ToString() };
 
             // No Roslyn analog for these available from diagnostic
             //rule.Options
@@ -60,6 +61,32 @@ namespace Microsoft.CodeAnalysis.IL
             return region;
         }
 
+        public static RuleConfigurationDefaultLevel ConvertToRuleConfigurationDefaultLevel(this DiagnosticSeverity severity)
+        {
+            switch (severity)
+            {
+                case DiagnosticSeverity.Error:
+                {
+                    return RuleConfigurationDefaultLevel.Error;
+                }
+
+                case DiagnosticSeverity.Hidden:
+                case DiagnosticSeverity.Warning:
+                {
+                    return RuleConfigurationDefaultLevel.Warning;
+                }
+
+                case DiagnosticSeverity.Info:
+                {
+                    return RuleConfigurationDefaultLevel.Note;
+                }
+
+                default:
+                {
+                    throw new InvalidOperationException("Unrecognized diagnostic severity value: " + severity.ToString());
+                }
+            }
+        }
         public static ResultLevel ConvertToResultLevel(this DiagnosticSeverity severity)
         {
             switch (severity)
@@ -80,7 +107,7 @@ namespace Microsoft.CodeAnalysis.IL
                     return ResultLevel.Note;
                 }
 
-                default: 
+                default:
                 {
                     throw new InvalidOperationException("Unrecognized diagnostic severity value: " + severity.ToString());
                 }

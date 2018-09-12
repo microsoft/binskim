@@ -14,24 +14,24 @@ using ELFSharp.ELF.Segments;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
-    public class EnablePieOnExecutables : ELFBinarySkimmerBase
+    public class EnablePositionIndependentExecutable : ELFBinarySkimmerBase
     {
         /// <summary>
         /// BA3001
         /// </summary>
-        public override string Id { get { return RuleIds.EnablePieOnExecutables; } }
+        public override string Id { get { return RuleIds.EnablePositionIndependentExecutable; } }
 
         /// <summary>
         /// "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section,
         ///  if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult.
         ///  This can be enabled by passing '-f pie' to clang/gcc."
         /// </summary>
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA3001_EnablePieOnExecutables_Description; }
+            get { return  new Message { Text = RuleResources.BA3001_EnablePositionIndependentExecutable_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

@@ -33,12 +33,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// builds, as this feature creates a writable and executable section named '.textbss'
         /// in order to function.
         /// </summary>       
-        public override string FullDescription
+        public override Message FullDescription
         {
-            get { return RuleResources.BA2019_DoNotMarkWritableSectionsAsShared_Description; }
+            get { return new Message { Text = RuleResources.BA2019_DoNotMarkWritableSectionsAsShared_Description }; }
         }
 
-        protected override IEnumerable<string> FormatIds
+        protected override IEnumerable<string> MessageResourceNames
         {
             get
             {

@@ -861,9 +861,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// <summary>
         ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
-        internal static string BA3001_EnablePieOnExecutables_Description {
+        internal static string BA3001_EnablePositionIndependentExecutable_Description {
             get {
-                return ResourceManager.GetString("BA3001_EnablePieOnExecutables_Description", resourceCulture);
+                return ResourceManager.GetString("BA3001_EnablePositionIndependentExecutable_Description", resourceCulture);
             }
         }
         
@@ -958,7 +958,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the .data section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
+        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
         /// </summary>
         internal static string BA3010_EnableReadOnlyRelocations_Description {
             get {
