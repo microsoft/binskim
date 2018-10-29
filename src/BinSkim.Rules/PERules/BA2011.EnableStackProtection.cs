@@ -4,7 +4,6 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Reflection.PortableExecutable;
 
 using Dia2Lib;
 

@@ -1,9 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Driver;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {

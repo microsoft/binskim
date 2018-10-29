@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Globalization;
-using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -122,7 +121,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Version minAllowedVersion;
 
                     if (allowedLibraries.TryGetValue(libFileName, out minAllowedVersion) &&
-                        omDetails.CompilerVersion >= minAllowedVersion)
+                        omDetails.CompilerBackEndVersion >= minAllowedVersion)
                     {
                         continue;
                     }
@@ -135,7 +134,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     case Language.C:
                     case Language.Cxx:
-                        actualVersion = Minimum(omDetails.CompilerVersion, omDetails.CompilerFrontEndVersion);
+                        actualVersion = Minimum(omDetails.CompilerBackEndVersion, omDetails.CompilerFrontEndVersion);
                         minimumVersion = minCompilerVersion;
                         break;
 
@@ -184,7 +183,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         om.CreateCompilandRecordWithSuffix(
                             String.Format(CultureInfo.InvariantCulture,
                             RuleResources.BA2006_Error_BadModule,
-                            omLanguage, omDetails.CompilerVersion, omDetails.CompilerFrontEndVersion)));
+                            omLanguage, omDetails.CompilerBackEndVersion, omDetails.CompilerFrontEndVersion)));
                 }
             }
 

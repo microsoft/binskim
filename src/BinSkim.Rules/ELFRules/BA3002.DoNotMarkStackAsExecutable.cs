@@ -8,7 +8,6 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.BinaryParsers;
 using ELFSharp.ELF;
-using System.Linq;
 using ELFSharp.ELF.Segments;
 
 namespace Microsoft.CodeAnalysis.IL.Rules

@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 using System.Text;
 
@@ -14,9 +13,9 @@ using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
-using System.Runtime;
 using System.Linq;
 using Microsoft.CodeAnalysis.BinaryParsers;
+using System.IO;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -131,8 +130,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             Pdb pdb = target.Pdb;
 
-            TruncatedCompilandRecordList masmModules = new TruncatedCompilandRecordList();
-            TruncatedCompilandRecordList mitigationNotEnabledModules = new TruncatedCompilandRecordList();
+            var masmModules = new TruncatedCompilandRecordList();
+            var mitigationNotEnabledModules = new List<ObjectModuleDetails>();
             TruncatedCompilandRecordList mitigationDisabledInDebugBuild = new TruncatedCompilandRecordList();
             TruncatedCompilandRecordList mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
 
@@ -146,11 +145,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // See if the item is in our skip list.
                 if (!string.IsNullOrEmpty(om.Lib))
                 {
-                    string libFileName = string.Concat(System.IO.Path.GetFileName(om.Lib), ",", omDetails.Language.ToString()).ToLowerInvariant();
+                    string libFileName = string.Concat(Path.GetFileName(om.Lib), ",", omDetails.Language.ToString()).ToLowerInvariant();
                     Version minAllowedVersion;
 
                     if (allowedLibraries.TryGetValue(libFileName, out minAllowedVersion) &&
-                        omDetails.CompilerVersion >= minAllowedVersion)
+                        omDetails.CompilerBackEndVersion >= minAllowedVersion)
                     {
                         continue;
                     }
@@ -173,7 +172,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         }
                         else
                         {
-                            actualVersion = omDetails.CompilerVersion;
+                            actualVersion = omDetails.CompilerBackEndVersion;
                         }
                         break;
                     }
@@ -230,7 +229,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 // Get the appropriate compiler version against which to check this compiland.
                 // check that we are greater than or equal to the first fully supported release: 15.6 first
-                Version omVersion = omDetails.CompilerVersion;
+                Version omVersion = omDetails.CompilerBackEndVersion;
                 
                 CompilerMitigations availableMitigations = GetAvailableMitigations(context, machineType, omVersion);
                 
@@ -271,7 +270,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     if (QSpectreState == SwitchState.SwitchNotFound && d2guardspecloadState == SwitchState.SwitchNotFound)
                     {
                         // Built with tools that support the Spectre mitigations but these have not been enabled.
-                        mitigationNotEnabledModules.Add(om.CreateCompilandRecord());
+                        mitigationNotEnabledModules.Add(omDetails);
                     }
                     else
                     {
@@ -317,13 +316,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 sb.AppendLine(line);
             }
 
-            if (!mitigationNotEnabledModules.Empty)
+            if (mitigationNotEnabledModules.Count > 0)
             {
                 // The following modules were compiled with a toolset that supports 
                 // /Qspectre but the switch was not enabled on the command-line: {0}
                 line = string.Format(
                         RuleResources.BA2024_Error_SpectreMitigationNotEnabled,
-                        mitigationNotEnabledModules.CreateSortedObjectList());
+                        CreateOutputCoalescedByLibrary(mitigationNotEnabledModules));
                 sb.AppendLine(line);
             }
 
@@ -371,6 +370,41 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.TargetUri.GetFileName()));
         }
 
+        private string CreateOutputCoalescedByLibrary(List<ObjectModuleDetails> objectModuleDetailsList)
+        {
+            var librariesToObjectModulesMap = new Dictionary<string, List<string>>();
+
+            foreach (ObjectModuleDetails objectModuleDetail in objectModuleDetailsList)
+            {
+                string key = CreateLibraryDescriptor(objectModuleDetail);
+                if (!librariesToObjectModulesMap.TryGetValue(key, out List<string> objectModules))
+                {
+                    objectModules = librariesToObjectModulesMap[key] = new List<string>();
+                }
+                objectModules.Add(Path.GetFileName(objectModuleDetail.Name));
+            }
+
+
+            var sb = new StringBuilder();
+
+            foreach (string key in librariesToObjectModulesMap.Keys)
+            {
+                sb.Append(Environment.NewLine + key);
+
+                List<string> objectModules = librariesToObjectModulesMap[key];
+                objectModules.Sort();
+                sb.AppendLine(" : " + string.Join(",", objectModules.ToArray()));
+            }
+             
+            return sb.ToString();
+        }
+
+        private string CreateLibraryDescriptor(ObjectModuleDetails objectModuleDetail) => 
+            Path.GetFileName(objectModuleDetail.Library) + "," + 
+            objectModuleDetail.Language.ToString().ToLowerInvariant() + "," + 
+            objectModuleDetail.CompilerBackEndVersion;
+
+
         internal static Version GetClosestCompilerVersionWithSpectreMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)
         {
             var compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
@@ -392,11 +426,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Version previousMaximum = new Version(0, 0, 0, 0);
                 for (int i = 0; i < listOfMitigatedCompilers.Length; i++)
                 {
-                    if(omVersion > previousMaximum
-                        && omVersion <= listOfMitigatedCompilers[i].MinimalSupportedVersion 
-                        && (listOfMitigatedCompilers[i].SupportedMitigations 
-                            & (CompilerMitigations.QSpectreAvailable 
-                            | CompilerMitigations.D2GuardSpecLoadAvailable)) != 0)
+                    if (omVersion > previousMaximum && 
+                        omVersion <= listOfMitigatedCompilers[i].MinimalSupportedVersion && 
+                        (listOfMitigatedCompilers[i].SupportedMitigations & (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable)) != 0)
                     {
                         return listOfMitigatedCompilers[i].MinimalSupportedVersion;
                     }

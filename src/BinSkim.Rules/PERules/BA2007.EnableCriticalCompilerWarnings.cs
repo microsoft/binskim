@@ -8,7 +8,6 @@ using System.Composition;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Reflection.PortableExecutable;
 
 using Dia2Lib;
 
@@ -150,7 +149,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 overallMinimumWarningLevel = Math.Min(overallMinimumWarningLevel, warningLevel);
                 if (warningLevel < 3)
                 {
-                    exampleTooLowWarningCommandLine = exampleTooLowWarningCommandLine ?? omDetails.CommandLine;
+                    exampleTooLowWarningCommandLine = exampleTooLowWarningCommandLine ?? omDetails.RawCommandLine;
 
                     string msg = "[warning level: " + warningLevel.ToString(CultureInfo.InvariantCulture) + "]";
                     warningTooLowModules.Add(om.CreateCompilandRecordWithSuffix(msg));
@@ -160,7 +159,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (requiredDisabledWarnings.Count != 0)
                 {
                     MergeInto(overallDisabledWarnings, requiredDisabledWarnings);
-                    exampleDisabledWarningCommandLine = exampleDisabledWarningCommandLine ?? omDetails.CommandLine;
+                    exampleDisabledWarningCommandLine = exampleDisabledWarningCommandLine ?? omDetails.RawCommandLine;
 
                     string msg = "[Explicitly disabled warnings: " + CreateTextWarningList(requiredDisabledWarnings) + "]";
                     disabledWarningModules.Add(om.CreateCompilandRecordWithSuffix(msg));
