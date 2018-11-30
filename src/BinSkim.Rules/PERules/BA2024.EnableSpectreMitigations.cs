@@ -49,10 +49,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             get
             {
                 return new string[] {
-                    nameof(RuleResources.BA2024_Error),
-                    nameof(RuleResources.BA2024_Error_OptimizationsDisabled),
-                    nameof(RuleResources.BA2024_Error_SpectreMitigationNotEnabled),
-                    nameof(RuleResources.BA2024_Error_SpectreMitigationExplicitlyDisabled),
+                    nameof(RuleResources.BA2024_Warning),
+                    nameof(RuleResources.BA2024_Warning_OptimizationsDisabled),
+                    nameof(RuleResources.BA2024_Warning_SpectreMitigationNotEnabled),
+                    nameof(RuleResources.BA2024_Warning_SpectreMitigationExplicitlyDisabled),
                     nameof(RuleResources.BA2024_Pass),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)};
             }
@@ -311,7 +311,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // The following modules were compiled with Spectre
                 // mitigations explicitly disabled: {0}
                 line = string.Format(
-                        RuleResources.BA2024_Error_SpectreMitigationExplicitlyDisabled,
+                        RuleResources.BA2024_Warning_SpectreMitigationExplicitlyDisabled,
                         mitigationExplicitlyDisabledModules.CreateSortedObjectList());
                 sb.AppendLine(line);
             }
@@ -321,7 +321,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // The following modules were compiled with a toolset that supports 
                 // /Qspectre but the switch was not enabled on the command-line: {0}
                 line = string.Format(
-                        RuleResources.BA2024_Error_SpectreMitigationNotEnabled,
+                        RuleResources.BA2024_Warning_SpectreMitigationNotEnabled,
                         CreateOutputCoalescedByLibrary(mitigationNotEnabledModules));
                 sb.AppendLine(line);
             }
@@ -331,7 +331,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // The following modules were compiled with optimizations disabled(/ Od),
                 // a condition that disables Spectre mitigations: {0}
                 line = string.Format(
-                        RuleResources.BA2024_Error_OptimizationsDisabled,
+                        RuleResources.BA2024_Warning_OptimizationsDisabled,
                         mitigationDisabledInDebugBuild.CreateSortedObjectList());
                 sb.AppendLine(line);
             }
@@ -340,7 +340,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 !masmModules.Empty)
             {
                 line = string.Format(
-                        RuleResources.BA2024_Error_MasmModulesDetected,
+                        RuleResources.BA2024_Warning_MasmModulesDetected,
                         masmModules.CreateSortedObjectList());
                 sb.AppendLine(line);
             }
@@ -357,7 +357,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // The following modules are out of policy: {1}
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                    nameof(RuleResources.BA2024_Error),
+                    nameof(RuleResources.BA2024_Warning),
                         context.TargetUri.GetFileName(),
                         sb.ToString()));
                 return;
