@@ -389,7 +389,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (string key in librariesToObjectModulesMap.Keys)
             {
-                sb.Append(Environment.NewLine + key);
+                sb.Append(key);
 
                 List<string> objectModules = librariesToObjectModulesMap[key];
                 objectModules.Sort();
