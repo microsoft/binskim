@@ -244,7 +244,7 @@
             "messageId": "Pass",
             "arguments": [
               "Native_x86_VS2013_Default.exe",
-              "0"
+              "3"
             ]
           },
           "locations": [

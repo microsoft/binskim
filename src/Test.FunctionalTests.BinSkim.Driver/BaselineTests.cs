@@ -140,11 +140,14 @@ namespace Microsoft.CodeAnalysis.IL
             actualText = Regex.Replace(actualText, @"\s*""startTime""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""processId""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"      ""id""[^,]+,\s+""tool""", @"      ""tool""", RegexOptions.Multiline);
-           
-
 
             // Write back the normalized actual text so that the diff command given on failure shows what was actually compared.
-            File.WriteAllText(actualFileName, actualText);
+
+            Encoding utf8encoding = new UTF8Encoding(true);
+            using (var textWriter = new StreamWriter(actualFileName, false, utf8encoding))
+            {
+                textWriter.Write(actualText);
+            }
 
             // Make sure we can successfully deserialize what was just generated
             SarifLog expectedLog = JsonConvert.DeserializeObject<SarifLog>(expectedText, settings);
