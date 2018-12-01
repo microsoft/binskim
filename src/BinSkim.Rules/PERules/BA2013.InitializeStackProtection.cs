@@ -3,7 +3,6 @@
 
 using System.Composition;
 using System.Linq;
-using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;

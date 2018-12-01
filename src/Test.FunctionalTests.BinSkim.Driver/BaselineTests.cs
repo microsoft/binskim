@@ -100,6 +100,7 @@ namespace Microsoft.CodeAnalysis.IL
             options.ComputeFileHashes = true;
             options.OutputFilePath = actualFileName;
             options.ConfigurationFilePath = "default";
+            options.SarifVersion = SarifVersion.TwoZeroZero;
             options.TargetFileSpecifiers = new string[] { inputFileName };
 
             int result = command.Run(options);
@@ -125,6 +126,7 @@ namespace Microsoft.CodeAnalysis.IL
             actualText = Regex.Replace(actualText, @"\\r\\n   at [^""]+", "");
 
             actualText = actualText.Replace(@"""Sarif""", @"""BinSkim""");
+            actualText = actualText.Replace(@"        ""fileVersion"": ""15.0.0""," + Environment.NewLine, String.Empty);
 
             actualText = Regex.Replace(actualText, @"\s*""fullName""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""semanticVersion""[^\n]+?\n", Environment.NewLine);

@@ -5,10 +5,6 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 using CommandLine;
 using System.Collections.Generic;
-using System;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL

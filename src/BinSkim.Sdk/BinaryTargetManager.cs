@@ -1,8 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.BinaryParsers;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
