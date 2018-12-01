@@ -4,16 +4,10 @@
   "runs": [
     {
       "tool": {
-        "name": "BinSkim",
-        "fullName": "BinSkim 1.6.0.0",
-        "version": "1.6.0.0",
-        "semanticVersion": "1.6.0",
-        "sarifLoggerVersion": "2.0.0.0",
+        "name": "testhost",
+        "version": "15.0.0.0",
         "language": "en-US",
         "properties": {
-          "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
-          "CompanyName": "Microsoft",
-          "ProductName": "BinSkim Portable Executable Analyzer"
         }
       },
       "results": [
@@ -720,21 +714,6 @@
         }
       },
       "files": {
-        "EVMAUS-MAIN": {
-          "mimeType": "application/octet-stream"
-        },
-        "evmaus": {
-          "mimeType": "application/octet-stream"
-        },
-        "REDMOND": {
-          "mimeType": "application/octet-stream"
-        },
-        "REDMOND.CORP.MICROSOFT.COM": {
-          "mimeType": "application/octet-stream"
-        },
-        "file://co1-red-dc-29/": {
-          "mimeType": "application/octet-stream"
-        },
         "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe": {
           "mimeType": "application/octet-stream",
           "hashes": [
