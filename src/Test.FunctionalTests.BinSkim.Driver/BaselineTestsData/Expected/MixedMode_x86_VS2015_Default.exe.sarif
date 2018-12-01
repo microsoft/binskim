@@ -223,7 +223,7 @@
             "messageId": "Pass",
             "arguments": [
               "MixedMode_x86_VS2015_Default.exe",
-              "0"
+              "3"
             ]
           },
           "locations": [

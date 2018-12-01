@@ -136,6 +136,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 List<int> requiredDisabledWarnings = omDetails.ExplicitlyDisabledWarnings
                     .Where(context.Policy.GetProperty(RequiredCompilerWarnings).Contains).ToList();
 
+                overallMinimumWarningLevel = Math.Min(overallMinimumWarningLevel, warningLevel);
+
                 if (warningLevel >= 3 && requiredDisabledWarnings.Count == 0)
                 {
                     // We duplicate this condition to bail out early and avoid writing the
@@ -146,7 +148,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 List<string> suffix = new List<string>(2);
 
-                overallMinimumWarningLevel = Math.Min(overallMinimumWarningLevel, warningLevel);
                 if (warningLevel < 3)
                 {
                     exampleTooLowWarningCommandLine = exampleTooLowWarningCommandLine ?? omDetails.RawCommandLine;

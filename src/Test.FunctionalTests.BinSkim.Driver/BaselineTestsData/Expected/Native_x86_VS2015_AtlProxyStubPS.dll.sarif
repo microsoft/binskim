@@ -218,12 +218,14 @@
         },
         {
           "ruleId": "BA2007",
-          "level": "pass",
+          "level": "error",
           "message": {
-            "messageId": "Pass",
+            "messageId": "Error_InsufficientWarningLevel",
             "arguments": [
               "Native_x86_VS2015_AtlProxyStubPS.dll",
-              "0"
+              "1",
+              "-c -Zi -nologo -W1 -WX- -O2 -Oy- -DWIN32 -DREGISTER_PROXY_DLL -DNDEBUG -D_WINDLL -D_UNICODE -DUNICODE -Gm- -EHs -EHc -MD -GS -fp:precise -Zc:wchar_t -Zc:forScope -Zc:inline -Gd -TC -analyze- -errorreport:prompt -I\"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\include\" -I\"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\atlmfc\\include\" -I\"C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.10240.0\\ucrt\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\um\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\shared\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\winrt\" -X",
+              "dlldata.obj [warning level: 1]\r\nNative_x86_VS2015_AtlProxyStub_p.obj [warning level: 1]\r\n"
             ]
           },
           "locations": [

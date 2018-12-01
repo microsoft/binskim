@@ -284,7 +284,7 @@
             "messageId": "Pass",
             "arguments": [
               "MixedMode_x64_VS2013_Default.dll",
-              "0"
+              "3"
             ]
           },
           "locations": [

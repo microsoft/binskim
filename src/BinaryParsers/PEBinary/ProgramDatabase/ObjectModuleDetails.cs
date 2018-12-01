@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <summary>
         /// Returns the warning level as defined by the /Wn switch in the compiland command line
         /// </summary>
-        public int WarningLevel { get; private set;  }
+        public int WarningLevel { get { return _compilerCommandLine.WarningLevel; }  }
 
         /// <summary>
         /// Returns a list of integers corresponding to the set of warnings disabled via -wdnnnn switches on the command line
@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <summary>
         /// The raw command line passed to the compiler when building this object module.
         /// </summary>
-        public string RawCommandLine { get; private set; }
+        public string RawCommandLine { get { return _compilerCommandLine.Raw; } }
 
         /// <summary>
         /// The name of the compiler
