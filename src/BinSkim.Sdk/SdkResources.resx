@@ -165,8 +165,8 @@
   <data name="MetadataCondition_ImageIsXboxBinary" xml:space="preserve">
     <value>image is an xbox binary</value>
   </data>
-  <data name="MetadataCondition_ImageIsKernelModeAndNot64Bit_CfgUnsupported" xml:space="preserve">
-    <value>image is not 64-bit (the only architecture that enables CFG for kernel mode binaries)</value>
+  <data name="MetadataCondition_ImageIsKernelModeAndNot64Bit" xml:space="preserve">
+    <value>image is not 64-bit (the only architecture that enables control flow guard for kernel mode binaries)</value>
   </data>
   <data name="RuleWasDisabledDueToMissingPolicy" xml:space="preserve">
     <value>Check '{0}' was disabled for this run as the analysis was not configured with required policy ({1}). To resolve this, configure and provide a policy file on the BinSkim command-line using the --policy argument (recommended), or pass --defaultPolicy to invoke built-in settings. Invoke the BinSkim.exe 'export' command to produce an initial policy file that can be edited if required and passed back into the tool.</value>
@@ -184,21 +184,24 @@
     <value>image is a boot binary</value>
   </data>
   <data name="IllegalBinaryCast" xml:space="preserve">
-    <value>Attempted to cast a binary target to a '{0}', but was unable to.  This indicates a programmer error in rules evaluating that sort of target.</value>
+    <value>An attempt to cast a binary target to a '{0}' failed.  This indicates a programming error in rules evaluating that sort of target.</value>
   </data>
-  <data name="MetadataCondition_ELFIsCoreNoneOrObject" xml:space="preserve">
+  <data name="MetadataCondition_ElfIsCoreNoneOrObject" xml:space="preserve">
     <value>ELF is not a shared object or executable</value>
   </data>
-  <data name="MetadataCondition_ImageIsNotELF" xml:space="preserve">
+  <data name="MetadataCondition_ImageIsNotElf" xml:space="preserve">
     <value>image is not an ELF binary</value>
   </data>
   <data name="MetadataCondition_ImageIsNotPE" xml:space="preserve">
     <value>image is not a PE binary</value>
   </data>
-  <data name="MetadataCondition_ELFNotBuiltWithGCC" xml:space="preserve">
+  <data name="MetadataCondition_ElfNotBuiltWithGCC" xml:space="preserve">
     <value>not compiled solely with gcc</value>
   </data>
   <data name="MetadataCondition_ImageLikelyLoads32BitProcess" xml:space="preserve">
     <value>image will likely load as a 32-bit process</value>
+  </data>
+  <data name="MetadataCondition_ImageIsWixBinary" xml:space="preserve">
+    <value>image appears to be a WiX bootstrapper application</value>
   </data>
 </root>

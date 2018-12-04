@@ -14,14 +14,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
     public class PE : IDisposable
     {
         private long? _length;
+        private bool? _isBoot;
         private string _sha1Hash;
         private string _sha256Hash;
+        private bool? _isWixBinary;
         private string[] _asImports;
         private bool? _isKernelMode;
         private bool? _isResourceOnly;
         private FileVersionInfo _version;
         private bool? _isManagedResourceOnly;
-        private bool? _isBoot;
 
         private FileStream _fs;
         private PEReader _peReader;
@@ -59,10 +60,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             try
             {
-                byte byteRead = (byte) fs.ReadByte();
+                byte byteRead = (byte)fs.ReadByte();
                 if (byteRead != 'M') { return false; }
 
-                byteRead = (byte) fs.ReadByte();
+                byteRead = (byte)fs.ReadByte();
                 if (byteRead != 'Z') { return false; }
 
                 return true;
@@ -327,7 +328,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 return _version;
             }
         }
-   
+
 
         public Packer Packer
         {
@@ -343,7 +344,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 return Packer.UnknownOrNotPacked;
             }
         }
-       
+
         public bool IsPacked
         {
             get
@@ -419,7 +420,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     return _isResourceOnly.Value;
                 }
 
-                _isResourceOnly = 
+                _isResourceOnly =
                        (peHeader.ThreadLocalStorageTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_TLS == 9
                         peHeader.ImportAddressTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_IAT == 12
                         peHeader.GlobalPointerTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_GLOBALPTR == 8
@@ -439,7 +440,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     // If the binary only contains forwarders, we should regard it as not containing code
                     _isResourceOnly = false;
                 }
-                   
+
 
                 return _isResourceOnly.Value;
 
@@ -540,7 +541,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if(_isBoot != null)
+                if (_isBoot != null)
                 {
                     return (bool)_isBoot;
                 }
@@ -554,7 +555,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     //
                     //Version ssVer = this.SubsystemVersion;
 
-                    _isBoot =   this.Subsystem == Subsystem.EfiApplication ||
+                    _isBoot = this.Subsystem == Subsystem.EfiApplication ||
                                 this.Subsystem == Subsystem.EfiBootServiceDriver ||
                                 this.Subsystem == Subsystem.EfiRom ||
                                 this.Subsystem == Subsystem.EfiRuntimeDriver ||
@@ -655,6 +656,33 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 }
 
                 return null;
+            }
+        }
+
+        public bool IsWixBinary
+        {
+            get
+            {
+                if (_isWixBinary != null)
+                {
+                    return (bool)_isWixBinary;
+                }
+
+                _isWixBinary = false;
+
+                if (PEHeaders?.SectionHeaders != null)
+                {
+                    foreach (SectionHeader sectionHeader in PEHeaders.SectionHeaders)
+                    {
+                        if (sectionHeader.Name == ".wixburn")
+                        {
+                            _isWixBinary = true;
+                            break;
+                        }
+                    }
+                }
+
+                return _isWixBinary.Value;
             }
         }
     }

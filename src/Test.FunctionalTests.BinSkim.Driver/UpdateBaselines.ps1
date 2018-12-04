@@ -25,7 +25,7 @@ function Build-Baselines($sourceExtension)
     Write-Host "$sourceExtension"
 
     Get-ChildItem $testsDirectory -Filter $sourceExtension | ForEach-Object {
-        Write-Host [Environment]::Newline
+        Write-Host ""
         $input = $_.FullName
         $outputFile = $_.Name
         $output = Join-Path $expectedDirectory "$outputFile.sarif"

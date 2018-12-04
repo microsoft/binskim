@@ -6,7 +6,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public abstract class PEBinarySkimmerBase : BinarySkimmerBase
     {
-        public sealed override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             if (context.IsPE())
             {

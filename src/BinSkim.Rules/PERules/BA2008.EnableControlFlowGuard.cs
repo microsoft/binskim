@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsMixedModeBinary;
             if (portableExecutable.IsMixedMode) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeAndNot64Bit_CfgUnsupported;
+            reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeAndNot64Bit;
             if (portableExecutable.IsKernelMode && !portableExecutable.Is64Bit) { return result; }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsBootBinary;
@@ -105,6 +105,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 return result;
             }
+
+            reasonForNotAnalyzing = MetadataConditions.ImageIsWixBinary;
+            if (portableExecutable.IsWixBinary) { return result;  }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;

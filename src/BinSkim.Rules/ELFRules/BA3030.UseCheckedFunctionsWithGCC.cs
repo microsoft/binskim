@@ -127,13 +127,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        public override AnalysisApplicability CanAnalyzeELF(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             IELF elf = target.ELF;
 
             if (elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable)
             {
-                reasonForNotAnalyzing = MetadataConditions.ELFIsCoreNoneOrObject;
+                reasonForNotAnalyzing = MetadataConditions.ElfIsCoreNoneOrObject;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 
@@ -142,7 +142,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // This has a potential for a False Negative if teams are using GCC and other tools.
             if (target.Compilers.Any(c => c.Compiler != ELFCompilerType.GCC))
             {
-                reasonForNotAnalyzing = MetadataConditions.ELFNotBuiltWithGCC;
+                reasonForNotAnalyzing = MetadataConditions.ElfNotBuiltWithGcc;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 

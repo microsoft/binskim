@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attempted to cast a binary target to a &apos;{0}&apos;, but was unable to.  This indicates a programmer error in rules evaluating that sort of target..
+        ///   Looks up a localized string similar to An attempt to cast a binary target to a &apos;{0}&apos; failed.  This indicates a programming error in rules evaluating that sort of target..
         /// </summary>
         internal static string IllegalBinaryCast {
             get {
@@ -90,18 +90,18 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         /// <summary>
         ///   Looks up a localized string similar to ELF is not a shared object or executable.
         /// </summary>
-        internal static string MetadataCondition_ELFIsCoreNoneOrObject {
+        internal static string MetadataCondition_ElfIsCoreNoneOrObject {
             get {
-                return ResourceManager.GetString("MetadataCondition_ELFIsCoreNoneOrObject", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ElfIsCoreNoneOrObject", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to not compiled solely with gcc.
         /// </summary>
-        internal static string MetadataCondition_ELFNotBuiltWithGCC {
+        internal static string MetadataCondition_ElfNotBuiltWithGCC {
             get {
-                return ResourceManager.GetString("MetadataCondition_ELFNotBuiltWithGCC", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ElfNotBuiltWithGCC", resourceCulture);
             }
         }
         
@@ -151,11 +151,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to image is not 64-bit (the only architecture that enables CFG for kernel mode binaries).
+        ///   Looks up a localized string similar to image is not 64-bit (the only architecture that enables control flow guard for kernel mode binaries).
         /// </summary>
-        internal static string MetadataCondition_ImageIsKernelModeAndNot64Bit_CfgUnsupported {
+        internal static string MetadataCondition_ImageIsKernelModeAndNot64Bit {
             get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsKernelModeAndNot64Bit_CfgUnsupported", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ImageIsKernelModeAndNot64Bit", resourceCulture);
             }
         }
         
@@ -216,9 +216,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         /// <summary>
         ///   Looks up a localized string similar to image is not an ELF binary.
         /// </summary>
-        internal static string MetadataCondition_ImageIsNotELF {
+        internal static string MetadataCondition_ImageIsNotElf {
             get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsNotELF", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotElf", resourceCulture);
             }
         }
         
@@ -264,6 +264,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageIsResourceOnlyBinary {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsResourceOnlyBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image appears to be a WiX bootstrapper application.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsWixBinary {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsWixBinary", resourceCulture);
             }
         }
         

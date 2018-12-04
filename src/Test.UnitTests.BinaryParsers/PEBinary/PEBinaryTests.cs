@@ -2,11 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using Xunit;
-using FluentAssertions;
-using System.Reflection;
 using System.IO;
+using System.Reflection;
 using Dia2Lib;
+using FluentAssertions;
+using Xunit;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
@@ -56,9 +56,24 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
+        public void IsWixBinary()
+        {
+            string fileName = Path.Combine(BaselineTestsDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
+            PEBinary peBinary = new PEBinary(new Uri(fileName));
+            peBinary.Pdb.Should().BeNull();
+            peBinary.PE.IsWixBinary.Should().BeTrue();
+
+            // Verify a random other exe to ensure it is properly reporting as not a WIX bootstrapper
+            fileName = Path.Combine(BaselineTestsDataDirectory, "MixedMode_x64_VS2015_Default.exe");
+            peBinary = new PEBinary(new Uri(fileName));
+            peBinary.PE.IsWixBinary.Should().BeFalse();
+        }
+
+        [Fact]
         public void CanCreateIDiaSourceFromMsdia()
         {
-            IDiaDataSource source = ProgramDatabase.MsdiaComWrapper.GetDiaSource();
+            Action action = () => { IDiaDataSource source = ProgramDatabase.MsdiaComWrapper.GetDiaSource(); };
+            action.ShouldNotThrow();
         }
     }
 }

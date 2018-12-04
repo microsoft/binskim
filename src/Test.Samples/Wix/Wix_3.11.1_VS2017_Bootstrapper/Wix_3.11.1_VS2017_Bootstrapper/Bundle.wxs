@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Bundle Name="Wix_3.11.1_VS2017_Bootstrapper" Version="1.0.0.0" Manufacturer="BinSkim Testing" UpgradeCode="3c73171b-d7e0-4190-9b2f-35b613fe107f">
+		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
+		<Chain>
+			<MsiPackage SourceFile="..\..\..\..\Wix_3.11.1_VS2017_Bootstrapper\bin\Debug\Wix_3.11.1_VS2017_Msi.msi" /> 
+		</Chain>
+	</Bundle>
+</Wix>
