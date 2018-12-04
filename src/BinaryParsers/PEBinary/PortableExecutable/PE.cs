@@ -670,9 +670,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 _isWixBinary = false;
 
-                if (PEHeaders?.SectionHeaders != null)
+                if (this.PEHeaders?.SectionHeaders != null)
                 {
-                    foreach (SectionHeader sectionHeader in PEHeaders.SectionHeaders)
+                    foreach (SectionHeader sectionHeader in this.PEHeaders.SectionHeaders)
                     {
                         if (sectionHeader.Name == ".wixburn")
                         {
