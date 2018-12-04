@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Wix_3.11.1_VS2017_Bootstrapper", "Wix_3.11.1_VS2017_Bootstrapper\Wix_3.11.1_VS2017_Bootstrapper.wixproj", "{3C73171B-D7E0-4190-9B2F-35B613FE107F}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Wix_3.11.1_VS2017_Msi", "Wix_3.11.1_VS2017_Msi\Wix_3.11.1_VS2017_Msi.wixproj", "{CF128D69-C8EE-491F-B2AD-CE52506E34DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C73171B-D7E0-4190-9B2F-35B613FE107F}.Debug|x86.ActiveCfg = Debug|x86
+		{3C73171B-D7E0-4190-9B2F-35B613FE107F}.Debug|x86.Build.0 = Debug|x86
+		{3C73171B-D7E0-4190-9B2F-35B613FE107F}.Release|x86.ActiveCfg = Release|x86
+		{3C73171B-D7E0-4190-9B2F-35B613FE107F}.Release|x86.Build.0 = Release|x86
+		{CF128D69-C8EE-491F-B2AD-CE52506E34DF}.Debug|x86.ActiveCfg = Debug|x86
+		{CF128D69-C8EE-491F-B2AD-CE52506E34DF}.Debug|x86.Build.0 = Debug|x86
+		{CF128D69-C8EE-491F-B2AD-CE52506E34DF}.Release|x86.ActiveCfg = Release|x86
+		{CF128D69-C8EE-491F-B2AD-CE52506E34DF}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {61804745-AE5A-4A28-AD28-0870CEA2E805}
+	EndGlobalSection
+EndGlobal

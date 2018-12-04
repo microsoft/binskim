@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeBinary;
             if (portableExecutable.IsKernelMode) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageLikelyLoads32BitProcess;
+            reasonForNotAnalyzing = MetadataConditions.ImageLikelyLoadsAs32BitProcess;
             if (portableExecutable.PEHeaders.PEHeader.Magic != PEMagic.PE32Plus)
             {
                 // If the image's magic bytes are 'PE32', it is either a 32 bit binary (rule does not apply), or it is a managed binary compiled as AnyCpu.
