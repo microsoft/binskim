@@ -25,7 +25,7 @@ function Build-Baselines($sourceExtension)
     Write-Host "$sourceExtension"
 
     Get-ChildItem $testsDirectory -Filter $sourceExtension | ForEach-Object {
-        Write-Host "    $_ -> $_.sarif"
+        Write-Host ""
         $input = $_.FullName
         $outputFile = $_.Name
         $output = Join-Path $expectedDirectory "$outputFile.sarif"
@@ -33,8 +33,8 @@ function Build-Baselines($sourceExtension)
 
         # Actually run the tool
         Remove-Item $outputTemp -ErrorAction SilentlyContinue
-        Write-Host "$utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default"
-        &$utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default
+        Write-Host "$utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default --quiet"
+        &           $utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default --quiet
 
         # Replace repository root absolute path with Z:\ for machine and enlistment independence
         $text = [IO.File]::ReadAllText($outputTemp)
@@ -50,6 +50,14 @@ function Build-Baselines($sourceExtension)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"endTime`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"processId`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "      `"id`"[^,]+,\s+`"tool`"", "      `"tool`"", [Text.RegularExpressions.RegexOptions]::Singleline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "`"name`": `"BinSkim`"", "`"name`": `"testhost`"")
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"semanticVersion`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"sarifLoggerVersion`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"fullName`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"Comments`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"CompanyName`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"ProductName`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "    `"version`"[^,]+?,", "    `"version`": `"15.0.0.0`",")
     
         [IO.File]::WriteAllText($outputTemp, $text, [Text.Encoding]::UTF8)
         Move-Item $outputTemp $output -Force

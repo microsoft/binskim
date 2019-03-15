@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class DoNotMarkImportsSectionAsExecutable : PEBinarySkimmerBase
     {
         /// <summary>
@@ -33,9 +33,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// which merge the ".rdata" segment into an executable section.
         /// </summary>
 
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2010_DoNotMarkImportsSectionAsExecutable_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2010_DoNotMarkImportsSectionAsExecutable_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -107,7 +107,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // imports section to be executable, or which merge the ".rdata" segment into an executable 
                 // section.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2010_Error),
                         context.TargetUri.GetFileName()));
                 return;
@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // '{0}' does not have an imports section that is marked as executable.
             context.Logger.Log(this, 
-                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2010_Pass), 
                     context.TargetUri.GetFileName()));
         }

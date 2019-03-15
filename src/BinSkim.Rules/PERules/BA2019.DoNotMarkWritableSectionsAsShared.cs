@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class DoNotMarkWritableSectionsAsShared : PEBinarySkimmerBase
     {
         /// <summary>
@@ -33,9 +33,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// builds, as this feature creates a writable and executable section named '.textbss'
         /// in order to function.
         /// </summary>       
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2019_DoNotMarkWritableSectionsAsShared_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2019_DoNotMarkWritableSectionsAsShared_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -87,7 +87,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // Image '{0}' contains no data or code sections marked as both shared and writable.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2019_Pass),
                         context.TargetUri.GetFileName()));
                 return;
@@ -109,7 +109,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // linking (or analyze an alternate build configuration that disables this
             // feature) to resolve the problem.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2019_Error),
                     context.TargetUri.GetFileName(),
                     badSectionsText));

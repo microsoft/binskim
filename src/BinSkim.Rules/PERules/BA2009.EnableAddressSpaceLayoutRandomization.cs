@@ -15,7 +15,7 @@ using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class EnableAddressSpaceLayoutRandomization : PEBinarySkimmerBase
     {
         /// <summary>
@@ -33,9 +33,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// Visual Studio 2008 or later.
         /// </summary>
 
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2009_EnableAddressSpaceLayoutRandomization_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2009_EnableAddressSpaceLayoutRandomization_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -87,7 +87,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping 
                 // with Visual Studio 2008 or later.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2009_Error_NotDynamicBase),
                         context.TargetUri.GetFileName()));
                 return;
@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' is marked as DYNAMICBASE but relocation data has been stripped
                 // from the image, preventing address space layout randomization. 
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2009_Error_RelocsStripped),
                         context.TargetUri.GetFileName()));
                 return;
@@ -131,7 +131,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // is a Windows CE image but does not contain any relocation data, preventing 
                     // address space layout randomization.	
                     context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA2009_Error_WinCENoRelocationSection),
                         context.TargetUri.GetFileName()));
                     return;
@@ -140,7 +140,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             //'{0}' is properly compiled to enable address space layout randomization.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2009_Pass),
                         context.TargetUri.GetFileName()));
         }

@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -26,6 +28,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Pdb di = target.Pdb;
 
             AnalyzePortableExecutableAndPdb(context);
+        }
+
+        public sealed override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        {
+            AnalysisApplicability result = base.CanAnalyze(context, out reasonForNotAnalyzing);
+            if (result != AnalysisApplicability.ApplicableToSpecifiedTarget) { return result; }
+
+            PE portableExecutable = context.PEBinary().PE;
+            result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
+
+            reasonForNotAnalyzing = MetadataConditions.ImageIsWixBinary;
+            if (portableExecutable.IsWixBinary) { return result; }
+
+            reasonForNotAnalyzing = null;
+            return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
         public abstract void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context);

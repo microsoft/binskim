@@ -4,7 +4,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -14,7 +13,7 @@ using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
     public class DoNotDisableStackProtectionForFunctions : WindowsBinaryAndPdbSkimmerBase, IOptionsProvider
     {
         /// <summary>
@@ -35,9 +34,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// inserting stack protector checks in these locations rather than disabling the
         /// stack protector altogether.
         /// </summary>
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2014_DoNotDisableStackProtectionForFunctions_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2014_DoNotDisableStackProtectionForFunctions_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -119,7 +118,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // compiler to avoid inserting stack protector checks in these locations rather 
                 // than disabling the stack protector altogether.
                 context.Logger.Log(this, 
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2014_Error),
                         context.TargetUri.GetFileName(),
                         functionNames));
@@ -132,7 +131,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // more difficult for an attacker to exploit stack buffer overflow 
             // memory corruption vulnerabilities.
             context.Logger.Log(this, 
-                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2014_Pass),
                     context.TargetUri.GetFileName()));
         }

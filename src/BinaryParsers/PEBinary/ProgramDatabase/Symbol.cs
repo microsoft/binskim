@@ -413,7 +413,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 }
             }
 
-            return new ObjectModuleDetails(frontEndVersion, backEndVersion, commandLine, language, compilerName, hasSecurityChecks, debugInfo);
+            return new ObjectModuleDetails(this.Name, this.Lib, compilerName, frontEndVersion, backEndVersion, commandLine, language, hasSecurityChecks, debugInfo);
         }
 
         /// <summary>

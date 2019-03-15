@@ -13,7 +13,7 @@ using ELFSharp.ELF.Sections;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class UseCheckedFunctionsWithGcc : ELFBinarySkimmerBase
     {
         // This list comes from listing all of the functions available in glibc (using readelf), 
@@ -108,9 +108,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // smashing is detected.Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or 
         // '--fstack-protector-all' (all functions) to enable this.
         /// </summary>
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA3030_UseCheckedFunctionsWithGcc_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA3030_UseCheckedFunctionsWithGcc_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -127,13 +127,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        public override AnalysisApplicability CanAnalyzeELF(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             IELF elf = target.ELF;
 
             if (elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable)
             {
-                reasonForNotAnalyzing = MetadataConditions.ELFIsCoreNoneOrObject;
+                reasonForNotAnalyzing = MetadataConditions.ElfIsCoreNoneOrObject;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 
@@ -142,7 +142,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // This has a potential for a False Negative if teams are using GCC and other tools.
             if (target.Compilers.Any(c => c.Compiler != ELFCompilerType.GCC))
             {
-                reasonForNotAnalyzing = MetadataConditions.ELFNotBuiltWithGCC;
+                reasonForNotAnalyzing = MetadataConditions.ElfNotBuiltWithGcc;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 
@@ -188,14 +188,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (unprotectedFunctions.Any())
                 {
                     context.Logger.Log(this,
-                       RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                       RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                            nameof(RuleResources.BA3030_Pass_SomeFunctionsChecked),
                            context.TargetUri.GetFileName()));
                 }
                 else
                 {
                     context.Logger.Log(this,
-                       RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                       RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                            nameof(RuleResources.BA3030_Pass_AllFunctionsChecked),
                            context.TargetUri.GetFileName()));
                 }
@@ -203,14 +203,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             else if (unprotectedFunctions.Any())
             {
                 context.Logger.Log(this,
-                       RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                       RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                            nameof(RuleResources.BA3030_Error),
                            context.TargetUri.GetFileName()));
             }
             else
             {
                 context.Logger.Log(this,
-                       RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                       RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                            nameof(RuleResources.BA3030_Pass_NoCheckableFunctions),
                            context.TargetUri.GetFileName()));
             }

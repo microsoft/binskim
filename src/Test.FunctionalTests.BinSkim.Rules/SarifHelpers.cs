@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public static void ValidateTool(Tool tool)
         {
-            Assert.Equal("BinSkim", tool.Name);
+            Assert.Equal("BinSkim", tool.Driver.Name);
             // TODO version, etc
         }
     }
