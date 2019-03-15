@@ -8,12 +8,10 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.BinaryParsers;
 using ELFSharp.ELF;
-using System.Linq;
-using ELFSharp.ELF.Segments;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class EnableReadOnlyRelocations : ELFBinarySkimmerBase
     {
         private const uint GNU_RELRO_ID = 0x6474e552;
@@ -29,9 +27,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// This prevents them from being overwritten, which can redirect control flow. 
         /// Use the compiler flags '-Wl,z,relro' to enable this.
         /// </summary>
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA3010_EnableReadOnlyRelocations_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA3010_EnableReadOnlyRelocations_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -46,13 +44,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        public override AnalysisApplicability CanAnalyzeELF(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             IELF elf = target.ELF;
 
             if (elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable)
             {
-                reasonForNotAnalyzing = MetadataConditions.ELFIsCoreNoneOrObject;
+                reasonForNotAnalyzing = MetadataConditions.ElfIsCoreNoneOrObject;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 
@@ -70,7 +68,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     // Pass
                     context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                        RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                             nameof(RuleResources.BA3010_Pass),
                             context.TargetUri.GetFileName()));
                     return;
@@ -79,7 +77,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // Fail
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA3010_Error),
                     context.TargetUri.GetFileName()));
         }

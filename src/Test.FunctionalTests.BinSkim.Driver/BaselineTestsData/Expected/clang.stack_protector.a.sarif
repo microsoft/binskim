@@ -4,34 +4,30 @@
   "runs": [
     {
       "tool": {
-        "name": "BinSkim",
-        "fullName": "BinSkim 1.6.0.0",
-        "version": "1.6.0.0",
-        "semanticVersion": "1.6.0",
-        "sarifLoggerVersion": "2.0.0.0",
+        "name": "testhost",
+        "version": "15.0.0.0",
         "language": "en-US",
         "properties": {
-          "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
-          "CompanyName": "Microsoft",
-          "ProductName": "BinSkim Portable Executable Analyzer"
         }
       },
       "results": [],
       "files": {
-        "EVMAUS-MAIN": {
-          "mimeType": "application/octet-stream"
-        },
-        "evmaus": {
-          "mimeType": "application/octet-stream"
-        },
-        "REDMOND": {
-          "mimeType": "application/octet-stream"
-        },
-        "REDMOND.CORP.MICROSOFT.COM": {
-          "mimeType": "application/octet-stream"
-        },
-        "file://co1-red-dc-29/": {
-          "mimeType": "application/octet-stream"
+        "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.stack_protector.a": {
+          "mimeType": "application/octet-stream",
+          "hashes": [
+            {
+              "value": "2400EE99A6BB7B792A67A03A59385018",
+              "algorithm": "md5"
+            },
+            {
+              "value": "525CB4CBA8B8F80539BBC86C2D78A4275279D8F6",
+              "algorithm": "sha-1"
+            },
+            {
+              "value": "41BF336F8AB7D9A6246D37A6EC7210D4BE07893836890BAB0BFEDA98ACEDE87D",
+              "algorithm": "sha-256"
+            }
+          ]
         }
       },
       "invocations": [

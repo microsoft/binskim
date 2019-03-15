@@ -13,7 +13,7 @@ using ELFSharp.ELF.Sections;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class EnableStackProtector : ELFBinarySkimmerBase
     {
         private string[] stack_check_symbols = new string[]{
@@ -32,9 +32,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // smashing is detected.Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or 
         // '--fstack-protector-all' (all functions) to enable this.
         /// </summary>
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA3003_EnableStackProtector_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA3003_EnableStackProtector_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -49,13 +49,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        public override AnalysisApplicability CanAnalyzeELF(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             IELF elf = target.ELF;
 
             if (elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable)
             {
-                reasonForNotAnalyzing = MetadataConditions.ELFIsCoreNoneOrObject;
+                reasonForNotAnalyzing = MetadataConditions.ElfIsCoreNoneOrObject;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 
@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (symbolNames.Contains(stack_chk))
                 {
                     context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                        RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                             nameof(RuleResources.BA3003_Pass),
                             context.TargetUri.GetFileName()));
                     return;
@@ -86,7 +86,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             // If we haven't found the stack protector, we assume it wasn't used.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA3003_Error),
                     context.TargetUri.GetFileName()));
         }

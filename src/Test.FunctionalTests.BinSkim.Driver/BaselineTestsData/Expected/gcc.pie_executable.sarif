@@ -4,16 +4,10 @@
   "runs": [
     {
       "tool": {
-        "name": "BinSkim",
-        "fullName": "BinSkim 1.6.0.0",
-        "version": "1.6.0.0",
-        "semanticVersion": "1.6.0",
-        "sarifLoggerVersion": "2.0.0.0",
+        "name": "testhost",
+        "version": "15.0.0.0",
         "language": "en-US",
         "properties": {
-          "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
-          "CompanyName": "Microsoft",
-          "ProductName": "BinSkim Portable Executable Analyzer"
         }
       },
       "results": [
@@ -920,10 +914,10 @@
               "text": "Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it."
             },
             "messageStrings": {
-              "Error": "'{0}' was compiled with one or more modules that do not properly enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). The following modules are out of policy:\r\n{1}",
-              "Error_OptimizationsDisabled": "The following modules were compiled with optimizations disabled (/Od), a condition that disables Spectre mitigations:\r\n{0}",
-              "Error_SpectreMitigationNotEnabled": "The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:\r\n{0}",
-              "Error_SpectreMitigationExplicitlyDisabled": "The following modules were compiled with Spectre mitigations explicitly disabled:\r\n{0}",
+              "Warning": "'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request. The following modules are out of policy:\r\n{1}",
+              "Warning_OptimizationsDisabled": "The following modules were compiled with optimizations disabled (/Od), a condition that disables Spectre mitigations:\r\n{0}",
+              "Warning_SpectreMitigationNotEnabled": "The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:\r\n{0}",
+              "Warning_SpectreMitigationExplicitlyDisabled": "The following modules were compiled with Spectre mitigations explicitly disabled:\r\n{0}",
               "Pass": "All linked modules '{0}' were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.",
               "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
             },
@@ -1026,21 +1020,6 @@
         }
       },
       "files": {
-        "EVMAUS-MAIN": {
-          "mimeType": "application/octet-stream"
-        },
-        "evmaus": {
-          "mimeType": "application/octet-stream"
-        },
-        "REDMOND": {
-          "mimeType": "application/octet-stream"
-        },
-        "REDMOND.CORP.MICROSOFT.COM": {
-          "mimeType": "application/octet-stream"
-        },
-        "file://co1-red-dc-29/": {
-          "mimeType": "application/octet-stream"
-        },
         "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.pie_executable": {
           "mimeType": "application/octet-stream",
           "hashes": [

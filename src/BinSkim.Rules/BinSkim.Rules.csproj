@@ -12,12 +12,17 @@
       <HintPath>..\..\refs\dia2lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Sarif">
+      <HintPath>..\..\refs\Sarif.dll</HintPath>
+    </Reference>
+    <Reference Include="Sarif.Driver">
+      <HintPath>..\..\refs\Sarif.Driver.dll</HintPath>
+    </Reference>
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Sarif.Driver" Version="$(SarifSDKVersion)" />
-    <PackageReference Include="Sarif.Sdk" Version="$(SarifSDKVersion)" />
+    <PackageReference Include="System.Composition" Version="1.2.0" />
   </ItemGroup>
   
   <ItemGroup>

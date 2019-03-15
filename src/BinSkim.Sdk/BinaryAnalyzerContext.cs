@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public IAnalysisLogger Logger { get; set; }
 
-        public IRule Rule { get; set; }
+        public ReportingDescriptor Rule { get; set; }
 
         public PropertiesDictionary Policy { get; set; }
 

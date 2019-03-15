@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class LoadImageAboveFourGigabyteAddress : PEBinarySkimmerBase
     {
         /// <summary>
@@ -38,9 +38,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// valid for 32-bit binaries.
         /// </summary>
 
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2001_LoadImageAboveFourGigabyteAddress_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2001_LoadImageAboveFourGigabyteAddress_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsNot64BitBinary;
-            if (target.PE.PEHeaders.PEHeader.Magic != PEMagic.PE32Plus) { return result; }
+            if (portableExecutable.PEHeaders.PEHeader.Magic != PEMagic.PE32Plus) { return result; }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyManagedAssembly;
             if (portableExecutable.IsILOnly) { return result; }
@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // modification only for 64-bit builds, as base addresses above 4GB are not valid 
                 // for 32-bit binaries.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2001_Error),
                         context.TargetUri.GetFileName()));
                 return;
@@ -107,7 +107,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // '{0}' is marked as NX compatible.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2001_Pass),
                         context.TargetUri.GetFileName()));
         }

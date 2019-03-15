@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
     public class EnableControlFlowGuard : PEBinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
@@ -32,9 +32,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// the operating system will close the program.
         /// </summary>
 
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2008_EnableControlFlowGuard_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2008_EnableControlFlowGuard_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsMixedModeBinary;
             if (portableExecutable.IsMixedMode) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeAndNot64Bit_CfgUnsupported;
+            reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeAndNot64Bit;
             if (portableExecutable.IsKernelMode && !portableExecutable.Is64Bit) { return result; }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsBootBinary;
@@ -105,6 +105,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 return result;
             }
+
+            reasonForNotAnalyzing = MetadataConditions.ImageIsWixBinary;
+            if (portableExecutable.IsWixBinary) { return result;  }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -123,7 +126,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // version of Windows that does not support the control flow
                 // guard feature for kernel mode binaries.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.NotApplicable, context, null,
+                    RuleUtilities.BuildResult(ResultKind.NotApplicable, context, null,
                         nameof(RuleResources.BA2008_NotApplicable_UnsupportedKernelModeVersion),
                             context.TargetUri.GetFileName()));
             }
@@ -135,7 +138,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // and linker command lines. Binaries also require the 
                 // /DYNAMICBASE linker option in order to enable CFG.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2008_Error),
                         context.TargetUri.GetFileName()));
                 return;
@@ -143,7 +146,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // '{0}' enables the control flow guard mitigation.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2008_Pass),
                         context.TargetUri.GetFileName()));
         }

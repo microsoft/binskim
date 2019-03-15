@@ -7,23 +7,23 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    public abstract class ELFBinarySkimmerBase : BinarySkimmerBase
+    public abstract class ELFBinarySkimmerBase : BinarySkimmer
     {
         public sealed override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             if (context.IsELF())
             {
                 ELFBinary target = context.ELFBinary();
-                return CanAnalyzeELF(target, context.Policy, out reasonForNotAnalyzing);
+                return CanAnalyzeElf(target, context.Policy, out reasonForNotAnalyzing);
             }
             else
             {
-                reasonForNotAnalyzing = MetadataConditions.ImageIsNotELF;
+                reasonForNotAnalyzing = MetadataConditions.ImageIsNotElf;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
         }
 
-        public abstract AnalysisApplicability CanAnalyzeELF(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing);
+        public abstract AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing);
     }
     
 }

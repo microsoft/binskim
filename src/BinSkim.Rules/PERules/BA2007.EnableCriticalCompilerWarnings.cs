@@ -8,7 +8,6 @@ using System.Composition;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Reflection.PortableExecutable;
 
 using Dia2Lib;
 
@@ -21,7 +20,7 @@ using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
     public class EnableCriticalCompilerWarnings : WindowsBinaryAndPdbSkimmerBase, IOptionsProvider
     {
         /// <summary>
@@ -39,9 +38,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// resolve the warnings emitted.
         /// </summary>
 
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2007_EnableCriticalCompilerWarnings_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2007_EnableCriticalCompilerWarnings_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -137,6 +136,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 List<int> requiredDisabledWarnings = omDetails.ExplicitlyDisabledWarnings
                     .Where(context.Policy.GetProperty(RequiredCompilerWarnings).Contains).ToList();
 
+                overallMinimumWarningLevel = Math.Min(overallMinimumWarningLevel, warningLevel);
+
                 if (warningLevel >= 3 && requiredDisabledWarnings.Count == 0)
                 {
                     // We duplicate this condition to bail out early and avoid writing the
@@ -147,10 +148,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 List<string> suffix = new List<string>(2);
 
-                overallMinimumWarningLevel = Math.Min(overallMinimumWarningLevel, warningLevel);
                 if (warningLevel < 3)
                 {
-                    exampleTooLowWarningCommandLine = exampleTooLowWarningCommandLine ?? omDetails.CommandLine;
+                    exampleTooLowWarningCommandLine = exampleTooLowWarningCommandLine ?? omDetails.RawCommandLine;
 
                     string msg = "[warning level: " + warningLevel.ToString(CultureInfo.InvariantCulture) + "]";
                     warningTooLowModules.Add(om.CreateCompilandRecordWithSuffix(msg));
@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (requiredDisabledWarnings.Count != 0)
                 {
                     MergeInto(overallDisabledWarnings, requiredDisabledWarnings);
-                    exampleDisabledWarningCommandLine = exampleDisabledWarningCommandLine ?? omDetails.CommandLine;
+                    exampleDisabledWarningCommandLine = exampleDisabledWarningCommandLine ?? omDetails.RawCommandLine;
 
                     string msg = "[Explicitly disabled warnings: " + CreateTextWarningList(requiredDisabledWarnings) + "]";
                     disabledWarningModules.Add(om.CreateCompilandRecordWithSuffix(msg));
@@ -180,7 +180,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // that memory corruption, information disclosure, double-free and 
                 // other security-related vulnerabilities do not exist in code.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2007_Pass),
                         context.TargetUri.GetFileName(),
                         overallMinimumWarningLevel.ToString()));
@@ -193,7 +193,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // comprehensive analysis of the compiler warning settings. 
                 // The language could not be identified for the following modules: {1}
                 context.Logger.Log(this, 
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_UnknownModuleLanguage),
                         context.TargetUri.GetFileName(),
                         unknownLanguageModules.CreateSortedObjectList()));
@@ -210,7 +210,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // An example compiler command line triggering this check: {1}
                 // Modules triggering this check: {2}
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_InsufficientWarningLevel),
                         context.TargetUri.GetFileName(),
                         overallMinimumWarningLevel.ToString(),
@@ -230,7 +230,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // An example compiler command line triggering this check was: {1}
                 // Modules triggering this check were: {2}
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_WarningsDisabled),
                         context.TargetUri.GetFileName(),
                         exampleDisabledWarningCommandLine,

@@ -1,15 +1,12 @@
 ﻿using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif.Driver;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    public abstract class PEBinarySkimmerBase : BinarySkimmerBase
+    public abstract class PEBinarySkimmerBase : BinarySkimmer
     {
-        public sealed override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             if (context.IsPE())
             {

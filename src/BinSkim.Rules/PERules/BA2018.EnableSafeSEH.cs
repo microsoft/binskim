@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class EnableSafeSEH : PEBinarySkimmerBase
     {
         /// <summary>
@@ -34,9 +34,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// as the /SafeSEH flag is invalid when linking for ARM and x64.
         /// </summary>
 
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2018_EnableSafeSEH_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2018_EnableSafeSEH_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // target for exploits that attempt to replace SEH jump targets with 
                 // attacker-controlled shellcode.	
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2018_Pass_NoSEH),
                         context.TargetUri.GetFileName()));
                 return;
@@ -103,7 +103,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // that you will need to configure your build system to supply this flag for 
                 // x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2018_Error),
                         context.TargetUri.GetFileName(),
                         RuleResources.BA2018_Error_NoLoadConfigurationTable));
@@ -121,7 +121,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 string seHandlerSizeText = String.Format(RuleResources.BA2018_Error_LoadConfigurationIsTooSmall, seHandlerSize.ToString());
 
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2018_Error),
                         context.TargetUri.GetFileName(),
                         RuleResources.BA2018_Error_LoadConfigurationIsTooSmall,
@@ -155,7 +155,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // will need to configure your build system to supply this flag for x86 builds only, 
                 // as the /SafeSEH flag is invalid when linking for ARM and x64.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2018_Error),
                         context.TargetUri.GetFileName(),
                         failureKind));
@@ -165,7 +165,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // ''{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception 
             // jump targets are defined as exception handlers in the program (and not shellcode).
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2018_Pass),
                         context.TargetUri.GetFileName()));
         }

@@ -16,7 +16,7 @@ using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
     public class DoNotShipVulnerableBinaries : WindowsBinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
@@ -27,9 +27,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// Do not ship obsolete libraries for which there are known security vulnerabilities.
         /// </summary>
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2005_DoNotShipVulnerableBinaries_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2005_DoNotShipVulnerableBinaries_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     // Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems.
                     context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA2005_Error_CouldNotParseVersion),
                             context.TargetUri.GetFileName()));
                     return;
@@ -119,7 +119,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     //of {0} that is version {2} or greater. If this binary is not in fact {0}, 
                     // ignore this warning.
                     context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA2005_Error),
                             context.TargetUri.GetFileName(),
                             sanitizedVersion.Value,
@@ -131,7 +131,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // '{0}' is not known to be an obsolete binary that is 
             //vulnerable to one or more security problems.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2005_Pass),
                     context.TargetUri.GetFileName()));
         }

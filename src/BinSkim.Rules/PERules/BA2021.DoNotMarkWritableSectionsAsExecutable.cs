@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class DoNotMarkWritableSectionsAsExecutable : PEBinarySkimmerBase
     {
         /// <summary>
@@ -32,9 +32,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// source code, which mark a section with both attributes.
         /// </summary>
 
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2021_DoNotMarkWritableSectionsAsExecutable_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2021_DoNotMarkWritableSectionsAsExecutable_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // '{0}' has a section alignment ({1}) that is less than page size ({2}).
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2021_Error),
                         context.TargetUri.GetFileName(),
                         target.PE.FileName,
@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // '{0}' contains no data or code sections marked as both shared and executable.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2021_Pass),
                         context.TargetUri.GetFileName()));
                 return;
@@ -122,7 +122,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // linker command line for C and C++ programs, or  #pragma section in C and 
             // C++ source code, which mark a section with both attributes.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2021_Error),
                     context.TargetUri.GetFileName(),
                     badSectionsText));

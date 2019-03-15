@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 using System.Text;
 
@@ -14,9 +13,9 @@ using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
-using System.Runtime;
 using System.Linq;
 using Microsoft.CodeAnalysis.BinaryParsers;
+using System.IO;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -27,7 +26,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public CompilerMitigations SupportedMitigations;
     }
 
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
     public class EnableSpectreMitigations : WindowsBinaryAndPdbSkimmerBase, IOptionsProvider
     {
         /// <summary>
@@ -39,10 +38,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// Application code should be compiled with the most up-to-date toolsets possible
         /// in order to take advantage of the most current compile-time security features.
         /// </summary>
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
             // Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it.
-            get { return new Message { Text = RuleResources.BA2024_EnableSpectreMitigations_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2024_EnableSpectreMitigations_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -50,10 +49,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             get
             {
                 return new string[] {
-                    nameof(RuleResources.BA2024_Error),
-                    nameof(RuleResources.BA2024_Error_OptimizationsDisabled),
-                    nameof(RuleResources.BA2024_Error_SpectreMitigationNotEnabled),
-                    nameof(RuleResources.BA2024_Error_SpectreMitigationExplicitlyDisabled),
+                    nameof(RuleResources.BA2024_Warning),
+                    nameof(RuleResources.BA2024_Warning_OptimizationsDisabled),
+                    nameof(RuleResources.BA2024_Warning_SpectreMitigationNotEnabled),
+                    nameof(RuleResources.BA2024_Warning_SpectreMitigationExplicitlyDisabled),
                     nameof(RuleResources.BA2024_Pass),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)};
             }
@@ -131,8 +130,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             Pdb pdb = target.Pdb;
 
-            TruncatedCompilandRecordList masmModules = new TruncatedCompilandRecordList();
-            TruncatedCompilandRecordList mitigationNotEnabledModules = new TruncatedCompilandRecordList();
+            var masmModules = new TruncatedCompilandRecordList();
+            var mitigationNotEnabledModules = new List<ObjectModuleDetails>();
             TruncatedCompilandRecordList mitigationDisabledInDebugBuild = new TruncatedCompilandRecordList();
             TruncatedCompilandRecordList mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
 
@@ -146,11 +145,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // See if the item is in our skip list.
                 if (!string.IsNullOrEmpty(om.Lib))
                 {
-                    string libFileName = string.Concat(System.IO.Path.GetFileName(om.Lib), ",", omDetails.Language.ToString()).ToLowerInvariant();
+                    string libFileName = string.Concat(Path.GetFileName(om.Lib), ",", omDetails.Language.ToString()).ToLowerInvariant();
                     Version minAllowedVersion;
 
                     if (allowedLibraries.TryGetValue(libFileName, out minAllowedVersion) &&
-                        omDetails.CompilerVersion >= minAllowedVersion)
+                        omDetails.CompilerBackEndVersion >= minAllowedVersion)
                     {
                         continue;
                     }
@@ -173,7 +172,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         }
                         else
                         {
-                            actualVersion = omDetails.CompilerVersion;
+                            actualVersion = omDetails.CompilerBackEndVersion;
                         }
                         break;
                     }
@@ -230,7 +229,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 // Get the appropriate compiler version against which to check this compiland.
                 // check that we are greater than or equal to the first fully supported release: 15.6 first
-                Version omVersion = omDetails.CompilerVersion;
+                Version omVersion = omDetails.CompilerBackEndVersion;
                 
                 CompilerMitigations availableMitigations = GetAvailableMitigations(context, machineType, omVersion);
                 
@@ -271,7 +270,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     if (QSpectreState == SwitchState.SwitchNotFound && d2guardspecloadState == SwitchState.SwitchNotFound)
                     {
                         // Built with tools that support the Spectre mitigations but these have not been enabled.
-                        mitigationNotEnabledModules.Add(om.CreateCompilandRecord());
+                        mitigationNotEnabledModules.Add(omDetails);
                     }
                     else
                     {
@@ -312,18 +311,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // The following modules were compiled with Spectre
                 // mitigations explicitly disabled: {0}
                 line = string.Format(
-                        RuleResources.BA2024_Error_SpectreMitigationExplicitlyDisabled,
+                        RuleResources.BA2024_Warning_SpectreMitigationExplicitlyDisabled,
                         mitigationExplicitlyDisabledModules.CreateSortedObjectList());
                 sb.AppendLine(line);
             }
 
-            if (!mitigationNotEnabledModules.Empty)
+            if (mitigationNotEnabledModules.Count > 0)
             {
                 // The following modules were compiled with a toolset that supports 
                 // /Qspectre but the switch was not enabled on the command-line: {0}
                 line = string.Format(
-                        RuleResources.BA2024_Error_SpectreMitigationNotEnabled,
-                        mitigationNotEnabledModules.CreateSortedObjectList());
+                        RuleResources.BA2024_Warning_SpectreMitigationNotEnabled,
+                        CreateOutputCoalescedByLibrary(mitigationNotEnabledModules));
                 sb.AppendLine(line);
             }
 
@@ -332,7 +331,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // The following modules were compiled with optimizations disabled(/ Od),
                 // a condition that disables Spectre mitigations: {0}
                 line = string.Format(
-                        RuleResources.BA2024_Error_OptimizationsDisabled,
+                        RuleResources.BA2024_Warning_OptimizationsDisabled,
                         mitigationDisabledInDebugBuild.CreateSortedObjectList());
                 sb.AppendLine(line);
             }
@@ -341,7 +340,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 !masmModules.Empty)
             {
                 line = string.Format(
-                        RuleResources.BA2024_Error_MasmModulesDetected,
+                        RuleResources.BA2024_Warning_MasmModulesDetected,
                         masmModules.CreateSortedObjectList());
                 sb.AppendLine(line);
             }
@@ -357,8 +356,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // switch and it is not possible to update to a toolset that supports /Qspectre).
                 // The following modules are out of policy: {1}
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
-                    nameof(RuleResources.BA2024_Error),
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                    nameof(RuleResources.BA2024_Warning),
                         context.TargetUri.GetFileName(),
                         sb.ToString()));
                 return;
@@ -366,10 +365,45 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // All linked modules ‘{0}’ were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.
             context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2024_Pass),
                         context.TargetUri.GetFileName()));
         }
+
+        private string CreateOutputCoalescedByLibrary(List<ObjectModuleDetails> objectModuleDetailsList)
+        {
+            var librariesToObjectModulesMap = new Dictionary<string, List<string>>();
+
+            foreach (ObjectModuleDetails objectModuleDetail in objectModuleDetailsList)
+            {
+                string key = CreateLibraryDescriptor(objectModuleDetail);
+                if (!librariesToObjectModulesMap.TryGetValue(key, out List<string> objectModules))
+                {
+                    objectModules = librariesToObjectModulesMap[key] = new List<string>();
+                }
+                objectModules.Add(Path.GetFileName(objectModuleDetail.Name));
+            }
+
+
+            var sb = new StringBuilder();
+
+            foreach (string key in librariesToObjectModulesMap.Keys)
+            {
+                sb.Append(key);
+
+                List<string> objectModules = librariesToObjectModulesMap[key];
+                objectModules.Sort();
+                sb.AppendLine(" : " + string.Join(",", objectModules.ToArray()));
+            }
+             
+            return sb.ToString();
+        }
+
+        private string CreateLibraryDescriptor(ObjectModuleDetails objectModuleDetail) => 
+            Path.GetFileName(objectModuleDetail.Library) + "," + 
+            objectModuleDetail.Language.ToString().ToLowerInvariant() + "," + 
+            objectModuleDetail.CompilerBackEndVersion;
+
 
         internal static Version GetClosestCompilerVersionWithSpectreMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)
         {
@@ -392,11 +426,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Version previousMaximum = new Version(0, 0, 0, 0);
                 for (int i = 0; i < listOfMitigatedCompilers.Length; i++)
                 {
-                    if(omVersion > previousMaximum
-                        && omVersion <= listOfMitigatedCompilers[i].MinimalSupportedVersion 
-                        && (listOfMitigatedCompilers[i].SupportedMitigations 
-                            & (CompilerMitigations.QSpectreAvailable 
-                            | CompilerMitigations.D2GuardSpecLoadAvailable)) != 0)
+                    if (omVersion > previousMaximum && 
+                        omVersion <= listOfMitigatedCompilers[i].MinimalSupportedVersion && 
+                        (listOfMitigatedCompilers[i].SupportedMitigations & (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable)) != 0)
                     {
                         return listOfMitigatedCompilers[i].MinimalSupportedVersion;
                     }

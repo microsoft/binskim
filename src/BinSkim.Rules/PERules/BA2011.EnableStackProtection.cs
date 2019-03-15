@@ -4,7 +4,6 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Reflection.PortableExecutable;
 
 using Dia2Lib;
 
@@ -16,7 +15,7 @@ using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class EnableStackProtection : WindowsBinaryAndPdbSkimmerBase
     {
         /// <summary>
@@ -32,9 +31,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// compiled into the binary are compiled with the stack protector
         /// enabled by supplying /GS on the Visual C++ compiler command line.
         /// </summary>
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2011_EnableStackProtection_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2011_EnableStackProtection_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -97,7 +96,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // feature enabled for all modules, making it more difficult for an attacker to 
                 // exploit stack buffer overflow memory corruption vulnerabilities. 
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2011_Pass),
                         context.TargetUri.GetFileName()));
                 return;
@@ -109,7 +108,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // stack protector buffer security features. The language could not be identified for
                 // the following modules: {1}.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2011_Error_UnknownModuleLanguage),
                         context.TargetUri.GetFileName(),
                         unknownLanguageModules.CreateSortedObjectList()));
@@ -124,7 +123,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // is compiled with the stack protector enabled by supplying /GS on the Visual C++ 
                 // compiler command line. The affected modules were: {1}
                 context.Logger.Log(this, 
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2011_Error),
                         context.TargetUri.GetFileName(),
                         noGsModules.ToString()));
