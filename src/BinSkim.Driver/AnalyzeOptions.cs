@@ -3,7 +3,7 @@
 
 
 using CommandLine;
-
+using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL

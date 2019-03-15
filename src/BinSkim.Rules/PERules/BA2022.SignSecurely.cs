@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class SignSecurely : WindowsBinarySkimmerBase
     {
         /// <summary>
@@ -30,9 +30,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// that key sizes meet acceptable size thresholds.
         /// </summary>
 
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2022_SignCorrectly_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2022_SignCorrectly_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // on the entire certificate chain, excluding the root certificate. 
                 // The following digitial signature algorithms were detected: {1}
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2022_Pass),
                         context.TargetUri.GetFileName(),
                         algorithmName));
@@ -177,7 +177,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     {
                         string cryptoErrorDescription = cryptoError.GetErrorDescription();
                         // '{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}' ({2})
-                        context.Logger.Log(this, RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                        context.Logger.Log(this, RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA2022_Error_DidNotVerify),
                             context.TargetUri.GetFileName(),                        
                             cryptoError.ToString(),
@@ -193,7 +193,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (goodAlgorithms.Count == 0)
             {
                 // '{0}' was signed exclusively with algorithms that WinTrustVerify has flagged as insecure. {1}
-                context.Logger.Log(this, RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                context.Logger.Log(this, RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2022_Error_BadSigningAlgorithm),
                     context.TargetUri.GetFileName(),
                     algorithmsText));
@@ -252,7 +252,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // '{0}' signing could not be completely verified because
                 // '{1}' failed with error code: '{2}'.
-                context.Logger.Log(this, RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                context.Logger.Log(this, RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2022_Error_WinTrustVerifyApiError),
                     context.TargetUri.GetFileName(),
                     failedApiName,

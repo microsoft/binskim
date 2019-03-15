@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class EnableHighEntropyVirtualAddresses : PEBinarySkimmerBase
     {
         /// <summary>
@@ -31,9 +31,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// high entropy ASLR.
         /// </summary>
 
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2015_EnableHighEntropyVirtualAddresses_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2015_EnableHighEntropyVirtualAddresses_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well
                 // as /LARGEADDRESSAWARE to the C or C++ linker command line.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2015_Error_NeitherHighEntropyVANorLargeAddressAware),
                         context.TargetUri.GetFileName()));
                 return;
@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // C or C++ linker command line. (This image was determined to have been properly 
                 // compiled as /LARGEADDRESSAWARE.)
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2015_Error_NoHighEntropyVA),
                         context.TargetUri.GetFileName()));
                 return;
@@ -130,7 +130,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // or C++ linker command line. (This image was determined to have been properly 
                 // compiled as /HIGHENTROPYVA.)
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2015_Error_NoLargeAddressAware),
                         context.TargetUri.GetFileName()));
                 return;
@@ -138,7 +138,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             //'{0}' is high entropy ASLR compatible.
             context.Logger.Log(this, 
-                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2015_Pass),
                         context.TargetUri.GetFileName()));
         }

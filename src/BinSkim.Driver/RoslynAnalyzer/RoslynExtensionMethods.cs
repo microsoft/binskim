@@ -9,34 +9,34 @@ namespace Microsoft.CodeAnalysis.IL
 {
     internal static class RoslynExtensionMethods
     {
-        public static IRule ConvertToRuleDescriptor(this Diagnostic diagnostic)
+        public static ReportingDescriptor ConvertToRuleDescriptor(this Diagnostic diagnostic)
         {
             // TODO we should consume the standard Roslyn->SARIF emit code here.
 
             DiagnosticDescriptor diagnosticDescriptor = diagnostic.Descriptor;
 
-            var rule = new Rule();
-            rule.MessageStrings = new Dictionary<string, string>();
-            rule.MessageStrings["Default"] = diagnosticDescriptor.MessageFormat.ToString();
-            rule.FullDescription = new Message { Text = diagnosticDescriptor.Description.ToString() };
+            var rule = new ReportingDescriptor();
+            rule.MessageStrings = new Dictionary<string, MultiformatMessageString>();
+            rule.MessageStrings["Default"] = new MultiformatMessageString { Text = diagnosticDescriptor.MessageFormat.ToString() };
+            rule.FullDescription = new MultiformatMessageString { Text = diagnosticDescriptor.Description.ToString() };
             rule.HelpUri = new Uri(diagnosticDescriptor.HelpLinkUri);
             rule.Id = diagnosticDescriptor.Id;
 
             // TODO: review this decision
-            rule.Name = new Message { Text = diagnostic.GetType().Name };
+            rule.Name = diagnostic.GetType().Name;
 
             foreach (string tag in diagnosticDescriptor.CustomTags)
             {
                 rule.Tags.Add(tag);
             }
 
-            rule.Configuration = new RuleConfiguration();
-            rule.Configuration.DefaultLevel = diagnosticDescriptor.DefaultSeverity.ConvertToRuleConfigurationDefaultLevel();
+            rule.DefaultConfiguration = new ReportingConfiguration();
+            rule.DefaultConfiguration.Level = diagnosticDescriptor.DefaultSeverity.ConvertToRuleConfigurationDefaultLevel();
 
             rule.SetProperty("Category", diagnosticDescriptor.Category);
             rule.SetProperty("IsEnabledByDefault", diagnosticDescriptor.IsEnabledByDefault.ToString());
 
-            rule.ShortDescription = new Message { Text = diagnosticDescriptor.Title.ToString() };
+            rule.ShortDescription = new MultiformatMessageString { Text = diagnosticDescriptor.Title.ToString() };
 
             // No Roslyn analog for these available from diagnostic
             //rule.Options
@@ -61,24 +61,24 @@ namespace Microsoft.CodeAnalysis.IL
             return region;
         }
 
-        public static RuleConfigurationDefaultLevel ConvertToRuleConfigurationDefaultLevel(this DiagnosticSeverity severity)
+        public static FailureLevel ConvertToRuleConfigurationDefaultLevel(this DiagnosticSeverity severity)
         {
             switch (severity)
             {
                 case DiagnosticSeverity.Error:
                 {
-                    return RuleConfigurationDefaultLevel.Error;
+                    return FailureLevel.Error;
                 }
 
                 case DiagnosticSeverity.Hidden:
                 case DiagnosticSeverity.Warning:
                 {
-                    return RuleConfigurationDefaultLevel.Warning;
+                    return FailureLevel.Warning;
                 }
 
                 case DiagnosticSeverity.Info:
                 {
-                    return RuleConfigurationDefaultLevel.Note;
+                    return FailureLevel.Note;
                 }
 
                 default:
@@ -87,24 +87,24 @@ namespace Microsoft.CodeAnalysis.IL
                 }
             }
         }
-        public static ResultLevel ConvertToResultLevel(this DiagnosticSeverity severity)
+        public static FailureLevel ConvertToResultLevel(this DiagnosticSeverity severity)
         {
             switch (severity)
             {
                 case DiagnosticSeverity.Error:
                 {
-                    return ResultLevel.Error;
+                    return FailureLevel.Error;
                 }
 
                 case DiagnosticSeverity.Hidden:
                 case DiagnosticSeverity.Warning:
                 {
-                    return ResultLevel.Warning;
+                    return FailureLevel.Warning;
                 }
 
                 case DiagnosticSeverity.Info:
                 {
-                    return ResultLevel.Note;
+                    return FailureLevel.Note;
                 }
 
                 default:

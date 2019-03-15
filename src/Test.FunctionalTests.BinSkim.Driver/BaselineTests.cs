@@ -14,6 +14,7 @@ using Microsoft.CodeAnalysis.Sarif;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
+using Microsoft.CodeAnalysis.Sarif.Writers;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -30,6 +31,7 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public void Driver_BuiltInRuleFunctionalTests()
         {
+            AnalyzeCommand.s_UnitTestOutputVersion = SarifVersion.Current;
             BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*");
         }
 
@@ -100,7 +102,7 @@ namespace Microsoft.CodeAnalysis.IL
             options.ComputeFileHashes = true;
             options.OutputFilePath = actualFileName;
             options.ConfigurationFilePath = "default";
-            options.SarifVersion = SarifVersion.TwoZeroZero;
+            options.SarifOutputVersion = SarifVersion.Current;
             options.TargetFileSpecifiers = new string[] { inputFileName };
 
             int result = command.Run(options);
@@ -110,7 +112,6 @@ namespace Microsoft.CodeAnalysis.IL
 
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
-                ContractResolver = SarifContractResolver.Instance,
                 Formatting = Newtonsoft.Json.Formatting.Indented
             };
 
@@ -150,7 +151,11 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             // Make sure we can successfully deserialize what was just generated
-            SarifLog expectedLog = JsonConvert.DeserializeObject<SarifLog>(expectedText, settings);
+            SarifLog expectedLog = PrereleaseCompatibilityTransformer.UpdateToCurrentVersion(
+                                    expectedText,
+                                    settings.Formatting, 
+                                    out expectedText);
+
             SarifLog actualLog = JsonConvert.DeserializeObject<SarifLog>(actualText, settings);
 
             var visitor = new ResultDiffingVisitor(expectedLog);

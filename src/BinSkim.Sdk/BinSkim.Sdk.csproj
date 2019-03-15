@@ -9,12 +9,19 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Sarif.Driver" Version="$(SarifSDKVersion)" />
-    <PackageReference Include="Sarif.Sdk" Version="$(SarifSDKVersion)" />
   </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="Sarif">
+      <HintPath>..\..\refs\Sarif.dll</HintPath>
+    </Reference>
+    <Reference Include="Sarif.Driver">
+      <HintPath>..\..\refs\Sarif.Driver.dll</HintPath>
+    </Reference>
   </ItemGroup>
   
   <ItemGroup>
