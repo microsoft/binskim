@@ -14,13 +14,19 @@
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-    <PackageReference Include="Sarif.Sdk" Version="$(SarifSDKVersion)" />
-    <PackageReference Include="Sarif.Driver" Version="$(SarifSDKVersion)" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
     <ProjectReference Include="..\BinSkim.Rules\BinSkim.Rules.csproj" />
     <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Sarif">
+      <HintPath>..\..\refs\Sarif.dll</HintPath>
+    </Reference>
+    <Reference Include="Sarif.Driver">
+      <HintPath>..\..\refs\Sarif.Driver.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

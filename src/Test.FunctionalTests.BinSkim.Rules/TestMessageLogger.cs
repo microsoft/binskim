@@ -45,41 +45,53 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
         }
 
-        public void Log(IRule rule, Result result)
+        public void Log(ReportingDescriptor rule, Result result)
         {
-            NoteTestResult(result.Level, result.Locations.First().PhysicalLocation.FileLocation.Uri.LocalPath);
+            NoteTestResult(result.Kind, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
+            NoteTestResult(result.Level, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
         }
 
-        public void NoteTestResult(ResultLevel messageKind, string targetPath)
+        public void NoteTestResult(ResultKind messageKind, string targetPath)
         {
             switch (messageKind)
             {
-                case ResultLevel.Pass:
+                case ResultKind.Pass:
                 {
                     PassTargets.Add(targetPath);
                     break;
                 }
 
-                case ResultLevel.Error:
-                {
-                    FailTargets.Add(targetPath);
-                    break;
-                }
-
-                case ResultLevel.NotApplicable:
+                case ResultKind.NotApplicable:
                 {
                     NotApplicableTargets.Add(targetPath);
                     break;
                 }
 
-                case ResultLevel.Note:
+                default:
+                {
+                    break;
+                }
+            }
+        }
+
+        public void NoteTestResult(FailureLevel messageKind, string targetPath)
+        {
+            switch (messageKind)
+            {
+                case FailureLevel.Error:
+                {
+                    FailTargets.Add(targetPath);
+                    break;
+                }
+
+                case FailureLevel.Note:
                 {
                     throw new NotImplementedException();
                 }
 
                 default:
                 {
-                    throw new InvalidOperationException();
+                    break;
                 }
             }
         }
@@ -91,7 +103,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void LogConfigurationNotification(Sarif.Notification notification)
         {
-            ConfigurationErrorTargets.Add(notification.PhysicalLocation.FileLocation.Uri.LocalPath);
+            ConfigurationErrorTargets.Add(notification.PhysicalLocation.ArtifactLocation.Uri.LocalPath);
         }
     }
 }

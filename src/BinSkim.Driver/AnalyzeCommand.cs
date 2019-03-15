@@ -4,6 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -11,6 +13,8 @@ using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.CodeAnalysis.Sarif.Visitors;
+using Microsoft.CodeAnalysis.Sarif.Writers;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -31,10 +35,8 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override string Prerelease {  get { return VersionConstants.Prerelease; } }
 
-
         private RoslynAnalysisContext _globalRoslynAnalysisContext;
         private IEnumerable<string> _plugInFilePaths;
-
 
         protected override void InitializeConfiguration(AnalyzeOptions analyzeOptions, BinaryAnalyzerContext context)
         {
@@ -45,23 +47,21 @@ namespace Microsoft.CodeAnalysis.IL
                 Pdb.SymbolPath = analyzeOptions.SymbolsPath;
             }
             _plugInFilePaths = analyzeOptions.PluginFilePaths;
-        }
-
-        protected override void AnalyzeTarget(IEnumerable<ISkimmer<BinaryAnalyzerContext>> skimmers, BinaryAnalyzerContext context, HashSet<string> disabledSkimmers)
-        {
-            base.AnalyzeTarget(skimmers, context, disabledSkimmers);
-
-            if (context.IsPE())
-            {
-                if (context.PEBinary().PE.IsManaged && !context.PEBinary().PE.IsManagedResourceOnly)
-                {
-                    AnalyzeManagedAssembly(context.TargetUri.LocalPath, _plugInFilePaths, context);
-                }
-            }
+           
         }
 
         public override int Run(AnalyzeOptions analyzeOptions)
         {
+            if (!Environment.GetCommandLineArgs().Where(arg => arg.Equals("--sarif-output-version")).Any())
+            {
+                analyzeOptions.SarifOutputVersion = SarifVersion.OneZeroZero;
+            }
+
+            if (s_UnitTestOutputVersion != SarifVersion.Unknown)
+            {
+                analyzeOptions.SarifOutputVersion = s_UnitTestOutputVersion;
+            }
+
             int result = base.Run(analyzeOptions);
 
             // In BinSkim, no rule is ever applicable to every target type. For example,
@@ -72,6 +72,8 @@ namespace Microsoft.CodeAnalysis.IL
                 ? (int)((uint)result & (uint)~RuntimeConditions.RuleNotApplicableToTarget) 
                 : result;
         }
+
+        internal static SarifVersion s_UnitTestOutputVersion = SarifVersion.Unknown;
 
         private void AnalyzeManagedAssembly(string assemblyFilePath, IEnumerable<string> roslynAnalyzerFilePaths, BinaryAnalyzerContext context)
         {
@@ -139,7 +141,7 @@ namespace Microsoft.CodeAnalysis.IL
                 result.Locations = new List<Sarif.Location>();
 
                 // 1. Record the assembly under analysis
-                result.AnalysisTarget = new FileLocation { Uri = new Uri(assemblyFilePath) };
+                result.AnalysisTarget = new ArtifactLocation { Uri = new Uri(assemblyFilePath) };
 
                 // 2. Record the actual location associated with the result
                 var region = diagnostic.Location.ConvertToRegion();
@@ -152,7 +154,7 @@ namespace Microsoft.CodeAnalysis.IL
 
                     resultFile = new PhysicalLocation
                     {
-                        FileLocation = { Uri = new Uri(filePath) },
+                        ArtifactLocation = { Uri = new Uri(filePath) },
                         Region = region
                     };
                 }
@@ -181,15 +183,15 @@ namespace Microsoft.CodeAnalysis.IL
                         {                            
                             Message = new Message { Text = "Additional location" },
                             PhysicalLocation = new PhysicalLocation
-                                {
-                                    FileLocation = new FileLocation { Uri = new Uri(filePath) },
-                                    Region = region
-                                }
+                            {
+                                ArtifactLocation = new ArtifactLocation { Uri = new Uri(filePath) },
+                                Region = region
+                            }
                         });
                     }
                 }
 
-                IRule rule = diagnostic.ConvertToRuleDescriptor();
+                ReportingDescriptor rule = diagnostic.ConvertToRuleDescriptor();
                 context.Logger.Log(null, result);
             });
         }    

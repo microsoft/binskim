@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    public abstract class PEBinarySkimmerBase : BinarySkimmerBase
+    public abstract class PEBinarySkimmerBase : BinarySkimmer
     {
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {

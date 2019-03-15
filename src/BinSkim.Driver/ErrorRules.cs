@@ -7,11 +7,11 @@ namespace Microsoft.CodeAnalysis.IL
 {
     internal static class ErrorRules
     {
-        public static IRule InvalidPE = new Rule()
+        public static ReportingDescriptor InvalidPE = new ReportingDescriptor()
         {
             Id = "BA1001",
-            Name = new Message { Text = nameof(InvalidPE) },
-            FullDescription = new Message { Text = DriverResources.InvalidPE_Description }
+            Name = nameof(InvalidPE),
+            FullDescription = new MultiformatMessageString { Text = DriverResources.InvalidPE_Description }
         };
     }
 }

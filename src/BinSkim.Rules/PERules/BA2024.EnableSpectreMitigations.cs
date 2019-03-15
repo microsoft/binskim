@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public CompilerMitigations SupportedMitigations;
     }
 
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
     public class EnableSpectreMitigations : WindowsBinaryAndPdbSkimmerBase, IOptionsProvider
     {
         /// <summary>
@@ -38,10 +38,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// Application code should be compiled with the most up-to-date toolsets possible
         /// in order to take advantage of the most current compile-time security features.
         /// </summary>
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
             // Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it.
-            get { return new Message { Text = RuleResources.BA2024_EnableSpectreMitigations_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2024_EnableSpectreMitigations_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -356,7 +356,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // switch and it is not possible to update to a toolset that supports /Qspectre).
                 // The following modules are out of policy: {1}
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2024_Warning),
                         context.TargetUri.GetFileName(),
                         sb.ToString()));
@@ -365,7 +365,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // All linked modules ‘{0}’ were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.
             context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2024_Pass),
                         context.TargetUri.GetFileName()));
         }

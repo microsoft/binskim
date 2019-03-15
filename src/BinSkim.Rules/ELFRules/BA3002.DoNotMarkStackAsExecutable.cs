@@ -12,7 +12,7 @@ using ELFSharp.ELF.Segments;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class DoNotMarkStackAsExecutable : ELFBinarySkimmerBase
     {
         private const uint GNU_STACK_ID = 0x6474e551;
@@ -29,9 +29,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// to store shellcode. Ensure you are compiling with '-z noexecstack'
         /// to mark the stack as non-executable."
         /// </summary>
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA3002_DoNotMarkStackAsExecutable_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA3002_DoNotMarkStackAsExecutable_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -74,7 +74,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     {
                         // Fail -- stack seg is marked executable
                         context.Logger.Log(this,
-                            RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                            RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                                 nameof(RuleResources.BA3002_Error_StackExec),
                                 context.TargetUri.GetFileName()));
                         return;
@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     {
                         // Pass -- stack segment isn't executable
                         context.Logger.Log(this,
-                            RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                            RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                                 nameof(RuleResources.BA3002_Pass),
                                 context.TargetUri.GetFileName()));
                         return;
@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // If the GNU_STACK isn't present, the stack is probably loaded as executable
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA3002_Error_NoStackSeg),
                     context.TargetUri.GetFileName()));
         }

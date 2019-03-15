@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         private void VerifyPass(
-            IBinarySkimmer skimmer,
+            BinarySkimmer skimmer,
             IEnumerable<string> additionalTestFiles = null,
             bool useDefaultPolicy = false)
         {
@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         private void VerifyFail(
-            IBinarySkimmer skimmer,
+            BinarySkimmer skimmer,
             IEnumerable<string> additionalTestFiles = null,
             bool useDefaultPolicy = false)
         {
@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         private void Verify(
-            IBinarySkimmer skimmer,
+            BinarySkimmer skimmer,
             IEnumerable<string> additionalTestFiles,
             bool useDefaultPolicy,
             bool expectToPass)
@@ -162,7 +162,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         private void VerifyThrows<ExceptionType>(
-            IBinarySkimmer skimmer,
+            BinarySkimmer skimmer,
             IEnumerable<string> additionalTestFiles = null,
             bool useDefaultPolicy = false) where ExceptionType : Exception
         {
@@ -217,7 +217,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         private void VerifyNotApplicable(
-            IBinarySkimmer skimmer,
+            BinarySkimmer skimmer,
             HashSet<string> notApplicableConditions,
             AnalysisApplicability expectedApplicability = AnalysisApplicability.NotApplicableToSpecifiedTarget,
             bool useDefaultPolicy = false)

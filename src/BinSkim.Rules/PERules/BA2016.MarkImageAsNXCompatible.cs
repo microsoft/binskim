@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class MarkImageAsNXCompatible : PEBinarySkimmerBase
     {
         /// <summary>
@@ -35,9 +35,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// passing /NXCOMPAT to the C/C++ linker.
         /// </summary>
 
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2016_MarkImageAsNXCompatible_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2016_MarkImageAsNXCompatible_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -94,7 +94,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // executable code segment. To resolve this issue, ensure that your tool chain is configured to mark 
                 //your binaries as NX compatible, e.g. by passing / NXCOMPAT to the C / C++ linker.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2016_Error),
                         context.TargetUri.GetFileName()));
                 return;
@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // '{0}' is marked as NX compatible.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2016_Pass),
                         context.TargetUri.GetFileName()));
         }

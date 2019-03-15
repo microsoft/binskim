@@ -16,7 +16,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule)), Export(typeof(IOptionsProvider))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
     public class DoNotIncorporateVulnerableDependencies : WindowsBinaryAndPdbSkimmerBase, IOptionsProvider
     {
         /// <summary>
@@ -27,9 +27,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// Binaries should not take dependencies on other code with known security vulnerabilities.
         /// </summary>
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2002_DoNotIncorporateVulnerableBinaries_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2002_DoNotIncorporateVulnerableBinaries_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -159,7 +159,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // '{0}' was built with a version of {1} which is subject to the following issues: {2}. 
                     // To resolve this, {3}. The source files that triggered this were: {4}
                     context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA2002_Error),
                             context.TargetUri.GetFileName(),
                             descriptor.Name,
@@ -172,7 +172,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // '{0}' does not incorporate any known vulnerable dependencies, as configured by current policy.
             context.Logger.Log(this, 
-                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2002_Pass),
                     context.TargetUri.GetFileName()));
         }

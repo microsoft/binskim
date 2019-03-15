@@ -10,8 +10,6 @@
     <PackageReference Include="Microsoft.CodeAnalysis.BinSkim" Version="1.4.5" />
     <PackageReference Include="Microsoft.DiaSymReader" Version="1.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Sarif.Driver" Version="$(SarifSDKVersion)" />
-    <PackageReference Include="Sarif.Sdk" Version="$(SarifSDKVersion)" />
     <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
     <PackageReference Include="ELFSharp" Version="1.2.1" />
@@ -21,6 +19,12 @@
     <Reference Include="dia2lib">
       <HintPath>..\..\refs\dia2lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Sarif">
+      <HintPath>..\..\refs\Sarif.dll</HintPath>
+    </Reference>
+    <Reference Include="Sarif.Driver">
+      <HintPath>..\..\refs\Sarif.Driver.dll</HintPath>
     </Reference>
   </ItemGroup>
   

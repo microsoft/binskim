@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(ISkimmer<BinaryAnalyzerContext>)), Export(typeof(IRule))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class DoNotModifyStackProtectionCookie : PEBinarySkimmerBase
     {
         /// <summary>
@@ -41,9 +41,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// __security_cookie_complement.
         /// </summary>
 
-        public override Message FullDescription
+        public override MultiformatMessageString FullDescription
         {
-            get { return new Message { Text = RuleResources.BA2012_DoNotModifyStackProtectionCookie_Description }; }
+            get { return new MultiformatMessageString { Text = RuleResources.BA2012_DoNotModifyStackProtectionCookie_Description }; }
         }
 
         protected override IEnumerable<string> MessageResourceNames
@@ -86,7 +86,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // compiler that precedes stack protection features or is a binary (such as 
                 // an ngen'ed assembly) that is not subject to relevant security issues.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2012_Pass_NoLoadConfig),
                         context.TargetUri.GetFileName()));
                 return;
@@ -110,7 +110,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // the operating system over that produced by the C runtime start-up 
             // code.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Pass, context, null,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2012_Pass), 
                     context.TargetUri.GetFileName()));
         }
@@ -256,7 +256,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // The file may be corrupted or processed by an executable packer.
             // feature therefore could not be verified. The file was possibly packed by: {1}
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Warning, context, null,
+                RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                     nameof(RuleResources.BA2012_Warning_InvalidSecurityCookieOffset),
                     context.TargetUri.GetFileName(),
                     context.PEBinary().PE.Packer.ToString()));
@@ -268,7 +268,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // offset that exceeds the size of the packed file. Use of the stack protector (/GS)
             // feature therefore could not be verified. The file was possibly packed by: {1}
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Warning, context, null,
+                RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                     nameof(RuleResources.BA2012_Warning_InvalidSecurityCookieOffset),
                     context.TargetUri.GetFileName(),
                     context.PEBinary().PE.Packer.ToString()));
@@ -279,7 +279,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // '{0}' is a C or C++ binary that enables the stack protection feature 
             // but the security cookie could not be located. The binary may be corrupted.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2012_Error_CouldNotLocateCookie),
                     context.TargetUri.GetFileName()));
         }
@@ -303,7 +303,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // symbol named __security_cookie or __security_cookie_complement. NOTE: 
             // the modified cookie value detected was: {1}
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultLevel.Error, context, null,
+                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2012_Error),
                     context.TargetUri.GetFileName(),
                     cookie));
