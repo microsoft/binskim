@@ -356,7 +356,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // switch and it is not possible to update to a toolset that supports /Qspectre).
                 // The following modules are out of policy: {1}
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                     nameof(RuleResources.BA2024_Warning),
                         context.TargetUri.GetFileName(),
                         sb.ToString()));
