@@ -97,7 +97,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 default:
                 {
-                    throw new NotImplementedException();
+                    break;
                 }
             }
         }
