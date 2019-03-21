@@ -84,6 +84,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     break;
                 }
 
+                case FailureLevel.Warning:
+                {
+                    FailTargets.Add(targetPath);
+                    break;
+                }
+
                 case FailureLevel.Note:
                 {
                     throw new NotImplementedException();
