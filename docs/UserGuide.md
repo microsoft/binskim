@@ -19,11 +19,11 @@ The primary function of BinSkim is to analyze Windows PEs, such as Dynamic Link 
 ```csharp
 // Analyze a single binary named MyProjectFile.dll found in c:\temp
 // and emit verbose messages during analysis
-binskime.exe analyze c:\temp\MyProjectFile.dll –verbose
+binskim.exe analyze c:\temp\MyProjectFile.dll --verbose
 
 // Analyze all files with the .dll or .exe extension starting in the
 // current working directory and recursing through all child directories
-binskim analyze *.exe *.dll –recurse
+binskim analyze *.exe *.dll --recurse
 
 // Analyze all files with the .dll extension starting in the current
 // current directory and write results to a SARIF log file
