@@ -11,7 +11,20 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
     {
         private Uri _uri;
 
-        public IBinary Binary { get; private set; }
+
+        private IBinary _iBinary;
+        public IBinary Binary
+        {
+            get
+            {
+                _iBinary = _iBinary ?? BinaryTargetManager.GetBinaryFromFile(_uri);
+                return _iBinary;
+            }
+            set
+            {
+                _iBinary = value;
+            }
+        }
 
         public Exception TargetLoadException
         {
@@ -21,10 +34,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public bool IsValidAnalysisTarget
         {
-            get { return Binary != null && Binary.Valid ; }
+            get { return Binary != null && Binary.Valid; }
             set { throw new InvalidOperationException(); }
         }
-        
+
         public Uri TargetUri
         {
             get
@@ -38,7 +51,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     throw new InvalidOperationException(SdkResources.IllegalContextReuse);
                 }
                 _uri = value;
-                Binary = BinaryTargetManager.GetBinaryFromFile(_uri);
             }
         }
 
@@ -47,6 +59,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public ReportingDescriptor Rule { get; set; }
 
         public PropertiesDictionary Policy { get; set; }
+
+        public HashData Hashes { get; set; }
 
         public string MimeType
         {
@@ -65,7 +79,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 if (disposing)
                 {
-                    if(Binary != null)
+                    if (Binary != null)
                     {
                         Binary.Dispose();
                         Binary = null;

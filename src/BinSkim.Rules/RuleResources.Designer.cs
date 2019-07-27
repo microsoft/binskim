@@ -711,7 +711,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has a section alignment ({1}) that is smaller than page size ({2})..
+        ///   Looks up a localized string similar to &apos;{0}&apos; has a section alignment ({1}) that is smaller than its page size ({2})..
         /// </summary>
         internal static string BA2021_Error_UnexpectedSectionAligment {
             get {

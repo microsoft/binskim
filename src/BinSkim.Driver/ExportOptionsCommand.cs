@@ -20,7 +20,5 @@ namespace Microsoft.CodeAnalysis.IL
                 }; 
             }
         }
-
-        public override string Prerelease { get { return VersionConstants.Prerelease; } }
     }
 }
