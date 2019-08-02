@@ -109,7 +109,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void LogConfigurationNotification(Sarif.Notification notification)
         {
-            ConfigurationErrorTargets.Add(notification.PhysicalLocation.ArtifactLocation.Uri.LocalPath);
+            ConfigurationErrorTargets.Add(notification.Locations[0].PhysicalLocation.ArtifactLocation.Uri.LocalPath);
         }
     }
 }

@@ -33,9 +33,6 @@ namespace Microsoft.CodeAnalysis.IL
             set {  throw new InvalidOperationException(); }
         }
 
-        public override string Prerelease {  get { return VersionConstants.Prerelease; } }
-
-        private RoslynAnalysisContext _globalRoslynAnalysisContext;
         private IEnumerable<string> _plugInFilePaths;
 
         protected override void InitializeConfiguration(AnalyzeOptions analyzeOptions, BinaryAnalyzerContext context)
@@ -69,131 +66,15 @@ namespace Microsoft.CodeAnalysis.IL
             // Because of this, the return code bit for RuleNotApplicableToTarget is not
             // interesting (it will always be set). 
             return analyzeOptions.RichReturnCode 
-                ? (int)((uint)result & (uint)~RuntimeConditions.RuleNotApplicableToTarget) 
+                ? (int)((uint)result & ~(uint)RuntimeConditions.RuleNotApplicableToTarget) 
                 : result;
         }
 
-        internal static SarifVersion s_UnitTestOutputVersion = SarifVersion.Unknown;
-
-        private void AnalyzeManagedAssembly(string assemblyFilePath, IEnumerable<string> roslynAnalyzerFilePaths, BinaryAnalyzerContext context)
+        protected override void AnalyzeTarget(IEnumerable<Skimmer<BinaryAnalyzerContext>> skimmers, BinaryAnalyzerContext context, HashSet<string> disabledSkimmers)
         {
-            if (roslynAnalyzerFilePaths == null)
-            {
-                return;
-            }
+            base.AnalyzeTarget(skimmers, context, disabledSkimmers);
+        }
 
-            if (_globalRoslynAnalysisContext == null)
-            {
-                _globalRoslynAnalysisContext = new RoslynAnalysisContext();
-
-                // We could use the ILDiagnosticsAnalyzer factory method that initializes
-                // an object instance from an enumerable collection of analyzer paths. We
-                // initialize a context object from each path one-by-one instead, in order
-                // to make an attempt to load each specified analyzer. We will therefore
-                // collect information on each analyzer that fails to load. We will also 
-                // proceed with performing as much analysis as possible. Ultimately, a 
-                // single analyzer load failure will return in BinSkim returning a non-zero
-                // failure code from the run.
-                foreach (string analyzerFilePath in roslynAnalyzerFilePaths)
-                {
-                    InvokeCatchingRelevantIOExceptions
-                    (
-                        action: () => { ILDiagnosticsAnalyzer.LoadAnalyzer(analyzerFilePath, _globalRoslynAnalysisContext); },
-                        exceptionHandler: (ex) =>
-                        {
-                            Errors.LogExceptionLoadingPlugin(analyzerFilePath, context, ex);
-                        }
-                    );
-                }
-            }
-
-            Debug.Assert(context.MimeType == Sarif.Writers.MimeType.Binary);
-
-            ILDiagnosticsAnalyzer roslynAnalyzer = ILDiagnosticsAnalyzer.Create(_globalRoslynAnalysisContext);
-            roslynAnalyzer.Analyze(assemblyFilePath, diagnostic =>
-            {
-                // 0. Populate various members
-                var result = new Result();
-                result.Level = diagnostic.Severity.ConvertToResultLevel();
-                result.Message = new Message { Text = diagnostic.GetMessage() };
-
-                if (diagnostic.IsSuppressed)
-                {
-                    result.SuppressionStates = SuppressionStates.SuppressedInSource;
-                }
-
-                result.SetProperty("Severity", diagnostic.Severity.ToString());
-                result.SetProperty("IsWarningAsError", diagnostic.IsWarningAsError.ToString());
-                result.SetProperty("WarningLevel", diagnostic.WarningLevel.ToString());
-
-                foreach (string key in diagnostic.Properties.Keys)
-                {
-                    string value;
-                    if (result.TryGetProperty(key, out value))
-                    {
-                        // If the properties bag recapitulates one of the values set
-                        // previously, we'll retain the already set value
-                        continue;
-                    }
-                    result.SetProperty(key, diagnostic.Properties[key]);
-                }
-
-                result.Locations = new List<Sarif.Location>();
-
-                // 1. Record the assembly under analysis
-                result.AnalysisTarget = new ArtifactLocation { Uri = new Uri(assemblyFilePath) };
-
-                // 2. Record the actual location associated with the result
-                var region = diagnostic.Location.ConvertToRegion();
-                string filePath;
-                PhysicalLocation resultFile = null;
-
-                if (diagnostic.Location != Location.None)
-                {
-                    filePath = diagnostic.Location.GetLineSpan().Path;
-
-                    resultFile = new PhysicalLocation
-                    {
-                        ArtifactLocation = { Uri = new Uri(filePath) },
-                        Region = region
-                    };
-                }
-
-                result.Locations.Add(new Sarif.Location()
-                {
-                    PhysicalLocation = resultFile         
-                });
-                
-
-                // 3. If present, emit additional locations associated with diagnostic.
-                //    According to docs, these locations typically reference related
-                //    locations (i.e., they are not locations that specify other 
-                //    occurrences of a problem).
-
-                if (diagnostic.AdditionalLocations != null && diagnostic.AdditionalLocations.Count > 0)
-                {
-                    result.RelatedLocations = new List<Sarif.Location>();
-
-                    foreach(Location location in diagnostic.AdditionalLocations)
-                    {
-                        filePath = location.GetLineSpan().Path;
-                        region = location.ConvertToRegion();
-
-                        result.RelatedLocations.Add(new Sarif.Location
-                        {                            
-                            Message = new Message { Text = "Additional location" },
-                            PhysicalLocation = new PhysicalLocation
-                            {
-                                ArtifactLocation = new ArtifactLocation { Uri = new Uri(filePath) },
-                                Region = region
-                            }
-                        });
-                    }
-                }
-
-                ReportingDescriptor rule = diagnostic.ConvertToRuleDescriptor();
-                context.Logger.Log(null, result);
-            });
-        }    
+        internal static SarifVersion s_UnitTestOutputVersion = SarifVersion.Unknown;
     }
 }

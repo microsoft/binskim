@@ -78,3 +78,8 @@
 
 ## **v1.6.0-beta.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.6.0-beta.3)
 * Drop Spectre analysis to warning
+
+## **v1.6.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.6.0
+* Fix Linux NuGet packaging to include BinSkim executable missing in 1.5.0.
+
+

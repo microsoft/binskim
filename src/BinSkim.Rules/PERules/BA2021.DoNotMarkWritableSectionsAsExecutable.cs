@@ -73,12 +73,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // TODO: do we really require this check? What is the proposed fix to this issue? 
             if (peHeader.SectionAlignment < PAGE_SIZE)
             {
-                // '{0}' has a section alignment ({1}) that is less than page size ({2}).
+                // '{0}' has a section alignment ({1}) that is less than its page size ({2}).
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                        nameof(RuleResources.BA2021_Error),
+                        nameof(RuleResources.BA2021_Error_UnexpectedSectionAligment),
                         context.TargetUri.GetFileName(),
-                        target.PE.FileName,
                         "0x" + peHeader.SectionAlignment.ToString("x"),
                         "0x" + PAGE_SIZE.ToString("x")));
                 return;

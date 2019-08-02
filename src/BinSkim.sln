@@ -31,9 +31,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Sdk", "BinSkim.Sdk\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTests.BinaryParsers", "Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj", "{6DA91714-422E-4681-8454-F91BB8EEF3DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.UnitTests.BinSkim.Rules", "Test.UnitTests.BinSkim.Rules\Test.UnitTests.BinSkim.Rules.csproj", "{BDB5E58E-7B62-4BCB-B032-D86E18193E78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTests.BinSkim.Rules", "Test.UnitTests.BinSkim.Rules\Test.UnitTests.BinSkim.Rules.csproj", "{BDB5E58E-7B62-4BCB-B032-D86E18193E78}"
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AnyCPU = Debug|AnyCPU
 		Debug|x64 = Debug|x64
