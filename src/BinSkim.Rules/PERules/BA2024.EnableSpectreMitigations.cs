@@ -5,17 +5,17 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+using System.IO;
+using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Text;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
-using System.Linq;
-using Microsoft.CodeAnalysis.BinaryParsers;
-using System.IO;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -90,7 +90,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         internal static PerLanguageOption<PropertiesDictionary> MitigatedCompilers { get; } =
             new PerLanguageOption<PropertiesDictionary>(AnalyzerName, nameof(MitigatedCompilers), defaultValue: () => { return BuildMitigatedCompilersData(); });
-
 
         // Internal so that we can reset this during testing.  In practice this should never get reset, but we use several different configs during unit tests.
         // Please do not access this field outside of this class and unit tests.

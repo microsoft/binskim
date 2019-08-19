@@ -107,25 +107,32 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private void WindowsNativeLoadPdbUsingDia(string peOrPdbPath, string symbolPath)
         {
-            IDiaDataSource diaSource = MsdiaComWrapper.GetDiaSource();
+            IDiaDataSource diaSource = null;
             Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
 
-            if (symbolPath == null)
+            string pdbPath = Path.ChangeExtension(peOrPdbPath, ".pdb");
+            if (File.Exists(pdbPath))
             {
-                string pdbPath = Path.ChangeExtension(peOrPdbPath, ".pdb");
-                if (File.Exists(pdbPath))
-                {
-                    peOrPdbPath = pdbPath;
-                }
+                peOrPdbPath = pdbPath;
             }
 
             // load the debug info depending on the file type
             if (peOrPdbPath.EndsWith(".pdb", StringComparison.OrdinalIgnoreCase))
             {
-                diaSource.loadDataFromPdb(peOrPdbPath);
+                try
+                {
+                    diaSource = MsdiaComWrapper.GetDiaSource();
+                    diaSource.loadDataFromPdb(peOrPdbPath);
+                }
+                catch
+                {
+                    diaSource = null;
+                }
             }
-            else
+
+            if (diaSource == null)
             {
+                diaSource = MsdiaComWrapper.GetDiaSource();
                 diaSource.loadDataForExe(peOrPdbPath, symbolPath, IntPtr.Zero);
             }
 
