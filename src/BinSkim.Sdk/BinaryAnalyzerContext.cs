@@ -8,12 +8,7 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class BinaryAnalyzerContext : IAnalysisContext
-    {
-        public BinaryAnalyzerContext()
-        {
-
-        }
-
+    {        
         private Uri _uri;
         private IBinary _iBinary;
 
