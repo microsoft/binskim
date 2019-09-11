@@ -8,11 +8,10 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class BinaryAnalyzerContext : IAnalysisContext
-    {
+    {        
         private Uri _uri;
-
-
         private IBinary _iBinary;
+
         public IBinary Binary
         {
             get
@@ -79,10 +78,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 if (disposing)
                 {
-                    if (Binary != null)
+                    if (_iBinary != null)
                     {
-                        Binary.Dispose();
-                        Binary = null;
+                        _iBinary.Dispose();
+                        _iBinary = null;
                     }
                 }
                 disposedValue = true;

@@ -105,28 +105,29 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
         }
 
-        private void WindowsNativeLoadPdbUsingDia(string peOrPdbPath, string symbolPath)
+        private void WindowsNativeLoadPdbUsingDia(string pePath, string symbolPath)
         {
-            IDiaDataSource diaSource = MsdiaComWrapper.GetDiaSource();
+            IDiaDataSource diaSource = null;
             Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
 
-            if (symbolPath == null)
+            string pdbPath = Path.ChangeExtension(pePath, ".pdb");
+            if (File.Exists(pdbPath))
             {
-                string pdbPath = Path.ChangeExtension(peOrPdbPath, ".pdb");
-                if (File.Exists(pdbPath))
+                try
                 {
-                    peOrPdbPath = pdbPath;
+                    diaSource = MsdiaComWrapper.GetDiaSource();
+                    diaSource.loadDataFromPdb(pdbPath);
+                }
+                catch
+                {
+                    diaSource = null;
                 }
             }
 
-            // load the debug info depending on the file type
-            if (peOrPdbPath.EndsWith(".pdb", StringComparison.OrdinalIgnoreCase))
+            if (diaSource == null)
             {
-                diaSource.loadDataFromPdb(peOrPdbPath);
-            }
-            else
-            {
-                diaSource.loadDataForExe(peOrPdbPath, symbolPath, IntPtr.Zero);
+                diaSource = MsdiaComWrapper.GetDiaSource();
+                diaSource.loadDataForExe(pePath, symbolPath, IntPtr.Zero);
             }
 
             diaSource.openSession(out _session);
