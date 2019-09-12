@@ -12,7 +12,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
+              "Binskim.win-x64.RTR.dll",
               "EnablePositionIndependentExecutable",
               "image is not an ELF binary"
             ]
@@ -21,7 +21,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -36,7 +36,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
+              "Binskim.win-x64.RTR.dll",
               "DoNotMarkStackAsExecutable",
               "image is not an ELF binary"
             ]
@@ -45,7 +45,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -60,7 +60,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
+              "Binskim.win-x64.RTR.dll",
               "EnableStackProtector",
               "image is not an ELF binary"
             ]
@@ -69,7 +69,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -84,7 +84,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
+              "Binskim.win-x64.RTR.dll",
               "EnableReadOnlyRelocations",
               "image is not an ELF binary"
             ]
@@ -93,7 +93,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -108,7 +108,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
+              "Binskim.win-x64.RTR.dll",
               "UseCheckedFunctionsWithGcc",
               "image is not an ELF binary"
             ]
@@ -117,31 +117,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2001",
-          "ruleIndex": 5,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
-              "LoadImageAboveFourGigabyteAddress",
-              "image is not a 64-bit binary"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -150,118 +126,22 @@
         },
         {
           "ruleId": "BA2008",
-          "ruleIndex": 6,
+          "ruleIndex": 5,
           "kind": "notApplicable",
           "level": "none",
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
+              "Binskim.win-x64.RTR.dll",
               "EnableControlFlowGuard",
-              "image was compiled with a toolset version (11.0) that is not sufficiently recent (14.0 or newer) to provide relevant settings"
+              "image is a mixed mode binary"
             ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2011",
-          "ruleIndex": 7,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
-              "EnableStackProtection",
-              "image is a binary built by the .NET native toolset"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2012",
-          "ruleIndex": 8,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
-              "DoNotModifyStackProtectionCookie",
-              "image is a binary built by the .NET native toolset"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2013",
-          "ruleIndex": 9,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
-              "InitializeStackProtection",
-              "image is a binary built by the .NET native toolset"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2014",
-          "ruleIndex": 10,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
-              "DoNotDisableStackProtectionForFunctions",
-              "image is a binary built by the .NET native toolset"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -270,156 +150,22 @@
         },
         {
           "ruleId": "BA2015",
-          "ruleIndex": 11,
+          "ruleIndex": 6,
           "kind": "notApplicable",
           "level": "none",
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
+              "Binskim.win-x64.RTR.dll",
               "EnableHighEntropyVirtualAddresses",
-              "image will likely load as a 32-bit process"
+              "image is not an executable program"
             ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2002",
-          "ruleIndex": 12,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2005",
-          "ruleIndex": 13,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2006",
-          "ruleIndex": 14,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
-              "17.0.65501.17013"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2007",
-          "ruleIndex": 15,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
-              "2147483647"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
-          "ruleIndex": 16,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
-          "ruleIndex": 17,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -428,20 +174,22 @@
         },
         {
           "ruleId": "BA2016",
-          "ruleIndex": 18,
-          "kind": "pass",
+          "ruleIndex": 7,
+          "kind": "notApplicable",
           "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll"
+              "Binskim.win-x64.RTR.dll",
+              "MarkImageAsNXCompatible",
+              "image is a 64-bit binary"
             ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -450,20 +198,266 @@
         },
         {
           "ruleId": "BA2018",
-          "ruleIndex": 19,
-          "kind": "pass",
+          "ruleIndex": 8,
+          "kind": "notApplicable",
           "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll"
+              "Binskim.win-x64.RTR.dll",
+              "EnableSafeSEH",
+              "image is not a 32-bit binary"
             ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2001",
+          "ruleIndex": 9,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Binskim.win-x64.RTR.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2002",
+          "ruleIndex": 10,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Binskim.win-x64.RTR.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "ruleIndex": 11,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Binskim.win-x64.RTR.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2006",
+          "ruleIndex": 12,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Binskim.win-x64.RTR.dll",
+              "17.0.65501.17013"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2007",
+          "ruleIndex": 13,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Binskim.win-x64.RTR.dll",
+              "2147483647"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2009",
+          "ruleIndex": 14,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Binskim.win-x64.RTR.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2010",
+          "ruleIndex": 15,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Binskim.win-x64.RTR.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2011",
+          "ruleIndex": 16,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Binskim.win-x64.RTR.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2012",
+          "ruleIndex": 17,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass_NoLoadConfig",
+            "arguments": [
+              "Binskim.win-x64.RTR.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2013",
+          "ruleIndex": 18,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_FeatureNotEnabled",
+            "arguments": [
+              "Binskim.win-x64.RTR.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2014",
+          "ruleIndex": 19,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Binskim.win-x64.RTR.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -478,14 +472,14 @@
           "message": {
             "id": "Pass",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll"
+              "Binskim.win-x64.RTR.dll"
             ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -500,14 +494,14 @@
           "message": {
             "id": "Pass",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll"
+              "Binskim.win-x64.RTR.dll"
             ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -522,7 +516,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll",
+              "Binskim.win-x64.RTR.dll",
               "SignSecurely",
               "image is not signed "
             ]
@@ -531,7 +525,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -546,14 +540,14 @@
           "message": {
             "id": "Pass",
             "arguments": [
-              "Uwp_x86_VS2015_DefaultBlankApp.dll"
+              "Binskim.win-x64.RTR.dll"
             ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
                   "index": 0
                 }
               }
@@ -704,34 +698,6 @@
               "name": "UseCheckedFunctionsWithGcc"
             },
             {
-              "id": "BA2001",
-              "fullDescription": {
-                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
-              },
-              "helpUri": "https://github.com/microsoft/binskim",
-              "help": {
-                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' is a 64-bit image with a base address that is >= 4 gigabytes, increasing the effectiveness of Address Space Layout Randomization (which helps prevent attackers from executing security-sensitive code in well-known locations)."
-                },
-                "Error": {
-                  "text": "'{0}' is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "shortDescription": {
-                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security."
-              },
-              "name": "LoadImageAboveFourGigabyteAddress",
-              "properties": {
-                "equivalentBinScopeRuleReadableName": "FourGbCheck"
-              }
-            },
-            {
               "id": "BA2008",
               "fullDescription": {
                 "text": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program."
@@ -760,136 +726,6 @@
               "name": "EnableControlFlowGuard",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
-              }
-            },
-            {
-              "id": "BA2011",
-              "fullDescription": {
-                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line."
-              },
-              "helpUri": "https://github.com/microsoft/binskim",
-              "help": {
-                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled for all modules, making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities. "
-                },
-                "Error": {
-                  "text": "'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}"
-                },
-                "Error_UnknownModuleLanguage": {
-                  "text": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "shortDescription": {
-                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities."
-              },
-              "name": "EnableStackProtection",
-              "properties": {
-                "equivalentBinScopeRuleReadableName": "GSCheck"
-              }
-            },
-            {
-              "id": "BA2012",
-              "fullDescription": {
-                "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
-              },
-              "helpUri": "https://github.com/microsoft/binskim",
-              "help": {
-                "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' is a C or C++ binary built with the buffer security feature that properly preserves the stack protecter cookie. This has the effect of enabling a significant increase in entropy provided by the operating system over that produced by the C runtime start-up code."
-                },
-                "Pass_NoLoadConfig": {
-                  "text": "'{0}' is  C or C++binary that does not contain a load config table, which indicates either that it was compiled and linked with a version of the compiler that precedes stack protection features or is a binary (such as an ngen'ed assembly) that is not subject to relevant security issues."
-                },
-                "Error": {
-                  "text": "'{0}' is a C or C++ binary that interferes with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the magic statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement. NOTE: the modified cookie value detected was: {1}"
-                },
-                "Error_CouldNotLocateCookie": {
-                  "text": "'{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted."
-                },
-                "Warning_InvalidSecurityCookieOffset": {
-                  "text": "'{0}' appears to be a packed C or C++ binary that reports a security cookie offset that exceeds the size of the packed file. Use of the stack protector (/GS) feature therefore could not be verified. The file was possibly packed by: {1}."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "shortDescription": {
-                "text": "Application code should not interfere with the stack protector."
-              },
-              "name": "DoNotModifyStackProtectionCookie",
-              "properties": {
-                "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
-              }
-            },
-            {
-              "id": "BA2013",
-              "fullDescription": {
-                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
-              },
-              "helpUri": "https://github.com/microsoft/binskim",
-              "help": {
-                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' is a C or C++ binary built with the buffer security feature that properly initializes the stack protecter. This has the effect of increasing the effectiveness of the feature and reducing spurious detections."
-                },
-                "Pass_NoCode": {
-                  "text": "'{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code."
-                },
-                "NotApplicable_FeatureNotEnabled": {
-                  "text": "'{0}' is a C or C++ binary that does not enable the stack protection buffer security feature. It is therefore not required to initialize the stack protector."
-                },
-                "Error": {
-                  "text": "'{0}' is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "shortDescription": {
-                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities."
-              },
-              "name": "InitializeStackProtection",
-              "properties": {
-                "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
-              }
-            },
-            {
-              "id": "BA2014",
-              "fullDescription": {
-                "text": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
-              },
-              "helpUri": "https://github.com/microsoft/binskim",
-              "help": {
-                "text": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled which does not disable protection for any individual functions (via __declspec(safebuffers), making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities."
-                },
-                "Error": {
-                  "text": "'{0}' is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "shortDescription": {
-                "text": "Application code should not disable stack protection for individual functions."
-              },
-              "name": "DoNotDisableStackProtectionForFunctions",
-              "properties": {
-                "equivalentBinScopeRuleReadableName": "GSFunctionSafeBuffersCheck"
               }
             },
             {
@@ -924,6 +760,93 @@
               "name": "EnableHighEntropyVirtualAddresses",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "HighEntropyVACheck"
+              }
+            },
+            {
+              "id": "BA2016",
+              "fullDescription": {
+                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is marked as NX compatible, helping to prevent attackers from executing code that is injected into data segments."
+                },
+                "Error": {
+                  "text": "'{0}' is not marked NX compatible. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code."
+              },
+              "name": "MarkImageAsNXCompatible",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "NXCheck"
+              }
+            },
+            {
+              "id": "BA2018",
+              "fullDescription": {
+                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception jump targets are defined as exception handlers in the program (and not shellcode)."
+                },
+                "Pass_NoSEH": {
+                  "text": "'{0}' is an x86 binary that does not use SEH, making it an invalid target for exploits that attempt to replace SEH jump targets with attacker-controlled shellcode."
+                },
+                "Error": {
+                  "text": "'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues."
+              },
+              "name": "EnableSafeSEH",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
+              }
+            },
+            {
+              "id": "BA2001",
+              "fullDescription": {
+                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a 64-bit image with a base address that is >= 4 gigabytes, increasing the effectiveness of Address Space Layout Randomization (which helps prevent attackers from executing security-sensitive code in well-known locations)."
+                },
+                "Error": {
+                  "text": "'{0}' is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security."
+              },
+              "name": "LoadImageAboveFourGigabyteAddress",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "FourGbCheck"
               }
             },
             {
@@ -1113,62 +1036,133 @@
               }
             },
             {
-              "id": "BA2016",
+              "id": "BA2011",
               "fullDescription": {
-                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line."
               },
               "helpUri": "https://github.com/microsoft/binskim",
               "help": {
-                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line."
               },
               "messageStrings": {
                 "Pass": {
-                  "text": "'{0}' is marked as NX compatible, helping to prevent attackers from executing code that is injected into data segments."
+                  "text": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled for all modules, making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities. "
                 },
                 "Error": {
-                  "text": "'{0}' is not marked NX compatible. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+                  "text": "'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}"
+                },
+                "Error_UnknownModuleLanguage": {
+                  "text": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}."
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
               "shortDescription": {
-                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code."
+                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities."
               },
-              "name": "MarkImageAsNXCompatible",
+              "name": "EnableStackProtection",
               "properties": {
-                "equivalentBinScopeRuleReadableName": "NXCheck"
+                "equivalentBinScopeRuleReadableName": "GSCheck"
               }
             },
             {
-              "id": "BA2018",
+              "id": "BA2012",
               "fullDescription": {
-                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+                "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
               },
               "helpUri": "https://github.com/microsoft/binskim",
               "help": {
-                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+                "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
               },
               "messageStrings": {
                 "Pass": {
-                  "text": "'{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception jump targets are defined as exception handlers in the program (and not shellcode)."
+                  "text": "'{0}' is a C or C++ binary built with the buffer security feature that properly preserves the stack protecter cookie. This has the effect of enabling a significant increase in entropy provided by the operating system over that produced by the C runtime start-up code."
                 },
-                "Pass_NoSEH": {
-                  "text": "'{0}' is an x86 binary that does not use SEH, making it an invalid target for exploits that attempt to replace SEH jump targets with attacker-controlled shellcode."
+                "Pass_NoLoadConfig": {
+                  "text": "'{0}' is  C or C++binary that does not contain a load config table, which indicates either that it was compiled and linked with a version of the compiler that precedes stack protection features or is a binary (such as an ngen'ed assembly) that is not subject to relevant security issues."
                 },
                 "Error": {
-                  "text": "'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+                  "text": "'{0}' is a C or C++ binary that interferes with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the magic statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement. NOTE: the modified cookie value detected was: {1}"
+                },
+                "Error_CouldNotLocateCookie": {
+                  "text": "'{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted."
+                },
+                "Warning_InvalidSecurityCookieOffset": {
+                  "text": "'{0}' appears to be a packed C or C++ binary that reports a security cookie offset that exceeds the size of the packed file. Use of the stack protector (/GS) feature therefore could not be verified. The file was possibly packed by: {1}."
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
               "shortDescription": {
-                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues."
+                "text": "Application code should not interfere with the stack protector."
               },
-              "name": "EnableSafeSEH",
+              "name": "DoNotModifyStackProtectionCookie",
               "properties": {
-                "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
+                "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
+              }
+            },
+            {
+              "id": "BA2013",
+              "fullDescription": {
+                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a C or C++ binary built with the buffer security feature that properly initializes the stack protecter. This has the effect of increasing the effectiveness of the feature and reducing spurious detections."
+                },
+                "Pass_NoCode": {
+                  "text": "'{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code."
+                },
+                "NotApplicable_FeatureNotEnabled": {
+                  "text": "'{0}' is a C or C++ binary that does not enable the stack protection buffer security feature. It is therefore not required to initialize the stack protector."
+                },
+                "Error": {
+                  "text": "'{0}' is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities."
+              },
+              "name": "InitializeStackProtection",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
+              }
+            },
+            {
+              "id": "BA2014",
+              "fullDescription": {
+                "text": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled which does not disable protection for any individual functions (via __declspec(safebuffers), making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities."
+                },
+                "Error": {
+                  "text": "'{0}' is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "Application code should not disable stack protection for individual functions."
+              },
+              "name": "DoNotDisableStackProtectionForFunctions",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "GSFunctionSafeBuffersCheck"
               }
             },
             {
@@ -1302,21 +1296,21 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2019-09-12T19:33:15.012Z",
-          "endTimeUtc": "2019-09-12T19:33:15.494Z",
+          "startTimeUtc": "2019-09-12T19:32:51.556Z",
+          "endTimeUtc": "2019-09-12T19:32:52.020Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll",
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x64.RTR.dll",
             "index": 0
           },
           "hashes": {
-            "md5": "08042316A96A44FC0839C78419A3BD57",
-            "sha-1": "1201A2871B47132432B4960E7C7DDA773D0AA61F",
-            "sha-256": "2F90DC7C33702D7206652B382B245C8BCCC2550316EFB757B97CF50237F6DA10"
+            "md5": "1F2DAF6DB6FD731F1AA6824A5A90FA85",
+            "sha-1": "EE5C484707A42A051DAE5EDC94AC0B733B7091B6",
+            "sha-256": "8F373E7B25B238BDCC7899C3DF5F0555CEB5DD296E6B97B219E3D4A7DEA33751"
           }
         }
       ],
