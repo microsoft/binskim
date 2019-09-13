@@ -1304,8 +1304,6 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2019-09-12T19:33:12.594Z",
-          "endTimeUtc": "2019-09-12T19:33:12.967Z",
           "executionSuccessful": true
         }
       ],

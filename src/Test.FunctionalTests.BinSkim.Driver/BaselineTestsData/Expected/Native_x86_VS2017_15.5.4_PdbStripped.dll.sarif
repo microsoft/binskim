@@ -916,8 +916,6 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2019-09-12T19:33:11.473Z",
-          "endTimeUtc": "2019-09-12T19:33:11.876Z",
           "toolConfigurationNotifications": [
             {
               "locations": [
