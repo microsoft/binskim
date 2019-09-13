@@ -133,6 +133,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is a dotnet entry point dll.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsDotNetEntryPointDll {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsDotNetEntryPointDll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is a binary built by the .NET native toolset.
         /// </summary>
         internal static string MetadataCondition_ImageIsDotNetNativeBinary {

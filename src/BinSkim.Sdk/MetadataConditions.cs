@@ -22,6 +22,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageIsKernelModeBinary = SdkResources.MetadataCondition_ImageIsKernelModeBinary;
         public static readonly string ImageIsResourceOnlyBinary = SdkResources.MetadataCondition_ImageIsResourceOnlyBinary;
         public static readonly string ImageIsDotNetNativeBinary = SdkResources.MetadataCondition_ImageIsDotNetNativeBinary;
+        public static readonly string ImageIsDotNetEntryPointDll = SdkResources.MetadataCondition_ImageIsDotNetNativeBinary;
         public static readonly string ImageIsKernelModeAndNot64Bit = SdkResources.MetadataCondition_ImageIsKernelModeAndNot64Bit;
         public static readonly string ImageIsILOnlyManagedAssembly = SdkResources.MetadataCondition_ImageIsILOnlyManagedAssembly;
         public static readonly string ImageLikelyLoadsAs32BitProcess = SdkResources.MetadataCondition_ImageLikelyLoads32BitProcess;

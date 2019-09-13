@@ -204,4 +204,7 @@
   <data name="MetadataCondition_ImageIsWixBinary" xml:space="preserve">
     <value>image appears to be a WiX bootstrapper application</value>
   </data>
+  <data name="MetadataCondition_ImageIsDotNetEntryPointDll" xml:space="preserve">
+    <value>image is a dotnet entry point dll</value>
+  </data>
 </root>
