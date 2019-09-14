@@ -136,7 +136,7 @@ namespace Microsoft.CodeAnalysis.IL
             actualText = Regex.Replace(actualText, @"\s*""fullName""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""semanticVersion""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""sarifLoggerVersion""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""dottedQuadVersion""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""dottedQuadFileVersion""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""Comments""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""CompanyName""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""ProductName""[^\n]+?\n", Environment.NewLine);
