@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeBinary;
             if (portableExecutable.IsKernelMode) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyManagedAssembly;
+            reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyAssembly;
             if (portableExecutable.IsILOnly) { return result; }
 
             reasonForNotAnalyzing = null;

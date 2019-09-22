@@ -158,7 +158,7 @@
             "arguments": [
               "ManagedResourcesOnly.dll",
               "DoNotIncorporateVulnerableDependencies",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -182,7 +182,7 @@
             "arguments": [
               "ManagedResourcesOnly.dll",
               "BuildWithSecureTools",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -206,7 +206,7 @@
             "arguments": [
               "ManagedResourcesOnly.dll",
               "EnableCriticalCompilerWarnings",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -254,7 +254,7 @@
             "arguments": [
               "ManagedResourcesOnly.dll",
               "DoNotMarkImportsSectionAsExecutable",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -446,7 +446,7 @@
             "arguments": [
               "ManagedResourcesOnly.dll",
               "EnableSpectreMitigations",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [

@@ -310,7 +310,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 result.Add(Path.Combine(testFilesDirectory, "Managed_x64_VS2015_FSharp.exe.exe"));
             }
 
-            if (metadataConditions.Contains(MetadataConditions.ImageIsILOnlyManagedAssembly))
+            if (metadataConditions.Contains(MetadataConditions.ImageIsILOnlyAssembly))
             {
                 result.Add(Path.Combine(testFilesDirectory, "Managed_x86_VS2013_Wpf.exe"));
                 result.Add(Path.Combine(testFilesDirectory, "Managed_x86_VS2015_FSharp.dll"));
@@ -334,12 +334,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 result.Add(Path.Combine(testFilesDirectory, "Native_x86_VS2013_KernelModeDriver.sys"));
             }
 
-            if (metadataConditions.Contains(MetadataConditions.ImageIsManagedInteropAssembly))
+            if (metadataConditions.Contains(MetadataConditions.ImageIsInteropAssembly))
             {
                 result.Add(Path.Combine(testFilesDirectory, "ManagedInteropAssemblyForAtlTestLibrary.dll"));
             }
 
-            if (metadataConditions.Contains(MetadataConditions.ImageIsManagedResourceOnlyAssembly))
+            if (metadataConditions.Contains(MetadataConditions.ImageIsResourceOnlyAssembly))
             {
                 result.Add(Path.Combine(testFilesDirectory, "ManagedResourcesOnly.dll"));
             }
@@ -549,7 +549,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             HashSet<string> notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsKernelModeBinary,
-                MetadataConditions.ImageIsILOnlyManagedAssembly
+                MetadataConditions.ImageIsILOnlyAssembly
             };
 
             VerifyNotApplicable(new DoNotMarkImportsSectionAsExecutable(), notApplicableTo);
@@ -574,7 +574,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 MetadataConditions.ImageIsNot64BitBinary,
                 MetadataConditions.ImageIsKernelModeBinary,
-                MetadataConditions.ImageIsILOnlyManagedAssembly
+                MetadataConditions.ImageIsILOnlyAssembly
             };
 
             VerifyNotApplicable(new LoadImageAboveFourGigabyteAddress(), notApplicableTo);
@@ -642,10 +642,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MetadataConditions.ImageIsNot64BitBinary,
                 MetadataConditions.ImageIsKernelModeBinary,
                 MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsILOnlyManagedAssembly,
-                MetadataConditions.ImageIsManagedInteropAssembly,
+                MetadataConditions.ImageIsILOnlyAssembly,
+                MetadataConditions.ImageIsInteropAssembly,
                 MetadataConditions.ImageIsPreVersion7WindowsCEBinary,
-                MetadataConditions.ImageIsManagedResourceOnlyAssembly
+                MetadataConditions.ImageIsResourceOnlyAssembly
             };
 
             VerifyNotApplicable(new DoNotShipVulnerableBinaries(), notApplicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
@@ -756,7 +756,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MetadataConditions.ImageIsWixBinary,
                 MetadataConditions.ImageIsResourceOnlyBinary,
                 MetadataConditions.ImageIsDotNetNativeBinary,
-                MetadataConditions.ImageIsILOnlyManagedAssembly
+                MetadataConditions.ImageIsILOnlyAssembly
             };
 
             return notApplicableTo;
@@ -804,7 +804,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIsWixBinary,
                 MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsILOnlyManagedAssembly
+                MetadataConditions.ImageIsILOnlyAssembly
             };
 
             VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), notApplicableTo);
@@ -865,7 +865,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     MetadataConditions.ImageIsWixBinary,
                     MetadataConditions.ImageIsResourceOnlyBinary,
-                    MetadataConditions.ImageIsILOnlyManagedAssembly
+                    MetadataConditions.ImageIsILOnlyAssembly
                 };
 
                 VerifyNotApplicable(new EnableCriticalCompilerWarnings(), notApplicableTo);
@@ -907,7 +907,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MetadataConditions.ImageIsWixBinary,
                 MetadataConditions.ImageIsKernelModeBinary,
                 MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsILOnlyManagedAssembly
+                MetadataConditions.ImageIsILOnlyAssembly
             };
 
             VerifyNotApplicable(new EnableControlFlowGuard(), notApplicableTo, useDefaultPolicy: true);
@@ -950,7 +950,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 MetadataConditions.ImageIsWixBinary,
                 MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsILOnlyManagedAssembly
+                MetadataConditions.ImageIsILOnlyAssembly
             };
 
             VerifyNotApplicable(new BuildWithSecureTools(), notApplicableTo);
@@ -992,7 +992,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             HashSet<string> notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsILOnlyManagedAssembly
+                MetadataConditions.ImageIsILOnlyAssembly
             };
 
             VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), notApplicableTo);

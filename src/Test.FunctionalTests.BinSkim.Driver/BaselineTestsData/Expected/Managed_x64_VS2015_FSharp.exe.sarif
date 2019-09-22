@@ -134,7 +134,7 @@
             "arguments": [
               "Managed_x64_VS2015_FSharp.exe",
               "LoadImageAboveFourGigabyteAddress",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -158,7 +158,7 @@
             "arguments": [
               "Managed_x64_VS2015_FSharp.exe",
               "DoNotIncorporateVulnerableDependencies",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -182,7 +182,7 @@
             "arguments": [
               "Managed_x64_VS2015_FSharp.exe",
               "BuildWithSecureTools",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -206,7 +206,7 @@
             "arguments": [
               "Managed_x64_VS2015_FSharp.exe",
               "EnableCriticalCompilerWarnings",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -230,7 +230,7 @@
             "arguments": [
               "Managed_x64_VS2015_FSharp.exe",
               "EnableControlFlowGuard",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -254,7 +254,7 @@
             "arguments": [
               "Managed_x64_VS2015_FSharp.exe",
               "DoNotMarkImportsSectionAsExecutable",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -278,7 +278,7 @@
             "arguments": [
               "Managed_x64_VS2015_FSharp.exe",
               "EnableStackProtection",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -302,7 +302,7 @@
             "arguments": [
               "Managed_x64_VS2015_FSharp.exe",
               "DoNotModifyStackProtectionCookie",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -326,7 +326,7 @@
             "arguments": [
               "Managed_x64_VS2015_FSharp.exe",
               "InitializeStackProtection",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -350,7 +350,7 @@
             "arguments": [
               "Managed_x64_VS2015_FSharp.exe",
               "DoNotDisableStackProtectionForFunctions",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [
@@ -422,7 +422,7 @@
             "arguments": [
               "Managed_x64_VS2015_FSharp.exe",
               "EnableSpectreMitigations",
-              "image is an IL-only managed assembly"
+              "image is a managed IL-only assembly"
             ]
           },
           "locations": [

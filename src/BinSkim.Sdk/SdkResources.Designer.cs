@@ -151,11 +151,29 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to image is an IL-only managed assembly.
+        ///   Looks up a localized string similar to image is a managed IL library (i.e., ahead of time compiled) assembly.
         /// </summary>
-        internal static string MetadataCondition_ImageIsILOnlyManagedAssembly {
+        internal static string MetadataCondition_ImageIsILLibraryAssembly {
             get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsILOnlyManagedAssembly", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ImageIsILLibraryAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image is a managed IL-only assembly.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsILOnlyAssembly {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsILOnlyAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image is a managed interop assembly.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsInteropAssembly {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsInteropAssembly", resourceCulture);
             }
         }
         
@@ -174,24 +192,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageIsKernelModeBinary {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsKernelModeBinary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to image is a managed interop assembly.
-        /// </summary>
-        internal static string MetadataCondition_ImageIsManagedInteropAssembly {
-            get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsManagedInteropAssembly", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to image is a managed resource-only assembly.
-        /// </summary>
-        internal static string MetadataCondition_ImageIsManagedResourceOnlyAssembly {
-            get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsManagedResourceOnlyAssembly", resourceCulture);
             }
         }
         
@@ -264,6 +264,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageIsPreVersion7WindowsCEBinary {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsPreVersion7WindowsCEBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image is a managed resource-only assembly.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsResourceOnlyAssembly {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsResourceOnlyAssembly", resourceCulture);
             }
         }
         

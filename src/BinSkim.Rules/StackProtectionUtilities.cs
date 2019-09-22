@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
             if (portableExecutable.IsResourceOnly) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyManagedAssembly;
+            reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyAssembly;
             if (portableExecutable.IsILOnly) { return result; }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsXBoxBinary;

@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PE portableExecutable = target.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyManagedAssembly;
+            reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyAssembly;
             if (portableExecutable.IsILOnly) { return result; }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
