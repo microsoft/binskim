@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
@@ -73,6 +74,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             
             reasonForNotAnalyzing = MetadataConditions.ImageIsNotExe;
             if (!portableExecutable.PEHeaders.IsExe) { return result; }
+
+            // A dotnet core entry point dll is itself launched within a process
+            // that will always be configured for high entropy va, if available.
+            reasonForNotAnalyzing = MetadataConditions.ImageIsDotNetEntryPointDll;
+            if (portableExecutable.IsDotNetCore || portableExecutable.IsDotNetStandard) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;

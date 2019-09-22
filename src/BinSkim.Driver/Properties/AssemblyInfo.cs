@@ -9,3 +9,4 @@ using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Test.FunctionalTests.BinSkim.Driver")]
 [assembly: InternalsVisibleTo("Test.FunctionalTests.BinSkim.Rules")]
+[assembly: InternalsVisibleTo("Test.UnitTests.BinSkim.Driver")]

@@ -9,12 +9,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
-using Microsoft.CodeAnalysis.Sarif.Readers;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Readers;
+using Microsoft.CodeAnalysis.Sarif.Writers;
+
 using Newtonsoft.Json;
+
 using Xunit;
 using Xunit.Abstractions;
-using Microsoft.CodeAnalysis.Sarif.Writers;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -96,6 +98,7 @@ namespace Microsoft.CodeAnalysis.IL
             AnalyzeCommand command = new AnalyzeCommand();
             AnalyzeOptions options = new AnalyzeOptions();
 
+            options.Force = true;
             options.Verbose = true;
             options.Recurse = false;
             options.PrettyPrint = true;
@@ -132,13 +135,14 @@ namespace Microsoft.CodeAnalysis.IL
             actualText = Regex.Replace(actualText, @"\s*""fullName""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""semanticVersion""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""sarifLoggerVersion""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""dottedQuadFileVersion""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""Comments""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""CompanyName""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""ProductName""[^\n]+?\n", Environment.NewLine);
 
             actualText = Regex.Replace(actualText, @"\s*""time""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""endTime""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""startTime""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""endTimeUtc""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""startTimeUtc""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""processId""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"      ""id""[^,]+,\s+""tool""", @"      ""tool""", RegexOptions.Multiline);
 

@@ -4,8 +4,11 @@
 using System;
 using System.IO;
 using System.Reflection;
+
 using Dia2Lib;
+
 using FluentAssertions;
+
 using Xunit;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
@@ -23,8 +26,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             dirPath = Path.GetFullPath(dirPath);
             return Path.Combine(dirPath, relativeDirectory);
         }
-
-
+    
         [Fact]
         public void PdbAvailable()
         {

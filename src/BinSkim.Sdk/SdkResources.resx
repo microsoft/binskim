@@ -135,16 +135,16 @@
   <data name="MetadataCondition_ImageIsDotNetNativeBinary" xml:space="preserve">
     <value>image is a binary built by the .NET native toolset</value>
   </data>
-  <data name="MetadataCondition_ImageIsILOnlyManagedAssembly" xml:space="preserve">
-    <value>image is an IL-only managed assembly</value>
+  <data name="MetadataCondition_ImageIsILOnlyAssembly" xml:space="preserve">
+    <value>image is a managed IL-only assembly</value>
   </data>
   <data name="MetadataCondition_ImageIsKernelModeBinary" xml:space="preserve">
     <value>image is a kernel mode binary</value>
   </data>
-  <data name="MetadataCondition_ImageIsManagedInteropAssembly" xml:space="preserve">
+  <data name="MetadataCondition_ImageIsInteropAssembly" xml:space="preserve">
     <value>image is a managed interop assembly</value>
   </data>
-  <data name="MetadataCondition_ImageIsManagedResourceOnlyAssembly" xml:space="preserve">
+  <data name="MetadataCondition_ImageIsResourceOnlyAssembly" xml:space="preserve">
     <value>image is a managed resource-only assembly</value>
   </data>
   <data name="MetadataCondition_ImageIsNot32BitBinary" xml:space="preserve">
@@ -203,5 +203,11 @@
   </data>
   <data name="MetadataCondition_ImageIsWixBinary" xml:space="preserve">
     <value>image appears to be a WiX bootstrapper application</value>
+  </data>
+  <data name="MetadataCondition_ImageIsDotNetEntryPointDll" xml:space="preserve">
+    <value>image is a dotnet entry point dll</value>
+  </data>
+  <data name="MetadataCondition_ImageIsILLibraryAssembly" xml:space="preserve">
+    <value>image is a managed IL library (i.e., ahead of time compiled) assembly</value>
   </data>
 </root>

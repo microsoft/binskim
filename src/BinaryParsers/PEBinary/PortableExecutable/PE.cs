@@ -371,8 +371,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                return PEHeaders.CorHeader != null &&
+                return PEHeaders?.CorHeader != null &&
                        (PEHeaders.CorHeader.Flags & CorFlags.ILOnly) == CorFlags.ILOnly;
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the PE is a partially or completed 'ahead of time' compiled assembly
+        /// </summary>
+        public bool IsILLibrary
+        {
+            get
+            {
+                return PEHeaders?.CorHeader != null &&
+                       (PEHeaders.CorHeader.Flags & CorFlags.ILLibrary) == CorFlags.ILLibrary;
             }
         }
 
@@ -383,7 +395,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                return PEHeaders.CorHeader != null &&
+                return PEHeaders?.CorHeader != null &&
                        (PEHeaders.CorHeader.Flags & CorFlags.ILOnly) == 0;
             }
         }
@@ -463,7 +475,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 if (_isManagedResourceOnly != null)
                 {
-                    return (bool)_isManagedResourceOnly;
+                    return _isManagedResourceOnly.Value;
                 }
 
                 if (!IsILOnly)
@@ -475,6 +487,79 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 _isManagedResourceOnly = _metadataReader.MethodDefinitions.Count == 0;
                 return _isManagedResourceOnly.Value;
             }
+        }
+
+        private ManagedPlatform _managedPlatform;
+
+        public bool IsDotNetCore
+        {
+            get
+            {
+                if (IsManaged && _managedPlatform == ManagedPlatform.Unknown)
+                {
+                    _managedPlatform = ComputeIsDotNetCore(_metadataReader);
+                }
+                return _managedPlatform == ManagedPlatform.DotNetCore;
+            }
+        }
+
+        public bool IsDotNetStandard
+        {
+            get
+            {
+                if (IsManaged && _managedPlatform == ManagedPlatform.Unknown)
+                {
+                    _managedPlatform = ComputeIsDotNetCore(_metadataReader);
+                }
+                return _managedPlatform == ManagedPlatform.DotNetStandard;
+            }
+        }
+
+        public bool IsDotNetFramework
+        {
+            get
+            {
+                if (IsManaged && _managedPlatform == ManagedPlatform.Unknown)
+                {
+                    _managedPlatform = ComputeIsDotNetCore(_metadataReader);
+                }
+                return _managedPlatform == ManagedPlatform.DotNetFramework;
+            }
+        }
+
+        internal static ManagedPlatform ComputeIsDotNetCore(MetadataReader metadataReader)
+        {
+            foreach (AssemblyReferenceHandle handle in metadataReader.AssemblyReferences)
+            {
+                AssemblyReference assemblyReference = metadataReader.GetAssemblyReference(handle);
+                StringHandle stringHandle = assemblyReference.Name;
+                string assemblyName = metadataReader.GetString(stringHandle);
+
+                switch (assemblyName)
+                {
+                    case "mscorlib":
+                    {
+                        return ManagedPlatform.DotNetFramework;
+                    }
+                     
+                    case "System.Runtime":
+                    {
+                        return ManagedPlatform.DotNetCore;
+                    }
+
+                    case "netstandard":
+                    {
+                        return ManagedPlatform.DotNetStandard;
+                    }
+
+                    default:
+                    {
+                        break;
+                    }
+                }
+            }
+
+            throw new InvalidOperationException("Could not identify managed platform.");
         }
 
         /// <summary>

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
+  <Import Project="..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" />
+  <PropertyGroup>
+    <RootNamespace>Microsoft.CodeAnalysis.BinSkim.Rules</RootNamespace>
+    <TargetFramework>$(NetCoreVersion)</TargetFramework>
+    <OutputType>Library</OutputType>
+    <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="4.19.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
+    <ProjectReference Include="..\BinSkim.Driver\BinSkim.Driver.csproj" />
+    <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Sarif">
+      <HintPath>..\..\refs\Sarif.dll</HintPath>
+    </Reference>
+    <Reference Include="Sarif.Driver">
+      <HintPath>..\..\refs\Sarif.Driver.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

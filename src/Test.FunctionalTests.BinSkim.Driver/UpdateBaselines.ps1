@@ -33,8 +33,8 @@ function Build-Baselines($sourceExtension)
 
         # Actually run the tool
         Remove-Item $outputTemp -ErrorAction SilentlyContinue
-        Write-Host "$utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default --quiet"
-        &           $utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default --quiet
+        Write-Host "$utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default --quiet --sarif-output-version Current"
+        &           $utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default --quiet --sarif-output-version Current
 
         # Replace repository root absolute path with Z:\ for machine and enlistment independence
         $text = [IO.File]::ReadAllText($outputTemp)
@@ -46,8 +46,8 @@ function Build-Baselines($sourceExtension)
 
         # Remove log file details that change on every tool run
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"time`"[^\n]+?\n", [Environment]::Newline)
-        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"startTime`"[^\n]+?\n", [Environment]::Newline)
-        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"endTime`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"startTimeUtc`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"endTimeUtc`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"processId`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "      `"id`"[^,]+,\s+`"tool`"", "      `"tool`"", [Text.RegularExpressions.RegexOptions]::Singleline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "`"name`": `"BinSkim`"", "`"name`": `"testhost`"")

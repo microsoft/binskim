@@ -1,53 +1,56 @@
 ﻿{
-  "$schema": "http://json.schemastore.org/sarif-2.0.0",
-  "version": "2.0.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.4.json",
+  "version": "2.1.0",
   "runs": [
     {
-      "tool": {
-        "name": "testhost",
-        "version": "15.0.0.0",
-        "language": "en-US",
-        "properties": {
-        }
-      },
       "results": [],
-      "files": {
-        "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe": {
-          "mimeType": "application/octet-stream",
-          "hashes": [
-            {
-              "value": "992F5D2554195F9F19B9480A0E11AC78",
-              "algorithm": "md5"
-            },
-            {
-              "value": "A88412258FFEAC619F3FD960AD9A48AC2F29CBAE",
-              "algorithm": "sha-1"
-            },
-            {
-              "value": "9F92EDE722DC8740BFDF02CD199090B249BFBBF268DE3CD541FE9400A5652166",
-              "algorithm": "sha-256"
-            }
-          ]
+      "tool": {
+        "driver": {
+          "name": "testhost",
+          "version": "15.0.0.0",
+          "properties": {
+          }
         }
       },
       "invocations": [
         {
-          "configurationNotifications": [
+          "toolConfigurationNotifications": [
             {
-              "id": "ERR997.ExceptionLoadingAnalysisTarget",
-              "physicalLocation": {
-                "fileLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
+                    }
+                  }
                 }
-              },
+              ],
               "message": {
                 "text": "Could not load analysis target 'Corrupted_Native_x86_VS2013_Default.exe'. (Image is either too small or contains an invalid byte offset or count.)"
               },
-              "level": "error"
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingAnalysisTarget"
+              }
             }
-          ]
+          ],
+          "executionSuccessful": false
         }
-      ]
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe",
+            "index": 0
+          },
+          "hashes": {
+            "md5": "992F5D2554195F9F19B9480A0E11AC78",
+            "sha-1": "A88412258FFEAC619F3FD960AD9A48AC2F29CBAE",
+            "sha-256": "9F92EDE722DC8740BFDF02CD199090B249BFBBF268DE3CD541FE9400A5652166"
+          }
+        }
+      ],
+      "columnKind": "utf16CodeUnits"
     }
   ]
 }
