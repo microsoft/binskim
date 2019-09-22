@@ -27,11 +27,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     ExaminePEMetadata(file, sb);
                 }
             }
+
+            sb.Length.Should().Be(0, because: sb.ToString());
         }
 
         private void ExaminePEMetadata(string file, StringBuilder sb)
         {
-            Console.WriteLine(file);
+            var pe = new PE(file);
+
+            bool isNative = file.Contains("Native");
+            
+            if (isNative)
+            {
+                bool isManaged = (pe.IsDotNetCore & pe.IsDotNetCore & pe.IsDotNetFramework & pe.IsDotNetStandard &
+                pe.IsILLibrary & pe.IsILOnly & pe.IsMixedMode & pe.IsManaged & pe.IsManagedResourceOnly);
+
+                if (isManaged)
+                {
+                    sb.Append("Binary was unexpectedly evaluated as both native and managed: " + file);
+                }
+            }            
         }
     }
 }

@@ -42,6 +42,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (portableExecutable.IsWixBinary) { return result; }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsILLibraryAssembly;
+            if (portableExecutable.IsILLibrary) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;

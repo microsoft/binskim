@@ -9,13 +9,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
-using Microsoft.CodeAnalysis.Sarif.Readers;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Readers;
+using Microsoft.CodeAnalysis.Sarif.Writers;
+
 using Newtonsoft.Json;
+
 using Xunit;
 using Xunit.Abstractions;
-using Microsoft.CodeAnalysis.Sarif.Writers;
-using Test.FunctionalTests.BinSkim.Driver;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -93,8 +94,6 @@ namespace Microsoft.CodeAnalysis.IL
 
             string expectedFileName = Path.Combine(expectedDirectory, fileName + ".sarif");
             string actualFileName = Path.Combine(actualDirectory, fileName + ".sarif");
-
-            //new TestDeterminismVisitor().Visit()
 
             AnalyzeCommand command = new AnalyzeCommand();
             AnalyzeOptions options = new AnalyzeOptions();

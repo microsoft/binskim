@@ -371,8 +371,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                return PEHeaders.CorHeader != null &&
+                return PEHeaders?.CorHeader != null &&
                        (PEHeaders.CorHeader.Flags & CorFlags.ILOnly) == CorFlags.ILOnly;
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the PE is a partially or completed 'ahead of time' compiled assembly
+        /// </summary>
+        public bool IsILLibrary
+        {
+            get
+            {
+                return PEHeaders?.CorHeader != null &&
+                       (PEHeaders.CorHeader.Flags & CorFlags.ILLibrary) == CorFlags.ILLibrary;
             }
         }
 
@@ -383,7 +395,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                return PEHeaders.CorHeader != null &&
+                return PEHeaders?.CorHeader != null &&
                        (PEHeaders.CorHeader.Flags & CorFlags.ILOnly) == 0;
             }
         }
@@ -463,7 +475,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 if (_isManagedResourceOnly != null)
                 {
-                    return (bool)_isManagedResourceOnly;
+                    return _isManagedResourceOnly.Value;
                 }
 
                 if (!IsILOnly)
