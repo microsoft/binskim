@@ -1315,8 +1315,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.execstack",
-            "index": 0
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.execstack"
           },
           "hashes": {
             "md5": "582FA8D20CEADBEB96B46CDCBDBB4BCD",

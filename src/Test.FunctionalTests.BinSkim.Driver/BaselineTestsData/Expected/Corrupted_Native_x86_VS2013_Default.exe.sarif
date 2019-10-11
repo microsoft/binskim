@@ -40,8 +40,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe",
-            "index": 0
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
           },
           "hashes": {
             "md5": "992F5D2554195F9F19B9480A0E11AC78",

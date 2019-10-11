@@ -1317,8 +1317,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.fortified",
-            "index": 0
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.fortified"
           },
           "hashes": {
             "md5": "C126E6DD12BE72445D405FB084838A98",
