@@ -43,8 +43,7 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 Pdb.SymbolPath = analyzeOptions.SymbolsPath;
             }
-            _plugInFilePaths = analyzeOptions.PluginFilePaths;
-           
+            _plugInFilePaths = analyzeOptions.PluginFilePaths;           
         }
 
         public override int Run(AnalyzeOptions analyzeOptions)
@@ -68,11 +67,6 @@ namespace Microsoft.CodeAnalysis.IL
             return analyzeOptions.RichReturnCode 
                 ? (int)((uint)result & ~(uint)RuntimeConditions.RuleNotApplicableToTarget) 
                 : result;
-        }
-
-        protected override void AnalyzeTarget(IEnumerable<Skimmer<BinaryAnalyzerContext>> skimmers, BinaryAnalyzerContext context, HashSet<string> disabledSkimmers)
-        {
-            base.AnalyzeTarget(skimmers, context, disabledSkimmers);
         }
 
         internal static SarifVersion s_UnitTestOutputVersion = SarifVersion.Unknown;

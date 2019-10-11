@@ -40,8 +40,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.stack_protector.a",
-            "index": 0
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.stack_protector.a"
           },
           "hashes": {
             "md5": "2400EE99A6BB7B792A67A03A59385018",
