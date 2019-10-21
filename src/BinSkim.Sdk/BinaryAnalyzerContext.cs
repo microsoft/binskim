@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             get
             {
-                _iBinary = _iBinary ?? BinaryTargetManager.GetBinaryFromFile(_uri);
+                _iBinary = _iBinary ?? BinaryTargetManager.GetBinaryFromFile(_uri, SymbolPath);
                 return _iBinary;
             }
             set
@@ -52,6 +52,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 _uri = value;
             }
         }
+
+        public string SymbolPath { get; set; }
 
         public IAnalysisLogger Logger { get; set; }
 

@@ -35,15 +35,12 @@ namespace Microsoft.CodeAnalysis.IL
 
         private IEnumerable<string> _plugInFilePaths;
 
-        protected override void InitializeConfiguration(AnalyzeOptions analyzeOptions, BinaryAnalyzerContext context)
+        protected override BinaryAnalyzerContext CreateContext(AnalyzeOptions options, IAnalysisLogger logger, RuntimeConditions runtimeErrors, string filePath = null)
         {
-            base.InitializeConfiguration(analyzeOptions, context);
-
-            if (!string.IsNullOrEmpty(analyzeOptions.SymbolsPath))
-            {
-                Pdb.SymbolPath = analyzeOptions.SymbolsPath;
-            }
-            _plugInFilePaths = analyzeOptions.PluginFilePaths;           
+            BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, filePath);
+            binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
+            _plugInFilePaths = options.PluginFilePaths;
+            return binaryAnalyzerContext;
         }
 
         public override int Run(AnalyzeOptions analyzeOptions)
