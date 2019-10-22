@@ -221,7 +221,7 @@
           ]
         },
         {
-          "ruleId": "BA2002",
+          "ruleId": "BA2005",
           "ruleIndex": 9,
           "kind": "pass",
           "level": "none",
@@ -243,7 +243,7 @@
           ]
         },
         {
-          "ruleId": "BA2005",
+          "ruleId": "BA2009",
           "ruleIndex": 10,
           "kind": "pass",
           "level": "none",
@@ -265,98 +265,8 @@
           ]
         },
         {
-          "ruleId": "BA2006",
-          "ruleIndex": 11,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_ARM_VS2015_DefaultBlankApp.exe",
-              "17.0.65501.17013"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2007",
-          "ruleIndex": 12,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_ARM_VS2015_DefaultBlankApp.exe",
-              "2147483647"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
-          "ruleIndex": 13,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA2010",
-          "ruleIndex": 14,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2011",
-          "ruleIndex": 15,
+          "ruleIndex": 11,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -378,7 +288,7 @@
         },
         {
           "ruleId": "BA2012",
-          "ruleIndex": 16,
+          "ruleIndex": 12,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -399,52 +309,8 @@
           ]
         },
         {
-          "ruleId": "BA2013",
-          "ruleIndex": 17,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_FeatureNotEnabled",
-            "arguments": [
-              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2014",
-          "ruleIndex": 18,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA2016",
-          "ruleIndex": 19,
+          "ruleIndex": 13,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -466,7 +332,7 @@
         },
         {
           "ruleId": "BA2019",
-          "ruleIndex": 20,
+          "ruleIndex": 14,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -488,7 +354,7 @@
         },
         {
           "ruleId": "BA2021",
-          "ruleIndex": 21,
+          "ruleIndex": 15,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -510,7 +376,7 @@
         },
         {
           "ruleId": "BA2022",
-          "ruleIndex": 22,
+          "ruleIndex": 16,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -519,28 +385,6 @@
               "Uwp_ARM_VS2015_DefaultBlankApp.exe",
               "SignSecurely",
               "image is not signed "
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2024",
-          "ruleIndex": 23,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
             ]
           },
           "locations": [
@@ -822,34 +666,6 @@
               "name": "UseCheckedFunctionsWithGcc"
             },
             {
-              "id": "BA2002",
-              "fullDescription": {
-                "text": "Binaries should not take dependencies on code with known security vulnerabilities."
-              },
-              "helpUri": "https://github.com/microsoft/binskim",
-              "help": {
-                "text": "Binaries should not take dependencies on code with known security vulnerabilities."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' does not incorporate any known vulnerable dependencies, as configured by current policy."
-                },
-                "Error": {
-                  "text": "'{0}' was built with a version of {1} which is subject to the following issues: {2}. To resolve this, {3}. The source files that triggered this were: {4}"
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "shortDescription": {
-                "text": "Binaries should not take dependencies on code with known security vulnerabilities."
-              },
-              "name": "DoNotIncorporateVulnerableDependencies",
-              "properties": {
-                "equivalentBinScopeRuleReadableName": "ATLVersionCheck"
-              }
-            },
-            {
               "id": "BA2005",
               "fullDescription": {
                 "text": "Do not ship obsolete libraries for which there are known security vulnerabilities."
@@ -878,71 +694,6 @@
               "name": "DoNotShipVulnerableBinaries",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "BinaryVersionsCheck"
-              }
-            },
-            {
-              "id": "BA2006",
-              "fullDescription": {
-                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks."
-              },
-              "helpUri": "https://github.com/microsoft/binskim",
-              "help": {
-                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks."
-              },
-              "messageStrings": {
-                "Error": {
-                  "text": "'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}). More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning. Modules built outside of policy: \r\n{2}"
-                },
-                "Error_BadModule": {
-                  "text": "built with {0} compiler version {1} (Front end version {2})"
-                },
-                "Pass": {
-                  "text": "All linked modules of '{0}' generated by the Microsoft front-end satisfy configured policy (compiler minimum version {1})."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "shortDescription": {
-                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features."
-              },
-              "name": "BuildWithSecureTools",
-              "properties": {
-                "equivalentBinScopeRuleReadableName": "CompilerVersionCheck"
-              }
-            },
-            {
-              "id": "BA2007",
-              "fullDescription": {
-                "text": "Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted."
-              },
-              "helpUri": "https://github.com/microsoft/binskim",
-              "help": {
-                "text": "Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' was compiled at a secure warning level ({1}) and does not include any modules that disable specific warnings that are required by policy. As a result, it is less likely that memory corruption, information disclosure, double-free and other security-related vulnerabilities exist in code."
-                },
-                "Error_WarningsDisabled": {
-                  "text": "'{0}' disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation. An example compiler command line triggering this check was: {1}\r\nModules triggering this check were:\r\n{2}"
-                },
-                "Error_InsufficientWarningLevel": {
-                  "text": "'{0}' was compiled at too low a warning level (effective warning level {1} for one or more modules). Warning level 3 enables important static analysis in the compiler to flag bugs that can lead to memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted. An example compiler command line triggering this check: {2}\r\nModules triggering this check: {3}"
-                },
-                "Error_UnknownModuleLanguage": {
-                  "text": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the compiler warning settings. The language could not be identified for the following modules: {1}"
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "shortDescription": {
-                "text": "Binaries should be compiled with a warning level that enables all critical security-relevant checks."
-              },
-              "name": "EnableCriticalCompilerWarnings",
-              "properties": {
-                "equivalentBinScopeRuleReadableName": "CompilerWarningsCheck"
               }
             },
             {
@@ -1008,37 +759,6 @@
               }
             },
             {
-              "id": "BA2011",
-              "fullDescription": {
-                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line."
-              },
-              "helpUri": "https://github.com/microsoft/binskim",
-              "help": {
-                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled for all modules, making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities. "
-                },
-                "Error": {
-                  "text": "'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}"
-                },
-                "Error_UnknownModuleLanguage": {
-                  "text": "'{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "shortDescription": {
-                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities."
-              },
-              "name": "EnableStackProtection",
-              "properties": {
-                "equivalentBinScopeRuleReadableName": "GSCheck"
-              }
-            },
-            {
               "id": "BA2012",
               "fullDescription": {
                 "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
@@ -1073,68 +793,6 @@
               "name": "DoNotModifyStackProtectionCookie",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
-              }
-            },
-            {
-              "id": "BA2013",
-              "fullDescription": {
-                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
-              },
-              "helpUri": "https://github.com/microsoft/binskim",
-              "help": {
-                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' is a C or C++ binary built with the buffer security feature that properly initializes the stack protecter. This has the effect of increasing the effectiveness of the feature and reducing spurious detections."
-                },
-                "Pass_NoCode": {
-                  "text": "'{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code."
-                },
-                "NotApplicable_FeatureNotEnabled": {
-                  "text": "'{0}' is a C or C++ binary that does not enable the stack protection buffer security feature. It is therefore not required to initialize the stack protector."
-                },
-                "Error": {
-                  "text": "'{0}' is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "shortDescription": {
-                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities."
-              },
-              "name": "InitializeStackProtection",
-              "properties": {
-                "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
-              }
-            },
-            {
-              "id": "BA2014",
-              "fullDescription": {
-                "text": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
-              },
-              "helpUri": "https://github.com/microsoft/binskim",
-              "help": {
-                "text": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' is a C or C++ binary built with the stack protector buffer security feature enabled which does not disable protection for any individual functions (via __declspec(safebuffers), making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities."
-                },
-                "Error": {
-                  "text": "'{0}' is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "shortDescription": {
-                "text": "Application code should not disable stack protection for individual functions."
-              },
-              "name": "DoNotDisableStackProtectionForFunctions",
-              "properties": {
-                "equivalentBinScopeRuleReadableName": "GSFunctionSafeBuffersCheck"
               }
             },
             {
@@ -1254,40 +912,6 @@
                 "text": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms."
               },
               "name": "SignSecurely"
-            },
-            {
-              "id": "BA2024",
-              "fullDescription": {
-                "text": "Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it."
-              },
-              "helpUri": "https://github.com/microsoft/binskim",
-              "help": {
-                "text": "Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it."
-              },
-              "messageStrings": {
-                "Warning": {
-                  "text": "'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request. The following modules are out of policy:\r\n{1}"
-                },
-                "Warning_OptimizationsDisabled": {
-                  "text": "The following modules were compiled with optimizations disabled (/Od), a condition that disables Spectre mitigations:\r\n{0}"
-                },
-                "Warning_SpectreMitigationNotEnabled": {
-                  "text": "The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:\r\n{0}"
-                },
-                "Warning_SpectreMitigationExplicitlyDisabled": {
-                  "text": "The following modules were compiled with Spectre mitigations explicitly disabled:\r\n{0}"
-                },
-                "Pass": {
-                  "text": "All linked modules '{0}' were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "shortDescription": {
-                "text": "Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it."
-              },
-              "name": "EnableSpectreMitigations"
             }
           ],
           "properties": {
@@ -1296,7 +920,156 @@
       },
       "invocations": [
         {
-          "executionSuccessful": true
+          "toolConfigurationNotifications": [
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              },
+              "associatedRule": {
+                "id": "BA2002"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              },
+              "associatedRule": {
+                "id": "BA2006"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              },
+              "associatedRule": {
+                "id": "BA2007"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              },
+              "associatedRule": {
+                "id": "BA2011"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              },
+              "associatedRule": {
+                "id": "BA2013"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              },
+              "associatedRule": {
+                "id": "BA2014"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              },
+              "associatedRule": {
+                "id": "BA2024"
+              }
+            }
+          ],
+          "executionSuccessful": false
         }
       ],
       "artifacts": [

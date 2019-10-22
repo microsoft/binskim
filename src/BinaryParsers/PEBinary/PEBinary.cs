@@ -14,14 +14,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     {
         private Lazy<Pdb> _pdb;
         private string _symbolPath;
+        private string _localSymbolDirectories;
 
-        public PEBinary(Uri uri, string symbolPath = null) : base(uri)
+        public PEBinary(Uri uri, string symbolPath = null, string localSymbolDirectories = null) : base(uri)
         {
             PE = new PE(TargetUri.LocalPath);
             IsManagedAssembly = PE.IsManaged;
             LoadException = PE.LoadException;
             Valid = PE.IsPEFile;
             _symbolPath = symbolPath;
+            _localSymbolDirectories = localSymbolDirectories;
 
             _pdb = new Lazy<Pdb>(LoadPdb, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
         }
@@ -36,7 +38,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             Pdb pdb = null;
             try
             {
-                pdb = new Pdb(PE.FileName, _symbolPath);
+                pdb = new Pdb(PE.FileName, _symbolPath, _localSymbolDirectories);
             }
             catch (PdbParseException ex)
             {
