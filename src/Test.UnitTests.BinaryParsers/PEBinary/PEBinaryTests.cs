@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [Fact]
         public void PdbAvailable()
         {
-            string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x64_VS2013_Default.pdb");
+            string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x64_VS2013_Default.dll");
             PEBinary peBinary = new PEBinary(new Uri(fileName));
             peBinary.Pdb.Should().NotBeNull();
             peBinary.StrippedPdb.Should().BeNull();

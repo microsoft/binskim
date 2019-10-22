@@ -39,6 +39,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, filePath);
             binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
+            binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
             _plugInFilePaths = options.PluginFilePaths;
             return binaryAnalyzerContext;
         }

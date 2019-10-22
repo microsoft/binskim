@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             get
             {
-                _iBinary = _iBinary ?? BinaryTargetManager.GetBinaryFromFile(_uri, SymbolPath);
+                _iBinary = _iBinary ?? BinaryTargetManager.GetBinaryFromFile(_uri, SymbolPath, LocalSymbolDirectories);
                 return _iBinary;
             }
             set
@@ -36,6 +36,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             get { return Binary != null && Binary.Valid; }
             set { throw new InvalidOperationException(); }
         }
+
+        public string LocalSymbolDirectories { get; set; }
 
         public Uri TargetUri
         {

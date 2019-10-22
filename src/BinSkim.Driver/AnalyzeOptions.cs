@@ -18,5 +18,11 @@ namespace Microsoft.CodeAnalysis.IL
                         "Note that BinSkim will clear the _NT_SYMBOL_PATH environment variable at runtime. Use this argument for symbol " +
                         "information instead.")]
         public string SymbolsPath { get; internal set; }
+
+
+        [Option(
+            "local-symbol-directories",
+            HelpText = "A set of semicolon-delimited local directory paths that will be examined when attempting to locate PDBs.")]
+        public string LocalSymbolDirectories { get; internal set; }
     }
 }

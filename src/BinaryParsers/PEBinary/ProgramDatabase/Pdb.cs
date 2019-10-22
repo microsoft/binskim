@@ -2,8 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Dia2Lib;
@@ -16,71 +18,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     /// </summary>
     public sealed class Pdb : IDisposable
     {
-        private static string s_symbolPath;       // The default symbol path, used by the property
-        public static readonly string PublicSymbolServerPath = "SRV*http://msdl.microsoft.com/download/symbols";
-        public static readonly string PrivateSymbolServerPath = "SRV*http://symweb";
         private IDiaSession _session;
         private readonly Lazy<Symbol> _globalScope;
 
         /// <summary>
-        /// Load debug info for the PE image or the PDB
-        /// </summary>
-        /// <param name="peOrPdbPath">Path to a binary or a PDB file</param>
-        public Pdb(string peOrPdbPath)
-            : this(peOrPdbPath, SymbolPath)
-        {
-        }
-
-        /// <summary>
         /// Load debug info fr PE or PDB, using symbolPath to help find symbols
         /// </summary>
-        /// <param name="peOrPdbPath"></param>
-        /// <param name="symbolPath"></param>
-        public Pdb(string peOrPdbPath, string symbolPath)
+        /// <param name="pePath">The path to the portable executable.</param>
+        /// <param name="localSymbolDirectories">An option collection of local directories that should be examined for PDBs.</param>
+        /// <param name="symbolPath">The symsrv.dll symbol path.</param>
+        public Pdb(string pePath, string symbolPath = null, string localSymbolDirectories = null)
         {
             _globalScope = new Lazy<Symbol>(GetGlobalScope, LazyThreadSafetyMode.ExecutionAndPublication);
             _writableSegmentIds = new Lazy<HashSet<uint>>(GenerateWritableSegmentSet);
             _executableSectionContribCompilandIds = new Lazy<HashSet<uint>>(GenerateExecutableSectionContribIds);
-            Init(peOrPdbPath, symbolPath);
-        }
-
-        /// <summary>
-        /// The default symbol path for all instances of this class
-        /// </summary>
-        public static string SymbolPath
-        {
-            get
-            {
-                return s_symbolPath;
-            }
-            set
-            {
-                s_symbolPath = value;
-            }
-        }
-
-        /// <summary>Calculates the symbol path.</summary>
-        /// <param name="userSpecification">
-        /// The user specification for the symbol path. May be null if the user has provided no explicit
-        /// value.
-        /// </param>
-        /// <param name="fallback">The fallback path. Typically <see cref="PublicSymbolServerPath"/>.</param>
-        /// <returns>The calculated symbol path.</returns>
-        public static string CalculateSymbolPath(string fallback)
-        {
-            string ntSymbolPath = Environment.GetEnvironmentVariable("_NT_SYMBOL_PATH");
-            if (ntSymbolPath != null)
-            {
-                return ntSymbolPath;
-            }
-
-            return fallback;
-        }
-
-        /// <summary>Resets the symbol path to the default value.</summary>
-        public static void ResetSymbolPath()
-        {
-            s_symbolPath = null;
+            Init(pePath, symbolPath, localSymbolDirectories);
         }
 
         /// <summary>
@@ -88,12 +40,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// </summary>
         /// <param name="peOrPdbPath"></param>
         /// <param name="symbolPath"></param>
-        private void Init(string peOrPdbPath, string symbolPath)
+        private void Init(string peOrPdbPath, string symbolPath, string localSymbolDirectories)
         {
             try
             {
                 PlatformSpecificHelpers.ThrowIfNotOnWindows();
-                WindowsNativeLoadPdbUsingDia(peOrPdbPath, symbolPath);
+                WindowsNativeLoadPdbUsingDia(peOrPdbPath, symbolPath, localSymbolDirectories);
             }
             catch (PlatformNotSupportedException ex)
             {
@@ -105,23 +57,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
         }
 
-        private void WindowsNativeLoadPdbUsingDia(string pePath, string symbolPath)
+        private void WindowsNativeLoadPdbUsingDia(string pePath, string symbolPath, string localSymbolDirectories)
         {
             IDiaDataSource diaSource = null;
             Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
+            Environment.SetEnvironmentVariable("_NT_ALT_SYMBOL_PATH", "");
 
-            string pdbPath = Path.ChangeExtension(pePath, ".pdb");
-            if (File.Exists(pdbPath))
+            string peDirectory = Path.GetDirectoryName(pePath);
+            string pdbName = Path.GetFileNameWithoutExtension(pePath) + ".pdb";
+
+            try
             {
-                try
-                {
-                    diaSource = MsdiaComWrapper.GetDiaSource();
-                    diaSource.loadDataFromPdb(pdbPath);
-                }
-                catch
-                {
-                    diaSource = null;
-                }
+                diaSource = MsdiaComWrapper.GetDiaSource();
+                diaSource.loadDataForExe(pePath, localSymbolDirectories, IntPtr.Zero);
+            }
+            catch
+            {
+                diaSource = null;
             }
 
             if (diaSource == null)
