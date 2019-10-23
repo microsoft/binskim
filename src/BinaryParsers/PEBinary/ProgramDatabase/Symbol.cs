@@ -48,6 +48,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
         }
 
+        /// <summary>Retrieves the symbol's guid.</summary>
+        /// <value>The symbol's guid.</value>
+        public Guid Guid
+        {
+            get
+            {
+                return _sym.guid;
+            }
+        }
+
         /// <summary>Gets the symbol's name.</summary>
         /// <value>The symbol's name.</value>
         public string Name
