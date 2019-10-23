@@ -273,20 +273,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
         private static IntegerSet BuildRequiredCompilerWarningsSet()
         {
-            var result = new IntegerSet();
-            result.Add(4018);
-            result.Add(4146);
-            result.Add(4244);
-            result.Add(4267);
-            result.Add(4302);
-            result.Add(4308);
-            result.Add(4509);
-            result.Add(4532);
-            result.Add(4533);
-            result.Add(4700);
-            result.Add(4789);
-            result.Add(4995);
-            result.Add(4996);
+            var result = new IntegerSet
+            {
+                4018,
+                4146,
+                4244,
+                4267,
+                4302,
+                4308,
+                4509,
+                4532,
+                4533,
+                4700,
+                4789,
+                4995,
+                4996
+            };
             return result;
         }
     }

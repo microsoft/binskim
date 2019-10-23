@@ -31,44 +31,56 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public void PEBinary_PdbAvailable()
         {
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x64_VS2013_Default.dll");
-            PEBinary peBinary = new PEBinary(new Uri(fileName));
-            peBinary.Pdb.Should().NotBeNull();
-            peBinary.StrippedPdb.Should().BeNull();
-            peBinary.PdbParseException.Should().BeNull();
+            using (PEBinary peBinary = new PEBinary(new Uri(fileName)))
+            {
+                peBinary.Pdb.Should().NotBeNull();
+                peBinary.StrippedPdb.Should().BeNull();
+                peBinary.PdbParseException.Should().BeNull();
+            }
         }
 
         [Fact]
         public void PEBinary_NoPdbAvailable()
         {
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x86_VS2013_PdbMissing.exe");
-            PEBinary peBinary = new PEBinary(new Uri(fileName));
-            peBinary.Pdb.Should().BeNull();
-            peBinary.StrippedPdb.Should().BeNull();
-            peBinary.PdbParseException.Should().NotBeNull();
+            using (PEBinary peBinary = new PEBinary(new Uri(fileName)))
+            {
+                peBinary.Pdb.Should().BeNull();
+                peBinary.StrippedPdb.Should().BeNull();
+                peBinary.PdbParseException.Should().NotBeNull();
+            }
         }
 
         [Fact]
         public void PEBinary_PdbIsStripped()
         {
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x86_VS2017_15.5.4_PdbStripped.dll");
-            PEBinary peBinary = new PEBinary(new Uri(fileName));
-            peBinary.Pdb.Should().BeNull();
-            peBinary.StrippedPdb.Should().NotBeNull();
-            peBinary.PdbParseException.Should().NotBeNull();
+            using (PEBinary peBinary = new PEBinary(new Uri(fileName)))
+            {
+                peBinary.Pdb.Should().BeNull();
+                peBinary.StrippedPdb.Should().NotBeNull();
+                peBinary.PdbParseException.Should().NotBeNull();
+            }
         }
 
         [Fact]
         public void PEBinary_IsWixBinary()
         {
+            PEBinary peBinary;
+
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
-            PEBinary peBinary = new PEBinary(new Uri(fileName));
-            peBinary.Pdb.Should().BeNull();
-            peBinary.PE.IsWixBinary.Should().BeTrue();
+            using (peBinary = new PEBinary(new Uri(fileName)))
+            {
+                peBinary.Pdb.Should().BeNull();
+                peBinary.PE.IsWixBinary.Should().BeTrue();
+            }
 
             // Verify a random other exe to ensure it is properly reporting as not a WIX bootstrapper
             fileName = Path.Combine(BaselineTestsDataDirectory, "MixedMode_x64_VS2015_Default.exe");
-            peBinary = new PEBinary(new Uri(fileName));
-            peBinary.PE.IsWixBinary.Should().BeFalse();
+            using (peBinary = new PEBinary(new Uri(fileName)))
+            { 
+                peBinary.PE.IsWixBinary.Should().BeFalse();
+            }
         }
 
         [Fact]
@@ -82,13 +94,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public void PEBinary_CanRecognizeDotNetBootstrappingExe()
         {
             string fileName = Path.Combine(BaselineTestsDataDirectory, "DotNetCore_win-x64_VS2019_Default.exe");
-            PEBinary peBinary = new PEBinary(new Uri(fileName));
-            peBinary.PE.IsDotNetCoreBootstrapExe.Should().BeTrue();
+            PEBinary peBinary;
+            using (peBinary = new PEBinary(new Uri(fileName)))
+            {
+                peBinary.PE.IsDotNetCoreBootstrapExe.Should().BeTrue();
+            }
 
             // Verify a random other exe to ensure it is properly reporting as not a .NET Core bootstrapper
             fileName = Path.Combine(BaselineTestsDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
-            peBinary = new PEBinary(new Uri(fileName));
-            peBinary.PE.IsDotNetCoreBootstrapExe.Should().BeFalse();
+            using (peBinary = new PEBinary(new Uri(fileName)))
+            {
+                peBinary.PE.IsDotNetCoreBootstrapExe.Should().BeFalse();
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public abstract class BinarySkimmer : Skimmer<BinaryAnalyzerContext>
     {
-        private static Uri s_helpUri = new Uri("https://github.com/microsoft/binskim");
+        private static readonly Uri s_helpUri = new Uri("https://github.com/microsoft/binskim");
 
         public override Uri HelpUri { get { return s_helpUri; } }
 

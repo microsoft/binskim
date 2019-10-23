@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         // This list comes from listing all of the functions available in glibc (using readelf), 
         // then filtering to ones with a checked variant (_*_chk).
-        private static string[] fortifiableFunctionNames = new string[]{
+        private static readonly string[] fortifiableFunctionNames = new string[]{
             "asprintf",
             "confstr",
             "dprintf",
@@ -91,10 +91,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             "wprintf"
         };
 
-        private static HashSet<string> unfortifiedFunctions =
+        private static readonly HashSet<string> unfortifiedFunctions =
             new HashSet<string>(fortifiableFunctionNames);
 
-        private static HashSet<string> fortifiedFunctions =
+        private static readonly HashSet<string> fortifiedFunctions =
             new HashSet<string>(fortifiableFunctionNames.Select(f => "__" + f + "_chk"));
 
         /// <summary>

@@ -8,7 +8,7 @@ namespace Microsoft.CodeAnalysis.IL
 {
     internal class AnalyzeStatistics : IDisposable
     {
-        private Stopwatch _stopwatch;
+        private readonly Stopwatch _stopwatch;
 
         public AnalyzeStatistics(AnalyzeOptions analyzerOptions)
         {

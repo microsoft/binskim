@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     {
         // Regular expressions for extracting compiler types.
         // These should be ordered so that the generic "catch all" mapping to unknown is last.
-        static List<(Regex Regex, ELFCompilerType Compiler)> compilerRegexes = new List<(Regex, ELFCompilerType)>
+        static readonly List<(Regex Regex, ELFCompilerType Compiler)> compilerRegexes = new List<(Regex, ELFCompilerType)>
         {
             (new Regex(@"GCC:.+"), ELFCompilerType.GCC),
             (new Regex(@".*clang version.*"), ELFCompilerType.Clang),
@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         };
         
         // Regex for extracting something that looks like a version number--Goal is to match at least w.x, and up to w.x.y.z
-        static Regex versionRegex = new Regex(@"\d+(\.\d+){1,3}");
+        static readonly Regex versionRegex = new Regex(@"\d+(\.\d+){1,3}");
 
         /// <summary>
         /// Construct a ELFCompiler from a string from the .comments section.

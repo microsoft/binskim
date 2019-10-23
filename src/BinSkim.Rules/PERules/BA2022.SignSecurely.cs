@@ -306,7 +306,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        private static Dictionary<string, string> s_idToAlgorithmMap = BuildIdToAlgorithmMap();
+        private static readonly Dictionary<string, string> s_idToAlgorithmMap = BuildIdToAlgorithmMap();
 
         private static Dictionary<string, string> BuildIdToAlgorithmMap()
         {

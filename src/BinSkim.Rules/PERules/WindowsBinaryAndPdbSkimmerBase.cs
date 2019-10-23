@@ -25,8 +25,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            Pdb di = target.Pdb;
-
             AnalyzePortableExecutableAndPdb(context);
         }
 

@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class EnableStackProtector : ELFBinarySkimmerBase
     {
-        private string[] stack_check_symbols = new string[]{
+        private readonly string[] stack_check_symbols = new string[]{
             "__stack_chk_fail",
             "__stack_chk_fail_local" // Optimization for some architectures, according to compiler comments.
         };
