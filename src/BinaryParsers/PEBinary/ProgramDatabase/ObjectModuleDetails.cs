@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     /// <summary>A set of relatively expensive to calculate details from an object module.</summary>
     public class ObjectModuleDetails
     {
-        private CompilerCommandLine _compilerCommandLine;
+        private readonly CompilerCommandLine _compilerCommandLine;
         
         /// <summary>Initializes a new instance of the <see cref="ObjectModuleDetails"/> class.</summary>
         /// <param name="compilerFrontEndVersion">The front end version of the compiler producing the object module.</param>

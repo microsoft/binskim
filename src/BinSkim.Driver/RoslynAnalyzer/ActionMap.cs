@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.IL
     /// <typeparam name="TKind"></typeparam>
     internal sealed class ActionMap<TContext, TKind>
     {
-        private SortedList<TKind, Action<TContext>> _map;
+        private readonly SortedList<TKind, Action<TContext>> _map;
 
         public ActionMap()
         {

@@ -7,7 +7,7 @@ namespace Microsoft.CodeAnalysis.IL
 {
     internal sealed class RoslynSymbolVisitor : SymbolVisitor
     {
-        private Action<ISymbol> _action;
+        private readonly Action<ISymbol> _action;
 
         public RoslynSymbolVisitor(Action<ISymbol> action)
         {

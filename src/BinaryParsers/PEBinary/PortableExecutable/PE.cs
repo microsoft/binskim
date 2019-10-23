@@ -26,8 +26,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         private FileStream _fs;
         private PEReader _peReader;
-        internal SafePointer m_pImage; // pointer to the beginning of the file in memory
-        private MetadataReader _metadataReader;
+        internal SafePointer _pImage; // pointer to the beginning of the file in memory
+        private readonly MetadataReader _metadataReader;
 
         public PE(string fileName)
         {
@@ -42,9 +42,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 _peReader = new PEReader(_fs);
                 PEHeaders = _peReader.PEHeaders;
+
                 IsPEFile = true;
 
-                m_pImage = new SafePointer(_peReader.GetEntireImage().GetContent().ToBuilder().ToArray());
+                _pImage = new SafePointer(_peReader.GetEntireImage().GetContent().ToBuilder().ToArray());
 
                 if (IsManaged)
                 {
@@ -132,6 +133,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
+        public CodeViewDebugDirectoryData CodeViewDebugDirectoryData
+        {
+            get
+            {
+                foreach (DebugDirectoryEntry debugDirectoryEntry in _peReader.ReadDebugDirectory())
+                {
+                    if (debugDirectoryEntry.Type == DebugDirectoryEntryType.CodeView)
+                    {
+                        return _peReader.ReadCodeViewDebugDirectoryData(debugDirectoryEntry);
+                    }
+                }
+                return new CodeViewDebugDirectoryData();
+            }
+        }
+
         public string[] Imports
         {
             get
@@ -145,7 +161,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     }
                     else
                     {
-                        SafePointer sp = new SafePointer(m_pImage._array, importTableDirectory.RelativeVirtualAddress);
+                        SafePointer sp = new SafePointer(_pImage._array, importTableDirectory.RelativeVirtualAddress);
 
                         ArrayList al = new ArrayList();
 
@@ -202,9 +218,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (m_pImage._array != null)
+                if (_pImage._array != null)
                 {
-                    return m_pImage._array;
+                    return _pImage._array;
                 }
 
                 throw new InvalidOperationException("Image bytes cannot be retrieved when data is backed by a stream.");
@@ -228,27 +244,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 byte[] buffer = new byte[4096];
 
                 // create the hash object
-                SHA1 sha1 = SHA1.Create();
-
-                // open the input file
-                using (FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read))
+                using (SHA1 sha1 = SHA1.Create())
                 {
-                    int readBytes = -1;
-
-                    // pump the file through the hash
-                    do
+                    // open the input file
+                    using (FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read))
                     {
-                        readBytes = fs.Read(buffer, 0, buffer.Length);
+                        int readBytes = -1;
 
-                        sha1.TransformBlock(buffer, 0, readBytes, buffer, 0);
-                    } while (readBytes > 0);
+                        // pump the file through the hash
+                        do
+                        {
+                            readBytes = fs.Read(buffer, 0, buffer.Length);
 
-                    // need to call this to finalize the calculations
-                    sha1.TransformFinalBlock(buffer, 0, readBytes);
+                            sha1.TransformBlock(buffer, 0, readBytes, buffer, 0);
+                        } while (readBytes > 0);
+
+                        // need to call this to finalize the calculations
+                        sha1.TransformFinalBlock(buffer, 0, readBytes);
+                    }
+
+                    // get the string representation
+                    _sha1Hash = BitConverter.ToString(sha1.Hash).Replace("-", "");
                 }
-
-                // get the string representation
-                _sha1Hash = BitConverter.ToString(sha1.Hash).Replace("-", "");
 
                 return _sha1Hash;
             }
@@ -503,6 +520,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
+        public bool IsDotNetCoreBootstrapExe
+        {
+            get
+            {
+                // The .NET core bootstrap exe is a generated native binary that loads
+                // its corresponding .NET core application entry point dll.
+                return !IsDotNetCore 
+                    && CodeViewDebugDirectoryData.Path.EndsWith("apphost.pdb", StringComparison.OrdinalIgnoreCase);
+            }
+        }
+
         public bool IsDotNetStandard
         {
             get
@@ -690,10 +718,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 PEHeader optionalHeader = PEHeaders.PEHeader;
 
-                if (PEHeaders.PEHeader != null)
+                if (optionalHeader != null)
                 {
-                    UInt16 major = PEHeaders.PEHeader.MajorOperatingSystemVersion;
-                    UInt16 minor = PEHeaders.PEHeader.MinorOperatingSystemVersion;
+                    UInt16 major = optionalHeader.MajorOperatingSystemVersion;
+                    UInt16 minor = optionalHeader.MinorOperatingSystemVersion;
 
                     return new Version(major, minor);
                 }

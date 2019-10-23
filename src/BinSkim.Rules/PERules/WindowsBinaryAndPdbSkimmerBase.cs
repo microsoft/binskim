@@ -25,8 +25,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            Pdb di = target.Pdb;
-
             AnalyzePortableExecutableAndPdb(context);
         }
 
@@ -43,6 +41,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsILLibraryAssembly;
             if (portableExecutable.IsILLibrary) { return result; }
+
+            reasonForNotAnalyzing = MetadataConditions.ImageIsDotNetCoreBootstrapExe;
+            if (portableExecutable.IsDotNetCoreBootstrapExe) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;

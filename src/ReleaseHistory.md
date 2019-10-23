@@ -1,11 +1,12 @@
 # BinSkim Release History
 
 ## **v1.6.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.6.0
-* Update to final SARIF v2 (version 2.1.16). This enables results caching when passing --hashes on the command-line, a significant performance improvement when recursively analyzing directories with multiple copies of scan targets.
-* Fix typo in BA2021.DoNotMarkWritableSectionsAsExecutable output.
-* Eliminate PDB loading for all non-mixed-mode for managed assemblies, including IL Library (ahead of time compiled) binaries.
-* Verify that a PDB placed alongside a binary actually matches the binary under analysis
-* Provide --local-symbol-directories argument to specify additional (local, non-symbol-server) PDB look-up locations
+* FEATURE: Update to final SARIF v2 (version 2.1.16). This enables results caching when passing --hashes on the command-line, a significant performance improvement when recursively analyzing directories with multiple copies of scan targets.
+* BUG FIX: Fix typo in BA2021.DoNotMarkWritableSectionsAsExecutable output.
+* PERFORMANCE: Eliminate PDB loading for all non-mixed-mode for managed assemblies, including IL Library (ahead of time compiled) binaries.
+* FALSE NEGATIVE FIX: Verify that a PDB placed alongside a binary actually matches the binary under analysis
+* FEATURE: Provide --local-symbol-directories argument to specify additional (local, non-symbol-server) PDB look-up locations
+* FALSE POSITIVE FIX: Skip PDB-driven analysis for the generated .NET core native bootstrap exe (which is not user-controllable code).
 
 ## **v1.6.0-beta.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.6.0-beta.3)
 * Drop Spectre analysis to warning

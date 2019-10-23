@@ -59,12 +59,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private void WindowsNativeLoadPdbUsingDia(string pePath, string symbolPath, string localSymbolDirectories)
         {
-            IDiaDataSource diaSource = null;
+            IDiaDataSource diaSource;
             Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
             Environment.SetEnvironmentVariable("_NT_ALT_SYMBOL_PATH", "");
-
-            string peDirectory = Path.GetDirectoryName(pePath);
-            string pdbName = Path.GetFileNameWithoutExtension(pePath) + ".pdb";
 
             try
             {
@@ -158,9 +155,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
                 while (true)
                 {
-                    uint celt;
-                    IDiaSourceFile sourceFile = null;
-                    sourceFilesEnum.Next(1, out sourceFile, out celt);
+                    sourceFilesEnum.Next(1, out IDiaSourceFile sourceFile, out uint celt);
                     if (celt != 1) break;
 
                     yield return new SourceFile(sourceFile);
@@ -191,8 +186,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 for (int i = 0; i < enumTables.Count; i++)
                 {
                     IDiaTable table = enumTables.Item(i);
-                    T result = table as T;
-                    if (result == null)
+                    if (!(table is T result))
                     {
                         Marshal.ReleaseComObject(table);
                     }
@@ -261,7 +255,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             return _writableSegmentIds.Value.Contains(addressSection);
         }
 
-        private Lazy<HashSet<uint>> _executableSectionContribCompilandIds;
+        private readonly Lazy<HashSet<uint>> _executableSectionContribCompilandIds;
 
         private HashSet<uint> GenerateExecutableSectionContribIds()
         {
