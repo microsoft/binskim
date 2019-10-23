@@ -204,10 +204,13 @@
   <data name="MetadataCondition_ImageIsWixBinary" xml:space="preserve">
     <value>image appears to be a WiX bootstrapper application</value>
   </data>
-  <data name="MetadataCondition_ImageIsDotNetEntryPointDll" xml:space="preserve">
-    <value>image is a dotnet entry point dll</value>
+  <data name="MetadataCondition_ImageIsDotNetCoreEntryPointDll" xml:space="preserve">
+    <value>image is a .NET core entry point dll</value>
   </data>
   <data name="MetadataCondition_ImageIsILLibraryAssembly" xml:space="preserve">
     <value>image is a managed IL library (i.e., ahead of time compiled) assembly</value>
+  </data>
+  <data name="MetadataCondition_ImageIsDotNetCoreBootstrapExe" xml:space="preserve">
+    <value>image is a .NET core native bootstrap exe</value>
   </data>
 </root>

@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
     
         [Fact]
-        public void PdbAvailable()
+        public void PEBinary_PdbAvailable()
         {
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x64_VS2013_Default.dll");
             PEBinary peBinary = new PEBinary(new Uri(fileName));
@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
-        public void NoPdbAvailable()
+        public void PEBinary_NoPdbAvailable()
         {
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x86_VS2013_PdbMissing.exe");
             PEBinary peBinary = new PEBinary(new Uri(fileName));
@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
-        public void PdbIsStripped()
+        public void PEBinary_PdbIsStripped()
         {
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x86_VS2017_15.5.4_PdbStripped.dll");
             PEBinary peBinary = new PEBinary(new Uri(fileName));
@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
-        public void IsWixBinary()
+        public void PEBinary_IsWixBinary()
         {
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
             PEBinary peBinary = new PEBinary(new Uri(fileName));
@@ -72,10 +72,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
-        public void CanCreateIDiaSourceFromMsdia()
+        public void PEBinary_CanCreateIDiaSourceFromMsdia()
         {
             Action action = () => { IDiaDataSource source = ProgramDatabase.MsdiaComWrapper.GetDiaSource(); };
             action.ShouldNotThrow();
+        }
+
+        [Fact]
+        public void PEBinary_CanRecognizeDotNetBootstrappingExe()
+        {
+            string fileName = Path.Combine(BaselineTestsDataDirectory, "DotNetCore_win-x64_VS2019_Default.exe");
+            PEBinary peBinary = new PEBinary(new Uri(fileName));
+            peBinary.PE.IsDotNetCoreBootstrapExe.Should().BeTrue();
+
+            // Verify a random other exe to ensure it is properly reporting as not a .NET Core bootstrapper
+            fileName = Path.Combine(BaselineTestsDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
+            peBinary = new PEBinary(new Uri(fileName));
+            peBinary.PE.IsDotNetCoreBootstrapExe.Should().BeFalse();
         }
     }
 }

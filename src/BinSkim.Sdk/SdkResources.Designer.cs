@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class SdkResources {
@@ -133,11 +133,20 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to image is a dotnet entry point dll.
+        ///   Looks up a localized string similar to image is a .NET core native bootstrap exe.
         /// </summary>
-        internal static string MetadataCondition_ImageIsDotNetEntryPointDll {
+        internal static string MetadataCondition_ImageIsDotNetCoreBootstrapExe {
             get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsDotNetEntryPointDll", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ImageIsDotNetCoreBootstrapExe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image is a .NET core entry point dll.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsDotNetCoreEntryPointDll {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsDotNetCoreEntryPointDll", resourceCulture);
             }
         }
         

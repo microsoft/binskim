@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         private FileStream _fs;
         private PEReader _peReader;
-        internal SafePointer m_pImage; // pointer to the beginning of the file in memory
+        internal SafePointer _pImage; // pointer to the beginning of the file in memory
         private MetadataReader _metadataReader;
 
         public PE(string fileName)
@@ -42,9 +42,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 _peReader = new PEReader(_fs);
                 PEHeaders = _peReader.PEHeaders;
+
                 IsPEFile = true;
 
-                m_pImage = new SafePointer(_peReader.GetEntireImage().GetContent().ToBuilder().ToArray());
+                _pImage = new SafePointer(_peReader.GetEntireImage().GetContent().ToBuilder().ToArray());
 
                 if (IsManaged)
                 {
@@ -132,6 +133,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
+        public CodeViewDebugDirectoryData CodeViewDebugDirectoryData
+        {
+            get
+            {
+                foreach (DebugDirectoryEntry debugDirectoryEntry in _peReader.ReadDebugDirectory())
+                {
+                    if (debugDirectoryEntry.Type == DebugDirectoryEntryType.CodeView)
+                    {
+                        return _peReader.ReadCodeViewDebugDirectoryData(debugDirectoryEntry);
+                    }
+                }
+                return new CodeViewDebugDirectoryData();
+            }
+        }
+
         public string[] Imports
         {
             get
@@ -145,7 +161,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     }
                     else
                     {
-                        SafePointer sp = new SafePointer(m_pImage._array, importTableDirectory.RelativeVirtualAddress);
+                        SafePointer sp = new SafePointer(_pImage._array, importTableDirectory.RelativeVirtualAddress);
 
                         ArrayList al = new ArrayList();
 
@@ -202,9 +218,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (m_pImage._array != null)
+                if (_pImage._array != null)
                 {
-                    return m_pImage._array;
+                    return _pImage._array;
                 }
 
                 throw new InvalidOperationException("Image bytes cannot be retrieved when data is backed by a stream.");
@@ -500,6 +516,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     _managedPlatform = ComputeIsDotNetCore(_metadataReader);
                 }
                 return _managedPlatform == ManagedPlatform.DotNetCore;
+            }
+        }
+
+        public bool IsDotNetCoreBootstrapExe
+        {
+            get
+            {
+                // The .NET core bootstrap exe is a generated native binary that loads
+                // its corresponding .NET core application entry point dll.
+                return !IsDotNetCore 
+                    && CodeViewDebugDirectoryData.Path.EndsWith("apphost.pdb", StringComparison.OrdinalIgnoreCase);
             }
         }
 

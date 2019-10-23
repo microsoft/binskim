@@ -44,6 +44,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsILLibraryAssembly;
             if (portableExecutable.IsILLibrary) { return result; }
 
+            reasonForNotAnalyzing = MetadataConditions.ImageIsDotNetCoreBootstrapExe;
+            if (portableExecutable.IsDotNetCoreBootstrapExe) { return result; }
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }

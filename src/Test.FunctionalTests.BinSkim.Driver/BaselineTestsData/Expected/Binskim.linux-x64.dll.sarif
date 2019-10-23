@@ -254,7 +254,7 @@
             "arguments": [
               "Binskim.linux-x64.dll",
               "EnableHighEntropyVirtualAddresses",
-              "image is a binary built by the .NET native toolset"
+              "image is a .NET core entry point dll"
             ]
           },
           "locations": [
