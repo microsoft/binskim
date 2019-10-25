@@ -13,8 +13,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     public class PEBinary : BinaryBase
     {
         private Lazy<Pdb> _pdb;
-        private string _symbolPath;
-        private string _localSymbolDirectories;
+        private readonly string _symbolPath;
+        private readonly string _localSymbolDirectories;
 
         public PEBinary(Uri uri, string symbolPath = null, string localSymbolDirectories = null) : base(uri)
         {

@@ -165,7 +165,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return data;
         }
 
-        private CompilerVersionToMitigation[] testData = new CompilerVersionToMitigation[]
+        private readonly CompilerVersionToMitigation[] testData = new CompilerVersionToMitigation[]
         {
             new CompilerVersionToMitigation()
             {

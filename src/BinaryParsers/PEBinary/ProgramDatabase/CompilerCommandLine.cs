@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             Disabled
         }
 
-        static private char[] switchPrefix = new char[] { '-', '/' };
+        private static readonly char[] switchPrefix = new char[] { '-', '/' };
 
         /// <summary>
         /// The raw, unadulterated command line before processing.

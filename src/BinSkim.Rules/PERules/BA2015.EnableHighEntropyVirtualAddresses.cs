@@ -75,9 +75,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsNotExe;
             if (!portableExecutable.PEHeaders.IsExe) { return result; }
 
-            // A dotnet core entry point dll is itself launched within a process
+            // A dotnet core entry point dll is itself loaded within a process
             // that will always be configured for high entropy va, if available.
-            reasonForNotAnalyzing = MetadataConditions.ImageIsDotNetEntryPointDll;
+            reasonForNotAnalyzing = MetadataConditions.ImageIsDotNetCoreEntryPointDll;
             if (portableExecutable.IsDotNetCore || portableExecutable.IsDotNetStandard) { return result; }
 
             reasonForNotAnalyzing = null;

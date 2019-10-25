@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         // Mapping of BinSkim rule IDs to Binscope friendly names for backwards compatability.
         public const string EquivalentBinScopeRulePropertyName = "equivalentBinScopeRuleReadableName";
-        private static Dictionary<string, string> binScopeRuleReadableNameMapping = new Dictionary<string, string>()
+        private static readonly Dictionary<string, string> binScopeRuleReadableNameMapping = new Dictionary<string, string>()
         {
             {RuleIds.LoadImageAboveFourGigabyteAddressId,  "FourGbCheck" }, //BA2001
             {RuleIds.DoNotIncorporateVulnerableDependenciesId , "ATLVersionCheck" }, //BA2002

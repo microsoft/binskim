@@ -133,11 +133,20 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to image is a dotnet entry point dll.
+        ///   Looks up a localized string similar to image is a .NET core native bootstrap exe.
         /// </summary>
-        internal static string MetadataCondition_ImageIsDotNetEntryPointDll {
+        internal static string MetadataCondition_ImageIsDotNetCoreBootstrapExe {
             get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsDotNetEntryPointDll", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ImageIsDotNetCoreBootstrapExe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image is a .NET core entry point dll.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsDotNetCoreEntryPointDll {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsDotNetCoreEntryPointDll", resourceCulture);
             }
         }
         

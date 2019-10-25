@@ -13,7 +13,7 @@ namespace Microsoft.CodeAnalysis.IL
 {
     internal static class DriverUtilities
     {
-        private static Assembly[] s_defaultCompositionAssemblies =
+        private static readonly Assembly[] s_defaultCompositionAssemblies =
                                         new Assembly[] {
                                             typeof(DoNotShipVulnerableBinaries).Assembly
                                         };

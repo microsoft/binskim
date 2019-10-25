@@ -386,7 +386,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 objectModules.Add(Path.GetFileName(objectModuleDetail.Name));
             }
 
-
             var sb = new StringBuilder();
 
             foreach (string key in librariesToObjectModulesMap.Keys)
