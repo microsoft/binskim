@@ -13,6 +13,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     public class PETests
     {
         [Fact]
+        public void IsWixBinary()
+        {
+            string fileName = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
+            PEBinary peBinary = new PEBinary(new Uri(fileName));
+            peBinary.Pdb.Should().BeNull();
+            peBinary.PE.IsWixBinary.Should().BeTrue();
+
+            // Verify a random other exe to ensure it is properly reporting as not a WIX bootstrapper
+            fileName = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "MixedMode_x64_VS2015_Default.exe");
+            peBinary = new PEBinary(new Uri(fileName));
+            peBinary.PE.IsWixBinary.Should().BeFalse();
+        }
+
+        [Fact]
         public void PE_ComputePortableExecutableMetadata()
         {
             string[] filters = new[] { "*.dll", "*.exe" };

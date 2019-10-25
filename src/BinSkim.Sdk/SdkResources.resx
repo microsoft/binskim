@@ -213,4 +213,7 @@
   <data name="MetadataCondition_ImageIsDotNetCoreBootstrapExe" xml:space="preserve">
     <value>image is a .NET core native bootstrap exe</value>
   </data>
+  <data name="MetadataCondition_ImageIsNativeUniversalWindowsPlatformBinary" xml:space="preserve">
+    <value>image is a native UWP (Univesal Windows Platform) binary</value>
+  </data>
 </root>

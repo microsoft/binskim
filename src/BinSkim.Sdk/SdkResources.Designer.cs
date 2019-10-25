@@ -214,6 +214,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is a native UWP (Univesal Windows Platform) binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNativeUniversalWindowsPlatformBinary {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNativeUniversalWindowsPlatformBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is not a 32-bit binary.
         /// </summary>
         internal static string MetadataCondition_ImageIsNot32BitBinary {

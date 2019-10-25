@@ -106,6 +106,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
             if (portableExecutable.IsResourceOnly) { return result; }
 
+            reasonForNotAnalyzing = MetadataConditions.ImageIsNativeUniversalWindowsPlatformBinary;
+            if (portableExecutable.IsNativeUniversalWindowsPlatform) { return result; }
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }

@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     {
         internal static string BaselineTestsDataDirectory = GetTestDirectory(@"Test.FunctionalTests.BinSkim.Driver" + Path.DirectorySeparatorChar + "BaselineTestsData");
 
-        private static string GetTestDirectory(string relativeDirectory)
+        internal static string GetTestDirectory(string relativeDirectory)
         {
             var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
