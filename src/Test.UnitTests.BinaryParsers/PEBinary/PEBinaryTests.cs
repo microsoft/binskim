@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     {
         internal static string BaselineTestsDataDirectory = GetTestDirectory(@"Test.FunctionalTests.BinSkim.Driver" + Path.DirectorySeparatorChar + "BaselineTestsData");
 
-        private static string GetTestDirectory(string relativeDirectory)
+        internal static string GetTestDirectory(string relativeDirectory)
         {
             var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
@@ -55,20 +55,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             peBinary.Pdb.Should().BeNull();
             peBinary.StrippedPdb.Should().NotBeNull();
             peBinary.PdbParseException.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void IsWixBinary()
-        {
-            string fileName = Path.Combine(BaselineTestsDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
-            PEBinary peBinary = new PEBinary(new Uri(fileName));
-            peBinary.Pdb.Should().BeNull();
-            peBinary.PE.IsWixBinary.Should().BeTrue();
-
-            // Verify a random other exe to ensure it is properly reporting as not a WIX bootstrapper
-            fileName = Path.Combine(BaselineTestsDataDirectory, "MixedMode_x64_VS2015_Default.exe");
-            peBinary = new PEBinary(new Uri(fileName));
-            peBinary.PE.IsWixBinary.Should().BeFalse();
         }
 
         [Fact]

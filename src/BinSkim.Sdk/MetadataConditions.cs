@@ -31,5 +31,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageLikelyLoadsAs32BitProcess = SdkResources.MetadataCondition_ImageLikelyLoads32BitProcess;
         public static readonly string ImageCompiledWithOutdatedTools = SdkResources.MetadataCondition_ImageCompiledWithOutdatedTools;
         public static readonly string ImageIsPreVersion7WindowsCEBinary = SdkResources.MetadataCondition_ImageIsPreVersion7WindowsCEBinary;
+        public static readonly string ImageIsNativeUniversalWindowsPlatformBinary = SdkResources.MetadataCondition_ImageIsNativeUniversalWindowsPlatformBinary;
     }
 }

@@ -210,4 +210,7 @@
   <data name="MetadataCondition_ImageIsILLibraryAssembly" xml:space="preserve">
     <value>image is a managed IL library (i.e., ahead of time compiled) assembly</value>
   </data>
+  <data name="MetadataCondition_ImageIsNativeUniversalWindowsPlatformBinary" xml:space="preserve">
+    <value>image is a native UWP (Univesal Windows Platform) binary</value>
+  </data>
 </root>
