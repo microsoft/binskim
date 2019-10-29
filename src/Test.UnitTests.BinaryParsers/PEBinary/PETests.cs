@@ -27,7 +27,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             peBinary.PE.IsWixBinary.Should().BeFalse();
         }
 
-
         [Fact]
         public void PEBinary_IsDotNetCoreBootstrapExe()
         {
