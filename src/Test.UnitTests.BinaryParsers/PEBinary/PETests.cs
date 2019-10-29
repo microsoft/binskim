@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using FluentAssertions;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -24,6 +25,52 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             fileName = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "MixedMode_x64_VS2015_Default.exe");
             peBinary = new PEBinary(new Uri(fileName));
             peBinary.PE.IsWixBinary.Should().BeFalse();
+        }
+
+        [Fact]
+        public void PEBinary_IsDotNetCoreBootstrapExe()
+        {
+            string fileName = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "DotNetCore_win-x64_VS2019_Default.exe");
+            PEBinary peBinary;
+            using (peBinary = new PEBinary(new Uri(fileName)))
+            {
+                peBinary.PE.IsDotNetCoreBootstrapExe.Should().BeTrue();
+            }
+
+            // Verify a random other exe to ensure it is properly reporting as not a .NET Core bootstrapper
+            fileName = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
+            using (peBinary = new PEBinary(new Uri(fileName)))
+            {
+                peBinary.PE.IsDotNetCoreBootstrapExe.Should().BeFalse();
+            }
+        }
+
+
+        [Fact]
+        public void PEBinary_CanRecognizeDotNetBootstrappingExe()
+        {
+            foreach (string nativeUwpFileName in Directory.GetFiles(PEBinaryTests.BaselineTestsDataDirectory, "Uwp*Cpp*"))
+            {
+                if (nativeUwpFileName.EndsWith(".pdb", StringComparison.OrdinalIgnoreCase)) { continue; }
+
+                PEBinary peBinary;
+                using (peBinary = new PEBinary(new Uri(nativeUwpFileName)))
+                {
+                    peBinary.PE.IsNativeUniversalWindowsPlatform.Should().BeTrue();
+                }
+            }
+
+            foreach (string nonNativeUwpFileName in Directory.GetFiles(PEBinaryTests.BaselineTestsDataDirectory, "Uwp*"))
+            {
+                if (nonNativeUwpFileName.Contains("Cpp")) { continue; }
+                if (nonNativeUwpFileName.EndsWith(".pdb", StringComparison.OrdinalIgnoreCase)) { continue; }
+
+                PEBinary peBinary;
+                using (peBinary = new PEBinary(new Uri(nonNativeUwpFileName)))
+                {
+                    peBinary.PE.IsNativeUniversalWindowsPlatform.Should().BeFalse();
+                }
+            }
         }
 
         [Fact]
