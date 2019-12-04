@@ -25,15 +25,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     {
         // Regular expressions for extracting compiler types.
         // These should be ordered so that the generic "catch all" mapping to unknown is last.
-        static readonly List<(Regex Regex, ELFCompilerType Compiler)> compilerRegexes = new List<(Regex, ELFCompilerType)>
+        private static readonly List<(Regex Regex, ELFCompilerType Compiler)> compilerRegexes = new List<(Regex, ELFCompilerType)>
         {
             (new Regex(@"GCC:.+"), ELFCompilerType.GCC),
             (new Regex(@".*clang version.*"), ELFCompilerType.Clang),
             (new Regex(@".*"), ELFCompilerType.Unknown)
         };
-        
+
         // Regex for extracting something that looks like a version number--Goal is to match at least w.x, and up to w.x.y.z
-        static readonly Regex versionRegex = new Regex(@"\d+(\.\d+){1,3}");
+        private static readonly Regex versionRegex = new Regex(@"\d+(\.\d+){1,3}");
 
         /// <summary>
         /// Construct a ELFCompiler from a string from the .comments section.
@@ -44,30 +44,30 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             // If for some reason we get a null string, we will simply return an unknown compiler.
             if (fullDescription == null)
             {
-                FullDescription = string.Empty;
-                Compiler = ELFCompilerType.Unknown;
-                Version = new Version(0, 0, 0, 0);
+                this.FullDescription = string.Empty;
+                this.Compiler = ELFCompilerType.Unknown;
+                this.Version = new Version(0, 0, 0, 0);
             }
             else
             {
-                FullDescription = fullDescription;
-                Compiler = compilerRegexes.First(s => s.Regex.IsMatch(fullDescription)).Compiler;
+                this.FullDescription = fullDescription;
+                this.Compiler = compilerRegexes.First(s => s.Regex.IsMatch(fullDescription)).Compiler;
 
                 try
                 {
                     Match versionStr = versionRegex.Match(fullDescription);
                     if (versionStr.Success)
                     {
-                        Version = new Version(versionStr.Value);
+                        this.Version = new Version(versionStr.Value);
                     }
                     else
                     {
-                        Version = new Version(0, 0, 0, 0);
+                        this.Version = new Version(0, 0, 0, 0);
                     }
                 }
                 catch (FormatException) // Version we recovered wasn't well formed.
                 {
-                    Version = new Version(0, 0, 0, 0);
+                    this.Version = new Version(0, 0, 0, 0);
                 }
             }
         }

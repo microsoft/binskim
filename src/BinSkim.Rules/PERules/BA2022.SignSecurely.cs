@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2022
         /// </summary>
-        public override string Id { get { return RuleIds.SignCorrectly; } }
+        public override string Id => RuleIds.SignCorrectly;
 
         /// <summary>
         /// Images should be correctly signed by trusted publishers using 
@@ -30,24 +30,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// that key sizes meet acceptable size thresholds.
         /// </summary>
 
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2022_SignCorrectly_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2022_SignCorrectly_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2022_Pass),
                     nameof(RuleResources.BA2022_Error_BadSigningAlgorithm),
                     nameof(RuleResources.BA2022_Error_DidNotVerify),
                     nameof(RuleResources.BA2022_Error_WinTrustVerifyApiError),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -62,13 +53,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
 
             Native.WINTRUST_DATA winTrustData;
-            string algorithmName, filePath;
-            
+            string filePath;
+
             filePath = target.PE.FileName;
 
             winTrustData = new Native.WINTRUST_DATA();
 
-            if (InvokeVerifyAction(context, filePath, out winTrustData, out algorithmName))
+            if (this.InvokeVerifyAction(context, filePath, out winTrustData, out string algorithmName))
             {
                 // '{0}' appears to be signed securely by a trusted publisher with no 
                 // verification or time stamp errors. Revocation checking was performed
@@ -90,8 +81,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             Guid action;
             CryptoError cryptoError;
-            var badAlgorithms  = new List<Tuple<string, string>>();
-            var goodAlgorithms = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> badAlgorithms = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> goodAlgorithms = new List<Tuple<string, string>>();
 
             algorithmsText = null;
             action = Native.ActionGenericVerifyV2;
@@ -99,16 +90,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             uint signatureCount = 1;
 
             // First, we retrieve the signature count
-            winTrustData = InitializeWinTrustDataStruct(filePath, WinTrustDataKind.SignatureCount);
+            winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.SignatureCount);
             Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
 
             if (winTrustData.pSignatureSettings != IntPtr.Zero)
             {
-                var signatureSettings = Marshal.PtrToStructure<Native.WINTRUST_SIGNATURE_SETTINGS>(winTrustData.pSignatureSettings);
+                Native.WINTRUST_SIGNATURE_SETTINGS signatureSettings = Marshal.PtrToStructure<Native.WINTRUST_SIGNATURE_SETTINGS>(winTrustData.pSignatureSettings);
                 signatureCount = signatureSettings.cSecondarySigs + 1; // Total count primary + cSecondary
             }
 
-            InvokeCloseAction(winTrustData);
+            this.InvokeCloseAction(winTrustData);
 
             // First, we will invoke the basic verification on all returned
             // signatures. Note that currently this code path does not reach across
@@ -119,7 +110,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             for (uint i = 0; i < signatureCount; i++)
             {
                 string hashAlgorithm, hashEncryptionAlgorithm;
-                winTrustData = InitializeWinTrustDataStruct(filePath, WinTrustDataKind.EnforcePolicy, i);
+                winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.EnforcePolicy, i);
 
                 cryptoError = (CryptoError)Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
 
@@ -134,61 +125,61 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case CryptoError.CERT_E_UNTRUSTEDROOT:
                     case CryptoError.CERT_E_CHAINING:
                     case CryptoError.ERROR_SUCCESS:
-                    {
-                        // Hash that represents the subject is trusted.
-                        // Trusted publisher with no verification errors.
-                        // No publisher or time stamp errors.
-                        // This verification excludes root chain info.
-                        if (GetSignerHashAlgorithms(context, winTrustData, out hashAlgorithm, out hashEncryptionAlgorithm))
                         {
-                            goodAlgorithms.Add(new Tuple<string, string>(hashAlgorithm, hashEncryptionAlgorithm));
-                        }
+                            // Hash that represents the subject is trusted.
+                            // Trusted publisher with no verification errors.
+                            // No publisher or time stamp errors.
+                            // This verification excludes root chain info.
+                            if (this.GetSignerHashAlgorithms(context, winTrustData, out hashAlgorithm, out hashEncryptionAlgorithm))
+                            {
+                                goodAlgorithms.Add(new Tuple<string, string>(hashAlgorithm, hashEncryptionAlgorithm));
+                            }
 
-                        InvokeCloseAction(winTrustData);
-                        break;
-                    }
+                            this.InvokeCloseAction(winTrustData);
+                            break;
+                        }
 
                     case CryptoError.NTE_BAD_ALGID:
-                    {
-                        InvokeCloseAction(winTrustData);
-
-                        // We cannot retrieve algorithm id and cert info for images that fail
-                        // the stringent WinTrustVerify security check. We therefore start
-                        // a new call chain with looser validation criteria.
-                        winTrustData = InitializeWinTrustDataStruct(filePath, WinTrustDataKind.Normal);
-                        Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
-
-                        if (GetSignerHashAlgorithms(context, winTrustData, out hashAlgorithm, out hashEncryptionAlgorithm))
                         {
-                            badAlgorithms.Add(new Tuple<string, string>(hashAlgorithm, hashEncryptionAlgorithm));
+                            this.InvokeCloseAction(winTrustData);
+
+                            // We cannot retrieve algorithm id and cert info for images that fail
+                            // the stringent WinTrustVerify security check. We therefore start
+                            // a new call chain with looser validation criteria.
+                            winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.Normal);
+                            Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
+
+                            if (this.GetSignerHashAlgorithms(context, winTrustData, out hashAlgorithm, out hashEncryptionAlgorithm))
+                            {
+                                badAlgorithms.Add(new Tuple<string, string>(hashAlgorithm, hashEncryptionAlgorithm));
+                            }
+
+                            this.InvokeCloseAction(winTrustData);
+                            break;
                         }
 
-                        InvokeCloseAction(winTrustData);
-                        break;
-                    }
-
                     case CryptoError.TRUST_E_NOSIGNATURE:
-                    {
-                        Notes.LogNotApplicableToSpecifiedTarget(context, MetadataConditions.ImageIsNotSigned);
-                        return false;
-                    }
+                        {
+                            Notes.LogNotApplicableToSpecifiedTarget(context, MetadataConditions.ImageIsNotSigned);
+                            return false;
+                        }
 
                     default:
-                    {
-                        string cryptoErrorDescription = cryptoError.GetErrorDescription();
-                        // '{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}' ({2})
-                        context.Logger.Log(this, RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                            nameof(RuleResources.BA2022_Error_DidNotVerify),
-                            context.TargetUri.GetFileName(),                        
-                            cryptoError.ToString(),
-                            cryptoErrorDescription));
-                        InvokeCloseAction(winTrustData);
-                        return false;
-                    }
+                        {
+                            string cryptoErrorDescription = cryptoError.GetErrorDescription();
+                            // '{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}' ({2})
+                            context.Logger.Log(this, RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                                nameof(RuleResources.BA2022_Error_DidNotVerify),
+                                context.TargetUri.GetFileName(),
+                                cryptoError.ToString(),
+                                cryptoErrorDescription));
+                            this.InvokeCloseAction(winTrustData);
+                            return false;
+                        }
                 }
             }
 
-            algorithmsText = BuildAlgorithmsText(badAlgorithms, goodAlgorithms);
+            algorithmsText = this.BuildAlgorithmsText(badAlgorithms, goodAlgorithms);
 
             if (goodAlgorithms.Count == 0)
             {
@@ -205,16 +196,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private string BuildAlgorithmsText(List<Tuple<string, string>> badAlgorithms, List<Tuple<string, string>> goodAlgorithms)
         {
             int count;
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
             if (badAlgorithms.Count > 0)
             {
                 count = 0;
                 sb.Append("Cryptographically weak signatures: ");
 
-                foreach(Tuple<string, string> tuple in badAlgorithms)
+                foreach (Tuple<string, string> tuple in badAlgorithms)
                 {
-                    sb.Append((count > 0 ? "," : String.Empty) + "[digest algorithm: '" + tuple.Item1 + "' + digest encryption algorithm: '" + tuple.Item2 + "']");
+                    sb.Append((count > 0 ? "," : string.Empty) + "[digest algorithm: '" + tuple.Item1 + "' + digest encryption algorithm: '" + tuple.Item2 + "']");
                     count++;
                 }
             }
@@ -222,11 +213,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (goodAlgorithms.Count > 0)
             {
                 count = 0;
-                sb.Append((sb.Length > 0 ? " " : String.Empty) + "Cryptographically strong signatures: ");
+                sb.Append((sb.Length > 0 ? " " : string.Empty) + "Cryptographically strong signatures: ");
 
                 foreach (Tuple<string, string> tuple in goodAlgorithms)
                 {
-                    sb.Append((count > 0 ? "," : String.Empty) + "[digest algorithm: '" + tuple.Item1 + "' + digest encryption algorithm: '" + tuple.Item2 + "']");
+                    sb.Append((count > 0 ? "," : string.Empty) + "[digest algorithm: '" + tuple.Item1 + "' + digest encryption algorithm: '" + tuple.Item2 + "']");
                     count++;
                 }
             }
@@ -234,19 +225,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         private bool GetSignerHashAlgorithms(
-            BinaryAnalyzerContext context, 
+            BinaryAnalyzerContext context,
             Native.WINTRUST_DATA winTrustData,
             out string hashAlgorithm,
             out string hashEncryptionAlgorithm)
         {
-            string failedApiName;
             CryptoError cryptoError;
 
-            cryptoError = GetSignerHashAlgorithms(
+            cryptoError = this.GetSignerHashAlgorithms(
                 winTrustData.hWVTStateData,
-                out hashAlgorithm, 
-                out hashEncryptionAlgorithm, 
-                out failedApiName);
+                out hashAlgorithm,
+                out hashEncryptionAlgorithm,
+                out string failedApiName);
 
             if (cryptoError != CryptoError.ERROR_SUCCESS)
             {
@@ -265,8 +255,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private string GetAlgorithmName(string pszObjId)
         {
-            string algorithmName;
-            if (!s_idToAlgorithmMap.TryGetValue(pszObjId, out algorithmName))
+            if (!s_idToAlgorithmMap.TryGetValue(pszObjId, out string algorithmName))
             {
                 // NOTE: this rule by design currently raises an exception on encountering an 
                 // unrecognized algorithm id. This will have the effect of shutting down this rule
@@ -293,7 +282,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (winTrustData.pSignatureSettings != IntPtr.Zero)
             {
-                var signatureSettings = Marshal.PtrToStructure<Native.WINTRUST_SIGNATURE_SETTINGS>(winTrustData.pSignatureSettings);
+                Native.WINTRUST_SIGNATURE_SETTINGS signatureSettings = Marshal.PtrToStructure<Native.WINTRUST_SIGNATURE_SETTINGS>(winTrustData.pSignatureSettings);
 
                 if (signatureSettings.pCryptoPolicy != IntPtr.Zero)
                 {
@@ -310,7 +299,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static Dictionary<string, string> BuildIdToAlgorithmMap()
         {
-            var result = new Dictionary<string, string>
+            Dictionary<string, string> result = new Dictionary<string, string>
             {
                 { "1.2.840.113549.1.1.1",    "RSA" },
                 { "1.2.840.113549.1.1.2",    "md2RSA"},
@@ -367,15 +356,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return (CryptoError)Marshal.GetLastWin32Error();
             }
 
-            var cryptProviderSigner = (Native.CRYPT_PROVIDER_SGNR)Marshal.PtrToStructure(providerSigner, typeof(Native.CRYPT_PROVIDER_SGNR));
+            Native.CRYPT_PROVIDER_SGNR cryptProviderSigner = (Native.CRYPT_PROVIDER_SGNR)Marshal.PtrToStructure(providerSigner, typeof(Native.CRYPT_PROVIDER_SGNR));
 
-            var cryptoError = (CryptoError)cryptProviderSigner.dwError;
+            CryptoError cryptoError = (CryptoError)cryptProviderSigner.dwError;
 
             if (cryptProviderSigner.psSigner != IntPtr.Zero)
             {
-                var psSigner = (Native.CMSG_SIGNER_INFO)Marshal.PtrToStructure(cryptProviderSigner.psSigner, typeof(Native.CMSG_SIGNER_INFO));
-                hashAlgorithm = GetAlgorithmName(psSigner.HashAlgorithm.pszObjId);
-                hashEncryptionAlgorithm = GetAlgorithmName(psSigner.HashEncryptionAlgorithm.pszObjId);
+                Native.CMSG_SIGNER_INFO psSigner = (Native.CMSG_SIGNER_INFO)Marshal.PtrToStructure(cryptProviderSigner.psSigner, typeof(Native.CMSG_SIGNER_INFO));
+                hashAlgorithm = this.GetAlgorithmName(psSigner.HashAlgorithm.pszObjId);
+                hashEncryptionAlgorithm = this.GetAlgorithmName(psSigner.HashEncryptionAlgorithm.pszObjId);
             }
 
             if (cryptoError == CryptoError.ERROR_SUCCESS)
@@ -391,12 +380,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // See https://msdn.microsoft.com/en-us/library/windows/desktop/aa382384(v=vs.85).aspx
             // which was used to drive data initialization, API use and comments in this code.
 
-            var winTrustData = new Native.WINTRUST_DATA();
-            winTrustData.cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_DATA));
+            Native.WINTRUST_DATA winTrustData = new Native.WINTRUST_DATA
+            {
+                cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_DATA))
+            };
 
-            var fileInfo = new Native.WINTRUST_FILE_INFO();
-            fileInfo.cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_FILE_INFO));
-            fileInfo.pcwszFilePath = filePath;
+            Native.WINTRUST_FILE_INFO fileInfo = new Native.WINTRUST_FILE_INFO
+            {
+                cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_FILE_INFO)),
+                pcwszFilePath = filePath
+            };
 
             winTrustData.pFile = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Native.WINTRUST_FILE_INFO)));
             Marshal.StructureToPtr(fileInfo, winTrustData.pFile, false);
@@ -425,17 +418,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     flags = Native.SignatureSettingsFlags.WSS_VERIFY_SPECIFIC;
                 }
 
-                var signatureSettings = new Native.WINTRUST_SIGNATURE_SETTINGS();
-                signatureSettings.cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_SIGNATURE_SETTINGS));
-                signatureSettings.dwIndex = signatureIndex;
-                signatureSettings.dwFlags = flags;
-                signatureSettings.cSecondarySigs = 0;
-                signatureSettings.dwVerifiedSigIndex = 0;
+                Native.WINTRUST_SIGNATURE_SETTINGS signatureSettings = new Native.WINTRUST_SIGNATURE_SETTINGS
+                {
+                    cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_SIGNATURE_SETTINGS)),
+                    dwIndex = signatureIndex,
+                    dwFlags = flags,
+                    cSecondarySigs = 0,
+                    dwVerifiedSigIndex = 0
+                };
 
-                var policy = new Native.CERT_STRONG_SIGN_PARA();
-                policy.cbStruct = (uint)Marshal.SizeOf(typeof(Native.CERT_STRONG_SIGN_PARA));
-                policy.dwInfoChoice = Native.InfoChoice.CERT_STRONG_SIGN_OID_INFO_CHOICE;
-                policy.pszOID = Native.szOID_CERT_STRONG_SIGN_OS_1;
+                Native.CERT_STRONG_SIGN_PARA policy = new Native.CERT_STRONG_SIGN_PARA
+                {
+                    cbStruct = (uint)Marshal.SizeOf(typeof(Native.CERT_STRONG_SIGN_PARA)),
+                    dwInfoChoice = Native.InfoChoice.CERT_STRONG_SIGN_OID_INFO_CHOICE,
+                    pszOID = Native.szOID_CERT_STRONG_SIGN_OS_1
+                };
 
                 signatureSettings.pCryptoPolicy = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Native.CERT_STRONG_SIGN_PARA)));
                 Marshal.StructureToPtr(policy, signatureSettings.pCryptoPolicy, false);

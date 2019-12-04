@@ -1,15 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
-
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
-using System.Collections.Generic;
-using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -19,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2016
         /// </summary>
-        public override string Id { get { return RuleIds.MarkImageAsNXCompatibleId; } }
+        public override string Id => RuleIds.MarkImageAsNXCompatibleId;
 
         /// <summary>
         /// Binaries should be marked as NX compatible in order to help prevent
@@ -35,22 +34,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// passing /NXCOMPAT to the C/C++ linker.
         /// </summary>
 
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2016_MarkImageAsNXCompatible_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2016_MarkImageAsNXCompatible_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2016_Pass),
                     nameof(RuleResources.BA2016_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {

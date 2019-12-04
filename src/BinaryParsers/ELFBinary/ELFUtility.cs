@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using ELFSharp.ELF;
-using ELFSharp.ELF.Sections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ELFSharp.ELF;
+using ELFSharp.ELF.Sections;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
@@ -22,7 +22,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             IEnumerable<ISymbolTable> symbolTables = elf.GetSections<ISymbolTable>();
             return symbolTables.Aggregate(
                     new List<ISymbolEntry>(),
-                    (agg, next) => {
+                    (agg, next) =>
+                    {
                         agg.AddRange(next.Entries);
                         return agg;
                     }
@@ -43,7 +44,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 {
                     string[] commentData = NullTermAsciiToStrings(commentSection.GetContents());
                     ELFCompiler[] compilers = new ELFCompiler[commentData.Length];
-                    for (int i=0; i<commentData.Length; i++)
+                    for (int i = 0; i < commentData.Length; i++)
                     {
                         compilers[i] = new ELFCompiler(commentData[i]);
                     }
@@ -72,10 +73,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
-            } 
+            }
             if (data.Length == 0)
             {
-                throw new ArgumentException("Data passed to NullTermAsciiToStrings() must be a list of null terminated ascii strings, but the parameter was empty.", nameof(data));    
+                throw new ArgumentException("Data passed to NullTermAsciiToStrings() must be a list of null terminated ascii strings, but the parameter was empty.", nameof(data));
             }
 
             List<string> strings = new List<string>();

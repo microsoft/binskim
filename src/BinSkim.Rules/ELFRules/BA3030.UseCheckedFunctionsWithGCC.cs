@@ -3,13 +3,13 @@
 
 using System.Collections.Generic;
 using System.Composition;
-using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif;
-using Microsoft.CodeAnalysis.BinaryParsers;
-using ELFSharp.ELF;
 using System.Linq;
+using ELFSharp.ELF;
 using ELFSharp.ELF.Sections;
+using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA3030
         /// </summary>
-        public override string Id { get { return RuleIds.UseCheckedFunctionsWithGcc; } }
+        public override string Id => RuleIds.UseCheckedFunctionsWithGcc;
 
         /// <summary>
         /// The stack protector ensures that all functions that use buffers over a certain size will
@@ -108,24 +108,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // smashing is detected.Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or 
         // '--fstack-protector-all' (all functions) to enable this.
         /// </summary>
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA3030_UseCheckedFunctionsWithGcc_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3030_UseCheckedFunctionsWithGcc_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA3030_Pass_AllFunctionsChecked),
                     nameof(RuleResources.BA3030_Pass_SomeFunctionsChecked),
                     nameof(RuleResources.BA3030_Pass_NoCheckableFunctions),
                     nameof(RuleResources.BA3030_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -165,7 +156,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override void Analyze(BinaryAnalyzerContext context)
         {
             IELF elf = context.ELFBinary().ELF;
-            
+
             IEnumerable<ISymbolEntry> symbols =
                 ELFUtility.GetAllSymbols(elf).Where(sym => sym.Type == SymbolType.Function || sym.Type == SymbolType.Object);
 

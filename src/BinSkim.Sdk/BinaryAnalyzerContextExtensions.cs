@@ -1,5 +1,5 @@
-﻿using Microsoft.CodeAnalysis.BinaryParsers;
-using System;
+﻿using System;
+using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {

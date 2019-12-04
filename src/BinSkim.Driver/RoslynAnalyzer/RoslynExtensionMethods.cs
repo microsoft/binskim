@@ -15,8 +15,10 @@ namespace Microsoft.CodeAnalysis.IL
 
             DiagnosticDescriptor diagnosticDescriptor = diagnostic.Descriptor;
 
-            var rule = new ReportingDescriptor();
-            rule.MessageStrings = new Dictionary<string, MultiformatMessageString>();
+            ReportingDescriptor rule = new ReportingDescriptor
+            {
+                MessageStrings = new Dictionary<string, MultiformatMessageString>()
+            };
             rule.MessageStrings["Default"] = new MultiformatMessageString { Text = diagnosticDescriptor.MessageFormat.ToString() };
             rule.FullDescription = new MultiformatMessageString { Text = diagnosticDescriptor.Description.ToString() };
             rule.HelpUri = new Uri(diagnosticDescriptor.HelpLinkUri);
@@ -30,8 +32,10 @@ namespace Microsoft.CodeAnalysis.IL
                 rule.Tags.Add(tag);
             }
 
-            rule.DefaultConfiguration = new ReportingConfiguration();
-            rule.DefaultConfiguration.Level = diagnosticDescriptor.DefaultSeverity.ConvertToRuleConfigurationDefaultLevel();
+            rule.DefaultConfiguration = new ReportingConfiguration
+            {
+                Level = diagnosticDescriptor.DefaultSeverity.ConvertToRuleConfigurationDefaultLevel()
+            };
 
             rule.SetProperty("Category", diagnosticDescriptor.Category);
             rule.SetProperty("IsEnabledByDefault", diagnosticDescriptor.IsEnabledByDefault.ToString());
@@ -48,7 +52,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             if (location == Location.None) { return null; }
 
-            var region = new Region();
+            Region region = new Region();
 
             FileLinePositionSpan flps = location.GetLineSpan();
 
@@ -66,25 +70,25 @@ namespace Microsoft.CodeAnalysis.IL
             switch (severity)
             {
                 case DiagnosticSeverity.Error:
-                {
-                    return FailureLevel.Error;
-                }
+                    {
+                        return FailureLevel.Error;
+                    }
 
                 case DiagnosticSeverity.Hidden:
                 case DiagnosticSeverity.Warning:
-                {
-                    return FailureLevel.Warning;
-                }
+                    {
+                        return FailureLevel.Warning;
+                    }
 
                 case DiagnosticSeverity.Info:
-                {
-                    return FailureLevel.Note;
-                }
+                    {
+                        return FailureLevel.Note;
+                    }
 
                 default:
-                {
-                    throw new InvalidOperationException("Unrecognized diagnostic severity value: " + severity.ToString());
-                }
+                    {
+                        throw new InvalidOperationException("Unrecognized diagnostic severity value: " + severity.ToString());
+                    }
             }
         }
         public static FailureLevel ConvertToResultLevel(this DiagnosticSeverity severity)
@@ -92,25 +96,25 @@ namespace Microsoft.CodeAnalysis.IL
             switch (severity)
             {
                 case DiagnosticSeverity.Error:
-                {
-                    return FailureLevel.Error;
-                }
+                    {
+                        return FailureLevel.Error;
+                    }
 
                 case DiagnosticSeverity.Hidden:
                 case DiagnosticSeverity.Warning:
-                {
-                    return FailureLevel.Warning;
-                }
+                    {
+                        return FailureLevel.Warning;
+                    }
 
                 case DiagnosticSeverity.Info:
-                {
-                    return FailureLevel.Note;
-                }
+                    {
+                        return FailureLevel.Note;
+                    }
 
                 default:
-                {
-                    throw new InvalidOperationException("Unrecognized diagnostic severity value: " + severity.ToString());
-                }
+                    {
+                        throw new InvalidOperationException("Unrecognized diagnostic severity value: " + severity.ToString());
+                    }
             }
         }
     }

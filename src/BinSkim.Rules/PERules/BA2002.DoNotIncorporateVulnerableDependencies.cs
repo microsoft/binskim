@@ -22,27 +22,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2002
         /// </summary>
-        public override string Id { get { return RuleIds.DoNotIncorporateVulnerableDependenciesId; } }
+        public override string Id => RuleIds.DoNotIncorporateVulnerableDependenciesId;
 
         /// <summary>
         /// Binaries should not take dependencies on other code with known security vulnerabilities.
         /// </summary>
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2002_DoNotIncorporateVulnerableBinaries_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2002_DoNotIncorporateVulnerableBinaries_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2002_Pass),
                     nameof(RuleResources.BA2002_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public IEnumerable<IOption> GetOptions()
         {
@@ -65,12 +56,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (context.Policy == null) { return; }
 
-            _files = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            _filesToVulnerabilitiesMap = new Dictionary<string, VulnerableDependencyDescriptor>();
+            this._files = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            this._filesToVulnerabilitiesMap = new Dictionary<string, VulnerableDependencyDescriptor>();
 
             foreach (PropertiesDictionary dictionary in context.Policy.GetProperty(VulnerableDependencies).Values)
             {
-                var descriptor = dictionary as VulnerableDependencyDescriptor;
+                VulnerableDependencyDescriptor descriptor = dictionary as VulnerableDependencyDescriptor;
 
                 // This happens if we have deserialized settings from JSON rather than XML
                 if (descriptor == null)
@@ -80,8 +71,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 foreach (string fileHash in descriptor.FileHashes)
                 {
-                    _filesToVulnerabilitiesMap[fileHash] = descriptor;
-                    _files.Add(fileHash.Split('#')[0]);
+                    this._filesToVulnerabilitiesMap[fileHash] = descriptor;
+                    this._files.Add(fileHash.Split('#')[0]);
                 }
             }
 
@@ -107,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
-            
+
             Dictionary<string, TruncatedCompilandRecordList> vulnerabilityToModules = new Dictionary<string, TruncatedCompilandRecordList>();
             TruncatedCompilandRecordList moduleList;
 
@@ -130,15 +121,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     SourceFile sf = sfView.Value;
                     string fileName = Path.GetFileName(sf.FileName);
 
-                    if (!_files.Contains(fileName) || sf.HashType == HashType.None)
+                    if (!this._files.Contains(fileName) || sf.HashType == HashType.None)
                     {
                         continue;
                     }
 
                     string hash = fileName + "#" + BitConverter.ToString(sf.Hash);
-                    VulnerableDependencyDescriptor descriptor;
 
-                    if (_filesToVulnerabilitiesMap.TryGetValue(hash, out descriptor))
+                    if (this._filesToVulnerabilitiesMap.TryGetValue(hash, out VulnerableDependencyDescriptor descriptor))
                     {
                         if (!vulnerabilityToModules.TryGetValue(descriptor.Id, out moduleList))
                         {
@@ -171,7 +161,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             // '{0}' does not incorporate any known vulnerable dependencies, as configured by current policy.
-            context.Logger.Log(this, 
+            context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2002_Pass),
                     context.TargetUri.GetFileName()));
@@ -179,14 +169,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static PropertiesDictionary BuildDefaultVulnerableDependenciesMap()
         {
-            var result = new PropertiesDictionary();
+            PropertiesDictionary result = new PropertiesDictionary();
 
-            var vulnerabilityDescriptor = new VulnerableDependencyDescriptor();
-
-            vulnerabilityDescriptor.Name = "the Active Template Library (ATL)";
-            vulnerabilityDescriptor.Id = "AtlVulnerability";
-            vulnerabilityDescriptor.VulnerabilityDescription = "contains known remote execution bugs (see https://technet.microsoft.com/en-us/library/security/ms09-035.aspx).";
-            vulnerabilityDescriptor.Resolution = "compile your binary using an up-to-date copy of ATL.";
+            VulnerableDependencyDescriptor vulnerabilityDescriptor = new VulnerableDependencyDescriptor
+            {
+                Name = "the Active Template Library (ATL)",
+                Id = "AtlVulnerability",
+                VulnerabilityDescription = "contains known remote execution bugs (see https://technet.microsoft.com/en-us/library/security/ms09-035.aspx).",
+                Resolution = "compile your binary using an up-to-date copy of ATL."
+            };
             vulnerabilityDescriptor.FileHashes.Add("atlbase.h#FC-A7-3E-99-8B-D3-CC-E6-D6-28-75-F6-B4-27-DF-6E");
             vulnerabilityDescriptor.FileHashes.Add("atlimpl.cpp#7C-4C-5D-BE-B6-EF-CB-DF-AF-8E-54-E5-0E-C0-2A-FB");
             vulnerabilityDescriptor.FileHashes.Add("atlbase.h#31-F6-53-39-6A-51-B4-57-1E-F0-DD-C0-B3-54-8A-60");

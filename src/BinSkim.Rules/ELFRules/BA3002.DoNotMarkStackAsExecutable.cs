@@ -3,12 +3,12 @@
 
 using System.Collections.Generic;
 using System.Composition;
-using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif;
-using Microsoft.CodeAnalysis.BinaryParsers;
 using ELFSharp.ELF;
 using ELFSharp.ELF.Segments;
+using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// "BA3002"
         /// </summary>
-        public override string Id { get { return RuleIds.DoNotMarkStackAsExecutable; } }
+        public override string Id => RuleIds.DoNotMarkStackAsExecutable;
 
         /// <summary>
         /// "This checks if a binary has an executable stack; an 
@@ -29,23 +29,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// to store shellcode. Ensure you are compiling with '-z noexecstack'
         /// to mark the stack as non-executable."
         /// </summary>
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA3002_DoNotMarkStackAsExecutable_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3002_DoNotMarkStackAsExecutable_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA3002_Pass),
                     nameof(RuleResources.BA3002_Error_StackExec),
                     nameof(RuleResources.BA3002_Error_NoStackSeg),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -65,7 +56,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             IELF elf = context.ELFBinary().ELF;
             // Look for the GNU_STACK segment
-            foreach (var seg in elf.Segments)
+            foreach (ISegment seg in elf.Segments)
             {
                 if (((uint)seg.Type) == GNU_STACK_ID)
                 {

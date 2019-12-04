@@ -72,8 +72,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <seealso cref="M:System.ValueType.ToString()"/>
         public override string ToString()
         {
-            var sb = new StringBuilder();
-            AppendString(sb);
+            StringBuilder sb = new StringBuilder();
+            this.AppendString(sb);
             return sb.ToString();
         }
 
@@ -106,7 +106,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 sb.Append(")");
             }
 
-            if (!String.IsNullOrWhiteSpace(this.Suffix))
+            if (!string.IsNullOrWhiteSpace(this.Suffix))
             {
                 sb.Append(' ');
                 sb.Append(this.Suffix);
@@ -117,7 +117,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            var hash = new MultiplyByPrimesHash();
+            MultiplyByPrimesHash hash = new MultiplyByPrimesHash();
             if (this.Object == null)
             {
                 hash.Add(0);
@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <returns>true if the objects are considered equal, false if they are not.</returns>
         public override bool Equals(object obj)
         {
-            var converted = obj as CompilandRecord?;
+            CompilandRecord? converted = obj as CompilandRecord?;
             return converted.HasValue && this.Equals(converted.Value);
         }
 
@@ -194,7 +194,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private static string SanitizeName(string name)
         {
-            if (String.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return null;
             }

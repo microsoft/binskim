@@ -13,8 +13,8 @@ namespace Microsoft.CodeAnalysis.IL
     {
         [Fact]
         public void CompilationStartAnalysisContext_Simple()
-        {     
-            var context = new RoslynCompilationStartAnalysisContext(null, null, CancellationToken.None);
+        {
+            RoslynCompilationStartAnalysisContext context = new RoslynCompilationStartAnalysisContext(null, null, CancellationToken.None);
             int invocationCount = 0;
 
             // The relevant work
@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             context.SymbolActions.Invoke(SymbolKind.NamedType, new SymbolAnalysisContext());
 
-            Assert.Equal(1, invocationCount);           
+            Assert.Equal(1, invocationCount);
         }
     }
 }

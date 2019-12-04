@@ -12,10 +12,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         public TestMessageLogger()
         {
-            FailTargets = new HashSet<string>();
-            PassTargets = new HashSet<string>();
-            NotApplicableTargets = new HashSet<string>();
-            ConfigurationErrorTargets = new HashSet<string>();
+            this.FailTargets = new HashSet<string>();
+            this.PassTargets = new HashSet<string>();
+            this.NotApplicableTargets = new HashSet<string>();
+            this.ConfigurationErrorTargets = new HashSet<string>();
         }
 
         public RuntimeConditions RuntimeErrors { get; set; }
@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void AnalysisStopped(RuntimeConditions runtimeConditions)
         {
-            RuntimeErrors = runtimeConditions;
+            this.RuntimeErrors = runtimeConditions;
         }
 
         public void AnalyzingTarget(IAnalysisContext context)
@@ -47,8 +47,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void Log(ReportingDescriptor rule, Result result)
         {
-            NoteTestResult(result.Kind, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
-            NoteTestResult(result.Level, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
+            this.NoteTestResult(result.Kind, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
+            this.NoteTestResult(result.Level, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
         }
 
         public void NoteTestResult(ResultKind messageKind, string targetPath)
@@ -56,21 +56,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             switch (messageKind)
             {
                 case ResultKind.Pass:
-                {
-                    PassTargets.Add(targetPath);
-                    break;
-                }
+                    {
+                        this.PassTargets.Add(targetPath);
+                        break;
+                    }
 
                 case ResultKind.NotApplicable:
-                {
-                    NotApplicableTargets.Add(targetPath);
-                    break;
-                }
+                    {
+                        this.NotApplicableTargets.Add(targetPath);
+                        break;
+                    }
 
                 default:
-                {
-                    break;
-                }
+                    {
+                        break;
+                    }
             }
         }
 
@@ -79,26 +79,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             switch (messageKind)
             {
                 case FailureLevel.Error:
-                {
-                    FailTargets.Add(targetPath);
-                    break;
-                }
+                    {
+                        this.FailTargets.Add(targetPath);
+                        break;
+                    }
 
                 case FailureLevel.Warning:
-                {
-                    FailTargets.Add(targetPath);
-                    break;
-                }
+                    {
+                        this.FailTargets.Add(targetPath);
+                        break;
+                    }
 
                 case FailureLevel.Note:
-                {
-                    throw new NotImplementedException();
-                }
+                    {
+                        throw new NotImplementedException();
+                    }
 
                 default:
-                {
-                    break;
-                }
+                    {
+                        break;
+                    }
             }
         }
 
@@ -109,7 +109,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void LogConfigurationNotification(Sarif.Notification notification)
         {
-            ConfigurationErrorTargets.Add(notification.Locations[0].PhysicalLocation.ArtifactLocation.Uri.LocalPath);
+            this.ConfigurationErrorTargets.Add(notification.Locations[0].PhysicalLocation.ArtifactLocation.Uri.LocalPath);
         }
     }
 }

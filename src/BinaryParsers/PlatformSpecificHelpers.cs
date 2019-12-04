@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public static void ThrowIfNotOnWindows()
         {
-            if(!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 throw new PlatformNotSupportedException(
                     string.Format(BinaryParsersResources.PlatformUnsupportedFormat, RuntimeInformation.OSDescription, OSPlatform.Windows));

@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    class TestRoslynAnalyzer : DiagnosticAnalyzer
+    internal class TestRoslynAnalyzer : DiagnosticAnalyzer
     {
         internal static DiagnosticDescriptor SymbolNameRule = new DiagnosticDescriptor(id: "T1001",
                                                                              title: "Symbol name reporter",
@@ -35,13 +35,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static readonly ImmutableArray<DiagnosticDescriptor> s_supportedDiagnostics = ImmutableArray.Create(SymbolNameRule, CallbackReportingRule);
 
-        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        {
-            get
-            {
-                return s_supportedDiagnostics;
-            }
-        }
+        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => s_supportedDiagnostics;
 
         public override void Initialize(AnalysisContext analysisContext)
         {
@@ -50,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // The compilation start action cannot report a diagnostic,
                 // so we do not report T1002 here.
 
-                compilationContext.RegisterSymbolAction(context =>                
+                compilationContext.RegisterSymbolAction(context =>
                 {
                     // We do not report a callback here, as the analysis itself serves.
                     AnalyzeSymbol((INamedTypeSymbol)context.Symbol, context.ReportDiagnostic);

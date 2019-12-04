@@ -3,13 +3,13 @@
 
 using System.Collections.Generic;
 using System.Composition;
-using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif;
-using Microsoft.CodeAnalysis.BinaryParsers;
-using ELFSharp.ELF;
 using System.Linq;
+using ELFSharp.ELF;
 using ELFSharp.ELF.Segments;
+using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -19,41 +19,32 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA3001
         /// </summary>
-        public override string Id { get { return RuleIds.EnablePositionIndependentExecutable; } }
+        public override string Id => RuleIds.EnablePositionIndependentExecutable;
 
         /// <summary>
         /// "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section,
         ///  if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult.
         ///  This can be enabled by passing '-f pie' to clang/gcc."
         /// </summary>
-        public override MultiformatMessageString FullDescription
-        {
-            get { return  new MultiformatMessageString { Text = RuleResources.BA3001_EnablePositionIndependentExecutable_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3001_EnablePositionIndependentExecutable_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA3001_Pass_Executable),
                     nameof(RuleResources.BA3001_Pass_Library),
                     nameof(RuleResources.BA3001_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             IELF elf = target.ELF;
-            
-            if(elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable )
+
+            if (elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable)
             {
                 reasonForNotAnalyzing = reasonForNotAnalyzing = MetadataConditions.ElfIsCoreNoneOrObject;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
-            
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }

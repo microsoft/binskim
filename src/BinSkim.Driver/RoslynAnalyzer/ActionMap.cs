@@ -20,25 +20,25 @@ namespace Microsoft.CodeAnalysis.IL
 
         public ActionMap()
         {
-            _map = new SortedList<TKind, Action<TContext>>();
+            this._map = new SortedList<TKind, Action<TContext>>();
         }
 
         public void Add(Action<TContext> action, ImmutableArray<TKind> kinds)
         {
-            foreach (var kind in kinds)
+            foreach (TKind kind in kinds)
             {
-                Action<TContext> actions;
-                _map.TryGetValue(kind, out actions);
+                this._map.TryGetValue(kind, out Action<TContext> actions);
                 actions += action;
-                _map[kind] = actions;
+                this._map[kind] = actions;
             }
         }
 
         public void Invoke(TKind kind, TContext context)
         {
-            Action<TContext> actions;
-            if (_map.TryGetValue(kind, out actions))
+            if (this._map.TryGetValue(kind, out Action<TContext> actions))
+            {
                 actions(context);
+            }
         }
     }
 }

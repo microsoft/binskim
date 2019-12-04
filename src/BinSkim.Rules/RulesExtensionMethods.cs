@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static Dictionary<CryptoError, string> BuildCryptoErrorDescriptions()
         {
-            var result = new Dictionary<CryptoError, string>()
+            Dictionary<CryptoError, string> result = new Dictionary<CryptoError, string>()
             {
                 { CryptoError.ERROR_SUCCESS, "Call succeeded." },
                 { CryptoError.CERT_E_CHAINING, "An internal certificate chaining error has occurred." },
@@ -160,8 +160,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
         public static string GetErrorDescription(this CryptoError cryptoError)
         {
-            string result;
-            if (!s_cryptoErrorToDescriptionMap.TryGetValue(cryptoError, out result))
+            if (!s_cryptoErrorToDescriptionMap.TryGetValue(cryptoError, out string result))
             {
                 throw new InvalidOperationException("Unrecognized crypto HRESULT: 0x" + cryptoError.ToString("x"));
             }

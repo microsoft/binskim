@@ -11,35 +11,35 @@ namespace Microsoft.CodeAnalysis.IL
 
         public RoslynSymbolVisitor(Action<ISymbol> action)
         {
-            _action = action;
+            this._action = action;
         }
 
         public override void DefaultVisit(ISymbol symbol)
         {
-            _action(symbol);
+            this._action(symbol);
         }
 
         public override void VisitAssembly(IAssemblySymbol symbol)
         {
-            foreach (var module in symbol.Modules) { Visit(module); }
+            foreach (IModuleSymbol module in symbol.Modules) { this.Visit(module); }
             base.VisitAssembly(symbol);
         }
 
         public override void VisitModule(IModuleSymbol symbol)
         {
-            Visit(symbol.GlobalNamespace);
+            this.Visit(symbol.GlobalNamespace);
             base.VisitModule(symbol);
         }
 
         public override void VisitNamespace(INamespaceSymbol symbol)
         {
-            foreach (var member in symbol.GetMembers()) { Visit(member); }
+            foreach (INamespaceOrTypeSymbol member in symbol.GetMembers()) { this.Visit(member); }
             base.VisitNamespace(symbol);
         }
 
         public override void VisitNamedType(INamedTypeSymbol symbol)
         {
-            foreach (var member in symbol.GetMembers()) { Visit(member); }
+            foreach (ISymbol member in symbol.GetMembers()) { this.Visit(member); }
             base.VisitNamedType(symbol);
         }
     }

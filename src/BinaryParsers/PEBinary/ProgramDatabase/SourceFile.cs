@@ -22,8 +22,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// RCW.</param>
         public SourceFile(IDiaSourceFile source)
         {
-            _hashBytes = new Lazy<byte[]>(GetHash);
-            _sourceFile = source;
+            this._hashBytes = new Lazy<byte[]>(this.GetHash);
+            this._sourceFile = source;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return _hashBytes.Value;       // NB: evil callers can change the contents of the hash array
+                return this._hashBytes.Value;       // NB: evil callers can change the contents of the hash array
             }
         }
 
@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return (HashType)_sourceFile.checksumType;
+                return (HashType)this._sourceFile.checksumType;
             }
         }
 
@@ -57,7 +57,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return _sourceFile.fileName;
+                return this._sourceFile.fileName;
             }
         }
 
@@ -67,12 +67,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <seealso cref="M:System.IDisposable.Dispose()"/>
         public void Dispose()
         {
-            if (!_disposed)
+            if (!this._disposed)
             {
-                Marshal.ReleaseComObject(_sourceFile);
+                Marshal.ReleaseComObject(this._sourceFile);
             }
 
-            _disposed = true;
+            this._disposed = true;
         }
 
         private byte[] GetHash()
@@ -81,14 +81,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             try
             {
-                uint hashLength = 0;
-                _sourceFile.get_checksum(0, out hashLength, IntPtr.Zero);
+                this._sourceFile.get_checksum(0, out uint hashLength, IntPtr.Zero);
 
                 int allocSize = checked((int)hashLength);
                 nativeBuffer = Marshal.AllocHGlobal(allocSize);
 
-                uint actualHashLength;
-                _sourceFile.get_checksum(hashLength, out actualHashLength, nativeBuffer);
+                this._sourceFile.get_checksum(hashLength, out uint actualHashLength, nativeBuffer);
                 if (actualHashLength != hashLength)
                 {
                     throw new InvalidOperationException("Inconsistent hash lengths returned from IDiaSourceFile::get_checksum.");
@@ -106,7 +104,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private void AssertNotDisposed()
         {
-            if (_disposed)
+            if (this._disposed)
             {
                 throw new ObjectDisposedException("SourceFile");
             }

@@ -41,27 +41,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 throw new ArgumentOutOfRangeException("maxRecords", maxRecords, "Max record count must be at least 4 to leave room for truncation messages.");
             }
 
-            _rawRecords = new List<CompilandRecord>();
-            _maxRecords = maxRecords;
+            this._rawRecords = new List<CompilandRecord>();
+            this._maxRecords = maxRecords;
         }
 
         /// <summary>Adds record to this list.</summary>
         /// <param name="record">The record to add.</param>
         public void Add(CompilandRecord record)
         {
-            _sorted = false;
-            _rawRecords.Add(record);
+            this._sorted = false;
+            this._rawRecords.Add(record);
         }
 
         /// <summary>Gets a value indicating whether or not this list is empty.</summary>
         /// <value>true if empty, false if not.</value>
-        public bool Empty
-        {
-            get
-            {
-                return _rawRecords.Count == 0;
-            }
-        }
+        public bool Empty => this._rawRecords.Count == 0;
 
         /// <summary>Creates a sorted formatted object list string.</summary>
         /// <returns>The sorted, formatted object list.</returns>
@@ -74,7 +68,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         public override string ToString()
         {
-            return CreateSortedObjectList();
+            return this.CreateSortedObjectList();
         }
 
         /// <summary>Creates truncated object list for display purposes.</summary>
@@ -82,7 +76,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public string CreateTruncatedObjectList()
         {
             this.EnsureSorted();
-            if (_rawRecords.Count <= _maxRecords)
+            if (this._rawRecords.Count <= this._maxRecords)
             {
                 // No truncation necessary.
                 // (Avoids unnecessary calulation and prevents infinite loops;
@@ -96,13 +90,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             // Build `blockStarts` and `blockDisplaySizes` by trying to give each library
             // `targetLibraryBlockSize` space
-            int remainingSpace = TryRoughFitOfBlocksOfTargetLibraryBlockSize(blockStarts, blockDisplaySizes, _maxRecords - 1 /* -1 for total truncated records message */);
-            bool anyLibrariesAreCompletelyTruncated = blockStarts[blockStarts.Count - 1] != _rawRecords.Count;
+            int remainingSpace = this.TryRoughFitOfBlocksOfTargetLibraryBlockSize(blockStarts, blockDisplaySizes, this._maxRecords - 1 /* -1 for total truncated records message */);
+            bool anyLibrariesAreCompletelyTruncated = blockStarts[blockStarts.Count - 1] != this._rawRecords.Count;
             if (anyLibrariesAreCompletelyTruncated)
             {
                 // There will be a "completely removed libraries" block; recalculate with 1 less remainingSpace
                 // to allow for that message
-                remainingSpace = TryRoughFitOfBlocksOfTargetLibraryBlockSize(blockStarts, blockDisplaySizes, _maxRecords - 2);
+                remainingSpace = this.TryRoughFitOfBlocksOfTargetLibraryBlockSize(blockStarts, blockDisplaySizes, this._maxRecords - 2);
             }
 
             ExpandDisplayedBlockSizesToConsumeRemainingSpace(blockStarts, blockDisplaySizes, remainingSpace);
@@ -131,7 +125,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     sb.Append('(');
                     sb.Append(truncatedRecords.ToString(CultureInfo.InvariantCulture));
                     sb.Append(" object files truncated");
-                    string library = _rawRecords[blockStart].Library;
+                    string library = this._rawRecords[blockStart].Library;
                     if (library != null)
                     {
                         sb.Append(" from ");
@@ -146,12 +140,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             if (anyLibrariesAreCompletelyTruncated)
             {
                 int ptr = blockStarts[blockStarts.Count - 1];
-                int totallyTruncatedObjects = _rawRecords.Count - ptr;
+                int totallyTruncatedObjects = this._rawRecords.Count - ptr;
                 int totallyTruncatedLibraries = 0;
-                while (ptr != _rawRecords.Count)
+                while (ptr != this._rawRecords.Count)
                 {
                     ++totallyTruncatedLibraries;
-                    ptr = FindNextLibraryTransition(ptr);
+                    ptr = this.FindNextLibraryTransition(ptr);
                 }
 
                 // (X entire libraries truncated containing Y object files)
@@ -176,7 +170,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
 
             string result = sb.ToString();
-            Debug.Assert(result.Count(ch => ch == Environment.NewLine[0]) == _maxRecords);
+            Debug.Assert(result.Count(ch => ch == Environment.NewLine[0]) == this._maxRecords);
             return result;
         }
 
@@ -184,14 +178,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <returns>The enumerator.</returns>
         public IEnumerator<CompilandRecord> GetEnumerator()
         {
-            return ((IEnumerable<CompilandRecord>)_rawRecords).GetEnumerator();
+            return ((IEnumerable<CompilandRecord>)this._rawRecords).GetEnumerator();
         }
 
         /// <summary>Gets the enumerator.</summary>
         /// <returns>The enumerator.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<CompilandRecord>)_rawRecords).GetEnumerator();
+            return ((IEnumerable<CompilandRecord>)this._rawRecords).GetEnumerator();
         }
 
         private int TryRoughFitOfBlocksOfTargetLibraryBlockSize(List<int> blockStarts, List<int> blockDisplaySizes, int spaceToFitFor)
@@ -205,9 +199,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             int targetLibraryBlockSize = Math.Max(2, (int)Math.Truncate(Math.Sqrt(spaceToFitFor)));
 
             int next = 0;
-            for (int ptr = 0; spaceToFitFor != 0 && ptr != _rawRecords.Count; ptr = next)
+            for (int ptr = 0; spaceToFitFor != 0 && ptr != this._rawRecords.Count; ptr = next)
             {
-                next = FindNextLibraryTransition(ptr);
+                next = this.FindNextLibraryTransition(ptr);
                 blockStarts.Add(next);
                 int consumed = Math.Min(Math.Min(targetLibraryBlockSize, next - ptr), spaceToFitFor);
                 spaceToFitFor -= consumed;
@@ -218,7 +212,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 // Last "block start" has no "n + 1" record and represents
                 // the entire set of truncated entire libraries
-                blockStarts.Add(FindNextLibraryTransition(blockStarts[blockStarts.Count - 1]));
+                blockStarts.Add(this.FindNextLibraryTransition(blockStarts[blockStarts.Count - 1]));
             }
 
             return spaceToFitFor;
@@ -252,16 +246,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private int FindNextLibraryTransition(int startAt)
         {
-            AssertIndex(startAt);
+            this.AssertIndex(startAt);
 
-            if (startAt == _rawRecords.Count)
+            if (startAt == this._rawRecords.Count)
             {
                 return startAt;
             }
 
-            string firstLib = _rawRecords[startAt].Library;
-            while (startAt < _rawRecords.Count &&
-                StringComparer.OrdinalIgnoreCase.Equals(firstLib, _rawRecords[startAt].Library))
+            string firstLib = this._rawRecords[startAt].Library;
+            while (startAt < this._rawRecords.Count &&
+                StringComparer.OrdinalIgnoreCase.Equals(firstLib, this._rawRecords[startAt].Library))
             {
                 ++startAt;
             }
@@ -273,31 +267,31 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         private void AssertRange(int first, int last)
         {
             Debug.Assert(first <= last);
-            AssertIndex(first);
-            AssertIndex(last);
+            this.AssertIndex(first);
+            this.AssertIndex(last);
         }
 
         [Conditional("DEBUG")]
         private void AssertIndex(int index)
         {
-            Debug.Assert(index >= 0 && index <= _rawRecords.Count, "Record index out of range");
+            Debug.Assert(index >= 0 && index <= this._rawRecords.Count, "Record index out of range");
         }
 
         private void AppendRecords(StringBuilder sb, int first, int last)
         {
-            AssertRange(first, last);
+            this.AssertRange(first, last);
 
             for (; first != last; ++first)
             {
-                _rawRecords[first].AppendString(sb);
+                this._rawRecords[first].AppendString(sb);
                 sb.AppendLine();
             }
         }
 
         private string CreateAllObjectList()
         {
-            var sb = new StringBuilder();
-            foreach (CompilandRecord record in _rawRecords)
+            StringBuilder sb = new StringBuilder();
+            foreach (CompilandRecord record in this._rawRecords)
             {
                 record.AppendString(sb);
                 sb.AppendLine();
@@ -308,13 +302,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private void EnsureSorted()
         {
-            if (_sorted)
+            if (this._sorted)
             {
                 return;
             }
 
-            _rawRecords.Sort();
-            _sorted = true;
+            this._rawRecords.Sort();
+            this._sorted = true;
         }
     }
 }

@@ -2,10 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Dia2Lib;
@@ -29,10 +26,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <param name="symbolPath">The symsrv.dll symbol path.</param>
         public Pdb(string pePath, string symbolPath = null, string localSymbolDirectories = null)
         {
-            _globalScope = new Lazy<Symbol>(GetGlobalScope, LazyThreadSafetyMode.ExecutionAndPublication);
-            _writableSegmentIds = new Lazy<HashSet<uint>>(GenerateWritableSegmentSet);
-            _executableSectionContribCompilandIds = new Lazy<HashSet<uint>>(GenerateExecutableSectionContribIds);
-            Init(pePath, symbolPath, localSymbolDirectories);
+            this._globalScope = new Lazy<Symbol>(this.GetGlobalScope, LazyThreadSafetyMode.ExecutionAndPublication);
+            this._writableSegmentIds = new Lazy<HashSet<uint>>(this.GenerateWritableSegmentSet);
+            this._executableSectionContribCompilandIds = new Lazy<HashSet<uint>>(this.GenerateExecutableSectionContribIds);
+            this.Init(pePath, symbolPath, localSymbolDirectories);
         }
 
         /// <summary>
@@ -45,7 +42,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             try
             {
                 PlatformSpecificHelpers.ThrowIfNotOnWindows();
-                WindowsNativeLoadPdbUsingDia(peOrPdbPath, symbolPath, localSymbolDirectories);
+                this.WindowsNativeLoadPdbUsingDia(peOrPdbPath, symbolPath, localSymbolDirectories);
             }
             catch (PlatformNotSupportedException ex)
             {
@@ -79,7 +76,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 diaSource.loadDataForExe(pePath, symbolPath, IntPtr.Zero);
             }
 
-            diaSource.openSession(out _session);
+            diaSource.openSession(out this._session);
         }
 
         /// <summary>
@@ -87,21 +84,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// must NOT dispose it.
         /// </summary>
         /// <value>The global scope.</value>
-        public Symbol GlobalScope
-        {
-            get
-            {
-                return _globalScope.Value;
-            }
-        }
+        public Symbol GlobalScope => this._globalScope.Value;
 
-        public bool IsStripped
-        {
-            get
-            {
-                return GlobalScope.IsStripped;
-            }
-        }
+        public bool IsStripped => this.GlobalScope.IsStripped;
 
 
         /// <summary>
@@ -151,12 +136,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             IDiaEnumSourceFiles sourceFilesEnum = null;
             try
             {
-                _session.findFile(inObjectModule, null, 0, out sourceFilesEnum);
+                this._session.findFile(inObjectModule, null, 0, out sourceFilesEnum);
 
                 while (true)
                 {
                     sourceFilesEnum.Next(1, out IDiaSourceFile sourceFile, out uint celt);
-                    if (celt != 1) break;
+                    if (celt != 1)
+                    {
+                        break;
+                    }
 
                     yield return new SourceFile(sourceFile);
                 }
@@ -176,7 +164,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             try
             {
-                _session.getEnumTables(out enumTables);
+                this._session.getEnumTables(out enumTables);
                 if (enumTables == null)
                 {
                     return null;
@@ -211,12 +199,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private HashSet<uint> GenerateWritableSegmentSet()
         {
-            var result = new HashSet<uint>();
+            HashSet<uint> result = new HashSet<uint>();
             IDiaEnumSegments enumSegments = null;
 
             try
             {
-                enumSegments = CreateDiaTable<IDiaEnumSegments>();
+                enumSegments = this.CreateDiaTable<IDiaEnumSegments>();
             }
             catch (NotImplementedException) { }
 
@@ -252,19 +240,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         public bool IsSegmentWithIdWritable(uint addressSection)
         {
-            return _writableSegmentIds.Value.Contains(addressSection);
+            return this._writableSegmentIds.Value.Contains(addressSection);
         }
 
         private readonly Lazy<HashSet<uint>> _executableSectionContribCompilandIds;
 
         private HashSet<uint> GenerateExecutableSectionContribIds()
         {
-            var result = new HashSet<uint>();
+            HashSet<uint> result = new HashSet<uint>();
             IDiaEnumSectionContribs enumSectionContribs = null;
 
             try
             {
-                enumSectionContribs = CreateDiaTable<IDiaEnumSectionContribs>();
+                enumSectionContribs = this.CreateDiaTable<IDiaEnumSectionContribs>();
             }
             catch (NotImplementedException) { }
 
@@ -304,41 +292,35 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         public bool CompilandWithIdIsInExecutableSectionContrib(uint segmentId)
         {
-            return _executableSectionContribCompilandIds.Value.Contains(segmentId);
+            return this._executableSectionContribCompilandIds.Value.Contains(segmentId);
         }
 
         public bool ContainsExecutableSectionContribs()
         {
-            return _executableSectionContribCompilandIds.Value.Count != 0;
+            return this._executableSectionContribCompilandIds.Value.Count != 0;
         }
 
         /// <summary>
         /// Returns the location of the PDB for this module
         /// </summary>
-        public string PdbLocation
-        {
-            get
-            {
-                return _session.globalScope.symbolsFileName;
-            }
-        }
+        public string PdbLocation => this._session.globalScope.symbolsFileName;
 
         public void Dispose()
         {
-            if (_globalScope.IsValueCreated)
+            if (this._globalScope.IsValueCreated)
             {
-                _globalScope.Value.Dispose();
+                this._globalScope.Value.Dispose();
             }
 
-            if (_session != null)
+            if (this._session != null)
             {
-                Marshal.ReleaseComObject(_session);
+                Marshal.ReleaseComObject(this._session);
             }
         }
 
         private Symbol GetGlobalScope()
         {
-            return Symbol.Create(_session.globalScope);
+            return Symbol.Create(this._session.globalScope);
         }
     }
 }

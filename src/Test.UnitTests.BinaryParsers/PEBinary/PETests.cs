@@ -3,7 +3,6 @@
 
 using System;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text;
 using FluentAssertions;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -79,13 +78,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             string[] filters = new[] { "*.dll", "*.exe" };
             string testsDataDirectory = PEBinaryTests.BaselineTestsDataDirectory;
 
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
             foreach (string filter in filters)
             {
                 foreach (string file in Directory.GetFiles(testsDataDirectory, filter))
                 {
-                    ExaminePEMetadata(file, sb);
+                    this.ExaminePEMetadata(file, sb);
                 }
             }
 
@@ -94,10 +93,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         private void ExaminePEMetadata(string file, StringBuilder sb)
         {
-            var pe = new PE(file);
+            PE pe = new PE(file);
 
             bool isNative = file.Contains("Native");
-            
+
             if (isNative)
             {
                 bool isManaged = (pe.IsDotNetCore & pe.IsDotNetCore & pe.IsDotNetFramework & pe.IsDotNetStandard &
@@ -107,7 +106,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 {
                     sb.Append("Binary was unexpectedly evaluated as both native and managed: " + file);
                 }
-            }            
+            }
         }
     }
 }

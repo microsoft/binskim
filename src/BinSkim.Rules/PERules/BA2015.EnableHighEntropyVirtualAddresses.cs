@@ -1,16 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
-
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
-using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -20,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2015
         /// </summary>
-        public override string Id { get { return RuleIds.EnableHighEntropyVirtualAddressesId; } }
+        public override string Id => RuleIds.EnableHighEntropyVirtualAddressesId;
 
         /// <summary>
         /// Binaries should be marked as high entropy Address Space Layout Randomization
@@ -32,25 +30,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// high entropy ASLR.
         /// </summary>
 
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2015_EnableHighEntropyVirtualAddresses_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2015_EnableHighEntropyVirtualAddresses_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2015_Pass),
                     nameof(RuleResources.BA2015_Error_NoHighEntropyVA),
                     nameof(RuleResources.BA2015_Error_NoLargeAddressAware),
                     nameof(RuleResources.BA2015_Error_NeitherHighEntropyVANorLargeAddressAware),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
-        
+
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
@@ -71,7 +60,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     return result;
                 }
             }
-            
+
             reasonForNotAnalyzing = MetadataConditions.ImageIsNotExe;
             if (!portableExecutable.PEHeaders.IsExe) { return result; }
 
@@ -143,7 +132,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             //'{0}' is high entropy ASLR compatible.
-            context.Logger.Log(this, 
+            context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2015_Pass),
                         context.TargetUri.GetFileName()));

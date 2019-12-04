@@ -19,14 +19,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         internal static string GetTestDirectory(string relativeDirectory)
         {
-            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
-            var dirPath = Path.GetDirectoryName(codeBasePath);
+            Uri codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
+            string dirPath = Path.GetDirectoryName(codeBasePath);
             dirPath = Path.Combine(dirPath, string.Format(@"..{0}..{0}..{0}..{0}src{0}", Path.DirectorySeparatorChar));
             dirPath = Path.GetFullPath(dirPath);
             return Path.Combine(dirPath, relativeDirectory);
         }
-    
+
         [Fact]
         public void PEBinary_PdbAvailable()
         {

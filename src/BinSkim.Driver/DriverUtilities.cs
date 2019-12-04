@@ -19,8 +19,8 @@ namespace Microsoft.CodeAnalysis.IL
                                         };
 
         public static ImmutableArray<T> GetExports<T>(IEnumerable<Assembly> assemblies = null)
-        {            
-            var container = CreateCompositionContainer<T>(assemblies ?? s_defaultCompositionAssemblies);
+        {
+            CompositionHost container = CreateCompositionContainer<T>(assemblies ?? s_defaultCompositionAssemblies);
             return container.GetExports<T>().ToImmutableArray();
         }
 
@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private static ConventionBuilder GetConventions<T>()
         {
-            var conventions = new ConventionBuilder();
+            ConventionBuilder conventions = new ConventionBuilder();
 
             // New per-analyzer options mechanism 
             conventions.ForTypesDerivedFrom<T>()

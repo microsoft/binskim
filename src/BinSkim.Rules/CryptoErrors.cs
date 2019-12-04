@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 namespace Microsoft.CodeAnalysis.IL.Rules
-{ 
+{
     /// <summary>
     /// This class defines a range of execution conditions that identify various results
     /// in code, both for primary function of application and negative conditions

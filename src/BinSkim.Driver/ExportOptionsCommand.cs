@@ -11,14 +11,8 @@ namespace Microsoft.CodeAnalysis.IL
 {
     internal class ExportConfigurationCommand : ExportConfigurationCommandBase
     {
-        public override IEnumerable<Assembly> DefaultPlugInAssemblies
-        {
-            get
-            {
-                return new Assembly[] {
+        public override IEnumerable<Assembly> DefaultPlugInAssemblies => new Assembly[] {
                     typeof(MarkImageAsNXCompatible).Assembly
-                }; 
-            }
-        }
+                };
     }
 }

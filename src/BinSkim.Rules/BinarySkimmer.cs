@@ -13,17 +13,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         private static readonly Uri s_helpUri = new Uri("https://github.com/microsoft/binskim");
 
-        public override Uri HelpUri { get { return s_helpUri; } }
+        public override Uri HelpUri => s_helpUri;
 
         // TODO: author good help text
         // https://github.com/Microsoft/binskim/issues/192
-        public override MultiformatMessageString Help {  get { return this.FullDescription; } }
+        public override MultiformatMessageString Help => this.FullDescription;
 
         public BinarySkimmer()
         {
             // Set Binscope friendly name for backwards compatibility, if one exists.
             string altId = BinScopeCompatibility.GetBinScopeRuleReadableName(this.Id);
-            if (!String.IsNullOrEmpty(altId))
+            if (!string.IsNullOrEmpty(altId))
             {
                 this.SetProperty<string>(BinScopeCompatibility.EquivalentBinScopeRulePropertyName, altId);
             }
@@ -33,12 +33,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // that potentially fires warnings (and its default is error).
         public override FailureLevel DefaultLevel => FailureLevel.Error;
 
-        protected override ResourceManager ResourceManager
-        {
-            get
-            {
-                return RuleResources.ResourceManager;
-            }
-        }
+        protected override ResourceManager ResourceManager => RuleResources.ResourceManager;
     }
 }

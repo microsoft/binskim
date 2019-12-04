@@ -16,30 +16,30 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         // constructors
         public SafePointer(byte[] byte_array)
         {
-            _array = byte_array;
-            _index = 0;
-            _stream = null;
+            this._array = byte_array;
+            this._index = 0;
+            this._stream = null;
         }
 
         public SafePointer(byte[] byte_array, int index)
         {
-            _array = byte_array;
-            _index = index;
-            _stream = null;
+            this._array = byte_array;
+            this._index = index;
+            this._stream = null;
         }
 
         public SafePointer(Stream stream)
         {
-            _array = null;
-            _stream = stream;
-            _index = 0;
+            this._array = null;
+            this._stream = stream;
+            this._index = 0;
         }
 
         internal SafePointer(byte[] byte_array, Stream stream, int index)
         {
-            _array = byte_array;
-            _stream = stream;
-            _index = index;
+            this._array = byte_array;
+            this._stream = stream;
+            this._index = index;
         }
 
         // required overrides
@@ -55,13 +55,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public override int GetHashCode()
         {
-            return (_array != null)
-                ? (_array.GetHashCode() << 16) + _index
-                : _stream.GetHashCode();
+            return (this._array != null)
+                ? (this._array.GetHashCode() << 16) + this._index
+                : this._stream.GetHashCode();
         }
 
         // conversion
-        public static implicit operator byte (SafePointer pp)
+        public static implicit operator byte(SafePointer pp)
         {
             pp.TestPointerAndThrow();
 
@@ -79,27 +79,31 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             throw new InvalidOperationException("Neither _array nor _stream exist");
         }
 
-        public static explicit operator UInt32(SafePointer sp)
+        public static explicit operator uint(SafePointer sp)
         {
-            return (((uint)(byte)(sp + 3)) << 24) | (((uint)(byte)(sp + 2)) << 16) | (((uint)(byte)(sp + 1)) << 8) | ((uint)(byte)(sp));
+            return (((uint)(sp + 3)) << 24) | (((uint)(sp + 2)) << 16) | (((uint)(sp + 1)) << 8) | sp;
         }
 
-        public static explicit operator UInt16(SafePointer sp)
+        public static explicit operator ushort(SafePointer sp)
         {
-            return (ushort)(((byte)(sp + 1) << 8) | (byte)(sp));
+            return (ushort)((sp + 1 << 8) | sp);
         }
 
-        public static explicit operator UInt64(SafePointer sp)
+        public static explicit operator ulong(SafePointer sp)
         {
-            return ((UInt64)(UInt32)(sp + 4) << 32) | ((UInt64)(UInt32)(sp));
+            return ((ulong)(uint)(sp + 4) << 32) | (uint)(sp);
         }
 
-        public static explicit operator string (SafePointer sp)
+        public static explicit operator string(SafePointer sp)
         {
             if (sp._array != null)
             {
                 int nullterm = sp._index;
-                while (sp._array[nullterm] != 0) nullterm++;
+                while (sp._array[nullterm] != 0)
+                {
+                    nullterm++;
+                }
+
                 return System.Text.Encoding.ASCII.GetString(sp._array, sp._index, nullterm - sp._index);
             }
 
@@ -149,22 +153,46 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public static int operator -(SafePointer spl, SafePointer spr)
         {
-            if (spl._array != spr._array) throw new Exception("Incomparable pointers");
-            if (spl._stream != spr._stream) throw new Exception("Incomparable pointers");
+            if (spl._array != spr._array)
+            {
+                throw new Exception("Incomparable pointers");
+            }
+
+            if (spl._stream != spr._stream)
+            {
+                throw new Exception("Incomparable pointers");
+            }
+
             return spl._index - spr._index;
         }
 
         public static bool operator <(SafePointer spl, SafePointer spr)
         {
-            if (spl._array != spr._array) throw new Exception("Incomparable pointers");
-            if (spl._stream != spr._stream) throw new Exception("Incomparable pointers");
+            if (spl._array != spr._array)
+            {
+                throw new Exception("Incomparable pointers");
+            }
+
+            if (spl._stream != spr._stream)
+            {
+                throw new Exception("Incomparable pointers");
+            }
+
             return (spl._index < spr._index);
         }
 
         public static bool operator >(SafePointer spl, SafePointer spr)
         {
-            if (spl._array != spr._array) throw new Exception("Incomparable pointers");
-            if (spl._stream != spr._stream) throw new Exception("Incomparable pointers");
+            if (spl._array != spr._array)
+            {
+                throw new Exception("Incomparable pointers");
+            }
+
+            if (spl._stream != spr._stream)
+            {
+                throw new Exception("Incomparable pointers");
+            }
+
             return (spl._index > spr._index);
         }
 
@@ -192,36 +220,39 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public int Address
         {
-            get { return _index; }
-            set { _index = value; }
+            get => this._index;
+            set => this._index = value;
         }
 
         public override string ToString()
         {
-            return _index.ToString("X");
+            return this._index.ToString("X");
         }
 
         public byte[] GetBytes(int len)
         {
-            if (_array != null)
+            if (this._array != null)
             {
-                if (_index + len > _array.Length)
+                if (this._index + len > this._array.Length)
+                {
                     throw new ArgumentException("Out of bounds");
+                }
+
                 byte[] ret = new byte[len];
-                Array.Copy(_array, _index, ret, 0, len);
+                Array.Copy(this._array, this._index, ret, 0, len);
                 return ret;
             }
 
-            if (_stream != null)
+            if (this._stream != null)
             {
-                if (_stream.Seek(_index, SeekOrigin.Begin) != _index)
+                if (this._stream.Seek(this._index, SeekOrigin.Begin) != this._index)
                 {
                     throw new InvalidOperationException("Seeking outside stream boundaries");
                 }
 
                 byte[] ret = new byte[len];
 
-                if (_stream.Read(ret, 0, len) != len)
+                if (this._stream.Read(ret, 0, len) != len)
                 {
                     throw new InvalidOperationException("Reading past stream boundaries");
                 }
@@ -234,24 +265,24 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public Stream GetStream()
         {
-            if (_array != null)
+            if (this._array != null)
             {
-                return new MemoryStream(_array, _index, _array.Length - _index);
+                return new MemoryStream(this._array, this._index, this._array.Length - this._index);
             }
 
-            return _stream;
+            return this._stream;
         }
 
         public bool HasData(int cBytes)
         {
-            if (_array != null)
+            if (this._array != null)
             {
-                return (_index <= _array.Length - cBytes);
+                return (this._index <= this._array.Length - cBytes);
             }
 
-            if (_stream != null)
+            if (this._stream != null)
             {
-                return (_index <= _stream.Length - cBytes);
+                return (this._index <= this._stream.Length - cBytes);
             }
 
             return true;
@@ -259,16 +290,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         private void TestPointerAndThrow()
         {
-            if (!IsValid)
+            if (!this.IsValid)
+            {
                 throw new InvalidOperationException("Pointer is beyond the safe range.");
+            }
         }
 
         public bool IsValid
         {
             get
             {
-                if ((_array != null) && (_index < _array.Length) && (_index >= 0)) return true;
-                if ((_stream != null) && (_index >= 0) && (_index < _stream.Length)) return true;
+                if ((this._array != null) && (this._index < this._array.Length) && (this._index >= 0))
+                {
+                    return true;
+                }
+
+                if ((this._stream != null) && (this._index >= 0) && (this._index < this._stream.Length))
+                {
+                    return true;
+                }
+
                 return false;
             }
         }
@@ -277,16 +318,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (((_array == null) || (_array.Length == 0)) && ((_stream == null) || (_stream.Length == 0))) return true;
+                if (((this._array == null) || (this._array.Length == 0)) && ((this._stream == null) || (this._stream.Length == 0)))
+                {
+                    return true;
+                }
+
                 return false;
             }
         }
 
         public void Set(byte b)
         {
-            if (_array != null)
+            if (this._array != null)
             {
-                _array[_index] = b;
+                this._array[this._index] = b;
             }
             else
             {

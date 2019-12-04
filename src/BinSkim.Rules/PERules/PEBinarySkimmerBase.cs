@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (context.IsPE())
             {
                 PEBinary target = context.PEBinary();
-                return CanAnalyzePE(target, context.Policy, out reasonForNotAnalyzing);
+                return this.CanAnalyzePE(target, context.Policy, out reasonForNotAnalyzing);
             }
             else
             {

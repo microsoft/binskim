@@ -4,14 +4,12 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-
 using Dia2Lib;
-
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -21,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2011
         /// </summary>
-        public override string Id { get { return RuleIds.EnableStackProtectionId; } }
+        public override string Id => RuleIds.EnableStackProtectionId;
 
         /// <summary>
         /// Binaries should be built with the stack protector buffer security
@@ -31,23 +29,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// compiled into the binary are compiled with the stack protector
         /// enabled by supplying /GS on the Visual C++ compiler command line.
         /// </summary>
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2011_EnableStackProtection_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2011_EnableStackProtection_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
-                    nameof(RuleResources.BA2011_Pass),                    
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
+                    nameof(RuleResources.BA2011_Pass),
                     nameof(RuleResources.BA2011_Error),
                     nameof(RuleResources.BA2011_Error_UnknownModuleLanguage),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -122,7 +111,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // memory corruption vulnerabilities. To resolve this issue, ensure that your code 
                 // is compiled with the stack protector enabled by supplying /GS on the Visual C++ 
                 // compiler command line. The affected modules were: {1}
-                context.Logger.Log(this, 
+                context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2011_Error),
                         context.TargetUri.GetFileName(),

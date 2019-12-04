@@ -8,15 +8,13 @@ using System.Composition;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-
 using Dia2Lib;
-
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -26,7 +24,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2007
         /// </summary>
-        public override string Id { get { return RuleIds.EnableCriticalCompilerWarningsId; } }
+        public override string Id => RuleIds.EnableCriticalCompilerWarningsId;
 
         /// <summary>
         /// Binaries should be compiled with a warning level that enables all critical
@@ -38,24 +36,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// resolve the warnings emitted.
         /// </summary>
 
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2007_EnableCriticalCompilerWarnings_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2007_EnableCriticalCompilerWarnings_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2007_Pass),
                     nameof(RuleResources.BA2007_Error_WarningsDisabled),
                     nameof(RuleResources.BA2007_Error_InsufficientWarningLevel),
                     nameof(RuleResources.BA2007_Error_UnknownModuleLanguage),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public IEnumerable<IOption> GetOptions()
         {
@@ -100,7 +89,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             TruncatedCompilandRecordList allWarningLevelLowModules = new TruncatedCompilandRecordList();
 
             string exampleTooLowWarningCommandLine = null;
-            int overallMinimumWarningLevel = Int32.MaxValue;
+            int overallMinimumWarningLevel = int.MaxValue;
             string exampleDisabledWarningCommandLine = null;
             List<int> overallDisabledWarnings = new List<int>();
 
@@ -167,7 +156,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     suffix.Add(msg);
                 }
 
-                allWarningLevelLowModules.Add(om.CreateCompilandRecordWithSuffix(String.Join(" ", suffix)));
+                allWarningLevelLowModules.Add(om.CreateCompilandRecordWithSuffix(string.Join(" ", suffix)));
             }
 
             if (unknownLanguageModules.Empty &&
@@ -192,14 +181,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' contains code from an unknown language, preventing a 
                 // comprehensive analysis of the compiler warning settings. 
                 // The language could not be identified for the following modules: {1}
-                context.Logger.Log(this, 
+                context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_UnknownModuleLanguage),
                         context.TargetUri.GetFileName(),
                         unknownLanguageModules.CreateSortedObjectList()));
             }
 
-            if (!String.IsNullOrEmpty(exampleTooLowWarningCommandLine))
+            if (!string.IsNullOrEmpty(exampleTooLowWarningCommandLine))
             {
                 // '{0}' was compiled at too low a warning level. Warning level 3 enables 
                 // important static analysis in the compiler to flag bugs that can lead 
@@ -240,7 +229,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static string CreateTextWarningList(IEnumerable<int> warningList)
         {
-            return String.Join(";", warningList
+            return string.Join(";", warningList
                 .Select(warningNumber => warningNumber.ToString(CultureInfo.InvariantCulture)));
         }
 
@@ -273,7 +262,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
         private static IntegerSet BuildRequiredCompilerWarningsSet()
         {
-            var result = new IntegerSet
+            IntegerSet result = new IntegerSet
             {
                 4018,
                 4146,

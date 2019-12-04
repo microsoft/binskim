@@ -3,11 +3,11 @@
 
 using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
 using Xunit;
 using Xunit.Abstractions;
-using Microsoft.CodeAnalysis.Sarif;
-using FluentAssertions;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -17,40 +17,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public EnableSpectreMitigationsTests(ITestOutputHelper output)
         {
-            _testOutputHelper = output;
+            this._testOutputHelper = output;
 
             // Reset the static cache of compiler data before each test, because
             // we use a couple of different Policy configurations in testing.
             EnableSpectreMitigations._compilerData = null;
         }
-        
+
         [Fact]
         public void LoadCompilerDataFromConfig_ParsesAndCachesAsExpected()
         {
-            var context = new BinaryAnalyzerContext();
-            context.Policy = new PropertiesDictionary();
+            BinaryAnalyzerContext context = new BinaryAnalyzerContext
+            {
+                Policy = new PropertiesDictionary()
+            };
 
-            AddFakeConfigTestData(context.Policy);
+            this.AddFakeConfigTestData(context.Policy);
 
             Dictionary<MachineFamily, CompilerVersionToMitigation[]> result = EnableSpectreMitigations.LoadCompilerDataFromConfig(context.Policy);
 
-            ValidateResultFromFakeTestData(result[MachineFamily.X86]);
+            this.ValidateResultFromFakeTestData(result[MachineFamily.X86]);
             result.Should().ContainKeys(new MachineFamily[] { MachineFamily.X86, MachineFamily.Arm });
         }
 
         [Fact]
         public void CreateSortedVersionDictionary_ParsesAsExpected()
         {
-            var versionList = GenerateMachineFamilyData();
+            PropertiesDictionary versionList = this.GenerateMachineFamilyData();
 
             CompilerVersionToMitigation[] result = EnableSpectreMitigations.CreateSortedVersionDictionary(versionList);
 
-            ValidateResultFromFakeTestData(result);
+            this.ValidateResultFromFakeTestData(result);
         }
 
         private void ValidateResultFromFakeTestData(CompilerVersionToMitigation[] results)
         {
-            results.ShouldAllBeEquivalentTo(testData, "Loaded from test data.");
+            results.ShouldAllBeEquivalentTo(this.testData, "Loaded from test data.");
         }
 
         [Theory]
@@ -59,10 +61,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [InlineData("1.0.0.0 - 1.8.0.0", "1.1.0.0 - 1.7.0.0")]
         public void CreateSortedVersionDictionary_OverlappingVersionRange_ThrowsException(string firstRange, string secondRange)
         {
-            var versionList = new PropertiesDictionary();
-
-            versionList.Add(firstRange, (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
-            versionList.Add(secondRange, (CompilerMitigations.QSpectreAvailable).ToString());
+            PropertiesDictionary versionList = new PropertiesDictionary
+            {
+                { firstRange, (CompilerMitigations.D2GuardSpecLoadAvailable).ToString() },
+                { secondRange, (CompilerMitigations.QSpectreAvailable).ToString() }
+            };
 
             Assert.Throws<InvalidOperationException>(() => EnableSpectreMitigations.CreateSortedVersionDictionary(versionList));
         }
@@ -70,9 +73,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void CreateSortedVersionDictionary_BadVersionRange_ThrowsException()
         {
-            var versionList = new PropertiesDictionary();
-
-            versionList.Add("8.0.0.0 - 1.0.0.0", (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
+            PropertiesDictionary versionList = new PropertiesDictionary
+            {
+                { "8.0.0.0 - 1.0.0.0", (CompilerMitigations.D2GuardSpecLoadAvailable).ToString() }
+            };
 
             Assert.Throws<InvalidOperationException>(() => EnableSpectreMitigations.CreateSortedVersionDictionary(versionList));
         }
@@ -87,15 +91,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [InlineData("100.0.0.0", ExtendedMachine.I386, CompilerMitigations.None)]
         public void GetCompilerData_VersionPresent_WorksAsExpected(string versionStr, ExtendedMachine machine, CompilerMitigations expectedMitgations)
         {
-            var context = new BinaryAnalyzerContext();
-            context.Policy = new PropertiesDictionary();
+            BinaryAnalyzerContext context = new BinaryAnalyzerContext
+            {
+                Policy = new PropertiesDictionary()
+            };
 
-            AddFakeConfigTestData(context.Policy);
+            this.AddFakeConfigTestData(context.Policy);
 
             CompilerMitigations actualMitigations = EnableSpectreMitigations.GetAvailableMitigations(context, machine, new Version(versionStr));
             Assert.Equal(expectedMitgations, actualMitigations);
         }
-        
+
         [Theory]
         [InlineData("0.0.0.1", ExtendedMachine.I386, "1.0.100.5")]
         [InlineData("1.12.0.0", ExtendedMachine.Amd64, "2.0.0.0")]
@@ -107,10 +113,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             Version actualVersion = new Version(firstVersionStr);
 
-            var context = new BinaryAnalyzerContext();
-            context.Policy = new PropertiesDictionary();
+            BinaryAnalyzerContext context = new BinaryAnalyzerContext
+            {
+                Policy = new PropertiesDictionary()
+            };
 
-            AddFakeConfigTestData(context.Policy);
+            this.AddFakeConfigTestData(context.Policy);
 
             Version nextUp = EnableSpectreMitigations.GetClosestCompilerVersionWithSpectreMitigations(context, machine, actualVersion);
 
@@ -120,14 +128,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void GetClosestCompilerVersionWithSpectreMitigations_UnsupportedOnMachine()
         {
-            BinaryAnalyzerContext context = new BinaryAnalyzerContext();
-            context.Policy = new PropertiesDictionary();
+            BinaryAnalyzerContext context = new BinaryAnalyzerContext
+            {
+                Policy = new PropertiesDictionary()
+            };
             PropertiesDictionary BA2024Config = new PropertiesDictionary();
             PropertiesDictionary mitigatedCompilers = new PropertiesDictionary();
-            PropertiesDictionary fakeX86Data = GenerateMachineFamilyData();
-            
+            PropertiesDictionary fakeX86Data = this.GenerateMachineFamilyData();
+
             mitigatedCompilers.Add(MachineFamily.X86.ToString(), fakeX86Data);
-            
+
             BA2024Config.Add("MitigatedCompilers", mitigatedCompilers);
             context.Policy.Add("BA2024.EnableSpectreMitigations.Options", BA2024Config);
 
@@ -138,12 +148,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             PropertiesDictionary BA2024Config = new PropertiesDictionary();
             PropertiesDictionary mitigatedCompilers = new PropertiesDictionary();
-            PropertiesDictionary fakeX86Data = GenerateMachineFamilyData();
+            PropertiesDictionary fakeX86Data = this.GenerateMachineFamilyData();
 
-            PropertiesDictionary fakeArmData = new PropertiesDictionary();
-            fakeArmData.Add("1.0.0.0 - 1.8.*.*", (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString());
-            fakeArmData.Add("2.0.0.0 - 2.0.0.*", (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable).ToString());
-            fakeArmData.Add("2.0.1.0 - 2.*.*.*", (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable).ToString());
+            PropertiesDictionary fakeArmData = new PropertiesDictionary
+            {
+                { "1.0.0.0 - 1.8.*.*", (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString() },
+                { "2.0.0.0 - 2.0.0.*", (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable).ToString() },
+                { "2.0.1.0 - 2.*.*.*", (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable).ToString() }
+            };
 
             mitigatedCompilers.Add(MachineFamily.X86.ToString(), fakeX86Data);
             mitigatedCompilers.Add(MachineFamily.Arm.ToString(), fakeArmData);
@@ -157,9 +169,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             PropertiesDictionary data = new PropertiesDictionary();
 
-            foreach(var entry in testData)
+            foreach (CompilerVersionToMitigation entry in this.testData)
             {
-                AddCompilerMitigationDataToDictionary(data, entry);
+                this.AddCompilerMitigationDataToDictionary(data, entry);
             }
 
             return data;
@@ -192,7 +204,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 SupportedMitigations = (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable),
             }
         };
-        
+
         private void AddCompilerMitigationDataToDictionary(PropertiesDictionary dictionary, CompilerVersionToMitigation data)
         {
             string start = data.MinimalSupportedVersion.ToString().Replace(int.MaxValue.ToString(), "*");

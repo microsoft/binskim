@@ -25,17 +25,17 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override void RegisterSymbolAction(Action<SymbolAnalysisContext> action, ImmutableArray<SymbolKind> symbolKinds)
         {
-            SymbolActions.Add(action, symbolKinds);
+            this.SymbolActions.Add(action, symbolKinds);
         }
 
         public override void RegisterCompilationStartAction(Action<CompilationStartAnalysisContext> action)
         {
-            CompilationStartActions += action;
+            this.CompilationStartActions += action;
         }
 
         public override void RegisterCompilationAction(Action<CompilationAnalysisContext> action)
         {
-            CompilationActions += action;
+            this.CompilationActions += action;
         }
 
         // These registration actions are currently unsupported or not relevant to an MSIL-driven analysis

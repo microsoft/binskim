@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Sarif;
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class BinaryAnalyzerContext : IAnalysisContext
-    {        
+    {
         private Uri _uri;
         private IBinary _iBinary;
 
@@ -16,42 +16,36 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             get
             {
-                _iBinary = _iBinary ?? BinaryTargetManager.GetBinaryFromFile(_uri, SymbolPath, LocalSymbolDirectories);
-                return _iBinary;
+                this._iBinary = this._iBinary ?? BinaryTargetManager.GetBinaryFromFile(this._uri, this.SymbolPath, this.LocalSymbolDirectories);
+                return this._iBinary;
             }
-            set
-            {
-                _iBinary = value;
-            }
+            set => this._iBinary = value;
         }
 
         public Exception TargetLoadException
         {
-            get { return Binary != null ? Binary.LoadException : null; }
-            set { throw new InvalidOperationException(); }
+            get => this.Binary != null ? this.Binary.LoadException : null;
+            set => throw new InvalidOperationException();
         }
 
         public bool IsValidAnalysisTarget
         {
-            get { return Binary != null && Binary.Valid; }
-            set { throw new InvalidOperationException(); }
+            get => this.Binary != null && this.Binary.Valid;
+            set => throw new InvalidOperationException();
         }
 
         public string LocalSymbolDirectories { get; set; }
 
         public Uri TargetUri
         {
-            get
-            {
-                return _uri;
-            }
+            get => this._uri;
             set
             {
-                if (_uri != null)
+                if (this._uri != null)
                 {
                     throw new InvalidOperationException(SdkResources.IllegalContextReuse);
                 }
-                _uri = value;
+                this._uri = value;
             }
         }
 
@@ -67,8 +61,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public string MimeType
         {
-            get { return Microsoft.CodeAnalysis.Sarif.Writers.MimeType.Binary; }
-            set { throw new InvalidOperationException(); }
+            get => Microsoft.CodeAnalysis.Sarif.Writers.MimeType.Binary;
+            set => throw new InvalidOperationException();
         }
 
         public RuntimeConditions RuntimeErrors { get; set; }
@@ -78,17 +72,17 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!this.disposedValue)
             {
                 if (disposing)
                 {
-                    if (_iBinary != null)
+                    if (this._iBinary != null)
                     {
-                        _iBinary.Dispose();
-                        _iBinary = null;
+                        this._iBinary.Dispose();
+                        this._iBinary = null;
                     }
                 }
-                disposedValue = true;
+                this.disposedValue = true;
             }
         }
 
@@ -96,7 +90,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
+            this.Dispose(true);
         }
         #endregion
     }

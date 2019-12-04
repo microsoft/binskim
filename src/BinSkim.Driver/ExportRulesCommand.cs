@@ -3,22 +3,15 @@
 
 using System.Collections.Generic;
 using System.Reflection;
-
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.IL.Rules;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL
 {
     internal class ExportRulesMetadataCommand : ExportRulesMetadataCommandBase
     {
-        public override IEnumerable<Assembly> DefaultPlugInAssemblies
-        {
-            get
-            {
-                return new Assembly[] {
+        public override IEnumerable<Assembly> DefaultPlugInAssemblies => new Assembly[] {
                     typeof(MarkImageAsNXCompatible).Assembly
                 };
-            }
-        }
     }
 }
