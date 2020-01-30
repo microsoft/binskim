@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         public static ILDiagnosticsAnalyzer Create(params string[] analyzerFilePaths)
         {
-            RoslynAnalysisContext analysisContext = new RoslynAnalysisContext();
+            var analysisContext = new RoslynAnalysisContext();
 
             foreach (string analyzerFilePath in analyzerFilePaths)
             {
@@ -47,13 +47,13 @@ namespace Microsoft.CodeAnalysis.IL
         {
             analysisContext = analysisContext ?? new RoslynAnalysisContext();
 
-            Assembly assembly = Assembly.LoadFrom(path);
+            var assembly = Assembly.LoadFrom(path);
 
             foreach (Type type in assembly.GetTypes())
             {
                 if (typeof(DiagnosticAnalyzer).IsAssignableFrom(type) && !type.IsAbstract)
                 {
-                    DiagnosticAnalyzer analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(type);
+                    var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(type);
                     analyzer.Initialize(analysisContext);
                 }
             }
@@ -70,17 +70,17 @@ namespace Microsoft.CodeAnalysis.IL
             // of analyzing it). Using this mechanism, we can scan types/members contained in the 
             // binary. We cannot currently retrieve IL from method bodies.
             PortableExecutableReference reference = MetadataReference.CreateFromFile(targetPath);
-            CSharpCompilation compilation = CSharpCompilation.Create("_", references: new[] { reference });
+            var compilation = CSharpCompilation.Create("_", references: new[] { reference });
             ISymbol target = compilation.GetAssemblyOrModuleSymbol(reference);
 
             // For each analysis target, we create a compilation start context, which may result
             // in symbol action registration. We need to capture and throw these registrations 
             // away for each binary we inspect. 
-            RoslynCompilationStartAnalysisContext compilationStartAnalysisContext = new RoslynCompilationStartAnalysisContext(compilation, _options, cancellationToken);
+            var compilationStartAnalysisContext = new RoslynCompilationStartAnalysisContext(compilation, _options, cancellationToken);
 
             this.GlobalRoslynAnalysisContext.CompilationStartActions?.Invoke(compilationStartAnalysisContext);
 
-            RoslynSymbolVisitor visitor = new RoslynSymbolVisitor(symbol => this.Analyze(
+            var visitor = new RoslynSymbolVisitor(symbol => this.Analyze(
                 symbol,
                 compilation,
                 compilationStartAnalysisContext.SymbolActions,
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             // Having finished analysis, we'll invoke any compilation end actions registered previously.
             // We also discard the per-compilation symbol actions we collected.
-            CompilationAnalysisContext compilationAnalysisContext = new CompilationAnalysisContext(compilation, _options, reportDiagnostic, _isSupportedDiagnostic, cancellationToken);
+            var compilationAnalysisContext = new CompilationAnalysisContext(compilation, _options, reportDiagnostic, _isSupportedDiagnostic, cancellationToken);
 
             this.GlobalRoslynAnalysisContext.CompilationActions?.Invoke(compilationAnalysisContext);
             compilationStartAnalysisContext.CompilationEndActions?.Invoke(compilationAnalysisContext);
@@ -104,7 +104,7 @@ namespace Microsoft.CodeAnalysis.IL
             Action<Diagnostic> reportDiagnostic,
             CancellationToken cancellationToken)
         {
-            SymbolAnalysisContext symbolContext = new SymbolAnalysisContext(symbol, compilation, _options, reportDiagnostic, _isSupportedDiagnostic, cancellationToken);
+            var symbolContext = new SymbolAnalysisContext(symbol, compilation, _options, reportDiagnostic, _isSupportedDiagnostic, cancellationToken);
 
             this.GlobalRoslynAnalysisContext.SymbolActions.Invoke(symbol.Kind, symbolContext);
             perCompilationSymbolActions.Invoke(symbol.Kind, symbolContext);

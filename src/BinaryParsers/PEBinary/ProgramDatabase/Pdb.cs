@@ -199,7 +199,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private HashSet<uint> GenerateWritableSegmentSet()
         {
-            HashSet<uint> result = new HashSet<uint>();
+            var result = new HashSet<uint>();
             IDiaEnumSegments enumSegments = null;
 
             try
@@ -247,7 +247,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private HashSet<uint> GenerateExecutableSectionContribIds()
         {
-            HashSet<uint> result = new HashSet<uint>();
+            var result = new HashSet<uint>();
             IDiaEnumSectionContribs enumSectionContribs = null;
 
             try

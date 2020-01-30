@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             args = EntryPointUtilities.GenerateArguments(args, new FileSystem(), new EnvironmentVariables());
 
-            List<string> rewrittenArgs = new List<string>(args);
+            var rewrittenArgs = new List<string>(args);
 
             bool richResultCode = rewrittenArgs.RemoveAll(arg => arg.Equals("--rich-return-code")) == 0;
 

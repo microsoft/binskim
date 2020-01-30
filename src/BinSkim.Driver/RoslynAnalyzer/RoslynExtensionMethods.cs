@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             DiagnosticDescriptor diagnosticDescriptor = diagnostic.Descriptor;
 
-            ReportingDescriptor rule = new ReportingDescriptor
+            var rule = new ReportingDescriptor
             {
                 MessageStrings = new Dictionary<string, MultiformatMessageString>()
             };
@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             if (location == Location.None) { return null; }
 
-            Region region = new Region();
+            var region = new Region();
 
             FileLinePositionSpan flps = location.GetLineSpan();
 

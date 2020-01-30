@@ -57,7 +57,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             System.Collections.Immutable.ImmutableArray<SectionHeader> sectionHeaders = target.PE.PEHeaders.SectionHeaders;
 
-            List<string> badSections = new List<string>();
+            var badSections = new List<string>();
 
             if (sectionHeaders != null)
             {

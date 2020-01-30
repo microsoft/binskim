@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static Dictionary<CryptoError, string> BuildCryptoErrorDescriptions()
         {
-            Dictionary<CryptoError, string> result = new Dictionary<CryptoError, string>()
+            var result = new Dictionary<CryptoError, string>()
             {
                 { CryptoError.ERROR_SUCCESS, "Call succeeded." },
                 { CryptoError.CERT_E_CHAINING, "An internal certificate chaining error has occurred." },

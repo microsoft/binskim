@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             IntPtr pClassFactory = IntPtr.Zero;
             int hr = DllGetClassObject(clsidOfServer, new Guid("00000001-0000-0000-C000-000000000046"), out pClassFactory);
-            IClassFactory classFactory = Marshal.GetObjectForIUnknown(pClassFactory) as IClassFactory;
+            var classFactory = Marshal.GetObjectForIUnknown(pClassFactory) as IClassFactory;
             classFactory.CreateInstance(IntPtr.Zero, ref riid, out pvObject);
             Marshal.Release(pClassFactory);
             Marshal.ReleaseComObject(classFactory);
@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             IntPtr diaSourcePtr = IntPtr.Zero;
             CoCreateFromMsdia(new Guid(DiaSourceClsid), new Guid(IDiaDataSourceRiid), out diaSourcePtr);
             object objectForIUnknown = Marshal.GetObjectForIUnknown(diaSourcePtr);
-            IDiaDataSource diaSourceInstance = objectForIUnknown as IDiaDataSource;
+            var diaSourceInstance = objectForIUnknown as IDiaDataSource;
             return diaSourceInstance;
         }
     }

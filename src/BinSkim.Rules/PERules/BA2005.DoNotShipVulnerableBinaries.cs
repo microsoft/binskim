@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static StringToVersionMap BuildDefaultVulnerableBinariesMap()
         {
-            StringToVersionMap result = new StringToVersionMap
+            var result = new StringToVersionMap
             {
                 ["msxml6.dll"] = new Version(6, 30),
                 ["xmllite.dll"] = new Version(1, 3),
@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (context.Policy.GetProperty(VulnerableBinaries).TryGetValue(fileName, out Version minimumVersion))
             {
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Path.GetFullPath(target.PE.FileName));
+                var fvi = FileVersionInfo.GetVersionInfo(Path.GetFullPath(target.PE.FileName));
                 string rawVersion = fvi.FileVersion ?? string.Empty;
                 Match sanitizedVersion = s_versionRegex.Match(rawVersion);
                 if (!sanitizedVersion.Success)
@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     return;
                 }
 
-                Version actualVersion = new Version(sanitizedVersion.Value);
+                var actualVersion = new Version(sanitizedVersion.Value);
                 if (actualVersion < minimumVersion)
                 {
                     // '{0}' appears to be an obsolete library (version {1}) for which there are one

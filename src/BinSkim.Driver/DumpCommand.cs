@@ -17,13 +17,13 @@ namespace Microsoft.CodeAnalysis.IL
     {
         public override int Run(DumpOptions dumpOptions)
         {
-            List<string> targets = new List<string>();
+            var targets = new List<string>();
 
             foreach (string specifier in dumpOptions.BinaryFileSpecifiers)
             {
                 if (Directory.Exists(specifier))
                 {
-                    FileSpecifier fileSpecifier = new FileSpecifier(specifier + ".dll", recurse: dumpOptions.Recurse);
+                    var fileSpecifier = new FileSpecifier(specifier + ".dll", recurse: dumpOptions.Recurse);
                     targets.AddRange(fileSpecifier.Files);
 
                     fileSpecifier = new FileSpecifier(specifier + ".exe", recurse: dumpOptions.Recurse);
@@ -31,12 +31,12 @@ namespace Microsoft.CodeAnalysis.IL
                 }
                 else
                 {
-                    FileSpecifier fileSpecifier = new FileSpecifier(specifier, recurse: dumpOptions.Recurse);
+                    var fileSpecifier = new FileSpecifier(specifier, recurse: dumpOptions.Recurse);
                     targets.AddRange(fileSpecifier.Files);
                 }
             }
 
-            Task<ParallelLoopResult> dumpTask = Task.Run(() => Parallel.ForEach(targets, (target) => this.DumpFile(target, dumpOptions.Verbose)));
+            var dumpTask = Task.Run(() => Parallel.ForEach(targets, (target) => this.DumpFile(target, dumpOptions.Verbose)));
             dumpTask.Wait();
 
             return 0;
@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.IL
         private void DumpFile(string target, bool verbose)
         {
             PE pe;
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             try
             {
                 pe = new PE(target);

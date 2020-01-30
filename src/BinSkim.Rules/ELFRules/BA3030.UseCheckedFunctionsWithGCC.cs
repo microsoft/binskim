@@ -160,8 +160,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             IEnumerable<ISymbolEntry> symbols =
                 ELFUtility.GetAllSymbols(elf).Where(sym => sym.Type == SymbolType.Function || sym.Type == SymbolType.Object);
 
-            List<ISymbolEntry> protectedFunctions = new List<ISymbolEntry>();
-            List<ISymbolEntry> unprotectedFunctions = new List<ISymbolEntry>();
+            var protectedFunctions = new List<ISymbolEntry>();
+            var unprotectedFunctions = new List<ISymbolEntry>();
             foreach (ISymbolEntry e in symbols)
             {
                 if (unfortifiedFunctions.Contains(e.Name))

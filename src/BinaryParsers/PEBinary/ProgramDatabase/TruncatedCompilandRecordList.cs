@@ -84,8 +84,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 return this.CreateAllObjectList();
             }
 
-            List<int> blockStarts = new List<int>();
-            List<int> blockDisplaySizes = new List<int>();
+            var blockStarts = new List<int>();
+            var blockDisplaySizes = new List<int>();
             // Size of [ blockStarts[n], blockStarts[n + 1] ) is in blockSizes[n]
 
             // Build `blockStarts` and `blockDisplaySizes` by trying to give each library
@@ -101,7 +101,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             ExpandDisplayedBlockSizesToConsumeRemainingSpace(blockStarts, blockDisplaySizes, remainingSpace);
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             int totalTruncatedLibrariesCount = 0;
             int totalTruncatedObjectsCount = 0;
             for (int idx = 0; idx < blockDisplaySizes.Count; ++idx)
@@ -290,7 +290,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private string CreateAllObjectList()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             foreach (CompilandRecord record in this._rawRecords)
             {
                 record.AppendString(sb);

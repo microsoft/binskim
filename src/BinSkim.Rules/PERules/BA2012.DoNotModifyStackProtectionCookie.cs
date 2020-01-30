@@ -110,16 +110,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
 
             PEHeader peHeader = target.PE.PEHeaders.PEHeader;
-            SafePointer sp = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
+            var sp = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
             SafePointer loadConfigVA = target.PE.RVA2VA(sp);
-            ImageLoadConfigDirectory64 loadConfig = new ImageLoadConfigDirectory64(peHeader, loadConfigVA);
+            var loadConfig = new ImageLoadConfigDirectory64(peHeader, loadConfigVA);
 
             ulong cookieVA = (ulong)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.SecurityCookie);
             ulong baseAddress = peHeader.ImageBase;
 
             // we need to find the offset in the file based on the cookie's VA
             ulong sectionSize, sectionVA = 0;
-            SectionHeader ish = new SectionHeader();
+            var ish = new SectionHeader();
             bool foundCookieSection = false;
             foreach (SectionHeader t in target.PE.PEHeaders.SectionHeaders)
             {
@@ -172,16 +172,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             PEBinary target = context.PEBinary();
             PEHeader peHeader = target.PE.PEHeaders.PEHeader;
-            SafePointer sp = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
+            var sp = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
             SafePointer loadConfigVA = target.PE.RVA2VA(sp);
-            ImageLoadConfigDirectory32 loadConfig = new ImageLoadConfigDirectory32(peHeader, loadConfigVA);
+            var loadConfig = new ImageLoadConfigDirectory32(peHeader, loadConfigVA);
 
             uint cookieVA = (uint)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.SecurityCookie);
             uint baseAddress = (uint)peHeader.ImageBase;
 
             // we need to find the offset in the file based on the cookie's VA
             uint sectionSize, sectionVA = 0;
-            SectionHeader ish = new SectionHeader();
+            var ish = new SectionHeader();
             bool foundCookieSection = false;
             foreach (SectionHeader t in target.PE.PEHeaders.SectionHeaders)
             {

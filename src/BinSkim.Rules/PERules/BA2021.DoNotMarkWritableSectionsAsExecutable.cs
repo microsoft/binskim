@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Reflection.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers;
@@ -72,9 +73,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            System.Collections.Immutable.ImmutableArray<SectionHeader> sectionHeaders = target.PE.PEHeaders.SectionHeaders;
+            ImmutableArray<SectionHeader> sectionHeaders = target.PE.PEHeaders.SectionHeaders;
 
-            List<string> badSections = new List<string>();
+            var badSections = new List<string>();
 
             if (sectionHeaders != null)
             {

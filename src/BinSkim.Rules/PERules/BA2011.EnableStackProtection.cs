@@ -48,8 +48,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
 
-            TruncatedCompilandRecordList noGsModules = new TruncatedCompilandRecordList();
-            TruncatedCompilandRecordList unknownLanguageModules = new TruncatedCompilandRecordList();
+            var noGsModules = new TruncatedCompilandRecordList();
+            var unknownLanguageModules = new TruncatedCompilandRecordList();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {

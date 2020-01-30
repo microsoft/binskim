@@ -185,9 +185,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     }
                     else
                     {
-                        SafePointer sp = new SafePointer(this._pImage._array, importTableDirectory.RelativeVirtualAddress);
+                        var sp = new SafePointer(this._pImage._array, importTableDirectory.RelativeVirtualAddress);
 
-                        ArrayList al = new ArrayList();
+                        var al = new ArrayList();
 
                         if (sp.Address != 0)
                         {
@@ -219,7 +219,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         public SafePointer RVA2VA(SafePointer rva)
         {
             // find which section is our rva in
-            SectionHeader ish = new SectionHeader();
+            var ish = new SectionHeader();
             foreach (SectionHeader sectionHeader in this.PEHeaders.SectionHeaders)
             {
                 if ((rva.Address >= sectionHeader.VirtualAddress) &&
@@ -271,10 +271,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 byte[] buffer = new byte[4096];
 
                 // create the hash object
-                using (SHA1 sha1 = SHA1.Create())
+                using (var sha1 = SHA1.Create())
                 {
                     // open the input file
-                    using (FileStream fs = new FileStream(this.FileName, FileMode.Open, FileAccess.Read))
+                    using (var fs = new FileStream(this.FileName, FileMode.Open, FileAccess.Read))
                     {
                         int readBytes = -1;
 
@@ -323,9 +323,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 using (FileStream stream = File.OpenRead(fileName))
                 {
-                    using (BufferedStream bufferedStream = new BufferedStream(stream, 1024 * 32))
+                    using (var bufferedStream = new BufferedStream(stream, 1024 * 32))
                     {
-                        using (SHA256 algorithm = SHA256.Create())
+                        using (var algorithm = SHA256.Create())
                         {
                             byte[] checksum = algorithm.ComputeHash(bufferedStream);
                             sha256Hash = BitConverter.ToString(checksum).Replace("-", string.Empty);
@@ -350,7 +350,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     return (long)this._length;
                 }
 
-                FileInfo fi = new FileInfo(this.FileName);
+                var fi = new FileInfo(this.FileName);
                 this._length = fi.Length;
 
                 return (long)this._length;

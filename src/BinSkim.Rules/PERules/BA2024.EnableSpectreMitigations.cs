@@ -110,7 +110,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Machine reflectionMachineType = target.PE.Machine;
 
             // The current Machine enum does not have support for Arm64, so translate to our Machine enum
-            ExtendedMachine machineType = (ExtendedMachine)reflectionMachineType;
+            var machineType = (ExtendedMachine)reflectionMachineType;
 
             if (!machineType.CanBeMitigated())
             {
@@ -122,10 +122,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             Pdb pdb = target.Pdb;
 
-            TruncatedCompilandRecordList masmModules = new TruncatedCompilandRecordList();
-            List<ObjectModuleDetails> mitigationNotEnabledModules = new List<ObjectModuleDetails>();
-            TruncatedCompilandRecordList mitigationDisabledInDebugBuild = new TruncatedCompilandRecordList();
-            TruncatedCompilandRecordList mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
+            var masmModules = new TruncatedCompilandRecordList();
+            var mitigationNotEnabledModules = new List<ObjectModuleDetails>();
+            var mitigationDisabledInDebugBuild = new TruncatedCompilandRecordList();
+            var mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
 
@@ -295,7 +295,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             string line;
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (!mitigationExplicitlyDisabledModules.Empty)
             {
@@ -363,7 +363,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private string CreateOutputCoalescedByLibrary(List<ObjectModuleDetails> objectModuleDetailsList)
         {
-            Dictionary<string, List<string>> librariesToObjectModulesMap = new Dictionary<string, List<string>>();
+            var librariesToObjectModulesMap = new Dictionary<string, List<string>>();
 
             foreach (ObjectModuleDetails objectModuleDetail in objectModuleDetailsList)
             {
@@ -375,7 +375,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 objectModules.Add(Path.GetFileName(objectModuleDetail.Name));
             }
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (string key in librariesToObjectModulesMap.Keys)
             {
@@ -414,7 +414,7 @@ objectModuleDetail.CompilerBackEndVersion;
                 // 2) it is in-between two supported compiler versions (e.x. VS2017.1-4)--it is larger than some supported version numbers and smaller than others.
                 // 3) it's greater than any of them.
                 // We want to give users the 'next greatest' compiler version that supports the spectre mitigations--this should be the "smallest available upgrade."
-                Version previousMaximum = new Version(0, 0, 0, 0);
+                var previousMaximum = new Version(0, 0, 0, 0);
                 for (int i = 0; i < listOfMitigatedCompilers.Length; i++)
                 {
                     if (omVersion > previousMaximum &&
@@ -463,7 +463,7 @@ objectModuleDetail.CompilerBackEndVersion;
 
         private static StringToVersionMap BuildAllowedLibraries()
         {
-            StringToVersionMap result = new StringToVersionMap();
+            var result = new StringToVersionMap();
 
             // Example entries
             // result["cExample.lib,c"] = new Version("1.0.0.0") 
@@ -517,11 +517,11 @@ objectModuleDetail.CompilerBackEndVersion;
 
              */
 
-            PropertiesDictionary compilersData = new PropertiesDictionary();
+            var compilersData = new PropertiesDictionary();
 
             // Mitigations for x86 family of processors
-            PropertiesDictionary x86Data = new PropertiesDictionary();
-            PropertiesDictionary armData = new PropertiesDictionary();
+            var x86Data = new PropertiesDictionary();
+            var armData = new PropertiesDictionary();
 
             // Format of this data and the ranges:
             // ThrowIfMitigationDataIsInvalid requires a range here from the start of this support 
@@ -584,7 +584,7 @@ objectModuleDetail.CompilerBackEndVersion;
                 PropertiesDictionary configData = policy.GetProperty(MitigatedCompilers);
                 foreach (string key in configData.Keys)
                 {
-                    MachineFamily machine = (MachineFamily)Enum.Parse(typeof(MachineFamily), key); // Neaten this up.
+                    var machine = (MachineFamily)Enum.Parse(typeof(MachineFamily), key); // Neaten this up.
                     _compilerData.Add(machine, CreateSortedVersionDictionary((PropertiesDictionary)configData[key]));
                 }
             }
@@ -593,11 +593,11 @@ objectModuleDetail.CompilerBackEndVersion;
 
         internal static CompilerVersionToMitigation[] CreateSortedVersionDictionary(PropertiesDictionary versionList)
         {
-            List<CompilerVersionToMitigation> mitigatedCompilerList = new List<CompilerVersionToMitigation>();
+            var mitigatedCompilerList = new List<CompilerVersionToMitigation>();
             foreach (string key in versionList.Keys)
             {
                 string[] versions = key.Split('-').Select((s) => { return s.Replace("*", int.MaxValue.ToString()); }).ToArray();
-                CompilerVersionToMitigation mitigationData = new CompilerVersionToMitigation()
+                var mitigationData = new CompilerVersionToMitigation()
                 {
                     MinimalSupportedVersion = new Version(versions[0]),
                     MaximumSupportedVersion = new Version(versions[1]),

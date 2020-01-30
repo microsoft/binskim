@@ -53,7 +53,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static StringSet BuildApprovedFunctionsStringSet()
         {
-            StringSet result = new StringSet
+            var result = new StringSet
             {
                 "_TlgWrite",
                 "__vcrt_trace_logging_provider::_TlgWrite"
@@ -77,7 +77,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
 
-            List<string> names = new List<string>();
+            var names = new List<string>();
             foreach (DisposableEnumerableView<Symbol> functionView in pdb.CreateGlobalFunctionIterator())
             {
                 Symbol function = functionView.Value;

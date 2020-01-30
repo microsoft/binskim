@@ -18,18 +18,18 @@ insert_final_newline = false
 #### .NET Coding Conventions ####
 
 # Organize usings
-dotnet_separate_import_directive_groups = true:warning
-dotnet_sort_system_directives_first = true:warning
+dotnet_separate_import_directive_groups = true:error
+dotnet_sort_system_directives_first = true:error
 
 # this. and Me. preferences
-dotnet_style_qualification_for_event = true:suggestion
-dotnet_style_qualification_for_field = true:suggestion
-dotnet_style_qualification_for_method = true:suggestion
-dotnet_style_qualification_for_property = true:suggestion
+dotnet_style_qualification_for_field = true:error
+dotnet_style_qualification_for_property = true:error
+dotnet_style_qualification_for_event = true:silent
+dotnet_style_qualification_for_method = true:silent
 
 # Language keywords vs BCL types preferences
-dotnet_style_predefined_type_for_locals_parameters_members = true:warning
-dotnet_style_predefined_type_for_member_access = true:warning
+dotnet_style_predefined_type_for_locals_parameters_members = true:error
+dotnet_style_predefined_type_for_member_access = true:error
 
 # Parentheses preferences
 dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:silent
@@ -38,34 +38,34 @@ dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
 dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
 
 # Modifier preferences
-dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:error
 
 # Expression-level preferences
-dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_coalesce_expression = true:silent
 dotnet_style_collection_initializer = true:silent
 dotnet_style_explicit_tuple_names = true:silent
-dotnet_style_null_propagation = true:suggestion
+dotnet_style_null_propagation = true:silent
 dotnet_style_object_initializer = true:silent
 dotnet_style_prefer_auto_properties = true:silent
 dotnet_style_prefer_compound_assignment = true:silent
 dotnet_style_prefer_conditional_expression_over_assignment = true:silent
 dotnet_style_prefer_conditional_expression_over_return = true:silent
-dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
-dotnet_style_prefer_inferred_tuple_names = true:suggestion
-dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
+dotnet_style_prefer_inferred_anonymous_type_member_names = true:silent
+dotnet_style_prefer_inferred_tuple_names = true:silent
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:silent
 
 # Field preferences
-dotnet_style_readonly_field = true:warning
+dotnet_style_readonly_field = true:error
 
 # Parameter preferences
-dotnet_code_quality_unused_parameters = all:suggestion
+dotnet_code_quality_unused_parameters = all:error
 
 #### C# Coding Conventions ####
 
 # var preferences
-csharp_style_var_elsewhere = false:warning
-csharp_style_var_for_built_in_types = false:warning
-csharp_style_var_when_type_is_apparent = false:warning
+csharp_style_var_elsewhere = false:error
+csharp_style_var_for_built_in_types = false:error
+csharp_style_var_when_type_is_apparent = true:error
 
 # Expression-bodied members
 csharp_style_expression_bodied_accessors = true:silent
@@ -78,15 +78,15 @@ csharp_style_expression_bodied_operators = false:silent
 csharp_style_expression_bodied_properties = true:silent
 
 # Pattern matching preferences
-csharp_style_pattern_matching_over_as_with_null_check = true:silent
-csharp_style_pattern_matching_over_is_with_cast_check = true:silent
+csharp_style_pattern_matching_over_as_with_null_check = true:error
+csharp_style_pattern_matching_over_is_with_cast_check = true:error
 csharp_style_prefer_switch_expression = true:silent
 
 # Null-checking preferences
-csharp_style_conditional_delegate_call = true:suggestion
+csharp_style_conditional_delegate_call = true:silent
 
 # Modifier preferences
-csharp_prefer_static_local_function = true:suggestion
+csharp_prefer_static_local_function = true:silent
 csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
 
 # Code-block preferences
@@ -94,10 +94,10 @@ csharp_prefer_braces = true:warning
 csharp_prefer_simple_using_statement = true:silent
 
 # Expression-level preferences
-csharp_prefer_simple_default_expression = true:suggestion
+csharp_prefer_simple_default_expression = true:silent
 csharp_style_deconstructed_variable_declaration = true:silent
 csharp_style_inlined_variable_declaration = true:silent
-csharp_style_pattern_local_over_anonymous_function = true:suggestion
+csharp_style_pattern_local_over_anonymous_function = true:silent
 csharp_style_prefer_index_operator = true:silent
 csharp_style_prefer_range_operator = true:silent
 csharp_style_throw_expression = true:silent
@@ -122,7 +122,7 @@ csharp_new_line_between_query_expression_clauses = true
 csharp_indent_block_contents = true
 csharp_indent_braces = false
 csharp_indent_case_contents = true
-csharp_indent_case_contents_when_block = true
+csharp_indent_case_contents_when_block = false
 csharp_indent_labels = one_less_than_current
 csharp_indent_switch_labels = true
 

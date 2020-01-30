@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (PropertiesDictionary dictionary in context.Policy.GetProperty(VulnerableDependencies).Values)
             {
-                VulnerableDependencyDescriptor descriptor = dictionary as VulnerableDependencyDescriptor;
+                var descriptor = dictionary as VulnerableDependencyDescriptor;
 
                 // This happens if we have deserialized settings from JSON rather than XML
                 if (descriptor == null)
@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
 
-            Dictionary<string, TruncatedCompilandRecordList> vulnerabilityToModules = new Dictionary<string, TruncatedCompilandRecordList>();
+            var vulnerabilityToModules = new Dictionary<string, TruncatedCompilandRecordList>();
             TruncatedCompilandRecordList moduleList;
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
@@ -144,7 +144,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 foreach (string id in vulnerabilityToModules.Keys)
                 {
                     moduleList = vulnerabilityToModules[id];
-                    VulnerableDependencyDescriptor descriptor = (VulnerableDependencyDescriptor)context.Policy.GetProperty(VulnerableDependencies)[id];
+                    var descriptor = (VulnerableDependencyDescriptor)context.Policy.GetProperty(VulnerableDependencies)[id];
 
                     // '{0}' was built with a version of {1} which is subject to the following issues: {2}. 
                     // To resolve this, {3}. The source files that triggered this were: {4}
@@ -169,9 +169,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static PropertiesDictionary BuildDefaultVulnerableDependenciesMap()
         {
-            PropertiesDictionary result = new PropertiesDictionary();
+            var result = new PropertiesDictionary();
 
-            VulnerableDependencyDescriptor vulnerabilityDescriptor = new VulnerableDependencyDescriptor
+            var vulnerabilityDescriptor = new VulnerableDependencyDescriptor
             {
                 Name = "the Active Template Library (ATL)",
                 Id = "AtlVulnerability",

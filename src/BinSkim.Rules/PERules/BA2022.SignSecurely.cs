@@ -81,8 +81,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             Guid action;
             CryptoError cryptoError;
-            List<Tuple<string, string>> badAlgorithms = new List<Tuple<string, string>>();
-            List<Tuple<string, string>> goodAlgorithms = new List<Tuple<string, string>>();
+            var badAlgorithms = new List<Tuple<string, string>>();
+            var goodAlgorithms = new List<Tuple<string, string>>();
 
             algorithmsText = null;
             action = Native.ActionGenericVerifyV2;
@@ -196,7 +196,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private string BuildAlgorithmsText(List<Tuple<string, string>> badAlgorithms, List<Tuple<string, string>> goodAlgorithms)
         {
             int count;
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (badAlgorithms.Count > 0)
             {
@@ -299,7 +299,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static Dictionary<string, string> BuildIdToAlgorithmMap()
         {
-            Dictionary<string, string> result = new Dictionary<string, string>
+            var result = new Dictionary<string, string>
             {
                 { "1.2.840.113549.1.1.1",    "RSA" },
                 { "1.2.840.113549.1.1.2",    "md2RSA"},
@@ -356,13 +356,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return (CryptoError)Marshal.GetLastWin32Error();
             }
 
-            Native.CRYPT_PROVIDER_SGNR cryptProviderSigner = (Native.CRYPT_PROVIDER_SGNR)Marshal.PtrToStructure(providerSigner, typeof(Native.CRYPT_PROVIDER_SGNR));
+            var cryptProviderSigner = (Native.CRYPT_PROVIDER_SGNR)Marshal.PtrToStructure(providerSigner, typeof(Native.CRYPT_PROVIDER_SGNR));
 
-            CryptoError cryptoError = (CryptoError)cryptProviderSigner.dwError;
+            var cryptoError = (CryptoError)cryptProviderSigner.dwError;
 
             if (cryptProviderSigner.psSigner != IntPtr.Zero)
             {
-                Native.CMSG_SIGNER_INFO psSigner = (Native.CMSG_SIGNER_INFO)Marshal.PtrToStructure(cryptProviderSigner.psSigner, typeof(Native.CMSG_SIGNER_INFO));
+                var psSigner = (Native.CMSG_SIGNER_INFO)Marshal.PtrToStructure(cryptProviderSigner.psSigner, typeof(Native.CMSG_SIGNER_INFO));
                 hashAlgorithm = this.GetAlgorithmName(psSigner.HashAlgorithm.pszObjId);
                 hashEncryptionAlgorithm = this.GetAlgorithmName(psSigner.HashEncryptionAlgorithm.pszObjId);
             }
@@ -380,12 +380,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // See https://msdn.microsoft.com/en-us/library/windows/desktop/aa382384(v=vs.85).aspx
             // which was used to drive data initialization, API use and comments in this code.
 
-            Native.WINTRUST_DATA winTrustData = new Native.WINTRUST_DATA
+            var winTrustData = new Native.WINTRUST_DATA
             {
                 cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_DATA))
             };
 
-            Native.WINTRUST_FILE_INFO fileInfo = new Native.WINTRUST_FILE_INFO
+            var fileInfo = new Native.WINTRUST_FILE_INFO
             {
                 cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_FILE_INFO)),
                 pcwszFilePath = filePath
@@ -418,7 +418,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     flags = Native.SignatureSettingsFlags.WSS_VERIFY_SPECIFIC;
                 }
 
-                Native.WINTRUST_SIGNATURE_SETTINGS signatureSettings = new Native.WINTRUST_SIGNATURE_SETTINGS
+                var signatureSettings = new Native.WINTRUST_SIGNATURE_SETTINGS
                 {
                     cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_SIGNATURE_SETTINGS)),
                     dwIndex = signatureIndex,
@@ -427,7 +427,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     dwVerifiedSigIndex = 0
                 };
 
-                Native.CERT_STRONG_SIGN_PARA policy = new Native.CERT_STRONG_SIGN_PARA
+                var policy = new Native.CERT_STRONG_SIGN_PARA
                 {
                     cbStruct = (uint)Marshal.SizeOf(typeof(Native.CERT_STRONG_SIGN_PARA)),
                     dwInfoChoice = Native.InfoChoice.CERT_STRONG_SIGN_OID_INFO_CHOICE,

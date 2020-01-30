@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             string testDirectory = PEBinaryTests.BaselineTestsDataDirectory + Path.DirectorySeparatorChar + ruleName;
 
             foreach (string inputFilter in inputFilters)
@@ -95,8 +95,8 @@ namespace Microsoft.CodeAnalysis.IL
             string expectedFileName = Path.Combine(expectedDirectory, fileName + ".sarif");
             string actualFileName = Path.Combine(actualDirectory, fileName + ".sarif");
 
-            AnalyzeCommand command = new AnalyzeCommand();
-            AnalyzeOptions options = new AnalyzeOptions
+            var command = new AnalyzeCommand();
+            var options = new AnalyzeOptions
             {
                 Force = true,
                 Verbose = true,
@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis.IL
             // Note that we don't ensure a success code. That is because we
             // are running end-to-end tests for valid and invalid files
 
-            JsonSerializerSettings settings = new JsonSerializerSettings()
+            var settings = new JsonSerializerSettings()
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented
             };
@@ -150,7 +150,7 @@ namespace Microsoft.CodeAnalysis.IL
             // Write back the normalized actual text so that the diff command given on failure shows what was actually compared.
 
             Encoding utf8encoding = new UTF8Encoding(true);
-            using (StreamWriter textWriter = new StreamWriter(actualFileName, false, utf8encoding))
+            using (var textWriter = new StreamWriter(actualFileName, false, utf8encoding))
             {
                 textWriter.Write(actualText);
             }
@@ -163,7 +163,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             SarifLog actualLog = JsonConvert.DeserializeObject<SarifLog>(actualText, settings);
 
-            ResultDiffingVisitor visitor = new ResultDiffingVisitor(expectedLog);
+            var visitor = new ResultDiffingVisitor(expectedLog);
 
             if (!visitor.Diff(actualLog.Runs[0].Results))
             {
@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private static string TryFindBeyondCompare()
         {
-            List<string> directories = new List<string>();
+            var directories = new List<string>();
             string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
 
             directories.Add(programFiles);

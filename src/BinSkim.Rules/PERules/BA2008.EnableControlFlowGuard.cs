@@ -150,7 +150,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return false;
             }
 
-            SafePointer loadConfigRVA = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
+            var loadConfigRVA = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
             if (loadConfigRVA.Address == 0)
             {
                 return false;
@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (target.PE.Is64Bit)
             {
-                ImageLoadConfigDirectory64 loadConfig = new ImageLoadConfigDirectory64(peHeader, loadConfigVA);
+                var loadConfig = new ImageLoadConfigDirectory64(peHeader, loadConfigVA);
 
                 int imageDirectorySize = (int)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.Size);
                 ulong guardCFCheckFunctionPointer = (ulong)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.GuardCFCheckFunctionPointer);
@@ -177,7 +177,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                ImageLoadConfigDirectory32 loadConfig = new ImageLoadConfigDirectory32(peHeader, loadConfigVA);
+                var loadConfig = new ImageLoadConfigDirectory32(peHeader, loadConfigVA);
 
                 int imageDirectorySize = (int)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.Size);
                 uint guardCFCheckFunctionPointer = (uint)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.GuardCFCheckFunctionPointer);

@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [InlineData("", "", "test", "", "test2", "")]
         public void NullTermAsciiToStrings_WorksOnExpectedData(params string[] testStrings)
         {
-            List<byte> testData = new List<byte>();
+            var testData = new List<byte>();
             foreach (string str in testStrings)
             {
                 testData.AddRange(System.Text.Encoding.ASCII.GetBytes(str.ToCharArray()));

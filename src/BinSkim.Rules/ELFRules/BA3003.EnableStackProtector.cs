@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             IELF elf = context.ELFBinary().ELF;
 
-            HashSet<string> symbolNames =
+            var symbolNames =
                 new HashSet<string>
                 (
                     ELFUtility.GetAllSymbols(elf).Select<ISymbolEntry, string>(sym => sym.Name)

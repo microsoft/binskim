@@ -99,9 +99,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            SafePointer sp = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
+            var sp = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
             SafePointer loadConfigVA = target.PE.RVA2VA(sp);
-            ImageLoadConfigDirectory32 loadConfig = new ImageLoadConfigDirectory32(peHeader, loadConfigVA);
+            var loadConfig = new ImageLoadConfigDirectory32(peHeader, loadConfigVA);
 
             int seHandlerSize = (int)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.Size);
             if (seHandlerSize < 72)

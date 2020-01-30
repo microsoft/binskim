@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             bool useDefaultPolicy,
             bool expectToPass)
         {
-            List<string> targets = new List<string>();
+            var targets = new List<string>();
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = ruleName;
             testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", testFilesDirectory);
@@ -69,8 +69,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
 
-            BinaryAnalyzerContext context = new BinaryAnalyzerContext();
-            TestMessageLogger logger = new TestMessageLogger();
+            var context = new BinaryAnalyzerContext();
+            var logger = new TestMessageLogger();
             context.Logger = logger;
             PropertiesDictionary policy = null;
 
@@ -104,7 +104,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             string expectedText = expectToPass ? "success" : "failure";
             string actualText = expectToPass ? "failed" : "succeeded";
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (string target in targets)
             {
@@ -148,7 +148,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private BinaryAnalyzerContext CreateContext(TestMessageLogger logger, PropertiesDictionary policy, string target)
         {
-            BinaryAnalyzerContext context = new BinaryAnalyzerContext
+            var context = new BinaryAnalyzerContext
             {
                 Logger = logger,
                 Policy = policy
@@ -167,7 +167,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             IEnumerable<string> additionalTestFiles = null,
             bool useDefaultPolicy = false) where ExceptionType : Exception
         {
-            List<string> targets = new List<string>();
+            var targets = new List<string>();
             string ruleName = skimmer.GetType().Name;
             string baseFilesDirectory = ruleName;
             baseFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", baseFilesDirectory);
@@ -190,8 +190,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
             }
-            BinaryAnalyzerContext context = new BinaryAnalyzerContext();
-            TestMessageLogger logger = new TestMessageLogger();
+            var context = new BinaryAnalyzerContext();
+            var logger = new TestMessageLogger();
             context.Logger = logger;
             PropertiesDictionary policy = null;
 
@@ -228,7 +228,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, "NotApplicable");
 
-            BinaryAnalyzerContext context = new BinaryAnalyzerContext();
+            var context = new BinaryAnalyzerContext();
 
             HashSet<string> targets = this.GetTestFilesMatchingConditions(notApplicableConditions);
 
@@ -243,10 +243,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
 
-            TestMessageLogger logger = new TestMessageLogger();
+            var logger = new TestMessageLogger();
             context.Logger = logger;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (string target in targets)
             {
@@ -287,7 +287,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestsData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
-            HashSet<string> result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             if (metadataConditions.Contains(MetadataConditions.ImageIsNotExe))
             {
@@ -405,7 +405,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void SetNoExecutableBit_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIs64BitBinary,
@@ -450,7 +450,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotMarkWritableSectionsAsShared_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary
             };
@@ -473,7 +473,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotMarkWritableSectionsAsExecutable_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsKernelModeBinary
             };
@@ -496,7 +496,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableHighEntropyVirtualAddresses_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsNotExe,
                 MetadataConditions.ImageIsNot64BitBinary,
@@ -521,7 +521,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableAddressSpaceLayoutRandomization_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIsKernelModeBinary,
@@ -546,7 +546,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotMarkImportsSectionAsExecutable_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsKernelModeBinary,
                 MetadataConditions.ImageIsILOnlyAssembly
@@ -570,7 +570,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void LoadImageAboveFourGigabyteAddress_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsNot64BitBinary,
                 MetadataConditions.ImageIsKernelModeBinary,
@@ -595,7 +595,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableSafeSEH_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIsNot32BitBinary,
@@ -634,7 +634,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotShipVulnerableBinaries_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIs64BitBinary,
@@ -690,7 +690,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> failureConditions = new HashSet<string>
+                var failureConditions = new HashSet<string>
                 {
                     MetadataConditions.CouldNotLoadPdb
                 };
@@ -750,7 +750,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static HashSet<string> GetNotApplicableBinariesForStackProtectionFeature()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIsWixBinary,
@@ -767,7 +767,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> failureConditions = new HashSet<string>
+                var failureConditions = new HashSet<string>
                 {
                     MetadataConditions.CouldNotLoadPdb,
                 };
@@ -799,7 +799,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotDisableStackProtectionForFunctions_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIsWixBinary,
@@ -811,7 +811,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> applicableTo = new HashSet<string>
+                var applicableTo = new HashSet<string>
                 {
                     MetadataConditions.ImageIs64BitBinary
                 };
@@ -829,7 +829,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> failureConditions = new HashSet<string>
+                var failureConditions = new HashSet<string>
                 {
                     MetadataConditions.CouldNotLoadPdb
                 };
@@ -863,7 +863,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> notApplicableTo = new HashSet<string>
+                var notApplicableTo = new HashSet<string>
                 {
                     MetadataConditions.ImageIsWixBinary,
                     MetadataConditions.ImageIsResourceOnlyBinary,
@@ -872,7 +872,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 this.VerifyNotApplicable(new EnableCriticalCompilerWarnings(), notApplicableTo);
 
-                HashSet<string> applicableTo = new HashSet<string>
+                var applicableTo = new HashSet<string>
                 {
                     MetadataConditions.ImageIs64BitBinary
                 };
@@ -903,7 +903,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableControlFlowGuard_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsMixedModeBinary,
                 MetadataConditions.ImageIsWixBinary,
@@ -920,7 +920,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
+                var failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
                 this.VerifyFail(
                     new BuildWithSecureTools(),
                     this.GetTestFilesMatchingConditions(failureConditions),
@@ -948,7 +948,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BuildWithSecureTools_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsWixBinary,
                 MetadataConditions.ImageIsResourceOnlyBinary,
@@ -963,7 +963,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
+                var failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
                 this.VerifyFail(
                     new DoNotIncorporateVulnerableDependencies(),
                     this.GetTestFilesMatchingConditions(failureConditions),
@@ -991,7 +991,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void DoNotIncorporateVulnerableDependencies_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsResourceOnlyBinary,
                 MetadataConditions.ImageIsILOnlyAssembly
@@ -1001,7 +1001,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> applicableTo = new HashSet<string> { MetadataConditions.ImageIs64BitBinary };
+                var applicableTo = new HashSet<string> { MetadataConditions.ImageIs64BitBinary };
                 this.VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
             }
             else
@@ -1038,7 +1038,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void SignSecurely_NotApplicable()
         {
-            HashSet<string> applicableTo = new HashSet<string> { MetadataConditions.ImageIsNotSigned };
+            var applicableTo = new HashSet<string> { MetadataConditions.ImageIsNotSigned };
             this.VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableToSpecifiedTarget);
         }
 

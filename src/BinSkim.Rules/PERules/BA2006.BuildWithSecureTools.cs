@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 ? context.Policy.GetProperty(MinimumToolVersions)[MIN_XBOX_COMPILER_VER]
                 : context.Policy.GetProperty(MinimumToolVersions)[MIN_COMPILER_VER];
 
-            TruncatedCompilandRecordList badModuleList = new TruncatedCompilandRecordList();
+            var badModuleList = new TruncatedCompilandRecordList();
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
@@ -138,7 +138,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (!foundIssue &&
                     (advancedMitigations & AdvancedMitigations.Spectre) == AdvancedMitigations.Spectre)
                 {
-                    ExtendedMachine machineType = (ExtendedMachine)target.PE.Machine;
+                    var machineType = (ExtendedMachine)target.PE.Machine;
 
                     // Current toolchain is within the version range to validate.
                     // Now we'll retrieve relevant compiler mitigation details to
@@ -212,7 +212,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static StringToVersionMap BuildMinimumToolVersionsMap()
         {
-            StringToVersionMap result = new StringToVersionMap
+            var result = new StringToVersionMap
             {
                 [MIN_COMPILER_VER] = new Version(17, 0, 65501, 17013),
                 [MIN_XBOX_COMPILER_VER] = new Version(16, 0, 11886, 0)
@@ -223,7 +223,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static StringToVersionMap BuildAllowedLibraries()
         {
-            StringToVersionMap result = new StringToVersionMap();
+            var result = new StringToVersionMap();
 
             // Example entries
             // result["cExample.lib,c"] = new Version("1.0.0.0") 

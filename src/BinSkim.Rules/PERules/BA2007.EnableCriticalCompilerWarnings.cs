@@ -83,15 +83,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb di = target.Pdb;
 
-            TruncatedCompilandRecordList warningTooLowModules = new TruncatedCompilandRecordList();
-            TruncatedCompilandRecordList disabledWarningModules = new TruncatedCompilandRecordList();
-            TruncatedCompilandRecordList unknownLanguageModules = new TruncatedCompilandRecordList();
-            TruncatedCompilandRecordList allWarningLevelLowModules = new TruncatedCompilandRecordList();
+            var warningTooLowModules = new TruncatedCompilandRecordList();
+            var disabledWarningModules = new TruncatedCompilandRecordList();
+            var unknownLanguageModules = new TruncatedCompilandRecordList();
+            var allWarningLevelLowModules = new TruncatedCompilandRecordList();
 
             string exampleTooLowWarningCommandLine = null;
             int overallMinimumWarningLevel = int.MaxValue;
             string exampleDisabledWarningCommandLine = null;
-            List<int> overallDisabledWarnings = new List<int>();
+            var overallDisabledWarnings = new List<int>();
 
             foreach (DisposableEnumerableView<Symbol> omView in di.CreateObjectModuleIterator())
             {
@@ -122,7 +122,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
 
                 int warningLevel = omDetails.WarningLevel;
-                List<int> requiredDisabledWarnings = omDetails.ExplicitlyDisabledWarnings
+                var requiredDisabledWarnings = omDetails.ExplicitlyDisabledWarnings
                     .Where(context.Policy.GetProperty(RequiredCompilerWarnings).Contains).ToList();
 
                 overallMinimumWarningLevel = Math.Min(overallMinimumWarningLevel, warningLevel);
@@ -135,7 +135,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
-                List<string> suffix = new List<string>(2);
+                var suffix = new List<string>(2);
 
                 if (warningLevel < 3)
                 {
@@ -262,7 +262,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
         private static IntegerSet BuildRequiredCompilerWarningsSet()
         {
-            IntegerSet result = new IntegerSet
+            var result = new IntegerSet
             {
                 4018,
                 4146,

@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <seealso cref="M:System.ValueType.ToString()"/>
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             this.AppendString(sb);
             return sb.ToString();
         }
@@ -117,7 +117,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            MultiplyByPrimesHash hash = new MultiplyByPrimesHash();
+            var hash = new MultiplyByPrimesHash();
             if (this.Object == null)
             {
                 hash.Add(0);
@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <returns>true if the objects are considered equal, false if they are not.</returns>
         public override bool Equals(object obj)
         {
-            CompilandRecord? converted = obj as CompilandRecord?;
+            var converted = obj as CompilandRecord?;
             return converted.HasValue && this.Equals(converted.Value);
         }
 

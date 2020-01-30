@@ -84,7 +84,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.Raw = commandLine ?? "";
             this.WarningLevel = 0;
             this.WarningsAsErrors = false;
-            Dictionary<int, WarningState> explicitWarnings = new Dictionary<int, WarningState>();
+            var explicitWarnings = new Dictionary<int, WarningState>();
             foreach (string argument in ArgumentSplitter.CommandLineToArgvW(commandLine))
             {
                 if (!IsSwitch(argument))

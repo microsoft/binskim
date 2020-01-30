@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private static ConventionBuilder GetConventions<T>()
         {
-            ConventionBuilder conventions = new ConventionBuilder();
+            var conventions = new ConventionBuilder();
 
             // New per-analyzer options mechanism 
             conventions.ForTypesDerivedFrom<T>()

@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 try
                 {
                     string[] commentData = NullTermAsciiToStrings(commentSection.GetContents());
-                    ELFCompiler[] compilers = new ELFCompiler[commentData.Length];
+                    var compilers = new ELFCompiler[commentData.Length];
                     for (int i = 0; i < commentData.Length; i++)
                     {
                         compilers[i] = new ELFCompiler(commentData[i]);
@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 throw new ArgumentException("Data passed to NullTermAsciiToStrings() must be a list of null terminated ascii strings, but the parameter was empty.", nameof(data));
             }
 
-            List<string> strings = new List<string>();
+            var strings = new List<string>();
             int curr_start = 0;
             int curr_end;
             while (curr_start < data.Length)

@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public void IsWixBinary()
         {
             string fileName = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
-            PEBinary peBinary = new PEBinary(new Uri(fileName));
+            var peBinary = new PEBinary(new Uri(fileName));
             peBinary.Pdb.Should().BeNull();
             peBinary.PE.IsWixBinary.Should().BeTrue();
 
@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             string[] filters = new[] { "*.dll", "*.exe" };
             string testsDataDirectory = PEBinaryTests.BaselineTestsDataDirectory;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (string filter in filters)
             {
@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         private void ExaminePEMetadata(string file, StringBuilder sb)
         {
-            PE pe = new PE(file);
+            var pe = new PE(file);
 
             bool isNative = file.Contains("Native");
 

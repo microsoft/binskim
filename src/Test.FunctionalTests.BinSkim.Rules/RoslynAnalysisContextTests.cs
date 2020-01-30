@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public void AnalysisContext_Simple()
         {
-            RoslynAnalysisContext context = new RoslynAnalysisContext();
+            var context = new RoslynAnalysisContext();
             int symbolActionInvocationCount = 0;
             int compilationStartInvocationCount = 0;
 
