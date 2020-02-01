@@ -391,9 +391,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private string CreateLibraryDescriptor(ObjectModuleDetails objectModuleDetail)
         {
-            return Path.GetFileName(objectModuleDetail.Library) + "," +
-objectModuleDetail.Language.ToString().ToLowerInvariant() + "," +
-objectModuleDetail.CompilerBackEndVersion;
+            return Path.GetFileName(
+                            objectModuleDetail.Library) + "," +
+                            objectModuleDetail.Language.ToString().ToLowerInvariant() + "," +
+                            objectModuleDetail.CompilerBackEndVersion;
         }
 
         internal static Version GetClosestCompilerVersionWithSpectreMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)
