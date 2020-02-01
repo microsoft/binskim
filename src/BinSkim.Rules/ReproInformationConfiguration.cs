@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         internal static PerLanguageOption<StringToVersionMap> BA2024_AllowedLibraries { get; } =
             new PerLanguageOption<StringToVersionMap>(
-                null, nameof(BA2024_AllowedLibraries), defaultValue: () => { return null; });
+                null, nameof(BA2024_AllowedLibraries), defaultValue: () => null);
 
     }
 }

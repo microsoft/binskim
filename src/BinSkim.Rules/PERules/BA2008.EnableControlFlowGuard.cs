@@ -53,7 +53,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public static PerLanguageOption<Version> MinimumRequiredLinkerVersion { get; } =
             new PerLanguageOption<Version>(
-                AnalyzerName, nameof(MinimumRequiredLinkerVersion), defaultValue: () => { return new Version("14.0"); });
+                AnalyzerName, nameof(MinimumRequiredLinkerVersion), defaultValue: () => new Version("14.0"));
 
         public const uint IMAGE_GUARD_CF_INSTRUMENTED = 0x0100;
         public const uint IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG = 10;

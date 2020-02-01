@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public static PerLanguageOption<IntegerSet> RequiredCompilerWarnings { get; } =
             new PerLanguageOption<IntegerSet>(
-                AnalyzerName, nameof(RequiredCompilerWarnings), defaultValue: () => { return BuildRequiredCompilerWarningsSet(); });
+                AnalyzerName, nameof(RequiredCompilerWarnings), defaultValue: () => BuildRequiredCompilerWarningsSet());
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {

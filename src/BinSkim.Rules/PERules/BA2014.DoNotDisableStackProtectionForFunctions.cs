@@ -63,7 +63,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public static PerLanguageOption<StringSet> ApprovedFunctionsThatDisableStackProtection { get; } =
             new PerLanguageOption<StringSet>(
-                AnalyzerName, nameof(StringSet), defaultValue: () => { return BuildApprovedFunctionsStringSet(); });
+                AnalyzerName, nameof(StringSet), defaultValue: () => BuildApprovedFunctionsStringSet());
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {

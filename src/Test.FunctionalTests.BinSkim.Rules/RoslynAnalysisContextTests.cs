@@ -17,8 +17,8 @@ namespace Microsoft.CodeAnalysis.IL
             int compilationStartInvocationCount = 0;
 
             // The relevant work
-            context.RegisterSymbolAction((c) => { symbolActionInvocationCount += 13; }, SymbolKind.NamedType);
-            context.RegisterCompilationStartAction((c) => { compilationStartInvocationCount += 7; });
+            context.RegisterSymbolAction((c) => symbolActionInvocationCount += 13, SymbolKind.NamedType);
+            context.RegisterCompilationStartAction((c) => compilationStartInvocationCount += 7);
 
             // No-ops
             context.RegisterCodeBlockAction(null);

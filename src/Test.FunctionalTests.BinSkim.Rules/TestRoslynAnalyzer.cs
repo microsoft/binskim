@@ -45,10 +45,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // so we do not report T1002 here.
 
                 compilationContext.RegisterSymbolAction(context =>
-                {
                     // We do not report a callback here, as the analysis itself serves.
-                    AnalyzeSymbol((INamedTypeSymbol)context.Symbol, context.ReportDiagnostic);
-                },
+                    AnalyzeSymbol((INamedTypeSymbol)context.Symbol, context.ReportDiagnostic),
                 SymbolKind.NamedType);
 
                 compilationContext.RegisterCompilationEndAction(context =>

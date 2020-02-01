@@ -56,15 +56,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public static PerLanguageOption<StringToVersionMap> MinimumToolVersions { get; } =
             new PerLanguageOption<StringToVersionMap>(
-                AnalyzerName, nameof(MinimumToolVersions), defaultValue: () => { return BuildMinimumToolVersionsMap(); });
+                AnalyzerName, nameof(MinimumToolVersions), defaultValue: () => BuildMinimumToolVersionsMap());
 
         public static PerLanguageOption<StringToVersionMap> AllowedLibraries { get; } =
             new PerLanguageOption<StringToVersionMap>(
-                AnalyzerName, nameof(AllowedLibraries), defaultValue: () => { return BuildAllowedLibraries(); });
+                AnalyzerName, nameof(AllowedLibraries), defaultValue: () => BuildAllowedLibraries());
 
         public static PerLanguageOption<AdvancedMitigations> AdvancedMitigationsEnforced { get; } =
             new PerLanguageOption<AdvancedMitigations>(
-                AnalyzerName, nameof(AdvancedMitigationsEnforced), defaultValue: () => { return AdvancedMitigations.None; });
+                AnalyzerName, nameof(AdvancedMitigationsEnforced), defaultValue: () => AdvancedMitigations.None);
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
