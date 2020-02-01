@@ -72,14 +72,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         internal static PerLanguageOption<StringToVersionMap> AllowedLibraries { get; } =
             new PerLanguageOption<StringToVersionMap>(
-                AnalyzerName, nameof(AllowedLibraries), defaultValue: () => { return BuildAllowedLibraries(); });
+                AnalyzerName, nameof(AllowedLibraries), defaultValue: () => BuildAllowedLibraries());
 
         internal static PerLanguageOption<ReportingOptions> Reporting { get; } =
             new PerLanguageOption<ReportingOptions>(
-                AnalyzerName, nameof(Reporting), defaultValue: () => { return CodeAnalysis.Sarif.ReportingOptions.Default; });
+                AnalyzerName, nameof(Reporting), defaultValue: () => CodeAnalysis.Sarif.ReportingOptions.Default);
 
         internal static PerLanguageOption<PropertiesDictionary> MitigatedCompilers { get; } =
-            new PerLanguageOption<PropertiesDictionary>(AnalyzerName, nameof(MitigatedCompilers), defaultValue: () => { return BuildMitigatedCompilersData(); });
+            new PerLanguageOption<PropertiesDictionary>(AnalyzerName, nameof(MitigatedCompilers), defaultValue: () => BuildMitigatedCompilersData());
 
         // Internal so that we can reset this during testing.  In practice this should never get reset, but we use several different configs during unit tests.
         // Please do not access this field outside of this class and unit tests.
@@ -476,7 +476,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         internal static PerLanguageOption<string> Description { get; } =
             new PerLanguageOption<string>(
-                AnalyzerName, nameof(Description), defaultValue: () => { return string.Empty; });
+                AnalyzerName, nameof(Description), defaultValue: () => string.Empty);
 
         private static PropertiesDictionary BuildMitigatedCompilersData()
         {
@@ -597,7 +597,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var mitigatedCompilerList = new List<CompilerVersionToMitigation>();
             foreach (string key in versionList.Keys)
             {
-                string[] versions = key.Split('-').Select((s) => { return s.Replace("*", int.MaxValue.ToString()); }).ToArray();
+                string[] versions = key.Split('-').Select((s) => s.Replace("*", int.MaxValue.ToString())).ToArray();
                 var mitigationData = new CompilerVersionToMitigation()
                 {
                     MinimalSupportedVersion = new Version(versions[0]),
@@ -646,11 +646,9 @@ namespace Microsoft.CodeAnalysis.Sarif
     {
         public static MachineFamily GetMachineFamily(this ExtendedMachine extendedMachine)
         {
-            if (extendedMachine.IsArmFamily()) { return MachineFamily.Arm; }
-
-            if (extendedMachine.IsX86Family()) { return MachineFamily.X86; }
-
-            return MachineFamily.Unknown;
+            return extendedMachine.IsArmFamily() ? MachineFamily.Arm : 
+                   extendedMachine.IsX86Family() ? MachineFamily.X86 : 
+                                                   MachineFamily.Unknown;
         }
 
         public static bool CanBeMitigated(this ExtendedMachine machine)

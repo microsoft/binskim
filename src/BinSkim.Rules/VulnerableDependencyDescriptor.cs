@@ -25,23 +25,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static PerLanguageOption<StringSet> s_fileHashes { get; } =
             new PerLanguageOption<StringSet>(
-                nameof(VulnerableDependencyDescriptor), nameof(FileHashes), defaultValue: () => { return new StringSet(); });
+                nameof(VulnerableDependencyDescriptor), nameof(FileHashes), defaultValue: () => new StringSet());
 
         private static PerLanguageOption<string> s_id { get; } =
             new PerLanguageOption<string>(
-                nameof(VulnerableDependencyDescriptor), nameof(Id), defaultValue: () => { return string.Empty; });
+                nameof(VulnerableDependencyDescriptor), nameof(Id), defaultValue: () => string.Empty);
 
         private static PerLanguageOption<string> s_dependencyName { get; } =
             new PerLanguageOption<string>(
-                nameof(VulnerableDependencyDescriptor), nameof(DependencyName), defaultValue: () => { return string.Empty; });
+                nameof(VulnerableDependencyDescriptor), nameof(DependencyName), defaultValue: () => string.Empty);
 
         private static PerLanguageOption<string> s_vulnerabilityDescription { get; } =
             new PerLanguageOption<string>(
-                nameof(VulnerableDependencyDescriptor), nameof(VulnerabilityDescription), defaultValue: () => { return string.Empty; });
+                nameof(VulnerableDependencyDescriptor), nameof(VulnerabilityDescription), defaultValue: () => string.Empty);
 
         private static PerLanguageOption<string> s_resolution { get; } =
             new PerLanguageOption<string>(
-                nameof(VulnerableDependencyDescriptor), nameof(Resolution), defaultValue: () => { return string.Empty; });
+                nameof(VulnerableDependencyDescriptor), nameof(Resolution), defaultValue: () => string.Empty);
 
         public StringSet FileHashes => this.GetProperty(s_fileHashes);
 

@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public static PerLanguageOption<PropertiesDictionary> VulnerableDependencies { get; } =
             new PerLanguageOption<PropertiesDictionary>(
-                AnalyzerName, nameof(VulnerableDependencies), defaultValue: () => { return BuildDefaultVulnerableDependenciesMap(); });
+                AnalyzerName, nameof(VulnerableDependencies), defaultValue: () => BuildDefaultVulnerableDependenciesMap());
 
         private HashSet<string> _files;
         private Dictionary<string, VulnerableDependencyDescriptor> _filesToVulnerabilitiesMap;

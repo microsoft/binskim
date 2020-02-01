@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public static PerLanguageOption<StringToVersionMap> VulnerableBinaries { get; } =
             new PerLanguageOption<StringToVersionMap>(
-                AnalyzerName, nameof(VulnerableBinaries), defaultValue: () => { return BuildDefaultVulnerableBinariesMap(); });
+                AnalyzerName, nameof(VulnerableBinaries), defaultValue: () => BuildDefaultVulnerableBinariesMap());
 
         // \d+(\.\d+){0,3}
         // 
