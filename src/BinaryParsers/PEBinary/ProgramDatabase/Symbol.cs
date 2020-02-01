@@ -18,8 +18,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     /// <seealso cref="T:System.IDisposable"/>
     public sealed class Symbol : IDisposable
     {
-        private readonly IDiaSymbol _sym;
-        private bool _disposed;
+        private readonly IDiaSymbol sym;
+        private bool disposed;
 
         /// <summary>Creates a new <see cref="Symbol"/> around a COM <see cref="IDiaSymbol"/> implementation.</summary>
         /// <param name="symbol">The symbol to wrap, or null. This method takes ownership of the <see cref="IDiaSymbol"/> COM RCW.</param>
@@ -44,13 +44,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return this._sym.symIndexId;
+                return this.sym.symIndexId;
             }
         }
 
         /// <summary>Retrieves the symbol's guid.</summary>
         /// <value>The symbol's guid.</value>
-        public Guid Guid => this._sym.guid;
+        public Guid Guid => this.sym.guid;
 
         /// <summary>Gets the symbol's name.</summary>
         /// <value>The symbol's name.</value>
@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return this._sym.name;
+                return this.sym.name;
             }
         }
 
@@ -70,7 +70,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return this._sym.undecoratedName;
+                return this.sym.undecoratedName;
             }
         }
 
@@ -94,7 +94,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return this._sym.libraryName;
+                return this.sym.libraryName;
             }
         }
 
@@ -147,7 +147,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     throw new InvalidOperationException("RVA is only valid for LocIsStatic location types");
                 }
 
-                return this._sym.relativeVirtualAddress;
+                return this.sym.relativeVirtualAddress;
             }
         }
 
@@ -165,7 +165,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     throw new InvalidOperationException("AddressSection is only valid for LocIsStatic location types");
                 }
 
-                return this._sym.addressSection;
+                return this.sym.addressSection;
             }
         }
 
@@ -183,7 +183,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     throw new InvalidOperationException("AddressOffset is only valid for LocIsStatic location types");
                 }
 
-                return this._sym.addressOffset;
+                return this.sym.addressOffset;
             }
         }
 
@@ -195,7 +195,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return this._sym.offset;
+                return this.sym.offset;
             }
         }
 
@@ -207,7 +207,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return (LocationType)this._sym.locationType;
+                return (LocationType)this.sym.locationType;
             }
         }
 
@@ -219,7 +219,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return (SymTagEnum)this._sym.symTag;
+                return (SymTagEnum)this.sym.symTag;
             }
         }
 
@@ -229,7 +229,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public Symbol CreateType()
         {
             this.AssertNotDisposed();
-            return Symbol.Create(this._sym.type);
+            return Symbol.Create(this.sym.type);
         }
 
         /// <summary>Creates all symbols which are children of this symbol.</summary>
@@ -261,7 +261,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return this._sym.length;
+                return this.sym.length;
             }
         }
 
@@ -273,7 +273,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return this._sym.isSafeBuffers != 0;
+                return this.sym.isSafeBuffers != 0;
             }
         }
 
@@ -282,7 +282,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return this._sym.hasSecurityChecks != 0;
+                return this.sym.hasSecurityChecks != 0;
             }
         }
 
@@ -296,7 +296,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 this.AssertNotDisposed();
                 // sometimes DIA reports managed functions as not managed, but the managed token is present,
                 // so we can use that to determine managed functions (managed method tokens start with 0x06......)
-                return this._sym.managed != 0 || (this._sym.locationType == (uint)LocationType.LocInMetaData); //  ((this.sym.token & 0xff000000) == 0x06000000);
+                return this.sym.managed != 0 || (this.sym.locationType == (uint)LocationType.LocInMetaData); //  ((this.sym.token & 0xff000000) == 0x06000000);
             }
         }
 
@@ -308,7 +308,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return this._sym.compilerGenerated != 0;
+                return this.sym.compilerGenerated != 0;
             }
         }
 
@@ -317,7 +317,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return this._sym.isStripped != 0;
+                return this.sym.isStripped != 0;
             }
         }
 
@@ -329,7 +329,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return (DataKind)this._sym.dataKind;
+                return (DataKind)this.sym.dataKind;
             }
         }
 
@@ -341,13 +341,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return this._sym.hasDebugInfo != 0;
+                return this.sym.hasDebugInfo != 0;
             }
         }
 
         private void AssertNotDisposed()
         {
-            if (this._disposed)
+            if (this.disposed)
             {
                 throw new ObjectDisposedException("Symbol");
             }
@@ -355,17 +355,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private Symbol(IDiaSymbol sym)
         {
-            this._sym = sym;
+            this.sym = sym;
         }
 
         public void Dispose()
         {
-            if (!this._disposed)
+            if (!this.disposed)
             {
-                Marshal.ReleaseComObject(this._sym);
+                Marshal.ReleaseComObject(this.sym);
             }
 
-            this._disposed = true;
+            this.disposed = true;
         }
 
         public ObjectModuleDetails GetObjectModuleDetails()
@@ -467,7 +467,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 this.AssertNotDisposed();
-                return this._sym;
+                return this.sym;
             }
         }
 
@@ -479,7 +479,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 try
                 {
-                    this._sym.findChildren(symbolTagType, symbolName, (uint)searchOptions, out enumSymbols);
+                    this.sym.findChildren(symbolTagType, symbolName, (uint)searchOptions, out enumSymbols);
                 }
                 catch (NotImplementedException) { }
 

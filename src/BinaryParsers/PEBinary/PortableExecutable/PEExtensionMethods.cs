@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 case Type.UINT64: res = (ulong)sp; break;
                 case Type.INT32: res = (int)(uint)sp; break;
                 case Type.INT64: res = (long)(ulong)sp; break;
-                case Type.POINTER: res = new SafePointer(sp._array, sp._stream, (int)(uint)sp); break;
+                case Type.POINTER: res = new SafePointer(sp.array, sp.stream, (int)(uint)sp); break;
                 case Type.HEADER: res = fi.Header.Create(fi.ParentHeader, sp); break;
                 case Type.NATIVEINT:
                     PEHeader ioh = fi.ParentHeader;

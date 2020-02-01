@@ -7,16 +7,16 @@ namespace Microsoft.CodeAnalysis.IL
 {
     internal sealed class RoslynSymbolVisitor : SymbolVisitor
     {
-        private readonly Action<ISymbol> _action;
+        private readonly Action<ISymbol> action;
 
         public RoslynSymbolVisitor(Action<ISymbol> action)
         {
-            this._action = action;
+            this.action = action;
         }
 
         public override void DefaultVisit(ISymbol symbol)
         {
-            this._action(symbol);
+            this.action(symbol);
         }
 
         public override void VisitAssembly(IAssemblySymbol symbol)

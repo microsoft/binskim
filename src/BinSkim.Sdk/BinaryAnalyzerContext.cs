@@ -9,17 +9,17 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class BinaryAnalyzerContext : IAnalysisContext
     {
-        private Uri _uri;
-        private IBinary _iBinary;
+        private Uri uri;
+        private IBinary iBinary;
 
         public IBinary Binary
         {
             get
             {
-                this._iBinary = this._iBinary ?? BinaryTargetManager.GetBinaryFromFile(this._uri, this.SymbolPath, this.LocalSymbolDirectories);
-                return this._iBinary;
+                this.iBinary = this.iBinary ?? BinaryTargetManager.GetBinaryFromFile(this.uri, this.SymbolPath, this.LocalSymbolDirectories);
+                return this.iBinary;
             }
-            set => this._iBinary = value;
+            set => this.iBinary = value;
         }
 
         public Exception TargetLoadException
@@ -38,14 +38,14 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public Uri TargetUri
         {
-            get => this._uri;
+            get => this.uri;
             set
             {
-                if (this._uri != null)
+                if (this.uri != null)
                 {
                     throw new InvalidOperationException(SdkResources.IllegalContextReuse);
                 }
-                this._uri = value;
+                this.uri = value;
             }
         }
 
@@ -76,10 +76,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 if (disposing)
                 {
-                    if (this._iBinary != null)
+                    if (this.iBinary != null)
                     {
-                        this._iBinary.Dispose();
-                        this._iBinary = null;
+                        this.iBinary.Dispose();
+                        this.iBinary = null;
                     }
                 }
                 this.disposedValue = true;

@@ -49,30 +49,28 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<PropertiesDictionary>(
                 AnalyzerName, nameof(VulnerableDependencies), defaultValue: () => { return BuildDefaultVulnerableDependenciesMap(); });
 
-        private HashSet<string> _files;
-        private Dictionary<string, VulnerableDependencyDescriptor> _filesToVulnerabilitiesMap;
+        private HashSet<string> files;
+        private Dictionary<string, VulnerableDependencyDescriptor> filesToVulnerabilitiesMap;
 
         public override void Initialize(BinaryAnalyzerContext context)
         {
             if (context.Policy == null) { return; }
 
-            this._files = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            this._filesToVulnerabilitiesMap = new Dictionary<string, VulnerableDependencyDescriptor>();
+            this.files = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            this.filesToVulnerabilitiesMap = new Dictionary<string, VulnerableDependencyDescriptor>();
 
             foreach (PropertiesDictionary dictionary in context.Policy.GetProperty(VulnerableDependencies).Values)
             {
-                var descriptor = dictionary as VulnerableDependencyDescriptor;
-
                 // This happens if we have deserialized settings from JSON rather than XML
-                if (descriptor == null)
+                if (!(dictionary is VulnerableDependencyDescriptor descriptor))
                 {
                     descriptor = new VulnerableDependencyDescriptor(dictionary);
                 }
 
                 foreach (string fileHash in descriptor.FileHashes)
                 {
-                    this._filesToVulnerabilitiesMap[fileHash] = descriptor;
-                    this._files.Add(fileHash.Split('#')[0]);
+                    this.filesToVulnerabilitiesMap[fileHash] = descriptor;
+                    this.files.Add(fileHash.Split('#')[0]);
                 }
             }
 
@@ -121,14 +119,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     SourceFile sf = sfView.Value;
                     string fileName = Path.GetFileName(sf.FileName);
 
-                    if (!this._files.Contains(fileName) || sf.HashType == HashType.None)
+                    if (!this.files.Contains(fileName) || sf.HashType == HashType.None)
                     {
                         continue;
                     }
 
                     string hash = fileName + "#" + BitConverter.ToString(sf.Hash);
 
-                    if (this._filesToVulnerabilitiesMap.TryGetValue(hash, out VulnerableDependencyDescriptor descriptor))
+                    if (this.filesToVulnerabilitiesMap.TryGetValue(hash, out VulnerableDependencyDescriptor descriptor))
                     {
                         if (!vulnerabilityToModules.TryGetValue(descriptor.Id, out moduleList))
                         {
