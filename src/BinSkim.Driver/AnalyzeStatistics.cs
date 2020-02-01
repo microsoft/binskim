@@ -16,17 +16,17 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 return;
             }
-            _stopwatch = Stopwatch.StartNew();
+            this._stopwatch = Stopwatch.StartNew();
         }
 
         public void Dispose()
         {
-            DumpStatisticsToConsole();
+            this.DumpStatisticsToConsole();
         }
 
         internal void DumpStatisticsToConsole()
         {
-            if (_stopwatch == null)
+            if (this._stopwatch == null)
             {
                 return;
             }

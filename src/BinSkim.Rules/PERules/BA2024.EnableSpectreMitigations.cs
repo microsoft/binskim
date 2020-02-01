@@ -32,31 +32,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2024
         /// </summary>
-        public override string Id { get { return RuleIds.EnableSpectreMitigations; } }
+        public override string Id => RuleIds.EnableSpectreMitigations;
 
         /// <summary>
         /// Application code should be compiled with the most up-to-date toolsets possible
         /// in order to take advantage of the most current compile-time security features.
         /// </summary>
-        public override MultiformatMessageString FullDescription
-        {
-            // Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it.
-            get { return new MultiformatMessageString { Text = RuleResources.BA2024_EnableSpectreMitigations_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2024_EnableSpectreMitigations_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2024_Warning),
                     nameof(RuleResources.BA2024_Warning_OptimizationsDisabled),
                     nameof(RuleResources.BA2024_Warning_SpectreMitigationNotEnabled),
                     nameof(RuleResources.BA2024_Warning_SpectreMitigationExplicitlyDisabled),
                     nameof(RuleResources.BA2024_Pass),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)};
-            }
-        }
 
         public IEnumerable<IOption> GetOptions()
         {
@@ -94,7 +84,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // Internal so that we can reset this during testing.  In practice this should never get reset, but we use several different configs during unit tests.
         // Please do not access this field outside of this class and unit tests.
         internal static Dictionary<MachineFamily, CompilerVersionToMitigation[]> _compilerData = null;
-        
+
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
@@ -120,8 +110,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Machine reflectionMachineType = target.PE.Machine;
 
             // The current Machine enum does not have support for Arm64, so translate to our Machine enum
-            ExtendedMachine machineType = (ExtendedMachine)reflectionMachineType;
-            
+            var machineType = (ExtendedMachine)reflectionMachineType;
+
             if (!machineType.CanBeMitigated())
             {
                 // QUESTION:
@@ -134,8 +124,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             var masmModules = new TruncatedCompilandRecordList();
             var mitigationNotEnabledModules = new List<ObjectModuleDetails>();
-            TruncatedCompilandRecordList mitigationDisabledInDebugBuild = new TruncatedCompilandRecordList();
-            TruncatedCompilandRecordList mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
+            var mitigationDisabledInDebugBuild = new TruncatedCompilandRecordList();
+            var mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
 
@@ -148,9 +138,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (!string.IsNullOrEmpty(om.Lib))
                 {
                     string libFileName = string.Concat(Path.GetFileName(om.Lib), ",", omDetails.Language.ToString()).ToLowerInvariant();
-                    Version minAllowedVersion;
 
-                    if (allowedLibraries.TryGetValue(libFileName, out minAllowedVersion) &&
+                    if (allowedLibraries.TryGetValue(libFileName, out Version minAllowedVersion) &&
                         omDetails.CompilerBackEndVersion >= minAllowedVersion)
                     {
                         continue;
@@ -166,42 +155,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     case Language.C:
                     case Language.Cxx:
-                    {
-                        if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftNativeCompiler)
                         {
-                            // TODO: https://github.com/Microsoft/binskim/issues/114
-                            continue;
+                            if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftNativeCompiler)
+                            {
+                                // TODO: https://github.com/Microsoft/binskim/issues/114
+                                continue;
+                            }
+                            else
+                            {
+                                actualVersion = omDetails.CompilerBackEndVersion;
+                            }
+                            break;
                         }
-                        else
-                        {
-                            actualVersion = omDetails.CompilerBackEndVersion;
-                        }
-                        break;
-                    }
 
                     case Language.MASM:
-                    {
-                        masmModules.Add(om.CreateCompilandRecord());
-                        continue;
-                    }
+                        {
+                            masmModules.Add(om.CreateCompilandRecord());
+                            continue;
+                        }
 
                     case Language.LINK:
-                    {
-                        // Linker is not involved in the mitigations, so no need to check version or switches at this time.
-                        continue;
-                    }
+                        {
+                            // Linker is not involved in the mitigations, so no need to check version or switches at this time.
+                            continue;
+                        }
 
                     case Language.CVTRES:
-                    {
-                        // Resource compiler is not involved in the mitigations, so no need to check version or switches at this time.
-                        continue;
-                    }
+                        {
+                            // Resource compiler is not involved in the mitigations, so no need to check version or switches at this time.
+                            continue;
+                        }
 
                     case Language.HLSL:
-                    {
-                        // HLSL compiler is not involved in the mitigations, so no need to check version or switches at this time.
-                        continue;
-                    }
+                        {
+                            // HLSL compiler is not involved in the mitigations, so no need to check version or switches at this time.
+                            continue;
+                        }
 
                     // Mixed binaries (/clr) can contain non C++ compilands if they are linked in via netmodules
                     // .NET IL should be mitigated by the runtime if any mitigations are necessary
@@ -209,34 +198,34 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.CSharp:
                     case Language.MSIL:
                     case Language.ILASM:
-                    {
-                        continue;
-                    }
+                        {
+                            continue;
+                        }
 
                     case Language.Unknown:
-                    {
-                        // The linker may emit debug information for modules from static libraries that do not contribute to actual code.
-                        // do not contribute to actual code. Currently these come back as Language.Unknown :(
-                        // TODO: https://github.com/Microsoft/binskim/issues/116
-                        continue;
-                    }
+                        {
+                            // The linker may emit debug information for modules from static libraries that do not contribute to actual code.
+                            // do not contribute to actual code. Currently these come back as Language.Unknown :(
+                            // TODO: https://github.com/Microsoft/binskim/issues/116
+                            continue;
+                        }
 
                     default:
-                    {
-                        // TODO: https://github.com/Microsoft/binskim/issues/117
-                        // Review unknown languages for this and all checks
-                    }
-                    continue;
+                        {
+                            // TODO: https://github.com/Microsoft/binskim/issues/117
+                            // Review unknown languages for this and all checks
+                        }
+                        continue;
                 }
 
                 // Get the appropriate compiler version against which to check this compiland.
                 // check that we are greater than or equal to the first fully supported release: 15.6 first
                 Version omVersion = omDetails.CompilerBackEndVersion;
-                
+
                 CompilerMitigations availableMitigations = GetAvailableMitigations(context, machineType, omVersion);
-                
+
                 if (availableMitigations == CompilerMitigations.None)
-                { 
+                {
                     // Built with a compiler version {0} that does not support any Spectre
                     // mitigations. We do not report here. BA2006 will fire instead.
                     continue;
@@ -324,7 +313,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // /Qspectre but the switch was not enabled on the command-line: {0}
                 line = string.Format(
                         RuleResources.BA2024_Warning_SpectreMitigationNotEnabled,
-                        CreateOutputCoalescedByLibrary(mitigationNotEnabledModules));
+                        this.CreateOutputCoalescedByLibrary(mitigationNotEnabledModules));
                 sb.AppendLine(line);
             }
 
@@ -378,7 +367,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (ObjectModuleDetails objectModuleDetail in objectModuleDetailsList)
             {
-                string key = CreateLibraryDescriptor(objectModuleDetail);
+                string key = this.CreateLibraryDescriptor(objectModuleDetail);
                 if (!librariesToObjectModulesMap.TryGetValue(key, out List<string> objectModules))
                 {
                     objectModules = librariesToObjectModulesMap[key] = new List<string>();
@@ -396,20 +385,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 objectModules.Sort();
                 sb.AppendLine(" : " + string.Join(",", objectModules.ToArray()));
             }
-             
+
             return sb.ToString();
         }
 
-        private string CreateLibraryDescriptor(ObjectModuleDetails objectModuleDetail) => 
-            Path.GetFileName(objectModuleDetail.Library) + "," + 
-            objectModuleDetail.Language.ToString().ToLowerInvariant() + "," + 
-            objectModuleDetail.CompilerBackEndVersion;
-
+        private string CreateLibraryDescriptor(ObjectModuleDetails objectModuleDetail)
+        {
+            return Path.GetFileName(
+                            objectModuleDetail.Library) + "," +
+                            objectModuleDetail.Language.ToString().ToLowerInvariant() + "," +
+                            objectModuleDetail.CompilerBackEndVersion;
+        }
 
         internal static Version GetClosestCompilerVersionWithSpectreMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)
         {
-            var compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
-            var machineFamily = machine.GetMachineFamily();
+            Dictionary<MachineFamily, CompilerVersionToMitigation[]> compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
+            MachineFamily machineFamily = machine.GetMachineFamily();
 
             if (!compilerMitigationData.ContainsKey(machineFamily))
             {
@@ -418,17 +409,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                var listOfMitigatedCompilers = compilerMitigationData[machineFamily];
+                CompilerVersionToMitigation[] listOfMitigatedCompilers = compilerMitigationData[machineFamily];
                 // If the compiler version is not supported, then either:
                 // 1) it is earlier than any supported compiler version
                 // 2) it is in-between two supported compiler versions (e.x. VS2017.1-4)--it is larger than some supported version numbers and smaller than others.
                 // 3) it's greater than any of them.
                 // We want to give users the 'next greatest' compiler version that supports the spectre mitigations--this should be the "smallest available upgrade."
-                Version previousMaximum = new Version(0, 0, 0, 0);
+                var previousMaximum = new Version(0, 0, 0, 0);
                 for (int i = 0; i < listOfMitigatedCompilers.Length; i++)
                 {
-                    if (omVersion > previousMaximum && 
-                        omVersion <= listOfMitigatedCompilers[i].MinimalSupportedVersion && 
+                    if (omVersion > previousMaximum &&
+                        omVersion <= listOfMitigatedCompilers[i].MinimalSupportedVersion &&
                         (listOfMitigatedCompilers[i].SupportedMitigations & (CompilerMitigations.QSpectreAvailable | CompilerMitigations.D2GuardSpecLoadAvailable)) != 0)
                     {
                         return listOfMitigatedCompilers[i].MinimalSupportedVersion;
@@ -444,14 +435,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return listOfMitigatedCompilers[listOfMitigatedCompilers.Length - 1].MinimalSupportedVersion;
             }
         }
-        
+
         /// <summary>
         /// Get the Spectre compiler compiler mitigations available for a particular compiler version and machine type.
         /// </summary>
         internal static CompilerMitigations GetAvailableMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)
         {
-            var compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
-            var machineFamily = machine.GetMachineFamily();
+            Dictionary<MachineFamily, CompilerVersionToMitigation[]> compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
+            MachineFamily machineFamily = machine.GetMachineFamily();
 
             if (!compilerMitigationData.ContainsKey(machineFamily))
             {
@@ -459,7 +450,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                var listOfMitigatedCompilers = compilerMitigationData[machineFamily];
+                CompilerVersionToMitigation[] listOfMitigatedCompilers = compilerMitigationData[machineFamily];
                 for (int i = 0; i < listOfMitigatedCompilers.Length; i++)
                 {
                     if (omVersion >= listOfMitigatedCompilers[i].MinimalSupportedVersion && omVersion < listOfMitigatedCompilers[i].MaximumSupportedVersion)
@@ -473,7 +464,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static StringToVersionMap BuildAllowedLibraries()
         {
-            StringToVersionMap result = new StringToVersionMap();
+            var result = new StringToVersionMap();
 
             // Example entries
             // result["cExample.lib,c"] = new Version("1.0.0.0") 
@@ -485,8 +476,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         internal static PerLanguageOption<string> Description { get; } =
             new PerLanguageOption<string>(
-                AnalyzerName, nameof(Description), defaultValue: () => { return String.Empty; });
-        
+                AnalyzerName, nameof(Description), defaultValue: () => { return string.Empty; });
+
         private static PropertiesDictionary BuildMitigatedCompilersData()
         {
             // As per https://blogs.msdn.microsoft.com/vcblog/2018/01/15/spectre-mitigations-in-msvc/ 
@@ -541,7 +532,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // VS2015 15.0 Update 3 Versions
             //       D2GuardSpecLoad version will not be back-ported
             // This terminates at 19.0 due to gaps in support in the 19.10 and 19.11 compilers
-            x86Data.Add("19.00.24232.0 - 19.0.*.*", 
+            x86Data.Add("19.00.24232.0 - 19.0.*.*",
                 (CompilerMitigations.QSpectreAvailable).ToString());
 
             // VS2017 RTM
@@ -550,7 +541,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString());
 
             // VS2017 - 15.5.x
-            x86Data.Add("19.12.25830.2 - 19.12.25834.*", 
+            x86Data.Add("19.12.25830.2 - 19.12.25834.*",
                 (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
 
             // This terminates at 19.12.*.* due to a gap in support for 15.6 early previews
@@ -558,7 +549,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable).ToString());
 
             // VS2017 - 15.6 Preview 3
-            x86Data.Add("19.13.26029.0 - 19.13.26117.*", 
+            x86Data.Add("19.13.26029.0 - 19.13.26117.*",
                 (CompilerMitigations.D2GuardSpecLoadAvailable).ToString());
 
             // Version flows into 15.7 as there is no gap in support for these switches moving forwards
@@ -592,19 +583,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 _compilerData = new Dictionary<MachineFamily, CompilerVersionToMitigation[]>();
                 PropertiesDictionary configData = policy.GetProperty(MitigatedCompilers);
-                foreach (var key in configData.Keys)
+                foreach (string key in configData.Keys)
                 {
-                    MachineFamily machine = (MachineFamily)Enum.Parse(typeof(MachineFamily), key); // Neaten this up.
+                    var machine = (MachineFamily)Enum.Parse(typeof(MachineFamily), key); // Neaten this up.
                     _compilerData.Add(machine, CreateSortedVersionDictionary((PropertiesDictionary)configData[key]));
                 }
             }
             return _compilerData;
         }
-        
+
         internal static CompilerVersionToMitigation[] CreateSortedVersionDictionary(PropertiesDictionary versionList)
         {
-            List<CompilerVersionToMitigation> mitigatedCompilerList = new List<CompilerVersionToMitigation>();
-            foreach (var key in versionList.Keys)
+            var mitigatedCompilerList = new List<CompilerVersionToMitigation>();
+            foreach (string key in versionList.Keys)
             {
                 string[] versions = key.Split('-').Select((s) => { return s.Replace("*", int.MaxValue.ToString()); }).ToArray();
                 var mitigationData = new CompilerVersionToMitigation()
@@ -621,7 +612,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             return mitigatedCompilerList.ToArray();
         }
-        
+
         private static void ThrowIfMitigationDataIsInvalid(List<CompilerVersionToMitigation> compilerVersionToMitigation)
         {
             for (int i = 0; i < compilerVersionToMitigation.Count; i++)
@@ -676,10 +667,10 @@ namespace Microsoft.CodeAnalysis.Sarif
                 case ExtendedMachine.Arm:
                 case ExtendedMachine.Arm64:
                 case ExtendedMachine.ArmThumb2:
-                isFamily = true;
-                break;
+                    isFamily = true;
+                    break;
                 default:
-                break;
+                    break;
             }
 
             return isFamily;
@@ -693,10 +684,10 @@ namespace Microsoft.CodeAnalysis.Sarif
             {
                 case ExtendedMachine.Amd64:
                 case ExtendedMachine.I386:
-                isFamily = true;
-                break;
+                    isFamily = true;
+                    break;
                 default:
-                break;
+                    break;
             }
 
             return isFamily;

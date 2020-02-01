@@ -28,33 +28,33 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         public PdbParseException(int code, Exception innerException)
             : base(
-                (((uint)code >= (uint)PdbParseErrorCode.E_PDB_OK) && ((uint)code < (uint)PdbParseErrorCode.E_PDB_MAX)) ? String.Format("{0} ({1})", ((PdbParseErrorCode)code).ToString(), PdbParseExceptionStrings[(uint)code - (uint)PdbParseErrorCode.E_PDB_OK]) : innerException.Message,
+                (((uint)code >= (uint)PdbParseErrorCode.E_PDB_OK) && ((uint)code < (uint)PdbParseErrorCode.E_PDB_MAX)) ? string.Format("{0} ({1})", ((PdbParseErrorCode)code).ToString(), PdbParseExceptionStrings[(uint)code - (uint)PdbParseErrorCode.E_PDB_OK]) : innerException.Message,
                 innerException)
         {
-            ExceptionCode = (PdbParseErrorCode)(uint)code;
+            this.ExceptionCode = (PdbParseErrorCode)(uint)code;
         }
 
         public PdbParseException(PdbParseErrorCode code, Exception innerException)
-            : base(String.Format("{0} : {1}", code.ToString(), PdbParseExceptionStrings[(uint)code - (uint)PdbParseErrorCode.E_PDB_OK]), innerException)
+            : base(string.Format("{0} : {1}", code.ToString(), PdbParseExceptionStrings[(uint)code - (uint)PdbParseErrorCode.E_PDB_OK]), innerException)
         {
-            ExceptionCode = code;
+            this.ExceptionCode = code;
         }
 
         public PdbParseException(PdbParseErrorCode code, string message, Exception innerException)
             : base(message, innerException)
         {
-            ExceptionCode = code;
+            this.ExceptionCode = code;
         }
-        
+
         public PdbParseException(string message) : base(message)
         {
-            ExceptionCode = PdbParseErrorCode.E_PDB_MAX;
+            this.ExceptionCode = PdbParseErrorCode.E_PDB_MAX;
         }
-        
+
         public PdbParseException(string message, Exception innerException)
             : base(message, innerException)
         {
-            ExceptionCode = PdbParseErrorCode.E_PDB_MAX;
+            this.ExceptionCode = PdbParseErrorCode.E_PDB_MAX;
         }
 
         public static string[] PdbParseExceptionStrings = {

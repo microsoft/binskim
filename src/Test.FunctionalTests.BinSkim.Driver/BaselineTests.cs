@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         public BuiltInRuleFunctionalTests(ITestOutputHelper output)
         {
-            _testOutputHelper = output;
+            this._testOutputHelper = output;
         }
 
 
@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL
         public void Driver_BuiltInRuleFunctionalTests()
         {
             AnalyzeCommand.s_UnitTestOutputVersion = SarifVersion.Current;
-            BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*");
+            this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*");
         }
 
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.IL
 
                 foreach (string file in testFiles)
                 {
-                    RunRules(sb, file);
+                    this.RunRules(sb, file);
                 }
             }
 
@@ -59,16 +59,16 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             string rebaselineMessage = "If the actual output is expected, generate new baselines by executing `UpdateBaselines.ps1` from a PS command prompt.";
-            sb.AppendLine(String.Format(CultureInfo.CurrentCulture, rebaselineMessage));
+            sb.AppendLine(string.Format(CultureInfo.CurrentCulture, rebaselineMessage));
 
             if (sb.Length > 0)
             {
                 sb.AppendLine();
                 sb.AppendLine("Run the following to all test baselines vs. actual results:");
-                sb.AppendLine(GenerateDiffCommand(
-                    Path.Combine(testDirectory, "Expected"), 
+                sb.AppendLine(this.GenerateDiffCommand(
+                    Path.Combine(testDirectory, "Expected"),
                     Path.Combine(testDirectory, "Actual")));
-                _testOutputHelper.WriteLine(sb.ToString());
+                this._testOutputHelper.WriteLine(sb.ToString());
             }
 
             Assert.Equal(0, sb.Length);
@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 expectedDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "Expected");
             }
-            else 
+            else
             {
                 expectedDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "NonWindowsExpected");
             }
@@ -95,25 +95,26 @@ namespace Microsoft.CodeAnalysis.IL
             string expectedFileName = Path.Combine(expectedDirectory, fileName + ".sarif");
             string actualFileName = Path.Combine(actualDirectory, fileName + ".sarif");
 
-            AnalyzeCommand command = new AnalyzeCommand();
-            AnalyzeOptions options = new AnalyzeOptions();
-
-            options.Force = true;
-            options.Verbose = true;
-            options.Recurse = false;
-            options.PrettyPrint = true;
-            options.ComputeFileHashes = true;
-            options.OutputFilePath = actualFileName;
-            options.ConfigurationFilePath = "default";
-            options.SarifOutputVersion = SarifVersion.Current;
-            options.TargetFileSpecifiers = new string[] { inputFileName };
+            var command = new AnalyzeCommand();
+            var options = new AnalyzeOptions
+            {
+                Force = true,
+                Verbose = true,
+                Recurse = false,
+                PrettyPrint = true,
+                ComputeFileHashes = true,
+                OutputFilePath = actualFileName,
+                ConfigurationFilePath = "default",
+                SarifOutputVersion = SarifVersion.Current,
+                TargetFileSpecifiers = new string[] { inputFileName }
+            };
 
             int result = command.Run(options);
 
             // Note that we don't ensure a success code. That is because we
             // are running end-to-end tests for valid and invalid files
 
-            JsonSerializerSettings settings = new JsonSerializerSettings()
+            var settings = new JsonSerializerSettings()
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented
             };
@@ -125,12 +126,12 @@ namespace Microsoft.CodeAnalysis.IL
             string repoRoot = Path.GetFullPath(Path.Combine(actualDirectory, "..", "..", "..", ".."));
             actualText = actualText.Replace(repoRoot.Replace(@"\", @"\\"), @"Z:");
             actualText = actualText.Replace(repoRoot.Replace(@"\", @"/"), @"Z:");
-            
+
             // Remove stack traces as they can change due to inlining differences by configuration and runtime.
             actualText = Regex.Replace(actualText, @"\\r\\n   at [^""]+", "");
 
             actualText = actualText.Replace(@"""Sarif""", @"""BinSkim""");
-            actualText = actualText.Replace(@"        ""fileVersion"": ""15.0.0""," + Environment.NewLine, String.Empty);
+            actualText = actualText.Replace(@"        ""fileVersion"": ""15.0.0""," + Environment.NewLine, string.Empty);
 
             actualText = Regex.Replace(actualText, @"\s*""fullName""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""semanticVersion""[^\n]+?\n", Environment.NewLine);
@@ -157,7 +158,7 @@ namespace Microsoft.CodeAnalysis.IL
             // Make sure we can successfully deserialize what was just generated
             SarifLog expectedLog = PrereleaseCompatibilityTransformer.UpdateToCurrentVersion(
                                     expectedText,
-                                    settings.Formatting, 
+                                    settings.Formatting,
                                     out expectedText);
 
             SarifLog actualLog = JsonConvert.DeserializeObject<SarifLog>(actualText, settings);
@@ -167,9 +168,9 @@ namespace Microsoft.CodeAnalysis.IL
             if (!visitor.Diff(actualLog.Runs[0].Results))
             {
                 string errorMessage = "The output of the tool did not match for input {0}.";
-                sb.AppendLine(String.Format(CultureInfo.CurrentCulture, errorMessage, inputFileName));
+                sb.AppendLine(string.Format(CultureInfo.CurrentCulture, errorMessage, inputFileName));
                 sb.AppendLine("Check differences with:");
-                sb.AppendLine(GenerateDiffCommand(expectedFileName, actualFileName));
+                sb.AppendLine(this.GenerateDiffCommand(expectedFileName, actualFileName));
             }
         }
 
@@ -181,22 +182,22 @@ namespace Microsoft.CodeAnalysis.IL
             string beyondCompare = TryFindBeyondCompare();
             if (beyondCompare != null)
             {
-                return String.Format(CultureInfo.InvariantCulture, "\"{0}\" \"{1}\" \"{2}\" /title1=Expected /title2=Actual", beyondCompare, expected, actual);
+                return string.Format(CultureInfo.InvariantCulture, "\"{0}\" \"{1}\" \"{2}\" /title1=Expected /title2=Actual", beyondCompare, expected, actual);
             }
 
             if (PlatformSpecificHelpers.RunningOnWindows())
             {
-                return String.Format(CultureInfo.InvariantCulture, "windiff \"{0}\" \"{1}\"", expected, actual);
-            } 
+                return string.Format(CultureInfo.InvariantCulture, "windiff \"{0}\" \"{1}\"", expected, actual);
+            }
             else
             {
-                return String.Format(CultureInfo.InvariantCulture, "diff \"{0}\", \"{1}\"", expected, actual);
+                return string.Format(CultureInfo.InvariantCulture, "diff \"{0}\", \"{1}\"", expected, actual);
             }
         }
 
         private static string TryFindBeyondCompare()
         {
-            List<string> directories = new List<string>();
+            var directories = new List<string>();
             string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
 
             directories.Add(programFiles);
@@ -206,7 +207,7 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 for (int idx = 4; idx >= 3; --idx)
                 {
-                    string beyondComparePath = String.Format(CultureInfo.InvariantCulture, "{0}\\Beyond Compare {1}\\BComp.exe", directory, idx);
+                    string beyondComparePath = string.Format(CultureInfo.InvariantCulture, "{0}\\Beyond Compare {1}\\BComp.exe", directory, idx);
                     if (File.Exists(beyondComparePath))
                     {
                         return beyondComparePath;

@@ -73,7 +73,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public override string ToString()
         {
             var sb = new StringBuilder();
-            AppendString(sb);
+            this.AppendString(sb);
             return sb.ToString();
         }
 
@@ -106,7 +106,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 sb.Append(")");
             }
 
-            if (!String.IsNullOrWhiteSpace(this.Suffix))
+            if (!string.IsNullOrWhiteSpace(this.Suffix))
             {
                 sb.Append(' ');
                 sb.Append(this.Suffix);
@@ -194,7 +194,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private static string SanitizeName(string name)
         {
-            if (String.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return null;
             }

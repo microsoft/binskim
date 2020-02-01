@@ -4,12 +4,11 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -19,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2014
         /// </summary>
-        public override string Id { get { return RuleIds.DoNotDisableStackProtectionForFunctionsId; } }
+        public override string Id => RuleIds.DoNotDisableStackProtectionForFunctionsId;
 
         /// <summary>
         /// Application code should not disable stack protection for individual functions. 
@@ -34,22 +33,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// inserting stack protector checks in these locations rather than disabling the
         /// stack protector altogether.
         /// </summary>
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2014_DoNotDisableStackProtectionForFunctions_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2014_DoNotDisableStackProtectionForFunctions_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2014_Pass),
                     nameof(RuleResources.BA2014_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public IEnumerable<IOption> GetOptions()
         {
@@ -63,9 +53,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static StringSet BuildApprovedFunctionsStringSet()
         {
-            var result = new StringSet();
-            result.Add("_TlgWrite");
-            result.Add("__vcrt_trace_logging_provider::_TlgWrite");
+            var result = new StringSet
+            {
+                "_TlgWrite",
+                "__vcrt_trace_logging_provider::_TlgWrite"
+            };
             return result;
         }
 
@@ -85,7 +77,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
 
-            List<string> names = new List<string>();
+            var names = new List<string>();
             foreach (DisposableEnumerableView<Symbol> functionView in pdb.CreateGlobalFunctionIterator())
             {
                 Symbol function = functionView.Value;
@@ -117,7 +109,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // move stack buffer modifications out of the hot path of execution to allow the 
                 // compiler to avoid inserting stack protector checks in these locations rather 
                 // than disabling the stack protector altogether.
-                context.Logger.Log(this, 
+                context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2014_Error),
                         context.TargetUri.GetFileName(),
@@ -130,7 +122,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // any individual functions (via __declspec(safebuffers), making it 
             // more difficult for an attacker to exploit stack buffer overflow 
             // memory corruption vulnerabilities.
-            context.Logger.Log(this, 
+            context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2014_Pass),
                     context.TargetUri.GetFileName()));

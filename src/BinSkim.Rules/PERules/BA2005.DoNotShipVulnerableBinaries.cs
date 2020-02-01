@@ -8,11 +8,10 @@ using System.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-
-using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -22,28 +21,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2005
         /// </summary>
-        public override string Id { get { return RuleIds.DoNotShipVulnerableBinariesId; } }
+        public override string Id => RuleIds.DoNotShipVulnerableBinariesId;
 
         /// <summary>
         /// Do not ship obsolete libraries for which there are known security vulnerabilities.
         /// </summary>
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2005_DoNotShipVulnerableBinaries_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2005_DoNotShipVulnerableBinaries_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2005_Pass),
                     nameof(RuleResources.BA2005_Error),
                     nameof(RuleResources.BA2005_Error_CouldNotParseVersion),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public IEnumerable<IOption> GetOptions()
         {
@@ -57,10 +47,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static StringToVersionMap BuildDefaultVulnerableBinariesMap()
         {
-            var result = new StringToVersionMap();
-            result["msxml6.dll"] = new Version(6, 30);
-            result["xmllite.dll"] = new Version(1, 3);
-            result["msidcrl.dll"] = new Version(7, 0);
+            var result = new StringToVersionMap
+            {
+                ["msxml6.dll"] = new Version(6, 30),
+                ["xmllite.dll"] = new Version(1, 3),
+                ["msidcrl.dll"] = new Version(7, 0)
+            };
             return result;
         }
 
@@ -95,10 +87,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             string fileName = Path.GetFileName(target.PE.FileName);
 
-            Version minimumVersion;
-            if (context.Policy.GetProperty(VulnerableBinaries).TryGetValue(fileName, out minimumVersion))
+            if (context.Policy.GetProperty(VulnerableBinaries).TryGetValue(fileName, out Version minimumVersion))
             {
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Path.GetFullPath(target.PE.FileName));
+                var fvi = FileVersionInfo.GetVersionInfo(Path.GetFullPath(target.PE.FileName));
                 string rawVersion = fvi.FileVersion ?? string.Empty;
                 Match sanitizedVersion = s_versionRegex.Match(rawVersion);
                 if (!sanitizedVersion.Success)

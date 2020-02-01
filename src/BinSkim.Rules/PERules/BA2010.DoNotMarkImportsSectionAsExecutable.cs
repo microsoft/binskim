@@ -4,12 +4,11 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
-
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
-using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -19,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2010
         /// </summary>
-        public override string Id { get { return RuleIds.DoNotMarkImportsSectionAsExecutableId; } }
+        public override string Id => RuleIds.DoNotMarkImportsSectionAsExecutableId;
 
         /// <summary>
         /// PE sections should not be marked as both writable and executable. This condition
@@ -33,22 +32,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// which merge the ".rdata" segment into an executable section.
         /// </summary>
 
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2010_DoNotMarkImportsSectionAsExecutable_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2010_DoNotMarkImportsSectionAsExecutable_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2010_Pass),
                     nameof(RuleResources.BA2010_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -114,9 +104,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             // '{0}' does not have an imports section that is marked as executable.
-            context.Logger.Log(this, 
+            context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                    nameof(RuleResources.BA2010_Pass), 
+                    nameof(RuleResources.BA2010_Pass),
                     context.TargetUri.GetFileName()));
         }
     }

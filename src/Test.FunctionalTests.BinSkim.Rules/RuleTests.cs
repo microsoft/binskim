@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public RuleTests(ITestOutputHelper output)
         {
-            _testOutputHelper = output;
+            this._testOutputHelper = output;
         }
 
         private void VerifyPass(
@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             IEnumerable<string> additionalTestFiles = null,
             bool useDefaultPolicy = false)
         {
-            Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: true);
+            this.Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: true);
         }
 
         private void VerifyFail(
@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             IEnumerable<string> additionalTestFiles = null,
             bool useDefaultPolicy = false)
         {
-            Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: false);
+            this.Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: false);
         }
 
         private void Verify(
@@ -84,14 +84,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (string target in targets)
             {
-                context = CreateContext(logger, policy, target);
+                context = this.CreateContext(logger, policy, target);
 
                 if (!context.IsValidAnalysisTarget) { continue; }
 
                 context.Rule = skimmer;
 
-                string reasonForNotAnalyzing;
-                if (skimmer.CanAnalyze(context, out reasonForNotAnalyzing) != AnalysisApplicability.ApplicableToSpecifiedTarget)
+                if (skimmer.CanAnalyze(context, out string reasonForNotAnalyzing) != AnalysisApplicability.ApplicableToSpecifiedTarget)
                 {
                     continue;
                 }
@@ -139,7 +138,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (sb.Length > 0)
             {
-                _testOutputHelper.WriteLine(sb.ToString());
+                this._testOutputHelper.WriteLine(sb.ToString());
             }
 
             Assert.Equal(0, sb.Length);
@@ -149,9 +148,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private BinaryAnalyzerContext CreateContext(TestMessageLogger logger, PropertiesDictionary policy, string target)
         {
-            var context = new BinaryAnalyzerContext();
-            context.Logger = logger;
-            context.Policy = policy;
+            var context = new BinaryAnalyzerContext
+            {
+                Logger = logger,
+                Policy = policy
+            };
 
             if (target != null)
             {
@@ -179,7 +180,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Path.Combine(baseFilesDirectory, "NotApplicable")
                 };
 
-            foreach (var testDirectory in testFilesDirectories)
+            foreach (string testDirectory in testFilesDirectories)
             {
                 if (Directory.Exists(testDirectory))
                 {
@@ -204,7 +205,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (string target in targets)
             {
-                context = CreateContext(logger, policy, target);
+                context = this.CreateContext(logger, policy, target);
 
                 context.Rule = skimmer;
 
@@ -229,7 +230,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             var context = new BinaryAnalyzerContext();
 
-            HashSet<string> targets = GetTestFilesMatchingConditions(notApplicableConditions);
+            HashSet<string> targets = this.GetTestFilesMatchingConditions(notApplicableConditions);
 
             if (Directory.Exists(testFilesDirectory))
             {
@@ -251,7 +252,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 string extension = Path.GetExtension(target);
 
-                context = CreateContext(logger, null, target);
+                context = this.CreateContext(logger, null, target);
                 if (!context.IsValidAnalysisTarget) { continue; }
 
                 if (useDefaultPolicy)
@@ -261,9 +262,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 context.Rule = skimmer;
 
-                string reasonForNotAnalyzing;
                 AnalysisApplicability applicability;
-                applicability = skimmer.CanAnalyze(context, out reasonForNotAnalyzing);
+                applicability = skimmer.CanAnalyze(context, out string reasonForNotAnalyzing);
                 if (applicability != expectedApplicability)
                 {
                     sb.AppendLine("CanAnalyze did not indicate target was invalid for analysis (return was " +
@@ -275,7 +275,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (sb.Length > 0)
             {
-                _testOutputHelper.WriteLine(sb.ToString());
+                this._testOutputHelper.WriteLine(sb.ToString());
             }
 
             Assert.Equal(0, sb.Length);
@@ -287,7 +287,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestsData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
-            HashSet<string> result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             if (metadataConditions.Contains(MetadataConditions.ImageIsNotExe))
             {
@@ -393,19 +393,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void SetNoExecutableBit_Pass()
         {
-            VerifyPass(new MarkImageAsNXCompatible());
+            this.VerifyPass(new MarkImageAsNXCompatible());
         }
 
         [Fact]
         public void SetNoExecutableBit_Fail()
         {
-            VerifyFail(new MarkImageAsNXCompatible());
+            this.VerifyFail(new MarkImageAsNXCompatible());
         }
 
         [Fact]
         public void SetNoExecutableBit_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIs64BitBinary,
@@ -414,7 +414,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MetadataConditions.ImageIsPreVersion7WindowsCEBinary
             };
 
-            VerifyNotApplicable(new MarkImageAsNXCompatible(), notApplicableTo);
+            this.VerifyNotApplicable(new MarkImageAsNXCompatible(), notApplicableTo);
         }
 
         [Fact]
@@ -422,7 +422,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                VerifyPass(new EnableSpectreMitigations(), useDefaultPolicy: true);
+                this.VerifyPass(new EnableSpectreMitigations(), useDefaultPolicy: true);
             }
         }
 
@@ -431,178 +431,178 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                VerifyFail(new EnableSpectreMitigations(), useDefaultPolicy: true);
+                this.VerifyFail(new EnableSpectreMitigations(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
         public void DoNotMarkWritableSectionsAsShared_Pass()
         {
-            VerifyPass(new DoNotMarkWritableSectionsAsShared());
+            this.VerifyPass(new DoNotMarkWritableSectionsAsShared());
         }
 
         [Fact]
         public void DoNotMarkWritableSectionsAsShared_Fail()
         {
-            VerifyFail(new DoNotMarkWritableSectionsAsShared());
+            this.VerifyFail(new DoNotMarkWritableSectionsAsShared());
         }
 
         [Fact]
         public void DoNotMarkWritableSectionsAsShared_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary
             };
 
-            VerifyNotApplicable(new DoNotMarkWritableSectionsAsShared(), notApplicableTo);
+            this.VerifyNotApplicable(new DoNotMarkWritableSectionsAsShared(), notApplicableTo);
         }
 
         [Fact]
         public void DoNotMarkWritableSectionsAsExecutable_Pass()
         {
-            VerifyPass(new DoNotMarkWritableSectionsAsExecutable());
+            this.VerifyPass(new DoNotMarkWritableSectionsAsExecutable());
         }
 
         [Fact]
         public void DoNotMarkWritableSectionsAsExecutable_Fail()
         {
-            VerifyFail(new DoNotMarkWritableSectionsAsExecutable());
+            this.VerifyFail(new DoNotMarkWritableSectionsAsExecutable());
         }
 
         [Fact]
         public void DoNotMarkWritableSectionsAsExecutable_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsKernelModeBinary
             };
 
-            VerifyNotApplicable(new DoNotMarkWritableSectionsAsExecutable(), notApplicableTo);
+            this.VerifyNotApplicable(new DoNotMarkWritableSectionsAsExecutable(), notApplicableTo);
         }
 
         [Fact]
         public void EnableHighEntropyVirtualAddresses_Pass()
         {
-            VerifyPass(new EnableHighEntropyVirtualAddresses());
+            this.VerifyPass(new EnableHighEntropyVirtualAddresses());
         }
 
         [Fact]
         public void EnableHighEntropyVirtualAddresses_Fail()
         {
-            VerifyFail(new EnableHighEntropyVirtualAddresses());
+            this.VerifyFail(new EnableHighEntropyVirtualAddresses());
         }
 
         [Fact]
         public void EnableHighEntropyVirtualAddresses_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsNotExe,
                 MetadataConditions.ImageIsNot64BitBinary,
                 MetadataConditions.ImageIsKernelModeBinary
             };
 
-            VerifyNotApplicable(new EnableHighEntropyVirtualAddresses(), notApplicableTo);
+            this.VerifyNotApplicable(new EnableHighEntropyVirtualAddresses(), notApplicableTo);
         }
 
         [Fact]
         public void EnableAddressSpaceLayoutRandomization_Pass()
         {
-            VerifyPass(new EnableAddressSpaceLayoutRandomization());
+            this.VerifyPass(new EnableAddressSpaceLayoutRandomization());
         }
 
         [Fact]
         public void EnableAddressSpaceLayoutRandomization_Fail()
         {
-            VerifyFail(new EnableAddressSpaceLayoutRandomization());
+            this.VerifyFail(new EnableAddressSpaceLayoutRandomization());
         }
 
         [Fact]
         public void EnableAddressSpaceLayoutRandomization_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIsKernelModeBinary,
                 MetadataConditions.ImageIsPreVersion7WindowsCEBinary,
             };
 
-            VerifyNotApplicable(new EnableAddressSpaceLayoutRandomization(), notApplicableTo);
+            this.VerifyNotApplicable(new EnableAddressSpaceLayoutRandomization(), notApplicableTo);
         }
 
         [Fact]
         public void DoNotMarkImportsSectionAsExecutable_Pass()
         {
-            VerifyPass(new DoNotMarkImportsSectionAsExecutable());
+            this.VerifyPass(new DoNotMarkImportsSectionAsExecutable());
         }
 
         [Fact]
         public void DoNotMarkImportsSectionAsExecutable_Fail()
         {
-            VerifyFail(new DoNotMarkImportsSectionAsExecutable());
+            this.VerifyFail(new DoNotMarkImportsSectionAsExecutable());
         }
 
         [Fact]
         public void DoNotMarkImportsSectionAsExecutable_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsKernelModeBinary,
                 MetadataConditions.ImageIsILOnlyAssembly
             };
 
-            VerifyNotApplicable(new DoNotMarkImportsSectionAsExecutable(), notApplicableTo);
+            this.VerifyNotApplicable(new DoNotMarkImportsSectionAsExecutable(), notApplicableTo);
         }
 
         [Fact]
         public void LoadImageAboveFourGigabyteAddress_Fail()
         {
-            VerifyFail(new LoadImageAboveFourGigabyteAddress());
+            this.VerifyFail(new LoadImageAboveFourGigabyteAddress());
         }
 
         [Fact]
         public void LoadImageAboveFourGigabyteAddress_Pass()
         {
-            VerifyPass(new LoadImageAboveFourGigabyteAddress());
+            this.VerifyPass(new LoadImageAboveFourGigabyteAddress());
         }
 
         [Fact]
         public void LoadImageAboveFourGigabyteAddress_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsNot64BitBinary,
                 MetadataConditions.ImageIsKernelModeBinary,
                 MetadataConditions.ImageIsILOnlyAssembly
             };
 
-            VerifyNotApplicable(new LoadImageAboveFourGigabyteAddress(), notApplicableTo);
+            this.VerifyNotApplicable(new LoadImageAboveFourGigabyteAddress(), notApplicableTo);
         }
 
         [Fact]
         public void EnableSafeSEH_Fail()
         {
-            VerifyFail(new EnableSafeSEH());
+            this.VerifyFail(new EnableSafeSEH());
         }
 
         [Fact]
         public void EnableSafeSEH_Pass()
         {
-            VerifyPass(new EnableSafeSEH());
+            this.VerifyPass(new EnableSafeSEH());
         }
 
         [Fact]
         public void EnableSafeSEH_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIsNot32BitBinary,
                 MetadataConditions.ImageIsResourceOnlyBinary
             };
 
-            VerifyNotApplicable(new EnableSafeSEH(), notApplicableTo);
+            this.VerifyNotApplicable(new EnableSafeSEH(), notApplicableTo);
         }
 
         [Fact]
@@ -610,11 +610,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                VerifyFail(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                this.VerifyFail(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 
@@ -623,18 +623,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                VerifyPass(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                this.VerifyPass(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
         public void DoNotShipVulnerableBinaries_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIs64BitBinary,
@@ -648,7 +648,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MetadataConditions.ImageIsResourceOnlyAssembly
             };
 
-            VerifyNotApplicable(new DoNotShipVulnerableBinaries(), notApplicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
+            this.VerifyNotApplicable(new DoNotShipVulnerableBinaries(), notApplicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
         }
 
         [Fact]
@@ -656,11 +656,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                VerifyFail(new EnableStackProtection());
+                this.VerifyFail(new EnableStackProtection());
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 
@@ -669,11 +669,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                VerifyPass(new EnableStackProtection());
+                this.VerifyPass(new EnableStackProtection());
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 
@@ -682,7 +682,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             HashSet<string> notApplicableTo = GetNotApplicableBinariesForStackProtectionFeature();
 
-            VerifyNotApplicable(new EnableStackProtection(), notApplicableTo);
+            this.VerifyNotApplicable(new EnableStackProtection(), notApplicableTo);
         }
 
         [Fact]
@@ -690,14 +690,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> failureConditions = new HashSet<string>
+                var failureConditions = new HashSet<string>
                 {
                     MetadataConditions.CouldNotLoadPdb
                 };
 
-                VerifyFail(
+                this.VerifyFail(
                     new InitializeStackProtection(),
-                    GetTestFilesMatchingConditions(failureConditions),
+                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
         }
@@ -707,11 +707,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                VerifyPass(new InitializeStackProtection());
+                this.VerifyPass(new InitializeStackProtection());
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 
@@ -720,19 +720,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             HashSet<string> notApplicableTo = GetNotApplicableBinariesForStackProtectionFeature();
 
-            VerifyNotApplicable(new InitializeStackProtection(), notApplicableTo);
+            this.VerifyNotApplicable(new InitializeStackProtection(), notApplicableTo);
         }
 
         [Fact]
         public void DoNotModifyStackProtectionCookie_Fail()
         {
-            VerifyFail(new DoNotModifyStackProtectionCookie());
+            this.VerifyFail(new DoNotModifyStackProtectionCookie());
         }
 
         [Fact]
         public void DoNotModifyStackProtectionCookie_Pass()
         {
-            VerifyPass(new DoNotModifyStackProtectionCookie());
+            this.VerifyPass(new DoNotModifyStackProtectionCookie());
         }
 
         [Fact]
@@ -745,12 +745,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // data that indicates that stack protection is relevant to the file.
             notApplicableTo.Remove(MetadataConditions.ImageIsWixBinary);
 
-            VerifyNotApplicable(new DoNotModifyStackProtectionCookie(), notApplicableTo);
+            this.VerifyNotApplicable(new DoNotModifyStackProtectionCookie(), notApplicableTo);
         }
 
         private static HashSet<string> GetNotApplicableBinariesForStackProtectionFeature()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIsWixBinary,
@@ -767,19 +767,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> failureConditions = new HashSet<string>
+                var failureConditions = new HashSet<string>
                 {
                     MetadataConditions.CouldNotLoadPdb,
                 };
 
-                VerifyFail(
+                this.VerifyFail(
                     new DoNotDisableStackProtectionForFunctions(),
-                    GetTestFilesMatchingConditions(failureConditions),
+                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -788,18 +788,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                VerifyPass(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyPass(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
         public void DoNotDisableStackProtectionForFunctions_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsXBoxBinary,
                 MetadataConditions.ImageIsWixBinary,
@@ -807,18 +807,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MetadataConditions.ImageIsILOnlyAssembly
             };
 
-            VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), notApplicableTo);
+            this.VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), notApplicableTo);
 
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> applicableTo = new HashSet<string>();
-                applicableTo.Add(MetadataConditions.ImageIs64BitBinary);
-                VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
+                var applicableTo = new HashSet<string>
+                {
+                    MetadataConditions.ImageIs64BitBinary
+                };
+                this.VerifyNotApplicable(new DoNotDisableStackProtectionForFunctions(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
             }
 
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -827,19 +829,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> failureConditions = new HashSet<string>
+                var failureConditions = new HashSet<string>
                 {
                     MetadataConditions.CouldNotLoadPdb
                 };
 
-                VerifyFail(
+                this.VerifyFail(
                     new EnableCriticalCompilerWarnings(),
-                    GetTestFilesMatchingConditions(failureConditions),
+                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -848,11 +850,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                VerifyPass(new EnableCriticalCompilerWarnings(), useDefaultPolicy: true);
+                this.VerifyPass(new EnableCriticalCompilerWarnings(), useDefaultPolicy: true);
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -861,47 +863,47 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> notApplicableTo = new HashSet<string>
+                var notApplicableTo = new HashSet<string>
                 {
                     MetadataConditions.ImageIsWixBinary,
                     MetadataConditions.ImageIsResourceOnlyBinary,
                     MetadataConditions.ImageIsILOnlyAssembly
                 };
 
-                VerifyNotApplicable(new EnableCriticalCompilerWarnings(), notApplicableTo);
+                this.VerifyNotApplicable(new EnableCriticalCompilerWarnings(), notApplicableTo);
 
-                HashSet<string> applicableTo = new HashSet<string>
+                var applicableTo = new HashSet<string>
                 {
                     MetadataConditions.ImageIs64BitBinary
                 };
 
-                VerifyNotApplicable(
+                this.VerifyNotApplicable(
                     new EnableCriticalCompilerWarnings(),
                     applicableTo,
                     AnalysisApplicability.ApplicableToSpecifiedTarget);
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
         public void EnableControlFlowGuard_Fail()
         {
-            VerifyFail(new EnableControlFlowGuard(), useDefaultPolicy: true);
+            this.VerifyFail(new EnableControlFlowGuard(), useDefaultPolicy: true);
         }
 
         [Fact]
         public void EnableControlFlowGuard_Pass()
         {
-            VerifyPass(new EnableControlFlowGuard(), useDefaultPolicy: true);
+            this.VerifyPass(new EnableControlFlowGuard(), useDefaultPolicy: true);
         }
 
         [Fact]
         public void EnableControlFlowGuard_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsMixedModeBinary,
                 MetadataConditions.ImageIsWixBinary,
@@ -910,7 +912,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MetadataConditions.ImageIsILOnlyAssembly
             };
 
-            VerifyNotApplicable(new EnableControlFlowGuard(), notApplicableTo, useDefaultPolicy: true);
+            this.VerifyNotApplicable(new EnableControlFlowGuard(), notApplicableTo, useDefaultPolicy: true);
         }
 
         [Fact]
@@ -918,15 +920,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
-                VerifyFail(
+                var failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
+                this.VerifyFail(
                     new BuildWithSecureTools(),
-                    GetTestFilesMatchingConditions(failureConditions),
+                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -935,25 +937,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                VerifyPass(new BuildWithSecureTools(), useDefaultPolicy: true);
+                this.VerifyPass(new BuildWithSecureTools(), useDefaultPolicy: true);
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
         public void BuildWithSecureTools_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsWixBinary,
                 MetadataConditions.ImageIsResourceOnlyBinary,
                 MetadataConditions.ImageIsILOnlyAssembly
             };
 
-            VerifyNotApplicable(new BuildWithSecureTools(), notApplicableTo);
+            this.VerifyNotApplicable(new BuildWithSecureTools(), notApplicableTo);
         }
 
         [Fact]
@@ -961,15 +963,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
-                VerifyFail(
+                var failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
+                this.VerifyFail(
                     new DoNotIncorporateVulnerableDependencies(),
-                    GetTestFilesMatchingConditions(failureConditions),
+                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -978,33 +980,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                VerifyPass(new DoNotIncorporateVulnerableDependencies(), useDefaultPolicy: true);
+                this.VerifyPass(new DoNotIncorporateVulnerableDependencies(), useDefaultPolicy: true);
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
         public void DoNotIncorporateVulnerableDependencies_NotApplicable()
         {
-            HashSet<string> notApplicableTo = new HashSet<string>
+            var notApplicableTo = new HashSet<string>
             {
                 MetadataConditions.ImageIsResourceOnlyBinary,
                 MetadataConditions.ImageIsILOnlyAssembly
             };
 
-            VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), notApplicableTo);
+            this.VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), notApplicableTo);
 
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                HashSet<string> applicableTo = new HashSet<string> { MetadataConditions.ImageIs64BitBinary };
-                VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
+                var applicableTo = new HashSet<string> { MetadataConditions.ImageIs64BitBinary };
+                this.VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -1013,11 +1015,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                VerifyFail(new SignSecurely());
+                this.VerifyFail(new SignSecurely());
             }
             else
             {
-                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -1029,105 +1031,105 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 string kernel32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
                 kernel32Path = Path.Combine(kernel32Path, "kernel32.dll");
 
-                VerifyPass(new SignSecurely(), additionalTestFiles: new[] { kernel32Path });
+                this.VerifyPass(new SignSecurely(), additionalTestFiles: new[] { kernel32Path });
             }
         }
 
         [Fact]
         public void SignSecurely_NotApplicable()
         {
-            HashSet<string> applicableTo = new HashSet<string> { MetadataConditions.ImageIsNotSigned };
-            VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableToSpecifiedTarget);
+            var applicableTo = new HashSet<string> { MetadataConditions.ImageIsNotSigned };
+            this.VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableToSpecifiedTarget);
         }
 
         [Fact]
         public void EnablePositionIndependentExecutable_Pass()
         {
-            VerifyPass(new EnablePositionIndependentExecutable());
+            this.VerifyPass(new EnablePositionIndependentExecutable());
         }
 
         [Fact]
         public void EnablePositionIndepedentExecutable_Fail()
         {
-            VerifyFail(new EnablePositionIndependentExecutable());
+            this.VerifyFail(new EnablePositionIndependentExecutable());
         }
 
         [Fact]
         public void EnablePositionIndepedentExecutable_NotApplicable()
         {
-            VerifyNotApplicable(new EnablePositionIndependentExecutable(), new HashSet<string>());
+            this.VerifyNotApplicable(new EnablePositionIndependentExecutable(), new HashSet<string>());
         }
 
         [Fact]
         public void DoNotMarkStackAsExecutable_Pass()
         {
-            VerifyPass(new DoNotMarkStackAsExecutable());
+            this.VerifyPass(new DoNotMarkStackAsExecutable());
         }
 
         [Fact]
         public void DoNotMarkStackAsExecutable_Fail()
         {
-            VerifyFail(new DoNotMarkStackAsExecutable());
+            this.VerifyFail(new DoNotMarkStackAsExecutable());
         }
 
         [Fact]
         public void DoNotMarkStackAsExecutable_NotApplicable()
         {
-            VerifyNotApplicable(new EnablePositionIndependentExecutable(), new HashSet<string>());
+            this.VerifyNotApplicable(new EnablePositionIndependentExecutable(), new HashSet<string>());
         }
 
         [Fact]
         public void EnableReadOnlyRelocations_Pass()
         {
-            VerifyPass(new EnableReadOnlyRelocations());
+            this.VerifyPass(new EnableReadOnlyRelocations());
         }
 
         [Fact]
         public void EnableReadOnlyRelocations_Fail()
         {
-            VerifyFail(new EnableReadOnlyRelocations());
+            this.VerifyFail(new EnableReadOnlyRelocations());
         }
 
         [Fact]
         public void EnableReadOnlyRelocations_NotApplicable()
         {
-            VerifyNotApplicable(new EnablePositionIndependentExecutable(), new HashSet<string>());
+            this.VerifyNotApplicable(new EnablePositionIndependentExecutable(), new HashSet<string>());
         }
 
         [Fact]
         public void EnableStackProtector_Pass()
         {
-            VerifyPass(new EnableStackProtector());
+            this.VerifyPass(new EnableStackProtector());
         }
 
         [Fact]
         public void EnableStackProtector_Fail()
         {
-            VerifyFail(new EnableStackProtector());
+            this.VerifyFail(new EnableStackProtector());
         }
 
         [Fact]
         public void EnableStackProtector_NotApplicable()
         {
-            VerifyNotApplicable(new EnablePositionIndependentExecutable(), new HashSet<string>());
+            this.VerifyNotApplicable(new EnablePositionIndependentExecutable(), new HashSet<string>());
         }
 
         [Fact]
         public void UseCheckedFunctionsWithGCC_Pass()
         {
-            VerifyPass(new UseCheckedFunctionsWithGcc());
+            this.VerifyPass(new UseCheckedFunctionsWithGcc());
         }
 
         [Fact]
         public void UseCheckedFunctionsWithGCC_Fail()
         {
-            VerifyFail(new UseCheckedFunctionsWithGcc());
+            this.VerifyFail(new UseCheckedFunctionsWithGcc());
         }
 
         [Fact]
         public void UseCheckedFunctionsWithGCC_NotApplicable()
         {
-            VerifyNotApplicable(new UseCheckedFunctionsWithGcc(), new HashSet<string>());
+            this.VerifyNotApplicable(new UseCheckedFunctionsWithGcc(), new HashSet<string>());
         }
     }
 }

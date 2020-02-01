@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{39DE5DFD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{1C3EA3C9-98CE-4315-A1BE-6BB11847CB04}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		build.common.props = build.common.props
 		build.netcore.props = build.netcore.props
 	EndProjectSection

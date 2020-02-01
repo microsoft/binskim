@@ -2,9 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using Xunit;
-using FluentAssertions;
 using System.Collections.Generic;
+using FluentAssertions;
+using Xunit;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
@@ -18,8 +18,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [InlineData("", "", "test", "", "test2", "")]
         public void NullTermAsciiToStrings_WorksOnExpectedData(params string[] testStrings)
         {
-            List<byte> testData = new List<byte>();
-            foreach(var str in testStrings)
+            var testData = new List<byte>();
+            foreach (string str in testStrings)
             {
                 testData.AddRange(System.Text.Encoding.ASCII.GetBytes(str.ToCharArray()));
                 testData.Add(0);
@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [Theory]
         [InlineData(new byte[0])]
         [InlineData(new byte[] { 01, 01, })]
-        [InlineData(new byte[] { 01, 02, 00, 01, 01})]
+        [InlineData(new byte[] { 01, 02, 00, 01, 01 })]
         public void NullTermAsciiToStrings_ThrowsArgumentExceptionForInvalidData(byte[] data)
         {
             Assert.Throws<ArgumentException>(() => ELFUtility.NullTermAsciiToStrings(data));

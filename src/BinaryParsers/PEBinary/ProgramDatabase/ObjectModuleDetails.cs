@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     public class ObjectModuleDetails
     {
         private readonly CompilerCommandLine _compilerCommandLine;
-        
+
         /// <summary>Initializes a new instance of the <see cref="ObjectModuleDetails"/> class.</summary>
         /// <param name="compilerFrontEndVersion">The front end version of the compiler producing the object module.</param>
         /// <param name="backEndVersion">The back end version of the compiler producing the object module.</param>
@@ -23,24 +23,24 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <param name="hasDebugInfo">A boolean that indicates whether the PE comes with a corresponding PDB.</param>
         /// 
         public ObjectModuleDetails(
-            string name, 
+            string name,
             string library,
             string compilerName,
-            Version compilerFrontEndVersion, 
-            Version backEndVersion, 
-            string commandLine, 
-            Language language, 
+            Version compilerFrontEndVersion,
+            Version backEndVersion,
+            string commandLine,
+            Language language,
             bool hasSecurityChecks, bool hasDebugInfo)
         {
-            Name = name;
-            Library = library;
-            CompilerFrontEndVersion = compilerFrontEndVersion ?? new Version();
-            CompilerBackEndVersion = backEndVersion ?? new Version();
-            _compilerCommandLine = new CompilerCommandLine(commandLine ?? String.Empty);
-            Language = language;
-            CompilerName = compilerName;
-            HasSecurityChecks = hasSecurityChecks;
-            HasDebugInfo = hasDebugInfo;
+            this.Name = name;
+            this.Library = library;
+            this.CompilerFrontEndVersion = compilerFrontEndVersion ?? new Version();
+            this.CompilerBackEndVersion = backEndVersion ?? new Version();
+            this._compilerCommandLine = new CompilerCommandLine(commandLine ?? string.Empty);
+            this.Language = language;
+            this.CompilerName = compilerName;
+            this.HasSecurityChecks = hasSecurityChecks;
+            this.HasDebugInfo = hasDebugInfo;
         }
 
         public string Name { get; private set; }
@@ -50,23 +50,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <summary>
         /// Returns the warning level as defined by the /Wn switch in the compiland command line
         /// </summary>
-        public int WarningLevel { get { return _compilerCommandLine.WarningLevel; }  }
+        public int WarningLevel => this._compilerCommandLine.WarningLevel;
 
         /// <summary>
         /// Returns a list of integers corresponding to the set of warnings disabled via -wdnnnn switches on the command line
         /// </summary>
-        public ImmutableArray<int> ExplicitlyDisabledWarnings
-        {
-            get
-            {
-                return _compilerCommandLine.WarningsExplicitlyDisabled;
-            }
-        }
+        public ImmutableArray<int> ExplicitlyDisabledWarnings => this._compilerCommandLine.WarningsExplicitlyDisabled;
 
         /// <summary>
         /// The raw command line passed to the compiler when building this object module.
         /// </summary>
-        public string RawCommandLine { get { return _compilerCommandLine.Raw; } }
+        public string RawCommandLine => this._compilerCommandLine.Raw;
 
         /// <summary>
         /// The name of the compiler
@@ -87,26 +81,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// Determines the language of this object module.
         /// </summary>
         public Language Language { get; private set; }
-        
-        Nullable<WellKnownCompilers> _wellKnownCompiler;
+
+        private Nullable<WellKnownCompilers> _wellKnownCompiler;
 
         public WellKnownCompilers WellKnownCompiler
         {
             get
             {
-                if (!_wellKnownCompiler.HasValue) { ComputeWellKnownCompilerValue(); }
-                return _wellKnownCompiler.Value;
+                if (!this._wellKnownCompiler.HasValue) { this.ComputeWellKnownCompilerValue(); }
+                return this._wellKnownCompiler.Value;
             }
         }
 
         private void ComputeWellKnownCompilerValue()
         {
-            _wellKnownCompiler = WellKnownCompilers.Unknown;
+            this._wellKnownCompiler = WellKnownCompilers.Unknown;
 
             if ((this.Language == Language.C || this.Language == Language.Cxx) &&
                 this.CompilerName == "Microsoft (R) Optimizing Compiler")
             {
-                _wellKnownCompiler = WellKnownCompilers.MicrosoftNativeCompiler;
+                this._wellKnownCompiler = WellKnownCompilers.MicrosoftNativeCompiler;
             }
         }
 
@@ -122,7 +116,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public SwitchState GetSwitchState(string switchName, OrderOfPrecedence precedence)
         {
             string[] switchNames = new string[1] { switchName };
-            return _compilerCommandLine.GetSwitchState(switchNames, null, SwitchState.SwitchNotFound, precedence);
+            return this._compilerCommandLine.GetSwitchState(switchNames, null, SwitchState.SwitchNotFound, precedence);
         }
 
         /// <summary>
@@ -134,7 +128,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <param name="precedence">The precedence rules for this set of switches.</param>
         public SwitchState GetSwitchState(string[] switchNames, string[] overrideNames, SwitchState defaultStateOfFirst, OrderOfPrecedence precedence)
         {
-            return _compilerCommandLine.GetSwitchState(switchNames, overrideNames, defaultStateOfFirst, precedence);
+            return this._compilerCommandLine.GetSwitchState(switchNames, overrideNames, defaultStateOfFirst, precedence);
         }
 
     }

@@ -5,12 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
-
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
-using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -20,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2012
         /// </summary>
-        public override string Id { get { return RuleIds.DoNotModifyStackProtectionCookieId; } }
+        public override string Id => RuleIds.DoNotModifyStackProtectionCookieId;
 
         /// <summary>
         /// Application code should not interfere with the stack protector. The stack
@@ -41,16 +40,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// __security_cookie_complement.
         /// </summary>
 
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2012_DoNotModifyStackProtectionCookie_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2012_DoNotModifyStackProtectionCookie_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2012_Pass),
                     nameof(RuleResources.BA2012_Pass_NoLoadConfig),
                     nameof(RuleResources.BA2012_Error),
@@ -58,8 +50,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2012_Warning_InvalidSecurityCookieOffset),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -94,12 +84,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (target.PE.Is64Bit)
             {
-                if (!Validate64BitImage(context))
+                if (!this.Validate64BitImage(context))
                 {
                     return;
                 }
             }
-            else if (!Validate32BitImage(context))
+            else if (!this.Validate32BitImage(context))
             {
                 return;
             }
@@ -111,7 +101,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // code.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                    nameof(RuleResources.BA2012_Pass), 
+                    nameof(RuleResources.BA2012_Pass),
                     context.TargetUri.GetFileName()));
         }
 
@@ -120,21 +110,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
 
             PEHeader peHeader = target.PE.PEHeaders.PEHeader;
-            SafePointer sp = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
+            var sp = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
             SafePointer loadConfigVA = target.PE.RVA2VA(sp);
-            ImageLoadConfigDirectory64 loadConfig = new ImageLoadConfigDirectory64(peHeader, loadConfigVA);
+            var loadConfig = new ImageLoadConfigDirectory64(peHeader, loadConfigVA);
 
-            UInt64 cookieVA = (UInt64)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.SecurityCookie);
-            UInt64 baseAddress = peHeader.ImageBase;
+            ulong cookieVA = (ulong)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.SecurityCookie);
+            ulong baseAddress = peHeader.ImageBase;
 
             // we need to find the offset in the file based on the cookie's VA
-            UInt64 sectionSize, sectionVA = 0;
-            SectionHeader ish = new SectionHeader();
+            ulong sectionSize, sectionVA = 0;
+            var ish = new SectionHeader();
             bool foundCookieSection = false;
             foreach (SectionHeader t in target.PE.PEHeaders.SectionHeaders)
             {
-                sectionVA = (UInt64)(UInt32)t.VirtualAddress + baseAddress;
-                sectionSize = (UInt32)t.VirtualSize;
+                sectionVA = (uint)t.VirtualAddress + baseAddress;
+                sectionSize = (uint)t.VirtualSize;
                 if ((cookieVA >= sectionVA) &&
                     (cookieVA < sectionVA + sectionSize))
                 {
@@ -146,32 +136,32 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!foundCookieSection)
             {
-                LogCouldNotLocateCookie(context);
+                this.LogCouldNotLocateCookie(context);
                 return false;
             }
 
-            UInt64 fileCookieOffset = (cookieVA - baseAddress) - (sectionVA - baseAddress) + (UInt32)ish.PointerToRawData;
+            ulong fileCookieOffset = (cookieVA - baseAddress) - (sectionVA - baseAddress) + (uint)ish.PointerToRawData;
             SafePointer fileCookiePtr = loadConfigVA;
             fileCookiePtr.Address = (int)fileCookieOffset;
 
 
             SafePointer boundsCheck = fileCookiePtr + 8;
-            if (!CookieOffsetValid(context, boundsCheck))
+            if (!this.CookieOffsetValid(context, boundsCheck))
             {
                 return false;
             }
 
             if (!boundsCheck.IsValid && target.PE.IsPacked)
             {
-                LogInvalidCookieOffsetForKnownPackedFile(context);
+                this.LogInvalidCookieOffsetForKnownPackedFile(context);
                 return false;
             }
 
-            UInt64 cookie = BitConverter.ToUInt64(fileCookiePtr.GetBytes(8), 0);
+            ulong cookie = BitConverter.ToUInt64(fileCookiePtr.GetBytes(8), 0);
 
             if (cookie != StackProtectionUtilities.DefaultCookieX64)
             {
-                LogFailure(context, cookie.ToString("x"));
+                this.LogFailure(context, cookie.ToString("x"));
                 return false;
             }
             return true;
@@ -182,21 +172,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             PEBinary target = context.PEBinary();
             PEHeader peHeader = target.PE.PEHeaders.PEHeader;
-            SafePointer sp = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
+            var sp = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
             SafePointer loadConfigVA = target.PE.RVA2VA(sp);
-            ImageLoadConfigDirectory32 loadConfig = new ImageLoadConfigDirectory32(peHeader, loadConfigVA);
+            var loadConfig = new ImageLoadConfigDirectory32(peHeader, loadConfigVA);
 
-            UInt32 cookieVA = (UInt32)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.SecurityCookie);
-            UInt32 baseAddress = (UInt32)peHeader.ImageBase;
+            uint cookieVA = (uint)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.SecurityCookie);
+            uint baseAddress = (uint)peHeader.ImageBase;
 
             // we need to find the offset in the file based on the cookie's VA
-            UInt32 sectionSize, sectionVA = 0;
-            SectionHeader ish = new SectionHeader();
+            uint sectionSize, sectionVA = 0;
+            var ish = new SectionHeader();
             bool foundCookieSection = false;
             foreach (SectionHeader t in target.PE.PEHeaders.SectionHeaders)
             {
-                sectionVA = (UInt32)t.VirtualAddress + baseAddress;
-                sectionSize = (UInt32)t.VirtualSize;
+                sectionVA = (uint)t.VirtualAddress + baseAddress;
+                sectionSize = (uint)t.VirtualSize;
                 if ((cookieVA >= sectionVA) &&
                     (cookieVA < sectionVA + sectionSize))
                 {
@@ -208,25 +198,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!foundCookieSection)
             {
-                LogCouldNotLocateCookie(context);
+                this.LogCouldNotLocateCookie(context);
                 return false;
             }
 
-            UInt64 fileCookieOffset = (cookieVA - baseAddress) - (sectionVA - baseAddress) + (UInt32)ish.PointerToRawData;
+            ulong fileCookieOffset = (cookieVA - baseAddress) - (sectionVA - baseAddress) + (uint)ish.PointerToRawData;
             SafePointer fileCookiePtr = loadConfigVA;
             fileCookiePtr.Address = (int)fileCookieOffset;
 
             SafePointer boundsCheck = fileCookiePtr + 4;
-            if (!CookieOffsetValid(context, boundsCheck))
+            if (!this.CookieOffsetValid(context, boundsCheck))
             {
                 return false;
             }
 
-            UInt32 cookie = BitConverter.ToUInt32(fileCookiePtr.GetBytes(4), 0);
+            uint cookie = BitConverter.ToUInt32(fileCookiePtr.GetBytes(4), 0);
 
             if (!StackProtectionUtilities.DefaultCookiesX86.Contains(cookie) && target.PE.Machine == Machine.I386)
             {
-                LogFailure(context, cookie.ToString("x"));
+                this.LogFailure(context, cookie.ToString("x"));
                 return false;
             }
 
@@ -241,11 +231,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (target.PE.IsPacked)
             {
-                LogInvalidCookieOffsetForKnownPackedFile(context);
+                this.LogInvalidCookieOffsetForKnownPackedFile(context);
             }
             else
             {
-                LogInvalidCookieOffset(context);
+                this.LogInvalidCookieOffset(context);
             }
             return false;
         }

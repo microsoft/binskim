@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    static class BinScopeCompatibility
+    internal static class BinScopeCompatibility
     {
         // Mapping of BinSkim rule IDs to Binscope friendly names for backwards compatability.
         public const string EquivalentBinScopeRulePropertyName = "equivalentBinScopeRuleReadableName";
@@ -38,8 +38,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <returns>The BinScope rule readable name if one exists, null otherwise.</returns>
         public static string GetBinScopeRuleReadableName(string ruleId)
         {
-            string result;
-            binScopeRuleReadableNameMapping.TryGetValue(ruleId, out result);
+            binScopeRuleReadableNameMapping.TryGetValue(ruleId, out string result);
             return result;
         }
     }

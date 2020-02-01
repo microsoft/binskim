@@ -20,18 +20,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         internal static string GetTestDirectory(string relativeDirectory)
         {
             var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
-            var dirPath = Path.GetDirectoryName(codeBasePath);
+            string codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
+            string dirPath = Path.GetDirectoryName(codeBasePath);
             dirPath = Path.Combine(dirPath, string.Format(@"..{0}..{0}..{0}..{0}src{0}", Path.DirectorySeparatorChar));
             dirPath = Path.GetFullPath(dirPath);
             return Path.Combine(dirPath, relativeDirectory);
         }
-    
+
         [Fact]
         public void PEBinary_PdbAvailable()
         {
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x64_VS2013_Default.dll");
-            using (PEBinary peBinary = new PEBinary(new Uri(fileName)))
+            using (var peBinary = new PEBinary(new Uri(fileName)))
             {
                 peBinary.Pdb.Should().NotBeNull();
                 peBinary.StrippedPdb.Should().BeNull();
@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public void PEBinary_NoPdbAvailable()
         {
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x86_VS2013_PdbMissing.exe");
-            using (PEBinary peBinary = new PEBinary(new Uri(fileName)))
+            using (var peBinary = new PEBinary(new Uri(fileName)))
             {
                 peBinary.Pdb.Should().BeNull();
                 peBinary.StrippedPdb.Should().BeNull();
@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public void PEBinary_PdbIsStripped()
         {
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x86_VS2017_15.5.4_PdbStripped.dll");
-            using (PEBinary peBinary = new PEBinary(new Uri(fileName)))
+            using (var peBinary = new PEBinary(new Uri(fileName)))
             {
                 peBinary.Pdb.Should().BeNull();
                 peBinary.StrippedPdb.Should().NotBeNull();

@@ -31,30 +31,30 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public PE(string fileName)
         {
-            FileName = Path.GetFullPath(fileName);
-            Uri = new Uri(FileName);
-            IsPEFile = false;
+            this.FileName = Path.GetFullPath(fileName);
+            this.Uri = new Uri(this.FileName);
+            this.IsPEFile = false;
             try
             {
-                _fs = File.OpenRead(FileName);
+                this._fs = File.OpenRead(this.FileName);
 
-                if (!CheckPEMagicBytes(_fs)) { return; }
+                if (!CheckPEMagicBytes(this._fs)) { return; }
 
-                _peReader = new PEReader(_fs);
-                PEHeaders = _peReader.PEHeaders;
+                this._peReader = new PEReader(this._fs);
+                this.PEHeaders = this._peReader.PEHeaders;
 
-                IsPEFile = true;
+                this.IsPEFile = true;
 
-                _pImage = new SafePointer(_peReader.GetEntireImage().GetContent().ToBuilder().ToArray());
+                this._pImage = new SafePointer(this._peReader.GetEntireImage().GetContent().ToBuilder().ToArray());
 
-                if (IsManaged)
+                if (this.IsManaged)
                 {
-                    _metadataReader = _peReader.GetMetadataReader();
+                    this._metadataReader = this._peReader.GetMetadataReader();
                 }
             }
-            catch (IOException e) { LoadException = e; }
-            catch (BadImageFormatException e) { LoadException = e; }
-            catch (UnauthorizedAccessException e) { LoadException = e; }
+            catch (IOException e) { this.LoadException = e; }
+            catch (BadImageFormatException e) { this.LoadException = e; }
+            catch (UnauthorizedAccessException e) { this.LoadException = e; }
         }
 
         public static bool CheckPEMagicBytes(FileStream fs)
@@ -77,16 +77,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public void Dispose()
         {
-            if (_peReader != null)
+            if (this._peReader != null)
             {
-                _peReader.Dispose();
-                _peReader = null;
+                this._peReader.Dispose();
+                this._peReader = null;
             }
 
-            if (_fs != null)
+            if (this._fs != null)
             {
-                _fs.Dispose();
-                _fs = null;
+                this._fs.Dispose();
+                this._fs = null;
             }
         }
 
@@ -148,12 +148,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (PEHeaders.PEHeader == null)
+                if (this.PEHeaders.PEHeader == null)
                 {
                     return false;
                 }
 
-                return PEHeaders.PEHeader.Magic == PEMagic.PE32Plus;
+                return this.PEHeaders.PEHeader.Magic == PEMagic.PE32Plus;
             }
         }
 
@@ -161,11 +161,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                foreach (DebugDirectoryEntry debugDirectoryEntry in _peReader.ReadDebugDirectory())
+                foreach (DebugDirectoryEntry debugDirectoryEntry in this._peReader.ReadDebugDirectory())
                 {
                     if (debugDirectoryEntry.Type == DebugDirectoryEntryType.CodeView)
                     {
-                        return _peReader.ReadCodeViewDebugDirectoryData(debugDirectoryEntry);
+                        return this._peReader.ReadCodeViewDebugDirectoryData(debugDirectoryEntry);
                     }
                 }
                 return new CodeViewDebugDirectoryData();
@@ -176,29 +176,29 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (_asImports == null)
+                if (this._asImports == null)
                 {
-                    DirectoryEntry importTableDirectory = PEHeaders.PEHeader.ImportTableDirectory;
-                    if (PEHeaders.PEHeader.ImportTableDirectory.Size == 0)
+                    DirectoryEntry importTableDirectory = this.PEHeaders.PEHeader.ImportTableDirectory;
+                    if (this.PEHeaders.PEHeader.ImportTableDirectory.Size == 0)
                     {
-                        _asImports = new string[0];
+                        this._asImports = new string[0];
                     }
                     else
                     {
-                        SafePointer sp = new SafePointer(_pImage._array, importTableDirectory.RelativeVirtualAddress);
+                        var sp = new SafePointer(this._pImage._array, importTableDirectory.RelativeVirtualAddress);
 
-                        ArrayList al = new ArrayList();
+                        var al = new ArrayList();
 
                         if (sp.Address != 0)
                         {
-                            sp = RVA2VA(sp);
+                            sp = this.RVA2VA(sp);
 
-                            while (((UInt32)sp != 0) || ((UInt32)(sp + 12) != 0) || ((UInt32)(sp + 16) != 0))
+                            while (((uint)sp != 0) || ((uint)(sp + 12) != 0) || ((uint)(sp + 16) != 0))
                             {
                                 SafePointer spName = sp;
-                                spName.Address = (int)(UInt32)(sp + 12);
+                                spName.Address = (int)(uint)(sp + 12);
 
-                                spName = RVA2VA(spName);
+                                spName = this.RVA2VA(spName);
 
                                 string name = (string)(spName);
 
@@ -208,19 +208,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                             }
                         }
 
-                        _asImports = (string[])al.ToArray(typeof(string));
+                        this._asImports = (string[])al.ToArray(typeof(string));
                     }
                 }
 
-                return _asImports;
+                return this._asImports;
             }
         }
 
         public SafePointer RVA2VA(SafePointer rva)
         {
             // find which section is our rva in
-            SectionHeader ish = new SectionHeader();
-            foreach (SectionHeader sectionHeader in PEHeaders.SectionHeaders)
+            var ish = new SectionHeader();
+            foreach (SectionHeader sectionHeader in this.PEHeaders.SectionHeaders)
             {
                 if ((rva.Address >= sectionHeader.VirtualAddress) &&
                     (rva.Address < sectionHeader.VirtualAddress + sectionHeader.SizeOfRawData))
@@ -230,7 +230,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 }
             }
 
-            if (ish.VirtualAddress == 0) throw new InvalidOperationException("RVA does not belong to any section");
+            if (ish.VirtualAddress == 0)
+            {
+                throw new InvalidOperationException("RVA does not belong to any section");
+            }
 
             // calculate the VA
             rva.Address = (rva.Address - ish.VirtualAddress + ish.PointerToRawData);
@@ -242,9 +245,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (_pImage._array != null)
+                if (this._pImage._array != null)
                 {
-                    return _pImage._array;
+                    return this._pImage._array;
                 }
 
                 throw new InvalidOperationException("Image bytes cannot be retrieved when data is backed by a stream.");
@@ -259,19 +262,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (_sha1Hash != null)
+                if (this._sha1Hash != null)
                 {
-                    return _sha1Hash;
+                    return this._sha1Hash;
                 }
 
                 // processing buffer
                 byte[] buffer = new byte[4096];
 
                 // create the hash object
-                using (SHA1 sha1 = SHA1.Create())
+                using (var sha1 = SHA1.Create())
                 {
                     // open the input file
-                    using (FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read))
+                    using (var fs = new FileStream(this.FileName, FileMode.Open, FileAccess.Read))
                     {
                         int readBytes = -1;
 
@@ -288,10 +291,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     }
 
                     // get the string representation
-                    _sha1Hash = BitConverter.ToString(sha1.Hash).Replace("-", "");
+                    this._sha1Hash = BitConverter.ToString(sha1.Hash).Replace("-", "");
                 }
 
-                return _sha1Hash;
+                return this._sha1Hash;
             }
         }
 
@@ -302,13 +305,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (_sha256Hash != null)
+                if (this._sha256Hash != null)
                 {
-                    return _sha256Hash;
+                    return this._sha256Hash;
                 }
-                _sha256Hash = ComputeSha256Hash(FileName);
+                this._sha256Hash = ComputeSha256Hash(this.FileName);
 
-                return _sha256Hash;
+                return this._sha256Hash;
             }
         }
 
@@ -325,7 +328,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                         using (var algorithm = SHA256.Create())
                         {
                             byte[] checksum = algorithm.ComputeHash(bufferedStream);
-                            sha256Hash = BitConverter.ToString(checksum).Replace("-", String.Empty);
+                            sha256Hash = BitConverter.ToString(checksum).Replace("-", string.Empty);
                         }
                     }
                 }
@@ -342,15 +345,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (_length != null)
+                if (this._length != null)
                 {
-                    return (long)_length;
+                    return (long)this._length;
                 }
 
-                FileInfo fi = new FileInfo(FileName);
-                _length = fi.Length;
+                var fi = new FileInfo(this.FileName);
+                this._length = fi.Length;
 
-                return (long)_length;
+                return (long)this._length;
             }
         }
 
@@ -362,11 +365,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (_version == null)
+                if (this._version == null)
                 {
-                    _version = FileVersionInfo.GetVersionInfo(Path.GetFullPath(FileName));
+                    this._version = FileVersionInfo.GetVersionInfo(Path.GetFullPath(this.FileName));
                 }
-                return _version;
+                return this._version;
             }
         }
 
@@ -375,9 +378,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (PEHeaders != null)
+                if (this.PEHeaders != null)
                 {
-                    foreach (SectionHeader sh in PEHeaders.SectionHeaders)
+                    foreach (SectionHeader sh in this.PEHeaders.SectionHeaders)
                     {
                         if (sh.Name.StartsWith("UPX")) { return Packer.Upx; }
                     }
@@ -386,60 +389,30 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-        public bool IsPacked
-        {
-            get
-            {
-                return Packer != Packer.UnknownOrNotPacked;
-            }
-        }
+        public bool IsPacked => this.Packer != Packer.UnknownOrNotPacked;
 
         /// <summary>
         /// Returns true if the PE is managed
         /// </summary>
-        public bool IsManaged
-        {
-            get
-            {
-                return PEHeaders != null && PEHeaders.CorHeader != null;
-            }
-        }
+        public bool IsManaged => this.PEHeaders != null && this.PEHeaders.CorHeader != null;
 
         /// <summary>
         /// Returns true if the PE is pure managed
         /// </summary>
-        public bool IsILOnly
-        {
-            get
-            {
-                return PEHeaders?.CorHeader != null &&
-                       (PEHeaders.CorHeader.Flags & CorFlags.ILOnly) == CorFlags.ILOnly;
-            }
-        }
+        public bool IsILOnly => this.PEHeaders?.CorHeader != null &&
+                       (this.PEHeaders.CorHeader.Flags & CorFlags.ILOnly) == CorFlags.ILOnly;
 
         /// <summary>
         /// Returns true if the PE is a partially or completed 'ahead of time' compiled assembly
         /// </summary>
-        public bool IsILLibrary
-        {
-            get
-            {
-                return PEHeaders?.CorHeader != null &&
-                       (PEHeaders.CorHeader.Flags & CorFlags.ILLibrary) == CorFlags.ILLibrary;
-            }
-        }
+        public bool IsILLibrary => this.PEHeaders?.CorHeader != null &&
+                       (this.PEHeaders.CorHeader.Flags & CorFlags.ILLibrary) == CorFlags.ILLibrary;
 
         /// <summary>
         /// Returns true if the PE is a mixed mode assembly
         /// </summary>
-        public bool IsMixedMode
-        {
-            get
-            {
-                return PEHeaders?.CorHeader != null &&
-                       (PEHeaders.CorHeader.Flags & CorFlags.ILOnly) == 0;
-            }
-        }
+        public bool IsMixedMode => this.PEHeaders?.CorHeader != null &&
+                       (this.PEHeaders.CorHeader.Flags & CorFlags.ILOnly) == 0;
 
         /// <summary>
         /// Returns true if the only directory present is Resource Directory (this also covers hxs and hxi files)
@@ -448,32 +421,32 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (_isResourceOnly != null)
+                if (this._isResourceOnly != null)
                 {
-                    return (bool)_isResourceOnly;
+                    return (bool)this._isResourceOnly;
                 }
 
-                if (IsILOnly)
+                if (this.IsILOnly)
                 {
-                    _isResourceOnly = IsManagedResourceOnly;
-                    return _isResourceOnly.Value;
+                    this._isResourceOnly = this.IsManagedResourceOnly;
+                    return this._isResourceOnly.Value;
                 }
 
-                PEHeader peHeader = PEHeaders.PEHeader;
+                PEHeader peHeader = this.PEHeaders.PEHeader;
                 if (peHeader == null)
                 {
-                    _isResourceOnly = false;
-                    return _isResourceOnly.Value;
+                    this._isResourceOnly = false;
+                    return this._isResourceOnly.Value;
                 }
 
                 // IMAGE_DIRECTORY_ENTRY_RESOURCE == 2
                 if (peHeader.ResourceTableDirectory.RelativeVirtualAddress == 0)
                 {
-                    _isResourceOnly = false;
-                    return _isResourceOnly.Value;
+                    this._isResourceOnly = false;
+                    return this._isResourceOnly.Value;
                 }
 
-                _isResourceOnly =
+                this._isResourceOnly =
                        (peHeader.ThreadLocalStorageTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_TLS == 9
                         peHeader.ImportAddressTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_IAT == 12
                         peHeader.GlobalPointerTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_GLOBALPTR == 8
@@ -485,17 +458,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                         peHeader.CorHeaderTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR == 14
                         peHeader.ImportTableDirectory.RelativeVirtualAddress == 0); // IMAGE_DIRECTORY_ENTRY_IMPORT == 1
 
-                if (_isResourceOnly.Value &&
+                if (this._isResourceOnly.Value &&
                     peHeader.ExportTableDirectory.RelativeVirtualAddress != 0 && // IMAGE_DIRECTORY_ENTRY_EXPORT = 0;
                     peHeader.SizeOfCode > 0)
                 {
                     // We require special checks in the event of a non-zero export table directory value
                     // If the binary only contains forwarders, we should regard it as not containing code
-                    _isResourceOnly = false;
+                    this._isResourceOnly = false;
                 }
 
 
-                return _isResourceOnly.Value;
+                return this._isResourceOnly.Value;
 
                 // These are explicitly ignored. Debug info is sometimes present in resource
                 // only binaries. We've seen cases where help resource-only DLLs had a bogus
@@ -514,19 +487,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (_isManagedResourceOnly != null)
+                if (this._isManagedResourceOnly != null)
                 {
-                    return _isManagedResourceOnly.Value;
+                    return this._isManagedResourceOnly.Value;
                 }
 
-                if (!IsILOnly)
+                if (!this.IsILOnly)
                 {
-                    _isManagedResourceOnly = false;
-                    return _isManagedResourceOnly.Value;
+                    this._isManagedResourceOnly = false;
+                    return this._isManagedResourceOnly.Value;
                 }
 
-                _isManagedResourceOnly = _metadataReader.MethodDefinitions.Count == 0;
-                return _isManagedResourceOnly.Value;
+                this._isManagedResourceOnly = this._metadataReader.MethodDefinitions.Count == 0;
+                return this._isManagedResourceOnly.Value;
             }
         }
 
@@ -536,34 +509,29 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (IsManaged && _managedPlatform == ManagedPlatform.Unknown)
+                if (this.IsManaged && this._managedPlatform == ManagedPlatform.Unknown)
                 {
-                    _managedPlatform = ComputeIsDotNetCore(_metadataReader);
+                    this._managedPlatform = ComputeIsDotNetCore(this._metadataReader);
                 }
-                return _managedPlatform == ManagedPlatform.DotNetCore;
+                return this._managedPlatform == ManagedPlatform.DotNetCore;
             }
         }
 
-        public bool IsDotNetCoreBootstrapExe
-        {
-            get
-            {
+        public bool IsDotNetCoreBootstrapExe =>
                 // The .NET core bootstrap exe is a generated native binary that loads
                 // its corresponding .NET core application entry point dll.
-                return !IsDotNetCore 
-                    && CodeViewDebugDirectoryData.Path.EndsWith("apphost.pdb", StringComparison.OrdinalIgnoreCase);
-            }
-        }
+                !this.IsDotNetCore
+                    && this.CodeViewDebugDirectoryData.Path.EndsWith("apphost.pdb", StringComparison.OrdinalIgnoreCase);
 
         public bool IsDotNetStandard
         {
             get
             {
-                if (IsManaged && _managedPlatform == ManagedPlatform.Unknown)
+                if (this.IsManaged && this._managedPlatform == ManagedPlatform.Unknown)
                 {
-                    _managedPlatform = ComputeIsDotNetCore(_metadataReader);
+                    this._managedPlatform = ComputeIsDotNetCore(this._metadataReader);
                 }
-                return _managedPlatform == ManagedPlatform.DotNetStandard;
+                return this._managedPlatform == ManagedPlatform.DotNetStandard;
             }
         }
 
@@ -571,11 +539,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (IsManaged && _managedPlatform == ManagedPlatform.Unknown)
+                if (this.IsManaged && this._managedPlatform == ManagedPlatform.Unknown)
                 {
-                    _managedPlatform = ComputeIsDotNetCore(_metadataReader);
+                    this._managedPlatform = ComputeIsDotNetCore(this._metadataReader);
                 }
-                return _managedPlatform == ManagedPlatform.DotNetFramework;
+                return this._managedPlatform == ManagedPlatform.DotNetFramework;
             }
         }
 
@@ -590,24 +558,24 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 switch (assemblyName)
                 {
                     case "mscorlib":
-                    {
-                        return ManagedPlatform.DotNetFramework;
-                    }
-                     
+                        {
+                            return ManagedPlatform.DotNetFramework;
+                        }
+
                     case "System.Runtime":
-                    {
-                        return ManagedPlatform.DotNetCore;
-                    }
+                        {
+                            return ManagedPlatform.DotNetCore;
+                        }
 
                     case "netstandard":
-                    {
-                        return ManagedPlatform.DotNetStandard;
-                    }
+                        {
+                            return ManagedPlatform.DotNetStandard;
+                        }
 
                     default:
-                    {
-                        break;
-                    }
+                        {
+                            break;
+                        }
                 }
             }
 
@@ -621,20 +589,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (_isKernelMode != null)
+                if (this._isKernelMode != null)
                 {
-                    return (bool)_isKernelMode;
+                    return (bool)this._isKernelMode;
                 }
 
 
-                _isKernelMode = false;
+                this._isKernelMode = false;
 
-                if (!IsPEFile || PEHeaders.PEHeader == null)
+                if (!this.IsPEFile || this.PEHeaders.PEHeader == null)
                 {
-                    return _isKernelMode.Value;
+                    return this._isKernelMode.Value;
                 }
 
-                string[] imports = Imports;
+                string[] imports = this.Imports;
 
                 foreach (string import in imports)
                 {
@@ -650,12 +618,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                         import.StartsWith("storport.sys", StringComparison.OrdinalIgnoreCase) ||
                         import.StartsWith("tape.sys", StringComparison.OrdinalIgnoreCase))
                     {
-                        _isKernelMode = true;
+                        this._isKernelMode = true;
                         break;
                     }
                 }
 
-                return _isKernelMode.Value;
+                return this._isKernelMode.Value;
             }
         }
 
@@ -666,9 +634,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (PEHeaders.PEHeader != null)
+                if (this.PEHeaders.PEHeader != null)
                 {
-                    return PEHeaders.PEHeader.Subsystem == System.Reflection.PortableExecutable.Subsystem.Xbox;
+                    return this.PEHeaders.PEHeader.Subsystem == System.Reflection.PortableExecutable.Subsystem.Xbox;
                 }
                 return false;
             }
@@ -678,28 +646,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (_isBoot != null)
+                if (this._isBoot != null)
                 {
-                    return (bool)_isBoot;
+                    return (bool)this._isBoot;
                 }
 
-                _isBoot = false;
+                this._isBoot = false;
 
-                if (PEHeaders.PEHeader != null)
+                if (this.PEHeaders.PEHeader != null)
                 {
                     //
                     // Currently SubsystemVersion is an optional field but I would hope we can use this in the future
                     //
                     //Version ssVer = this.SubsystemVersion;
 
-                    _isBoot = this.Subsystem == Subsystem.EfiApplication ||
+                    this._isBoot = this.Subsystem == Subsystem.EfiApplication ||
                                 this.Subsystem == Subsystem.EfiBootServiceDriver ||
                                 this.Subsystem == Subsystem.EfiRom ||
                                 this.Subsystem == Subsystem.EfiRuntimeDriver ||
                                 (int)this.Subsystem == 16; // BOOT_APPLICATION
                 }
 
-                return _isBoot.Value;
+                return this._isBoot.Value;
             }
         }
 
@@ -710,9 +678,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (PEHeaders.PEHeader != null)
+                if (this.PEHeaders.PEHeader != null)
                 {
-                    return PEHeaders.CoffHeader.Machine;
+                    return this.PEHeaders.CoffHeader.Machine;
                 }
                 return Machine.Unknown;
             }
@@ -725,9 +693,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (PEHeaders.PEHeader != null)
+                if (this.PEHeaders.PEHeader != null)
                 {
-                    return PEHeaders.PEHeader.Subsystem;
+                    return this.PEHeaders.PEHeader.Subsystem;
                 }
                 return Subsystem.Unknown;
             }
@@ -740,12 +708,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                PEHeader optionalHeader = PEHeaders.PEHeader;
+                PEHeader optionalHeader = this.PEHeaders.PEHeader;
 
                 if (optionalHeader != null)
                 {
-                    UInt16 major = optionalHeader.MajorOperatingSystemVersion;
-                    UInt16 minor = optionalHeader.MinorOperatingSystemVersion;
+                    ushort major = optionalHeader.MajorOperatingSystemVersion;
+                    ushort minor = optionalHeader.MinorOperatingSystemVersion;
 
                     return new Version(major, minor);
                 }
@@ -761,12 +729,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                PEHeader optionalHeader = PEHeaders.PEHeader;
+                PEHeader optionalHeader = this.PEHeaders.PEHeader;
 
                 if (optionalHeader != null)
                 {
-                    UInt16 major = optionalHeader.MajorSubsystemVersion;
-                    UInt16 minor = optionalHeader.MinorSubsystemVersion;
+                    ushort major = optionalHeader.MajorSubsystemVersion;
+                    ushort minor = optionalHeader.MinorSubsystemVersion;
 
                     return new Version(major, minor);
                 }
@@ -782,7 +750,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                PEHeader optionalHeader = PEHeaders.PEHeader;
+                PEHeader optionalHeader = this.PEHeaders.PEHeader;
 
                 if (optionalHeader != null)
                 {
@@ -800,12 +768,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (_isWixBinary != null)
+                if (this._isWixBinary != null)
                 {
-                    return (bool)_isWixBinary;
+                    return (bool)this._isWixBinary;
                 }
 
-                _isWixBinary = false;
+                this._isWixBinary = false;
 
                 if (this.PEHeaders?.SectionHeaders != null)
                 {
@@ -813,13 +781,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     {
                         if (sectionHeader.Name == ".wixburn")
                         {
-                            _isWixBinary = true;
+                            this._isWixBinary = true;
                             break;
                         }
                     }
                 }
 
-                return _isWixBinary.Value;
+                return this._isWixBinary.Value;
             }
         }
     }

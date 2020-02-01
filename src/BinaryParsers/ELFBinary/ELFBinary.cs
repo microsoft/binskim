@@ -13,17 +13,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             try
             {
-                ELF = ELFReader.Load(Path.GetFullPath(uri.LocalPath));
-                Compilers = ELFUtility.GetELFCompilers(ELF);
-                Valid = true;
+                this.ELF = ELFReader.Load(Path.GetFullPath(uri.LocalPath));
+                this.Compilers = ELFUtility.GetELFCompilers(this.ELF);
+                this.Valid = true;
             }
             // At some point, we may want to better enumerate expected vs. unexpected exceptions.
             // For now, though, we'll generically catch any of them--ELFSharp can throw a number of different exceptions
             // if given an invalid ELF file.
             catch (Exception e)
             {
-                LoadException = e;
-                Valid = false;
+                this.LoadException = e;
+                this.Valid = false;
             }
         }
 

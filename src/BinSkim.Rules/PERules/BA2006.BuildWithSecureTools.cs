@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2006
         /// </summary>
-        public override string Id { get { return RuleIds.BuildWithSecureToolsId; } }
+        public override string Id => RuleIds.BuildWithSecureToolsId;
 
         /// <summary>
         /// Application code should be compiled with the most up-to-date tool sets
@@ -31,23 +31,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// code generation that can help prevent speculative execution side-channel
         /// attacks.
         /// </summary>
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2006_BuildWithSecureTools_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2006_BuildWithSecureTools_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2006_Error),
                     nameof(RuleResources.BA2006_Error_BadModule),
                     nameof(RuleResources.BA2006_Pass),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)};
-            }
-        }
-        
+
         public IEnumerable<IOption> GetOptions()
         {
             return new List<IOption>
@@ -98,10 +89,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Version minCompilerVersion;
 
             minCompilerVersion = (target.PE.IsXBox)
-                ?  context.Policy.GetProperty(MinimumToolVersions)[MIN_XBOX_COMPILER_VER]
+                ? context.Policy.GetProperty(MinimumToolVersions)[MIN_XBOX_COMPILER_VER]
                 : context.Policy.GetProperty(MinimumToolVersions)[MIN_COMPILER_VER];
 
-            TruncatedCompilandRecordList badModuleList = new TruncatedCompilandRecordList();
+            var badModuleList = new TruncatedCompilandRecordList();
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
@@ -118,9 +109,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (!string.IsNullOrEmpty(om.Lib))
                 {
                     string libFileName = string.Concat(System.IO.Path.GetFileName(om.Lib), ",", omDetails.Language.ToString()).ToLowerInvariant();
-                    Version minAllowedVersion;
 
-                    if (allowedLibraries.TryGetValue(libFileName, out minAllowedVersion) &&
+                    if (allowedLibraries.TryGetValue(libFileName, out Version minAllowedVersion) &&
                         omDetails.CompilerBackEndVersion >= minAllowedVersion)
                     {
                         continue;
@@ -148,26 +138,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (!foundIssue &&
                     (advancedMitigations & AdvancedMitigations.Spectre) == AdvancedMitigations.Spectre)
                 {
-                    ExtendedMachine machineType = (ExtendedMachine)target.PE.Machine;
-                    
+                    var machineType = (ExtendedMachine)target.PE.Machine;
+
                     // Current toolchain is within the version range to validate.
                     // Now we'll retrieve relevant compiler mitigation details to
                     // ensure this object module's build and revision meet
                     // expectations.
-                    CompilerMitigations newMitigationData = 
+                    CompilerMitigations newMitigationData =
                         EnableSpectreMitigations.GetAvailableMitigations(context, machineType, actualVersion);
 
                     // Current compiler version does not support Spectre mitigations.
-                    foundIssue = !newMitigationData.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable) 
+                    foundIssue = !newMitigationData.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable)
                                  && !newMitigationData.HasFlag(CompilerMitigations.QSpectreAvailable);
-                    
+
                     if (foundIssue)
                     {
                         // Get the closest compiler version that has mitigations--i.e. if the user is using a 19.0 (VS2015) compiler, we should be recommending an upgrade to the 
                         // 19.0 version that has the mitigations, not an upgrade to a 19.10+ (VS2017) compiler.
                         // Limitation--if there are multiple 'upgrade to' versions to recommend, this just going to give users the last one we see in the error.
                         minCompilerVersion = EnableSpectreMitigations.GetClosestCompilerVersionWithSpectreMitigations(context, machineType, actualVersion);
-                        
+
                         // Indicates Spectre mitigations are not supported on this platform.  We won't flag this case.
                         if (minCompilerVersion == null)
                         {
@@ -181,7 +171,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // built with {0} compiler version {1} (Front end version: {2})
                     badModuleList.Add(
                         om.CreateCompilandRecordWithSuffix(
-                            String.Format(CultureInfo.InvariantCulture,
+                            string.Format(CultureInfo.InvariantCulture,
                             RuleResources.BA2006_Error_BadModule,
                             omLanguage, omDetails.CompilerBackEndVersion, omDetails.CompilerFrontEndVersion)));
                 }
@@ -197,7 +187,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // product where the tool chain cannot be modified (e.g. producing a hotfix
                 // for an already shipped version) ignore this warning. Modules built outside
                 // of policy: {2}
-                context.Logger.Log(this, 
+                context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2006_Error),
                         context.TargetUri.GetFileName(),
@@ -222,17 +212,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static StringToVersionMap BuildMinimumToolVersionsMap()
         {
-            var result = new StringToVersionMap();
-
-            result[MIN_COMPILER_VER] = new Version(17, 0, 65501, 17013);
-            result[MIN_XBOX_COMPILER_VER] = new Version(16, 0, 11886, 0);
+            var result = new StringToVersionMap
+            {
+                [MIN_COMPILER_VER] = new Version(17, 0, 65501, 17013),
+                [MIN_XBOX_COMPILER_VER] = new Version(16, 0, 11886, 0)
+            };
 
             return result;
         }
 
         private static StringToVersionMap BuildAllowedLibraries()
         {
-            StringToVersionMap result = new StringToVersionMap();
+            var result = new StringToVersionMap();
 
             // Example entries
             // result["cExample.lib,c"] = new Version("1.0.0.0") 

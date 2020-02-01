@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2008
         /// </summary>
-        public override string Id { get { return RuleIds.EnableControlFlowGuardId; } }
+        public override string Id => RuleIds.EnableControlFlowGuardId;
 
         /// <summary>
         /// Binaries should enable the compiler control guard feature (CFG) at build
@@ -32,23 +32,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// the operating system will close the program.
         /// </summary>
 
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2008_EnableControlFlowGuard_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2008_EnableControlFlowGuard_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2008_Pass),
                     nameof(RuleResources.BA2008_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata),
                     nameof(RuleResources.BA2008_NotApplicable_UnsupportedKernelModeVersion)
                 };
-            }
-        }
 
         public IEnumerable<IOption> GetOptions()
         {
@@ -64,16 +55,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<Version>(
                 AnalyzerName, nameof(MinimumRequiredLinkerVersion), defaultValue: () => { return new Version("14.0"); });
 
-        public const UInt32 IMAGE_GUARD_CF_INSTRUMENTED = 0x0100;
-        public const UInt32 IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG = 10;
-        public const UInt32 IMAGE_LOAD_CONFIG_MINIMUM_SIZE_32 = 0x005C;
-        public const UInt32 IMAGE_LOAD_CONFIG_MINIMUM_SIZE_64 = 0x0090;
-        public const UInt32 IMAGE_GUARD_CF_FUNCTION_TABLE_PRESENT = 0x0400;
-        public const UInt32 IMAGE_DLLCHARACTERISTICS_CONTROLFLOWGUARD = 0x4000;
+        public const uint IMAGE_GUARD_CF_INSTRUMENTED = 0x0100;
+        public const uint IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG = 10;
+        public const uint IMAGE_LOAD_CONFIG_MINIMUM_SIZE_32 = 0x005C;
+        public const uint IMAGE_LOAD_CONFIG_MINIMUM_SIZE_64 = 0x0090;
+        public const uint IMAGE_GUARD_CF_FUNCTION_TABLE_PRESENT = 0x0400;
+        public const uint IMAGE_DLLCHARACTERISTICS_CONTROLFLOWGUARD = 0x4000;
 
-        public const UInt32 IMAGE_GUARD_CF_CHECKS = 
+        public const uint IMAGE_GUARD_CF_CHECKS =
             IMAGE_GUARD_CF_INSTRUMENTED | IMAGE_GUARD_CF_FUNCTION_TABLE_PRESENT;
-        
+
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
@@ -99,7 +90,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (portableExecutable.LinkerVersion < minimumRequiredLinkerVersion)
             {
                 reasonForNotAnalyzing = string.Format(
-                    MetadataConditions.ImageCompiledWithOutdatedTools,                    
+                    MetadataConditions.ImageCompiledWithOutdatedTools,
                     portableExecutable.LinkerVersion,
                     minimumRequiredLinkerVersion);
 
@@ -107,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsWixBinary;
-            if (portableExecutable.IsWixBinary) { return result;  }
+            if (portableExecutable.IsWixBinary) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -131,7 +122,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             context.TargetUri.GetFileName()));
             }
 
-            if (!EnablesControlFlowGuard(target))
+            if (!this.EnablesControlFlowGuard(target))
             {
                 // '{0}' does not enable the control flow guard (CFG) mitigation. 
                 // To resolve this issue, pass /GUARD:CF on both the compiler
@@ -159,7 +150,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return false;
             }
 
-            SafePointer loadConfigRVA = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
+            var loadConfigRVA = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
             if (loadConfigRVA.Address == 0)
             {
                 return false;
@@ -169,12 +160,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (target.PE.Is64Bit)
             {
-                ImageLoadConfigDirectory64 loadConfig = new ImageLoadConfigDirectory64(peHeader, loadConfigVA);
+                var loadConfig = new ImageLoadConfigDirectory64(peHeader, loadConfigVA);
 
-                Int32 imageDirectorySize = (Int32)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.Size);
-                UInt64 guardCFCheckFunctionPointer = (UInt64)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.GuardCFCheckFunctionPointer);
-                UInt64 guardCFFunctionTable = (UInt64)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.GuardCFFunctionTable);
-                UInt32 guardFlags = (UInt32)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.GuardFlags);
+                int imageDirectorySize = (int)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.Size);
+                ulong guardCFCheckFunctionPointer = (ulong)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.GuardCFCheckFunctionPointer);
+                ulong guardCFFunctionTable = (ulong)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.GuardCFFunctionTable);
+                uint guardFlags = (uint)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.GuardFlags);
 
                 if (imageDirectorySize >= IMAGE_LOAD_CONFIG_MINIMUM_SIZE_64 &&
                     guardCFCheckFunctionPointer != 0 &&
@@ -186,12 +177,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                ImageLoadConfigDirectory32 loadConfig = new ImageLoadConfigDirectory32(peHeader, loadConfigVA);
+                var loadConfig = new ImageLoadConfigDirectory32(peHeader, loadConfigVA);
 
-                Int32 imageDirectorySize = (Int32)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.Size);
-                UInt32 guardCFCheckFunctionPointer = (UInt32)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.GuardCFCheckFunctionPointer);
-                UInt32 guardCFFunctionTable = (UInt32)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.GuardCFFunctionTable);
-                UInt32 guardFlags = (UInt32)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.GuardFlags);
+                int imageDirectorySize = (int)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.Size);
+                uint guardCFCheckFunctionPointer = (uint)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.GuardCFCheckFunctionPointer);
+                uint guardCFFunctionTable = (uint)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.GuardCFFunctionTable);
+                uint guardFlags = (uint)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.GuardFlags);
 
                 if (imageDirectorySize >= IMAGE_LOAD_CONFIG_MINIMUM_SIZE_32 &&
                     guardCFCheckFunctionPointer != 0 &&

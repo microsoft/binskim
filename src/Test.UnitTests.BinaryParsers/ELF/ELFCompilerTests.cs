@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using Xunit;
 using FluentAssertions;
+using Xunit;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [InlineData(null, ELFCompilerType.Unknown, "0.0.0.0")]
         public void ELFCompiler_ConstructorHandlesKnownInputs(string compilerString, ELFCompilerType expectedType, string expectedVersion)
         {
-            ELFCompiler compiler = new ELFCompiler(compilerString);
+            var compiler = new ELFCompiler(compilerString);
             compiler.Compiler.Should().Be(expectedType);
             compiler.Version.Should().Be(new Version(expectedVersion));
         }

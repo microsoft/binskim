@@ -6,13 +6,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     {
         public BinaryBase(Uri uri)
         {
-            TargetUri = uri;
+            this.TargetUri = uri;
         }
 
         public Uri TargetUri { get; private set; }
 
         public Exception LoadException { get; protected set; }
-        
+
         public bool Valid { get; protected set; }
 
         public virtual void Dispose() { }

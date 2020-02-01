@@ -9,27 +9,27 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
     {
         public ImageFieldData(int offset, string name, Type type, int count)
         {
-            Offset = offset;
-            Name = name;
-            Type = type;
-            Count = count;
-            Header = null;
-            PadTo = 0;
-            VarLen = false;
-            TrailingByte = 0;
-            ParentHeader = null;
-            Is32BitOnly = false;
+            this.Offset = offset;
+            this.Name = name;
+            this.Type = type;
+            this.Count = count;
+            this.Header = null;
+            this.PadTo = 0;
+            this.VarLen = false;
+            this.TrailingByte = 0;
+            this.ParentHeader = null;
+            this.Is32BitOnly = false;
         }
 
         public ImageFieldData(int offset, string name, Type type, int count, ImageHeader h) : this(offset, name, type, count)
         {
-            Header = h;
-            ParentHeader = h.ParentHeader;
+            this.Header = h;
+            this.ParentHeader = h.ParentHeader;
         }
 
         public ImageFieldData(int offset, string name, Type type, int count, bool b32BitOnly) : this(offset, name, type, count)
         {
-            Is32BitOnly = b32BitOnly;
+            this.Is32BitOnly = b32BitOnly;
         }
 
         public int Offset;

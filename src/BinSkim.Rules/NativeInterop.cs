@@ -227,7 +227,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [DllImport("crypt32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        private extern static
+        private static extern
         bool CryptHashPublicKeyInfo(
             [In]      IntPtr hCryptProv, // HCRYPTPROV
             [In]      uint Algid,      // ALG_ID
@@ -252,7 +252,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
 
         [DllImport("crypt32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        private extern static
+        private static extern
         bool CryptHashToBeSigned(
             [In]      IntPtr hCryptProv, // HCRYPTPROV
             [In]      uint dwCertEncodingType,
@@ -280,12 +280,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
 
         [DllImport("wintrust.dll")]
-        private static extern UInt32 WinVerifyTrust(
+        private static extern uint WinVerifyTrust(
             IntPtr hwnd,
             ref Guid action,
             [In, Out] ref WINTRUST_DATA winVerifyTrustData);
 
-        public static UInt32 WinVerifyTrustWrapper(
+        public static uint WinVerifyTrustWrapper(
             IntPtr hwnd,
             ref Guid action,
             [In, Out] ref WINTRUST_DATA winVerifyTrustData)
@@ -303,7 +303,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
             return WTHelperProvDataFromStateData(hStateData);
         }
-        
+
         [DllImport("wintrust.dll")]
         private static extern IntPtr WTHelperGetProvSignerFromChain(
             IntPtr pProvData,
@@ -436,7 +436,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [StructLayout(LayoutKind.Sequential)]
         public struct WINTRUST_DATA
         {
-            public UInt32 cbStruct;
+            public uint cbStruct;
 
             public IntPtr pPolicyCallbackData;   // optional: used to pass data between the app and policy
             public IntPtr pSIPClientData;        // optional: used to pass data between the app and SIP.
@@ -469,7 +469,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [StructLayout(LayoutKind.Sequential)]
         public struct WINTRUST_FILE_INFO
         {
-            public UInt32 cbStruct;
+            public uint cbStruct;
             [MarshalAs(UnmanagedType.LPWStr)]
             public string pcwszFilePath;
             public IntPtr hFile;

@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.IL
         public RoslynCompilationStartAnalysisContext(Compilation compilation, AnalyzerOptions options, CancellationToken cancellationToken)
             : base(compilation, options, cancellationToken)
         {
-            SymbolActions = new ActionMap<SymbolAnalysisContext, SymbolKind>();
+            this.SymbolActions = new ActionMap<SymbolAnalysisContext, SymbolKind>();
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.IL
         /// <param name="symbolKinds"></param>
         public override void RegisterSymbolAction(Action<SymbolAnalysisContext> action, ImmutableArray<SymbolKind> symbolKinds)
         {
-            SymbolActions.Add(action, symbolKinds);
+            this.SymbolActions.Add(action, symbolKinds);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis.IL
         /// <param name="action"></param>
         public override void RegisterCompilationEndAction(Action<CompilationAnalysisContext> action)
         {
-            CompilationEndActions += action;
+            this.CompilationEndActions += action;
         }
 
         public override void RegisterCodeBlockAction(Action<CodeBlockAnalysisContext> action) { }

@@ -160,8 +160,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
         public static string GetErrorDescription(this CryptoError cryptoError)
         {
-            string result;
-            if (!s_cryptoErrorToDescriptionMap.TryGetValue(cryptoError, out result))
+            if (!s_cryptoErrorToDescriptionMap.TryGetValue(cryptoError, out string result))
             {
                 throw new InvalidOperationException("Unrecognized crypto HRESULT: 0x" + cryptoError.ToString("x"));
             }

@@ -18,14 +18,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public PEBinary(Uri uri, string symbolPath = null, string localSymbolDirectories = null) : base(uri)
         {
-            PE = new PE(TargetUri.LocalPath);
-            IsManagedAssembly = PE.IsManaged;
-            LoadException = PE.LoadException;
-            Valid = PE.IsPEFile;
-            _symbolPath = symbolPath;
-            _localSymbolDirectories = localSymbolDirectories;
+            this.PE = new PE(this.TargetUri.LocalPath);
+            this.IsManagedAssembly = this.PE.IsManaged;
+            this.LoadException = this.PE.LoadException;
+            this.Valid = this.PE.IsPEFile;
+            this._symbolPath = symbolPath;
+            this._localSymbolDirectories = localSymbolDirectories;
 
-            _pdb = new Lazy<Pdb>(LoadPdb, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+            this._pdb = new Lazy<Pdb>(this.LoadPdb, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
         private Pdb LoadPdb()
@@ -33,23 +33,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             // We should never be required to load a PDB for a managed assembly that does
             // not incorporate native code, as no managed-relevant rule currently crawls
             // PDBs for its analysis.
-            Debug.Assert(!PE.IsManaged || PE.IsMixedMode);
+            Debug.Assert(!this.PE.IsManaged || this.PE.IsMixedMode);
 
             Pdb pdb = null;
             try
             {
-                pdb = new Pdb(PE.FileName, _symbolPath, _localSymbolDirectories);
+                pdb = new Pdb(this.PE.FileName, this._symbolPath, this._localSymbolDirectories);
             }
             catch (PdbParseException ex)
             {
-                PdbParseException = ex;
+                this.PdbParseException = ex;
             }
 
             if (pdb != null && pdb.IsStripped)
             {
-                StrippedPdb = pdb;
+                this.StrippedPdb = pdb;
                 pdb = null;
-                PdbParseException = new PdbParseException(BinaryParsersResources.PdbStripped);
+                this.PdbParseException = new PdbParseException(BinaryParsersResources.PdbStripped);
             }
             return pdb;
         }
@@ -60,36 +60,30 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public PE PE { get; private set; }
 
-        public Pdb Pdb
-        {
-            get
-            {
-                return _pdb?.Value;
-            }            
-        }
+        public Pdb Pdb => this._pdb?.Value;
 
         public Pdb StrippedPdb { get; private set; }
 
         public void DisposePortableExecutableData()
         {
-            if (_pdb != null &&
-                _pdb.IsValueCreated &&
-                _pdb.Value != null)
+            if (this._pdb != null &&
+                this._pdb.IsValueCreated &&
+                this._pdb.Value != null)
             {
-                _pdb.Value.Dispose();
+                this._pdb.Value.Dispose();
             }
-            _pdb = null;
+            this._pdb = null;
 
-            if (PE != null)
+            if (this.PE != null)
             {
-                PE.Dispose();
-                PE = null;
+                this.PE.Dispose();
+                this.PE = null;
             }
         }
 
         public override void Dispose()
         {
-            DisposePortableExecutableData();
+            this.DisposePortableExecutableData();
         }
 
         public static bool CanLoadBinary(Uri uri)

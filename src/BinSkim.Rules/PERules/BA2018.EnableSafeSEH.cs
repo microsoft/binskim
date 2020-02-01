@@ -1,16 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
-
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
-using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -20,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2018
         /// </summary>
-        public override string Id { get { return RuleIds.EnableSafeSEHId; } }
+        public override string Id => RuleIds.EnableSafeSEHId;
 
         /// <summary>
         /// X86 binaries should enable the SafeSEH mitigation in order to minimize
@@ -34,23 +32,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// as the /SafeSEH flag is invalid when linking for ARM and x64.
         /// </summary>
 
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2018_EnableSafeSEH_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2018_EnableSafeSEH_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2018_Pass),
                     nameof(RuleResources.BA2018_Pass_NoSEH),
                     nameof(RuleResources.BA2018_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -110,15 +99,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            SafePointer sp = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
+            var sp = new SafePointer(target.PE.ImageBytes, peHeader.LoadConfigTableDirectory.RelativeVirtualAddress);
             SafePointer loadConfigVA = target.PE.RVA2VA(sp);
-            ImageLoadConfigDirectory32 loadConfig = new ImageLoadConfigDirectory32(peHeader, loadConfigVA);
+            var loadConfig = new ImageLoadConfigDirectory32(peHeader, loadConfigVA);
 
-            Int32 seHandlerSize = (Int32)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.Size);
+            int seHandlerSize = (int)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.Size);
             if (seHandlerSize < 72)
             {
                 // contains an unexpectedly small load configuration table {size 0}
-                string seHandlerSizeText = String.Format(RuleResources.BA2018_Error_LoadConfigurationIsTooSmall, seHandlerSize.ToString());
+                string seHandlerSizeText = string.Format(RuleResources.BA2018_Error_LoadConfigurationIsTooSmall, seHandlerSize.ToString());
 
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
@@ -129,8 +118,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            UInt32 seHandlerTable = (UInt32)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.SEHandlerTable);
-            UInt32 seHandlerCount = (UInt32)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.SEHandlerCount);
+            uint seHandlerTable = (uint)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.SEHandlerTable);
+            uint seHandlerCount = (uint)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.SEHandlerCount);
 
             if (seHandlerTable == 0 || seHandlerCount == 0)
             {

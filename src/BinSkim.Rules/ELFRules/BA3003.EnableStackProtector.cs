@@ -3,13 +3,13 @@
 
 using System.Collections.Generic;
 using System.Composition;
-using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif;
-using Microsoft.CodeAnalysis.BinaryParsers;
-using ELFSharp.ELF;
 using System.Linq;
+using ELFSharp.ELF;
 using ELFSharp.ELF.Sections;
+using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA3003
         /// </summary>
-        public override string Id { get { return RuleIds.EnableStackProtector; } }
+        public override string Id => RuleIds.EnableStackProtector;
 
         /// <summary>
         /// The stack protector ensures that all functions that use buffers over a certain size will
@@ -32,22 +32,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // smashing is detected.Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or 
         // '--fstack-protector-all' (all functions) to enable this.
         /// </summary>
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA3003_EnableStackProtector_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3003_EnableStackProtector_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA3003_Pass),
                     nameof(RuleResources.BA3003_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -67,13 +58,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             IELF elf = context.ELFBinary().ELF;
 
-            HashSet<string> symbolNames =
+            var symbolNames =
                 new HashSet<string>
                 (
                     ELFUtility.GetAllSymbols(elf).Select<ISymbolEntry, string>(sym => sym.Name)
                 );
 
-            foreach (string stack_chk in stack_check_symbols)
+            foreach (string stack_chk in this.stack_check_symbols)
             {
                 if (symbolNames.Contains(stack_chk))
                 {

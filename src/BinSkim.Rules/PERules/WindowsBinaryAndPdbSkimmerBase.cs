@@ -3,7 +3,6 @@
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -25,7 +24,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            AnalyzePortableExecutableAndPdb(context);
+            this.AnalyzePortableExecutableAndPdb(context);
         }
 
         public sealed override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)

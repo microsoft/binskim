@@ -1,15 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
-using System.Collections.Generic;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -20,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// BA2013
         /// 
         /// </summary>
-        public override string Id { get { return RuleIds.InitializeStackProtectionId; } }
+        public override string Id => RuleIds.InitializeStackProtectionId;
 
         /// <summary>
         /// Binaries should properly initialize the stack protector (/GS) in order
@@ -36,24 +35,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// custom entry point.
         /// </summary>
 
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2013_InitializeStackProtection_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2013_InitializeStackProtection_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2013_Pass),
                     nameof(RuleResources.BA2013_Pass_NoCode),
                     nameof(RuleResources.BA2013_NotApplicable_FeatureNotEnabled),
                     nameof(RuleResources.BA2013_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -70,7 +60,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (noCode)
             {
                 // '{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code.
-                context.Logger.Log(this, 
+                context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2013_Pass_NoCode),
                         context.TargetUri.GetFileName()));
@@ -108,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // protector. To resolve this issue, use the default entry point provided 
                 // by the C runtime, which will make this call for you, or call 
                 // __security_init_cookie() manually in your custom entry point.
-                context.Logger.Log(this, 
+                context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2013_Error),
                         context.TargetUri.GetFileName()));
@@ -119,7 +109,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // that properly initializes the stack protecter. This has the 
             //effect of increasing the effectiveness of the feature and reducing 
             // spurious detections.
-            context.Logger.Log(this, 
+            context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                    nameof(RuleResources.BA2013_Pass),
                         context.TargetUri.GetFileName()));

@@ -1,9 +1,9 @@
-﻿using Microsoft.CodeAnalysis.BinaryParsers;
-using System;
+﻿using System;
+using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
-    class BinaryTargetManager
+    internal class BinaryTargetManager
     {
         // We may want to consider changing this to an extension/plugin model rather than a hardcoded list of supported binary parsers.
         // However, for now this will do.

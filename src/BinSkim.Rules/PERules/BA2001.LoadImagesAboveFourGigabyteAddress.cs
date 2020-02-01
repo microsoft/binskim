@@ -1,16 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
-
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
-using System.Collections.Generic;
-using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -20,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2001
         /// </summary>
-        public override string Id { get { return RuleIds.LoadImageAboveFourGigabyteAddressId; } }
+        public override string Id => RuleIds.LoadImageAboveFourGigabyteAddressId;
 
         /// <summary>
         /// 64-bit images should have a preferred base address above the 4GB boundary in
@@ -38,22 +36,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// valid for 32-bit binaries.
         /// </summary>
 
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2001_LoadImageAboveFourGigabyteAddress_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2001_LoadImageAboveFourGigabyteAddress_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2001_Pass),
                     nameof(RuleResources.BA2001_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -81,7 +70,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             PEHeader peHeader = target.PE.PEHeaders.PEHeader;
 
-            UInt64 imageBase = peHeader.ImageBase;
+            ulong imageBase = peHeader.ImageBase;
 
             if (imageBase <= 0xFFFFFFFF)
             {

@@ -3,18 +3,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-
-using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif.Visitors;
-using Microsoft.CodeAnalysis.Sarif.Writers;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -26,11 +20,8 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override IEnumerable<Assembly> DefaultPlugInAssemblies
         {
-            get
-            {
-                return new Assembly[] { typeof(MarkImageAsNXCompatible).Assembly };
-            }
-            set {  throw new InvalidOperationException(); }
+            get => new Assembly[] { typeof(MarkImageAsNXCompatible).Assembly };
+            set => throw new InvalidOperationException();
         }
 
         private IEnumerable<string> _plugInFilePaths;
@@ -40,7 +31,7 @@ namespace Microsoft.CodeAnalysis.IL
             BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, filePath);
             binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
-            _plugInFilePaths = options.PluginFilePaths;
+            this._plugInFilePaths = options.PluginFilePaths;
             return binaryAnalyzerContext;
         }
 
@@ -62,8 +53,8 @@ namespace Microsoft.CodeAnalysis.IL
             // we have checks that are only relevant to either 32-bit or 64-bit binaries.
             // Because of this, the return code bit for RuleNotApplicableToTarget is not
             // interesting (it will always be set). 
-            return analyzeOptions.RichReturnCode 
-                ? (int)((uint)result & ~(uint)RuntimeConditions.RuleNotApplicableToTarget) 
+            return analyzeOptions.RichReturnCode
+                ? (int)((uint)result & ~(uint)RuntimeConditions.RuleNotApplicableToTarget)
                 : result;
         }
 

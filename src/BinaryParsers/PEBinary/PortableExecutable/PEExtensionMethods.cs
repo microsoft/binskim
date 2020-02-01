@@ -16,19 +16,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 case Type.BYTE: res = (byte)sp; break;
                 case Type.SBYTE: res = (sbyte)(byte)sp; break;
-                case Type.UINT16: res = (UInt16)sp; break;
-                case Type.INT16: res = (Int16)(UInt16)sp; break;
-                case Type.UINT32: res = (UInt32)sp; break;
-                case Type.UINT64: res = (UInt64)sp; break;
-                case Type.INT32: res = (Int32)(UInt32)sp; break;
-                case Type.INT64: res = (Int64)(UInt64)sp; break;
-                case Type.POINTER: res = new SafePointer(sp._array, sp._stream, (Int32)(UInt32)sp); break;
+                case Type.UINT16: res = (ushort)sp; break;
+                case Type.INT16: res = (short)(ushort)sp; break;
+                case Type.UINT32: res = (uint)sp; break;
+                case Type.UINT64: res = (ulong)sp; break;
+                case Type.INT32: res = (int)(uint)sp; break;
+                case Type.INT64: res = (long)(ulong)sp; break;
+                case Type.POINTER: res = new SafePointer(sp._array, sp._stream, (int)(uint)sp); break;
                 case Type.HEADER: res = fi.Header.Create(fi.ParentHeader, sp); break;
                 case Type.NATIVEINT:
                     PEHeader ioh = fi.ParentHeader;
                     res = ((ioh != null) && (ioh.Magic == PEMagic.PE32Plus))
-                        ? (UInt64)sp
-                        : (UInt32)sp;
+                        ? (ulong)sp
+                        : (uint)sp;
                     break;
                 default: throw new InvalidOperationException("Unknown type");
             }
@@ -41,10 +41,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             bool b64bit = false;
             PEHeader ioh = fi.ParentHeader;
             if (ioh != null)
+            {
                 b64bit = (ioh.Magic == PEMagic.PE32Plus);
+            }
 
             if (b64bit && fi.Is32BitOnly)
+            {
                 return 0;
+            }
 
             switch (fi.Type)
             {

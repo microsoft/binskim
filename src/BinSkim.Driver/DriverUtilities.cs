@@ -19,8 +19,8 @@ namespace Microsoft.CodeAnalysis.IL
                                         };
 
         public static ImmutableArray<T> GetExports<T>(IEnumerable<Assembly> assemblies = null)
-        {            
-            var container = CreateCompositionContainer<T>(assemblies ?? s_defaultCompositionAssemblies);
+        {
+            CompositionHost container = CreateCompositionContainer<T>(assemblies ?? s_defaultCompositionAssemblies);
             return container.GetExports<T>().ToImmutableArray();
         }
 

@@ -6,12 +6,11 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Diagnostics;
 using System.Reflection.PortableExecutable;
-
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif;
-using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -21,7 +20,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2009
         /// </summary>
-        public override string Id { get { return RuleIds.EnableAddressSpaceLayoutRandomizationId; } }
+        public override string Id => RuleIds.EnableAddressSpaceLayoutRandomizationId;
 
         /// <summary>
         /// Binaries should linked as DYNAMICBASE in order to be eligible for relocation
@@ -33,24 +32,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// Visual Studio 2008 or later.
         /// </summary>
 
-        public override MultiformatMessageString FullDescription
-        {
-            get { return new MultiformatMessageString { Text = RuleResources.BA2009_EnableAddressSpaceLayoutRandomization_Description }; }
-        }
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2009_EnableAddressSpaceLayoutRandomization_Description };
 
-        protected override IEnumerable<string> MessageResourceNames
-        {
-            get
-            {
-                return new string[] {
+        protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2009_Pass),
                     nameof(RuleResources.BA2009_Error_NotDynamicBase),
                     nameof(RuleResources.BA2009_Error_RelocsStripped),
                     nameof(RuleResources.BA2009_Error_WinCENoRelocationSection),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
-            }
-        }
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {

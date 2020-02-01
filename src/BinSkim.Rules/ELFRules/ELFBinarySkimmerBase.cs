@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (context.IsELF())
             {
                 ELFBinary target = context.ELFBinary();
-                return CanAnalyzeElf(target, context.Policy, out reasonForNotAnalyzing);
+                return this.CanAnalyzeElf(target, context.Policy, out reasonForNotAnalyzing);
             }
             else
             {
@@ -25,5 +25,5 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public abstract AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing);
     }
-    
+
 }
