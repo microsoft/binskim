@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     /// <summary>A set of relatively expensive to calculate details from an object module.</summary>
     public class ObjectModuleDetails
     {
-        private readonly CompilerCommandLine _compilerCommandLine;
+        private readonly CompilerCommandLine compilerCommandLine;
 
         /// <summary>Initializes a new instance of the <see cref="ObjectModuleDetails"/> class.</summary>
         /// <param name="compilerFrontEndVersion">The front end version of the compiler producing the object module.</param>
@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.Library = library;
             this.CompilerFrontEndVersion = compilerFrontEndVersion ?? new Version();
             this.CompilerBackEndVersion = backEndVersion ?? new Version();
-            this._compilerCommandLine = new CompilerCommandLine(commandLine ?? string.Empty);
+            this.compilerCommandLine = new CompilerCommandLine(commandLine ?? string.Empty);
             this.Language = language;
             this.CompilerName = compilerName;
             this.HasSecurityChecks = hasSecurityChecks;
@@ -50,17 +50,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <summary>
         /// Returns the warning level as defined by the /Wn switch in the compiland command line
         /// </summary>
-        public int WarningLevel => this._compilerCommandLine.WarningLevel;
+        public int WarningLevel => this.compilerCommandLine.WarningLevel;
 
         /// <summary>
         /// Returns a list of integers corresponding to the set of warnings disabled via -wdnnnn switches on the command line
         /// </summary>
-        public ImmutableArray<int> ExplicitlyDisabledWarnings => this._compilerCommandLine.WarningsExplicitlyDisabled;
+        public ImmutableArray<int> ExplicitlyDisabledWarnings => this.compilerCommandLine.WarningsExplicitlyDisabled;
 
         /// <summary>
         /// The raw command line passed to the compiler when building this object module.
         /// </summary>
-        public string RawCommandLine => this._compilerCommandLine.Raw;
+        public string RawCommandLine => this.compilerCommandLine.Raw;
 
         /// <summary>
         /// The name of the compiler
@@ -82,25 +82,25 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// </summary>
         public Language Language { get; private set; }
 
-        private Nullable<WellKnownCompilers> _wellKnownCompiler;
+        private Nullable<WellKnownCompilers> wellKnownCompiler;
 
         public WellKnownCompilers WellKnownCompiler
         {
             get
             {
-                if (!this._wellKnownCompiler.HasValue) { this.ComputeWellKnownCompilerValue(); }
-                return this._wellKnownCompiler.Value;
+                if (!this.wellKnownCompiler.HasValue) { this.ComputeWellKnownCompilerValue(); }
+                return this.wellKnownCompiler.Value;
             }
         }
 
         private void ComputeWellKnownCompilerValue()
         {
-            this._wellKnownCompiler = WellKnownCompilers.Unknown;
+            this.wellKnownCompiler = WellKnownCompilers.Unknown;
 
             if ((this.Language == Language.C || this.Language == Language.Cxx) &&
                 this.CompilerName == "Microsoft (R) Optimizing Compiler")
             {
-                this._wellKnownCompiler = WellKnownCompilers.MicrosoftNativeCompiler;
+                this.wellKnownCompiler = WellKnownCompilers.MicrosoftNativeCompiler;
             }
         }
 
@@ -116,7 +116,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public SwitchState GetSwitchState(string switchName, OrderOfPrecedence precedence)
         {
             string[] switchNames = new string[1] { switchName };
-            return this._compilerCommandLine.GetSwitchState(switchNames, null, SwitchState.SwitchNotFound, precedence);
+            return this.compilerCommandLine.GetSwitchState(switchNames, null, SwitchState.SwitchNotFound, precedence);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <param name="precedence">The precedence rules for this set of switches.</param>
         public SwitchState GetSwitchState(string[] switchNames, string[] overrideNames, SwitchState defaultStateOfFirst, OrderOfPrecedence precedence)
         {
-            return this._compilerCommandLine.GetSwitchState(switchNames, overrideNames, defaultStateOfFirst, precedence);
+            return this.compilerCommandLine.GetSwitchState(switchNames, overrideNames, defaultStateOfFirst, precedence);
         }
 
     }

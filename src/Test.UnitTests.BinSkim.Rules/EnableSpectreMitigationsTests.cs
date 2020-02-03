@@ -12,16 +12,12 @@ using Xunit.Abstractions;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public class EnableSpectreMitigationsTests
-    {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public EnableSpectreMitigationsTests(ITestOutputHelper output)
+    {        
+        public EnableSpectreMitigationsTests()
         {
-            this._testOutputHelper = output;
-
             // Reset the static cache of compiler data before each test, because
             // we use a couple of different Policy configurations in testing.
-            EnableSpectreMitigations._compilerData = null;
+            EnableSpectreMitigations.compilerData = null;
         }
 
         [Fact]

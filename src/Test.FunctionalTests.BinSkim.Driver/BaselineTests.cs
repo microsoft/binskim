@@ -22,11 +22,11 @@ namespace Microsoft.CodeAnalysis.IL
 {
     public class BuiltInRuleFunctionalTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper testOutputHelper;
 
         public BuiltInRuleFunctionalTests(ITestOutputHelper output)
         {
-            this._testOutputHelper = output;
+            this.testOutputHelper = output;
         }
 
 
@@ -68,7 +68,7 @@ namespace Microsoft.CodeAnalysis.IL
                 sb.AppendLine(this.GenerateDiffCommand(
                     Path.Combine(testDirectory, "Expected"),
                     Path.Combine(testDirectory, "Actual")));
-                this._testOutputHelper.WriteLine(sb.ToString());
+                this.testOutputHelper.WriteLine(sb.ToString());
             }
 
             Assert.Equal(0, sb.Length);

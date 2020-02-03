@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         // Internal so that we can reset this during testing.  In practice this should never get reset, but we use several different configs during unit tests.
         // Please do not access this field outside of this class and unit tests.
-        internal static Dictionary<MachineFamily, CompilerVersionToMitigation[]> _compilerData = null;
+        internal static Dictionary<MachineFamily, CompilerVersionToMitigation[]> compilerData = null;
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -579,17 +579,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         internal static Dictionary<MachineFamily, CompilerVersionToMitigation[]> LoadCompilerDataFromConfig(PropertiesDictionary policy)
         {
-            if (_compilerData == null)
+            if (compilerData == null)
             {
-                _compilerData = new Dictionary<MachineFamily, CompilerVersionToMitigation[]>();
+                compilerData = new Dictionary<MachineFamily, CompilerVersionToMitigation[]>();
                 PropertiesDictionary configData = policy.GetProperty(MitigatedCompilers);
                 foreach (string key in configData.Keys)
                 {
                     var machine = (MachineFamily)Enum.Parse(typeof(MachineFamily), key); // Neaten this up.
-                    _compilerData.Add(machine, CreateSortedVersionDictionary((PropertiesDictionary)configData[key]));
+                    compilerData.Add(machine, CreateSortedVersionDictionary((PropertiesDictionary)configData[key]));
                 }
             }
-            return _compilerData;
+            return compilerData;
         }
 
         internal static CompilerVersionToMitigation[] CreateSortedVersionDictionary(PropertiesDictionary versionList)

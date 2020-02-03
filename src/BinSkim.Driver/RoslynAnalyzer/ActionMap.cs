@@ -12,30 +12,30 @@ namespace Microsoft.CodeAnalysis.IL
     /// and invoked by providing a relevant key and context object, 
     /// serving as a kind of multicast delegate mechanism.
     /// </summary>
-    /// <typeparam name="TContext"></typeparam>
-    /// <typeparam name="TKind"></typeparam>
+    /// <typeparam name="TContext">A context instance that is passed to the action.</typeparam>
+    /// <typeparam name="TKind">A specifier that categorizes the action.</typeparam>
     internal sealed class ActionMap<TContext, TKind>
     {
-        private readonly SortedList<TKind, Action<TContext>> _map;
+        private readonly SortedList<TKind, Action<TContext>> map;
 
         public ActionMap()
         {
-            this._map = new SortedList<TKind, Action<TContext>>();
+            this.map = new SortedList<TKind, Action<TContext>>();
         }
 
         public void Add(Action<TContext> action, ImmutableArray<TKind> kinds)
         {
             foreach (TKind kind in kinds)
             {
-                this._map.TryGetValue(kind, out Action<TContext> actions);
+                this.map.TryGetValue(kind, out Action<TContext> actions);
                 actions += action;
-                this._map[kind] = actions;
+                this.map[kind] = actions;
             }
         }
 
         public void Invoke(TKind kind, TContext context)
         {
-            if (this._map.TryGetValue(kind, out Action<TContext> actions))
+            if (this.map.TryGetValue(kind, out Action<TContext> actions))
             {
                 actions(context);
             }

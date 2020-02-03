@@ -9,37 +9,37 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 {
     public struct SafePointer
     {
-        internal byte[] _array;
-        internal int _index;
-        internal Stream _stream;
+        internal byte[] array;
+        internal int index;
+        internal Stream stream;
 
         // constructors
-        public SafePointer(byte[] byte_array)
+        public SafePointer(byte[] bytearray)
         {
-            this._array = byte_array;
-            this._index = 0;
-            this._stream = null;
+            this.array = bytearray;
+            this.index = 0;
+            this.stream = null;
         }
 
-        public SafePointer(byte[] byte_array, int index)
+        public SafePointer(byte[] bytearray, int index)
         {
-            this._array = byte_array;
-            this._index = index;
-            this._stream = null;
+            this.array = bytearray;
+            this.index = index;
+            this.stream = null;
         }
 
         public SafePointer(Stream stream)
         {
-            this._array = null;
-            this._stream = stream;
-            this._index = 0;
+            this.array = null;
+            this.stream = stream;
+            this.index = 0;
         }
 
-        internal SafePointer(byte[] byte_array, Stream stream, int index)
+        internal SafePointer(byte[] bytearray, Stream stream, int index)
         {
-            this._array = byte_array;
-            this._stream = stream;
-            this._index = index;
+            this.array = bytearray;
+            this.stream = stream;
+            this.index = index;
         }
 
         // required overrides
@@ -55,9 +55,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public override int GetHashCode()
         {
-            return (this._array != null)
-                ? (this._array.GetHashCode() << 16) + this._index
-                : this._stream.GetHashCode();
+            return (this.array != null)
+                ? (this.array.GetHashCode() << 16) + this.index
+                : this.stream.GetHashCode();
         }
 
         // conversion
@@ -65,18 +65,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             pp.TestPointerAndThrow();
 
-            if (pp._array != null)
+            if (pp.array != null)
             {
-                return pp._array[pp._index];
+                return pp.array[pp.index];
             }
 
-            if (pp._stream != null)
+            if (pp.stream != null)
             {
-                pp._stream.Seek(pp._index, SeekOrigin.Begin);
-                return (byte)pp._stream.ReadByte();
+                pp.stream.Seek(pp.index, SeekOrigin.Begin);
+                return (byte)pp.stream.ReadByte();
             }
 
-            throw new InvalidOperationException("Neither _array nor _stream exist");
+            throw new InvalidOperationException("Neither array nor stream exist");
         }
 
         public static explicit operator uint(SafePointer sp)
@@ -96,28 +96,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public static explicit operator string(SafePointer sp)
         {
-            if (sp._array != null)
+            if (sp.array != null)
             {
-                int nullterm = sp._index;
-                while (sp._array[nullterm] != 0)
+                int nullterm = sp.index;
+                while (sp.array[nullterm] != 0)
                 {
                     nullterm++;
                 }
 
-                return System.Text.Encoding.ASCII.GetString(sp._array, sp._index, nullterm - sp._index);
+                return System.Text.Encoding.ASCII.GetString(sp.array, sp.index, nullterm - sp.index);
             }
 
-            if (sp._stream != null)
+            if (sp.stream != null)
             {
                 var alBytes = new ArrayList();
                 byte b = 0;
 
-                if (sp._stream.Seek(sp._index, SeekOrigin.Begin) != sp._index)
+                if (sp.stream.Seek(sp.index, SeekOrigin.Begin) != sp.index)
                 {
                     throw new InvalidOperationException("Seeking outside stream boundaries");
                 }
 
-                while ((b = (byte)sp._stream.ReadByte()) != 0)
+                while ((b = (byte)sp.stream.ReadByte()) != 0)
                 {
                     alBytes.Add(b);
                 }
@@ -127,132 +127,132 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 return System.Text.Encoding.ASCII.GetString(ab);
             }
 
-            throw new InvalidOperationException("Neither _array nor _stream exist");
+            throw new InvalidOperationException("Neither array nor stream exist");
         }
 
         // operators
         public static SafePointer operator +(SafePointer pp, int n)
         {
-            return new SafePointer(pp._array, pp._stream, pp._index + n);
+            return new SafePointer(pp.array, pp.stream, pp.index + n);
         }
 
         public static SafePointer operator -(SafePointer pp, int n)
         {
-            return new SafePointer(pp._array, pp._stream, pp._index - n);
+            return new SafePointer(pp.array, pp.stream, pp.index - n);
         }
 
         public static SafePointer operator +(SafePointer pp, uint n)
         {
-            return new SafePointer(pp._array, pp._stream, (int)(pp._index + n));
+            return new SafePointer(pp.array, pp.stream, (int)(pp.index + n));
         }
 
         public static SafePointer operator -(SafePointer pp, uint n)
         {
-            return new SafePointer(pp._array, pp._stream, (int)(pp._index - n));
+            return new SafePointer(pp.array, pp.stream, (int)(pp.index - n));
         }
 
         public static int operator -(SafePointer spl, SafePointer spr)
         {
-            if (spl._array != spr._array)
+            if (spl.array != spr.array)
             {
                 throw new Exception("Incomparable pointers");
             }
 
-            if (spl._stream != spr._stream)
+            if (spl.stream != spr.stream)
             {
                 throw new Exception("Incomparable pointers");
             }
 
-            return spl._index - spr._index;
+            return spl.index - spr.index;
         }
 
         public static bool operator <(SafePointer spl, SafePointer spr)
         {
-            if (spl._array != spr._array)
+            if (spl.array != spr.array)
             {
                 throw new Exception("Incomparable pointers");
             }
 
-            if (spl._stream != spr._stream)
+            if (spl.stream != spr.stream)
             {
                 throw new Exception("Incomparable pointers");
             }
 
-            return (spl._index < spr._index);
+            return (spl.index < spr.index);
         }
 
         public static bool operator >(SafePointer spl, SafePointer spr)
         {
-            if (spl._array != spr._array)
+            if (spl.array != spr.array)
             {
                 throw new Exception("Incomparable pointers");
             }
 
-            if (spl._stream != spr._stream)
+            if (spl.stream != spr.stream)
             {
                 throw new Exception("Incomparable pointers");
             }
 
-            return (spl._index > spr._index);
+            return (spl.index > spr.index);
         }
 
         public static bool operator ==(SafePointer sp1, SafePointer sp2)
         {
-            return ((sp1._array == sp2._array) && (sp1._stream == sp2._stream) && (sp1._index == sp2._index));
+            return ((sp1.array == sp2.array) && (sp1.stream == sp2.stream) && (sp1.index == sp2.index));
         }
 
         public static bool operator !=(SafePointer sp1, SafePointer sp2)
         {
-            return ((sp1._array != sp2._array) || (sp1._stream != sp2._stream) || (sp1._index != sp2._index));
+            return ((sp1.array != sp2.array) || (sp1.stream != sp2.stream) || (sp1.index != sp2.index));
         }
 
         public static SafePointer operator ++(SafePointer sp)
         {
-            sp._index++;
+            sp.index++;
             return sp;
         }
 
         public static SafePointer operator --(SafePointer sp)
         {
-            sp._index--;
+            sp.index--;
             return sp;
         }
 
         public int Address
         {
-            get => this._index;
-            set => this._index = value;
+            get => this.index;
+            set => this.index = value;
         }
 
         public override string ToString()
         {
-            return this._index.ToString("X");
+            return this.index.ToString("X");
         }
 
         public byte[] GetBytes(int len)
         {
-            if (this._array != null)
+            if (this.array != null)
             {
-                if (this._index + len > this._array.Length)
+                if (this.index + len > this.array.Length)
                 {
                     throw new ArgumentException("Out of bounds");
                 }
 
                 byte[] ret = new byte[len];
-                Array.Copy(this._array, this._index, ret, 0, len);
+                Array.Copy(this.array, this.index, ret, 0, len);
                 return ret;
             }
 
-            if (this._stream != null)
+            if (this.stream != null)
             {
-                if (this._stream.Seek(this._index, SeekOrigin.Begin) != this._index)
+                if (this.stream.Seek(this.index, SeekOrigin.Begin) != this.index)
                 {
                     throw new InvalidOperationException("Seeking outside stream boundaries");
                 }
 
                 byte[] ret = new byte[len];
 
-                if (this._stream.Read(ret, 0, len) != len)
+                if (this.stream.Read(ret, 0, len) != len)
                 {
                     throw new InvalidOperationException("Reading past stream boundaries");
                 }
@@ -260,29 +260,29 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 return ret;
             }
 
-            throw new InvalidOperationException("Neither _array nor _stream exist");
+            throw new InvalidOperationException("Neither array nor stream exist");
         }
 
         public Stream GetStream()
         {
-            if (this._array != null)
+            if (this.array != null)
             {
-                return new MemoryStream(this._array, this._index, this._array.Length - this._index);
+                return new MemoryStream(this.array, this.index, this.array.Length - this.index);
             }
 
-            return this._stream;
+            return this.stream;
         }
 
         public bool HasData(int cBytes)
         {
-            if (this._array != null)
+            if (this.array != null)
             {
-                return (this._index <= this._array.Length - cBytes);
+                return (this.index <= this.array.Length - cBytes);
             }
 
-            if (this._stream != null)
+            if (this.stream != null)
             {
-                return (this._index <= this._stream.Length - cBytes);
+                return (this.index <= this.stream.Length - cBytes);
             }
 
             return true;
@@ -300,12 +300,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if ((this._array != null) && (this._index < this._array.Length) && (this._index >= 0))
+                if ((this.array != null) && (this.index < this.array.Length) && (this.index >= 0))
                 {
                     return true;
                 }
 
-                if ((this._stream != null) && (this._index >= 0) && (this._index < this._stream.Length))
+                if ((this.stream != null) && (this.index >= 0) && (this.index < this.stream.Length))
                 {
                     return true;
                 }
@@ -318,7 +318,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (((this._array == null) || (this._array.Length == 0)) && ((this._stream == null) || (this._stream.Length == 0)))
+                if (((this.array == null) || (this.array.Length == 0)) && ((this.stream == null) || (this.stream.Length == 0)))
                 {
                     return true;
                 }
@@ -329,9 +329,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public void Set(byte b)
         {
-            if (this._array != null)
+            if (this.array != null)
             {
-                this._array[this._index] = b;
+                this.array[this.index] = b;
             }
             else
             {

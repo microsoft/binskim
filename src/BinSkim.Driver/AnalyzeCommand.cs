@@ -24,14 +24,11 @@ namespace Microsoft.CodeAnalysis.IL
             set => throw new InvalidOperationException();
         }
 
-        private IEnumerable<string> _plugInFilePaths;
-
         protected override BinaryAnalyzerContext CreateContext(AnalyzeOptions options, IAnalysisLogger logger, RuntimeConditions runtimeErrors, string filePath = null)
         {
             BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, filePath);
             binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
-            this._plugInFilePaths = options.PluginFilePaths;
             return binaryAnalyzerContext;
         }
 

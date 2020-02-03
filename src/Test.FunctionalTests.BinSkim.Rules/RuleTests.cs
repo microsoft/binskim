@@ -16,11 +16,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public class RuleTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper testOutputHelper;
 
         public RuleTests(ITestOutputHelper output)
         {
-            this._testOutputHelper = output;
+            this.testOutputHelper = output;
         }
 
         private void VerifyPass(
@@ -138,7 +138,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (sb.Length > 0)
             {
-                this._testOutputHelper.WriteLine(sb.ToString());
+                this.testOutputHelper.WriteLine(sb.ToString());
             }
 
             Assert.Equal(0, sb.Length);
@@ -164,7 +164,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private void VerifyThrows<ExceptionType>(
             BinarySkimmer skimmer,
-            IEnumerable<string> additionalTestFiles = null,
             bool useDefaultPolicy = false) where ExceptionType : Exception
         {
             var targets = new List<string>();
@@ -275,7 +274,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (sb.Length > 0)
             {
-                this._testOutputHelper.WriteLine(sb.ToString());
+                this.testOutputHelper.WriteLine(sb.ToString());
             }
 
             Assert.Equal(0, sb.Length);

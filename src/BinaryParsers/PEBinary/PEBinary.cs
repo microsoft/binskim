@@ -12,9 +12,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public class PEBinary : BinaryBase
     {
-        private Lazy<Pdb> _pdb;
-        private readonly string _symbolPath;
-        private readonly string _localSymbolDirectories;
+        private Lazy<Pdb> pdb;
+        private readonly string symbolPath;
+        private readonly string localSymbolDirectories;
 
         public PEBinary(Uri uri, string symbolPath = null, string localSymbolDirectories = null) : base(uri)
         {
@@ -22,10 +22,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             this.IsManagedAssembly = this.PE.IsManaged;
             this.LoadException = this.PE.LoadException;
             this.Valid = this.PE.IsPEFile;
-            this._symbolPath = symbolPath;
-            this._localSymbolDirectories = localSymbolDirectories;
+            this.symbolPath = symbolPath;
+            this.localSymbolDirectories = localSymbolDirectories;
 
-            this._pdb = new Lazy<Pdb>(this.LoadPdb, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+            this.pdb = new Lazy<Pdb>(this.LoadPdb, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
         private Pdb LoadPdb()
@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             Pdb pdb = null;
             try
             {
-                pdb = new Pdb(this.PE.FileName, this._symbolPath, this._localSymbolDirectories);
+                pdb = new Pdb(this.PE.FileName, this.symbolPath, this.localSymbolDirectories);
             }
             catch (PdbParseException ex)
             {
@@ -60,19 +60,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public PE PE { get; private set; }
 
-        public Pdb Pdb => this._pdb?.Value;
+        public Pdb Pdb => this.pdb?.Value;
 
         public Pdb StrippedPdb { get; private set; }
 
         public void DisposePortableExecutableData()
         {
-            if (this._pdb != null &&
-                this._pdb.IsValueCreated &&
-                this._pdb.Value != null)
+            if (this.pdb != null &&
+                this.pdb.IsValueCreated &&
+                this.pdb.Value != null)
             {
-                this._pdb.Value.Dispose();
+                this.pdb.Value.Dispose();
             }
-            this._pdb = null;
+            this.pdb = null;
 
             if (this.PE != null)
             {
