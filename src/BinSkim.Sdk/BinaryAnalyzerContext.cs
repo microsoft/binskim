@@ -67,31 +67,25 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public RuntimeConditions RuntimeErrors { get; set; }
 
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
+       private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposedValue)
+            if (!this.disposed && disposing)
             {
-                if (disposing)
+                if (this.iBinary != null)
                 {
-                    if (this.iBinary != null)
-                    {
-                        this.iBinary.Dispose();
-                        this.iBinary = null;
-                    }
+                    this.iBinary.Dispose();
+                    this.iBinary = null;
                 }
-                this.disposedValue = true;
+                this.disposed = true;
             }
         }
 
-        // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
         }
-        #endregion
     }
 }
