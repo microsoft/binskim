@@ -12,8 +12,8 @@ namespace Microsoft.CodeAnalysis.IL
     /// and invoked by providing a relevant key and context object, 
     /// serving as a kind of multicast delegate mechanism.
     /// </summary>
-    /// <typeparam name="TContext"></typeparam>
-    /// <typeparam name="TKind"></typeparam>
+    /// <typeparam name="TContext">A context instance that is passed to the action.</typeparam>
+    /// <typeparam name="TKind">A specifier that categorizes the action.</typeparam>
     internal sealed class ActionMap<TContext, TKind>
     {
         private readonly SortedList<TKind, Action<TContext>> map;
