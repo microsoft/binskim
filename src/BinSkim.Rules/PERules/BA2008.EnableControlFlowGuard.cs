@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (!this.EnablesControlFlowGuard(target))
             {
                 // '{0}' does not enable the control flow guard (CFG) mitigation. 
-                // To resolve this issue, pass /GUARD:CF on both the compiler
+                // To resolve this issue, pass /guard:cf on both the compiler
                 // and linker command lines. Binaries also require the 
                 // /DYNAMICBASE linker option in order to enable CFG.
                 context.Logger.Log(this,

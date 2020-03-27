@@ -252,7 +252,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /GUARD:CF on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG..
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /guard:cf on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG..
         /// </summary>
         internal static string BA2008_Error {
             get {
