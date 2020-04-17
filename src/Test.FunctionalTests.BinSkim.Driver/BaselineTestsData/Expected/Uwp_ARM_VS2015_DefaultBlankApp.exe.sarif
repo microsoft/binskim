@@ -920,7 +920,7 @@
       },
       "invocations": [
         {
-          "toolExecutionNotifications": [
+          "toolConfigurationNotifications": [
             {
               "locations": [
                 {
@@ -932,71 +932,11 @@
                 }
               ],
               "message": {
-                "text": "An exception was raised attempting to determine whether 'Uwp_ARM_VS2015_DefaultBlankApp.exe' is a valid analysis target for check 'DoNotIncorporateVulnerableDependencies' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however. (Object reference not set to an instance of an object.)"
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
               },
               "level": "error",
-              "exception": {
-                "kind": "NullReferenceException",
-                "message": "Object reference not set to an instance of an object.",
-                "stack": {
-                  "frames": [
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PortableExecutable/PE.cs"
-                          },
-                          "region": {
-                            "startLine": 528
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PE.get_IsDotNetCoreBootstrapExe()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs"
-                          },
-                          "region": {
-                            "startLine": 47
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///E:/src/sarif/src/Sarif.Driver/Sdk/AnalyzeCommandBase.cs"
-                          },
-                          "region": {
-                            "startLine": 746
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.DetermineApplicabilityForTarget(IEnumerable`1 skimmers, TContext context, ISet`1 disabledSkimmers)"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              },
               "descriptor": {
-                "id": "ERR998.ExceptionInCanAnalyze"
+                "id": "ERR997.ExceptionLoadingPdb"
               },
               "associatedRule": {
                 "id": "BA2002"
@@ -1013,71 +953,11 @@
                 }
               ],
               "message": {
-                "text": "An exception was raised attempting to determine whether 'Uwp_ARM_VS2015_DefaultBlankApp.exe' is a valid analysis target for check 'BuildWithSecureTools' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however. (Object reference not set to an instance of an object.)"
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
               },
               "level": "error",
-              "exception": {
-                "kind": "NullReferenceException",
-                "message": "Object reference not set to an instance of an object.",
-                "stack": {
-                  "frames": [
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PortableExecutable/PE.cs"
-                          },
-                          "region": {
-                            "startLine": 528
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PE.get_IsDotNetCoreBootstrapExe()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs"
-                          },
-                          "region": {
-                            "startLine": 47
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///E:/src/sarif/src/Sarif.Driver/Sdk/AnalyzeCommandBase.cs"
-                          },
-                          "region": {
-                            "startLine": 746
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.DetermineApplicabilityForTarget(IEnumerable`1 skimmers, TContext context, ISet`1 disabledSkimmers)"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              },
               "descriptor": {
-                "id": "ERR998.ExceptionInCanAnalyze"
+                "id": "ERR997.ExceptionLoadingPdb"
               },
               "associatedRule": {
                 "id": "BA2006"
@@ -1094,71 +974,11 @@
                 }
               ],
               "message": {
-                "text": "An exception was raised attempting to determine whether 'Uwp_ARM_VS2015_DefaultBlankApp.exe' is a valid analysis target for check 'EnableCriticalCompilerWarnings' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however. (Object reference not set to an instance of an object.)"
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
               },
               "level": "error",
-              "exception": {
-                "kind": "NullReferenceException",
-                "message": "Object reference not set to an instance of an object.",
-                "stack": {
-                  "frames": [
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PortableExecutable/PE.cs"
-                          },
-                          "region": {
-                            "startLine": 528
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PE.get_IsDotNetCoreBootstrapExe()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs"
-                          },
-                          "region": {
-                            "startLine": 47
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///E:/src/sarif/src/Sarif.Driver/Sdk/AnalyzeCommandBase.cs"
-                          },
-                          "region": {
-                            "startLine": 746
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.DetermineApplicabilityForTarget(IEnumerable`1 skimmers, TContext context, ISet`1 disabledSkimmers)"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              },
               "descriptor": {
-                "id": "ERR998.ExceptionInCanAnalyze"
+                "id": "ERR997.ExceptionLoadingPdb"
               },
               "associatedRule": {
                 "id": "BA2007"
@@ -1175,71 +995,11 @@
                 }
               ],
               "message": {
-                "text": "An exception was raised attempting to determine whether 'Uwp_ARM_VS2015_DefaultBlankApp.exe' is a valid analysis target for check 'EnableStackProtection' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however. (Object reference not set to an instance of an object.)"
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
               },
               "level": "error",
-              "exception": {
-                "kind": "NullReferenceException",
-                "message": "Object reference not set to an instance of an object.",
-                "stack": {
-                  "frames": [
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PortableExecutable/PE.cs"
-                          },
-                          "region": {
-                            "startLine": 528
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PE.get_IsDotNetCoreBootstrapExe()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs"
-                          },
-                          "region": {
-                            "startLine": 47
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///E:/src/sarif/src/Sarif.Driver/Sdk/AnalyzeCommandBase.cs"
-                          },
-                          "region": {
-                            "startLine": 746
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.DetermineApplicabilityForTarget(IEnumerable`1 skimmers, TContext context, ISet`1 disabledSkimmers)"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              },
               "descriptor": {
-                "id": "ERR998.ExceptionInCanAnalyze"
+                "id": "ERR997.ExceptionLoadingPdb"
               },
               "associatedRule": {
                 "id": "BA2011"
@@ -1256,71 +1016,11 @@
                 }
               ],
               "message": {
-                "text": "An exception was raised attempting to determine whether 'Uwp_ARM_VS2015_DefaultBlankApp.exe' is a valid analysis target for check 'InitializeStackProtection' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however. (Object reference not set to an instance of an object.)"
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
               },
               "level": "error",
-              "exception": {
-                "kind": "NullReferenceException",
-                "message": "Object reference not set to an instance of an object.",
-                "stack": {
-                  "frames": [
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PortableExecutable/PE.cs"
-                          },
-                          "region": {
-                            "startLine": 528
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PE.get_IsDotNetCoreBootstrapExe()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs"
-                          },
-                          "region": {
-                            "startLine": 47
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///E:/src/sarif/src/Sarif.Driver/Sdk/AnalyzeCommandBase.cs"
-                          },
-                          "region": {
-                            "startLine": 746
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.DetermineApplicabilityForTarget(IEnumerable`1 skimmers, TContext context, ISet`1 disabledSkimmers)"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              },
               "descriptor": {
-                "id": "ERR998.ExceptionInCanAnalyze"
+                "id": "ERR997.ExceptionLoadingPdb"
               },
               "associatedRule": {
                 "id": "BA2013"
@@ -1337,71 +1037,11 @@
                 }
               ],
               "message": {
-                "text": "An exception was raised attempting to determine whether 'Uwp_ARM_VS2015_DefaultBlankApp.exe' is a valid analysis target for check 'DoNotDisableStackProtectionForFunctions' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however. (Object reference not set to an instance of an object.)"
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
               },
               "level": "error",
-              "exception": {
-                "kind": "NullReferenceException",
-                "message": "Object reference not set to an instance of an object.",
-                "stack": {
-                  "frames": [
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PortableExecutable/PE.cs"
-                          },
-                          "region": {
-                            "startLine": 528
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PE.get_IsDotNetCoreBootstrapExe()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs"
-                          },
-                          "region": {
-                            "startLine": 47
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///E:/src/sarif/src/Sarif.Driver/Sdk/AnalyzeCommandBase.cs"
-                          },
-                          "region": {
-                            "startLine": 746
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.DetermineApplicabilityForTarget(IEnumerable`1 skimmers, TContext context, ISet`1 disabledSkimmers)"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              },
               "descriptor": {
-                "id": "ERR998.ExceptionInCanAnalyze"
+                "id": "ERR997.ExceptionLoadingPdb"
               },
               "associatedRule": {
                 "id": "BA2014"
@@ -1418,71 +1058,11 @@
                 }
               ],
               "message": {
-                "text": "An exception was raised attempting to determine whether 'Uwp_ARM_VS2015_DefaultBlankApp.exe' is a valid analysis target for check 'EnableSpectreMitigations' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however. (Object reference not set to an instance of an object.)"
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded. (E_PDB_NO_DEBUG_INFO (Pdb is stripped of cv (CodeView) info))"
               },
               "level": "error",
-              "exception": {
-                "kind": "NullReferenceException",
-                "message": "Object reference not set to an instance of an object.",
-                "stack": {
-                  "frames": [
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PortableExecutable/PE.cs"
-                          },
-                          "region": {
-                            "startLine": 528
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable.PE.get_IsDotNetCoreBootstrapExe()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs"
-                          },
-                          "region": {
-                            "startLine": 47
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///E:/src/sarif/src/Sarif.Driver/Sdk/AnalyzeCommandBase.cs"
-                          },
-                          "region": {
-                            "startLine": 746
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.DetermineApplicabilityForTarget(IEnumerable`1 skimmers, TContext context, ISet`1 disabledSkimmers)"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              },
               "descriptor": {
-                "id": "ERR998.ExceptionInCanAnalyze"
+                "id": "ERR997.ExceptionLoadingPdb"
               },
               "associatedRule": {
                 "id": "BA2024"

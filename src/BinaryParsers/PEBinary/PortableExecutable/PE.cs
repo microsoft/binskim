@@ -65,9 +65,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 if (byteRead != 'M') { return false; }
 
                 byteRead = (byte)fs.ReadByte();
-                if (byteRead != 'Z') { return false; }
-
-                return true;
+                return byteRead == 'Z';
             }
             finally
             {
@@ -144,18 +142,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-        public bool Is64Bit
-        {
-            get
-            {
-                if (this.PEHeaders.PEHeader == null)
-                {
-                    return false;
-                }
-
-                return this.PEHeaders.PEHeader.Magic == PEMagic.PE32Plus;
-            }
-        }
+        public bool Is64Bit => this.PEHeaders.PEHeader != null
+                    ? this.PEHeaders.PEHeader.Magic == PEMagic.PE32Plus
+                    : false;
 
         public CodeViewDebugDirectoryData CodeViewDebugDirectoryData
         {
@@ -521,6 +510,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 // The .NET core bootstrap exe is a generated native binary that loads
                 // its corresponding .NET core application entry point dll.
                 !this.IsDotNetCore
+                    && this.CodeViewDebugDirectoryData.Path != null
                     && this.CodeViewDebugDirectoryData.Path.EndsWith("apphost.pdb", StringComparison.OrdinalIgnoreCase);
 
         public bool IsDotNetStandard
@@ -630,17 +620,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         /// <summary>
         /// Returns true if the binary is built for XBox
         /// </summary>
-        public bool IsXBox
-        {
-            get
-            {
-                if (this.PEHeaders.PEHeader != null)
-                {
-                    return this.PEHeaders.PEHeader.Subsystem == System.Reflection.PortableExecutable.Subsystem.Xbox;
-                }
-                return false;
-            }
-        }
+        public bool IsXBox => this.PEHeaders.PEHeader != null
+                    ? this.PEHeaders.PEHeader.Subsystem == System.Reflection.PortableExecutable.Subsystem.Xbox
+                    : false;
 
         public bool IsBoot
         {
@@ -674,32 +656,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         /// <summary>
         /// Machine type
         /// </summary>
-        public Machine Machine
-        {
-            get
-            {
-                if (this.PEHeaders.PEHeader != null)
-                {
-                    return this.PEHeaders.CoffHeader.Machine;
-                }
-                return Machine.Unknown;
-            }
-        }
+        public Machine Machine => this.PEHeaders.PEHeader != null
+                    ? this.PEHeaders.CoffHeader.Machine
+                    : Machine.Unknown;
 
         /// <summary>
         /// Subsystem type
         /// </summary>
-        public Subsystem Subsystem
-        {
-            get
-            {
-                if (this.PEHeaders.PEHeader != null)
-                {
-                    return this.PEHeaders.PEHeader.Subsystem;
-                }
-                return Subsystem.Unknown;
-            }
-        }
+        public Subsystem Subsystem => this.PEHeaders.PEHeader != null
+                    ? this.PEHeaders.PEHeader.Subsystem
+                    : Subsystem.Unknown;
 
         /// <summary>
         /// OS version from the PE Optional Header
