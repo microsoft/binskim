@@ -1,6 +1,7 @@
 # BinSkim Release History
 
 ## **v1.6.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.6.1
+* DOC FIX: Correct reporting to reflect that /guard:cf is case-sensitive for the compiler. Contributed by [@JacksonText](https://github.com/JacksonTech)
 * BUG FIX: Fix ExceptionRaisedInSkimmerCanAnalyze null dereference exception for binaries without PDBs. [#265](https://github.com/microsoft/binskim/issues/265)
 
 ## **v1.6.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.6.0
