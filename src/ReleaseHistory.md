@@ -1,5 +1,8 @@
 # BinSkim Release History
 
+## **v1.6.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.6.1
+* BUG FIX: Fix ExceptionRaisedInSkimmerCanAnalyze null dereference exception for binaries without PDBs. [#265](https://github.com/microsoft/binskim/issues/265)
+
 ## **v1.6.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.6.0
 * FEATURE: Update to final SARIF v2 (version 2.1.16). This enables results caching when passing --hashes on the command-line, a significant performance improvement when recursively analyzing directories with multiple copies of scan targets.
 * BUG FIX: Fix typo in BA2021.DoNotMarkWritableSectionsAsExecutable output.
