@@ -5,8 +5,7 @@
   <PropertyGroup>
     <AssemblyName>BinSkim</AssemblyName>
     <!--  Condition="'$(OS)'=='Windows_NT'" -->
-    <TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <TargetFramework>$(NetCoreVersion)</TargetFramework>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
