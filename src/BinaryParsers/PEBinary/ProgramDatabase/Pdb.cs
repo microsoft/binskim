@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 diaSource.loadDataForExe(
                     pePath, 
                     localSymbolDirectories, 
-                    this.LoadTrace != null ? this : (object)IntPtr.Zero);
+                    this.loadTrace != null ? this : (object)IntPtr.Zero);
             }
             catch
             {
@@ -108,7 +108,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 diaSource.loadDataForExe(
                     pePath, 
                     symbolPath,
-                    this.LoadTrace != null ? this : (object)IntPtr.Zero);
+                    this.loadTrace != null ? this : (object)IntPtr.Zero);
             }
 
             diaSource.openSession(out this.session);

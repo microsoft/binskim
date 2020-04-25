@@ -106,7 +106,8 @@ namespace Microsoft.CodeAnalysis.IL
                 OutputFilePath = actualFileName,
                 ConfigurationFilePath = "default",
                 SarifOutputVersion = SarifVersion.Current,
-                TargetFileSpecifiers = new string[] { inputFileName }
+                TargetFileSpecifiers = new string[] { inputFileName },
+                Traces = new Traces[] { }
             };
 
             int result = command.Run(options);

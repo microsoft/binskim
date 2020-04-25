@@ -101,11 +101,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.LogConfigurationNotification(
                 Errors.CreateNotification(
                     context.TargetUri,
-                    RuleResources.ERR997_ExceptionLoadingPdb,
+                    "ERR997.ExceptionLoadingPdb",
                     context.Rule.Id,
                     FailureLevel.Error,
                     exception,
                     persistExceptionStack: false,
+                    RuleResources.ERR997_ExceptionLoadingPdb,
                     context.TargetUri.GetFileName(),
                     context.Rule.Name));
 

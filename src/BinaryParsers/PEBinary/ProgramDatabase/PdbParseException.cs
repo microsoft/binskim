@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public PdbParseException(int code, Exception innerException)
             : base(
                 ((code >= (int)DiaHresult.E_PDB_OK) && (code < (int)DiaHresult.E_PDB_MAX)) 
-                  ? code.ToString()
+                  ? ((DiaHresult)code).ToString()
                   : innerException.Message,
                 innerException)
         {
