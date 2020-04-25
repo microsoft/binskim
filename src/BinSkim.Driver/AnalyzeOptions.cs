@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-
+using System.Collections.Generic;
 using CommandLine;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
@@ -11,13 +11,23 @@ namespace Microsoft.CodeAnalysis.IL
     internal class AnalyzeOptions : AnalyzeOptionsBase
     {
         [Option(
-            "sympath",
-            HelpText = "Symbols path value, e.g., SRV*http://msdl.microsoft.com/download/symbols or Cache*d:\\symbols;Srv*http://symweb. " +
-                       "See https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/advanced-symsrv-use for syntax information. " +
-                        "Note that BinSkim will clear the _NT_SYMBOL_PATH environment variable at runtime. Use this argument for symbol " +
-                        "information instead.")]
-        public string SymbolsPath { get; internal set; }
+            "trace",
+            Separator = ';',
+            HelpText = "Execution traces, expressed as a semicolon-delimited list, that " +
+                       "should be emitted to the console and log file (if appropriate). " +
+                       "Valid values: PdbLoad.")]
+        public IEnumerable<Traces> Traces { get; internal set; }
 
+        [Option(
+            "sympath",
+            HelpText = "Symbols path value, e.g., Cache*c:\\symbols;SRV*http://msdl.microsoft.com/download/symbols " +
+                       "or Cache*d:\\symbols;Srv*http://symweb. See " +
+                       "https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/advanced-symsrv-use for " +
+                       "syntax information. Note that BinSkim will clear the _NT_SYMBOL_PATH and _NT_ALT_SYMBOL_PATH " + 
+                       "environment variables at runtime. Use this argument instead for specifying the symbol path." + 
+                       "WARNING: Be sure to specify a local file cache in the symbol path if at all possible, in order " +
+                       "to avoid the possibility of significance time-to-analyze performance degradataion.")]
+        public string SymbolsPath { get; internal set; }
 
         [Option(
             "local-symbol-directories",

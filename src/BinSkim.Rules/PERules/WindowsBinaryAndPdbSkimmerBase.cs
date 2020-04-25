@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -18,9 +20,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
             PEBinary target = context.PEBinary();
 
+            string pdbLoadTrace = target.PdbLoadTrace;
+            if (!string.IsNullOrEmpty(pdbLoadTrace))
+            {
+                LogPdbLoadTrace(
+                    context, 
+                    pdbLoadSucceeded: target.Pdb != null, 
+                    pdbLoadTrace);
+            }
+
             if (target.Pdb == null)
             {
-                Errors.LogExceptionLoadingPdb(context, target.PdbParseException);
+                LogExceptionLoadingPdb(context, target.PdbParseException);
                 return;
             }
 
@@ -49,5 +60,56 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         public abstract void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context);
+
+        public static void LogPdbLoadTrace(
+            IAnalysisContext context, 
+            bool pdbLoadSucceeded,
+            string pdbLoadTrace)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            string formatString = pdbLoadSucceeded
+                // The PDB for '{0}' was found and loaded. Probing details:{1}
+                ? RuleResources.PdbLoadSucceeded
+                // Could not locate the PDB for '{0'}. Probing details:{1}
+                : RuleResources.PdbLoadFailed;
+
+            context.Logger.LogConfigurationNotification(
+                Errors.CreateNotification(
+                    context.TargetUri,
+                    "TRC001.PdbLoad",
+                    context.Rule.Id,
+                    FailureLevel.Warning,
+                    exception: null,
+                    persistExceptionStack: false,
+                    formatString,
+                    context.TargetUri.GetFileName(),
+                    pdbLoadTrace));
+        }
+
+        public static void LogExceptionLoadingPdb(IAnalysisContext context, Exception exception)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            // '{0}' was not evaluated for check '{1}' because its PDB could not be loaded.
+            context.Logger.LogConfigurationNotification(
+                Errors.CreateNotification(
+                    context.TargetUri,
+                    RuleResources.ERR997_ExceptionLoadingPdb,
+                    context.Rule.Id,
+                    FailureLevel.Error,
+                    exception,
+                    persistExceptionStack: false,
+                    context.TargetUri.GetFileName(),
+                    context.Rule.Name));
+
+            context.RuntimeErrors |= RuntimeConditions.ExceptionLoadingPdb;
+        }
     }
 }

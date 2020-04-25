@@ -453,4 +453,15 @@ Modules triggering this check were:
   <data name="NotApplicable_PlatformUnsupported" xml:space="preserve">
     <value>This check is not supported on the '{0}' platform, as it requires interoperability with a native Windows library.</value>
   </data>
+  <data name="ERR997_ExceptionLoadingPdb" xml:space="preserve">
+    <value>'{0}' was not evaluated for check '{1}' because its PDB could not be loaded.</value>
+  </data>
+  <data name="PdbLoadFailed" xml:space="preserve">
+    <value>Could not locate the PDB for '{0'}. Probing details:
+{1}</value>
+  </data>
+  <data name="PdbLoadSucceeded" xml:space="preserve">
+    <value>The PDB for '{0}' was found and loaded. Probing details:
+{1}</value>
+  </data>
 </root>

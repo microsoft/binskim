@@ -3,7 +3,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using Dia2Lib;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -13,23 +16,49 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     /// <summary>
     /// The main class
     /// </summary>
-    public sealed class Pdb : IDisposable
+    public sealed class Pdb : IDisposable, IDiaLoadCallback2
     {
         private IDiaSession session;
+        private readonly StringBuilder loadTrace;
         private readonly Lazy<Symbol> globalScope;
 
         /// <summary>
-        /// Load debug info fr PE or PDB, using symbolPath to help find symbols
+        /// Load debug info from PE or PDB, using symbolPath to help find symbols
         /// </summary>
         /// <param name="pePath">The path to the portable executable.</param>
         /// <param name="localSymbolDirectories">An option collection of local directories that should be examined for PDBs.</param>
         /// <param name="symbolPath">The symsrv.dll symbol path.</param>
-        public Pdb(string pePath, string symbolPath = null, string localSymbolDirectories = null)
+        public Pdb(
+            string pePath, 
+            string symbolPath = null, 
+            string localSymbolDirectories = null, 
+            bool traceLoads = false)
         {
+            this.loadTrace = traceLoads ? new StringBuilder() : null;
             this.globalScope = new Lazy<Symbol>(this.GetGlobalScope, LazyThreadSafetyMode.ExecutionAndPublication);
             this.writableSegmentIds = new Lazy<HashSet<uint>>(this.GenerateWritableSegmentSet);
             this.executableSectionContribCompilandIds = new Lazy<HashSet<uint>>(this.GenerateExecutableSectionContribIds);
             this.Init(pePath, symbolPath, localSymbolDirectories);
+        }
+
+        public string LoadTrace 
+        { 
+            get
+            {
+                if (this.loadTrace == null)
+                {
+                    return string.Empty;
+                }
+
+                string result = this.loadTrace.ToString();
+                
+                // We only return the trace a single time. This hack
+                // prevents redundant messages in the log that report
+                // PDB probing details.
+                this.loadTrace.Length = 0;
+                
+                return result;
+            }
         }
 
         /// <summary>
@@ -46,7 +75,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
             catch (PlatformNotSupportedException ex)
             {
-                throw new PdbParseException(BinaryParsersResources.PdbPlatformUnsupported, ex);
+                throw new PdbParseException(message: BinaryParsersResources.PdbPlatformUnsupported, ex);
             }
             catch (COMException ce)
             {
@@ -63,7 +92,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             try
             {
                 diaSource = MsdiaComWrapper.GetDiaSource();
-                diaSource.loadDataForExe(pePath, localSymbolDirectories, IntPtr.Zero);
+                diaSource.loadDataForExe(
+                    pePath, 
+                    localSymbolDirectories, 
+                    this.LoadTrace != null ? this : (object)IntPtr.Zero);
             }
             catch
             {
@@ -73,7 +105,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             if (diaSource == null)
             {
                 diaSource = MsdiaComWrapper.GetDiaSource();
-                diaSource.loadDataForExe(pePath, symbolPath, IntPtr.Zero);
+                diaSource.loadDataForExe(
+                    pePath, 
+                    symbolPath,
+                    this.LoadTrace != null ? this : (object)IntPtr.Zero);
             }
 
             diaSource.openSession(out this.session);
@@ -321,6 +356,57 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         private Symbol GetGlobalScope()
         {
             return Symbol.Create(this.session.globalScope);
+        }
+
+        public void NotifyDebugDir([MarshalAs(UnmanagedType.Bool)] bool executable, int dataSize, [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data)
+        {
+            Console.WriteLine(nameof(NotifyDebugDir));
+        }
+
+        public void NotifyOpenDbg([MarshalAs(UnmanagedType.LPWStr)] string dbgPath, DiaHresult resultCode)
+        {
+            this.loadTrace.AppendLine($"  Examined DBG path: '{dbgPath}'. HResult: {resultCode}.");
+        }
+
+        public void NotifyOpenPdb([MarshalAs(UnmanagedType.LPWStr)] string pdbPath, DiaHresult resultCode)
+        {
+            this.loadTrace.AppendLine($"  Examined PDB path: '{pdbPath}'. HResult: {resultCode}.");
+        }
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public bool RestrictRegistryAccess()
+        {
+            return true;
+        }
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public bool RestrictSymbolServerAccess()
+        {
+            return false;
+        }
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public bool RestrictOriginalPathAccess()
+        {
+            return false;
+        }
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public bool RestrictReferencePathAccess()
+        {
+            return false;
+        }
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public bool RestrictDbgAccess()
+        {
+            return false;
+        }
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public bool RestrictSystemRootAccess()
+        {
+            return false;
         }
     }
 }
