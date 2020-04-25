@@ -85,7 +85,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsBootBinary;
             if (portableExecutable.IsBoot) { return result; }
 
+            bool minimumRequiredLinkerVersionExplicitlySet = policy.ContainsKey(MinimumRequiredLinkerVersion.Name);
+
             Version minimumRequiredLinkerVersion = policy.GetProperty(MinimumRequiredLinkerVersion);
+
+            if (!minimumRequiredLinkerVersionExplicitlySet && portableExecutable.IsDotNetCoreBootstrapExe)
+            {
+                minimumRequiredLinkerVersion = new Version("11.0");
+            }
 
             if (portableExecutable.LinkerVersion < minimumRequiredLinkerVersion)
             {

@@ -901,21 +901,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableControlFlowGuard_Fail()
         {
-            var conditions = new HashSet<string>(new string[] { MetadataConditions.ImageIsDotNetNativeBinary });
-
-            HashSet<string> relevantTo = this.GetTestFilesMatchingConditions(conditions);
-
-            conditions.Clear();
-            conditions.Add(MetadataConditions.ImageIsDotNetNativeBootstrapExe);
-                
-            foreach(string file in this.GetTestFilesMatchingConditions(conditions))
-            {
-                relevantTo.Remove(file);
-            }
-
             this.VerifyFail(
                 new EnableControlFlowGuard(),
-                additionalTestFiles: relevantTo,
                 useDefaultPolicy: true);
         }
 
