@@ -87,13 +87,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             bool minimumRequiredLinkerVersionExplicitlySet = policy.ContainsKey(MinimumRequiredLinkerVersion.Name);
 
-            Version minimumRequiredLinkerVersion = policy.GetProperty(MinimumRequiredLinkerVersion);
-
-            if (!minimumRequiredLinkerVersionExplicitlySet && portableExecutable.IsDotNetCoreBootstrapExe)
-            {
-                minimumRequiredLinkerVersion = new Version("11.0");
-            }
-
             if (portableExecutable.LinkerVersion < minimumRequiredLinkerVersion)
             {
                 reasonForNotAnalyzing = string.Format(
