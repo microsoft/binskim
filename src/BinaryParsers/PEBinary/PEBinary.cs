@@ -13,18 +13,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     public class PEBinary : BinaryBase
     {
         private Lazy<Pdb> pdb;
+        private readonly bool tracePdbLoad;
         private readonly string symbolPath;
         private readonly string localSymbolDirectories;
 
-        public PEBinary(Uri uri, string symbolPath = null, string localSymbolDirectories = null) : base(uri)
+        public PEBinary(
+            Uri uri, 
+            string symbolPath = null, 
+            string localSymbolDirectories = null,
+            bool tracePdbLoad = false) : base(uri)
         {
-            this.PE = new PE(this.TargetUri.LocalPath);
-            this.IsManagedAssembly = this.PE.IsManaged;
-            this.LoadException = this.PE.LoadException;
-            this.Valid = this.PE.IsPEFile;
             this.symbolPath = symbolPath;
+            this.tracePdbLoad = tracePdbLoad;
             this.localSymbolDirectories = localSymbolDirectories;
 
+            // We actively verify our ability to parse this binary as a PE.
+            this.PE = new PE(this.TargetUri.LocalPath);
+            this.Valid = this.PE.IsPEFile;
+            this.LoadException = this.PE.LoadException;
+
+            // But we defer attempting to load PDBs, as this won't be necessary
+            // for every binary we analyze, depending on the binary itself
+            // (managed vs. native) or the current scan rules configuration.
             this.pdb = new Lazy<Pdb>(this.LoadPdb, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
@@ -38,7 +48,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             Pdb pdb = null;
             try
             {
-                pdb = new Pdb(this.PE.FileName, this.symbolPath, this.localSymbolDirectories);
+                pdb = new Pdb(
+                    this.PE.FileName, 
+                    this.symbolPath, 
+                    this.localSymbolDirectories,
+                    this.tracePdbLoad);
             }
             catch (PdbParseException ex)
             {
@@ -54,13 +68,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             return pdb;
         }
 
-        public PdbParseException PdbParseException { get; internal set; }
-
-        public bool IsManagedAssembly { get; internal set; }
-
         public PE PE { get; private set; }
 
         public Pdb Pdb => this.pdb?.Value;
+
+        public PdbParseException PdbParseException { get; internal set; }
+
+        public string PdbLoadTrace => this.pdb?.Value?.LoadTrace?.ToString();
 
         public Pdb StrippedPdb { get; private set; }
 

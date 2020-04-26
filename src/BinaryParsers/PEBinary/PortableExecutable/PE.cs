@@ -34,6 +34,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             this.FileName = Path.GetFullPath(fileName);
             this.Uri = new Uri(this.FileName);
             this.IsPEFile = false;
+
             try
             {
                 this.fs = File.OpenRead(this.FileName);
@@ -103,6 +104,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
+                PEHeader peHeader = this.PEHeaders.PEHeader;
+                if ((peHeader.DllCharacteristics & DllCharacteristics.AppContainer) == 0)
+                {
+                    return false;
+                }
+
                 if (this.Imports != null)
                 {
                     for (int i = 0; i < this.Imports.Length; i++)
@@ -114,7 +121,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                         }
                     }
                 }
-                return false;
+
+                return this.IsDotNetNativeBootstrapExe;
             }
         }
 
@@ -512,6 +520,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 !this.IsDotNetCore
                     && this.CodeViewDebugDirectoryData.Path != null
                     && this.CodeViewDebugDirectoryData.Path.EndsWith("apphost.pdb", StringComparison.OrdinalIgnoreCase);
+
+        public bool IsDotNetNativeBootstrapExe
+        {
+            get
+            {
+                if (this.IsDotNetCore) { return false; }
+                if (this.Imports == null || this.Imports.Length != 1) { return false; }
+
+                string correspondingDllName = Path.GetFileNameWithoutExtension(this.Uri.OriginalString) + ".dll";
+
+                return this.Imports[0].Equals(correspondingDllName, StringComparison.OrdinalIgnoreCase);
+            }
+        }
 
         public bool IsDotNetStandard
         {

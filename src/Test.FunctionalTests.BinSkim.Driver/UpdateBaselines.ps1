@@ -4,7 +4,7 @@ Param(
 
 $tool = "BinSkim"
 $repoRoot = ( Resolve-Path "$PSScriptRoot\..\..\" ).ToString()
-$utility = "$repoRoot\bld\bin\AnyCPU_Release\netcoreapp2.0\win-x64\$tool.exe"
+$utility = "$repoRoot\bld\bin\AnyCPU_Release\netcoreapp3.1\win-x64\$tool.exe"
 
 function Build-Tool()
 {
@@ -52,6 +52,8 @@ function Build-Baselines($sourceExtension)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "      `"id`"[^,]+,\s+`"tool`"", "      `"tool`"", [Text.RegularExpressions.RegexOptions]::Singleline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "`"name`": `"BinSkim`"", "`"name`": `"testhost`"")
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"semanticVersion`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"organization`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"product`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"sarifLoggerVersion`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"fullName`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"Comments`"[^\n]+?\n", [Environment]::Newline)

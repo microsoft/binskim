@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class BinaryParsersResources {
@@ -61,164 +61,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Access denied.
-        /// </summary>
-        internal static string AccessDenied {
-            get {
-                return ResourceManager.GetString("AccessDenied", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to (contact suport).
-        /// </summary>
-        internal static string ContactSupport {
-            get {
-                return ResourceManager.GetString("ContactSupport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dbg file not found.
-        /// </summary>
-        internal static string DbgNotFound {
-            get {
-                return ResourceManager.GetString("DbgNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Drive not ready.
-        /// </summary>
-        internal static string DriveNotReady {
-            get {
-                return ResourceManager.GetString("DriveNotReady", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to File system or network error reading Pdb.
-        /// </summary>
-        internal static string FileNetError {
-            get {
-                return ResourceManager.GetString("FileNetError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to File not found.
-        /// </summary>
-        internal static string FileNotFound {
-            get {
-                return ResourceManager.GetString("FileNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid executable image.
-        /// </summary>
-        internal static string InvalidExecutable {
-            get {
-                return ResourceManager.GetString("InvalidExecutable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid parameters.
-        /// </summary>
-        internal static string InvalidParameters {
-            get {
-                return ResourceManager.GetString("InvalidParameters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Image has invalid timestamp.
-        /// </summary>
-        internal static string InvalidTimestamp {
-            get {
-                return ResourceManager.GetString("InvalidTimestamp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Malformed debug info or unrecognized format.
-        /// </summary>
-        internal static string MalformedDebugInfo {
-            get {
-                return ResourceManager.GetString("MalformedDebugInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Mismatched pdb (age).
-        /// </summary>
-        internal static string MismatchedPdbAge {
-            get {
-                return ResourceManager.GetString("MismatchedPdbAge", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Mismatched pdb (signature).
-        /// </summary>
-        internal static string MismatchedPdbSig {
-            get {
-                return ResourceManager.GetString("MismatchedPdbSig", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Attempted to access a DisposableEnumerable which is non-owning..
         /// </summary>
         internal static string NonOwningDisposableViewAccess {
             get {
                 return ResourceManager.GetString("NonOwningDisposableViewAccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Ok.
-        /// </summary>
-        internal static string Ok {
-            get {
-                return ResourceManager.GetString("Ok", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Old pdb version.
-        /// </summary>
-        internal static string OldPdbVersion {
-            get {
-                return ResourceManager.GetString("OldPdbVersion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Out of memory.
-        /// </summary>
-        internal static string OutOfMemory {
-            get {
-                return ResourceManager.GetString("OutOfMemory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Pdb file is corrupted.
-        /// </summary>
-        internal static string PdbCorrupted {
-            get {
-                return ResourceManager.GetString("PdbCorrupted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Pdb has no symbols.
-        /// </summary>
-        internal static string PdbHasNoSymbols {
-            get {
-                return ResourceManager.GetString("PdbHasNoSymbols", resourceCulture);
             }
         }
         
@@ -241,7 +88,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This feature is not supported on the {0} platform, it is only supported on the {1} platform(s)..
+        ///   Looks up a localized string similar to This feature is not supported on {0} platform,(s) it is only supported on {1} platform(s)..
         /// </summary>
         internal static string PlatformUnsupportedFormat {
             get {

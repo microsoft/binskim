@@ -16,7 +16,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             get
             {
-                this.iBinary = this.iBinary ?? BinaryTargetManager.GetBinaryFromFile(this.uri, this.SymbolPath, this.LocalSymbolDirectories);
+                this.iBinary = this.iBinary 
+                    ?? BinaryTargetManager.GetBinaryFromFile(
+                        this.uri, 
+                        this.SymbolPath, 
+                        this.LocalSymbolDirectories,
+                        this.TracePdbLoads);
+
                 return this.iBinary;
             }
             set => this.iBinary = value;
@@ -48,6 +54,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 this.uri = value;
             }
         }
+        public bool TracePdbLoads { get; set; }
 
         public string SymbolPath { get; set; }
 

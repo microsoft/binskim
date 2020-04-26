@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class RuleResources {
@@ -1030,6 +1030,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; because its PDB could not be loaded..
+        /// </summary>
+        internal static string ERR997_ExceptionLoadingPdb {
+            get {
+                return ResourceManager.GetString("ERR997_ExceptionLoadingPdb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; as the analysis is not relevant based on observed metadata: {2}..
         /// </summary>
         internal static string NotApplicable_InvalidMetadata {
@@ -1044,6 +1053,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string NotApplicable_PlatformUnsupported {
             get {
                 return ResourceManager.GetString("NotApplicable_PlatformUnsupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not locate the PDB for &apos;{0&apos;}. Probing details:
+        ///{1}.
+        /// </summary>
+        internal static string PdbLoadFailed {
+            get {
+                return ResourceManager.GetString("PdbLoadFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; was found and loaded. Probing details:
+        ///{1}.
+        /// </summary>
+        internal static string PdbLoadSucceeded {
+            get {
+                return ResourceManager.GetString("PdbLoadSucceeded", resourceCulture);
             }
         }
     }

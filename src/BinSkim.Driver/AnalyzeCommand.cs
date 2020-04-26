@@ -27,8 +27,11 @@ namespace Microsoft.CodeAnalysis.IL
         protected override BinaryAnalyzerContext CreateContext(AnalyzeOptions options, IAnalysisLogger logger, RuntimeConditions runtimeErrors, string filePath = null)
         {
             BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, filePath);
+
             binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
+            binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(Traces.PdbLoad);
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
+            
             return binaryAnalyzerContext;
         }
 
@@ -50,6 +53,7 @@ namespace Microsoft.CodeAnalysis.IL
             // we have checks that are only relevant to either 32-bit or 64-bit binaries.
             // Because of this, the return code bit for RuleNotApplicableToTarget is not
             // interesting (it will always be set). 
+
             return analyzeOptions.RichReturnCode
                 ? (int)((uint)result & ~(uint)RuntimeConditions.RuleNotApplicableToTarget)
                 : result;
