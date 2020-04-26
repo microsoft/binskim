@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.4.json",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
   "version": "2.1.0",
   "runs": [
     {
@@ -358,6 +358,8 @@
       "tool": {
         "driver": {
           "name": "BinSkim",
+          "organization": "Microsoft",
+          "product": "BinSkim Portable Executable Analyzer",
           "fullName": "BinSkim 1.6.1.0",
           "version": "1.6.1.0",
           "semanticVersion": "1.6.1",
@@ -811,16 +813,14 @@
             }
           ],
           "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
-            "CompanyName": "Microsoft",
-            "ProductName": "BinSkim Portable Executable Analyzer"
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
           }
         }
       },
       "invocations": [
         {
-          "startTimeUtc": "2020-04-26T04:14:29.302Z",
-          "endTimeUtc": "2020-04-26T04:14:29.595Z",
+          "startTimeUtc": "2020-04-26T04:19:40.579Z",
+          "endTimeUtc": "2020-04-26T04:19:40.867Z",
           "toolConfigurationNotifications": [
             {
               "locations": [
