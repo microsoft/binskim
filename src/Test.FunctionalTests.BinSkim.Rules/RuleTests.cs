@@ -379,11 +379,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 result.Add(Path.Combine(testFilesDirectory, "Uwp_x86_VS2015_DefaultBlankApp.dll"));
                 result.Add(Path.Combine(testFilesDirectory, "Uwp_x64_VS2015_DefaultBlankApp.dll"));
                 result.Add(Path.Combine(testFilesDirectory, "Uwp_ARM_VS2015_DefaultBlankApp.dll"));
+                result.Add(Path.Combine(testFilesDirectory, "DotnetNative_x86_VS2019_UniversalApp.dll"));
+                result.Add(Path.Combine(testFilesDirectory, "DotnetNative_x86_VS2019_UniversalApp.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "Managed_x86_VS2019_UniversalApp_Release.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "Native_ARM64_VS2019_UniversalApp.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "Native_ARM_VS2019_UniversalApp.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "Native_x64_VS2019_UniversalApp.exe"));
             }
 
             if (metadataConditions.Contains(MetadataConditions.ImageIsWixBinary))
             {
                 result.Add(Path.Combine(testFilesDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe"));
+            }
+
+            if (metadataConditions.Contains(MetadataConditions.ImageIsDotNetCoreBootstrapExe))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "DotnetNative_x86_VS2019_UniversalApp.exe"));
             }
 
             return result;
@@ -890,7 +901,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void EnableControlFlowGuard_Fail()
         {
-            this.VerifyFail(new EnableControlFlowGuard(), useDefaultPolicy: true);
+            this.VerifyFail(
+                new EnableControlFlowGuard(),
+                useDefaultPolicy: true);
         }
 
         [Fact]
@@ -904,11 +917,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             var notApplicableTo = new HashSet<string>
             {
-                MetadataConditions.ImageIsMixedModeBinary,
-                MetadataConditions.ImageIsWixBinary,
-                MetadataConditions.ImageIsKernelModeBinary,
                 MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsILOnlyAssembly
+                MetadataConditions.ImageIsILOnlyAssembly,
+                MetadataConditions.ImageIsMixedModeBinary,
+                MetadataConditions.ImageIsKernelModeAndNot64Bit,
+                MetadataConditions.ImageIsBootBinary,
+                MetadataConditions.ImageIsWixBinary,
             };
 
             this.VerifyNotApplicable(new EnableControlFlowGuard(), notApplicableTo, useDefaultPolicy: true);

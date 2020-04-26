@@ -33,9 +33,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // .NET native compiled binaries are not fully /GS enabled. This is 
             // considered reasonable, as the binaries themselves consist strictly
             // of cross-compiled MSIL. The supporting native libraries for these
-            // applications exists in a separate (/GS enabled) native dll. 
+            // applications exists in a separate (/GS enabled) native dll. We exclude
+            // the native bootstrap exe from this check, as this loader should enforce
+            // relevant security settings.
             reasonForNotAnalyzing = MetadataConditions.ImageIsDotNetNativeBinary;
-            if (portableExecutable.IsDotNetNative) { return result; }
+            if (portableExecutable.IsDotNetNative && !portableExecutable.IsDotNetNativeBootstrapExe) 
+            { 
+                return result; 
+            }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsBootBinary;
             if (portableExecutable.IsBoot) { return result; }

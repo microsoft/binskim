@@ -1,5 +1,5 @@
 ﻿{
-  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.4.json",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
   "version": "2.1.0",
   "runs": [
     {
@@ -930,7 +930,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
               },
               "level": "error",
               "descriptor": {
@@ -951,7 +951,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
               },
               "level": "error",
               "descriptor": {
@@ -972,7 +972,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
               },
               "level": "error",
               "descriptor": {
@@ -993,7 +993,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
               },
               "level": "error",
               "descriptor": {
@@ -1014,7 +1014,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
               },
               "level": "error",
               "descriptor": {
@@ -1035,7 +1035,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
               },
               "level": "error",
               "descriptor": {
@@ -1056,7 +1056,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
               },
               "level": "error",
               "descriptor": {

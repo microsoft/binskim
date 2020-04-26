@@ -160,6 +160,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is a .NET native bootstrap exe.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsDotNetNativeBootstrapExe {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsDotNetNativeBootstrapExe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is a managed IL library (i.e., ahead of time compiled) assembly.
         /// </summary>
         internal static string MetadataCondition_ImageIsILLibraryAssembly {
@@ -214,7 +223,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to image is a native UWP (Univesal Windows Platform) binary.
+        ///   Looks up a localized string similar to image is a native UWP (Universal Windows Platform) binary.
         /// </summary>
         internal static string MetadataCondition_ImageIsNativeUniversalWindowsPlatformBinary {
             get {

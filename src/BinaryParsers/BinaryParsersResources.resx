@@ -117,59 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AccessDenied" xml:space="preserve">
-    <value>Access denied</value>
-  </data>
-  <data name="ContactSupport" xml:space="preserve">
-    <value>(contact suport)</value>
-  </data>
-  <data name="DbgNotFound" xml:space="preserve">
-    <value>Dbg file not found</value>
-  </data>
-  <data name="DriveNotReady" xml:space="preserve">
-    <value>Drive not ready</value>
-  </data>
-  <data name="FileNetError" xml:space="preserve">
-    <value>File system or network error reading Pdb</value>
-  </data>
-  <data name="FileNotFound" xml:space="preserve">
-    <value>File not found</value>
-  </data>
-  <data name="InvalidExecutable" xml:space="preserve">
-    <value>Invalid executable image</value>
-  </data>
-  <data name="InvalidParameters" xml:space="preserve">
-    <value>Invalid parameters</value>
-  </data>
-  <data name="InvalidTimestamp" xml:space="preserve">
-    <value>Image has invalid timestamp</value>
-  </data>
-  <data name="MalformedDebugInfo" xml:space="preserve">
-    <value>Malformed debug info or unrecognized format</value>
-  </data>
-  <data name="MismatchedPdbAge" xml:space="preserve">
-    <value>Mismatched pdb (age)</value>
-  </data>
-  <data name="MismatchedPdbSig" xml:space="preserve">
-    <value>Mismatched pdb (signature)</value>
-  </data>
   <data name="NonOwningDisposableViewAccess" xml:space="preserve">
     <value>Attempted to access a DisposableEnumerable which is non-owning.</value>
-  </data>
-  <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
-  </data>
-  <data name="OldPdbVersion" xml:space="preserve">
-    <value>Old pdb version</value>
-  </data>
-  <data name="OutOfMemory" xml:space="preserve">
-    <value>Out of memory</value>
-  </data>
-  <data name="PdbCorrupted" xml:space="preserve">
-    <value>Pdb file is corrupted</value>
-  </data>
-  <data name="PdbHasNoSymbols" xml:space="preserve">
-    <value>Pdb has no symbols</value>
   </data>
   <data name="PdbPlatformUnsupported" xml:space="preserve">
     <value>Cannot parse pdb on this platform.</value>
@@ -178,7 +127,7 @@
     <value>Pdb is stripped of cv (CodeView) info</value>
   </data>
   <data name="PlatformUnsupportedFormat" xml:space="preserve">
-    <value>This feature is not supported on the {0} platform, it is only supported on the {1} platform(s).</value>
+    <value>This feature is not supported on {0} platform,(s) it is only supported on {1} platform(s).</value>
   </data>
   <data name="UnexpectedHashLength" xml:space="preserve">
     <value>Unexpected hash length for file: </value>

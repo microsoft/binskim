@@ -1,5 +1,5 @@
 ﻿{
-  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.4.json",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
   "version": "2.1.0",
   "runs": [
     {
@@ -1097,7 +1097,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
               },
               "level": "error",
               "descriptor": {
@@ -1118,7 +1118,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
               },
               "level": "error",
               "descriptor": {
@@ -1139,7 +1139,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
               },
               "level": "error",
               "descriptor": {
@@ -1160,7 +1160,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded. (E_PDB_NOT_FOUND (File not found))"
+                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
               },
               "level": "error",
               "descriptor": {

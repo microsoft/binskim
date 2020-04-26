@@ -265,27 +265,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public Stream GetStream()
         {
-            if (this.array != null)
-            {
-                return new MemoryStream(this.array, this.index, this.array.Length - this.index);
-            }
-
-            return this.stream;
-        }
-
-        public bool HasData(int cBytes)
-        {
-            if (this.array != null)
-            {
-                return (this.index <= this.array.Length - cBytes);
-            }
-
-            if (this.stream != null)
-            {
-                return (this.index <= this.stream.Length - cBytes);
-            }
-
-            return true;
+            return this.array != null 
+                ? new MemoryStream(this.array, this.index, this.array.Length - this.index) 
+                : this.stream;
         }
 
         private void TestPointerAndThrow()
@@ -318,12 +300,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (((this.array == null) || (this.array.Length == 0)) && ((this.stream == null) || (this.stream.Length == 0)))
-                {
-                    return true;
-                }
-
-                return false;
+                return 
+                    ((this.array == null)  || (this.array.Length == 0)) &&
+                    ((this.stream == null) || (this.stream.Length == 0));
             }
         }
 
