@@ -1,0 +1,974 @@
+{
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "BA2001",
+          "ruleIndex": 0,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+              "LoadImageAboveFourGigabyteAddress",
+              "image is not a 64-bit binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2008",
+          "ruleIndex": 1,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+              "EnableControlFlowGuard",
+              "image is a managed IL-only assembly"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2010",
+          "ruleIndex": 2,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+              "DoNotMarkImportsSectionAsExecutable",
+              "image is a managed IL-only assembly"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2012",
+          "ruleIndex": 3,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+              "DoNotModifyStackProtectionCookie",
+              "image is a managed IL-only assembly"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2015",
+          "ruleIndex": 4,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+              "EnableHighEntropyVirtualAddresses",
+              "image will likely load as a 32-bit process"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 5,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+              "EnablePositionIndependentExecutable",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3002",
+          "ruleIndex": 6,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+              "DoNotMarkStackAsExecutable",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3003",
+          "ruleIndex": 7,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+              "EnableStackProtector",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 8,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+              "EnableReadOnlyRelocations",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 9,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+              "UseCheckedFunctionsWithGcc",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2009",
+          "ruleIndex": 10,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2016",
+          "ruleIndex": 11,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2018",
+          "ruleIndex": 12,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass_NoSEH",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "ruleIndex": 13,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 14,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_Prefer32Bit.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "BinSkim",
+          "organization": "Microsoft",
+          "product": "BinSkim Portable Executable Analyzer",
+          "fullName": "BinSkim 1.6.1.0",
+          "version": "1.6.1.0",
+          "semanticVersion": "1.6.1",
+          "rules": [
+            {
+              "id": "BA2001",
+              "fullDescription": {
+                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a 64-bit image with a base address that is >= 4 gigabytes, increasing the effectiveness of Address Space Layout Randomization (which helps prevent attackers from executing security-sensitive code in well-known locations)."
+                },
+                "Error": {
+                  "text": "'{0}' is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security."
+              },
+              "name": "LoadImageAboveFourGigabyteAddress",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "FourGbCheck"
+              }
+            },
+            {
+              "id": "BA2008",
+              "fullDescription": {
+                "text": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location."
+                },
+                "Error": {
+                  "text": "'{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /guard:cf on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                },
+                "NotApplicable_UnsupportedKernelModeVersion": {
+                  "text": "'{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries."
+                }
+              },
+              "shortDescription": {
+                "text": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations."
+              },
+              "name": "EnableControlFlowGuard",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
+              }
+            },
+            {
+              "id": "BA2010",
+              "fullDescription": {
+                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' does not have an imports section that is marked as executable, helping to prevent the exploitation of code vulnerabilities."
+                },
+                "Error": {
+                  "text": "'{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here. To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "PE sections should not be marked as both writable and executable."
+              },
+              "name": "DoNotMarkImportsSectionAsExecutable",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "ExecutableImportsCheck"
+              }
+            },
+            {
+              "id": "BA2012",
+              "fullDescription": {
+                "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a C or C++ binary built with the buffer security feature that properly preserves the stack protecter cookie. This has the effect of enabling a significant increase in entropy provided by the operating system over that produced by the C runtime start-up code."
+                },
+                "Pass_NoLoadConfig": {
+                  "text": "'{0}' is  C or C++binary that does not contain a load config table, which indicates either that it was compiled and linked with a version of the compiler that precedes stack protection features or is a binary (such as an ngen'ed assembly) that is not subject to relevant security issues."
+                },
+                "Error": {
+                  "text": "'{0}' is a C or C++ binary that interferes with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the magic statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement. NOTE: the modified cookie value detected was: {1}"
+                },
+                "Error_CouldNotLocateCookie": {
+                  "text": "'{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted."
+                },
+                "Warning_InvalidSecurityCookieOffset": {
+                  "text": "'{0}' appears to be a packed C or C++ binary that reports a security cookie offset that exceeds the size of the packed file. Use of the stack protector (/GS) feature therefore could not be verified. The file was possibly packed by: {1}."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "Application code should not interfere with the stack protector."
+              },
+              "name": "DoNotModifyStackProtectionCookie",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
+              }
+            },
+            {
+              "id": "BA2015",
+              "fullDescription": {
+                "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is high entropy ASLR compatible, reducing an attacker's ability to exploit code in well-known locations."
+                },
+                "Error_NoHighEntropyVA": {
+                  "text": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.)"
+                },
+                "Error_NoLargeAddressAware": {
+                  "text": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible by supplying /LARGEADDRESSAWARE to the C or C++ linker command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.)"
+                },
+                "Error_NeitherHighEntropyVANorLargeAddressAware": {
+                  "text": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible."
+              },
+              "name": "EnableHighEntropyVirtualAddresses",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "HighEntropyVACheck"
+              }
+            },
+            {
+              "id": "BA3001",
+              "fullDescription": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "messageStrings": {
+                "Pass_Executable": {
+                  "text": "PIE enabled on executable '{0}'."
+                },
+                "Pass_Library": {
+                  "text": "'{0}' is a shared object library rather than an executable, and is automatically position independent."
+                },
+                "Error": {
+                  "text": "PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap)."
+              },
+              "name": "EnablePositionIndependentExecutable"
+            },
+            {
+              "id": "BA3002",
+              "fullDescription": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "GNU_STACK segment marked as non-executable on '{0}'."
+                },
+                "Error_StackExec": {
+                  "text": "Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable."
+                },
+                "Error_NoStackSeg": {
+                  "text": "GNU_STACK segment on '{0}' is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing '-z noexecstack' to the compiler."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode."
+              },
+              "name": "DoNotMarkStackAsExecutable"
+            },
+            {
+              "id": "BA3003",
+              "fullDescription": {
+                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "Stack protector was found on '{0}'.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections."
+                },
+                "Error": {
+                  "text": "The stack protector was not found in '{0}'.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected."
+              },
+              "name": "EnableStackProtector"
+            },
+            {
+              "id": "BA3010",
+              "fullDescription": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The GNU_RELRO segment was present, so '{0}' is protected."
+                },
+                "Error": {
+                  "text": "The GNU_RELRO segment is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,relro' to address this."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory."
+              },
+              "name": "EnableReadOnlyRelocations"
+            },
+            {
+              "id": "BA3030",
+              "fullDescription": {
+                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2')."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2')."
+              },
+              "messageStrings": {
+                "Pass_AllFunctionsChecked": {
+                  "text": "All functions that can be checked in '{0}' are using the checked versions, so this binary is protected from overflows caused by those function's use."
+                },
+                "Pass_SomeFunctionsChecked": {
+                  "text": "Some checked functions were found in '{0}'; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy."
+                },
+                "Pass_NoCheckableFunctions": {
+                  "text": "No unsafe functions which can be replaced with checked versions are used in '{0}'."
+                },
+                "Error": {
+                  "text": "No checked functions are present/used when compiling '{0}', and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 ('-O2') is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string."
+              },
+              "name": "UseCheckedFunctionsWithGcc"
+            },
+            {
+              "id": "BA2009",
+              "fullDescription": {
+                "text": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is properly compiled to enable Address Space Layout Randomization, reducing an attacker's ability to exploit code in well-known locations."
+                },
+                "Error_NotDynamicBase": {
+                  "text": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later."
+                },
+                "Error_RelocsStripped": {
+                  "text": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. "
+                },
+                "Error_WinCENoRelocationSection": {
+                  "text": "'{0}' is a Windows CE image but does not contain any relocation data, preventing Address Space Layout Randomization."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR)."
+              },
+              "name": "EnableAddressSpaceLayoutRandomization",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "DBCheck"
+              }
+            },
+            {
+              "id": "BA2016",
+              "fullDescription": {
+                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is marked as NX compatible, helping to prevent attackers from executing code that is injected into data segments."
+                },
+                "Error": {
+                  "text": "'{0}' is not marked NX compatible. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code."
+              },
+              "name": "MarkImageAsNXCompatible",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "NXCheck"
+              }
+            },
+            {
+              "id": "BA2018",
+              "fullDescription": {
+                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception jump targets are defined as exception handlers in the program (and not shellcode)."
+                },
+                "Pass_NoSEH": {
+                  "text": "'{0}' is an x86 binary that does not use SEH, making it an invalid target for exploits that attempt to replace SEH jump targets with attacker-controlled shellcode."
+                },
+                "Error": {
+                  "text": "'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues."
+              },
+              "name": "EnableSafeSEH",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
+              }
+            },
+            {
+              "id": "BA2019",
+              "fullDescription": {
+                "text": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitation of code vulnerabilities."
+                },
+                "Error": {
+                  "text": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "Code or data sections should not be marked as both shared and writable."
+              },
+              "name": "DoNotMarkWritableSectionsAsShared",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "SharedSectionCheck"
+              }
+            },
+            {
+              "id": "BA2021",
+              "fullDescription": {
+                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function."
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities."
+                },
+                "Error": {
+                  "text": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Enabling incremental linking via the /INCREMENTAL argument (the default for Microsoft Visual Studio debug build) can also result in a writable and executable section named 'textbss'. For this case, disable incremental linking (or analyze an alternate build configuration that disables this feature) to resolve the problem."
+                },
+                "Error_UnexpectedSectionAligment": {
+                  "text": "'{0}' has a section alignment ({1}) that is smaller than its page size ({2})."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "PE sections should not be marked as both writable and executable."
+              },
+              "name": "DoNotMarkWritableSectionsAsExecutable",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "WXCheck"
+              }
+            }
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
+        }
+      },
+      "invocations": [
+        {
+          "startTimeUtc": "2020-04-26T04:19:07.092Z",
+          "endTimeUtc": "2020-04-26T04:19:07.369Z",
+          "toolConfigurationNotifications": [
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {}
+                  }
+                }
+              ],
+              "message": {
+                "text": "Rule 'DoNotIncorporateVulnerableDependencies' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
+              },
+              "descriptor": {
+                "id": "WRN998.UnsupportedPlatform"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {}
+                  }
+                }
+              ],
+              "message": {
+                "text": "Rule 'DoNotShipVulnerableBinaries' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
+              },
+              "descriptor": {
+                "id": "WRN998.UnsupportedPlatform"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {}
+                  }
+                }
+              ],
+              "message": {
+                "text": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
+              },
+              "descriptor": {
+                "id": "WRN998.UnsupportedPlatform"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {}
+                  }
+                }
+              ],
+              "message": {
+                "text": "Rule 'EnableCriticalCompilerWarnings' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
+              },
+              "descriptor": {
+                "id": "WRN998.UnsupportedPlatform"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {}
+                  }
+                }
+              ],
+              "message": {
+                "text": "Rule 'EnableStackProtection' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
+              },
+              "descriptor": {
+                "id": "WRN998.UnsupportedPlatform"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {}
+                  }
+                }
+              ],
+              "message": {
+                "text": "Rule 'InitializeStackProtection' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
+              },
+              "descriptor": {
+                "id": "WRN998.UnsupportedPlatform"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {}
+                  }
+                }
+              ],
+              "message": {
+                "text": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
+              },
+              "descriptor": {
+                "id": "WRN998.UnsupportedPlatform"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {}
+                  }
+                }
+              ],
+              "message": {
+                "text": "Rule 'SignSecurely' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
+              },
+              "descriptor": {
+                "id": "WRN998.UnsupportedPlatform"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {}
+                  }
+                }
+              ],
+              "message": {
+                "text": "Rule 'EnableSpectreMitigations' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
+              },
+              "descriptor": {
+                "id": "WRN998.UnsupportedPlatform"
+              }
+            }
+          ],
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_Prefer32Bit.exe"
+          }
+        }
+      ],
+      "columnKind": "utf16CodeUnits"
+    }
+  ]
+}
