@@ -30,6 +30,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [Fact]
         public void PEBinary_PdbAvailable()
         {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x64_VS2013_Default.dll");
             using (var peBinary = new PEBinary(new Uri(fileName)))
             {
@@ -42,6 +44,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [Fact]
         public void PEBinary_NoPdbAvailable()
         {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x86_VS2013_PdbMissing.exe");
             using (var peBinary = new PEBinary(new Uri(fileName)))
             {
@@ -54,6 +58,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [Fact]
         public void PEBinary_PdbIsStripped()
         {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
             string fileName = Path.Combine(BaselineTestsDataDirectory, "Native_x86_VS2017_15.5.4_PdbStripped.dll");
             using (var peBinary = new PEBinary(new Uri(fileName)))
             {
@@ -66,6 +72,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [Fact]
         public void PEBinary_CanCreateIDiaSourceFromMsdia()
         {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
             Action action = () => { IDiaDataSource source = ProgramDatabase.MsdiaComWrapper.GetDiaSource(); };
             action.ShouldNotThrow();
         }
