@@ -1,77 +1,68 @@
 {
-  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-1.0.0.json",
   "version": "1.0.0",
   "runs": [
     {
-      "id": "064819d0-0e11-4bc1-bbc8-25c1b725ec5a",
       "tool": {
         "name": "BinSkim",
-        "fullName": "BinSkim 1.5.0.0",
-        "version": "1.5.0.0",
-        "semanticVersion": "1.5.0",
-        "sarifLoggerVersion": "1.7.3.0",
-        "language": "en-US",
-        "properties": {
-          "Comments": "A security and correctness analyzer for portable executable and MSIL formats.",
-          "CompanyName": "Microsoft",
-          "ProductName": "BinSkim Portable Executable Analyzer"
-        }
+        "fullName": "BinSkim 1.6.1.0",
+        "version": "1.6.1.0",
+        "semanticVersion": "1.6.1",
+        "language": "en-US"
+      },
+      "invocation": {
+        "startTime": "2020-04-26T04:04:23.568Z",
+        "endTime": "2020-04-26T04:04:23.736Z"
+      },
+      "files": {
+        "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.stack_protector.a": {}
       },
       "results": [],
       "configurationNotifications": [
         {
-          "id": "WRN998.NotSupportedPlatform",
+          "id": "WRN998.UnsupportedPlatform",
           "physicalLocation": {},
-          "message": "Rule 'DoNotIncorporateVulnerableDependencies' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
+          "message": "Rule 'DoNotIncorporateVulnerableDependencies' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
         },
         {
-          "id": "WRN998.NotSupportedPlatform",
+          "id": "WRN998.UnsupportedPlatform",
           "physicalLocation": {},
-          "message": "Rule 'DoNotShipVulnerableBinaries' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
+          "message": "Rule 'DoNotShipVulnerableBinaries' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
         },
         {
-          "id": "WRN998.NotSupportedPlatform",
+          "id": "WRN998.UnsupportedPlatform",
           "physicalLocation": {},
-          "message": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
+          "message": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
         },
         {
-          "id": "WRN998.NotSupportedPlatform",
+          "id": "WRN998.UnsupportedPlatform",
           "physicalLocation": {},
-          "message": "Rule 'EnableCriticalCompilerWarnings' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
+          "message": "Rule 'EnableCriticalCompilerWarnings' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
         },
         {
-          "id": "WRN998.NotSupportedPlatform",
+          "id": "WRN998.UnsupportedPlatform",
           "physicalLocation": {},
-          "message": "Rule 'EnableStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
+          "message": "Rule 'EnableStackProtection' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
         },
         {
-          "id": "WRN998.NotSupportedPlatform",
+          "id": "WRN998.UnsupportedPlatform",
           "physicalLocation": {},
-          "message": "Rule 'InitializeStackProtection' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
+          "message": "Rule 'InitializeStackProtection' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
         },
         {
-          "id": "WRN998.NotSupportedPlatform",
+          "id": "WRN998.UnsupportedPlatform",
           "physicalLocation": {},
-          "message": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
+          "message": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
         },
         {
-          "id": "WRN998.NotSupportedPlatform",
+          "id": "WRN998.UnsupportedPlatform",
           "physicalLocation": {},
-          "message": "Rule 'SignSecurely' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
+          "message": "Rule 'SignSecurely' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
         },
         {
-          "id": "WRN998.NotSupportedPlatform",
+          "id": "WRN998.UnsupportedPlatform",
           "physicalLocation": {},
-          "message": "Rule 'EnableSpectreMitigations' was disabled as it cannot run on the current platform 'Windows'.  It can only run on 'Linux'.",
-          "level": "note"
+          "message": "Rule 'EnableSpectreMitigations' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
         },
         {
           "id": "WRN997.InvalidTarget",
@@ -81,11 +72,7 @@
           "message": "'gcc.stack_protector.a' was not analyzed as it does not appear to be a valid file type for analysis.",
           "level": "note"
         }
-      ],
-      "invocation": {
-        "startTime": "2018-02-13T01:14:16.782Z",
-        "endTime": "2018-02-13T01:14:17.002Z"
-      }
+      ]
     }
   ]
 }

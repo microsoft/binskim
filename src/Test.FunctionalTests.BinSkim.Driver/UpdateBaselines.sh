@@ -4,14 +4,14 @@ ScriptDir=`dirname $0`
 
 TOOL="BinSkim"
 repoRoot=`readlink -f $ScriptDir/../../`
-BuildOutputPath="$repoRoot/bld/bin/AnyCPU_Release/netcoreapp2.0/linux-x64"
+BuildOutputPath="$repoRoot/bld/bin/AnyCPU_Release/netcoreapp3.1/linux-x64"
 PROJECT="$repoRoot/src/BinSkim.Driver/BinSkim.Driver.csproj"
 
 BuildTool () 
 {
     # Linux specific for now.
     echo "Building BinSkim..."
-    dotnet build $PROJECT -c Release --framework netcoreapp2.0 --runtime linux-x64
+    dotnet build $PROJECT -c Release --framework netcoreapp3.1 --runtime linux-x64
 }
 
 RunBaseline () 
