@@ -6,18 +6,20 @@ using System;
 namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 {
     /// <summary>
-    /// Exception we throw when pdb operations fail
+    /// Exception we throw when pdb operations fail.
     /// </summary>
-    public class PdbParseException : Exception
+    public class PdbException : Exception
     {
-        public DiaHresult ExceptionCode;
+        public DiaHresult ExceptionCode { get; private set; }
+
+        public string LoadTrace { get; set; }
 
         /// <summary>
         /// Ctor based on the ErrorCode (HRESULT) from COMException.
         /// If we don't recognize error code we rethrow the original COMException
         /// </summary>
         /// <param name="ce"></param>
-        public PdbParseException(System.Runtime.InteropServices.COMException ce)
+        public PdbException(System.Runtime.InteropServices.COMException ce)
             : this(ce.ErrorCode, ce)
         {
             if ((ce.ErrorCode < (int)DiaHresult.E_PDB_OK) || (ce.ErrorCode >= (int)DiaHresult.E_PDB_MAX))
@@ -26,7 +28,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
         }
 
-        public PdbParseException(int code, Exception innerException)
+        public PdbException(int code, Exception innerException)
             : base(
                 ((code >= (int)DiaHresult.E_PDB_OK) && (code < (int)DiaHresult.E_PDB_MAX)) 
                   ? ((DiaHresult)code).ToString()
@@ -36,24 +38,24 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.ExceptionCode = (DiaHresult)code;
         }
 
-        public PdbParseException(DiaHresult hresult, Exception innerException)
+        public PdbException(DiaHresult hresult, Exception innerException)
             : this((int)hresult, innerException)
         {
             this.ExceptionCode = hresult;
         }
 
-        public PdbParseException(DiaHresult code, string message, Exception innerException)
+        public PdbException(DiaHresult code, string message, Exception innerException)
             : base(message, innerException)
         {
             this.ExceptionCode = code;
         }
 
-        public PdbParseException(string message) : base(message)
+        public PdbException(string message) : base(message)
         {
             this.ExceptionCode = DiaHresult.E_PDB_MAX;
         }
 
-        public PdbParseException(string message, Exception innerException)
+        public PdbException(string message, Exception innerException)
             : base(message, innerException)
         {
             this.ExceptionCode = DiaHresult.E_PDB_MAX;

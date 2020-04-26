@@ -442,7 +442,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
                     if ((hash == null) || (hash.Length < 16))
                     {
-                        throw new PdbParseException("Unexpected hash length for file " + sf);
+                        throw new PdbException("Unexpected hash length for file " + sf);
                     }
 
                     for (int j = 0; j < 16; j++)
