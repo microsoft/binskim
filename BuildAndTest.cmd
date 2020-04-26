@@ -15,7 +15,7 @@ set Configuration=Release
 @REM Remove existing build data
 if exist bld (rd /s /q bld)
 
-SET NuGetConfigFile=%~dp0src\NuGet.config
+set NuGetConfigFile=%~dp0src\NuGet.config
 set NuGetPackageDir=%~dp0src\packages
 set NuGetOutputDirectory=%~dp0bld\bin\nuget\
 
@@ -37,10 +37,11 @@ echo         public const string Version = AssemblyVersion + Prerelease;        
 echo     }                                                                           >> %VERSION_CONSTANTS%
 echo  }                                                                              >> %VERSION_CONSTANTS%
 
-:: Build the solution 
-echo Cleaning build...
-dotnet clean /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% || goto :ExitFailed
+::Restore packages
+echo Restoring packages...
+dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --configfile "%NuGetConfigFile%" --packages "%NuGetPackageDir%
 
+:: Build the solution 
 echo Building solution...
 dotnet build --no-restore /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
