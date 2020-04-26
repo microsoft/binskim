@@ -27,8 +27,8 @@ RunBaseline ()
         output="$expectedDirectory/$outputFile.sarif"
         outputTemp="$output.temp"
 
-        echo "$TOOLPATH analyze $targetFile -o $outputTemp --pretty-print --verbose --config default"
-        $TOOLPATH analyze $targetFile -o $outputTemp --pretty-print --verbose --config default
+        echo "$TOOLPATH analyze $targetFile -o $outputTemp --pretty-print --verbose --config default --sarif-output-version Current"
+        $TOOLPATH analyze $targetFile -o $outputTemp --pretty-print --verbose --config default --sarif-output-version Current
 
         # Normalize paths--replace the repository root with '/'
         echo "Normalizing file output"
