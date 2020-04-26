@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Reflection;
+
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 

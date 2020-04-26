@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -56,21 +57,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             switch (messageKind)
             {
                 case ResultKind.Pass:
-                    {
-                        this.PassTargets.Add(targetPath);
-                        break;
-                    }
+                {
+                    this.PassTargets.Add(targetPath);
+                    break;
+                }
 
                 case ResultKind.NotApplicable:
-                    {
-                        this.NotApplicableTargets.Add(targetPath);
-                        break;
-                    }
+                {
+                    this.NotApplicableTargets.Add(targetPath);
+                    break;
+                }
 
                 default:
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
             }
         }
 
@@ -79,26 +80,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             switch (messageKind)
             {
                 case FailureLevel.Error:
-                    {
-                        this.FailTargets.Add(targetPath);
-                        break;
-                    }
+                {
+                    this.FailTargets.Add(targetPath);
+                    break;
+                }
 
                 case FailureLevel.Warning:
-                    {
-                        this.FailTargets.Add(targetPath);
-                        break;
-                    }
+                {
+                    this.FailTargets.Add(targetPath);
+                    break;
+                }
 
                 case FailureLevel.Note:
-                    {
-                        throw new NotImplementedException();
-                    }
+                {
+                    throw new NotImplementedException();
+                }
 
                 default:
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
             }
         }
 

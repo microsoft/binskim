@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Diagnostics;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;

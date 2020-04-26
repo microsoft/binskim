@@ -125,57 +125,57 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case CryptoError.CERT_E_UNTRUSTEDROOT:
                     case CryptoError.CERT_E_CHAINING:
                     case CryptoError.ERROR_SUCCESS:
+                    {
+                        // Hash that represents the subject is trusted.
+                        // Trusted publisher with no verification errors.
+                        // No publisher or time stamp errors.
+                        // This verification excludes root chain info.
+                        if (this.GetSignerHashAlgorithms(context, winTrustData, out hashAlgorithm, out hashEncryptionAlgorithm))
                         {
-                            // Hash that represents the subject is trusted.
-                            // Trusted publisher with no verification errors.
-                            // No publisher or time stamp errors.
-                            // This verification excludes root chain info.
-                            if (this.GetSignerHashAlgorithms(context, winTrustData, out hashAlgorithm, out hashEncryptionAlgorithm))
-                            {
-                                goodAlgorithms.Add(new Tuple<string, string>(hashAlgorithm, hashEncryptionAlgorithm));
-                            }
-
-                            this.InvokeCloseAction(winTrustData);
-                            break;
+                            goodAlgorithms.Add(new Tuple<string, string>(hashAlgorithm, hashEncryptionAlgorithm));
                         }
+
+                        this.InvokeCloseAction(winTrustData);
+                        break;
+                    }
 
                     case CryptoError.NTE_BAD_ALGID:
+                    {
+                        this.InvokeCloseAction(winTrustData);
+
+                        // We cannot retrieve algorithm id and cert info for images that fail
+                        // the stringent WinTrustVerify security check. We therefore start
+                        // a new call chain with looser validation criteria.
+                        winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.Normal);
+                        Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
+
+                        if (this.GetSignerHashAlgorithms(context, winTrustData, out hashAlgorithm, out hashEncryptionAlgorithm))
                         {
-                            this.InvokeCloseAction(winTrustData);
-
-                            // We cannot retrieve algorithm id and cert info for images that fail
-                            // the stringent WinTrustVerify security check. We therefore start
-                            // a new call chain with looser validation criteria.
-                            winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.Normal);
-                            Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
-
-                            if (this.GetSignerHashAlgorithms(context, winTrustData, out hashAlgorithm, out hashEncryptionAlgorithm))
-                            {
-                                badAlgorithms.Add(new Tuple<string, string>(hashAlgorithm, hashEncryptionAlgorithm));
-                            }
-
-                            this.InvokeCloseAction(winTrustData);
-                            break;
+                            badAlgorithms.Add(new Tuple<string, string>(hashAlgorithm, hashEncryptionAlgorithm));
                         }
+
+                        this.InvokeCloseAction(winTrustData);
+                        break;
+                    }
 
                     case CryptoError.TRUST_E_NOSIGNATURE:
-                        {
-                            Notes.LogNotApplicableToSpecifiedTarget(context, MetadataConditions.ImageIsNotSigned);
-                            return false;
-                        }
+                    {
+                        Notes.LogNotApplicableToSpecifiedTarget(context, MetadataConditions.ImageIsNotSigned);
+                        return false;
+                    }
 
                     default:
-                        {
-                            string cryptoErrorDescription = cryptoError.GetErrorDescription();
-                            // '{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}' ({2})
-                            context.Logger.Log(this, RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                                nameof(RuleResources.BA2022_Error_DidNotVerify),
-                                context.TargetUri.GetFileName(),
-                                cryptoError.ToString(),
-                                cryptoErrorDescription));
-                            this.InvokeCloseAction(winTrustData);
-                            return false;
-                        }
+                    {
+                        string cryptoErrorDescription = cryptoError.GetErrorDescription();
+                        // '{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}' ({2})
+                        context.Logger.Log(this, RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                            nameof(RuleResources.BA2022_Error_DidNotVerify),
+                            context.TargetUri.GetFileName(),
+                            cryptoError.ToString(),
+                            cryptoErrorDescription));
+                        this.InvokeCloseAction(winTrustData);
+                        return false;
+                    }
                 }
             }
 

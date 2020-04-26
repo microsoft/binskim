@@ -80,7 +80,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// E_PDB_OK = 0x806d0001.
         /// </summary>
-        E_PDB_OK = unchecked((int)(1 << 31)) | (0x6d << 16) | 1,
+        E_PDB_OK = unchecked(1 << 31) | (0x6d << 16) | 1,
 
         /// <summary>
         /// E_PDB_USAGE = 0x806d0002.

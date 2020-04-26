@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;

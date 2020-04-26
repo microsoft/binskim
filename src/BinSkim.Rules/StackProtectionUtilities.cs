@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -37,9 +38,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // the native bootstrap exe from this check, as this loader should enforce
             // relevant security settings.
             reasonForNotAnalyzing = MetadataConditions.ImageIsDotNetNativeBinary;
-            if (portableExecutable.IsDotNetNative && !portableExecutable.IsDotNetNativeBootstrapExe) 
-            { 
-                return result; 
+            if (portableExecutable.IsDotNetNative && !portableExecutable.IsDotNetNativeBootstrapExe)
+            {
+                return result;
             }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsBootBinary;

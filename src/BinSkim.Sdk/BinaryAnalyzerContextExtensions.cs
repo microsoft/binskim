@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk

@@ -8,7 +8,9 @@ using System.Composition;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+
 using Dia2Lib;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;

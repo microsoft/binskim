@@ -81,17 +81,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public static explicit operator uint(SafePointer sp)
         {
-            return (((uint)(byte)(sp + 3)) << 24) | (((uint)(byte)(sp + 2)) << 16) | (((uint)(byte)(sp + 1)) << 8) | ((uint)(byte)(sp));
+            return (((uint)(sp + 3)) << 24) | (((uint)(sp + 2)) << 16) | (((uint)(sp + 1)) << 8) | sp;
         }
 
         public static explicit operator ushort(SafePointer sp)
         {
-            return (ushort)(((byte)(sp + 1) << 8) | (byte)(sp));
+            return (ushort)((sp + 1 << 8) | sp);
         }
 
         public static explicit operator ulong(SafePointer sp)
         {
-            return ((ulong)(uint)(sp + 4) << 32) | ((ulong)(uint)(sp));
+            return ((ulong)(uint)(sp + 4) << 32) | (uint)(sp);
         }
 
         public static explicit operator string(SafePointer sp)
@@ -265,8 +265,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public Stream GetStream()
         {
-            return this.array != null 
-                ? new MemoryStream(this.array, this.index, this.array.Length - this.index) 
+            return this.array != null
+                ? new MemoryStream(this.array, this.index, this.array.Length - this.index)
                 : this.stream;
         }
 
@@ -296,15 +296,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-        public bool IsNull
-        {
-            get
-            {
-                return 
-                    ((this.array == null)  || (this.array.Length == 0)) &&
+        public bool IsNull => ((this.array == null) || (this.array.Length == 0)) &&
                     ((this.stream == null) || (this.stream.Length == 0));
-            }
-        }
 
         public void Set(byte b)
         {

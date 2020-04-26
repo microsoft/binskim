@@ -3,6 +3,7 @@
 
 using System;
 using System.Resources;
+
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;

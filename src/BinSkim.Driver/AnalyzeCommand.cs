@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
@@ -31,7 +32,7 @@ namespace Microsoft.CodeAnalysis.IL
             binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
             binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(Traces.PdbLoad);
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
-            
+
             return binaryAnalyzerContext;
         }
 
