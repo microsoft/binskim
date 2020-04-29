@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2018
         /// </summary>
-        public override string Id => RuleIds.EnableSafeSEHId;
+        public override string Id => RuleIds.EnableSafeSEH;
 
         /// <summary>
         /// X86 binaries should enable the SafeSEH mitigation in order to minimize

@@ -11,23 +11,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string EquivalentBinScopeRulePropertyName = "equivalentBinScopeRuleReadableName";
         private static readonly Dictionary<string, string> binScopeRuleReadableNameMapping = new Dictionary<string, string>()
         {
-            {RuleIds.LoadImageAboveFourGigabyteAddressId,  "FourGbCheck" }, //BA2001
-            {RuleIds.DoNotIncorporateVulnerableDependenciesId , "ATLVersionCheck" }, //BA2002
-            {RuleIds.DoNotShipVulnerableBinariesId, "BinaryVersionsCheck"}, //BA2005
-            {RuleIds.BuildWithSecureToolsId, "CompilerVersionCheck" }, //BA2006
-            {RuleIds.EnableCriticalCompilerWarningsId, "CompilerWarningsCheck" }, //BA2007
-            {RuleIds.EnableControlFlowGuardId, "ControlFlowGuardCheck" }, //BA2008
-            {RuleIds.EnableAddressSpaceLayoutRandomizationId, "DBCheck" }, //BA2009
-            {RuleIds.DoNotMarkImportsSectionAsExecutableId, "ExecutableImportsCheck" }, //BA2010
-            {RuleIds.EnableStackProtectionId, "GSCheck" }, //BA2011
-            {RuleIds.DoNotModifyStackProtectionCookieId, "DefaultGSCookieCheck" }, //BA2012
-            {RuleIds.InitializeStackProtectionId, "GSFriendlyInitCheck" }, //BA2013
-            {RuleIds.DoNotDisableStackProtectionForFunctionsId, "GSFunctionSafeBuffersCheck" }, //BA2014
-            {RuleIds.EnableHighEntropyVirtualAddressesId, "HighEntropyVACheck" }, //BA2015
-            {RuleIds.MarkImageAsNXCompatibleId, "NXCheck" }, //BA2016
-            {RuleIds.EnableSafeSEHId, "SafeSEHCheck" }, //BA2018
-            {RuleIds.DoNotMarkWritableSectionsAsSharedId, "SharedSectionCheck" }, //BA2019
-            {RuleIds.DoNotMarkWritableSectionsAsExecutableId, "WXCheck" } //BA2021
+            {RuleIds.LoadImageAboveFourGigabyteAddress,  "FourGbCheck" }, //BA2001
+            {RuleIds.DoNotIncorporateVulnerableDependencies , "ATLVersionCheck" }, //BA2002
+            {RuleIds.DoNotShipVulnerableBinaries, "BinaryVersionsCheck"}, //BA2005
+            {RuleIds.BuildWithSecureTools, "CompilerVersionCheck" }, //BA2006
+            {RuleIds.EnableCriticalCompilerWarnings, "CompilerWarningsCheck" }, //BA2007
+            {RuleIds.EnableControlFlowGuard, "ControlFlowGuardCheck" }, //BA2008
+            {RuleIds.EnableAddressSpaceLayoutRandomization, "DBCheck" }, //BA2009
+            {RuleIds.DoNotMarkImportsSectionAsExecutable, "ExecutableImportsCheck" }, //BA2010
+            {RuleIds.EnableStackProtection, "GSCheck" }, //BA2011
+            {RuleIds.DoNotModifyStackProtectionCookie, "DefaultGSCookieCheck" }, //BA2012
+            {RuleIds.InitializeStackProtection, "GSFriendlyInitCheck" }, //BA2013
+            {RuleIds.DoNotDisableStackProtectionForFunctions, "GSFunctionSafeBuffersCheck" }, //BA2014
+            {RuleIds.EnableHighEntropyVirtualAddresses, "HighEntropyVACheck" }, //BA2015
+            {RuleIds.MarkImageAsNXCompatible, "NXCheck" }, //BA2016
+            {RuleIds.EnableSafeSEH, "SafeSEHCheck" }, //BA2018
+            {RuleIds.DoNotMarkWritableSectionsAsShared, "SharedSectionCheck" }, //BA2019
+            {RuleIds.DoNotMarkWritableSectionsAsExecutable, "WXCheck" } //BA2021
         };
 
         /// <summary>

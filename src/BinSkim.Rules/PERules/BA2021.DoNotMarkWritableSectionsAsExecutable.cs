@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2021
         /// </summary>
-        public override string Id => RuleIds.DoNotMarkWritableSectionsAsExecutableId;
+        public override string Id => RuleIds.DoNotMarkWritableSectionsAsExecutable;
 
         /// <summary>
         /// PE sections should not be marked as both writable and executable. This condition

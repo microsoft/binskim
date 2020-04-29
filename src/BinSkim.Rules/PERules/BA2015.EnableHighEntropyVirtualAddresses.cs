@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2015
         /// </summary>
-        public override string Id => RuleIds.EnableHighEntropyVirtualAddressesId;
+        public override string Id => RuleIds.EnableHighEntropyVirtualAddresses;
 
         /// <summary>
         /// Binaries should be marked as high entropy Address Space Layout Randomization
