@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2011
         /// </summary>
-        public override string Id => RuleIds.EnableStackProtectionId;
+        public override string Id => RuleIds.EnableStackProtection;
 
         /// <summary>
         /// Binaries should be built with the stack protector buffer security

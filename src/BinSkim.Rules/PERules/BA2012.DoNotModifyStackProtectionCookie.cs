@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2012
         /// </summary>
-        public override string Id => RuleIds.DoNotModifyStackProtectionCookieId;
+        public override string Id => RuleIds.DoNotModifyStackProtectionCookie;
 
         /// <summary>
         /// Application code should not interfere with the stack protector. The stack

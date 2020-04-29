@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2005
         /// </summary>
-        public override string Id => RuleIds.DoNotShipVulnerableBinariesId;
+        public override string Id => RuleIds.DoNotShipVulnerableBinaries;
 
         /// <summary>
         /// Do not ship obsolete libraries for which there are known security vulnerabilities.
@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleIds.DoNotShipVulnerableBinariesId + "." + nameof(DoNotShipVulnerableBinaries);
+        private const string AnalyzerName = RuleIds.DoNotShipVulnerableBinaries + "." + nameof(DoNotShipVulnerableBinaries);
 
         private static StringToVersionMap BuildDefaultVulnerableBinariesMap()
         {

@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2007
         /// </summary>
-        public override string Id => RuleIds.EnableCriticalCompilerWarningsId;
+        public override string Id => RuleIds.EnableCriticalCompilerWarnings;
 
         /// <summary>
         /// Binaries should be compiled with a warning level that enables all critical
@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleIds.EnableCriticalCompilerWarningsId + "." + nameof(EnableCriticalCompilerWarnings);
+        private const string AnalyzerName = RuleIds.EnableCriticalCompilerWarnings + "." + nameof(EnableCriticalCompilerWarnings);
 
         /// <summary>
         /// Enable namespace import optimization.
