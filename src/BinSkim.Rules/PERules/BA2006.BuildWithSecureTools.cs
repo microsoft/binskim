@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2006
         /// </summary>
-        public override string Id => RuleIds.BuildWithSecureToolsId;
+        public override string Id => RuleIds.BuildWithSecureTools;
 
         /// <summary>
         /// Application code should be compiled with the most up-to-date tool sets
@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleIds.BuildWithSecureToolsId + "." + nameof(BuildWithSecureTools);
+        private const string AnalyzerName = RuleIds.BuildWithSecureTools + "." + nameof(BuildWithSecureTools);
 
         private const string MIN_COMPILER_VER = "MinimumCompilerVersion";
         private const string MIN_XBOX_COMPILER_VER = "MinimumXboxCompilerVersion";

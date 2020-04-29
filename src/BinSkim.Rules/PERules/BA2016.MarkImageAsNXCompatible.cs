@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2016
         /// </summary>
-        public override string Id => RuleIds.MarkImageAsNXCompatibleId;
+        public override string Id => RuleIds.MarkImageAsNXCompatible;
 
         /// <summary>
         /// Binaries should be marked as NX compatible in order to help prevent

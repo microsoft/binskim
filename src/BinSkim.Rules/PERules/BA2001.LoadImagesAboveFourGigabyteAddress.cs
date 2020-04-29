@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2001
         /// </summary>
-        public override string Id => RuleIds.LoadImageAboveFourGigabyteAddressId;
+        public override string Id => RuleIds.LoadImageAboveFourGigabyteAddress;
 
         /// <summary>
         /// 64-bit images should have a preferred base address above the 4GB boundary in

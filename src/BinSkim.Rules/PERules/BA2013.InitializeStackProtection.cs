@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// BA2013
         /// 
         /// </summary>
-        public override string Id => RuleIds.InitializeStackProtectionId;
+        public override string Id => RuleIds.InitializeStackProtection;
 
         /// <summary>
         /// Binaries should properly initialize the stack protector (/GS) in order

@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2009
         /// </summary>
-        public override string Id => RuleIds.EnableAddressSpaceLayoutRandomizationId;
+        public override string Id => RuleIds.EnableAddressSpaceLayoutRandomization;
 
         /// <summary>
         /// Binaries should linked as DYNAMICBASE in order to be eligible for relocation
