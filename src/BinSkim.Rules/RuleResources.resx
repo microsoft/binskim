@@ -457,7 +457,7 @@ Modules triggering this check were:
     <value>'{0}' was not evaluated for check '{1}' because its PDB could not be loaded.</value>
   </data>
   <data name="PdbLoadFailed" xml:space="preserve">
-    <value>Could not locate the PDB for '{0'}. Probing details:
+    <value>Could not locate the PDB for '{0}'. Probing details:
 {1}</value>
   </data>
   <data name="PdbLoadSucceeded" xml:space="preserve">

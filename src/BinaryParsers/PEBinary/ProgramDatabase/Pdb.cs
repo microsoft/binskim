@@ -19,8 +19,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     public sealed class Pdb : IDisposable, IDiaLoadCallback2
     {
         private IDiaSession session;
-        private readonly StringBuilder loadTrace;
+        private StringBuilder loadTrace;
         private readonly Lazy<Symbol> globalScope;
+        private bool restrictReferenceAndOriginalPathAccess;
 
         /// <summary>
         /// Load debug info from PE or PDB, using symbolPath to help find symbols
@@ -45,19 +46,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             get
             {
-                if (this.loadTrace == null)
-                {
-                    return string.Empty;
-                }
-
-                string result = this.loadTrace.ToString();
-
-                // We only return the trace a single time. This hack
-                // prevents redundant messages in the log that report
-                // PDB probing details.
-                this.loadTrace.Length = 0;
-
-                return result;
+                return this.loadTrace?.ToString();
+            }
+            set
+            {
+                // We make this settable to allow the tool to clear the trace. This
+                // prevents multiple reports (for every PDB loading rule) that the
+                // PDB couldn't, in fact, be loaded.
+                this.loadTrace = !string.IsNullOrEmpty(value) 
+                    ? new StringBuilder(value) 
+                    : null;
             }
         }
 
@@ -75,35 +73,48 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
             catch (PlatformNotSupportedException ex)
             {
-                throw new PdbParseException(message: BinaryParsersResources.PdbPlatformUnsupported, ex);
+                throw new PdbException(message: BinaryParsersResources.PdbPlatformUnsupported, ex);
             }
             catch (COMException ce)
             {
-                throw new PdbParseException(ce);
+                throw new PdbException(ce)
+                {
+                    LoadTrace = this.loadTrace?.ToString()
+                };
             }
         }
 
         private void WindowsNativeLoadPdbUsingDia(string pePath, string symbolPath, string localSymbolDirectories)
         {
-            IDiaDataSource diaSource;
+            IDiaDataSource diaSource = null;
             Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
             Environment.SetEnvironmentVariable("_NT_ALT_SYMBOL_PATH", "");
 
-            try
+            if (!string.IsNullOrEmpty(localSymbolDirectories))
             {
-                diaSource = MsdiaComWrapper.GetDiaSource();
-                diaSource.loadDataForExe(
-                    pePath,
-                    localSymbolDirectories,
-                    this.loadTrace != null ? this : (object)IntPtr.Zero);
-            }
-            catch
-            {
-                diaSource = null;
+                // If we have one or more local symbol directories, we want
+                // to probe them before any other default load behavior. If
+                // this load code path fails, we fill fallback to these
+                // defaults locations in the second load pass below.
+                this.restrictReferenceAndOriginalPathAccess = true;
+                try
+                {
+                    diaSource = MsdiaComWrapper.GetDiaSource();
+                    diaSource.loadDataForExe(
+                        pePath,
+                        localSymbolDirectories,
+                        this.loadTrace != null ? this : (object)IntPtr.Zero);
+                }
+                catch
+                {
+                    diaSource = null;
+                }
             }
 
             if (diaSource == null)
             {
+                this.restrictReferenceAndOriginalPathAccess = false;
+
                 diaSource = MsdiaComWrapper.GetDiaSource();
                 diaSource.loadDataForExe(
                     pePath,
@@ -360,7 +371,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         public void NotifyDebugDir([MarshalAs(UnmanagedType.Bool)] bool executable, int dataSize, [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data)
         {
-            Console.WriteLine(nameof(NotifyDebugDir));
         }
 
         public void NotifyOpenDbg([MarshalAs(UnmanagedType.LPWStr)] string dbgPath, DiaHresult resultCode)
@@ -388,13 +398,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         [return: MarshalAs(UnmanagedType.Bool)]
         public bool RestrictOriginalPathAccess()
         {
-            return false;
+            return this.restrictReferenceAndOriginalPathAccess;
         }
 
         [return: MarshalAs(UnmanagedType.Bool)]
         public bool RestrictReferencePathAccess()
         {
-            return false;
+            return this.restrictReferenceAndOriginalPathAccess;
         }
 
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -406,7 +416,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         [return: MarshalAs(UnmanagedType.Bool)]
         public bool RestrictSystemRootAccess()
         {
-            return false;
+            return true;
         }
     }
 }

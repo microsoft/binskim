@@ -19,14 +19,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // Uses PDB Parsing.
             BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
             PEBinary target = context.PEBinary();
-
-            string pdbLoadTrace = target.PdbLoadTrace;
-            if (!string.IsNullOrEmpty(pdbLoadTrace))
+            
+            if (!string.IsNullOrEmpty(target.Pdb?.LoadTrace))
             {
                 LogPdbLoadTrace(
-                    context,
-                    pdbLoadSucceeded: target.Pdb != null,
-                    pdbLoadTrace);
+                    context, 
+                    pdbLoadSucceeded: true,
+                    target.Pdb.LoadTrace);
+
+                // Set the trace to null so that we only emit it once.
+                target.Pdb.LoadTrace = null;
             }
 
             if (target.Pdb == null)
@@ -77,6 +79,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // Could not locate the PDB for '{0'}. Probing details:{1}
                 : RuleResources.PdbLoadFailed;
 
+            FailureLevel failureLevel = pdbLoadSucceeded
+                ? FailureLevel.Note
+                : FailureLevel.Warning;
+
             context.Logger.LogConfigurationNotification(
                 Errors.CreateNotification(
                     context.TargetUri,
@@ -90,7 +96,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     pdbLoadTrace));
         }
 
-        public static void LogExceptionLoadingPdb(IAnalysisContext context, Exception exception)
+        public static void LogExceptionLoadingPdb(IAnalysisContext context, PdbException pdbException)
         {
             if (context == null)
             {
@@ -104,13 +110,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     "ERR997.ExceptionLoadingPdb",
                     context.Rule.Id,
                     FailureLevel.Error,
-                    exception,
+                    pdbException,
                     persistExceptionStack: false,
                     RuleResources.ERR997_ExceptionLoadingPdb,
                     context.TargetUri.GetFileName(),
                     context.Rule.Name));
 
             context.RuntimeErrors |= RuntimeConditions.ExceptionLoadingPdb;
+
+            if (!string.IsNullOrEmpty(pdbException.LoadTrace))
+            {
+                LogPdbLoadTrace(
+                    context,
+                    pdbLoadSucceeded: false,
+                    pdbException.LoadTrace);
+            }
+
+            // Clear the trace data to ensure we never emit it more than once in output.
+            pdbException.LoadTrace = null;
         }
     }
 }

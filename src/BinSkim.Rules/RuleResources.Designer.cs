@@ -1057,7 +1057,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not locate the PDB for &apos;{0&apos;}. Probing details:
+        ///   Looks up a localized string similar to Could not locate the PDB for &apos;{0}&apos;. Probing details:
         ///{1}.
         /// </summary>
         internal static string PdbLoadFailed {

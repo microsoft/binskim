@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     this.localSymbolDirectories,
                     this.tracePdbLoad);
             }
-            catch (PdbParseException ex)
+            catch (PdbException ex)
             {
                 this.PdbParseException = ex;
             }
@@ -63,7 +63,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 this.StrippedPdb = pdb;
                 pdb = null;
-                this.PdbParseException = new PdbParseException(BinaryParsersResources.PdbStripped);
+                this.PdbParseException = new PdbException(BinaryParsersResources.PdbStripped)
+                {
+                    LoadTrace = this.StrippedPdb.LoadTrace
+                };
             }
             return pdb;
         }
@@ -72,10 +75,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public Pdb Pdb => this.pdb?.Value;
 
-        public PdbParseException PdbParseException { get; internal set; }
-
-        public string PdbLoadTrace => this.pdb?.Value?.LoadTrace?.ToString();
-
+        public PdbException PdbParseException { get; internal set; }
+       
         public Pdb StrippedPdb { get; private set; }
 
         public void DisposePortableExecutableData()

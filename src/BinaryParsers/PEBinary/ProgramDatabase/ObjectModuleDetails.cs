@@ -8,7 +8,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 {
     // TODO: Consider merging this function into Symbol. (Most of the code to support it is there anyway)
 
-    /// <summary>A set of relatively expensive to calculate details from an object module.</summary>
+    /// <summary>A set of relatively expensive-to-calculate details from an object module.</summary>
     public class ObjectModuleDetails
     {
         private readonly CompilerCommandLine compilerCommandLine;
