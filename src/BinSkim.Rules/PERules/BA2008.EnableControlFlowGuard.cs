@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2008
         /// </summary>
-        public override string Id => RuleIds.EnableControlFlowGuardId;
+        public override string Id => RuleIds.EnableControlFlowGuard;
 
         /// <summary>
         /// Binaries should enable the compiler control guard feature (CFG) at build
@@ -49,7 +49,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleIds.EnableControlFlowGuardId + "." + nameof(EnableControlFlowGuard);
+        private const string AnalyzerName = RuleIds.EnableControlFlowGuard + "." + nameof(EnableControlFlowGuard);
 
         public static PerLanguageOption<Version> MinimumRequiredLinkerVersion { get; } =
             new PerLanguageOption<Version>(
