@@ -4,7 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+
 using Dia2Lib;
+
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase

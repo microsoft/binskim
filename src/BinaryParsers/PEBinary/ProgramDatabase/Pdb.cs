@@ -3,12 +3,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+
 using Dia2Lib;
+
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
@@ -29,9 +29,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <param name="localSymbolDirectories">An option collection of local directories that should be examined for PDBs.</param>
         /// <param name="symbolPath">The symsrv.dll symbol path.</param>
         public Pdb(
-            string pePath, 
-            string symbolPath = null, 
-            string localSymbolDirectories = null, 
+            string pePath,
+            string symbolPath = null,
+            string localSymbolDirectories = null,
             bool traceLoads = false)
         {
             this.loadTrace = traceLoads ? new StringBuilder() : null;
@@ -41,8 +41,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.Init(pePath, symbolPath, localSymbolDirectories);
         }
 
-        public string LoadTrace 
-        { 
+        public string LoadTrace
+        {
             get
             {
                 if (this.loadTrace == null)
@@ -51,12 +51,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 }
 
                 string result = this.loadTrace.ToString();
-                
+
                 // We only return the trace a single time. This hack
                 // prevents redundant messages in the log that report
                 // PDB probing details.
                 this.loadTrace.Length = 0;
-                
+
                 return result;
             }
         }
@@ -93,8 +93,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 diaSource = MsdiaComWrapper.GetDiaSource();
                 diaSource.loadDataForExe(
-                    pePath, 
-                    localSymbolDirectories, 
+                    pePath,
+                    localSymbolDirectories,
                     this.loadTrace != null ? this : (object)IntPtr.Zero);
             }
             catch
@@ -106,7 +106,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 diaSource = MsdiaComWrapper.GetDiaSource();
                 diaSource.loadDataForExe(
-                    pePath, 
+                    pePath,
                     symbolPath,
                     this.loadTrace != null ? this : (object)IntPtr.Zero);
             }

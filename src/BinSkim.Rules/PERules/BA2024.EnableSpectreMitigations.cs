@@ -155,42 +155,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     case Language.C:
                     case Language.Cxx:
+                    {
+                        if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftNativeCompiler)
                         {
-                            if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftNativeCompiler)
-                            {
-                                // TODO: https://github.com/Microsoft/binskim/issues/114
-                                continue;
-                            }
-                            else
-                            {
-                                actualVersion = omDetails.CompilerBackEndVersion;
-                            }
-                            break;
+                            // TODO: https://github.com/Microsoft/binskim/issues/114
+                            continue;
                         }
+                        else
+                        {
+                            actualVersion = omDetails.CompilerBackEndVersion;
+                        }
+                        break;
+                    }
 
                     case Language.MASM:
-                        {
-                            masmModules.Add(om.CreateCompilandRecord());
-                            continue;
-                        }
+                    {
+                        masmModules.Add(om.CreateCompilandRecord());
+                        continue;
+                    }
 
                     case Language.LINK:
-                        {
-                            // Linker is not involved in the mitigations, so no need to check version or switches at this time.
-                            continue;
-                        }
+                    {
+                        // Linker is not involved in the mitigations, so no need to check version or switches at this time.
+                        continue;
+                    }
 
                     case Language.CVTRES:
-                        {
-                            // Resource compiler is not involved in the mitigations, so no need to check version or switches at this time.
-                            continue;
-                        }
+                    {
+                        // Resource compiler is not involved in the mitigations, so no need to check version or switches at this time.
+                        continue;
+                    }
 
                     case Language.HLSL:
-                        {
-                            // HLSL compiler is not involved in the mitigations, so no need to check version or switches at this time.
-                            continue;
-                        }
+                    {
+                        // HLSL compiler is not involved in the mitigations, so no need to check version or switches at this time.
+                        continue;
+                    }
 
                     // Mixed binaries (/clr) can contain non C++ compilands if they are linked in via netmodules
                     // .NET IL should be mitigated by the runtime if any mitigations are necessary
@@ -198,24 +198,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.CSharp:
                     case Language.MSIL:
                     case Language.ILASM:
-                        {
-                            continue;
-                        }
+                    {
+                        continue;
+                    }
 
                     case Language.Unknown:
-                        {
-                            // The linker may emit debug information for modules from static libraries that do not contribute to actual code.
-                            // do not contribute to actual code. Currently these come back as Language.Unknown :(
-                            // TODO: https://github.com/Microsoft/binskim/issues/116
-                            continue;
-                        }
+                    {
+                        // The linker may emit debug information for modules from static libraries that do not contribute to actual code.
+                        // do not contribute to actual code. Currently these come back as Language.Unknown :(
+                        // TODO: https://github.com/Microsoft/binskim/issues/116
+                        continue;
+                    }
 
                     default:
-                        {
-                            // TODO: https://github.com/Microsoft/binskim/issues/117
-                            // Review unknown languages for this and all checks
-                        }
-                        continue;
+                    {
+                        // TODO: https://github.com/Microsoft/binskim/issues/117
+                        // Review unknown languages for this and all checks
+                    }
+                    continue;
                 }
 
                 // Get the appropriate compiler version against which to check this compiland.
@@ -646,8 +646,8 @@ namespace Microsoft.CodeAnalysis.Sarif
     {
         public static MachineFamily GetMachineFamily(this ExtendedMachine extendedMachine)
         {
-            return extendedMachine.IsArmFamily() ? MachineFamily.Arm : 
-                   extendedMachine.IsX86Family() ? MachineFamily.X86 : 
+            return extendedMachine.IsArmFamily() ? MachineFamily.Arm :
+                   extendedMachine.IsX86Family() ? MachineFamily.X86 :
                                                    MachineFamily.Unknown;
         }
 

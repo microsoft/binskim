@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL
@@ -70,25 +71,25 @@ namespace Microsoft.CodeAnalysis.IL
             switch (severity)
             {
                 case DiagnosticSeverity.Error:
-                    {
-                        return FailureLevel.Error;
-                    }
+                {
+                    return FailureLevel.Error;
+                }
 
                 case DiagnosticSeverity.Hidden:
                 case DiagnosticSeverity.Warning:
-                    {
-                        return FailureLevel.Warning;
-                    }
+                {
+                    return FailureLevel.Warning;
+                }
 
                 case DiagnosticSeverity.Info:
-                    {
-                        return FailureLevel.Note;
-                    }
+                {
+                    return FailureLevel.Note;
+                }
 
                 default:
-                    {
-                        throw new InvalidOperationException("Unrecognized diagnostic severity value: " + severity.ToString());
-                    }
+                {
+                    throw new InvalidOperationException("Unrecognized diagnostic severity value: " + severity.ToString());
+                }
             }
         }
         public static FailureLevel ConvertToResultLevel(this DiagnosticSeverity severity)
@@ -96,25 +97,25 @@ namespace Microsoft.CodeAnalysis.IL
             switch (severity)
             {
                 case DiagnosticSeverity.Error:
-                    {
-                        return FailureLevel.Error;
-                    }
+                {
+                    return FailureLevel.Error;
+                }
 
                 case DiagnosticSeverity.Hidden:
                 case DiagnosticSeverity.Warning:
-                    {
-                        return FailureLevel.Warning;
-                    }
+                {
+                    return FailureLevel.Warning;
+                }
 
                 case DiagnosticSeverity.Info:
-                    {
-                        return FailureLevel.Note;
-                    }
+                {
+                    return FailureLevel.Note;
+                }
 
                 default:
-                    {
-                        throw new InvalidOperationException("Unrecognized diagnostic severity value: " + severity.ToString());
-                    }
+                {
+                    throw new InvalidOperationException("Unrecognized diagnostic severity value: " + severity.ToString());
+                }
             }
         }
     }

@@ -8,6 +8,7 @@ using System.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;

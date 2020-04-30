@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Text;
+
 using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase

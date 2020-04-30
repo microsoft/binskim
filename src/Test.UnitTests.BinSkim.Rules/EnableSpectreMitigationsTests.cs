@@ -3,16 +3,18 @@
 
 using System;
 using System.Collections.Generic;
+
 using FluentAssertions;
+
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
+
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public class EnableSpectreMitigationsTests
-    {        
+    {
         public EnableSpectreMitigationsTests()
         {
             // Reset the static cache of compiler data before each test, because

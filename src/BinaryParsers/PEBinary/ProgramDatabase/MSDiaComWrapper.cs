@@ -3,6 +3,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+
 using Dia2Lib;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase

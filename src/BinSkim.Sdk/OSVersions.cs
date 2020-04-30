@@ -3,6 +3,7 @@
 
 using System;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk

@@ -18,8 +18,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         private readonly string localSymbolDirectories;
 
         public PEBinary(
-            Uri uri, 
-            string symbolPath = null, 
+            Uri uri,
+            string symbolPath = null,
             string localSymbolDirectories = null,
             bool tracePdbLoad = false) : base(uri)
         {
@@ -49,8 +49,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             try
             {
                 pdb = new Pdb(
-                    this.PE.FileName, 
-                    this.symbolPath, 
+                    this.PE.FileName,
+                    this.symbolPath,
                     this.localSymbolDirectories,
                     this.tracePdbLoad);
             }
