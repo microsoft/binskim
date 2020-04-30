@@ -2,9 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
-using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -64,7 +64,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public abstract void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context);
 
         public static void LogPdbLoadTrace(
-            IAnalysisContext context, 
+            IAnalysisContext context,
             bool pdbLoadSucceeded,
             string pdbLoadTrace)
         {

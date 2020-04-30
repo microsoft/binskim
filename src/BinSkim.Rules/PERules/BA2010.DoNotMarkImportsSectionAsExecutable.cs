@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -18,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2010
         /// </summary>
-        public override string Id => RuleIds.DoNotMarkImportsSectionAsExecutableId;
+        public override string Id => RuleIds.DoNotMarkImportsSectionAsExecutable;
 
         /// <summary>
         /// PE sections should not be marked as both writable and executable. This condition

@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -18,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2014
         /// </summary>
-        public override string Id => RuleIds.DoNotDisableStackProtectionForFunctionsId;
+        public override string Id => RuleIds.DoNotDisableStackProtectionForFunctions;
 
         /// <summary>
         /// Application code should not disable stack protection for individual functions. 
@@ -49,7 +50,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleIds.DoNotDisableStackProtectionForFunctionsId + "." + nameof(DoNotDisableStackProtectionForFunctions);
+        private const string AnalyzerName = RuleIds.DoNotDisableStackProtectionForFunctions + "." + nameof(DoNotDisableStackProtectionForFunctions);
 
         private static StringSet BuildApprovedFunctionsStringSet()
         {

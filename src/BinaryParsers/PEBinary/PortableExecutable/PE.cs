@@ -569,24 +569,24 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 switch (assemblyName)
                 {
                     case "mscorlib":
-                        {
-                            return ManagedPlatform.DotNetFramework;
-                        }
+                    {
+                        return ManagedPlatform.DotNetFramework;
+                    }
 
                     case "System.Runtime":
-                        {
-                            return ManagedPlatform.DotNetCore;
-                        }
+                    {
+                        return ManagedPlatform.DotNetCore;
+                    }
 
                     case "netstandard":
-                        {
-                            return ManagedPlatform.DotNetStandard;
-                        }
+                    {
+                        return ManagedPlatform.DotNetStandard;
+                    }
 
                     default:
-                        {
-                            break;
-                        }
+                    {
+                        break;
+                    }
                 }
             }
 

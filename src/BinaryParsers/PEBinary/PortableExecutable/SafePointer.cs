@@ -265,8 +265,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public Stream GetStream()
         {
-            return this.array != null 
-                ? new MemoryStream(this.array, this.index, this.array.Length - this.index) 
+            return this.array != null
+                ? new MemoryStream(this.array, this.index, this.array.Length - this.index)
                 : this.stream;
         }
 
@@ -300,8 +300,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                return 
-                    ((this.array == null)  || (this.array.Length == 0)) &&
+                return
+                    ((this.array == null) || (this.array.Length == 0)) &&
                     ((this.stream == null) || (this.stream.Length == 0));
             }
         }

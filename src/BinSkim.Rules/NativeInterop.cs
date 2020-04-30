@@ -3,6 +3,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+
 using _FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
 namespace Microsoft.CodeAnalysis.IL.Rules

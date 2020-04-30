@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -18,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2015
         /// </summary>
-        public override string Id => RuleIds.EnableHighEntropyVirtualAddressesId;
+        public override string Id => RuleIds.EnableHighEntropyVirtualAddresses;
 
         /// <summary>
         /// Binaries should be marked as high entropy Address Space Layout Randomization

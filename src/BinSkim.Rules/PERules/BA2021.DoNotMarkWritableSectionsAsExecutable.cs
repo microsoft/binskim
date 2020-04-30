@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -19,7 +20,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2021
         /// </summary>
-        public override string Id => RuleIds.DoNotMarkWritableSectionsAsExecutableId;
+        public override string Id => RuleIds.DoNotMarkWritableSectionsAsExecutable;
 
         /// <summary>
         /// PE sections should not be marked as both writable and executable. This condition

@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+
 using Dia2Lib;
+
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
@@ -28,9 +30,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <param name="localSymbolDirectories">An option collection of local directories that should be examined for PDBs.</param>
         /// <param name="symbolPath">The symsrv.dll symbol path.</param>
         public Pdb(
-            string pePath, 
-            string symbolPath = null, 
-            string localSymbolDirectories = null, 
+            string pePath,
+            string symbolPath = null,
+            string localSymbolDirectories = null,
             bool traceLoads = false)
         {
             this.loadTrace = traceLoads ? new StringBuilder() : null;
@@ -115,7 +117,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
                 diaSource = MsdiaComWrapper.GetDiaSource();
                 diaSource.loadDataForExe(
-                    pePath, 
+                    pePath,
                     symbolPath,
                     this.loadTrace != null ? this : (object)IntPtr.Zero);
             }

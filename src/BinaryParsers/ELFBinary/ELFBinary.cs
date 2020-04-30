@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+
 using ELFSharp.ELF;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers

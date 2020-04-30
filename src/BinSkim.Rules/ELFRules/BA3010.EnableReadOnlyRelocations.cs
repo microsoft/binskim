@@ -3,7 +3,9 @@
 
 using System.Collections.Generic;
 using System.Composition;
+
 using ELFSharp.ELF;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;

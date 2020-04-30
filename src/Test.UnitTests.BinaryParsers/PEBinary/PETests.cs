@@ -4,8 +4,11 @@
 using System;
 using System.IO;
 using System.Text;
+
 using FluentAssertions;
+
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+
 using Xunit;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers

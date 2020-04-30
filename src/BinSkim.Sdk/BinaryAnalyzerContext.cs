@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.Sarif;
 
@@ -16,10 +17,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             get
             {
-                this.iBinary = this.iBinary 
+                this.iBinary = this.iBinary
                     ?? BinaryTargetManager.GetBinaryFromFile(
-                        this.uri, 
-                        this.SymbolPath, 
+                        this.uri,
+                        this.SymbolPath,
                         this.LocalSymbolDirectories,
                         this.TracePdbLoads);
 
@@ -74,7 +75,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public RuntimeConditions RuntimeErrors { get; set; }
 
-       private bool disposed = false;
+        private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
         {

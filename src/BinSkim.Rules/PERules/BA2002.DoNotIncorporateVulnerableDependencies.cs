@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2002
         /// </summary>
-        public override string Id => RuleIds.DoNotIncorporateVulnerableDependenciesId;
+        public override string Id => RuleIds.DoNotIncorporateVulnerableDependencies;
 
         /// <summary>
         /// Binaries should not take dependencies on other code with known security vulnerabilities.
@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleIds.DoNotIncorporateVulnerableDependenciesId + "." + nameof(DoNotIncorporateVulnerableDependencies);
+        private const string AnalyzerName = RuleIds.DoNotIncorporateVulnerableDependencies + "." + nameof(DoNotIncorporateVulnerableDependencies);
 
         public static PerLanguageOption<PropertiesDictionary> VulnerableDependencies { get; } =
             new PerLanguageOption<PropertiesDictionary>(
