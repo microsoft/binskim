@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2022
         /// </summary>
-        public override string Id => RuleIds.SignCorrectly;
+        public override string Id => RuleIds.SignSecurely;
 
         /// <summary>
         /// Images should be correctly signed by trusted publishers using 

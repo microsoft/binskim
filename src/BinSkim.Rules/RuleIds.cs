@@ -33,10 +33,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // 2020 open. Previously for 'do not use vb6' check
 
         public const string DoNotMarkWritableSectionsAsExecutable = "BA2021";
-        public const string SignCorrectly = "BA2022";
+        public const string SignSecurely = "BA2022";
 
         public const string EnableSpectreMitigations = "BA2024";
-
 
         // ELF Checks
         public const string EnablePositionIndependentExecutable = "BA3001";
