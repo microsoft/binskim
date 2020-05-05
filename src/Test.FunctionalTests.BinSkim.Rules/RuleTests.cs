@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             var targets = new List<string>();
             string ruleName = skimmer.GetType().Name;
-            string testFilesDirectory = ruleName;
+            string testFilesDirectory = GetTestDirectoryFor(ruleName);
             testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, expectToPass ? "Pass" : "Fail");
 
@@ -147,6 +147,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Assert.Empty(other);
         }
 
+        private string GetTestDirectoryFor(string ruleName)
+        {            
+            string ruleId = (string)typeof(RuleIds)
+                                .GetField(ruleName)
+                                .GetValue(obj: null);
+
+            return ruleId + "." + ruleName;
+        }
+
         private BinaryAnalyzerContext CreateContext(TestMessageLogger logger, PropertiesDictionary policy, string target)
         {
             var context = new BinaryAnalyzerContext
@@ -169,7 +178,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             var targets = new List<string>();
             string ruleName = skimmer.GetType().Name;
-            string baseFilesDirectory = ruleName;
+
+            string baseFilesDirectory = GetTestDirectoryFor(ruleName);
             baseFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", baseFilesDirectory);
 
             string[] testFilesDirectories =
@@ -224,7 +234,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             bool useDefaultPolicy = false)
         {
             string ruleName = skimmer.GetType().Name;
-            string testFilesDirectory = ruleName;
+            string testFilesDirectory = GetTestDirectoryFor(ruleName);
             testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, "NotApplicable");
 
