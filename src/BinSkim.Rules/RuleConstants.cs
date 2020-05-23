@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string SignCorrectly = "BA2022";
 
         public const string EnableSpectreMitigations = "BA2024";
-
+        public const string EnableControlEnforcementTechnologyShadowStack = "BA2025";
 
         // ELF Checks
         public const string EnablePositionIndependentExecutable = "BA3001";

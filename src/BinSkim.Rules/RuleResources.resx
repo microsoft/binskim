@@ -464,4 +464,13 @@ Modules triggering this check were:
     <value>The PDB for '{0}' was found and loaded. Probing details:
 {1}</value>
   </data>
+  <data name="BA2025_EnableControlEnforcementTechnologyShadowStack_Description" xml:space="preserve">
+    <value>Description placeholder</value>
+  </data>
+  <data name="BA2025_Error" xml:space="preserve">
+    <value>Error placeholder</value>
+  </data>
+  <data name="BA2025_Pass" xml:space="preserve">
+    <value>Pass placeholder</value>
+  </data>
 </root>

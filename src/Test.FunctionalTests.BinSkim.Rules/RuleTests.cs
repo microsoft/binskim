@@ -1145,5 +1145,34 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             this.VerifyNotApplicable(new UseCheckedFunctionsWithGcc(), new HashSet<string>());
         }
+
+        [Fact]
+        public void BA2025_EnableControlEnforcementTechnologyShadowStack_Fail()
+        {
+            this.VerifyFail(new EnableControlEnforcementTechnologyShadowStack());
+        }
+
+        [Fact]
+        public void BA2025_EnableControlEnforcementTechnologyShadowStack_Pass()
+        {
+            this.VerifyPass(new EnableControlEnforcementTechnologyShadowStack(), useDefaultPolicy: true);
+        }
+
+        [Fact]
+        public void BA2025_EnableControlEnforcementTechnologyShadowStack_NotApplicable()
+        {
+            // Be sure to add an exhaustive list of metadata conditions here
+            // that apply to the check (i.e., all the conditions that are
+            // referenced in the check CanAnalyze implementation).
+            var notApplicableTo = new HashSet<string>
+            {
+                MetadataConditions.ImageIsResourceOnlyBinary,
+                MetadataConditions.ImageIsILOnlyAssembly
+            };
+            this.VerifyNotApplicable(new EnableControlEnforcementTechnologyShadowStack(), notApplicableTo);
+
+            var applicableTo = new HashSet<string> { MetadataConditions.ImageIs64BitBinary };
+            this.VerifyNotApplicable(new EnableControlEnforcementTechnologyShadowStack(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
+        }
     }
 }
