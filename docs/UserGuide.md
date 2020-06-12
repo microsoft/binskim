@@ -62,11 +62,11 @@ All these arguments can be applied one or more times on the command-line. For an
 
 #### --sympath
 
-The `--sympath` argument provides a path to a symbol server. The syntax for this argument is identical to the symbol path provided to Windows debuggers, as documented **[here](https://msdn.microsoft.com/en-us/library/windows/hardware/ff558829(v=vs.85).aspx)**. The symbol path can also be used to specify a directory location to cache any downloaded symbols.
+The `--sympath` argument provides a path to a symbol server. The syntax for this argument is identical to the symbol path provided to Windows debuggers, as documented **[here](https://msdn.microsoft.com/en-us/library/windows/hardware/ff558829(v=vs.85).aspx)**. The symbol path can also be used to specify a directory location to cache any downloaded symbols. Note that BinSkim will clear the _NT_SYMBOL_PATH environment variable at runtime to prevent unexpected network activity or slowdowns related to PDB acquisition during analysis. Use `--sympath` to provide symbol server information instead. *IMPORTANT*: be sure to specific a `Cache*` component to your symbol path if at all possible. This will greatly improve performance, as BinSkim will download the PDB locally and scan from there, rather than crawling the PDB across the network.
 
-**NOTE:** BinSkim requires PDBs to complete a significant subset of its analysis (see list below) which should be located along a target .dll or .exe. BinSkim explicitly clears any symbol path configured in the environment via `%_NT_SYMBOL_PATH%` to prevent unexpected network activity or slowdowns related to PDB acquisition during analysis.
+**NOTE:** BinSkim requires PDBs to complete a significant subset of its analysis (see list below) which should be located along a target .dll or .exe. BinSkim explicitly clears any symbol path configured in the environment via `%_NT_SYMBOL_PATH%` 
 
-When BinSkim cannot properly load a PDB, because it is missing, corrupted, etc., the tool will emit an instance of `ERR97`. This message will report the problem including information on the specific `HRESULT` (and its meaning) error code returned by the PDB loading API. Here's an example: `error ERR997.ExceptionLoadingPdb : BA2013 : 'symsrv.dll' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded -- (E_PDB_NOT_FOUND (File not found))`
+When BinSkim cannot properly load a PDB, because it is missing, corrupted, etc., the tool will emit an instance of `ERR97`. This message will report the problem including information on the specific `HRESULT` (and its meaning) error code returned by the PDB loading API. Here's an example: `error ERR997.ExceptionLoadingPdb : BA2013 : 'symsrv.dll' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded -- (E_PDB_NOT_FOUND (File not found))`. See the documentation for `ERR97` in the [Rules and Errors Troubleshooting Guide](https://github.com/microsoft/binskim/blob/master/docs/RulesAndErrorsTroubleshootingGuide.md) for more information.
 
 The following table lists all BinSkim rules by ID and Name, detailing specific PDB information examined during analysis. Generally, each of these checks also inspects each object module language in order to restrict analysis to Microsoft C/C++ compilers.
 
@@ -79,6 +79,11 @@ The following table lists all BinSkim rules by ID and Name, detailing specific P
 | **BA2013** | `InitializeStackProtection` | Scans PDB for /GS feature function name |
 | **BA2014** | `DoNotDisableStackProtectionForFunctions` | `IDiaSymbol::get_isSafeBuffers` value for all binary functions |
 | **BA2024** | `EnableSpectreMitigations` | Compiler version of all linked object modules |
+
+       
+#### --local-symbol-directories
+
+The `--local-symbol-directories` argument configures a set of semicolon-delimited local directory paths that will be examined when attempting to locate PDBs. Provide this argument when your build system redirects PDB production to an alternate location (rather than emitting them alongside their matching binary).
 
 #### -o, --output
 
