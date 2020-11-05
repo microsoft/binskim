@@ -7,6 +7,7 @@ pool:
 steps:
 # Build and test
 - task: CmdLine@2
+  displayName: 'Build and Test'
   inputs:
     script: 'BuildAndTest.cmd' 
 
