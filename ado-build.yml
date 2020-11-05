@@ -6,11 +6,9 @@ pool:
   
 steps:
 # Build and test
-- task: PowerShell@2
-  displayName: Build and Test
+- task: CmdLine@2
   inputs:
-    targetType: filePath
-    filePath: ./scripts/BuildAndTest.ps1
+    script: 'BuildAndTest.cmd' 
 
 # Publish bld/bin folder
 - task: PublishBuildArtifacts@1
