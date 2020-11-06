@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             if (!Environment.GetCommandLineArgs().Where(arg => arg.Equals("--sarif-output-version")).Any())
             {
-                analyzeOptions.SarifOutputVersion = SarifVersion.OneZeroZero;
+                analyzeOptions.SarifOutputVersion = SarifVersion.Current;
             }
 
             if (s_UnitTestOutputVersion != SarifVersion.Unknown)
