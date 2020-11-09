@@ -38,9 +38,9 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override int Run(AnalyzeOptions analyzeOptions)
         {
-            if (!Environment.GetCommandLineArgs().Where(arg => arg.Equals("--sarif-output-version")).Any())
+            if (!Environment.GetCommandLineArgs().Any(arg => arg.Equals("--sarif-output-version")))
             {
-                analyzeOptions.SarifOutputVersion = SarifVersion.OneZeroZero;
+                analyzeOptions.SarifOutputVersion = SarifVersion.Current;
             }
 
             if (s_UnitTestOutputVersion != SarifVersion.Unknown)
