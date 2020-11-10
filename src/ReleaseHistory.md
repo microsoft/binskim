@@ -4,6 +4,7 @@
 * **AUTOMATION BREAKING**: Update to .NET Core 3.1. Changes tool paths in NuGet package. 
 * **FEATURE**: Add `--trace` argument to enable specialized trace of execution behavior, such as `PdbLoad`.
 * Update SARIF version to 2.2.3
+* **BREAKING** Default output is sarif v2
 
 ## **v1.6.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.6.1)
 * DOC FIX: Correct reporting to reflect that /guard:cf is case-sensitive for the compiler. Contributed by [@JacksonText](https://github.com/JacksonTech)
