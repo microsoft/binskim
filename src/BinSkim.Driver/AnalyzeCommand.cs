@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         protected override BinaryAnalyzerContext CreateContext(AnalyzeOptions options, IAnalysisLogger logger, RuntimeConditions runtimeErrors, PropertiesDictionary policy = null, string filePath = null)
         {
-            BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, policy: null, filePath: filePath);
+            BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, policy, filePath);
 
             binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
             binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(Traces.PdbLoad);
