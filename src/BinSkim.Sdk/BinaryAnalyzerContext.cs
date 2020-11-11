@@ -74,6 +74,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         }
 
         public RuntimeConditions RuntimeErrors { get; set; }
+        public bool AnalysisComplete { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         private bool disposed = false;
 

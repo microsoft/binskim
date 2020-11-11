@@ -102,7 +102,9 @@ namespace Microsoft.CodeAnalysis.IL
                 Verbose = true,
                 Recurse = false,
                 PrettyPrint = true,
+#pragma warning disable CS0618 // Type or member is obsolete
                 ComputeFileHashes = true,
+#pragma warning restore CS0618 // Type or member is obsolete
                 OutputFilePath = actualFileName,
                 ConfigurationFilePath = "default",
                 SarifOutputVersion = SarifVersion.Current,

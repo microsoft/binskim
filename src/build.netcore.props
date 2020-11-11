@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <NetCoreVersion>netcoreapp3.1</NetCoreVersion>
-    <NetStandardVersion>netstandard2.0</NetStandardVersion>
+    <NetStandardVersion>netstandard2.1</NetStandardVersion>
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64</RuntimeIdentifiers>
     </PropertyGroup>
 </Project>
