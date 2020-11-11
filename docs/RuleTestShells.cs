@@ -29,9 +29,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // Every PDB parsing rule should return an error if a PDB can't be located.
                 // Be sure to delete this code (and remove passing the 'failureConditions`
                 // arguments to 'VerifyFail' if not implementing a PDB crawling check.
-                var failureConditions = new HashSet<string> 
-                { 
-                    MetadataConditions.CouldNotLoadPdb 
+                var failureConditions = new HashSet<string>
+                {
+                    MetadataConditions.CouldNotLoadPdb
                 };
                 this.VerifyFail(
                     new RULEFRIENDLYNAME(),
@@ -87,5 +87,5 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 this.VerifyThrows<PlatformNotSupportedException>(new RULEFRIENDLYNAME(), useDefaultPolicy: true);
             }
         }
-   }
+    }
 }

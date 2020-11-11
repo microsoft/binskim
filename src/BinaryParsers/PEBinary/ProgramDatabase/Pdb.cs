@@ -53,8 +53,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 // We make this settable to allow the tool to clear the trace. This
                 // prevents multiple reports (for every PDB loading rule) that the
                 // PDB couldn't, in fact, be loaded.
-                this.loadTrace = !string.IsNullOrEmpty(value) 
-                    ? new StringBuilder(value) 
+                this.loadTrace = !string.IsNullOrEmpty(value)
+                    ? new StringBuilder(value)
                     : null;
             }
         }

@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         void NotifyDebugDir(
             [MarshalAs(UnmanagedType.Bool)] bool executable,
             int dataSize,
-            [In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data);
+            [In][MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data);
 
         /// <summary>
         /// Called when a candidate .dbg file has been opened.
@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         void NotifyDebugDir(
             [MarshalAs(UnmanagedType.Bool)] bool executable,
             int dataSize,
-            [In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data);
+            [In][MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data);
 
         /// <summary>
         /// Called when a candidate .dbg file has been opened.
@@ -218,7 +218,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             long fileOffset,
             int dataSize,
             out int dataRead,
-            [Out] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data);
+            [Out][MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data);
     }
 
     /// <summary>
@@ -242,6 +242,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             int relativeVirtualAddress,
             int dataSize,
             out int dataRead,
-            [Out] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data);
+            [Out][MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data);
     }
 }
