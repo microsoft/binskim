@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.IL
                 Verbose = true,
                 Recurse = false,
                 PrettyPrint = true,
-                ComputeFileHashes = true,
+                DataToInsert = new[] { OptionallyEmittedData.Hashes },
                 OutputFilePath = actualFileName,
                 ConfigurationFilePath = "default",
                 SarifOutputVersion = SarifVersion.Current,

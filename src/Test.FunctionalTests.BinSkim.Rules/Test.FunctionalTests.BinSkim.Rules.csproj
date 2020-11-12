@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.6.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.console" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
@@ -47,15 +47,6 @@
     <Folder Include="FunctionalTestsData\UseCheckedFunctionsWithGCC\Fail\" />
     <Folder Include="FunctionalTestsData\UseCheckedFunctionsWithGCC\NotApplicable\" />
     <Folder Include="FunctionalTestsData\UseCheckedFunctionsWithGCC\Pass\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Sarif">
-      <HintPath>..\..\refs\Sarif.dll</HintPath>
-    </Reference>
-    <Reference Include="Sarif.Driver">
-      <HintPath>..\..\refs\Sarif.Driver.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

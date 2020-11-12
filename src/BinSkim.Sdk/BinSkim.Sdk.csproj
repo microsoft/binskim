@@ -9,22 +9,14 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
+    <PackageReference Include="Sarif.Driver" Version="2.3.8" />
+    <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
   </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Reference Include="Sarif">
-      <HintPath>..\..\refs\Sarif.dll</HintPath>
-    </Reference>
-    <Reference Include="Sarif.Driver">
-      <HintPath>..\..\refs\Sarif.Driver.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  
+    
   <ItemGroup>
     <Compile Update="SdkResources.Designer.cs">
       <DesignTime>True</DesignTime>
