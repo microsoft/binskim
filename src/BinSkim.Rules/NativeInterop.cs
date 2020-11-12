@@ -230,21 +230,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [DllImport("crypt32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern
         bool CryptHashPublicKeyInfo(
-            [In]      IntPtr hCryptProv, // HCRYPTPROV
-            [In]      uint Algid,      // ALG_ID
-            [In]      uint dwFlags,
-            [In]      uint dwCertEncodingType,
-            [In]      ref CERT_PUBLIC_KEY_INFO pInfo,
-            [Out]     byte[] pbComputedHash,
+            [In] IntPtr hCryptProv, // HCRYPTPROV
+            [In] uint Algid,      // ALG_ID
+            [In] uint dwFlags,
+            [In] uint dwCertEncodingType,
+            [In] ref CERT_PUBLIC_KEY_INFO pInfo,
+            [Out] byte[] pbComputedHash,
             [In, Out] ref uint pcbComputedHash);
 
         internal static bool CryptHashPublicKeyInfoWrapper(
-            [In]      IntPtr hCryptProv, // HCRYPTPROV
-            [In]      uint Algid,      // ALG_ID
-            [In]      uint dwFlags,
-            [In]      uint dwCertEncodingType,
-            [In]      ref CERT_PUBLIC_KEY_INFO pInfo,
-            [Out]     byte[] pbComputedHash,
+            [In] IntPtr hCryptProv, // HCRYPTPROV
+            [In] uint Algid,      // ALG_ID
+            [In] uint dwFlags,
+            [In] uint dwCertEncodingType,
+            [In] ref CERT_PUBLIC_KEY_INFO pInfo,
+            [Out] byte[] pbComputedHash,
             [In, Out] ref uint pcbComputedHash)
         {
             BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
@@ -255,19 +255,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [DllImport("crypt32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern
         bool CryptHashToBeSigned(
-            [In]      IntPtr hCryptProv, // HCRYPTPROV
-            [In]      uint dwCertEncodingType,
-            [In]      byte[] pbEncoded,
-            [In]      uint cbEncoded,
-            [Out]     byte[] pbComputedHash,
+            [In] IntPtr hCryptProv, // HCRYPTPROV
+            [In] uint dwCertEncodingType,
+            [In] byte[] pbEncoded,
+            [In] uint cbEncoded,
+            [Out] byte[] pbComputedHash,
             [In, Out] ref uint pcbComputedHash);
 
         internal static bool CryptHashToBeSignedWrapper(
-            [In]      IntPtr hCryptProv, // HCRYPTPROV
-            [In]      uint dwCertEncodingType,
-            [In]      byte[] pbEncoded,
-            [In]      uint cbEncoded,
-            [Out]     byte[] pbComputedHash,
+            [In] IntPtr hCryptProv, // HCRYPTPROV
+            [In] uint dwCertEncodingType,
+            [In] byte[] pbEncoded,
+            [In] uint cbEncoded,
+            [Out] byte[] pbComputedHash,
             [In, Out] ref uint pcbComputedHash)
         {
             BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
@@ -309,13 +309,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private static extern IntPtr WTHelperGetProvSignerFromChain(
             IntPtr pProvData,
             uint idxSigner,
-            [MarshalAsAttribute(UnmanagedType.Bool)]bool fCounterSigner,
+            [MarshalAsAttribute(UnmanagedType.Bool)] bool fCounterSigner,
             uint idxCounterSigner);
 
         public static IntPtr WTHelperGetProvSignerFromChainWrapper(
             IntPtr pProvData,
             uint idxSigner,
-            [MarshalAsAttribute(UnmanagedType.Bool)]bool fCounterSigner,
+            [MarshalAsAttribute(UnmanagedType.Bool)] bool fCounterSigner,
             uint idxCounterSigner)
         {
             BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();

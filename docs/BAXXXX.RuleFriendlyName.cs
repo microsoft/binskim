@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// here as a summary comment.
         /// </summary>
 
-        public override MultiformatMessageString FullDescription => 
+        public override MultiformatMessageString FullDescription =>
             new MultiformatMessageString { Text = RuleResources.BAXXXX_RULEFRIENDLYNAME_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {

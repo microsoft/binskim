@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public Pdb Pdb => this.pdb?.Value;
 
         public PdbException PdbParseException { get; internal set; }
-       
+
         public Pdb StrippedPdb { get; private set; }
 
         public void DisposePortableExecutableData()

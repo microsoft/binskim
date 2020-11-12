@@ -148,7 +148,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         private string GetTestDirectoryFor(string ruleName)
-        {            
+        {
             string ruleId = (string)typeof(RuleIds)
                                 .GetField(ruleName)
                                 .GetValue(obj: null);

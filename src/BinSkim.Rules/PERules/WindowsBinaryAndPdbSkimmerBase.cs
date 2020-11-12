@@ -20,11 +20,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // Uses PDB Parsing.
             BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
             PEBinary target = context.PEBinary();
-            
+
             if (!string.IsNullOrEmpty(target.Pdb?.LoadTrace))
             {
                 LogPdbLoadTrace(
-                    context, 
+                    context,
                     pdbLoadSucceeded: true,
                     target.Pdb.LoadTrace);
 
