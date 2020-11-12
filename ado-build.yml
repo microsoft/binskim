@@ -10,10 +10,3 @@ steps:
   displayName: 'Build and Test'
   inputs:
     script: 'BuildAndTest.cmd' 
-
-# Publish bld/bin folder
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: build'
-  inputs:
-    PathtoPublish: '.\bld\bin\'
-    ArtifactName: build
