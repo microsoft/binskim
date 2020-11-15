@@ -42,7 +42,7 @@ if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :ExeFilesExit)
 Exit /B %ERRORLEVEL%
 
 :CopyFilesForMultitargeting
-xcopy /Y %BinaryOutputDirectory%\netcoreapp3.1\%~n1.dll %LayoutForSigningDirectory%\netcoreapp3.1\ 
+xcopy /Y %LayoutForSigningDirectory%\netcoreapp3.1\%~n1.dll %BinaryOutputDirectory%\netcoreapp3.1\ 
 if "%ERRORLEVEL%" NEQ "0" (echo %1 assembly copy failed. && goto :CopyFilesExit)
 :CopyFilesExit
 Exit /B %ERRORLEVEL%

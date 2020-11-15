@@ -1,9 +1,11 @@
 # BinSkim Release History
 
+* **BREAKING** Changing from self-contained to dotnettool. [#306](https://github.com/microsoft/binskim/pull/306)
+
 ## **v1.7.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.7.0)
 * **AUTOMATION BREAKING**: Update to .NET Core 3.1. Changes tool paths in NuGet package. 
 * **FEATURE**: Add `--trace` argument to enable specialized trace of execution behavior, such as `PdbLoad`.
-* Update SARIF version to 2.2.3
+* **FEATURE**: Update SARIF version to 2.3.8
 * **BREAKING** Default output is sarif v2
 
 ## **v1.6.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.6.1)
