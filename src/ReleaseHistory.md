@@ -1,5 +1,7 @@
 # BinSkim Release History
 
+## Unreleased
+
 * **BREAKING** Change from self-contained to dotnettool. [#306](https://github.com/microsoft/binskim/pull/306)
 
 ## **v1.7.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.7.0)
