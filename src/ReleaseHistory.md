@@ -1,6 +1,6 @@
 # BinSkim Release History
 
-## Unreleased
+## **Unreleased**
 
 * **BREAKING** Change from self-contained to dotnettool. [#306](https://github.com/microsoft/binskim/pull/306)
 
