@@ -1,12 +1,21 @@
 pr:
 - '*'
 
-pool:
-  vmImage: 'windows-latest'
-  
-steps:
-# Build and test
-- task: CmdLine@2
-  displayName: 'Build and Test'
-  inputs:
-    script: 'BuildAndTest.cmd' 
+jobs:
+- job: linux
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - task: Bash@3
+    displayName: 'Build and Test'
+    inputs:
+      filePath: 'BuildAndTest.sh'
+
+- job: windows
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - task: CmdLine@2
+    displayName: 'Build and Test'
+    inputs:
+      script: 'BuildAndTest.cmd'
