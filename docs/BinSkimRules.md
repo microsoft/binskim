@@ -1,4 +1,4 @@
-# Rules
+# BinSkim Rules
 
 ## Rule `BA3001.EnablePositionIndependentExecutable`
 
@@ -8,11 +8,11 @@ A Position Independent Executable (PIE) relocates all of its sections at load ti
 
 ### Messages
 
-#### `Pass_Executable`: Error
+#### `Executable`: Pass
 
 PIE enabled on executable '{0}'.
 
-#### `Pass_Library`: Error
+#### `Library`: Pass
 
 '{0}' is a shared object library rather than an executable, and is automatically position independent.
 
@@ -20,7 +20,7 @@ PIE enabled on executable '{0}'.
 
 PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -34,7 +34,7 @@ This checks if a binary has an executable stack; an executable stack allows atta
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 GNU_STACK segment marked as non-executable on '{0}'.
 
@@ -46,7 +46,7 @@ Stack on '{0}' is executable, which means that an attacker could use it as a pla
 
 GNU_STACK segment on '{0}' is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing '-z noexecstack' to the compiler.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -60,7 +60,7 @@ The stack protector ensures that all functions that use buffers over a certain s
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 Stack protector was found on '{0}'.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections.
 
@@ -68,7 +68,7 @@ Stack protector was found on '{0}'.  However, if you are not compiling with '--s
 
 The stack protector was not found in '{0}'.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -82,7 +82,7 @@ This check ensures that some relocation data is marked as read only after the ex
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 The GNU_RELRO segment was present, so '{0}' is protected.
 
@@ -90,7 +90,7 @@ The GNU_RELRO segment was present, so '{0}' is protected.
 
 The GNU_RELRO segment is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,relro' to address this.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -104,15 +104,15 @@ GCC can automatically replace unsafe functions with checked variants when it can
 
 ### Messages
 
-#### `Pass_AllFunctionsChecked`: Error
+#### `AllFunctionsChecked`: Pass
 
 All functions that can be checked in '{0}' are using the checked versions, so this binary is protected from overflows caused by those function's use.
 
-#### `Pass_SomeFunctionsChecked`: Error
+#### `SomeFunctionsChecked`: Pass
 
 Some checked functions were found in '{0}'; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy.
 
-#### `Pass_NoCheckableFunctions`: Error
+#### `NoCheckableFunctions`: Pass
 
 No unsafe functions which can be replaced with checked versions are used in '{0}'.
 
@@ -120,7 +120,7 @@ No unsafe functions which can be replaced with checked versions are used in '{0}
 
 No checked functions are present/used when compiling '{0}', and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 ('-O2') is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -134,7 +134,7 @@ No checked functions are present/used when compiling '{0}', and it was compiled 
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' is a 64-bit image with a base address that is >= 4 gigabytes, increasing the effectiveness of Address Space Layout Randomization (which helps prevent attackers from executing security-sensitive code in well-known locations).
 
@@ -142,7 +142,7 @@ No checked functions are present/used when compiling '{0}', and it was compiled 
 
 '{0}' is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -156,7 +156,7 @@ Binaries should not take dependencies on code with known security vulnerabilitie
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' does not incorporate any known vulnerable dependencies, as configured by current policy.
 
@@ -164,7 +164,7 @@ Binaries should not take dependencies on code with known security vulnerabilitie
 
 '{0}' was built with a version of {1} which is subject to the following issues: {2}. To resolve this, {3}. The source files that triggered this were: {4}
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -178,7 +178,7 @@ Do not ship obsolete libraries for which there are known security vulnerabilitie
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems.
 
@@ -190,7 +190,7 @@ Do not ship obsolete libraries for which there are known security vulnerabilitie
 
 Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -213,11 +213,11 @@ Application code should be compiled with the most up-to-date tool sets possible 
 
 built with {0} compiler version {1} (Front end version {2})
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 All linked modules of '{0}' generated by the Microsoft front-end satisfy configured policy (compiler minimum version {1}).
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -231,7 +231,7 @@ Binaries should be compiled with a warning level that enables all critical secur
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' was compiled at a secure warning level ({1}) and does not include any modules that disable specific warnings that are required by policy. As a result, it is less likely that memory corruption, information disclosure, double-free and other security-related vulnerabilities exist in code.
 
@@ -250,7 +250,7 @@ Modules triggering this check: {3}
 
 '{0}' contains code from an unknown language, preventing a comprehensive analysis of the compiler warning settings. The language could not be identified for the following modules: {1}
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -264,7 +264,7 @@ Binaries should enable the compiler control guard feature (CFG) at build time to
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location.
 
@@ -272,11 +272,11 @@ Binaries should enable the compiler control guard feature (CFG) at build time to
 
 '{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /guard:cf on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
-#### `NotApplicable_UnsupportedKernelModeVersion`: Error
+#### `UnsupportedKernelModeVersion`: NotApplicable
 
 '{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries.
 
@@ -290,7 +290,7 @@ Binaries should linked as DYNAMICBASE to be eligible for relocation by Address S
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' is properly compiled to enable Address Space Layout Randomization, reducing an attacker's ability to exploit code in well-known locations.
 
@@ -306,7 +306,7 @@ Binaries should linked as DYNAMICBASE to be eligible for relocation by Address S
 
 '{0}' is a Windows CE image but does not contain any relocation data, preventing Address Space Layout Randomization.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -320,7 +320,7 @@ PE sections should not be marked as both writable and executable. This condition
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' does not have an imports section that is marked as executable, helping to prevent the exploitation of code vulnerabilities.
 
@@ -328,7 +328,7 @@ PE sections should not be marked as both writable and executable. This condition
 
 '{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here. To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the ".rdata" segment into an executable section.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -342,7 +342,7 @@ Binaries should be built with the stack protector buffer security feature (/GS) 
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' is a C or C++ binary built with the stack protector buffer security feature enabled for all modules, making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities. 
 
@@ -354,7 +354,7 @@ Binaries should be built with the stack protector buffer security feature (/GS) 
 
 '{0}' contains code from an unknown language, preventing a comprehensive analysis of the stack protector buffer security features. The language could not be identified for the following modules: {1}.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -368,11 +368,11 @@ Application code should not interfere with the stack protector. The stack protec
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' is a C or C++ binary built with the buffer security feature that properly preserves the stack protecter cookie. This has the effect of enabling a significant increase in entropy provided by the operating system over that produced by the C runtime start-up code.
 
-#### `Pass_NoLoadConfig`: Error
+#### `NoLoadConfig`: Pass
 
 '{0}' is  C or C++binary that does not contain a load config table, which indicates either that it was compiled and linked with a version of the compiler that precedes stack protection features or is a binary (such as an ngen'ed assembly) that is not subject to relevant security issues.
 
@@ -384,11 +384,11 @@ Application code should not interfere with the stack protector. The stack protec
 
 '{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted.
 
-#### `InvalidSecurityCookieOffset`: Error
+#### `InvalidSecurityCookieOffset`: Warning
 
 '{0}' appears to be a packed C or C++ binary that reports a security cookie offset that exceeds the size of the packed file. Use of the stack protector (/GS) feature therefore could not be verified. The file was possibly packed by: {1}.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -402,15 +402,15 @@ Binaries should properly initialize the stack protector (/GS) in order to increa
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' is a C or C++ binary built with the buffer security feature that properly initializes the stack protecter. This has the effect of increasing the effectiveness of the feature and reducing spurious detections.
 
-#### `Pass_NoCode`: Error
+#### `NoCode`: Pass
 
 '{0}' is a C or C++ binary that is not required to initialize the stack protection, as it does not contain executable code.
 
-#### `NotApplicable_FeatureNotEnabled`: Error
+#### `FeatureNotEnabled`: NotApplicable
 
 '{0}' is a C or C++ binary that does not enable the stack protection buffer security feature. It is therefore not required to initialize the stack protector.
 
@@ -418,7 +418,7 @@ Binaries should properly initialize the stack protector (/GS) in order to increa
 
 '{0}' is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -432,7 +432,7 @@ Application code should not disable stack protection for individual functions. T
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' is a C or C++ binary built with the stack protector buffer security feature enabled which does not disable protection for any individual functions (via __declspec(safebuffers), making it more difficult for an attacker to exploit stack buffer overflow memory corruption vulnerabilities.
 
@@ -440,7 +440,7 @@ Application code should not disable stack protection for individual functions. T
 
 '{0}' is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -454,7 +454,7 @@ Binaries should be marked as high entropy Address Space Layout Randomization (AS
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' is high entropy ASLR compatible, reducing an attacker's ability to exploit code in well-known locations.
 
@@ -470,7 +470,7 @@ Binaries should be marked as high entropy Address Space Layout Randomization (AS
 
 '{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -484,7 +484,7 @@ Binaries should be marked as NX compatible to help prevent execution of untruste
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' is marked as NX compatible, helping to prevent attackers from executing code that is injected into data segments.
 
@@ -492,7 +492,7 @@ Binaries should be marked as NX compatible to help prevent execution of untruste
 
 '{0}' is not marked NX compatible. The NXCompat bit, also known as "Data Execution Prevention" (DEP) or "Execute Disable" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -506,11 +506,11 @@ X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception jump targets are defined as exception handlers in the program (and not shellcode).
 
-#### `Pass_NoSEH`: Error
+#### `NoSEH`: Pass
 
 '{0}' is an x86 binary that does not use SEH, making it an invalid target for exploits that attempt to replace SEH jump targets with attacker-controlled shellcode.
 
@@ -518,7 +518,7 @@ X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory
 
 '{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -532,7 +532,7 @@ Code or data sections should not be marked as both shared and writable. Because 
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitation of code vulnerabilities.
 
@@ -540,7 +540,7 @@ Code or data sections should not be marked as both shared and writable. Because 
 
 '{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -554,7 +554,7 @@ PE sections should not be marked as both writable and executable. This condition
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities.
 
@@ -566,7 +566,7 @@ PE sections should not be marked as both writable and executable. This condition
 
 '{0}' has a section alignment ({1}) that is smaller than its page size ({2}).
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -580,7 +580,7 @@ Images should be correctly signed by trusted publishers using cryptographically 
 
 ### Messages
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 '{0}' appears to be signed with secure cryptographic algorithms. WinTrustVerify successfully validated the binary but did not attempt to validate certificate chaining or that the root certificate is trusted. The following digitial signature algorithms were detected: {1}
 
@@ -596,7 +596,7 @@ Images should be correctly signed by trusted publishers using cryptographically 
 
 '{0}' signing could not be completely verified because '{1}' failed with error code: '{2}'.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
@@ -610,31 +610,31 @@ Application code should be compiled with the Spectre mitigations switch (/Qspect
 
 ### Messages
 
-#### `Warning`: Error
+#### `Warning`: Warning
 
 '{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request. The following modules are out of policy:
 {1}
 
-#### `OptimizationsDisabled`: Error
+#### `OptimizationsDisabled`: Warning
 
 The following modules were compiled with optimizations disabled (/Od), a condition that disables Spectre mitigations:
 {0}
 
-#### `SpectreMitigationNotEnabled`: Error
+#### `SpectreMitigationNotEnabled`: Warning
 
 The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:
 {0}
 
-#### `SpectreMitigationExplicitlyDisabled`: Error
+#### `SpectreMitigationExplicitlyDisabled`: Warning
 
 The following modules were compiled with Spectre mitigations explicitly disabled:
 {0}
 
-#### `Pass`: Error
+#### `Pass`: Pass
 
 All linked modules '{0}' were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.
 
-#### `NotApplicable_InvalidMetadata`: Error
+#### `InvalidMetadata`: NotApplicable
 
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
