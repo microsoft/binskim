@@ -9,19 +9,23 @@
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <RootNamespace>Microsoft.CodeAnalysis.IL</RootNamespace>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Microsoft/binskim</RepositoryUrl>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <Content Include="README.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include=".\DotnetToolSettings.xml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.7.82" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.6.1" />
@@ -31,20 +35,20 @@
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
     <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Reference Include="dia2lib">
       <HintPath>..\..\refs\dia2lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
     <ProjectReference Include="..\BinSkim.Rules\BinSkim.Rules.csproj" />
     <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Update="DriverResources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -52,7 +56,7 @@
       <DependentUpon>DriverResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Update="DriverResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
