@@ -2,7 +2,7 @@ name: dotnet format
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   check-format:
@@ -11,11 +11,6 @@ jobs:
     steps:
     - name: check out code
       uses: actions/checkout@v2
-
-    - name: Setup .NET Core 3.1
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.x
 
     - name: Install format tool
       run: dotnet tool install -g dotnet-format
