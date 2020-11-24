@@ -2,7 +2,8 @@
 
 ## **Unreleased**
 ## **v2.0.0** In progress (probably May/June 2021)
-* BREAKING: Change from self-contained to dotnettool.
+* BREAKING: Change from self-contained to dotnet-tool.
+* FEATURE: Enable .NET 5 support.
 
 ## **v1.7.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.7.3)
 * FEATURE: Update SARIF version to latest (using submodule). [#325](https://github.com/microsoft/binskim/pull/325)
