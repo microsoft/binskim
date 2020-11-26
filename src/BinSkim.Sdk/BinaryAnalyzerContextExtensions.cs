@@ -8,7 +8,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
     {
         public static bool IsPE(this BinaryAnalyzerContext target)
         {
-            return target.Binary is PEBinary ret;
+            return target.Binary is PEBinary;
         }
 
         public static PEBinary PEBinary(this BinaryAnalyzerContext target)
@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public static bool IsELF(this BinaryAnalyzerContext target)
         {
-            return target.Binary is ELFBinary ret;
+            return target.Binary is ELFBinary;
         }
 
         public static ELFBinary ELFBinary(this BinaryAnalyzerContext target)

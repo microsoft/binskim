@@ -66,7 +66,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (importTable.RelativeVirtualAddress != 0 && target.PE.PEHeaders.SectionHeaders != null)
             {
-                int importSize = peHeader.ImportTableDirectory.Size;
                 foreach (SectionHeader sectionHeader in target.PE.PEHeaders.SectionHeaders)
                 {
                     SectionCharacteristics memExecute = SectionCharacteristics.MemExecute;

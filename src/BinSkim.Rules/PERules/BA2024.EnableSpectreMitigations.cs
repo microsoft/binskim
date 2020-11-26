@@ -146,12 +146,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
 
-                Version actualVersion;
-                Language omLanguage = omDetails.Language;
-
                 // We already opted-out of IL Only binaries, so only check for native languages
                 // or those that can appear in mixed binaries.
-                switch (omLanguage)
+                switch (omDetails.Language)
                 {
                     case Language.C:
                     case Language.Cxx:
@@ -160,10 +157,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         {
                             // TODO: https://github.com/Microsoft/binskim/issues/114
                             continue;
-                        }
-                        else
-                        {
-                            actualVersion = omDetails.CompilerBackEndVersion;
                         }
                         break;
                     }
@@ -383,7 +376,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 List<string> objectModules = librariesToObjectModulesMap[key];
                 objectModules.Sort();
-                sb.AppendLine(" : " + string.Join(",", objectModules.ToArray()));
+                sb.Append(" : ").AppendLine(string.Join(",", objectModules.ToArray()));
             }
 
             return sb.ToString();
