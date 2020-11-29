@@ -80,12 +80,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // Could not locate the PDB for '{0'}. Probing details:{1}
                 : RuleResources.PdbLoadFailed;
 
+            FailureLevel failureLevel = pdbLoadSucceeded
+                ? FailureLevel.Note
+                : FailureLevel.Warning;
+
             context.Logger.LogConfigurationNotification(
                 Errors.CreateNotification(
                     context.TargetUri,
                     "TRC001.PdbLoad",
                     context.Rule.Id,
-                    FailureLevel.Warning,
+                    failureLevel,
                     exception: null,
                     persistExceptionStack: false,
                     formatString,
