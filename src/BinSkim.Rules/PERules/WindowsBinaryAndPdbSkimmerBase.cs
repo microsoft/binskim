@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.TargetUri,
                     "TRC001.PdbLoad",
                     context.Rule.Id,
-                    FailureLevel.Warning,
+                    failureLevel,
                     exception: null,
                     persistExceptionStack: false,
                     formatString,

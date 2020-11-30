@@ -52,14 +52,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
             PEBinary target = context.PEBinary();
 
-            Native.WINTRUST_DATA winTrustData;
-            string filePath;
-
-            filePath = target.PE.FileName;
-
-            winTrustData = new Native.WINTRUST_DATA();
-
-            if (this.InvokeVerifyAction(context, filePath, out winTrustData, out string algorithmName))
+            string filePath = target.PE.FileName;
+            if (this.InvokeVerifyAction(context, filePath, out _, out string algorithmName))
             {
                 // '{0}' appears to be signed securely by a trusted publisher with no 
                 // verification or time stamp errors. Revocation checking was performed
