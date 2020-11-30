@@ -519,7 +519,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 // its corresponding .NET core application entry point dll.
                 !this.IsDotNetCore
                     && this.CodeViewDebugDirectoryData.Path != null
-                    && this.CodeViewDebugDirectoryData.Path.EndsWith("apphost.pdb", StringComparison.OrdinalIgnoreCase);
+                    && (this.CodeViewDebugDirectoryData.Path.EndsWith("apphost.pdb", StringComparison.OrdinalIgnoreCase)
+                        || this.CodeViewDebugDirectoryData.Path.EndsWith("singlefilehost.pdb", StringComparison.OrdinalIgnoreCase));
 
         public bool IsDotNetNativeBootstrapExe
         {
