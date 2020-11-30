@@ -26,7 +26,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         private static void CoCreateFromMsdia(Guid clsidOfServer, Guid riid, out IntPtr pvObject)
         {
             IntPtr pClassFactory = IntPtr.Zero;
-            _ = DllGetClassObject(clsidOfServer, new Guid("00000001-0000-0000-C000-000000000046"), out pClassFactory);
+            int hr = DllGetClassObject(clsidOfServer, new Guid("00000001-0000-0000-C000-000000000046"), out pClassFactory);
+            if (hr != 0)
+            {
+                throw new InvalidOperationException("Could not get class object.");
+            }
             var classFactory = (IClassFactory)Marshal.GetObjectForIUnknown(pClassFactory);
             classFactory.CreateInstance(IntPtr.Zero, ref riid, out pvObject);
             Marshal.Release(pClassFactory);
