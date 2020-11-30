@@ -61,6 +61,10 @@ call BuildPackages.cmd || goto :ExitFailed
 echo CreateLayoutDirectory.cmd %~dp0bld\bin %Configuration% %Platform%
 call CreateLayoutDirectory.cmd %~dp0bld\bin %Configuration% %Platform%
 
+echo dotnet-format
+dotnet tool update --global dotnet-format --version 4.1.131201
+dotnet-format --folder
+
 goto :Exit
 
 :CreatePublishPackage
