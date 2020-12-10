@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public void Driver_BuiltInRuleFunctionalTests()
         {
-            AnalyzeCommand.s_UnitTestOutputVersion = SarifVersion.Current;
+            AnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
             this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*");
         }
 
@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.IL
                 DataToInsert = new[] { OptionallyEmittedData.Hashes },
                 OutputFilePath = actualFileName,
                 ConfigurationFilePath = "default",
-                SarifOutputVersion = SarifVersion.Current,
+                SarifOutputVersion = Sarif.SarifVersion.Current,
                 TargetFileSpecifiers = new string[] { inputFileName },
                 Traces = new Traces[] { }
             };

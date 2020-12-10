@@ -40,10 +40,10 @@ namespace Microsoft.CodeAnalysis.IL
         {
             if (!Environment.GetCommandLineArgs().Any(arg => arg.Equals("--sarif-output-version")))
             {
-                analyzeOptions.SarifOutputVersion = SarifVersion.Current;
+                analyzeOptions.SarifOutputVersion = Sarif.SarifVersion.Current;
             }
 
-            if (s_UnitTestOutputVersion != SarifVersion.Unknown)
+            if (s_UnitTestOutputVersion != Sarif.SarifVersion.Unknown)
             {
                 analyzeOptions.SarifOutputVersion = s_UnitTestOutputVersion;
             }
@@ -60,6 +60,6 @@ namespace Microsoft.CodeAnalysis.IL
                 : result;
         }
 
-        internal static SarifVersion s_UnitTestOutputVersion = SarifVersion.Unknown;
+        internal static Sarif.SarifVersion s_UnitTestOutputVersion;
     }
 }

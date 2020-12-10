@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private void ValidateResultFromFakeTestData(CompilerVersionToMitigation[] results)
         {
-            results.ShouldAllBeEquivalentTo(this.testData, "Loaded from test data.");
+            results.Should().BeEquivalentTo(this.testData, "Loaded from test data.");
         }
 
         [Theory]
@@ -120,7 +120,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             Version nextUp = EnableSpectreMitigations.GetClosestCompilerVersionWithSpectreMitigations(context, machine, actualVersion);
 
-            nextUp.ShouldBeEquivalentTo(new Version(expectedVersionStr));
+            nextUp.Should().BeEquivalentTo(new Version(expectedVersionStr));
         }
 
         [Fact]
