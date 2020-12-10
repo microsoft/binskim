@@ -3,7 +3,6 @@
 ## **Unreleased**
 
 ## **v1.7.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.7.1)
-
 * **BREAKING** Change from self-contained to dotnettool. [#306](https://github.com/microsoft/binskim/pull/306)
 * BUG FIX: Fix issue when analyze `SingleFilePublish` files. [#311](https://github.com/microsoft/binskim/pull/311)
 
