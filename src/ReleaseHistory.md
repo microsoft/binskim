@@ -3,7 +3,7 @@
 ## **Unreleased**
 
 ## **v1.7.2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.7.2)
-* **BREAKING**: Revert dotnet-tool. []() 
+* **BREAKING**: Revert dotnet-tool. [#316](https://github.com/microsoft/binskim/pull/316)
 
 ## **v1.7.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.7.1)
 * **BREAKING**: Change from self-contained to dotnettool. [#306](https://github.com/microsoft/binskim/pull/306)
