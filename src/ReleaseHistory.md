@@ -2,6 +2,9 @@
 
 ## **Unreleased**
 
+## **v2.0.0** In progress (probably May/June 2021)
+* **BREAKING**: Change from self-contained to dotnettool.
+
 ## **v1.7.2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.7.2)
 * **BREAKING**: Revert dotnet-tool. [#316](https://github.com/microsoft/binskim/pull/316)
 
