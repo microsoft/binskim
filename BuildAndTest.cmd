@@ -37,7 +37,7 @@ echo         public const string Version = AssemblyVersion + Prerelease;        
 echo     }                                                                           >> %VERSION_CONSTANTS%
 echo  }                                                                              >> %VERSION_CONSTANTS%
 
-:: Restore packages
+::Restore packages
 echo Restoring packages...
 dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --configfile "%NuGetConfigFile%" --packages "%NuGetPackageDir%
 
@@ -45,19 +45,24 @@ dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --configfil
 echo Building solution...
 dotnet build --no-restore /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
-:: Run unit tests
-echo Running tests...
-dotnet test %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --no-build
+::Run unit tests
+echo Run all multitargeting xunit tests
+call :RunTestProject BinaryParsers Unit || goto :ExitFailed
+call :RunTestProject BinSkim.Rules Unit || goto :ExitFailed
+call :RunTestProject BinSkim.Driver Functional || goto :ExitFailed
+call :RunTestProject BinSkim.Rules Functional  || goto :ExitFailed
 
-:: Create the BinSkim publish packages
-echo Creating Platform 'Publish' Packages...
-call :CreatePublishPackage netcoreapp3.1 || goto :ExitFailed
+::Create the BinSkim platform specific publish packages
+echo Creating Platform Specific BinSkim 'Publish' Packages
+call :CreatePublishPackage netcoreapp3.1 win-x86 || goto :ExitFailed
+call :CreatePublishPackage netcoreapp3.1 win-x64 || goto :ExitFailed
+call :CreatePublishPackage netcoreapp3.1 linux-x64 || goto :ExitFailed
 
-:: Build NuGet package
+::Build NuGet package
 echo BuildPackages.cmd
 call BuildPackages.cmd || goto :ExitFailed
 
-:: Create layout directory of assemblies that need to be signed
+::Create layout directory of assemblies that need to be signed
 echo CreateLayoutDirectory.cmd %~dp0bld\bin %Configuration% %Platform%
 call CreateLayoutDirectory.cmd %~dp0bld\bin %Configuration% %Platform%
 
@@ -67,9 +72,17 @@ dotnet-format --folder
 
 goto :Exit
 
+:RunTestProject
+set TestProject=%1
+set TestType=%2
+pushd %~dp0src\Test.%TestType%Tests.%TestProject% && dotnet test --no-build -c %Configuration% && popd
+if "%ERRORLEVEL%" NEQ "0" (echo %TestProject% %TestType% tests execution FAILED.)
+Exit /B %ERRORLEVEL%
+
 :CreatePublishPackage
 set Framework=%~1
-dotnet publish %~dp0src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework%
+set RuntimeArg=%~2
+dotnet publish %~dp0src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework% --runtime %RuntimeArg%
 Exit /B %ERRORLEVEL%
 
 :ExitFailed
