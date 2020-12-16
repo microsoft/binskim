@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
             Action action = () => { IDiaDataSource source = ProgramDatabase.MsdiaComWrapper.GetDiaSource(); };
-            action.ShouldNotThrow();
+            action.Should().NotThrow();
         }
     }
 }
