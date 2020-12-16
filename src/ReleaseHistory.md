@@ -2,8 +2,14 @@
 
 ## **Unreleased**
 
+## **v2.0.0** In progress (probably May/June 2021)
+* **BREAKING**: Change from self-contained to dotnettool.
+
+## **v1.7.2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.7.2)
+* **BREAKING**: Revert dotnet-tool. [#316](https://github.com/microsoft/binskim/pull/316)
+
 ## **v1.7.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.7.1)
-* **BREAKING** Change from self-contained to dotnettool. [#306](https://github.com/microsoft/binskim/pull/306)
+* **BREAKING**: Change from self-contained to dotnettool. [#306](https://github.com/microsoft/binskim/pull/306)
 * BUG FIX: Fix issue when analyze `SingleFilePublish` files. [#311](https://github.com/microsoft/binskim/pull/311)
 
 ## **v1.7.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.7.0)
