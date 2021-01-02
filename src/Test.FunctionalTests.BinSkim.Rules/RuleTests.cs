@@ -502,6 +502,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2004_EnableSecureSourceCodeHashing_Fail()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyFail(new EnableSecureSourceCodeHashing(), useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
         public void BA2005_DoNotShipVulnerableBinaries_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
