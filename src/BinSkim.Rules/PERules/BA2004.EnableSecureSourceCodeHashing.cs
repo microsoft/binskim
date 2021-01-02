@@ -75,157 +75,37 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb di = target.Pdb;
 
-            var warningTooLowModules = new TruncatedCompilandRecordList();
-            var disabledWarningModules = new TruncatedCompilandRecordList();
-            var unknownLanguageModules = new TruncatedCompilandRecordList();
-            var allWarningLevelLowModules = new TruncatedCompilandRecordList();
-
-            string exampleTooLowWarningCommandLine = null;
-            int overallMinimumWarningLevel = int.MaxValue;
-            string exampleDisabledWarningCommandLine = null;
-            var overallDisabledWarnings = new List<int>();
-
             foreach (DisposableEnumerableView<Symbol> omView in di.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                // Detection applies to C/C++ produced by MS compiler only
-                if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftNativeCompiler)
+                if (omDetails.Language != Language.C && omDetails.Language != Language.Cxx)
                 {
                     continue;
                 }
 
-                if (om.IsManaged)
+                if (!omDetails.HasDebugInfo)
                 {
-
+                    continue;
                 }
 
-                if (!string.IsNullOrEmpty(omDetails.RawCommandLine))
+                foreach (DisposableEnumerableView<SourceFile> sfView in di.CreateSourceFileIterator(om))
                 {
+                    SourceFile sf = sfView.Value;
 
-                }
-
-                if (omDetails.Language == Language.Unknown)
-                {
-                    // See if this module contributed to an executable section. If not, we can ignore the module.
-                    if (di.CompilandWithIdIsInExecutableSectionContrib(om.SymIndexId))
+                    if (sf.HashType != HashType.SHA256)
                     {
-                        unknownLanguageModules.Add(om.CreateCompilandRecord());
+                        if (om.IsManaged)
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
                     }
-
-                    continue;
                 }
-
-                if (!om.CreateChildIterator(SymTagEnum.SymTagFunction).Any())
-                {
-                    // uninteresting...
-                    continue;
-                }
-
-                int warningLevel = omDetails.WarningLevel;
-                var requiredDisabledWarnings = omDetails.ExplicitlyDisabledWarnings
-                    .Where(context.Policy.GetProperty(RequiredCompilerWarnings).Contains).ToList();
-
-                overallMinimumWarningLevel = Math.Min(overallMinimumWarningLevel, warningLevel);
-
-                if (warningLevel >= 3 && requiredDisabledWarnings.Count == 0)
-                {
-                    // We duplicate this condition to bail out early and avoid writing the
-                    // module description or newline into sbBadWarningModules if everything
-                    // in the module is OK.
-                    continue;
-                }
-
-                var suffix = new List<string>(2);
-
-                if (warningLevel < 3)
-                {
-                    exampleTooLowWarningCommandLine = exampleTooLowWarningCommandLine ?? omDetails.RawCommandLine;
-
-                    string msg = "[warning level: " + warningLevel.ToString(CultureInfo.InvariantCulture) + "]";
-                    warningTooLowModules.Add(om.CreateCompilandRecordWithSuffix(msg));
-                    suffix.Add(msg);
-                }
-
-                if (requiredDisabledWarnings.Count != 0)
-                {
-                    MergeInto(overallDisabledWarnings, requiredDisabledWarnings);
-                    exampleDisabledWarningCommandLine = exampleDisabledWarningCommandLine ?? omDetails.RawCommandLine;
-
-                    string msg = "[Explicitly disabled warnings: " + CreateTextWarningList(requiredDisabledWarnings) + "]";
-                    disabledWarningModules.Add(om.CreateCompilandRecordWithSuffix(msg));
-                    suffix.Add(msg);
-                }
-
-                allWarningLevelLowModules.Add(om.CreateCompilandRecordWithSuffix(string.Join(" ", suffix)));
-            }
-
-            if (unknownLanguageModules.Empty &&
-                exampleTooLowWarningCommandLine == null &&
-                exampleDisabledWarningCommandLine == null)
-            {
-                // '{0}' was compiled at a secure warning level ({1}) and does not 
-                // include any modules that disable specific warnings which are 
-                // required by policy. As a result, there is a greater likelihood 
-                // that memory corruption, information disclosure, double-free and 
-                // other security-related vulnerabilities do not exist in code.
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                        nameof(RuleResources.BA2007_Pass),
-                        context.TargetUri.GetFileName(),
-                        overallMinimumWarningLevel.ToString()));
-                return;
-            }
-
-            if (!unknownLanguageModules.Empty)
-            {
-                // '{0}' contains code from an unknown language, preventing a 
-                // comprehensive analysis of the compiler warning settings. 
-                // The language could not be identified for the following modules: {1}
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                        nameof(RuleResources.BA2007_Error_UnknownModuleLanguage),
-                        context.TargetUri.GetFileName(),
-                        unknownLanguageModules.CreateSortedObjectList()));
-            }
-
-            if (!string.IsNullOrEmpty(exampleTooLowWarningCommandLine))
-            {
-                // '{0}' was compiled at too low a warning level. Warning level 3 enables 
-                // important static analysis in the compiler to flag bugs that can lead 
-                // to memory corruption, information disclosure, or double-free 
-                // vulnerabilities.To resolve this issue, compile at warning level 3 or 
-                // higher by supplying / W3, / W4, or / Wall to the compiler, and resolve 
-                // the warnings emitted.
-                // An example compiler command line triggering this check: {1}
-                // Modules triggering this check: {2}
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                        nameof(RuleResources.BA2007_Error_InsufficientWarningLevel),
-                        context.TargetUri.GetFileName(),
-                        overallMinimumWarningLevel.ToString(),
-                        exampleTooLowWarningCommandLine,
-                        warningTooLowModules.CreateTruncatedObjectList()));
-            }
-
-            if (exampleDisabledWarningCommandLine != null)
-            {
-                // '{0}' disables compiler warning(s) which are required by policy. A 
-                // compiler warning is typically required if it has a high likelihood of 
-                // flagging memory corruption, information disclosure, or double-free 
-                // vulnerabilities. To resolve this issue, enable the indicated warning(s) 
-                // by removing /Wxxxx switches (where xxxx is a warning id indicated here) 
-                // from your command line, and resolve any warnings subsequently raised 
-                // during compilation.
-                // An example compiler command line triggering this check was: {1}
-                // Modules triggering this check were: {2}
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                        nameof(RuleResources.BA2007_Error_WarningsDisabled),
-                        context.TargetUri.GetFileName(),
-                        exampleDisabledWarningCommandLine,
-                        disabledWarningModules.CreateTruncatedObjectList()));
             }
         }
 

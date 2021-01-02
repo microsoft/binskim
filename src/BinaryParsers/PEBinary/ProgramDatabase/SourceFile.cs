@@ -119,6 +119,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     {
         None = 0,
         MD5,
-        SHA1
+        SHA1,
+        SHA256
     }
 }
