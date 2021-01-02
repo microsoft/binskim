@@ -115,6 +115,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/checksumalgorithm:SHA256&apos; on the compiler command-line to enable secure source code hashing..
+        /// </summary>
+        internal static string BA2004_Error_Managed {
+            get {
+                return ResourceManager.GetString("BA2004_Error_Managed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native Windows binary compiled with an insecure (MD5) source code hashing algorithm: &apos;{1}&apos;. MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA256&apos; on the compiler command-line to enable secure source code hashing..
+        /// </summary>
+        internal static string BA2004_Error_Native {
+            get {
+                return ResourceManager.GetString("BA2004_Error_Native", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a managed binary which was compiled with a secure (SHA-256) source code hashing algorithm..
+        /// </summary>
+        internal static string BA2004_Pass_Managed {
+            get {
+                return ResourceManager.GetString("BA2004_Pass_Managed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native Windows binary which was compiled with a secure (SHA-256) source code hashing algorithm..
+        /// </summary>
+        internal static string BA2004_Pass_Native {
+            get {
+                return ResourceManager.GetString("BA2004_Pass_Native", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not ship obsolete libraries for which there are known security vulnerabilities..
         /// </summary>
         internal static string BA2005_DoNotShipVulnerableBinaries_Description {
