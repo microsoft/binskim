@@ -6,6 +6,8 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   steps:
+  - checkout: self
+    submodules: true
   - task: Bash@3
     displayName: 'Build and Test'
     inputs:
@@ -15,6 +17,8 @@ jobs:
   pool:
     vmImage: 'windows-latest'
   steps:
+  - checkout: self
+    submodules: true
   - task: CmdLine@2
     displayName: 'Build and Test'
     inputs:

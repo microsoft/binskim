@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.IL
             BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, policy, filePath);
 
             binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
-            binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(Traces.PdbLoad);
+            binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
 
             return binaryAnalyzerContext;
@@ -46,6 +46,24 @@ namespace Microsoft.CodeAnalysis.IL
             if (s_UnitTestOutputVersion != Sarif.SarifVersion.Unknown)
             {
                 analyzeOptions.SarifOutputVersion = s_UnitTestOutputVersion;
+            }
+
+            // TODO: the SARIF SDK should be providing this backwards compatibility.
+            // I've filed a bug. We should convert BinSkim to consume SARIF-SDK as
+            // a sub-module. This would make implementing SDK spot fixes easier.
+            // https://github.com/microsoft/sarif-sdk/issues/2211
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            if (analyzeOptions.ComputeFileHashes)
+#pragma warning restore CS0618
+            {
+                OptionallyEmittedData dataToInsert = analyzeOptions.DataToInsert.ToFlags();
+                dataToInsert |= OptionallyEmittedData.Hashes;
+
+                analyzeOptions.DataToInsert =
+                    dataToInsert.ToString().Split('|')
+                        .Select(d => { return Enum.Parse<OptionallyEmittedData>(d); })
+                        .ToList();
             }
 
             int result = base.Run(analyzeOptions);

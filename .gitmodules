@@ -1,0 +1,3 @@
+[submodule "src/sarif-sdk"]
+	path = src/sarif-sdk
+	url = https://github.com/microsoft/sarif-sdk
