@@ -122,10 +122,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             Pdb pdb = target.Pdb;
 
-            var masmModules = new TruncatedCompilandRecordList();
+            var masmModules = new List<ObjectModuleDetails>();
             var mitigationNotEnabledModules = new List<ObjectModuleDetails>();
-            var mitigationDisabledInDebugBuild = new TruncatedCompilandRecordList();
-            var mitigationExplicitlyDisabledModules = new TruncatedCompilandRecordList();
+            var mitigationDisabledInDebugBuild = new List<ObjectModuleDetails>();
+            var mitigationExplicitlyDisabledModules = new List<ObjectModuleDetails>();
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
 
@@ -163,7 +163,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     case Language.MASM:
                     {
-                        masmModules.Add(om.CreateCompilandRecord());
+                        masmModules.Add(omDetails);
                         continue;
                     }
 
@@ -259,7 +259,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     else
                     {
                         // Built with the Spectre mitigations explicitly disabled.
-                        mitigationExplicitlyDisabledModules.Add(om.CreateCompilandRecord());
+                        mitigationExplicitlyDisabledModules.Add(omDetails);
                     }
 
                     continue;
@@ -281,7 +281,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     if (debugEnabled)
                     {
                         // Built with /Od which disables Spectre mitigations.
-                        mitigationDisabledInDebugBuild.Add(om.CreateCompilandRecord());
+                        mitigationDisabledInDebugBuild.Add(omDetails);
                         continue;
                     }
                 }
@@ -290,13 +290,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string line;
             var sb = new StringBuilder();
 
-            if (!mitigationExplicitlyDisabledModules.Empty)
+            if (mitigationExplicitlyDisabledModules.Count > 0)
             {
                 // The following modules were compiled with Spectre
                 // mitigations explicitly disabled: {0}
                 line = string.Format(
                         RuleResources.BA2024_Warning_SpectreMitigationExplicitlyDisabled,
-                        mitigationExplicitlyDisabledModules.CreateSortedObjectList());
+                        mitigationExplicitlyDisabledModules.CreateOutputCoalescedByLibrary());
                 sb.AppendLine(line);
             }
 
@@ -306,26 +306,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // /Qspectre but the switch was not enabled on the command-line: {0}
                 line = string.Format(
                         RuleResources.BA2024_Warning_SpectreMitigationNotEnabled,
-                        this.CreateOutputCoalescedByLibrary(mitigationNotEnabledModules));
+                        mitigationNotEnabledModules.CreateOutputCoalescedByLibrary());
                 sb.AppendLine(line);
             }
 
-            if (!mitigationDisabledInDebugBuild.Empty)
+            if (mitigationDisabledInDebugBuild.Count > 0)
             {
                 // The following modules were compiled with optimizations disabled(/ Od),
                 // a condition that disables Spectre mitigations: {0}
                 line = string.Format(
                         RuleResources.BA2024_Warning_OptimizationsDisabled,
-                        mitigationDisabledInDebugBuild.CreateSortedObjectList());
+                        mitigationDisabledInDebugBuild.CreateOutputCoalescedByLibrary());
                 sb.AppendLine(line);
             }
 
             if ((context.Policy.GetProperty(Reporting) & ReportingOptions.WarnIfMasmModulesPresent) == ReportingOptions.WarnIfMasmModulesPresent &&
-                !masmModules.Empty)
+                masmModules.Count > 0)
             {
                 line = string.Format(
                         RuleResources.BA2024_Warning_MasmModulesDetected,
-                        masmModules.CreateSortedObjectList());
+                        masmModules.CreateOutputCoalescedByLibrary());
                 sb.AppendLine(line);
             }
 
@@ -352,42 +352,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2024_Pass),
                         context.TargetUri.GetFileName()));
-        }
-
-        private string CreateOutputCoalescedByLibrary(List<ObjectModuleDetails> objectModuleDetailsList)
-        {
-            var librariesToObjectModulesMap = new Dictionary<string, List<string>>();
-
-            foreach (ObjectModuleDetails objectModuleDetail in objectModuleDetailsList)
-            {
-                string key = this.CreateLibraryDescriptor(objectModuleDetail);
-                if (!librariesToObjectModulesMap.TryGetValue(key, out List<string> objectModules))
-                {
-                    objectModules = librariesToObjectModulesMap[key] = new List<string>();
-                }
-                objectModules.Add(Path.GetFileName(objectModuleDetail.Name));
-            }
-
-            var sb = new StringBuilder();
-
-            foreach (string key in librariesToObjectModulesMap.Keys)
-            {
-                sb.Append(key);
-
-                List<string> objectModules = librariesToObjectModulesMap[key];
-                objectModules.Sort();
-                sb.Append(" : ").AppendLine(string.Join(",", objectModules.ToArray()));
-            }
-
-            return sb.ToString();
-        }
-
-        private string CreateLibraryDescriptor(ObjectModuleDetails objectModuleDetail)
-        {
-            return Path.GetFileName(
-                            objectModuleDetail.Library) + "," +
-                            objectModuleDetail.Language.ToString().ToLowerInvariant() + "," +
-                            objectModuleDetail.CompilerBackEndVersion;
         }
 
         internal static Version GetClosestCompilerVersionWithSpectreMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)
