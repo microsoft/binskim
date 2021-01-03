@@ -28,11 +28,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 this.SetProperty<string>(BinScopeCompatibility.EquivalentBinScopeRulePropertyName, altId);
             }
-        }
 
-        // BA2012.DoNotModifyStackProtectionCookie is the only rule
-        // that potentially fires warnings (and its default is error).
-        public override FailureLevel DefaultLevel => FailureLevel.Error;
+            // BA2012.DoNotModifyStackProtectionCookie is the only rule
+            // that potentially fires warnings (and its default is error).
+            this.DefaultConfiguration.Level = FailureLevel.Error;
+        }
 
         protected override ResourceManager ResourceManager => RuleResources.ResourceManager;
     }
