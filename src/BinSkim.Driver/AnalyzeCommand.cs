@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.IL
             BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, policy, filePath);
 
             binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
-            binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(Traces.PdbLoad);
+            binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
 
             return binaryAnalyzerContext;

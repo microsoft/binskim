@@ -75,6 +75,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public RuntimeConditions RuntimeErrors { get; set; }
         public bool AnalysisComplete { get; set; }
+        public DefaultTraces Traces { get; set; }
 
         private bool disposed = false;
 
