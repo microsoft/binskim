@@ -1097,7 +1097,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
+                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded."
               },
               "level": "error",
               "descriptor": {
@@ -1118,7 +1118,28 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
+                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded."
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              },
+              "associatedRule": {
+                "id": "BA2004"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2015_DefaultBlankApp.dll"
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded."
               },
               "level": "error",
               "descriptor": {
@@ -1139,7 +1160,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
+                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded."
               },
               "level": "error",
               "descriptor": {
@@ -1160,7 +1181,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded. (E_PDB_NOT_FOUND)"
+                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded."
               },
               "level": "error",
               "descriptor": {

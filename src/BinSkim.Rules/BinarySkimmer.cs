@@ -30,9 +30,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        // BA2012.DoNotModifyStackProtectionCookie is the only rule
-        // that potentially fires warnings (and its default is error).
-        public override FailureLevel DefaultLevel => FailureLevel.Error;
+        // We should not emit a default level of anything but warning. The reason is that 
+        // doing so prevents any rule from overriding this value to warning (as warning
+        // failure levels are elided during serialization). We need to support setting 
+        // result levels to 'null' to indicate they are in a default condition.
+        public override FailureLevel DefaultLevel => FailureLevel.Warning;
 
         protected override ResourceManager ResourceManager => RuleResources.ResourceManager;
     }

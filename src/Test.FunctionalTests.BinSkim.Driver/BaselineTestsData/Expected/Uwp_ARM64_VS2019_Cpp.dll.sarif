@@ -265,8 +265,29 @@
           ]
         },
         {
-          "ruleId": "BA2005",
+          "ruleId": "BA2004",
           "ruleIndex": 11,
+          "message": {
+            "id": "Warning_Native",
+            "arguments": [
+              "Uwp_ARM64_VS2019_Cpp.dll",
+              "dllmain.obj,cxx,19.22.27905.0\r\nUwp_ARM_VS2019_Cpp.obj,cxx,19.22.27905.0\r\npch.obj,cxx,19.22.27905.0\r\nMSVCRT.lib,c,19.22.26504.99 (cpu_disp.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,ucrt_detection.obj)\r\nMSVCRT.lib,cxx,19.22.26504.99 (app_appinit.obj,argv_mode.obj,default_local_stdio_options.obj,dll_dllmain.obj,initializers.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_app.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM64_VS2019_Cpp.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "ruleIndex": 12,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -288,7 +309,7 @@
         },
         {
           "ruleId": "BA2006",
-          "ruleIndex": 12,
+          "ruleIndex": 13,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -311,7 +332,7 @@
         },
         {
           "ruleId": "BA2007",
-          "ruleIndex": 13,
+          "ruleIndex": 14,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -334,7 +355,7 @@
         },
         {
           "ruleId": "BA2008",
-          "ruleIndex": 14,
+          "ruleIndex": 15,
           "level": "error",
           "message": {
             "id": "Error",
@@ -355,28 +376,6 @@
         },
         {
           "ruleId": "BA2009",
-          "ruleIndex": 15,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_ARM64_VS2019_Cpp.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM64_VS2019_Cpp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
           "ruleIndex": 16,
           "kind": "pass",
           "level": "none",
@@ -398,7 +397,7 @@
           ]
         },
         {
-          "ruleId": "BA2011",
+          "ruleId": "BA2010",
           "ruleIndex": 17,
           "kind": "pass",
           "level": "none",
@@ -420,7 +419,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2011",
           "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
@@ -442,7 +441,7 @@
           ]
         },
         {
-          "ruleId": "BA2013",
+          "ruleId": "BA2012",
           "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
@@ -464,7 +463,7 @@
           ]
         },
         {
-          "ruleId": "BA2014",
+          "ruleId": "BA2013",
           "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
@@ -486,7 +485,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2014",
           "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
@@ -508,7 +507,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2019",
           "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
@@ -530,8 +529,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 23,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_ARM64_VS2019_Cpp.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM64_VS2019_Cpp.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 24,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -663,7 +684,7 @@
               },
               "messageStrings": {
                 "Warning": {
-                  "text": "'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request. The following modules are out of policy:\r\n{1}"
+                  "text": "'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.\r\n{1}"
                 },
                 "Warning_OptimizationsDisabled": {
                   "text": "The following modules were compiled with optimizations disabled (/Od), a condition that disables Spectre mitigations:\r\n{0}"
@@ -878,6 +899,34 @@
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ATLVersionCheck"
               }
+            },
+            {
+              "id": "BA2004",
+              "fullDescription": {
+                "text": "TODO"
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "TODO"
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm."
+                },
+                "Warning_Native": {
+                  "text": "'{0}' is a native binary that links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
+                },
+                "Warning_Managed": {
+                  "text": "'{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "TODO."
+              },
+              "name": "EnableSecureSourceCodeHashing"
             },
             {
               "id": "BA2005",

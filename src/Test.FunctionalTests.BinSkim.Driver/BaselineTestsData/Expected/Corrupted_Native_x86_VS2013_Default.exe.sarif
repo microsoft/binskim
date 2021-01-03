@@ -26,7 +26,7 @@
                 }
               ],
               "message": {
-                "text": "Could not load analysis target 'Corrupted_Native_x86_VS2013_Default.exe'. (Image is either too small or contains an invalid byte offset or count.)"
+                "text": "Could not load analysis target 'Corrupted_Native_x86_VS2013_Default.exe'."
               },
               "level": "error",
               "descriptor": {

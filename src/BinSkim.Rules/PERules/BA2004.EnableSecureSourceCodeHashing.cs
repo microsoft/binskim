@@ -31,10 +31,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = "TODO" };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
-            nameof(RuleResources.BA2004_Pass_Managed),
-            nameof(RuleResources.BA2004_Pass_Native),
-            nameof(RuleResources.BA2004_Error_Managed),
-            nameof(RuleResources.BA2004_Error_Native),
+            nameof(RuleResources.BA2004_Pass),
+            nameof(RuleResources.BA2004_Warning_Native),
+            nameof(RuleResources.BA2004_Warning_Managed),
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
@@ -42,18 +41,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             return new List<IOption>
             {
-                RequiredCompilerWarnings,
+//                RequiredCompilerWarnings,
             }.ToImmutableArray();
         }
 
         private const string AnalyzerName = RuleIds.EnableSecureSourceCodeHashing + "." + nameof(EnableSecureSourceCodeHashing);
-
-        /// <summary>
-        /// Enable namespace import optimization.
-        /// </summary>
-        public static PerLanguageOption<IntegerSet> RequiredCompilerWarnings { get; } =
-            new PerLanguageOption<IntegerSet>(
-                AnalyzerName, nameof(RequiredCompilerWarnings), defaultValue: () => BuildRequiredCompilerWarningsSet());
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -63,8 +55,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyAssembly;
             if (portableExecutable.IsILOnly) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
-            if (portableExecutable.IsResourceOnly) { return result; }
+            // TODO: currently our test binary for this check is a dll that does not
+            // compile against any external library. BinSkim regards this as a resource
+            // only binary and skips the test. We should improve the IsResourceOnly
+            // helper to properly identify this dependency-free test binary as code.
+
+//            reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
+//            if (portableExecutable.IsResourceOnly) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -72,15 +69,34 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
+            if (context.PEBinary().PE.IsManaged)
+            {
+                AnalyzeManagedAssemblyAndPdb(context);
+                return;
+            }
+
+            AnalyzeNativeBinaryAndPdb(context);
+        }
+
+        private void AnalyzeManagedAssemblyAndPdb(BinaryAnalyzerContext context)
+        {
+            // TODO: use DiaSymReader?
+        }
+
+        public void AnalyzeNativeBinaryAndPdb(BinaryAnalyzerContext context)
+        {
             PEBinary target = context.PEBinary();
             Pdb di = target.Pdb;
+
+            var compilandsWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>(); ;
 
             foreach (DisposableEnumerableView<Symbol> omView in di.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                if (omDetails.Language != Language.C && omDetails.Language != Language.Cxx)
+                if (omDetails.Language != Language.C &&
+                    omDetails.Language != Language.Cxx)
                 {
                     continue;
                 }
@@ -96,17 +112,38 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     if (sf.HashType != HashType.SHA256)
                     {
-                        if (om.IsManaged)
-                        {
-
-                        }
-                        else
-                        {
-
-                        }
+                        compilandsWithOneOrMoreInsecureFileHashes.Add(omDetails);
                     }
+                    // We only need to check a single source file per compiland, as the relevant
+                    // command-line options will be applied to all files in the translation unit.
+                    break;
                 }
             }
+
+            if (compilandsWithOneOrMoreInsecureFileHashes.Count() > 0)
+            {
+                string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByLibrary();
+
+                //'{0}' is a native binary that links one or more object files which were hashed
+                // using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks
+                // and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the
+                // cl.exe command-line to enable secure source code hashing. The following modules
+                // are out of policy: {1} 
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
+                    nameof(RuleResources.BA2004_Warning_Native),
+                        context.TargetUri.GetFileName(),
+                        compilands));
+                return;
+            }
+
+            // '{0}' is a {1} binary which was compiled with a secure (SHA-256)
+            // source code hashing algorithm.
+            context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2004_Pass),
+                        context.TargetUri.GetFileName(),
+                        "native"));
         }
 
         private static string CreateTextWarningList(IEnumerable<int> warningList)

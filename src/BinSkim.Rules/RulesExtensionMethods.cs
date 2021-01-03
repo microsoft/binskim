@@ -2,11 +2,60 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public static class RulesExtensionMethods
     {
+        public static string CreateOutputCoalescedByLibrary(this IList<ObjectModuleDetails> objectModuleDetailsList)
+        {
+            var librariesToObjectModulesMap = new Dictionary<string, List<string>>();
+
+            foreach (ObjectModuleDetails objectModuleDetail in objectModuleDetailsList)
+            {
+                string key = CreateLibraryDescriptor(objectModuleDetail);
+                if (!librariesToObjectModulesMap.TryGetValue(key, out List<string> objectModules))
+                {
+                    objectModules = librariesToObjectModulesMap[key] = new List<string>();
+                }
+                objectModules.Add(Path.GetFileName(objectModuleDetail.Name));
+            }
+
+            var sb = new StringBuilder();
+
+            foreach (string key in librariesToObjectModulesMap.Keys)
+            {
+                sb.Append(key);
+
+                List<string> objectModules = librariesToObjectModulesMap[key];
+                objectModules.Sort();
+                string[] oms = objectModules.ToArray();
+
+                if (oms.Length != 1 || !key.StartsWith(oms[0]))
+                {
+                    sb.Append(" (").AppendLine(string.Join(",", objectModules.ToArray()) + ")");
+                }
+                else
+                {
+                    sb.AppendLine();
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        private static string CreateLibraryDescriptor(ObjectModuleDetails objectModuleDetail)
+        {
+            return Path.GetFileName(
+                            objectModuleDetail.Library) + "," +
+                            objectModuleDetail.Language.ToString().ToLowerInvariant() + "," +
+                            objectModuleDetail.CompilerBackEndVersion;
+        }
+
         private static readonly Dictionary<CryptoError, string> s_cryptoErrorToDescriptionMap = BuildCryptoErrorDescriptions();
 
         private static Dictionary<CryptoError, string> BuildCryptoErrorDescriptions()

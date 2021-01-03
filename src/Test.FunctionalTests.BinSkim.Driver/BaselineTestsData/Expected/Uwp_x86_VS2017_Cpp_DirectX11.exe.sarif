@@ -219,8 +219,29 @@
           ]
         },
         {
-          "ruleId": "BA2005",
+          "ruleId": "BA2004",
           "ruleIndex": 9,
+          "message": {
+            "id": "Warning_Native",
+            "arguments": [
+              "Uwp_x86_VS2017_Cpp_DirectX11.exe",
+              "App.obj,cxx,19.16.27034.0\r\nDeviceResources.obj,cxx,19.16.27034.0\r\nUwp_x86_VS2017_Cpp_DirectX11_exeMain.obj,cxx,19.16.27034.0\r\nSampleFpsTextRenderer.obj,cxx,19.16.27034.0\r\nSample3DSceneRenderer.obj,cxx,19.16.27034.0\r\npch.obj,cxx,19.16.27034.0\r\nvccorlib.lib,cxx,19.15.26706.0 (activation.obj,climain.obj,compiler.obj,init.obj,tmmta.obj,winmain.obj)\r\nMSVCRT.lib,c,19.15.26706.0 (chandler4gs.obj,cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,ehprolg3.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,secchk.obj,ucrt_detection.obj)\r\nMSVCRT.lib,cxx,19.15.26706.0 (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,delete_array.obj,delete_array_size.obj,delete_scalar.obj,delete_scalar_size.obj,denormal_control.obj,ehvecdtr.obj,env_mode.obj,exe_winmain.obj,file_mode.obj,initializers.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,new_scalar.obj,std_type_info_static.obj,thread_locale.obj,thread_safe_statics.obj,throw_bad_alloc.obj,tlssup.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_app.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "ruleIndex": 10,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -242,7 +263,7 @@
         },
         {
           "ruleId": "BA2006",
-          "ruleIndex": 10,
+          "ruleIndex": 11,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -265,7 +286,7 @@
         },
         {
           "ruleId": "BA2007",
-          "ruleIndex": 11,
+          "ruleIndex": 12,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -288,7 +309,7 @@
         },
         {
           "ruleId": "BA2008",
-          "ruleIndex": 12,
+          "ruleIndex": 13,
           "level": "error",
           "message": {
             "id": "Error",
@@ -309,28 +330,6 @@
         },
         {
           "ruleId": "BA2009",
-          "ruleIndex": 13,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x86_VS2017_Cpp_DirectX11.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
           "ruleIndex": 14,
           "kind": "pass",
           "level": "none",
@@ -352,7 +351,7 @@
           ]
         },
         {
-          "ruleId": "BA2011",
+          "ruleId": "BA2010",
           "ruleIndex": 15,
           "kind": "pass",
           "level": "none",
@@ -374,7 +373,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2011",
           "ruleIndex": 16,
           "kind": "pass",
           "level": "none",
@@ -396,7 +395,7 @@
           ]
         },
         {
-          "ruleId": "BA2013",
+          "ruleId": "BA2012",
           "ruleIndex": 17,
           "kind": "pass",
           "level": "none",
@@ -418,7 +417,7 @@
           ]
         },
         {
-          "ruleId": "BA2014",
+          "ruleId": "BA2013",
           "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
@@ -440,7 +439,7 @@
           ]
         },
         {
-          "ruleId": "BA2016",
+          "ruleId": "BA2014",
           "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
@@ -462,7 +461,7 @@
           ]
         },
         {
-          "ruleId": "BA2018",
+          "ruleId": "BA2016",
           "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
@@ -484,7 +483,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2018",
           "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
@@ -506,7 +505,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2019",
           "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
@@ -528,8 +527,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 23,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x86_VS2017_Cpp_DirectX11.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 24,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -630,7 +651,7 @@
               },
               "messageStrings": {
                 "Warning": {
-                  "text": "'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request. The following modules are out of policy:\r\n{1}"
+                  "text": "'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.\r\n{1}"
                 },
                 "Warning_OptimizationsDisabled": {
                   "text": "The following modules were compiled with optimizations disabled (/Od), a condition that disables Spectre mitigations:\r\n{0}"
@@ -817,6 +838,34 @@
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ATLVersionCheck"
               }
+            },
+            {
+              "id": "BA2004",
+              "fullDescription": {
+                "text": "TODO"
+              },
+              "helpUri": "https://github.com/microsoft/binskim",
+              "help": {
+                "text": "TODO"
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm."
+                },
+                "Warning_Native": {
+                  "text": "'{0}' is a native binary that links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
+                },
+                "Warning_Managed": {
+                  "text": "'{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "shortDescription": {
+                "text": "TODO."
+              },
+              "name": "EnableSecureSourceCodeHashing"
             },
             {
               "id": "BA2005",

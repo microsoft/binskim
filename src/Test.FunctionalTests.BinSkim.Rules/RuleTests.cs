@@ -497,7 +497,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new EnableSecureSourceCodeHashing(), useDefaultPolicy: true);
             }
         }
 
