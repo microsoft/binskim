@@ -38,15 +38,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
-        public IEnumerable<IOption> GetOptions()
-        {
-            return new List<IOption>
-            {
-            }.ToImmutableArray();
-        }
-
-        private const string AnalyzerName = RuleIds.EnableSecureSourceCodeHashing + "." + nameof(EnableSecureSourceCodeHashing);
-
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
@@ -90,7 +81,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb di = target.Pdb;
 
-            var compilandsWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>(); ;
+            var compilandsWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
 
             foreach (DisposableEnumerableView<Symbol> omView in di.CreateObjectModuleIterator())
             {
