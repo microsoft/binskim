@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             return new List<IOption>
             {
-//                RequiredCompilerWarnings,
+                //                RequiredCompilerWarnings,
             }.ToImmutableArray();
         }
 
@@ -60,8 +60,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // only binary and skips the test. We should improve the IsResourceOnly
             // helper to properly identify this dependency-free test binary as code.
 
-//            reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
-//            if (portableExecutable.IsResourceOnly) { return result; }
+            //            reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
+            //            if (portableExecutable.IsResourceOnly) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -78,7 +78,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             AnalyzeNativeBinaryAndPdb(context);
         }
 
+#pragma warning disable IDE0060 // Remove unused parameter
         private void AnalyzeManagedAssemblyAndPdb(BinaryAnalyzerContext context)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             // TODO: use DiaSymReader?
         }
@@ -144,60 +146,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2004_Pass),
                         context.TargetUri.GetFileName(),
                         "native"));
-        }
-
-        private static string CreateTextWarningList(IEnumerable<int> warningList)
-        {
-            return string.Join(";", warningList
-                .Select(warningNumber => warningNumber.ToString(CultureInfo.InvariantCulture)));
-        }
-
-        private static void MergeInto(List<int> target, List<int> source)
-        {
-            // Yes, this is N^2, and SortedSet would be N lg N, but for the
-            // values of N we're talking about here, constant factors rule.
-
-            // In practice the number of inserts never rises above 10-20 or so,
-            // so optimizing for memory-locality here.
-
-            int idx = 0;
-            foreach (int next in source)
-            {
-                while (idx != target.Count && target[idx] < next)
-                {
-                    ++idx;
-                }
-
-                if (idx == target.Count)
-                {
-                    target.Add(next);
-                }
-                else if (target[idx] != next)
-                {
-                    Debug.Assert(target[idx] > next);
-                    target.Insert(idx, next);
-                }
-            }
-        }
-        private static IntegerSet BuildRequiredCompilerWarningsSet()
-        {
-            var result = new IntegerSet
-            {
-                4018,
-                4146,
-                4244,
-                4267,
-                4302,
-                4308,
-                4509,
-                4532,
-                4533,
-                4700,
-                4789,
-                4995,
-                4996
-            };
-            return result;
         }
     }
 }
