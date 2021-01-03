@@ -14,12 +14,12 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
-    public class EnableDeterministicBuilds : PEBinarySkimmerBase, IOptionsProvider
+    public class EnableDeterministicBuilds : PEBinarySkimmerBase
     {
         /// <summary>
         /// BA2003
         /// </summary>
-        public override string Id => RuleIds.EnableDeterministicBuilds;
+        public override string Id => RuleIds.EnableReproducibleBuilds;
 
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = "TODO" };
 
@@ -32,8 +32,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
-            reasonForNotAnalyzing = "";
-
+            
+            reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
@@ -41,12 +41,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             PEBinary target = context.PEBinary();
             PE pe = target.PE;
-
-        }
-
-        public IEnumerable<IOption> GetOptions()
-        {
-            throw new NotImplementedException();
         }
     }
 }

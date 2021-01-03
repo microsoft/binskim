@@ -8,7 +8,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // Analysis check ids
         public const string LoadImageAboveFourGigabyteAddress = "BA2001";
         public const string DoNotIncorporateVulnerableDependencies = "BA2002";
-        public const string EnableDeterministicBuilds = "BA2003";
+        public const string EnableReproducibleBuilds = "BA2003";
         public const string EnableSecureSourceCodeHashing = "BA2004";
         public const string DoNotShipVulnerableBinaries = "BA2005";
         public const string BuildWithSecureTools = "BA2006";
