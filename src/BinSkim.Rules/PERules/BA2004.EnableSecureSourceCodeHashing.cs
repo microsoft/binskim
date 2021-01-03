@@ -1,15 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-
-using Dia2Lib;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -137,6 +132,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2004_Pass),
                         context.TargetUri.GetFileName(),
                         "native"));
+        }
+
+        public IEnumerable<IOption> GetOptions()
+        {
+            return new List<IOption>
+            {
+                //                RequiredCompilerWarnings,
+            }.ToImmutableArray();
         }
     }
 }
