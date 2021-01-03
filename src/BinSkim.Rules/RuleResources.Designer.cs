@@ -115,6 +115,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a {1} binary that was not compiled for deterministic (or reproducible) builds. (argument 1 == native|managed|*nix for this message and next).
+        /// </summary>
+        internal static string BA2003_Fail {
+            get {
+                return ResourceManager.GetString("BA2003_Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a {1} binary that is compiled for deterministic (or reproducible) builds..
+        /// </summary>
+        internal static string BA2003_Pass {
+            get {
+                return ResourceManager.GetString("BA2003_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not ship obsolete libraries for which there are known security vulnerabilities..
         /// </summary>
         internal static string BA2005_DoNotShipVulnerableBinaries_Description {

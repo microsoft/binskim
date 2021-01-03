@@ -464,4 +464,10 @@ Modules triggering this check were:
     <value>The PDB for '{0}' was found and loaded. Probing details:
 {1}</value>
   </data>
+  <data name="BA2003_Fail" xml:space="preserve">
+    <value>'{0}' is a {1} binary that was not compiled for deterministic (or reproducible) builds. (argument 1 == native|managed|*nix for this message and next)</value>
+  </data>
+  <data name="BA2003_Pass" xml:space="preserve">
+    <value>'{0}' is a {1} binary that is compiled for deterministic (or reproducible) builds.</value>
+  </data>
 </root>
