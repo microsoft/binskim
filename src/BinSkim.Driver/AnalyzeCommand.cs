@@ -60,7 +60,7 @@ namespace Microsoft.CodeAnalysis.IL
                 OptionallyEmittedData dataToInsert = analyzeOptions.DataToInsert.ToFlags();
                 dataToInsert |= OptionallyEmittedData.Hashes;
 
-                analyzeOptions.DataToInsert  = 
+                analyzeOptions.DataToInsert =
                     dataToInsert.ToString().Split('|')
                         .Select(d => { return Enum.Parse<OptionallyEmittedData>(d); })
                         .ToList();
