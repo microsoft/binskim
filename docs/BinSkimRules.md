@@ -1,4 +1,4 @@
-# BinSkim Rules
+# Rules
 
 ## Rule `BA3001.EnablePositionIndependentExecutable`
 
@@ -163,6 +163,33 @@ Binaries should not take dependencies on code with known security vulnerabilitie
 #### `Error`: Error
 
 '{0}' was built with a version of {1} which is subject to the following issues: {2}. To resolve this, {3}. The source files that triggered this were: {4}
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA2004.EnableSecureSourceCodeHashing`
+
+### Description
+
+Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm.
+
+#### `Native`: Warning
+
+'{0}' is a native binary that links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+{1}
+
+#### `Managed`: Warning
+
+'{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -612,7 +639,7 @@ Application code should be compiled with the Spectre mitigations switch (/Qspect
 
 #### `Warning`: Warning
 
-'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request. The following modules are out of policy:
+'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.
 {1}
 
 #### `OptimizationsDisabled`: Warning
