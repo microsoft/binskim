@@ -115,6 +115,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used t [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BA2004_EnableSecureSourceCodeHashing_Description {
+            get {
+                return ResourceManager.GetString("BA2004_EnableSecureSourceCodeHashing_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm..
         /// </summary>
         internal static string BA2004_Pass {

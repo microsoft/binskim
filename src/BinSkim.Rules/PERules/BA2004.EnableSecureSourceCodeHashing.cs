@@ -28,7 +28,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableSecureSourceCodeHashing;
 
-        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = "TODO" };
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString
+        { Text = RuleResources.BA2004_EnableSecureSourceCodeHashing_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA2004_Pass),
@@ -41,7 +42,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             return new List<IOption>
             {
-                //                RequiredCompilerWarnings,
             }.ToImmutableArray();
         }
 
