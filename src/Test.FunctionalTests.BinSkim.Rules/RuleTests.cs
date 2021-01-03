@@ -489,6 +489,58 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2003_EnableDeterministicBuilds_Pass()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new EnableDeterministicBuilds(), useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA2003_EnableDeterministicBuilds_Fail()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                var failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
+                this.VerifyFail(
+                    new EnableDeterministicBuilds(),
+                    this.GetTestFilesMatchingConditions(failureConditions),
+                    useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA2003_EnableDeterministicBuilds_NotApplicable()
+        {
+            var notApplicableTo = new HashSet<string>
+            {
+                MetadataConditions.ImageIsResourceOnlyBinary,
+                MetadataConditions.ImageIsILOnlyAssembly
+            };
+
+            this.VerifyNotApplicable(new EnableDeterministicBuilds(), notApplicableTo);
+
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                var applicableTo = new HashSet<string> { MetadataConditions.ImageIs64BitBinary };
+                this.VerifyNotApplicable(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
         public void BA2005_DoNotShipVulnerableBinaries_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
