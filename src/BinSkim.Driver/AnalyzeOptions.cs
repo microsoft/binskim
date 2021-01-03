@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL
             HelpText = "Execution traces, expressed as a semicolon-delimited list, that " +
                        "should be emitted to the console and log file (if appropriate). " +
                        "Valid values: PdbLoad.")]
-        public IEnumerable<Traces> Traces { get; internal set; }
+        public override IEnumerable<string> Traces { get; set; }
 
         [Option(
             "sympath",

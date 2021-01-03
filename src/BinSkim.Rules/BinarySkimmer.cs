@@ -28,13 +28,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 this.SetProperty<string>(BinScopeCompatibility.EquivalentBinScopeRulePropertyName, altId);
             }
-        }
 
-        // We should not emit a default level of anything but warning. The reason is that 
-        // doing so prevents any rule from overriding this value to warning (as warning
-        // failure levels are elided during serialization). We need to support setting 
-        // result levels to 'null' to indicate they are in a default condition.
-        public override FailureLevel DefaultLevel => FailureLevel.Warning;
+            // We should not emit a default level of anything but warning. The reason is that 
+            // doing so prevents any rule from overriding this value to warning (as warning
+            // failure levels are elided during serialization). We need to support setting 
+            // result levels to 'null' to indicate they are in a default condition.
+            this.DefaultConfiguration.Level = FailureLevel.Warning;
+        }
 
         protected override ResourceManager ResourceManager => RuleResources.ResourceManager;
     }

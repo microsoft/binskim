@@ -24,6 +24,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{1C3EA3C9-98CE-4315-A1BE-6BB11847CB04}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		..\ado-build.yml = ..\ado-build.yml
 		build.common.props = build.common.props
 		build.netcore.props = build.netcore.props
 	EndProjectSection
@@ -35,6 +36,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTests.BinSkim.Rules", "Test.UnitTests.BinSkim.Rules\Test.UnitTests.BinSkim.Rules.csproj", "{BDB5E58E-7B62-4BCB-B032-D86E18193E78}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTests.BinSkim.Driver", "Test.UnitTests.BinSkim.Driver\Test.UnitTests.BinSkim.Driver.csproj", "{B64DBE60-C7E6-48C1-BB7F-B12129DF98B2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sarif.Driver", "sarif-sdk\src\Sarif.Driver\Sarif.Driver.csproj", "{27C37565-AA27-4452-BABF-75DAF151A8F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sarif-sdk", "sarif-sdk", "{E69E2009-ECED-4750-AA40-BFDD4FD13DAB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sarif", "sarif-sdk\src\Sarif\Sarif.csproj", "{C0DA9150-1651-457E-A700-A5CC389571A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -154,9 +161,37 @@ Global
 		{B64DBE60-C7E6-48C1-BB7F-B12129DF98B2}.Release|x64.Build.0 = Release|Any CPU
 		{B64DBE60-C7E6-48C1-BB7F-B12129DF98B2}.Release|x86.ActiveCfg = Release|Any CPU
 		{B64DBE60-C7E6-48C1-BB7F-B12129DF98B2}.Release|x86.Build.0 = Release|Any CPU
+		{27C37565-AA27-4452-BABF-75DAF151A8F2}.Debug|AnyCPU.ActiveCfg = Debug|Any CPU
+		{27C37565-AA27-4452-BABF-75DAF151A8F2}.Debug|AnyCPU.Build.0 = Debug|Any CPU
+		{27C37565-AA27-4452-BABF-75DAF151A8F2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{27C37565-AA27-4452-BABF-75DAF151A8F2}.Debug|x64.Build.0 = Debug|Any CPU
+		{27C37565-AA27-4452-BABF-75DAF151A8F2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{27C37565-AA27-4452-BABF-75DAF151A8F2}.Debug|x86.Build.0 = Debug|Any CPU
+		{27C37565-AA27-4452-BABF-75DAF151A8F2}.Release|AnyCPU.ActiveCfg = Release|Any CPU
+		{27C37565-AA27-4452-BABF-75DAF151A8F2}.Release|AnyCPU.Build.0 = Release|Any CPU
+		{27C37565-AA27-4452-BABF-75DAF151A8F2}.Release|x64.ActiveCfg = Release|Any CPU
+		{27C37565-AA27-4452-BABF-75DAF151A8F2}.Release|x64.Build.0 = Release|Any CPU
+		{27C37565-AA27-4452-BABF-75DAF151A8F2}.Release|x86.ActiveCfg = Release|Any CPU
+		{27C37565-AA27-4452-BABF-75DAF151A8F2}.Release|x86.Build.0 = Release|Any CPU
+		{C0DA9150-1651-457E-A700-A5CC389571A6}.Debug|AnyCPU.ActiveCfg = Debug|Any CPU
+		{C0DA9150-1651-457E-A700-A5CC389571A6}.Debug|AnyCPU.Build.0 = Debug|Any CPU
+		{C0DA9150-1651-457E-A700-A5CC389571A6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C0DA9150-1651-457E-A700-A5CC389571A6}.Debug|x64.Build.0 = Debug|Any CPU
+		{C0DA9150-1651-457E-A700-A5CC389571A6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C0DA9150-1651-457E-A700-A5CC389571A6}.Debug|x86.Build.0 = Debug|Any CPU
+		{C0DA9150-1651-457E-A700-A5CC389571A6}.Release|AnyCPU.ActiveCfg = Release|Any CPU
+		{C0DA9150-1651-457E-A700-A5CC389571A6}.Release|AnyCPU.Build.0 = Release|Any CPU
+		{C0DA9150-1651-457E-A700-A5CC389571A6}.Release|x64.ActiveCfg = Release|Any CPU
+		{C0DA9150-1651-457E-A700-A5CC389571A6}.Release|x64.Build.0 = Release|Any CPU
+		{C0DA9150-1651-457E-A700-A5CC389571A6}.Release|x86.ActiveCfg = Release|Any CPU
+		{C0DA9150-1651-457E-A700-A5CC389571A6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{27C37565-AA27-4452-BABF-75DAF151A8F2} = {E69E2009-ECED-4750-AA40-BFDD4FD13DAB}
+		{C0DA9150-1651-457E-A700-A5CC389571A6} = {E69E2009-ECED-4750-AA40-BFDD4FD13DAB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD3DFD92-76F5-471C-AAAB-9762C40A363E}
