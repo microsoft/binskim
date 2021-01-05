@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL
 {
-    internal class AnalyzeCommand : AnalyzeCommandBase<BinaryAnalyzerContext, AnalyzeOptions>
+    public class AnalyzeCommand : AnalyzeCommandBase<BinaryAnalyzerContext, AnalyzeOptions>
     {
         public static HashSet<string> ValidAnalysisFileExtensions = new HashSet<string>(
             new string[] { ".dll", ".exe", ".sys" }
