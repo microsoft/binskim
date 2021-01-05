@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL
 {
     [Verb("analyze", HelpText = "Analyze one or more binary files for security and correctness issues.")]
-    internal class AnalyzeOptions : AnalyzeOptionsBase
+    public class AnalyzeOptions : AnalyzeOptionsBase
     {
         [Option(
             "trace",
