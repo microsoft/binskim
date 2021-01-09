@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    internal class TestMessageLogger : IAnalysisLogger
+    public class TestMessageLogger : IAnalysisLogger
     {
         public TestMessageLogger()
         {

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection.Metadata;
@@ -154,11 +155,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     ? this.PEHeaders.PEHeader.Magic == PEMagic.PE32Plus
                     : false;
 
-        public CodeViewDebugDirectoryData CodeViewDebugDirectoryData
+        public IEnumerable<DebugDirectoryEntry> DebugDirectories
         {
             get
             {
                 foreach (DebugDirectoryEntry debugDirectoryEntry in this.peReader.ReadDebugDirectory())
+                {
+                    yield return debugDirectoryEntry;
+                }
+            }
+        }
+
+        public CodeViewDebugDirectoryData CodeViewDebugDirectoryData
+        {
+            get
+            {
+                foreach (DebugDirectoryEntry debugDirectoryEntry in DebugDirectories)
                 {
                     if (debugDirectoryEntry.Type == DebugDirectoryEntryType.CodeView)
                     {
