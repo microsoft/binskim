@@ -76,7 +76,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb di = target.Pdb;
 
-            var compilandsWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
+            var compilandsBinaryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
+            var compilandsLibraryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
 
             foreach (DisposableEnumerableView<Symbol> omView in di.CreateObjectModuleIterator())
             {
@@ -94,13 +95,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
+                CompilandRecord record = om.CreateCompilandRecord();
+
                 foreach (DisposableEnumerableView<SourceFile> sfView in di.CreateSourceFileIterator(om))
                 {
                     SourceFile sf = sfView.Value;
 
                     if (sf.HashType != HashType.SHA256)
                     {
-                        compilandsWithOneOrMoreInsecureFileHashes.Add(omDetails);
+                        if (!string.IsNullOrEmpty(record.Library))
+                        {
+                            compilandsLibraryWithOneOrMoreInsecureFileHashes.Add(omDetails);
+                        }
+                        else
+                        {
+                            compilandsBinaryWithOneOrMoreInsecureFileHashes.Add(omDetails);
+                        }
                     }
                     // We only need to check a single source file per compiland, as the relevant
                     // command-line options will be applied to all files in the translation unit.
@@ -108,20 +118,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
 
-            if (compilandsWithOneOrMoreInsecureFileHashes.Count() > 0)
+            if (compilandsLibraryWithOneOrMoreInsecureFileHashes.Count > 0 || compilandsBinaryWithOneOrMoreInsecureFileHashes.Count > 0)
             {
-                string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByLibrary();
+                if (compilandsLibraryWithOneOrMoreInsecureFileHashes.Count > 0)
+                {
+                    GenerateCompilandsAndLog(context, compilandsLibraryWithOneOrMoreInsecureFileHashes);
+                }
 
-                //'{0}' is a native binary that links one or more object files which were hashed
-                // using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks
-                // and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the
-                // cl.exe command-line to enable secure source code hashing. The following modules
-                // are out of policy: {1} 
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
-                    nameof(RuleResources.BA2004_Warning_Native),
-                        context.TargetUri.GetFileName(),
-                        compilands));
+                if (compilandsBinaryWithOneOrMoreInsecureFileHashes.Count > 0)
+                {
+                    GenerateCompilandsAndLog(context, compilandsBinaryWithOneOrMoreInsecureFileHashes);
+                }
+
                 return;
             }
 
@@ -132,6 +140,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2004_Pass),
                         context.TargetUri.GetFileName(),
                         "native"));
+        }
+
+        private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes)
+        {
+            string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByLibrary();
+
+            //'{0}' is a native binary that links one or more object files which were hashed
+            // using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks
+            // and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the
+            // cl.exe command-line to enable secure source code hashing. The following modules
+            // are out of policy: {1} 
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
+                nameof(RuleResources.BA2004_Warning_Native),
+                    context.TargetUri.GetFileName(),
+                    compilands));
         }
 
         public IEnumerable<IOption> GetOptions()
