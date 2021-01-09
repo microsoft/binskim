@@ -622,9 +622,6 @@
                 }
               },
               "name": "LoadImageAboveFourGigabyteAddress",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "FourGbCheck"
               }
@@ -656,9 +653,6 @@
                 }
               },
               "name": "EnableHighEntropyVirtualAddresses",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "HighEntropyVACheck"
               }
@@ -686,10 +680,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnablePositionIndependentExecutable",
-              "defaultConfiguration": {
-                "level": "none"
-              }
+              "name": "EnablePositionIndependentExecutable"
             },
             {
               "id": "BA3002",
@@ -714,10 +705,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "DoNotMarkStackAsExecutable",
-              "defaultConfiguration": {
-                "level": "none"
-              }
+              "name": "DoNotMarkStackAsExecutable"
             },
             {
               "id": "BA3003",
@@ -739,10 +727,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableStackProtector",
-              "defaultConfiguration": {
-                "level": "none"
-              }
+              "name": "EnableStackProtector"
             },
             {
               "id": "BA3010",
@@ -764,10 +749,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableReadOnlyRelocations",
-              "defaultConfiguration": {
-                "level": "none"
-              }
+              "name": "EnableReadOnlyRelocations"
             },
             {
               "id": "BA3030",
@@ -795,10 +777,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "UseCheckedFunctionsWithGcc",
-              "defaultConfiguration": {
-                "level": "none"
-              }
+              "name": "UseCheckedFunctionsWithGcc"
             },
             {
               "id": "BA2002",
@@ -821,9 +800,6 @@
                 }
               },
               "name": "DoNotIncorporateVulnerableDependencies",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ATLVersionCheck"
               }
@@ -851,10 +827,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableSecureSourceCodeHashing",
-              "defaultConfiguration": {
-                "level": "none"
-              }
+              "name": "EnableSecureSourceCodeHashing"
             },
             {
               "id": "BA2005",
@@ -880,9 +853,6 @@
                 }
               },
               "name": "DoNotShipVulnerableBinaries",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "BinaryVersionsCheck"
               }
@@ -911,9 +881,6 @@
                 }
               },
               "name": "BuildWithSecureTools",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "CompilerVersionCheck"
               }
@@ -945,9 +912,6 @@
                 }
               },
               "name": "EnableCriticalCompilerWarnings",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "CompilerWarningsCheck"
               }
@@ -976,9 +940,6 @@
                 }
               },
               "name": "EnableControlFlowGuard",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
               }
@@ -1010,9 +971,6 @@
                 }
               },
               "name": "EnableAddressSpaceLayoutRandomization",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DBCheck"
               }
@@ -1038,9 +996,6 @@
                 }
               },
               "name": "DoNotMarkImportsSectionAsExecutable",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ExecutableImportsCheck"
               }
@@ -1069,9 +1024,6 @@
                 }
               },
               "name": "EnableStackProtection",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSCheck"
               }
@@ -1106,9 +1058,6 @@
                 }
               },
               "name": "DoNotModifyStackProtectionCookie",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
               }
@@ -1140,9 +1089,6 @@
                 }
               },
               "name": "InitializeStackProtection",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
               }
@@ -1168,9 +1114,6 @@
                 }
               },
               "name": "DoNotDisableStackProtectionForFunctions",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSFunctionSafeBuffersCheck"
               }
@@ -1196,9 +1139,6 @@
                 }
               },
               "name": "MarkImageAsNXCompatible",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "NXCheck"
               }
@@ -1227,9 +1167,6 @@
                 }
               },
               "name": "EnableSafeSEH",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
               }
@@ -1255,9 +1192,6 @@
                 }
               },
               "name": "DoNotMarkWritableSectionsAsShared",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "SharedSectionCheck"
               }
@@ -1286,9 +1220,6 @@
                 }
               },
               "name": "DoNotMarkWritableSectionsAsExecutable",
-              "defaultConfiguration": {
-                "level": "none"
-              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "WXCheck"
               }
@@ -1319,10 +1250,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "SignSecurely",
-              "defaultConfiguration": {
-                "level": "none"
-              }
+              "name": "SignSecurely"
             },
             {
               "id": "BA2024",
@@ -1353,10 +1281,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableSpectreMitigations",
-              "defaultConfiguration": {
-                "level": "none"
-              }
+              "name": "EnableSpectreMitigations"
             }
           ]
         }
