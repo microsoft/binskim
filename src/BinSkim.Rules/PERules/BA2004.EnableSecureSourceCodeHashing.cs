@@ -122,12 +122,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 if (compilandsLibraryWithOneOrMoreInsecureFileHashes.Count > 0)
                 {
-                    GenerateCompilandsAndLog(context, compilandsLibraryWithOneOrMoreInsecureFileHashes);
+                    GenerateCompilandsAndLog(context, compilandsLibraryWithOneOrMoreInsecureFileHashes, FailureLevel.Warning);
                 }
 
                 if (compilandsBinaryWithOneOrMoreInsecureFileHashes.Count > 0)
                 {
-                    GenerateCompilandsAndLog(context, compilandsBinaryWithOneOrMoreInsecureFileHashes);
+                    GenerateCompilandsAndLog(context, compilandsBinaryWithOneOrMoreInsecureFileHashes, FailureLevel.Error);
                 }
 
                 return;
@@ -142,7 +142,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         "native"));
         }
 
-        private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes)
+        private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
         {
             string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByLibrary();
 
@@ -152,7 +152,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // cl.exe command-line to enable secure source code hashing. The following modules
             // are out of policy: {1} 
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
+                RuleUtilities.BuildResult(failureLevel, context, null,
                 nameof(RuleResources.BA2004_Warning_Native),
                     context.TargetUri.GetFileName(),
                     compilands));

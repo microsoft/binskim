@@ -225,7 +225,29 @@
             "id": "Warning_Native",
             "arguments": [
               "Uwp_x64_VS2017_Cpp.dll",
-              "dllmain.obj,cxx,19.16.27034.0\r\nUwp_x64_VS2017_Cpp.dll.obj,cxx,19.16.27034.0\r\npch.obj,cxx,19.16.27034.0\r\nMSVCRT.lib,c,19.15.26706.0 (chandler4gs.obj,cpu_disp.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,secchk.obj,ucrt_detection.obj)\r\nMSVCRT.lib,cxx,19.15.26706.0 (app_appinit.obj,argv_mode.obj,default_local_stdio_options.obj,dll_dllmain.obj,initializers.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_app.obj)\r\n"
+              "MSVCRT.lib,c,19.15.26706.0 (chandler4gs.obj,cpu_disp.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,secchk.obj,ucrt_detection.obj)\r\nMSVCRT.lib,cxx,19.15.26706.0 (app_appinit.obj,argv_mode.obj,default_local_stdio_options.obj,dll_dllmain.obj,initializers.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_app.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2017_Cpp.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 9,
+          "level": "error",
+          "message": {
+            "id": "Warning_Native",
+            "arguments": [
+              "Uwp_x64_VS2017_Cpp.dll",
+              "dllmain.obj,cxx,19.16.27034.0\r\nUwp_x64_VS2017_Cpp.dll.obj,cxx,19.16.27034.0\r\npch.obj,cxx,19.16.27034.0\r\n"
             ]
           },
           "locations": [
@@ -576,6 +598,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -598,10 +622,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security."
-              },
               "name": "LoadImageAboveFourGigabyteAddress",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "FourGbCheck"
               }
@@ -632,10 +656,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible."
-              },
               "name": "EnableHighEntropyVirtualAddresses",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "HighEntropyVACheck"
               }
@@ -669,10 +693,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it."
-              },
-              "name": "EnableSpectreMitigations"
+              "name": "EnableSpectreMitigations",
+              "defaultConfiguration": {
+                "level": "none"
+              }
             },
             {
               "id": "BA3001",
@@ -697,10 +721,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap)."
-              },
-              "name": "EnablePositionIndependentExecutable"
+              "name": "EnablePositionIndependentExecutable",
+              "defaultConfiguration": {
+                "level": "none"
+              }
             },
             {
               "id": "BA3002",
@@ -725,10 +749,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode."
-              },
-              "name": "DoNotMarkStackAsExecutable"
+              "name": "DoNotMarkStackAsExecutable",
+              "defaultConfiguration": {
+                "level": "none"
+              }
             },
             {
               "id": "BA3003",
@@ -750,10 +774,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected."
-              },
-              "name": "EnableStackProtector"
+              "name": "EnableStackProtector",
+              "defaultConfiguration": {
+                "level": "none"
+              }
             },
             {
               "id": "BA3010",
@@ -775,10 +799,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory."
-              },
-              "name": "EnableReadOnlyRelocations"
+              "name": "EnableReadOnlyRelocations",
+              "defaultConfiguration": {
+                "level": "none"
+              }
             },
             {
               "id": "BA3030",
@@ -806,10 +830,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string."
-              },
-              "name": "UseCheckedFunctionsWithGcc"
+              "name": "UseCheckedFunctionsWithGcc",
+              "defaultConfiguration": {
+                "level": "none"
+              }
             },
             {
               "id": "BA2002",
@@ -831,10 +855,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should not take dependencies on code with known security vulnerabilities."
-              },
               "name": "DoNotIncorporateVulnerableDependencies",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ATLVersionCheck"
               }
@@ -862,10 +886,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs and associated source code."
-              },
-              "name": "EnableSecureSourceCodeHashing"
+              "name": "EnableSecureSourceCodeHashing",
+              "defaultConfiguration": {
+                "level": "none"
+              }
             },
             {
               "id": "BA2005",
@@ -890,10 +914,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Do not ship obsolete libraries for which there are known security vulnerabilities."
-              },
               "name": "DoNotShipVulnerableBinaries",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "BinaryVersionsCheck"
               }
@@ -921,10 +945,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features."
-              },
               "name": "BuildWithSecureTools",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "CompilerVersionCheck"
               }
@@ -955,10 +979,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should be compiled with a warning level that enables all critical security-relevant checks."
-              },
               "name": "EnableCriticalCompilerWarnings",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "CompilerWarningsCheck"
               }
@@ -986,10 +1010,10 @@
                   "text": "'{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations."
-              },
               "name": "EnableControlFlowGuard",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
               }
@@ -1020,10 +1044,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR)."
-              },
               "name": "EnableAddressSpaceLayoutRandomization",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DBCheck"
               }
@@ -1048,10 +1072,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "PE sections should not be marked as both writable and executable."
-              },
               "name": "DoNotMarkImportsSectionAsExecutable",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ExecutableImportsCheck"
               }
@@ -1079,10 +1103,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities."
-              },
               "name": "EnableStackProtection",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSCheck"
               }
@@ -1116,10 +1140,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Application code should not interfere with the stack protector."
-              },
               "name": "DoNotModifyStackProtectionCookie",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
               }
@@ -1150,10 +1174,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities."
-              },
               "name": "InitializeStackProtection",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
               }
@@ -1178,10 +1202,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Application code should not disable stack protection for individual functions."
-              },
               "name": "DoNotDisableStackProtectionForFunctions",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSFunctionSafeBuffersCheck"
               }
@@ -1206,10 +1230,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code."
-              },
               "name": "MarkImageAsNXCompatible",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "NXCheck"
               }
@@ -1237,10 +1261,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues."
-              },
               "name": "EnableSafeSEH",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
               }
@@ -1265,10 +1289,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Code or data sections should not be marked as both shared and writable."
-              },
               "name": "DoNotMarkWritableSectionsAsShared",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "SharedSectionCheck"
               }
@@ -1296,10 +1320,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "PE sections should not be marked as both writable and executable."
-              },
               "name": "DoNotMarkWritableSectionsAsExecutable",
+              "defaultConfiguration": {
+                "level": "none"
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "WXCheck"
               }
@@ -1330,14 +1354,12 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms."
-              },
-              "name": "SignSecurely"
+              "name": "SignSecurely",
+              "defaultConfiguration": {
+                "level": "none"
+              }
             }
-          ],
-          "properties": {
-          }
+          ]
         }
       },
       "invocations": [
