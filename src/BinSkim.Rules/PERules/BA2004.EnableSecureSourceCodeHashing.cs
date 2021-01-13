@@ -4,7 +4,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -28,8 +27,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA2004_Pass),
-            nameof(RuleResources.BA2004_Warning_Native),
+            nameof(RuleResources.BA2004_Warning_Native_WithBadCompilands),
             nameof(RuleResources.BA2004_Warning_Managed),
+            nameof(RuleResources.BA2004_Error_Native_WithBadCompilands),
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
@@ -153,7 +153,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // are out of policy: {1} 
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(failureLevel, context, null,
-                nameof(RuleResources.BA2004_Warning_Native),
+                failureLevel == FailureLevel.Error
+                    ? nameof(RuleResources.BA2004_Error_Native_WithBadCompilands)
+                    : nameof(RuleResources.BA2004_Warning_Native_WithBadCompilands),
                     context.TargetUri.GetFileName(),
                     compilands));
         }
