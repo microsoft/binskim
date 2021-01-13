@@ -4,7 +4,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -28,8 +27,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA2004_Pass),
-            nameof(RuleResources.BA2004_Warning_Native),
+            nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
             nameof(RuleResources.BA2004_Warning_Managed),
+            nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
@@ -150,12 +150,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks
             // and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the
             // cl.exe command-line to enable secure source code hashing. The following modules
-            // are out of policy: {1} 
+            // are out of policy: {1}
+            if (failureLevel == FailureLevel.Warning)
+            {
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(failureLevel,
+                                              context,
+                                              null,
+                                              nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
+                                              context.TargetUri.GetFileName(),
+                                              compilands));
+                return;
+            }
+
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(failureLevel, context, null,
-                nameof(RuleResources.BA2004_Warning_Native),
-                    context.TargetUri.GetFileName(),
-                    compilands));
+                RuleUtilities.BuildResult(failureLevel,
+                                          context,
+                                          null,
+                                          nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
+                                          context.TargetUri.GetFileName(),
+                                          compilands));
         }
 
         public IEnumerable<IOption> GetOptions()

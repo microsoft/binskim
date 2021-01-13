@@ -115,11 +115,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used t [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2004_EnableSecureSourceCodeHashing_Description {
             get {
                 return ResourceManager.GetString("BA2004_EnableSecureSourceCodeHashing_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+        ///{1}.
+        /// </summary>
+        internal static string BA2004_Error_NativeWithInsecureDirectCompilands {
+            get {
+                return ResourceManager.GetString("BA2004_Error_NativeWithInsecureDirectCompilands", resourceCulture);
             }
         }
         
@@ -142,12 +152,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA-256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
         ///{1}.
         /// </summary>
-        internal static string BA2004_Warning_Native {
+        internal static string BA2004_Warning_NativeWithInsecureStaticLibraryCompilands {
             get {
-                return ResourceManager.GetString("BA2004_Warning_Native", resourceCulture);
+                return ResourceManager.GetString("BA2004_Warning_NativeWithInsecureStaticLibraryCompilands", resourceCulture);
             }
         }
         
