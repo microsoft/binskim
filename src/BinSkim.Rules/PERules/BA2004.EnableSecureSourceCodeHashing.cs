@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             Pdb di = target.Pdb;
-            if (target.PE.IsManaged && (di.FileType == PdbFileType.Windows))
+            if (target.PE.IsManaged && (di?.FileType == PdbFileType.Windows))
             {
                 reasonForNotAnalyzing = MetadataConditions.CouldNotLoadPdb;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -59,10 +59,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
-            AnalyzeNativeBinaryAndPdb(context);
+            AnalyzeBinaryAndPdb(context);
         }
 
-        public void AnalyzeNativeBinaryAndPdb(BinaryAnalyzerContext context)
+        public void AnalyzeBinaryAndPdb(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
             Pdb di = target.Pdb;
