@@ -7,9 +7,9 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
-          "properties": {
-          }
         }
       },
       "invocations": [
