@@ -476,6 +476,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -497,9 +499,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security."
               },
               "name": "LoadImageAboveFourGigabyteAddress",
               "properties": {
@@ -529,9 +528,6 @@
                   "text": "'{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations."
-              },
               "name": "EnableControlFlowGuard",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
@@ -559,9 +555,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities."
               },
               "name": "EnableStackProtection",
               "properties": {
@@ -597,9 +590,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Application code should not interfere with the stack protector."
-              },
               "name": "DoNotModifyStackProtectionCookie",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
@@ -631,9 +621,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities."
-              },
               "name": "InitializeStackProtection",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
@@ -658,9 +645,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "Application code should not disable stack protection for individual functions."
               },
               "name": "DoNotDisableStackProtectionForFunctions",
               "properties": {
@@ -693,9 +677,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible."
-              },
               "name": "EnableHighEntropyVirtualAddresses",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "HighEntropyVACheck"
@@ -723,9 +704,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues."
               },
               "name": "EnableSafeSEH",
               "properties": {
@@ -755,9 +733,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap)."
-              },
               "name": "EnablePositionIndependentExecutable"
             },
             {
@@ -783,9 +758,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode."
-              },
               "name": "DoNotMarkStackAsExecutable"
             },
             {
@@ -808,9 +780,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected."
-              },
               "name": "EnableStackProtector"
             },
             {
@@ -832,9 +801,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory."
               },
               "name": "EnableReadOnlyRelocations"
             },
@@ -864,9 +830,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string."
-              },
               "name": "UseCheckedFunctionsWithGcc"
             },
             {
@@ -891,9 +854,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "Do not ship obsolete libraries for which there are known security vulnerabilities."
               },
               "name": "DoNotShipVulnerableBinaries",
               "properties": {
@@ -926,9 +886,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR)."
-              },
               "name": "EnableAddressSpaceLayoutRandomization",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DBCheck"
@@ -953,9 +910,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "PE sections should not be marked as both writable and executable."
               },
               "name": "DoNotMarkImportsSectionAsExecutable",
               "properties": {
@@ -982,9 +936,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code."
-              },
               "name": "MarkImageAsNXCompatible",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "NXCheck"
@@ -1009,9 +960,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "Code or data sections should not be marked as both shared and writable."
               },
               "name": "DoNotMarkWritableSectionsAsShared",
               "properties": {
@@ -1040,9 +988,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "PE sections should not be marked as both writable and executable."
               },
               "name": "DoNotMarkWritableSectionsAsExecutable",
               "properties": {
@@ -1075,14 +1020,9 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms."
-              },
               "name": "SignSecurely"
             }
-          ],
-          "properties": {
-          }
+          ]
         }
       },
       "invocations": [

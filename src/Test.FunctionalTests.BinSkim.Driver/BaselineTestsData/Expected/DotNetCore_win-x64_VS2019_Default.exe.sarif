@@ -590,6 +590,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -612,9 +614,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should not take dependencies on code with known security vulnerabilities."
-              },
               "name": "DoNotIncorporateVulnerableDependencies",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ATLVersionCheck"
@@ -623,28 +622,28 @@
             {
               "id": "BA2004",
               "fullDescription": {
-                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler."
+                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing."
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md",
               "help": {
-                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler."
+                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing."
               },
               "messageStrings": {
                 "Pass": {
                   "text": "'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm."
                 },
-                "Warning_Native": {
-                  "text": "'{0}' is a native binary that links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
+                "Warning_NativeWithInsecureStaticLibraryCompilands": {
+                  "text": "'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
                 },
                 "Warning_Managed": {
                   "text": "'{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing."
                 },
+                "Error_NativeWithInsecureDirectCompilands": {
+                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
+                },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs and associated source code."
               },
               "name": "EnableSecureSourceCodeHashing"
             },
@@ -670,9 +669,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features."
               },
               "name": "BuildWithSecureTools",
               "properties": {
@@ -705,9 +701,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should be compiled with a warning level that enables all critical security-relevant checks."
-              },
               "name": "EnableCriticalCompilerWarnings",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "CompilerWarningsCheck"
@@ -735,9 +728,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities."
               },
               "name": "EnableStackProtection",
               "properties": {
@@ -770,9 +760,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities."
-              },
               "name": "InitializeStackProtection",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
@@ -798,9 +785,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Application code should not disable stack protection for individual functions."
-              },
               "name": "DoNotDisableStackProtectionForFunctions",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSFunctionSafeBuffersCheck"
@@ -825,9 +809,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code."
               },
               "name": "MarkImageAsNXCompatible",
               "properties": {
@@ -856,9 +837,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues."
               },
               "name": "EnableSafeSEH",
               "properties": {
@@ -894,9 +872,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it."
-              },
               "name": "EnableSpectreMitigations"
             },
             {
@@ -921,9 +896,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap)."
               },
               "name": "EnablePositionIndependentExecutable"
             },
@@ -950,9 +922,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode."
-              },
               "name": "DoNotMarkStackAsExecutable"
             },
             {
@@ -975,9 +944,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected."
-              },
               "name": "EnableStackProtector"
             },
             {
@@ -999,9 +965,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory."
               },
               "name": "EnableReadOnlyRelocations"
             },
@@ -1031,9 +994,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string."
-              },
               "name": "UseCheckedFunctionsWithGcc"
             },
             {
@@ -1055,9 +1015,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security."
               },
               "name": "LoadImageAboveFourGigabyteAddress",
               "properties": {
@@ -1087,9 +1044,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Do not ship obsolete libraries for which there are known security vulnerabilities."
-              },
               "name": "DoNotShipVulnerableBinaries",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "BinaryVersionsCheck"
@@ -1117,9 +1071,6 @@
                 "NotApplicable_UnsupportedKernelModeVersion": {
                   "text": "'{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries."
                 }
-              },
-              "shortDescription": {
-                "text": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations."
               },
               "name": "EnableControlFlowGuard",
               "properties": {
@@ -1152,9 +1103,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR)."
-              },
               "name": "EnableAddressSpaceLayoutRandomization",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DBCheck"
@@ -1179,9 +1127,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "PE sections should not be marked as both writable and executable."
               },
               "name": "DoNotMarkImportsSectionAsExecutable",
               "properties": {
@@ -1217,9 +1162,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Application code should not interfere with the stack protector."
-              },
               "name": "DoNotModifyStackProtectionCookie",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
@@ -1251,9 +1193,6 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible."
-              },
               "name": "EnableHighEntropyVirtualAddresses",
               "properties": {
                 "equivalentBinScopeRuleReadableName": "HighEntropyVACheck"
@@ -1278,9 +1217,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "Code or data sections should not be marked as both shared and writable."
               },
               "name": "DoNotMarkWritableSectionsAsShared",
               "properties": {
@@ -1309,9 +1245,6 @@
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
-              },
-              "shortDescription": {
-                "text": "PE sections should not be marked as both writable and executable."
               },
               "name": "DoNotMarkWritableSectionsAsExecutable",
               "properties": {
@@ -1344,14 +1277,9 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": {
-                "text": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms."
-              },
               "name": "SignSecurely"
             }
-          ],
-          "properties": {
-          }
+          ]
         }
       },
       "invocations": [
