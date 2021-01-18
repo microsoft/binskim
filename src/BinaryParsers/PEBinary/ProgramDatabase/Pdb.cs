@@ -22,6 +22,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     {
         private IDiaSession session;
         private StringBuilder loadTrace;
+        private readonly string peOrPdbPath;
         private readonly Lazy<Symbol> globalScope;
         private bool restrictReferenceAndOriginalPathAccess;
         private PdbFileType pdbFileType;
@@ -42,6 +43,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             string localSymbolDirectories = null,
             bool traceLoads = false)
         {
+            this.peOrPdbPath = pePath;
             this.loadTrace = traceLoads ? new StringBuilder() : null;
             this.globalScope = new Lazy<Symbol>(this.GetGlobalScope, LazyThreadSafetyMode.ExecutionAndPublication);
             this.writableSegmentIds = new Lazy<HashSet<uint>>(this.GenerateWritableSegmentSet);
@@ -148,11 +150,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 if (this.pdbFileType != PdbFileType.Unknown)
                 {
                     return this.pdbFileType;
-                }
-
-                if (Directory.Exists(PdbLocation))
-                {
-                    return PdbFileType.Unknown;
                 }
 
                 int max = Math.Max(WindowsPdbSignature.Length, PortablePdbSignature.Length);
@@ -396,7 +393,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <summary>
         /// Returns the location of the PDB for this module
         /// </summary>
-        public string PdbLocation => this.session.globalScope.symbolsFileName;
+        public string PdbLocation
+        {
+            get
+            {
+                string path = this.session.globalScope.symbolsFileName;
+                if (File.Exists(path))
+                {
+                    return path;
+                }
+
+                if (Directory.Exists(path))
+                {
+                    string extension = Path.GetExtension(this.peOrPdbPath);
+                    if (File.Exists(this.peOrPdbPath.Replace(extension, ".pdb")))
+                    {
+                        return this.peOrPdbPath.Replace(extension, ".pdb");
+                    }
+                }
+
+                return path;
+            }
+        }
 
         public void Dispose()
         {
