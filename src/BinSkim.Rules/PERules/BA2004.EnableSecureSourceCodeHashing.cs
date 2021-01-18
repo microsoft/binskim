@@ -35,11 +35,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
-            PE portableExecutable = target.PE;
-            AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
+            Pdb di = target.Pdb;
+            if (target.PE.IsManaged && (di.FileType == PdbFileType.Windows))
+            {
+                reasonForNotAnalyzing = MetadataConditions.CouldNotLoadPdb;
+                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
+            }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyAssembly;
-            if (portableExecutable.IsILOnly) { return result; }
+            //reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyAssembly;
+            //if (portableExecutable.IsILOnly) { return result; }
 
             // TODO: currently our test binary for this check is a dll that does not
             // compile against any external library. BinSkim regards this as a resource
@@ -55,20 +59,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
-            if (context.PEBinary().PE.IsManaged)
-            {
-                AnalyzeManagedAssemblyAndPdb(context);
-                return;
-            }
-
             AnalyzeNativeBinaryAndPdb(context);
-        }
-
-#pragma warning disable IDE0060 // Remove unused parameter
-        private void AnalyzeManagedAssemblyAndPdb(BinaryAnalyzerContext context)
-#pragma warning restore IDE0060 // Remove unused parameter
-        {
-            // TODO: use DiaSymReader?
         }
 
         public void AnalyzeNativeBinaryAndPdb(BinaryAnalyzerContext context)
@@ -84,15 +75,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                if (omDetails.Language != Language.C &&
-                    omDetails.Language != Language.Cxx)
+                if (!target.PE.IsManaged)
                 {
-                    continue;
-                }
+                    if (omDetails.Language != Language.C &&
+                        omDetails.Language != Language.Cxx)
+                    {
+                        continue;
+                    }
 
-                if (!omDetails.HasDebugInfo)
-                {
-                    continue;
+                    if (!omDetails.HasDebugInfo)
+                    {
+                        continue;
+                    }
                 }
 
                 CompilandRecord record = om.CreateCompilandRecord();

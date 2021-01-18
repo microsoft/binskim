@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             // We should never be required to load a PDB for a managed assembly that does
             // not incorporate native code, as no managed-relevant rule currently crawls
             // PDBs for its analysis.
-            Debug.Assert(!this.PE.IsManaged || this.PE.IsMixedMode);
+            // Debug.Assert(!this.PE.IsManaged || this.PE.IsMixedMode);
 
             Pdb pdb = null;
             try
