@@ -10,6 +10,9 @@ using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 using System.Security.Cryptography;
 
+using Microsoft.DiaSymReader;
+using Microsoft.DiaSymReader.Tools;
+
 namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 {
     public class PE : IDisposable
@@ -89,7 +92,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 this.fs = null;
             }
         }
-
 
         public Exception LoadException { get; set; }
 
@@ -262,7 +264,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 throw new InvalidOperationException("Image bytes cannot be retrieved when data is backed by a stream.");
             }
         }
-
 
         /// <summary>
         /// Calculate SHA1 over the file contents
@@ -789,7 +790,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-        public bool IsChecksumAlgorithmSecure()
+        public bool IsChecksumAlgorithmSecureForPortablePdb()
         {
             const string sha256 = "8829d00f-11b8-4213-878b-770e8597ac16";
             var sha256guid = new Guid(sha256);
@@ -809,6 +810,42 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                     return hashGuid == sha256guid;
                 }
+            }
+
+            return false;
+        }
+
+        public bool IsChecksumAlgorithmSecureForFullPdb()
+        {
+            const string sha256 = "8829d00f-11b8-4213-878b-770e8597ac16";
+            var sha256guid = new Guid(sha256);
+            string fileName = Path.GetFileName(this.FileName);
+            string extension = Path.GetExtension(fileName);
+            string pdbPath = this.FileName.Replace(fileName, fileName.Replace(extension, ".pdb"));
+
+            if (!File.Exists(pdbPath))
+            {
+                return false;
+            }
+
+            using var pdbStream = new FileStream(pdbPath, FileMode.Open, FileAccess.Read);
+
+            var metadataProvider = new SymMetadataProvider(this.metadataReader);
+            object importer = SymUnmanagedReaderFactory.CreateSymReaderMetadataImport(metadataProvider);
+            ISymUnmanagedReader3 reader = SymUnmanagedReaderFactory.CreateReaderWithMetadataImport<ISymUnmanagedReader3>(pdbStream, importer, SymUnmanagedReaderCreationOptions.UseComRegistry);
+
+            try
+            {
+                Guid algorithm = Guid.Empty;
+                foreach (ISymUnmanagedDocument document in reader.GetDocuments())
+                {
+                    document.GetChecksumAlgorithmId(ref algorithm);
+                    return algorithm == sha256guid;
+                }
+            }
+            finally
+            {
+                _ = ((ISymUnmanagedDispose)reader).Destroy();
             }
 
             return false;

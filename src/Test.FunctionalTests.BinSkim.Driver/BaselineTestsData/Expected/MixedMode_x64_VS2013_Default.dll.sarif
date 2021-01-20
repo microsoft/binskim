@@ -5,32 +5,8 @@
     {
       "results": [
         {
-          "ruleId": "BA2004",
-          "ruleIndex": 0,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "MixedMode_x64_VS2013_Default.dll",
-              "EnableSecureSourceCodeHashing",
-              "an exception occurred attempting to load its pdb"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/MixedMode_x64_VS2013_Default.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA2008",
-          "ruleIndex": 1,
+          "ruleIndex": 0,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -54,7 +30,7 @@
         },
         {
           "ruleId": "BA2015",
-          "ruleIndex": 2,
+          "ruleIndex": 1,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -78,7 +54,7 @@
         },
         {
           "ruleId": "BA2016",
-          "ruleIndex": 3,
+          "ruleIndex": 2,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -102,7 +78,7 @@
         },
         {
           "ruleId": "BA2018",
-          "ruleIndex": 4,
+          "ruleIndex": 3,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -126,7 +102,7 @@
         },
         {
           "ruleId": "BA3001",
-          "ruleIndex": 5,
+          "ruleIndex": 4,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -150,7 +126,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 6,
+          "ruleIndex": 5,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -174,7 +150,7 @@
         },
         {
           "ruleId": "BA3003",
-          "ruleIndex": 7,
+          "ruleIndex": 6,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -198,7 +174,7 @@
         },
         {
           "ruleId": "BA3010",
-          "ruleIndex": 8,
+          "ruleIndex": 7,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -222,7 +198,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 9,
+          "ruleIndex": 8,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -246,7 +222,7 @@
         },
         {
           "ruleId": "BA2001",
-          "ruleIndex": 10,
+          "ruleIndex": 9,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -268,11 +244,31 @@
         },
         {
           "ruleId": "BA2002",
-          "ruleIndex": 11,
+          "ruleIndex": 10,
           "kind": "pass",
           "level": "none",
           "message": {
             "id": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_Default.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/MixedMode_x64_VS2013_Default.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 11,
+          "message": {
+            "id": "Error_Managed",
             "arguments": [
               "MixedMode_x64_VS2013_Default.dll"
             ]
@@ -587,34 +583,6 @@
           "version": "15.0.0.0",
           "rules": [
             {
-              "id": "BA2004",
-              "fullDescription": {
-                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md",
-              "help": {
-                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm."
-                },
-                "Warning_NativeWithInsecureStaticLibraryCompilands": {
-                  "text": "'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
-                },
-                "Error_Managed": {
-                  "text": "'{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing."
-                },
-                "Error_NativeWithInsecureDirectCompilands": {
-                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "name": "EnableSecureSourceCodeHashing"
-            },
-            {
               "id": "BA2008",
               "fullDescription": {
                 "text": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program."
@@ -897,6 +865,34 @@
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ATLVersionCheck"
               }
+            },
+            {
+              "id": "BA2004",
+              "fullDescription": {
+                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md",
+              "help": {
+                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm."
+                },
+                "Warning_NativeWithInsecureStaticLibraryCompilands": {
+                  "text": "'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
+                },
+                "Error_Managed": {
+                  "text": "'{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing."
+                },
+                "Error_NativeWithInsecureDirectCompilands": {
+                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableSecureSourceCodeHashing"
             },
             {
               "id": "BA2005",

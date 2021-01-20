@@ -62,7 +62,7 @@
             "arguments": [
               "Wix_3.11.1_VS2017_Bootstrapper.exe",
               "EnableSecureSourceCodeHashing",
-              "an exception occurred attempting to load its pdb"
+              "image appears to be a WiX bootstrapper application"
             ]
           },
           "locations": [

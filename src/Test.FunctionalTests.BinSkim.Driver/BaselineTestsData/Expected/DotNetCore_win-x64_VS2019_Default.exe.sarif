@@ -38,7 +38,7 @@
             "arguments": [
               "DotNetCore_win-x64_VS2019_Default.exe",
               "EnableSecureSourceCodeHashing",
-              "an exception occurred attempting to load its pdb"
+              "image is a .NET core native bootstrap exe"
             ]
           },
           "locations": [
