@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         protected override IEnumerable<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA2004_Pass),
             nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
-            nameof(RuleResources.BA2004_Warning_Managed),
+            nameof(RuleResources.BA2004_Error_Managed),
             nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
@@ -36,22 +36,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             Pdb di = target.Pdb;
+
             if (target.PE.IsManaged && (di?.FileType == PdbFileType.Windows))
             {
                 reasonForNotAnalyzing = MetadataConditions.CouldNotLoadPdb;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
-
-            //reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyAssembly;
-            //if (portableExecutable.IsILOnly) { return result; }
-
-            // TODO: currently our test binary for this check is a dll that does not
-            // compile against any external library. BinSkim regards this as a resource
-            // only binary and skips the test. We should improve the IsResourceOnly
-            // helper to properly identify this dependency-free test binary as code.
-
-            //            reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
-            //            if (portableExecutable.IsResourceOnly) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -59,10 +49,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
-            AnalyzeBinaryAndPdb(context);
+            if (context.PEBinary().PE.IsManaged)
+            {
+                AnalyzeManagedAssemblyAndPdb(context);
+                return;
+            }
+
+            AnalyzeNativeBinaryAndPdb(context);
         }
 
-        public void AnalyzeBinaryAndPdb(BinaryAnalyzerContext context)
+        private void AnalyzeManagedAssemblyAndPdb(BinaryAnalyzerContext context)
+        {
+            PEBinary target = context.PEBinary();
+
+            if (!target.PE.IsChecksumAlgorithmSecure())
+            {
+                // '{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm.
+                // SHA-1 is subject to collision attacks and its use can compromise supply chain integrity.
+                // Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project
+                // <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing.
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Fail, context, null,
+                    nameof(RuleResources.BA2004_Error_Managed),
+                        context.TargetUri.GetFileName()));
+                return;
+            }
+
+            // '{0}' is a {1} binary which was compiled with a secure (SHA-256)
+            // source code hashing algorithm.
+            context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA2004_Pass),
+                        context.TargetUri.GetFileName(),
+                        "managed"));
+        }
+
+        public void AnalyzeNativeBinaryAndPdb(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
             Pdb di = target.Pdb;
@@ -75,18 +97,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                if (!target.PE.IsManaged)
+                if (omDetails.Language != Language.C &&
+                    omDetails.Language != Language.Cxx)
                 {
-                    if (omDetails.Language != Language.C &&
-                        omDetails.Language != Language.Cxx)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    if (!omDetails.HasDebugInfo)
-                    {
-                        continue;
-                    }
+                if (!omDetails.HasDebugInfo)
+                {
+                    continue;
                 }
 
                 CompilandRecord record = om.CreateCompilandRecord();

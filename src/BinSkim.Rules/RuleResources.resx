@@ -464,7 +464,7 @@ Modules triggering this check were:
     <value>The PDB for '{0}' was found and loaded. Probing details:
 {1}</value>
   </data>
-  <data name="BA2004_Warning_Managed" xml:space="preserve">
+  <data name="BA2004_Error_Managed" xml:space="preserve">
     <value>'{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project &lt;ChecksumAlgorithm&gt; property with 'SHA256' to enable secure source code hashing.</value>
   </data>
   <data name="BA2004_Pass" xml:space="preserve">

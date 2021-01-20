@@ -124,6 +124,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;-checksumalgorithm:SHA256&apos; on the csc.exe command-line or populate the project &lt;ChecksumAlgorithm&gt; property with &apos;SHA256&apos; to enable secure source code hashing..
+        /// </summary>
+        internal static string BA2004_Error_Managed {
+            get {
+                return ResourceManager.GetString("BA2004_Error_Managed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
         ///{1}.
         /// </summary>
@@ -139,15 +148,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2004_Pass {
             get {
                 return ResourceManager.GetString("BA2004_Pass", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;-checksumalgorithm:SHA256&apos; on the csc.exe command-line or populate the project &lt;ChecksumAlgorithm&gt; property with &apos;SHA256&apos; to enable secure source code hashing..
-        /// </summary>
-        internal static string BA2004_Warning_Managed {
-            get {
-                return ResourceManager.GetString("BA2004_Warning_Managed", resourceCulture);
             }
         }
         

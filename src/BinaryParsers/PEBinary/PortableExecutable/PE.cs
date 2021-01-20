@@ -366,7 +366,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-
         /// <summary>
         /// Windows OS file version information
         /// </summary>
@@ -381,7 +380,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 return this.version;
             }
         }
-
 
         public Packer Packer
         {
@@ -789,6 +787,31 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 return this.isWixBinary.Value;
             }
+        }
+
+        public bool IsChecksumAlgorithmSecure()
+        {
+            const string sha256 = "8829d00f-11b8-4213-878b-770e8597ac16";
+            var sha256guid = new Guid(sha256);
+
+            if (this.peReader.TryOpenAssociatedPortablePdb(
+                this.FileName,
+                filePath => File.Exists(filePath) ? File.OpenRead(filePath) : null,
+                out MetadataReaderProvider pdbProvider,
+                out _))
+            {
+                MetadataReader metadataReader = pdbProvider.GetMetadataReader();
+                foreach (DocumentHandle document in metadataReader.Documents)
+                {
+                    Document doc = metadataReader.GetDocument(document);
+
+                    Guid hashGuid = metadataReader.GetGuid(doc.HashAlgorithm);
+
+                    return hashGuid == sha256guid;
+                }
+            }
+
+            return false;
         }
     }
 }
