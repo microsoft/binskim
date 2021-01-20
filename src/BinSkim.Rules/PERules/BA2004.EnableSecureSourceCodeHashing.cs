@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             Pdb di = target.Pdb;
 
-            if (target.PE.IsManaged && (di?.FileType == PdbFileType.Windows))
+            if (target.PE.IsManaged && (di?.FileType == PdbFileType.Windows) || di == null)
             {
                 reasonForNotAnalyzing = MetadataConditions.CouldNotLoadPdb;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
