@@ -16,6 +16,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
   
   <!-- Configuration specific properties -->
@@ -53,6 +54,13 @@
   
   <ItemGroup>
     <Compile Include="$(MsBuildThisFileDirectory)Shared\SharedAssemblyInfo.cs" />
+  </ItemGroup>
+  
+  <ItemGroup Label="Common Packages">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   
 </Project>

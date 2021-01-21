@@ -25,9 +25,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id => RuleIds.DoNotMarkStackAsExecutable;
 
         /// <summary>
-        /// "This checks if a binary has an executable stack; an 
-        /// executable stack allows attackers to redirect code flow 
-        /// into stack memory, which is an easy place for an attacker 
+        /// "This checks if a binary has an executable stack; an
+        /// executable stack allows attackers to redirect code flow
+        /// into stack memory, which is an easy place for an attacker
         /// to store shellcode. Ensure you are compiling with '-z noexecstack'
         /// to mark the stack as non-executable."
         /// </summary>

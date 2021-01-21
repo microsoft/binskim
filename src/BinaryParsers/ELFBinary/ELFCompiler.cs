@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     /// <summary>
     /// Many compilers on Linux note which compiler and version was used to build that code
     /// by adding an entry to the '.comment' section (represented as a series of null terminated ascii strings).
-    /// 
+    ///
     /// This class takes those strings and attempts to match them with a known toolchain & version.
     /// </summary>
     public class ELFCompiler

@@ -32,7 +32,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// segment in source code, which change the imports section to be executable, or
         /// which merge the ".rdata" segment into an executable section.
         /// </summary>
-
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2010_DoNotMarkImportsSectionAsExecutable_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {

@@ -912,7 +912,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 };
                 this.VerifyApplicability(new DoNotDisableStackProtectionForFunctions(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
             }
-
             else
             {
                 this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);

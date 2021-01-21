@@ -9,7 +9,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         public VulnerableDependencyDescriptor()
         {
-
         }
 
         public VulnerableDependencyDescriptor(PropertiesDictionary dictionary = null)

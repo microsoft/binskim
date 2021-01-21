@@ -90,7 +90,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-
         public Exception LoadException { get; set; }
 
         public Uri Uri { get; set; }
@@ -190,7 +189,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     DirectoryEntry importTableDirectory = this.PEHeaders.PEHeader.ImportTableDirectory;
                     if (this.PEHeaders.PEHeader.ImportTableDirectory.Size == 0)
                     {
-                        this.asImports = new string[0];
+                        this.asImports = Array.Empty<string>();
                     }
                     else
                     {
@@ -261,7 +260,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 throw new InvalidOperationException("Image bytes cannot be retrieved when data is backed by a stream.");
             }
-        }
+      }
 
 
         /// <summary>
@@ -364,7 +363,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 return (long)this.length;
             }
-        }
+      }
 
 
         /// <summary>
@@ -380,7 +379,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 }
                 return this.version;
             }
-        }
+      }
 
 
         public Packer Packer
@@ -474,7 +473,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     // We require special checks in the event of a non-zero export table directory value
                     // If the binary only contains forwarders, we should regard it as not containing code
                     this.isResourceOnly = false;
-                }
+              }
 
 
                 return this.isResourceOnly.Value;
@@ -616,7 +615,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 if (this.isKernelMode != null)
                 {
                     return (bool)this.isKernelMode;
-                }
+              }
 
 
                 this.isKernelMode = false;

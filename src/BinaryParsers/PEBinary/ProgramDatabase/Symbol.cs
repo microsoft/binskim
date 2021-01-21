@@ -511,7 +511,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         }
     }
 
-
     /// <summary>
     /// Symbol location type enum
     /// </summary>

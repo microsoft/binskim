@@ -72,7 +72,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         //       Between one and unlimited times, as many times as possible, giving back as needed (greedy) «+»
         private static readonly Regex s_versionRegex = new Regex(@"\d+(\.\d+){0,3}", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
 
-
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             reasonForNotAnalyzing = "";
