@@ -79,7 +79,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             internal IntPtr pwszExtendedErrorInfo;
         }
 
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         internal struct CERT_CONTEXT
         {
@@ -251,7 +250,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return CryptHashPublicKeyInfo(hCryptProv, Algid, dwFlags, dwCertEncodingType, ref pInfo, pbComputedHash, ref pcbComputedHash);
         }
 
-
         [DllImport("crypt32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern
         bool CryptHashToBeSigned(
@@ -278,7 +276,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 pbComputedHash,
                 ref pcbComputedHash);
         }
-
 
         [DllImport("wintrust.dll")]
         private static extern uint WinVerifyTrust(

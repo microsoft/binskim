@@ -192,7 +192,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     DirectoryEntry importTableDirectory = this.PEHeaders.PEHeader.ImportTableDirectory;
                     if (this.PEHeaders.PEHeader.ImportTableDirectory.Size == 0)
                     {
-                        this.asImports = new string[0];
+                        this.asImports = Array.Empty<string>();
                     }
                     else
                     {

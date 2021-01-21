@@ -47,7 +47,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
         }
 
-
         [Fact]
         public void PEBinary_CanRecognizeDotNetBootstrappingExe()
         {

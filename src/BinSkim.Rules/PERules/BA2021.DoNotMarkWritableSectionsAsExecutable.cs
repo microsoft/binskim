@@ -31,7 +31,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// linker command line for C and C++ programs, or #pragma section in C and C++
         /// source code, which mark a section with both attributes.
         /// </summary>
-
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2021_DoNotMarkWritableSectionsAsExecutable_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {

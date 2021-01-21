@@ -31,10 +31,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// direct shellcode in their exploit (because the exploit comes in the
         /// form of input data to the exploited program on a data segment,
         /// rather than on an executable code segment). Ensure that your tool
-        /// chain is configured to mark your binaries as NX compatible, e.g. by 
+        /// chain is configured to mark your binaries as NX compatible, e.g. by
         /// passing /NXCOMPAT to the C/C++ linker.
         /// </summary>
-
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2016_MarkImageAsNXCompatible_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {

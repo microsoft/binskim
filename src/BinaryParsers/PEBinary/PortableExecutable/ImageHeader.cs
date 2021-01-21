@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             object res;
             ImageFieldData fi = this.GetFieldInfo(n);
             int count = fi.Count;
-            int offset = this.GetFieldOffset(n); ;
+            int offset = this.GetFieldOffset(n);
             object o;
             int len;
 
@@ -80,7 +80,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             int padding = fi.PadTo;
             int size;
             int len;
-
 
             if (fi.VarLen)
             {

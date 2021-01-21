@@ -24,9 +24,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id => RuleIds.EnableReadOnlyRelocations;
 
         /// <summary>
-        /// This check ensures that some relocation data is marked as read only after 
-        /// the executable is loaded, and moved below the .data section in memory. 
-        /// This prevents them from being overwritten, which can redirect control flow. 
+        /// This check ensures that some relocation data is marked as read only after
+        /// the executable is loaded, and moved below the .data section in memory.
+        /// This prevents them from being overwritten, which can redirect control flow.
         /// Use the compiler flags '-Wl,z,relro' to enable this.
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3010_EnableReadOnlyRelocations_Description };

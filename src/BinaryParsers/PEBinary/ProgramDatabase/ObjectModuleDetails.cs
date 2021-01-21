@@ -17,11 +17,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <param name="compilerFrontEndVersion">The front end version of the compiler producing the object module.</param>
         /// <param name="backEndVersion">The back end version of the compiler producing the object module.</param>
         /// <param name="commandLine">The command line passed to the compiler used to build the object module.</param>
-        /// <param name="language">The language of the object module.</parm>
         /// <param name="compilerName">The compiler used to create the object module.</param>
+        /// <param name="language">The language of the object module.</parm>
         /// <param name="hasSecurityChecks">A boolean that indicates whether the PE contains security checks.</param>
         /// <param name="hasDebugInfo">A boolean that indicates whether the PE comes with a corresponding PDB.</param>
-        /// 
         public ObjectModuleDetails(
             string name,
             string library,
@@ -82,7 +81,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// </summary>
         public Language Language { get; private set; }
 
-        private Nullable<WellKnownCompilers> wellKnownCompiler;
+        private WellKnownCompilers? wellKnownCompiler;
 
         public WellKnownCompilers WellKnownCompiler
         {
@@ -132,7 +131,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         }
 
     }
-
     public enum Language : uint
     {
         C,

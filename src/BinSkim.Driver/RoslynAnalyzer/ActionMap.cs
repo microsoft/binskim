@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis.IL
 {
     /// <summary>
     /// A map of categorized actions that can be sequentially retrieved
-    /// and invoked by providing a relevant key and context object, 
+    /// and invoked by providing a relevant key and context object,
     /// serving as a kind of multicast delegate mechanism.
     /// </summary>
     /// <typeparam name="TContext">A context instance that is passed to the action.</typeparam>

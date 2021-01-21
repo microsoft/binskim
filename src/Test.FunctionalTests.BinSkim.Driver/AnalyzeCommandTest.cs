@@ -10,7 +10,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         [Fact]
         public void AnalyzeCommand_Basic()
         {
-
         }
     }
 }

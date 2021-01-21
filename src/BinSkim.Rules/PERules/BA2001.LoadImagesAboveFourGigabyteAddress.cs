@@ -29,14 +29,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// effectiveness at mitigating memory corruption vulnerabilities. To resolve
         /// this issue, either use the default preferred base address by removing any
         /// uses of /baseaddress from compiler command lines, or /BASE from linker
-        /// command lines (recommended), or configure your program to start at a base 
+        /// command lines (recommended), or configure your program to start at a base
         /// address above 4GB when compiled for 64 bit platforms (by changing the
         /// constant passed to /baseaddress / /BASE). Note that if you choose to
         /// continue using a custom preferred base address, you will need to make this
         /// modification only for 64-bit builds, as base addresses above 4GB are not
         /// valid for 32-bit binaries.
         /// </summary>
-
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2001_LoadImageAboveFourGigabyteAddress_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {

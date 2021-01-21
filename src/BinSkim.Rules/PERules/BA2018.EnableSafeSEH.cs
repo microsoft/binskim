@@ -32,7 +32,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// configure your build system to supply this flag for x86 builds only,
         /// as the /SafeSEH flag is invalid when linking for ARM and x64.
         /// </summary>
-
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2018_EnableSafeSEH_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {

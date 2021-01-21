@@ -134,7 +134,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var mitigatedCompilers = new PropertiesDictionary();
             PropertiesDictionary fakeX86Data = this.GenerateMachineFamilyData();
 
-            mitigatedCompilers.Add(MachineFamily.X86.ToString(), fakeX86Data);
+            mitigatedCompilers.Add(nameof(MachineFamily.X86), fakeX86Data);
 
             BA2024Config.Add("MitigatedCompilers", mitigatedCompilers);
             context.Policy.Add("BA2024.EnableSpectreMitigations.Options", BA2024Config);
@@ -155,9 +155,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 { "2.0.1.0 - 2.*.*.*", (CompilerMitigations.NonoptimizedCodeMitigated | CompilerMitigations.QSpectreAvailable).ToString() }
             };
 
-            mitigatedCompilers.Add(MachineFamily.X86.ToString(), fakeX86Data);
-            mitigatedCompilers.Add(MachineFamily.Arm.ToString(), fakeArmData);
-
+            mitigatedCompilers.Add(nameof(MachineFamily.X86), fakeX86Data);
+            mitigatedCompilers.Add(nameof(MachineFamily.Arm), fakeArmData);
 
             BA2024Config.Add("MitigatedCompilers", mitigatedCompilers);
             policy.Add("BA2024.EnableSpectreMitigations.Options", BA2024Config);

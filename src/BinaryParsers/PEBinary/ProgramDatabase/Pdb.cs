@@ -35,8 +35,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// Load debug info from PE or PDB, using symbolPath to help find symbols
         /// </summary>
         /// <param name="pePath">The path to the portable executable.</param>
-        /// <param name="localSymbolDirectories">An option collection of local directories that should be examined for PDBs.</param>
         /// <param name="symbolPath">The symsrv.dll symbol path.</param>
+        /// <param name="localSymbolDirectories">An option collection of local directories that should be examined for PDBs.</param>
         public Pdb(
             string pePath,
             string symbolPath = null,

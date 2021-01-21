@@ -23,13 +23,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id => RuleIds.SignSecurely;
 
         /// <summary>
-        /// Images should be correctly signed by trusted publishers using 
-        /// cryptographically secure signature algorithms. This rule 
+        /// Images should be correctly signed by trusted publishers using
+        /// cryptographically secure signature algorithms. This rule
         /// invokes WinTrustVerify to validate that binary hash, signing
         /// and public key algorithms are secure and, where configurable,
         /// that key sizes meet acceptable size thresholds.
         /// </summary>
-
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2022_SignCorrectly_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
