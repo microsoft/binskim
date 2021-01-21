@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             string language = pe.IsManaged ? "Pure Managed" : "Native";
-            if (pe.IsManaged && !pe.IsILOnly) { language = "Mixed Managed"; };
+            if (pe.IsManaged && !pe.IsILOnly) { language = "Mixed Managed"; }
             sb.Append(language);
 
             string machine = pe.Machine.ToString();

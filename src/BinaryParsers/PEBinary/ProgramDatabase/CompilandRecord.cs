@@ -104,7 +104,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 sb.Append(this.Object);
                 sb.Append(" (");
                 sb.Append(this.Library);
-                sb.Append(")");
+                sb.Append(')');
             }
 
             if (!string.IsNullOrWhiteSpace(this.Suffix))

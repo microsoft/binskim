@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         /// <summary>
         /// BA2013
-        /// 
+        ///
         /// </summary>
         public override string Id => RuleIds.InitializeStackProtection;
 
@@ -35,7 +35,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// this call for you, or call __security_init_cookie() manually in your
         /// custom entry point.
         /// </summary>
-
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2013_InitializeStackProtection_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {

@@ -32,7 +32,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// linker command line. For .NET applications, use a compiler shipping with
         /// Visual Studio 2008 or later.
         /// </summary>
-
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2009_EnableAddressSpaceLayoutRandomization_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
@@ -102,7 +101,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Debug.Assert(target.PE.OSVersion >= OSVersions.WindowsCE7);
 
                 bool relocSectionFound = false;
-
 
                 // For WinCE 7+ ASLR is a machine-wide setting and binaries must
                 // have relocation info present in order to be dynamically rebased.

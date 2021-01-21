@@ -11,7 +11,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public ImageLoadConfigDirectory64(PEHeader parentHeader, SafePointer sp) : base(parentHeader, sp) { }
 
-
         protected override ImageFieldData[] GetFields() { return s_fields; }
 
         public override ImageHeader Create(PEHeader parentHeader, SafePointer sp)

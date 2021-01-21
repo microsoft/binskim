@@ -30,7 +30,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable
         /// high entropy ASLR.
         /// </summary>
-
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2015_EnableHighEntropyVirtualAddresses_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {

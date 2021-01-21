@@ -394,7 +394,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         /// <summary>
-        /// Get the Spectre compiler compiler mitigations available for a particular compiler version and machine type.
+        /// Get the Spectre compiler mitigations available for a particular compiler version and machine type.
         /// </summary>
         internal static CompilerMitigations GetAvailableMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)
         {
@@ -528,8 +528,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             armData.Add("19.14.26329.0 - *.*.*.*",
                 (CompilerMitigations.D2GuardSpecLoadAvailable | CompilerMitigations.QSpectreAvailable | CompilerMitigations.NonoptimizedCodeMitigated).ToString());
 
-            compilersData.Add(MachineFamily.X86.ToString(), x86Data);
-            compilersData.Add(MachineFamily.Arm.ToString(), armData);
+            compilersData.Add(nameof(MachineFamily.X86), x86Data);
+            compilersData.Add(nameof(MachineFamily.Arm), armData);
 
             return compilersData;
         }

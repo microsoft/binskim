@@ -29,7 +29,6 @@ namespace Microsoft.CodeAnalysis.IL
             this.testOutputHelper = output;
         }
 
-
         [Fact]
         public void Driver_BuiltInRuleFunctionalTests()
         {
@@ -107,7 +106,7 @@ namespace Microsoft.CodeAnalysis.IL
                 ConfigurationFilePath = "default",
                 SarifOutputVersion = Sarif.SarifVersion.Current,
                 TargetFileSpecifiers = new string[] { inputFileName },
-                Traces = new string[] { }
+                Traces = Array.Empty<string>()
             };
 
             int result = command.Run(options);

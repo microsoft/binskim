@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace Microsoft.CodeAnalysis.IL
 {
     /// <summary>
-    /// Basic analysis context provided to Roslyn analyzers. We use a singleton instance of this class to 
+    /// Basic analysis context provided to Roslyn analyzers. We use a singleton instance of this class to
     /// capture all symbol action registration for analyzers. These actions will subsequently be invoked
     /// as we visit the IL of all analysis targets.
     /// </summary>
@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         /// <summary>
         /// Register a compilation end action. We record and invoke these callbacks after analyzing each assembly, in order
-        /// to allow analyzers to perform any relevant clean-up actions. 
+        /// to allow analyzers to perform any relevant clean-up actions.
         /// </summary>
         /// <param name="action"></param>
         public override void RegisterCompilationEndAction(Action<CompilationAnalysisContext> action)

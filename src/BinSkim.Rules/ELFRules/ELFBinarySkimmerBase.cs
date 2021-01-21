@@ -25,5 +25,4 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public abstract AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing);
     }
-
 }

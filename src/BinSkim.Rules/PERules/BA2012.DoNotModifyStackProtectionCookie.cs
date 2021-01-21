@@ -40,7 +40,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// reference or create a symbol named __security_cookie or
         /// __security_cookie_complement.
         /// </summary>
-
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2012_DoNotModifyStackProtectionCookie_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
@@ -145,7 +144,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             SafePointer fileCookiePtr = loadConfigVA;
             fileCookiePtr.Address = (int)fileCookieOffset;
 
-
             SafePointer boundsCheck = fileCookiePtr + 8;
             if (!this.CookieOffsetValid(context, boundsCheck))
             {
@@ -167,7 +165,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             return true;
         }
-
 
         private bool Validate32BitImage(BinaryAnalyzerContext context)
         {

@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             // 4. Truncation message totalling all truncated stuff
             if (maxRecords < 4)
             {
-                throw new ArgumentOutOfRangeException("maxRecords", maxRecords, "Max record count must be at least 4 to leave room for truncation messages.");
+                throw new ArgumentOutOfRangeException(nameof(maxRecords), maxRecords, "Max record count must be at least 4 to leave room for truncation messages.");
             }
 
             this.rawRecords = new List<CompilandRecord>();

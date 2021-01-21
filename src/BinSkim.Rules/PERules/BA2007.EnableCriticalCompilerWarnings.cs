@@ -37,7 +37,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and
         /// resolve the warnings emitted.
         /// </summary>
-
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2007_EnableCriticalCompilerWarnings_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {

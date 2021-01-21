@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// section with both attributes. Be sure to disable incremental linking in release
         /// builds, as this feature creates a writable and executable section named '.textbss'
         /// in order to function.
-        /// </summary>       
+        /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2019_DoNotMarkWritableSectionsAsShared_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
