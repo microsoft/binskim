@@ -32,6 +32,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         private PEReader peReader;
         internal SafePointer pImage; // pointer to the beginning of the file in memory
         private readonly MetadataReader metadataReader;
+        private const string sha256 = "8829d00f-11b8-4213-878b-770e8597ac16";
+        private static readonly Guid sha256guid = new Guid(sha256);
 
         public PE(string fileName)
         {
@@ -790,42 +792,46 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-        public bool IsChecksumAlgorithmSecureForPortablePdb()
+        public ChecksumAlgorithmType ManagedPdbSourceFileChecksumAlgorithm(PdbFileType pdbFileType)
         {
-            const string sha256 = "8829d00f-11b8-4213-878b-770e8597ac16";
-            var sha256guid = new Guid(sha256);
+            return pdbFileType == PdbFileType.Windows
+                ? ChecksumAlgorithmForFullPdb()
+                : ChecksumAlgorithmForPortablePdb();
+        }
 
-            if (this.peReader.TryOpenAssociatedPortablePdb(
+        private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb()
+        {
+            if (!this.peReader.TryOpenAssociatedPortablePdb(
                 this.FileName,
                 filePath => File.Exists(filePath) ? File.OpenRead(filePath) : null,
                 out MetadataReaderProvider pdbProvider,
                 out _))
             {
-                MetadataReader metadataReader = pdbProvider.GetMetadataReader();
-                foreach (DocumentHandle document in metadataReader.Documents)
-                {
-                    Document doc = metadataReader.GetDocument(document);
-
-                    Guid hashGuid = metadataReader.GetGuid(doc.HashAlgorithm);
-
-                    return hashGuid == sha256guid;
-                }
+                return ChecksumAlgorithmType.Unknown;
             }
 
-            return false;
+            MetadataReader metadataReader = pdbProvider.GetMetadataReader();
+            foreach (DocumentHandle document in metadataReader.Documents)
+            {
+                Document doc = metadataReader.GetDocument(document);
+
+                Guid hashGuid = metadataReader.GetGuid(doc.HashAlgorithm);
+
+                return hashGuid == sha256guid ? ChecksumAlgorithmType.Sha256 : ChecksumAlgorithmType.Sha1;
+            }
+
+            return ChecksumAlgorithmType.Unknown;
         }
 
-        public bool IsChecksumAlgorithmSecureForFullPdb()
+        private ChecksumAlgorithmType ChecksumAlgorithmForFullPdb()
         {
-            const string sha256 = "8829d00f-11b8-4213-878b-770e8597ac16";
-            var sha256guid = new Guid(sha256);
             string fileName = Path.GetFileName(this.FileName);
             string extension = Path.GetExtension(fileName);
             string pdbPath = this.FileName.Replace(fileName, fileName.Replace(extension, ".pdb"));
 
             if (!File.Exists(pdbPath))
             {
-                return false;
+                return ChecksumAlgorithmType.Unknown;
             }
 
             using var pdbStream = new FileStream(pdbPath, FileMode.Open, FileAccess.Read);
@@ -840,7 +846,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 foreach (ISymUnmanagedDocument document in reader.GetDocuments())
                 {
                     document.GetChecksumAlgorithmId(ref algorithm);
-                    return algorithm == sha256guid;
+                    return algorithm == sha256guid ? ChecksumAlgorithmType.Sha256 : ChecksumAlgorithmType.Sha1;
                 }
             }
             finally
@@ -848,7 +854,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 _ = ((ISymUnmanagedDispose)reader).Destroy();
             }
 
-            return false;
+            return ChecksumAlgorithmType.Unknown;
         }
     }
 }

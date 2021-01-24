@@ -398,18 +398,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             get
             {
                 string path = this.session.globalScope.symbolsFileName;
-                if (File.Exists(path))
+                if (File.Exists(path) && !Directory.Exists(path))
                 {
                     return path;
                 }
 
-                if (Directory.Exists(path))
+                string extension = Path.GetExtension(this.peOrPdbPath);
+                if (File.Exists(this.peOrPdbPath.Replace(extension, ".pdb")))
                 {
-                    string extension = Path.GetExtension(this.peOrPdbPath);
-                    if (File.Exists(this.peOrPdbPath.Replace(extension, ".pdb")))
-                    {
-                        return this.peOrPdbPath.Replace(extension, ".pdb");
-                    }
+                    return this.peOrPdbPath.Replace(extension, ".pdb");
                 }
 
                 return path;

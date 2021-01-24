@@ -63,36 +63,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb di = target.Pdb;
 
-            // Checking if it is full pdb
-            if (di.FileType == PdbFileType.Windows)
+            if (target.PE.ManagedPdbSourceFileChecksumAlgorithm(di.FileType) != ChecksumAlgorithmType.Sha256)
             {
-                if (!target.PE.IsChecksumAlgorithmSecureForFullPdb())
-                {
-                    // '{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm.
-                    // SHA-1 is subject to collision attacks and its use can compromise supply chain integrity.
-                    // Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project
-                    // <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing.
-                    context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultKind.Fail, context, null,
-                        nameof(RuleResources.BA2004_Error_Managed),
-                            context.TargetUri.GetFileName()));
-                    return;
-                }
-            }
-            else
-            {
-                if (!target.PE.IsChecksumAlgorithmSecureForPortablePdb())
-                {
-                    // '{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm.
-                    // SHA-1 is subject to collision attacks and its use can compromise supply chain integrity.
-                    // Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project
-                    // <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing.
-                    context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultKind.Fail, context, null,
-                        nameof(RuleResources.BA2004_Error_Managed),
-                            context.TargetUri.GetFileName()));
-                    return;
-                }
+                // '{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm.
+                // SHA-1 is subject to collision attacks and its use can compromise supply chain integrity.
+                // Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project
+                // <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing.
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Fail, context, null,
+                    nameof(RuleResources.BA2004_Error_Managed),
+                        context.TargetUri.GetFileName()));
+                return;
             }
 
             // '{0}' is a {1} binary which was compiled with a secure (SHA-256)
