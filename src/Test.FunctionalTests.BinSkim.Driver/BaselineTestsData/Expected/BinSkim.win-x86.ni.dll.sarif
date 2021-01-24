@@ -62,7 +62,7 @@
             "arguments": [
               "BinSkim.win-x86.ni.dll",
               "EnableSecureSourceCodeHashing",
-              "an exception occurred attempting to load its pdb"
+              "image is a managed IL library (i.e., ahead of time compiled) assembly"
             ]
           },
           "locations": [

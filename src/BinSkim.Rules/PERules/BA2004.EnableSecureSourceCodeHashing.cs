@@ -35,14 +35,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
-            Pdb di = target.Pdb;
-
-            if (target.PE.IsManaged && di == null)
-            {
-                reasonForNotAnalyzing = MetadataConditions.CouldNotLoadPdb;
-                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
-            }
-
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
