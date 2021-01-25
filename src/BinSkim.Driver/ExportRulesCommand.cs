@@ -11,8 +11,8 @@ namespace Microsoft.CodeAnalysis.IL
 {
     internal class ExportRulesMetadataCommand : ExportRulesMetadataCommandBase
     {
-        public override IEnumerable<Assembly> DefaultPlugInAssemblies => new Assembly[] {
-                    typeof(MarkImageAsNXCompatible).Assembly
-                };
+        public override IEnumerable<Assembly> DefaultPluginAssemblies => new Assembly[] {
+            typeof(MarkImageAsNXCompatible).Assembly
+        };
     }
 }
