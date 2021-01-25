@@ -10,6 +10,9 @@ using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 using System.Security.Cryptography;
 
+using Microsoft.DiaSymReader;
+using Microsoft.DiaSymReader.Tools;
+
 namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 {
     public class PE : IDisposable
@@ -29,6 +32,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         private PEReader peReader;
         internal SafePointer pImage; // pointer to the beginning of the file in memory
         private readonly MetadataReader metadataReader;
+        private const string sha256 = "8829d00f-11b8-4213-878b-770e8597ac16";
+        private static readonly Guid sha256guid = new Guid(sha256);
 
         public PE(string fileName)
         {
@@ -262,7 +267,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-
         /// <summary>
         /// Calculate SHA1 over the file contents
         /// </summary>
@@ -365,7 +369,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-
         /// <summary>
         /// Windows OS file version information
         /// </summary>
@@ -380,7 +383,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 return this.version;
             }
         }
-
 
         public Packer Packer
         {
@@ -788,6 +790,71 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 return this.isWixBinary.Value;
             }
+        }
+
+        public ChecksumAlgorithmType ManagedPdbSourceFileChecksumAlgorithm(PdbFileType pdbFileType)
+        {
+            return pdbFileType == PdbFileType.Windows
+                ? ChecksumAlgorithmForFullPdb()
+                : ChecksumAlgorithmForPortablePdb();
+        }
+
+        private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb()
+        {
+            if (!this.peReader.TryOpenAssociatedPortablePdb(
+                this.FileName,
+                filePath => File.Exists(filePath) ? File.OpenRead(filePath) : null,
+                out MetadataReaderProvider pdbProvider,
+                out _))
+            {
+                return ChecksumAlgorithmType.Unknown;
+            }
+
+            MetadataReader metadataReader = pdbProvider.GetMetadataReader();
+            foreach (DocumentHandle document in metadataReader.Documents)
+            {
+                Document doc = metadataReader.GetDocument(document);
+
+                Guid hashGuid = metadataReader.GetGuid(doc.HashAlgorithm);
+
+                return hashGuid == sha256guid ? ChecksumAlgorithmType.Sha256 : ChecksumAlgorithmType.Sha1;
+            }
+
+            return ChecksumAlgorithmType.Unknown;
+        }
+
+        private ChecksumAlgorithmType ChecksumAlgorithmForFullPdb()
+        {
+            string fileName = Path.GetFileName(this.FileName);
+            string extension = Path.GetExtension(fileName);
+            string pdbPath = this.FileName.Replace(fileName, fileName.Replace(extension, ".pdb"));
+
+            if (!File.Exists(pdbPath))
+            {
+                return ChecksumAlgorithmType.Unknown;
+            }
+
+            using var pdbStream = new FileStream(pdbPath, FileMode.Open, FileAccess.Read);
+
+            var metadataProvider = new SymMetadataProvider(this.metadataReader);
+            object importer = SymUnmanagedReaderFactory.CreateSymReaderMetadataImport(metadataProvider);
+            ISymUnmanagedReader3 reader = SymUnmanagedReaderFactory.CreateReaderWithMetadataImport<ISymUnmanagedReader3>(pdbStream, importer, SymUnmanagedReaderCreationOptions.UseComRegistry);
+
+            try
+            {
+                Guid algorithm = Guid.Empty;
+                foreach (ISymUnmanagedDocument document in reader.GetDocuments())
+                {
+                    document.GetChecksumAlgorithmId(ref algorithm);
+                    return algorithm == sha256guid ? ChecksumAlgorithmType.Sha256 : ChecksumAlgorithmType.Sha1;
+                }
+            }
+            finally
+            {
+                _ = ((ISymUnmanagedDispose)reader).Destroy();
+            }
+
+            return ChecksumAlgorithmType.Unknown;
         }
     }
 }

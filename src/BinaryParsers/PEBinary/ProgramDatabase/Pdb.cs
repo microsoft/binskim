@@ -3,6 +3,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -20,8 +22,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     {
         private IDiaSession session;
         private StringBuilder loadTrace;
+        private readonly string peOrPdbPath;
         private readonly Lazy<Symbol> globalScope;
         private bool restrictReferenceAndOriginalPathAccess;
+        private PdbFileType pdbFileType;
+        private const string s_windowsPdbSignature = "Microsoft C/C++ MSF 7.00\r\n\x001ADS\x0000\x0000\x0000";
+        private const string s_portablePdbSignature = "BSJB";
+        public static readonly ImmutableArray<byte> WindowsPdbSignature = ImmutableArray.Create(Encoding.ASCII.GetBytes(s_windowsPdbSignature));
+        public static readonly ImmutableArray<byte> PortablePdbSignature = ImmutableArray.Create(Encoding.ASCII.GetBytes(s_portablePdbSignature));
 
         /// <summary>
         /// Load debug info from PE or PDB, using symbolPath to help find symbols
@@ -35,6 +43,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             string localSymbolDirectories = null,
             bool traceLoads = false)
         {
+            this.peOrPdbPath = pePath;
             this.loadTrace = traceLoads ? new StringBuilder() : null;
             this.globalScope = new Lazy<Symbol>(this.GetGlobalScope, LazyThreadSafetyMode.ExecutionAndPublication);
             this.writableSegmentIds = new Lazy<HashSet<uint>>(this.GenerateWritableSegmentSet);
@@ -133,6 +142,42 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public Symbol GlobalScope => this.globalScope.Value;
 
         public bool IsStripped => this.GlobalScope.IsStripped;
+
+        public PdbFileType FileType
+        {
+            get
+            {
+                if (this.pdbFileType != PdbFileType.Unknown)
+                {
+                    return this.pdbFileType;
+                }
+
+                int max = Math.Max(WindowsPdbSignature.Length, PortablePdbSignature.Length);
+
+                byte[] b = new byte[max];
+
+                using (FileStream fs = File.OpenRead(PdbLocation))
+                {
+                    if (fs.Read(b, 0, b.Length) != b.Length)
+                    {
+                        return this.pdbFileType;
+                    }
+                }
+
+                Span<byte> span = b.AsSpan();
+
+                if (WindowsPdbSignature.AsSpan().SequenceEqual(span.Slice(0, WindowsPdbSignature.Length)))
+                {
+                    this.pdbFileType = PdbFileType.Windows;
+                }
+                else if (PortablePdbSignature.AsSpan().SequenceEqual(span.Slice(0, PortablePdbSignature.Length)))
+                {
+                    this.pdbFileType = PdbFileType.Portable;
+                }
+
+                return this.pdbFileType;
+            }
+        }
 
         /// <summary>
         /// Get the list of modules in this executable
@@ -348,7 +393,25 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <summary>
         /// Returns the location of the PDB for this module
         /// </summary>
-        public string PdbLocation => this.session.globalScope.symbolsFileName;
+        public string PdbLocation
+        {
+            get
+            {
+                string path = this.session.globalScope.symbolsFileName;
+                if (File.Exists(path) && !Directory.Exists(path))
+                {
+                    return path;
+                }
+
+                string extension = Path.GetExtension(this.peOrPdbPath);
+                if (File.Exists(this.peOrPdbPath.Replace(extension, ".pdb")))
+                {
+                    return this.peOrPdbPath.Replace(extension, ".pdb");
+                }
+
+                return path;
+            }
+        }
 
         public void Dispose()
         {
