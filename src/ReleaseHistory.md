@@ -1,8 +1,9 @@
 # BinSkim Release History
 
 ## **Unreleased**
-* **FEATURE**: Update SARIF version to latest (using submodule) [#325](https://github.com/microsoft/binskim/pull/325)
-* **FEATURE**: Add BA2004.EnableSecureSourceCodeHashing [#320](https://github.com/microsoft/binskim/pull/320)
+* **FEATURE**: Update SARIF version to latest (using submodule). [#325](https://github.com/microsoft/binskim/pull/325)
+* **FEATURE**: Add BA2004.EnableSecureSourceCodeHashing. [#320](https://github.com/microsoft/binskim/pull/320)
+* **BREAKING**: Replace `--verbose` for `--level` and `--kind`. [#339](https://github.com/microsoft/binskim/pull/339)
 
 ## **v2.0.0** In progress (probably May/June 2021)
 * **BREAKING**: Change from self-contained to dotnettool.
