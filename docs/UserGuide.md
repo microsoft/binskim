@@ -49,12 +49,12 @@ The **`analyze`** command supports the following additional arguments:
 | **`-s, --statistics`** | Generate timing and other statistics for analysis session |
 | **`-h, --hashes`** | Output hashes of analysis targets when emitting SARIF reports |
 | **`-e, --environment`** | <p>Log machine environment details of run to output file.</p><p>**WARNING:** This option records potentially sensitive information (such as all environment variable values) to the log file.</p> |
-| **`-p, --plug-in`** | Path to plug-in that will be invoked against all targets in the analysis set. |
+| **`-p, --plugin`** | Path to plugin that will be invoked against all targets in the analysis set. |
 | **`--help`** | Table of argument information. |
 | **`--version`** | BinSkim version details. |
 | **`--level`** | Filter output of scan results to one or more failure levels. Valid values: Error, Warning and Note. |
 | **`--kind`** | Filter output one or more result kinds. Valid values: Fail (for literal scan results), Pass, Review, Open, NotApplicable and Informational. |
-| **`--trace`** | Execution traces, expressed as a semicolon-delimited list, that should be emitted to the console and log file (if appropriate). Valid values: PdbLoad. | 
+| **`--trace`** | Execution traces, expressed as a semicolon-delimited list, that should be emitted to the console and log file (if appropriate). Valid values: PdbLoad. |
 | **`--rich-return-code`** | Output a more detailed exit code consisting of a series of flags about execution, rather than outputting '0' for success/'1' for failure (see codes below) |
 
 In addition to the named arguments above, BinSkim accepts one or more specifiers to a file, directory, or filter pattern that resolves to one or more binaries to analyze. Arguments can include wild cards, relative paths (in which case the file or directory path is resolved relative to the current working directory), and environment variables.
@@ -153,9 +153,9 @@ This leads to these masks being helpful when determining what to do with a rich 
 
 Note--In the future we may add add new fatal or non-fatal exit codes to this command.  They will be documented here and in the release documentation.
 
-#### -p, --plug-in
+#### -p, --plugin
 
-The `-p` or `--plug-in` argument is used to provide a path to a BinSkim plug-in that will be loaded and invoked at analysis time, in addition to the built-in checks. This argument can be specified multiple times on the command-line.
+The `-p` or `--plugin` argument is used to provide a path to a BinSkim plugin that will be loaded and invoked at analysis time, in addition to the built-in checks. This argument can be specified multiple times on the command-line.
 
 ## BinSkim Release History
 
