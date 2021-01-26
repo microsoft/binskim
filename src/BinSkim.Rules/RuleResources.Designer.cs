@@ -906,6 +906,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TODO: add full description.
+        /// </summary>
+        internal static string BA2025_EnableIntegrityCheck_Description {
+            get {
+                return ResourceManager.GetString("BA2025_EnableIntegrityCheck_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TODO: add note message.
+        /// </summary>
+        internal static string BA2025_Note_IntegrityCheckShouldBeEnabled {
+            get {
+                return ResourceManager.GetString("BA2025_Note_IntegrityCheckShouldBeEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TODO: Add pass message.
+        /// </summary>
+        internal static string BA2025_Pass {
+            get {
+                return ResourceManager.GetString("BA2025_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
         internal static string BA3001_EnablePositionIndependentExecutable_Description {

@@ -481,4 +481,13 @@ Modules triggering this check were:
     <value>'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
 {1}</value>
   </data>
+  <data name="BA2025_EnableIntegrityCheck_Description" xml:space="preserve">
+    <value>TODO: add full description</value>
+  </data>
+  <data name="BA2025_Note_IntegrityCheckShouldBeEnabled" xml:space="preserve">
+    <value>TODO: add note message</value>
+  </data>
+  <data name="BA2025_Pass" xml:space="preserve">
+    <value>TODO: Add pass message</value>
+  </data>
 </root>
