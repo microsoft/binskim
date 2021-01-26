@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL
             new string[] { ".dll", ".exe", ".sys" }
             );
 
-        public override IEnumerable<Assembly> DefaultPlugInAssemblies
+        public override IEnumerable<Assembly> DefaultPluginAssemblies
         {
             get => new Assembly[] { typeof(MarkImageAsNXCompatible).Assembly };
             set => throw new InvalidOperationException();

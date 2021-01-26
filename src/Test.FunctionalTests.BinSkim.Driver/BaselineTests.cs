@@ -98,7 +98,6 @@ namespace Microsoft.CodeAnalysis.IL
             var options = new AnalyzeOptions
             {
                 Force = true,
-                Verbose = true,
                 Recurse = false,
                 PrettyPrint = true,
                 DataToInsert = new[] { OptionallyEmittedData.Hashes },
@@ -106,7 +105,9 @@ namespace Microsoft.CodeAnalysis.IL
                 ConfigurationFilePath = "default",
                 SarifOutputVersion = Sarif.SarifVersion.Current,
                 TargetFileSpecifiers = new string[] { inputFileName },
-                Traces = Array.Empty<string>()
+                Traces = Array.Empty<string>(),
+                Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
+                Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.NotApplicable, ResultKind.Pass },
             };
 
             int result = command.Run(options);

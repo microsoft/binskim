@@ -18,8 +18,7 @@ The primary function of BinSkim is to analyze Windows PEs, such as Dynamic Link 
 
 ```csharp
 // Analyze a single binary named MyProjectFile.dll found in c:\temp
-// and emit verbose messages during analysis
-binskim.exe analyze c:\temp\MyProjectFile.dll --verbose
+binskim.exe analyze c:\temp\MyProjectFile.dll
 
 // Analyze all files with the .dll or .exe extension starting in the
 // current working directory and recursing through all child directories
@@ -44,16 +43,18 @@ The **`analyze`** command supports the following additional arguments:
 | -------------------------------- | ------- |
 | **`--sympath`** | Symbols path value (e.g. `SRV http://msdl.microsoft.com/download/symbols or Cache d:\symbols;Srv http://symweb`) |
 | **`-o, --output`** | File path used to write and output analysis using [SARIF](https://github.com/Microsoft/sarif-sdk) |
-| **`-v, --verbose`** | Emit verbose output. The comprehensive report is designed to provide appropriate evidence for compliance scenarios |
 | **`-r, --recurse`** | Recurse into subdirectories when evaluating file specifier arguments |
 | **`-c, --config`** | (Default: ‘default’) Path to policy file to be used to configure analysis. Passing value of 'default' (or omitting the argument) invokes built-in settings |
 | **`-q, --quiet`** | Do not log results to the console |
 | **`-s, --statistics`** | Generate timing and other statistics for analysis session |
 | **`-h, --hashes`** | Output hashes of analysis targets when emitting SARIF reports |
 | **`-e, --environment`** | <p>Log machine environment details of run to output file.</p><p>**WARNING:** This option records potentially sensitive information (such as all environment variable values) to the log file.</p> |
-| **`-p, --plug-in`** | Path to plug-in that will be invoked against all targets in the analysis set. |
+| **`-p, --plugin`** | Path to plugin that will be invoked against all targets in the analysis set. |
 | **`--help`** | Table of argument information. |
 | **`--version`** | BinSkim version details. |
+| **`--level`** | Filter output of scan results to one or more failure levels. Valid values: Error, Warning and Note. |
+| **`--kind`** | Filter output one or more result kinds. Valid values: Fail (for literal scan results), Pass, Review, Open, NotApplicable and Informational. |
+| **`--trace`** | Execution traces, expressed as a semicolon-delimited list, that should be emitted to the console and log file (if appropriate). Valid values: PdbLoad. |
 | **`--rich-return-code`** | Output a more detailed exit code consisting of a series of flags about execution, rather than outputting '0' for success/'1' for failure (see codes below) |
 
 In addition to the named arguments above, BinSkim accepts one or more specifiers to a file, directory, or filter pattern that resolves to one or more binaries to analyze. Arguments can include wild cards, relative paths (in which case the file or directory path is resolved relative to the current working directory), and environment variables.
@@ -88,10 +89,6 @@ The `--local-symbol-directories` argument configures a set of semicolon-delimite
 #### -o, --output
 
 The `-o` or `--output` argument specifies a file path to which BinSkim’s SARIF-formatted results will be written. The Microsoft SARIF SDK ships with a Microsoft Visual Studio Add-In that can be compiled and used to load SARIF log files into the Microsoft Visual Studio IDE.
-
-#### -v, --verbose
-
-By default, BinSkim output is restricted to errors and warnings. BinSkim can also be configured to provide more comprehensive output by passing `-v` or `--verbose` on the command-line. In this case, BinSkim will emit explicit messages for each rule as it examines each target, including whether a binary passed the check successfully or if the check was skipped because a target was not applicable to analysis.
 
 #### -r, --recurse
 
@@ -156,9 +153,9 @@ This leads to these masks being helpful when determining what to do with a rich 
 
 Note--In the future we may add add new fatal or non-fatal exit codes to this command.  They will be documented here and in the release documentation.
 
-#### -p, --plug-in
+#### -p, --plugin
 
-The `-p` or `--plug-in` argument is used to provide a path to a BinSkim plug-in that will be loaded and invoked at analysis time, in addition to the built-in checks. This argument can be specified multiple times on the command-line.
+The `-p` or `--plugin` argument is used to provide a path to a BinSkim plugin that will be loaded and invoked at analysis time, in addition to the built-in checks. This argument can be specified multiple times on the command-line.
 
 ## BinSkim Release History
 
