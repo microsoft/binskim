@@ -906,29 +906,29 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TODO: add full description.
-        /// </summary>
-        internal static string BA2025_EnableIntegrityCheck_Description {
-            get {
-                return ResourceManager.GetString("BA2025_EnableIntegrityCheck_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to TODO: add note message.
-        /// </summary>
-        internal static string BA2025_Note_IntegrityCheckShouldBeEnabled {
-            get {
-                return ResourceManager.GetString("BA2025_Note_IntegrityCheckShouldBeEnabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to TODO: Add pass message.
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a kernel mode binary that was compiled with /INTEGRITYCHECK, requiring the Windows memory manager to check for a digital signature when loading the image..
         /// </summary>
         internal static string BA2025_Pass {
             get {
                 return ResourceManager.GetString("BA2025_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forced Integrity checking is a policy that ensures a binary that is being loaded is signed prior to loading. The IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY flag is set in the PE header at link time by using the /INTEGRITYCHECK linker flag to indicate that the binary being loaded must be signed. This flag causes the Windows memory manager to enforce a signature check at load time on the binary file. Applications check for presence of the flag when the binary is loaded in order to ensure that the identity of pu [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BA2025_RequireSignatureCheck_Description {
+            get {
+                return ResourceManager.GetString("BA2025_RequireSignatureCheck_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a kernel mode binary that was not compiled with /INTEGRITYCHECK, requiring the Windows memory manager to check for a digital signature when loading the image..
+        /// </summary>
+        internal static string BA2025_Warning {
+            get {
+                return ResourceManager.GetString("BA2025_Warning", resourceCulture);
             }
         }
         

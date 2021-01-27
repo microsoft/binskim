@@ -1092,20 +1092,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void BA2025_EnableIntegrityCheck()
+        public void BA2025_RequireSignatureCheck()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyPass(new EnableIntegrityCheck(), useDefaultPolicy: true);
+                this.VerifyPass(new RequireSignatureCheck(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
-        public void BA2025_EnableIntegrityCheck_Fail()
+        public void BA2025_RequireSignatureCheck_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new EnableIntegrityCheck(), useDefaultPolicy: true);
+                this.VerifyFail(new RequireSignatureCheck(), useDefaultPolicy: true);
             }
         }
 
