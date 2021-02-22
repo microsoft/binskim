@@ -75,6 +75,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyAssembly;
             if (portableExecutable.IsILOnly) { return result; }
 
+            reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
+            if (portableExecutable.IsResourceOnly) { return result; }
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
