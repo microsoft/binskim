@@ -338,7 +338,7 @@
             "arguments": [
               "Native_x64_VS2013_Default.dll",
               "",
-              "Microsoft (R) CVTRES : cvtres : 12.0.21005.1 :  (* Linker Generated Manifest RES *)\r\nMicrosoft (R) Macro Assembler : masm : 12.0.20806.0 : MSVCRTD.lib (amdsecgs.obj)\r\n"
+              "Microsoft (R) Macro Assembler : masm : 12.0.20806.0 : MSVCRTD.lib (amdsecgs.obj)\r\n"
             ]
           },
           "locations": [

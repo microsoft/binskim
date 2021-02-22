@@ -314,7 +314,7 @@
             "arguments": [
               "MixedMode_x64_VS2015_Default.exe",
               "",
-              "Microsoft (R) CVTRES : cvtres : 14.0.24210.0 : app.res (app.res)\r\nMicrosoft (R) Macro Assembler : masm : 14.0.24123.0 : MSVCRT.lib (_guard_dispatch_.obj)\r\n"
+              "Microsoft (R) Macro Assembler : masm : 14.0.24123.0 : MSVCRT.lib (_guard_dispatch_.obj)\r\n"
             ]
           },
           "locations": [

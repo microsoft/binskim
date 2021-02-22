@@ -262,13 +262,13 @@
         {
           "ruleId": "BA2006",
           "ruleIndex": 10,
-          "level": "error",
+          "kind": "pass",
+          "level": "none",
           "message": {
-            "id": "Error",
+            "id": "Pass",
             "arguments": [
               "MixedMode_x86_VS2013_Default.exe",
-              "",
-              "Microsoft (R) CVTRES : cvtres : 12.0.21005.1 : app.res (app.res)\r\n"
+              "17.0.65501.17013"
             ]
           },
           "locations": [

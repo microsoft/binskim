@@ -268,7 +268,7 @@
             "arguments": [
               "Native_x86_VS2015_AtlProxyStubPS.dll",
               "",
-              "Microsoft (R) CVTRES : cvtres : 14.0.23506.0 :  (* Linker Generated Manifest RES *)\r\nMicrosoft (R) Macro Assembler : masm : 14.0.23406.0 : MSVCRT.lib (_sehprolg4_.obj)\r\n"
+              "Microsoft (R) Macro Assembler : masm : 14.0.23406.0 : MSVCRT.lib (_sehprolg4_.obj)\r\n"
             ]
           },
           "locations": [

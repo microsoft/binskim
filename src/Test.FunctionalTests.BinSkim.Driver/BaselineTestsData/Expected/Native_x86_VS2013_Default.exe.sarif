@@ -286,13 +286,13 @@
         {
           "ruleId": "BA2006",
           "ruleIndex": 11,
-          "level": "error",
+          "kind": "pass",
+          "level": "none",
           "message": {
-            "id": "Error",
+            "id": "Pass",
             "arguments": [
               "Native_x86_VS2013_Default.exe",
-              "",
-              "Microsoft (R) CVTRES : cvtres : 12.0.21005.1 : Native_x86_VS2013_Default.res (Native_x86_VS2013_Default.res)\r\n"
+              "17.0.65501.17013"
             ]
           },
           "locations": [
