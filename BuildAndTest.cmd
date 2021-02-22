@@ -15,7 +15,6 @@ set Configuration=Release
 @REM Remove existing build data
 if exist bld (rd /s /q bld)
 
-set NuGetConfigFile=%~dp0src\NuGet.config
 set NuGetPackageDir=%~dp0src\packages
 set NuGetOutputDirectory=%~dp0bld\bin\nuget\
 
@@ -39,7 +38,7 @@ echo  }                                                                         
 
 ::Restore packages
 echo Restoring packages...
-dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --configfile "%NuGetConfigFile%" --packages "%NuGetPackageDir%
+dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --packages "%NuGetPackageDir%
 
 :: Build the solution 
 echo Building solution...
