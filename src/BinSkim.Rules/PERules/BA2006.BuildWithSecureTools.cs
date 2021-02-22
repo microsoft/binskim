@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+using System.Diagnostics;
 using System.Globalization;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
@@ -36,8 +37,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2006_Error),
+                    nameof(RuleResources.BA2006_Error_OutdatedCsc),
                     nameof(RuleResources.BA2006_Error_BadModule),
                     nameof(RuleResources.BA2006_Pass),
+                    nameof(RuleResources.BA2006_Pass_Csc),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)};
 
         public IEnumerable<IOption> GetOptions()
@@ -52,7 +55,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private const string AnalyzerName = RuleIds.BuildWithSecureTools + "." + nameof(BuildWithSecureTools);
 
-        private const string MIN_COMPILER_VER = "MinimumCompilerVersion";
         private const string MIN_XBOX_COMPILER_VER = "MinimumXboxCompilerVersion";
 
         public static PerLanguageOption<StringToVersionMap> MinimumToolVersions { get; } =
@@ -75,9 +77,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyAssembly;
             if (portableExecutable.IsILOnly) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
-            if (portableExecutable.IsResourceOnly) { return result; }
-
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
@@ -87,24 +86,73 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
 
-            Version minCompilerVersion;
+            if (target.PE.IsManaged && !target.PE.IsMixedMode)
+            {
+                AnalyzeManagedPE(context);
+            }
 
-            minCompilerVersion = (target.PE.IsXBox)
-                ? context.Policy.GetProperty(MinimumToolVersions)[MIN_XBOX_COMPILER_VER]
-                : context.Policy.GetProperty(MinimumToolVersions)[MIN_COMPILER_VER];
+            Version minCompilerVersion = new Version(int.MaxValue, int.MaxValue);
 
-            var badModuleList = new TruncatedCompilandRecordList();
+            var badModules = new List<ObjectModuleDetails>();
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
+
+            var languageToBadModules = new Dictionary<Language, List<ObjectModuleDetails>>();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftNativeCompiler)
+                switch (omDetails.Language)
                 {
-                    continue;
+                    case Language.LINK:
+                    {
+                        continue;
+                    }
+
+                    case Language.C:
+                    case Language.Cxx:
+                    {
+                        minCompilerVersion = (target.PE.IsXBox)
+                            ? context.Policy.GetProperty(MinimumToolVersions)[MIN_XBOX_COMPILER_VER]
+                            : context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.C)];
+                        break;
+                    }
+
+                    case Language.MASM:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.MASM)];
+                        break;
+                    }
+
+                    case Language.CVTRES:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CVTRES)];
+                        break;
+                    }
+
+                    case Language.CSharp:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CSharp)];
+                        break;
+                    }
+
+                    case Language.Unknown:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.Unknown)];
+                        break;
+                    }
+
+                    default:
+                    {
+                        continue;
+                    }
                 }
+
 
                 // See if the item is in our skip list
                 if (!string.IsNullOrEmpty(om.Lib))
@@ -119,15 +167,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
 
                 Version actualVersion;
-                Version minimumVersion;
+                Version minimumVersion = minCompilerVersion;
                 Language omLanguage = omDetails.Language;
                 switch (omLanguage)
                 {
                     case Language.C:
                     case Language.Cxx:
+                    {
                         actualVersion = Minimum(omDetails.CompilerBackEndVersion, omDetails.CompilerFrontEndVersion);
-                        minimumVersion = minCompilerVersion;
                         break;
+                    }
+
+                    case Language.LINK:
+                    case Language.MASM:
+                    case Language.CVTRES:
+                    {
+                        actualVersion = omDetails.CompilerBackEndVersion;
+                        break;
+                    }
 
                     default:
                         continue;
@@ -169,19 +226,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (foundIssue)
                 {
-                    // built with {0} compiler version {1} (Front end version: {2})
-                    badModuleList.Add(
-                        om.CreateCompilandRecordWithSuffix(
-                            string.Format(CultureInfo.InvariantCulture,
-                            RuleResources.BA2006_Error_BadModule,
-                            omLanguage, omDetails.CompilerBackEndVersion, omDetails.CompilerFrontEndVersion)));
+                    badModules.Add(omDetails);
                 }
             }
 
-            if (!badModuleList.Empty)
+            if (badModules.Count != 0)
             {
+                string badModulesText = badModules.CreateOutputCoalescedByCompiler();
+                string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToBadModules);
+
                 // '{0}' was compiled with one or more modules which were not built using
-                // minimum required tool versions (compiler version {1}). More recent toolchains
+                // minimum required tool versions ({1}). More recent toolchains
                 // contain mitigations that make it more difficult for an attacker to exploit
                 // vulnerabilities in programs they produce. To resolve this issue, compile
                 // and /or link your binary with more recent tools. If you are servicing a
@@ -192,8 +247,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2006_Error),
                         context.TargetUri.GetFileName(),
-                        minCompilerVersion.ToString(),
-                        badModuleList.CreateSortedObjectList()));
+                        minimumRequiredCompilers,
+                        badModulesText));
                 return;
             }
 
@@ -206,6 +261,62 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         minCompilerVersion.ToString()));
         }
 
+        private string BuildMinimumCompilersList(BinaryAnalyzerContext context, Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
+        {
+            var languages = new List<string>();
+
+            foreach(Language language in languageToBadModules.Keys)
+            {
+                Version version = context.Policy.GetProperty(MinimumToolVersions)[language.ToString()];
+                languages.Add($"{language} ({version})");
+            }
+            return string.Join(", ", languages);
+        }
+
+        private string BuildBadModulesList(Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
+        {
+            var coalescedModules = new List<string>();
+
+            foreach (Language language in languageToBadModules.Keys)
+            {
+                string modulesText = languageToBadModules[language].CreateOutputCoalescedByCompiler();
+                coalescedModules.Add(modulesText);
+            }
+            return string.Join(string.Empty, coalescedModules);
+        }
+    
+
+    private void AnalyzeManagedPE(BinaryAnalyzerContext context)
+        {
+            Version minCscVersion =
+                context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CSharp)];
+
+            PE pe = context.PEBinary().PE;
+
+            if (pe.LinkerVersion < minCscVersion)
+            {
+                // '{0}' is a managed assembly that was compiled with an outdated toolchain
+                // ({1}) that does not support security features (such as SHA256 PDB
+                // checksums and reproducible builds) that must be enabled by policy. To
+                // resolve this issue, compile with more recent tools ({2} or later).
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                    nameof(RuleResources.BA2006_Error_OutdatedCsc),
+                        context.TargetUri.GetFileName(),
+                        pe.LinkerVersion.ToString(),
+                        minCscVersion.ToString()));
+
+                return;
+            }
+
+            // '{0}' is a managed assembly that was compiled with toolchain ({1}) that supports all security features that must be enabled by policy.
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                nameof(RuleResources.BA2006_Pass_Csc),
+                    context.TargetUri.GetFileName(),
+                    pe.LinkerVersion.ToString()));
+        }
+
         public static Version Minimum(Version lhs, Version rhs)
         {
             return (lhs < rhs) ? lhs : rhs;
@@ -215,9 +326,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             var result = new StringToVersionMap
             {
-                [MIN_COMPILER_VER] = new Version(17, 0, 65501, 17013),
+                [nameof(Language.C)] = new Version(17, 0, 65501, 17013),
+                [nameof(Language.Cxx)] = new Version(17, 0, 65501, 17013),
+                [nameof(Language.MASM)] = new Version(14, 15, 26706, 0),
+                [nameof(Language.LINK)] = new Version(17, 0, 65501, 17013),
+                [nameof(Language.CSharp)] = new Version(19, 0, 0, 0),
+                [nameof(Language.CVTRES)] = new Version(14, 14, 26430, 0),
+                [nameof(Language.Unknown)] = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue),
                 [MIN_XBOX_COMPILER_VER] = new Version(16, 0, 11886, 0)
             };
+
+            foreach (string name in Enum.GetNames(typeof(Language)))
+            {
+                if (!result.ContainsKey(name))
+                {
+                    // If we don't have entry for a language, fire on everything.
+                    result[name] = new Version(int.MaxValue, int.MaxValue);
+                }
+            }
 
             return result;
         }
@@ -227,7 +353,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var result = new StringToVersionMap();
 
             // Example entries
-            // result["cExample.lib,c"] = new Version("1.0.0.0") 
+            result["libeay32.lib,unknown"] = new Version("0.0.0.0"); 
             // result["cplusplusExample.lib,cxx"] = new Version("1.0.0.0")
             // result["masmExample.lib,masm"] = new Version("1.0.0.0")
 

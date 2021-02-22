@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
                 // Detection applies to C/C++ produced by MS compiler only
-                if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftNativeCompiler)
+                if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftC)
                 {
                     continue;
                 }

@@ -454,7 +454,7 @@ Modules triggering this check were:
     <value>This check is not supported on the '{0}' platform, as it requires interoperability with a native Windows library.</value>
   </data>
   <data name="ERR997_ExceptionLoadingPdb" xml:space="preserve">
-    <value>'{0}' was not evaluated for check '{1}' because its PDB could not be loaded.</value>
+    <value>'{0}' was not evaluated for check '{1}' because its PDB could not be loaded ({2}).</value>
   </data>
   <data name="PdbLoadFailed" xml:space="preserve">
     <value>Could not locate the PDB for '{0}'. Probing details:
@@ -480,5 +480,11 @@ Modules triggering this check were:
   <data name="BA2004_Error_NativeWithInsecureDirectCompilands" xml:space="preserve">
     <value>'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
 {1}</value>
+  </data>
+  <data name="BA2006_Error_OutdatedCsc" xml:space="preserve">
+    <value>'{0}' is a managed assembly that was compiled with an outdated toolchain ({1}) that does not support security features (such as SHA256 PDB checksums and reproducible builds) that must be enabled by policy. To resolve this issue, compile with more recent tools ({2} or later).</value>
+  </data>
+  <data name="BA2006_Pass_Csc" xml:space="preserve">
+    <value>'{0}' is a managed assembly that was compiled with toolchain ({1}) that supports all security features that must be enabled by policy.</value>
   </data>
 </root>

@@ -96,10 +96,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             this.wellKnownCompiler = WellKnownCompilers.Unknown;
 
-            if ((this.Language == Language.C || this.Language == Language.Cxx) &&
-                this.CompilerName == "Microsoft (R) Optimizing Compiler")
+            if (this.Language == Language.C &&
+                this.CompilerName == CompilerNames.MicrosoftC)
             {
-                this.wellKnownCompiler = WellKnownCompilers.MicrosoftNativeCompiler;
+                this.wellKnownCompiler = WellKnownCompilers.MicrosoftC;
+            }
+
+            if (this.Language == Language.Cxx &&
+                this.CompilerName == CompilerNames.MicrosoftCxx)
+            {
+                this.wellKnownCompiler = WellKnownCompilers.MicrosoftCxx;
+            }
+
+            if (this.Language == Language.LINK &&
+                this.CompilerName == CompilerNames.MicrosoftLink)
+            {
+                this.wellKnownCompiler = WellKnownCompilers.MicrosoftLink;
+            }
+
+            if (this.Language == Language.CVTRES &&
+                this.CompilerName == CompilerNames.MicrosoftCvtres)
+            {
+                this.wellKnownCompiler = WellKnownCompilers.MicrosoftCvtRes;
             }
         }
 
@@ -157,6 +175,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     public enum WellKnownCompilers
     {
         Unknown,
-        MicrosoftNativeCompiler = 0x1
+        MicrosoftC = 0x1,             // 32|64-bit for x86|x64|ARM|ARM64
+        MicrosoftMasm = 0x2,             // ml.exe
+        MicrosoftCsharp = 0x4,   // csc.exe
+        MicrosoftRC = 0x8,      // rc.exe
+        MicrosoftCvtRes = 0x10, // cvtres.exe
+        MicrosoftCxx = 0x20,    // cl.exe
+        MicrosoftLink = 0x40,    // cl.exe
     }
 }

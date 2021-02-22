@@ -15,6 +15,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     // Windows specific binary and program database-reading skimmers.
     public abstract class WindowsBinaryAndPdbSkimmerBase : WindowsBinarySkimmerBase
     {
+        /// <summary>
+        /// Gets a property indicating whether the rule should require that PDBs
+        /// can be located for managed assemblies. Some checks that inspect both
+        /// managed and native code require PDBs for the native case but not 
+        /// for managed.
+        /// </summary>
+        public virtual bool EnforcePdbLoadForManagedAssemblies => true;
+
         public sealed override void Analyze(BinaryAnalyzerContext context)
         {
             // Uses PDB Parsing.
@@ -32,7 +40,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 target.Pdb.LoadTrace = null;
             }
 
-            if (target.Pdb == null)
+            if ((!target.PE.IsManaged   ||
+                  target.PE.IsMixedMode ||
+                  EnforcePdbLoadForManagedAssemblies)
+                    && target.Pdb == null)
             {
                 LogExceptionLoadingPdb(context, target.PdbParseException);
                 return;
@@ -104,7 +115,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 throw new ArgumentNullException(nameof(context));
             }
 
-            // '{0}' was not evaluated for check '{1}' because its PDB could not be loaded.
+            // '{0}' was not evaluated for check '{1}' because its PDB could not be loaded ({2}).
             context.Logger.LogConfigurationNotification(
                 Errors.CreateNotification(
                     context.TargetUri,
@@ -115,7 +126,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     persistExceptionStack: false,
                     RuleResources.ERR997_ExceptionLoadingPdb,
                     context.TargetUri.GetFileName(),
-                    context.Rule.Name));
+                    context.Rule.Name,
+                    pdbException.ExceptionCode.ToString()));
 
             context.RuntimeErrors |= RuntimeConditions.ExceptionLoadingPdb;
 

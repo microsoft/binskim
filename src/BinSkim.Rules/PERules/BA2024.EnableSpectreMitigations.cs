@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.C:
                     case Language.Cxx:
                     {
-                        if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftNativeCompiler)
+                        if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftC)
                         {
                             // TODO: https://github.com/Microsoft/binskim/issues/114
                             continue;

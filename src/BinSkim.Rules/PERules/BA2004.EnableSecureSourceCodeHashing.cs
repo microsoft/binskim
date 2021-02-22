@@ -41,7 +41,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
-            if (context.PEBinary().PE.IsManaged)
+            PE pe = context.PEBinary().PE;
+
+            if (pe.IsManaged && !pe.IsMixedMode)
             {
                 AnalyzeManagedAssemblyAndPdb(context);
                 return;
@@ -150,7 +152,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
         {
-            string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByLibrary();
+            string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByCompiler();
 
             //'{0}' is a native binary that links one or more object files which were hashed
             // using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks

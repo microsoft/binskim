@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -11,13 +13,72 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public static class RulesExtensionMethods
     {
+        public static string CreateOutputCoalescedByCompiler(this IList<ObjectModuleDetails> objectModuleDetailsList)
+        {
+            var compilerToLibraries = new Dictionary<string, Dictionary<string, SortedSet<string>>>();
+
+            foreach (ObjectModuleDetails objectModuleDetail in objectModuleDetailsList)
+            {
+                string compiler = CreateCompilerKey(objectModuleDetail);
+                if (!compilerToLibraries.TryGetValue(compiler, out Dictionary<string, SortedSet<string>> libraries))
+                {
+                    libraries = compilerToLibraries[compiler] = new Dictionary<string, SortedSet<string>>();
+                }
+
+                string modulesKey = "[directly linked]";
+                string name = Path.GetFileName(objectModuleDetail.Name);
+                string libraryName = Path.GetFileName(objectModuleDetail.Library);
+
+                if (Path.GetExtension(name) != ".obj" || name != libraryName)
+                {
+                    modulesKey = libraryName;
+                }
+
+                if (!libraries.TryGetValue(modulesKey, out SortedSet<string> modules))
+                {
+                    modules = libraries[modulesKey] = new SortedSet<string>();
+                }
+                modules.Add(name);
+            }
+
+            var sb = new StringBuilder();
+
+            string[] sortedByCompiler = compilerToLibraries.Keys.ToArray();
+            Array.Sort(sortedByCompiler);
+
+            foreach (string compiler in sortedByCompiler)
+            {
+                Dictionary<string, SortedSet<string>> libraryToModules = compilerToLibraries[compiler];
+
+                string[] sortedByLibrary = libraryToModules.Keys.ToArray();
+                Array.Sort(sortedByLibrary);
+
+                foreach (string library in sortedByLibrary)
+                {
+                    sb.Append(compiler + " : " + library);
+
+                    SortedSet<string> modules = libraryToModules[library];
+                    if (modules.Count!= 1)
+                    {
+                        sb.Append(" (").AppendLine(string.Join(",", modules) + ")");
+                    }
+                    else
+                    {
+                        sb.AppendLine($" ({modules.First()})");
+                    }
+                }
+            }
+
+            return sb.ToString();
+        }
+
         public static string CreateOutputCoalescedByLibrary(this IList<ObjectModuleDetails> objectModuleDetailsList)
         {
             var librariesToObjectModulesMap = new Dictionary<string, List<string>>();
 
             foreach (ObjectModuleDetails objectModuleDetail in objectModuleDetailsList)
             {
-                string key = CreateLibraryDescriptor(objectModuleDetail);
+                string key = CreateLibraryKey(objectModuleDetail);
                 if (!librariesToObjectModulesMap.TryGetValue(key, out List<string> objectModules))
                 {
                     objectModules = librariesToObjectModulesMap[key] = new List<string>();
@@ -37,18 +98,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (oms.Length != 1 || !key.StartsWith(oms[0]))
                 {
-                    sb.Append(" (").AppendLine(string.Join(",", objectModules.ToArray()) + ")");
+                    sb.Append(" (").AppendLine(string.Join(",", oms) + ")");
                 }
                 else
                 {
-                    sb.AppendLine();
+                    sb.AppendLine($" ({oms[0]})");
                 }
             }
 
             return sb.ToString();
         }
 
-        private static string CreateLibraryDescriptor(ObjectModuleDetails objectModuleDetail)
+        private static string CreateCompilerKey(ObjectModuleDetails objectModuleDetail)
+        {
+            return objectModuleDetail.CompilerName + " : " +
+                   objectModuleDetail.Language.ToString().ToLowerInvariant() + " : " +
+                   objectModuleDetail.CompilerBackEndVersion;
+        }
+
+        private static string CreateLibraryKey(ObjectModuleDetails objectModuleDetail)
         {
             return Path.GetFileName(
                             objectModuleDetail.Library) + "," +
