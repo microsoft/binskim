@@ -331,7 +331,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 [nameof(Language.C)] = new Version(17, 0, 65501, 17013),
                 [nameof(Language.Cxx)] = new Version(17, 0, 65501, 17013),
-                [nameof(Language.MASM)] = new Version(14, 15, 26706, 0),
+                [nameof(Language.MASM)] = new Version(12, 0, 0, 0),
                 [nameof(Language.LINK)] = new Version(17, 0, 65501, 17013),
                 [nameof(Language.CSharp)] = new Version(19, 0, 0, 0),
                 [nameof(Language.CVTRES)] = new Version(12, 0, 0, 0),
