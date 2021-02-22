@@ -201,7 +201,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
-              "MSVCRTD.lib,c,19.0.23013.0 (_chandler4gs_.obj,_cpu_disp_.obj,_secchk_.obj,checkcfg.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMSVCRTD.lib,cxx,19.0.23013.0 (_error_.obj,_init_.obj,_initsect_.obj,_pdblkup_.obj,_stack_.obj,_userapi_.obj,argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,denormal_control.obj,exe_wwinmain.obj,file_mode.obj,initializers.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,thread_locale.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_desktop.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : c : 19.0.23013.0 : MSVCRTD.lib (_chandler4gs_.obj,_cpu_disp_.obj,_secchk_.obj,checkcfg.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.0.23013.0 : MSVCRTD.lib (_error_.obj,_init_.obj,_initsect_.obj,_pdblkup_.obj,_stack_.obj,_userapi_.obj,argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,denormal_control.obj,exe_wwinmain.obj,file_mode.obj,initializers.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,thread_locale.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_desktop.obj)\r\n"
             ]
           },
           "locations": [
@@ -223,7 +223,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
-              "stdafx.obj,cxx,19.0.23026.0\r\nNative_x86_VS2015_Default.obj,cxx,19.0.23026.0\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 19.0.23026.0 : [directly linked] (Native_x86_VS2015_Default.obj,stdafx.obj)\r\n"
             ]
           },
           "locations": [
@@ -262,13 +262,13 @@
         {
           "ruleId": "BA2006",
           "ruleIndex": 10,
-          "kind": "pass",
-          "level": "none",
+          "level": "error",
           "message": {
-            "id": "Pass",
+            "id": "Error",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
-              "17.0.65501.17013"
+              "",
+              "Microsoft (R) CVTRES : cvtres : 14.0.23026.0 : Native_x86_VS2015_Default.res (Native_x86_VS2015_Default.res)\r\n"
             ]
           },
           "locations": [
@@ -291,7 +291,7 @@
             "id": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
-              "3"
+              "4"
             ]
           },
           "locations": [
@@ -596,8 +596,6 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1285,7 +1283,10 @@
               },
               "name": "EnableSpectreMitigations"
             }
-          ]
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [

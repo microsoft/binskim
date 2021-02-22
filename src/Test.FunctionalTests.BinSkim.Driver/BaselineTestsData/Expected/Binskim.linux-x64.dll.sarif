@@ -576,8 +576,6 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1237,7 +1235,10 @@
               },
               "name": "SignSecurely"
             }
-          ]
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [
@@ -1254,7 +1255,7 @@
                 }
               ],
               "message": {
-                "text": "'Binskim.linux-x64.dll' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded."
+                "text": "'Binskim.linux-x64.dll' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
               },
               "level": "error",
               "descriptor": {

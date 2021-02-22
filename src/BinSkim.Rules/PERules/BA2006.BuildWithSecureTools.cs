@@ -37,10 +37,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2006_Error),
-                    nameof(RuleResources.BA2006_Error_OutdatedCsc),
                     nameof(RuleResources.BA2006_Error_BadModule),
                     nameof(RuleResources.BA2006_Pass),
-                    nameof(RuleResources.BA2006_Pass_Csc),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)};
 
         public IEnumerable<IOption> GetOptions()
@@ -86,10 +84,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
 
+            /*
             if (target.PE.IsManaged && !target.PE.IsMixedMode)
             {
                 AnalyzeManagedPE(context);
             }
+            */
 
             Version minCompilerVersion = new Version(int.MaxValue, int.MaxValue);
 

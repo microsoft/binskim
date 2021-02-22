@@ -575,8 +575,6 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1236,7 +1234,10 @@
               },
               "name": "SignSecurely"
             }
-          ]
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [
@@ -1253,7 +1254,7 @@
                 }
               ],
               "message": {
-                "text": "'ManagedResourcesOnly.dll' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded."
+                "text": "'ManagedResourcesOnly.dll' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
               },
               "level": "error",
               "descriptor": {

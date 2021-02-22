@@ -271,7 +271,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Uwp_ARM64_VS2019_Cpp.dll",
-              "MSVCRT.lib,c,19.22.26504.99 (cpu_disp.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,ucrt_detection.obj)\r\nMSVCRT.lib,cxx,19.22.26504.99 (app_appinit.obj,argv_mode.obj,default_local_stdio_options.obj,dll_dllmain.obj,initializers.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_app.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : c : 19.22.26504.99 : MSVCRT.lib (cpu_disp.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.22.26504.99 : MSVCRT.lib (app_appinit.obj,argv_mode.obj,default_local_stdio_options.obj,dll_dllmain.obj,initializers.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_app.obj)\r\n"
             ]
           },
           "locations": [
@@ -293,7 +293,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Uwp_ARM64_VS2019_Cpp.dll",
-              "dllmain.obj,cxx,19.22.27905.0\r\nUwp_ARM_VS2019_Cpp.obj,cxx,19.22.27905.0\r\npch.obj,cxx,19.22.27905.0\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 19.22.27905.0 : [directly linked] (dllmain.obj,pch.obj,Uwp_ARM_VS2019_Cpp.obj)\r\n"
             ]
           },
           "locations": [
@@ -361,7 +361,7 @@
             "id": "Pass",
             "arguments": [
               "Uwp_ARM64_VS2019_Cpp.dll",
-              "3"
+              "4"
             ]
           },
           "locations": [
@@ -600,8 +600,6 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1289,7 +1287,10 @@
               },
               "name": "SignSecurely"
             }
-          ]
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [

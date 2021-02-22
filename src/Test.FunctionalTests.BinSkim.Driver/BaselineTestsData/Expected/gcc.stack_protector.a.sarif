@@ -7,33 +7,14 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [
         {
-          "toolConfigurationNotifications": [
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.stack_protector.a"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'gcc.stack_protector.a' was not analyzed as it does not appear to be a valid file type for analysis."
-              },
-              "level": "note",
-              "descriptor": {
-                "id": "WRN997.InvalidTarget"
-              }
-            }
-          ],
           "executionSuccessful": true
         }
       ],

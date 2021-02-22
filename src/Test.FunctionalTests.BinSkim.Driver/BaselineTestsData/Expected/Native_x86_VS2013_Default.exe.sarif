@@ -225,7 +225,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Native_x86_VS2013_Default.exe",
-              "atls.lib,cxx,18.0.20806.0 (atlbase.obj,stdafx.obj)\r\nMSVCRTD.lib,cxx,18.0.20806.0 (ehvecdtr.obj,error.obj,init.obj,initsect.obj,pdblkup.obj,stack.obj,ti_inst.obj,unhandld.obj,userapi.obj)\r\nMSVCRTD.lib,c,18.0.20806.0 (_newmode.obj,atonexit.obj,chandler4gs.obj,cinitexe.obj,fp8.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,loadcfg.obj,merr.obj,natstart.obj,pesect.obj,secchk.obj,wcrtexew.obj,wdllargv.obj,wildcard.obj,xncommod.obj,xthdloc.obj,xtxtmode.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib (_newmode.obj,atonexit.obj,chandler4gs.obj,cinitexe.obj,fp8.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,loadcfg.obj,merr.obj,natstart.obj,pesect.obj,secchk.obj,wcrtexew.obj,wdllargv.obj,wildcard.obj,xncommod.obj,xthdloc.obj,xtxtmode.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : atls.lib (atlbase.obj,stdafx.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib (ehvecdtr.obj,error.obj,init.obj,initsect.obj,pdblkup.obj,stack.obj,ti_inst.obj,unhandld.obj,userapi.obj)\r\n"
             ]
           },
           "locations": [
@@ -247,7 +247,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Native_x86_VS2013_Default.exe",
-              "stdafx.obj,cxx,18.0.21005.1\r\nNative_x86_VS2013_Default.obj,cxx,18.0.21005.1\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] (Native_x86_VS2013_Default.obj,stdafx.obj)\r\n"
             ]
           },
           "locations": [
@@ -286,13 +286,13 @@
         {
           "ruleId": "BA2006",
           "ruleIndex": 11,
-          "kind": "pass",
-          "level": "none",
+          "level": "error",
           "message": {
-            "id": "Pass",
+            "id": "Error",
             "arguments": [
               "Native_x86_VS2013_Default.exe",
-              "17.0.65501.17013"
+              "",
+              "Microsoft (R) CVTRES : cvtres : 12.0.21005.1 : Native_x86_VS2013_Default.res (Native_x86_VS2013_Default.res)\r\n"
             ]
           },
           "locations": [
@@ -599,8 +599,6 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1288,7 +1286,10 @@
               },
               "name": "EnableSpectreMitigations"
             }
-          ]
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [

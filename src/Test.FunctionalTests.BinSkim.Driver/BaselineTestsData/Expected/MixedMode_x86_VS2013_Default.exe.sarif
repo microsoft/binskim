@@ -198,9 +198,32 @@
           "ruleId": "BA2004",
           "ruleIndex": 8,
           "message": {
-            "id": "Error_Managed",
+            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
-              "MixedMode_x86_VS2013_Default.exe"
+              "MixedMode_x86_VS2013_Default.exe",
+              "Microsoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib (atonexit.obj,chandler4gs.obj,cinitexe.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,loadcfg.obj,merr.obj,natstart.obj,secchk.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCMRTD.lib (managdeh.obj,ManagedMain.obj,msilexit.obj,mstartup.obj,puremsilcode.obj,wdllargv.obj,wildcard.obj,xncommod.obj,xthdloc.obj,xtxtmode.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib (initsect.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/MixedMode_x86_VS2013_Default.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 8,
+          "level": "error",
+          "message": {
+            "id": "Error_NativeWithInsecureDirectCompilands",
+            "arguments": [
+              "MixedMode_x86_VS2013_Default.exe",
+              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] (.NETFramework,Version=v4.5.AssemblyAttributes.obj,AssemblyInfo.obj,MixedMode_x86_VS2013_Default.obj,stdafx.obj)\r\n"
             ]
           },
           "locations": [
@@ -239,13 +262,13 @@
         {
           "ruleId": "BA2006",
           "ruleIndex": 10,
-          "kind": "pass",
-          "level": "none",
+          "level": "error",
           "message": {
-            "id": "Pass",
+            "id": "Error",
             "arguments": [
               "MixedMode_x86_VS2013_Default.exe",
-              "17.0.65501.17013"
+              "",
+              "Microsoft (R) CVTRES : cvtres : 12.0.21005.1 : app.res (app.res)\r\n"
             ]
           },
           "locations": [
@@ -573,8 +596,6 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1262,7 +1283,10 @@
               },
               "name": "EnableSpectreMitigations"
             }
-          ]
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [

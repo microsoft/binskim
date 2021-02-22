@@ -268,9 +268,32 @@
           "ruleId": "BA2004",
           "ruleIndex": 11,
           "message": {
-            "id": "Error_Managed",
+            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
-              "MixedMode_x64_VS2013_Default.dll"
+              "MixedMode_x64_VS2013_Default.dll",
+              "Microsoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib (atonexit.obj,cinitexe.obj,crtdll.obj,dllmain.obj,gs_cookie.obj,gs_support.obj,loadcfg.obj,natstart.obj,pesect.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCMRTD.lib (managdeh.obj,msilexit.obj,mstartup.obj,puremsilcode.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib (initsect.obj,tncleanup.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/MixedMode_x64_VS2013_Default.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 11,
+          "level": "error",
+          "message": {
+            "id": "Error_NativeWithInsecureDirectCompilands",
+            "arguments": [
+              "MixedMode_x64_VS2013_Default.dll",
+              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] (.NETFramework,Version=v4.5.AssemblyAttributes.obj,AssemblyInfo.obj,MixedMode_x64_VS2013_Default.obj,Stdafx.obj)\r\n"
             ]
           },
           "locations": [
@@ -309,13 +332,13 @@
         {
           "ruleId": "BA2006",
           "ruleIndex": 13,
-          "kind": "pass",
-          "level": "none",
+          "level": "error",
           "message": {
-            "id": "Pass",
+            "id": "Error",
             "arguments": [
               "MixedMode_x64_VS2013_Default.dll",
-              "17.0.65501.17013"
+              "",
+              "Microsoft (R) CVTRES : cvtres : 12.0.21005.1 : app.res (app.res)\r\n"
             ]
           },
           "locations": [
@@ -578,8 +601,6 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1267,7 +1288,10 @@
               },
               "name": "EnableSpectreMitigations"
             }
-          ]
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [

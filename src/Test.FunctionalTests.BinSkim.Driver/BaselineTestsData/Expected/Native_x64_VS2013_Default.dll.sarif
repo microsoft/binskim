@@ -271,7 +271,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Native_x64_VS2013_Default.dll",
-              "MSVCRTD.lib,cxx,18.0.20806.0 (error.obj,init.obj,initsect.obj,pdblkup.obj,tncleanup.obj,userapi.obj)\r\nMSVCRTD.lib,c,18.0.20806.0 (atonexit.obj,cinitexe.obj,crtdll.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,gshandler.obj,loadcfg.obj,natstart.obj,pesect.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib (atonexit.obj,cinitexe.obj,crtdll.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,gshandler.obj,loadcfg.obj,natstart.obj,pesect.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib (error.obj,init.obj,initsect.obj,pdblkup.obj,tncleanup.obj,userapi.obj)\r\n"
             ]
           },
           "locations": [
@@ -293,7 +293,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Native_x64_VS2013_Default.dll",
-              "stdafx.obj,cxx,18.0.21005.1\r\nNative_x64_VS2013_Default.obj,cxx,18.0.21005.1\r\ndllmain.obj,cxx,18.0.21005.1\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] (dllmain.obj,Native_x64_VS2013_Default.obj,stdafx.obj)\r\n"
             ]
           },
           "locations": [
@@ -332,13 +332,13 @@
         {
           "ruleId": "BA2006",
           "ruleIndex": 13,
-          "kind": "pass",
-          "level": "none",
+          "level": "error",
           "message": {
-            "id": "Pass",
+            "id": "Error",
             "arguments": [
               "Native_x64_VS2013_Default.dll",
-              "17.0.65501.17013"
+              "",
+              "Microsoft (R) CVTRES : cvtres : 12.0.21005.1 :  (* Linker Generated Manifest RES *)\r\nMicrosoft (R) Macro Assembler : masm : 12.0.20806.0 : MSVCRTD.lib (amdsecgs.obj)\r\n"
             ]
           },
           "locations": [
@@ -601,8 +601,6 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1290,7 +1288,10 @@
               },
               "name": "EnableSpectreMitigations"
             }
-          ]
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [
