@@ -57,6 +57,7 @@ function Build-Baselines($sourceExtension)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"sarifLoggerVersion`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"fullName`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"CompanyName`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "(?is),[^`"]+`"properties[^`"]+`"Comments`"[^}]+}\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"ProductName`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "    `"version`"[^,]+?,", "    `"version`": `"15.0.0.0`",")
     

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -58,7 +57,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     sb.Append(compiler + " : " + library);
 
                     SortedSet<string> modules = libraryToModules[library];
-                    if (modules.Count!= 1)
+                    if (modules.Count != 1)
                     {
                         sb.Append(" (").AppendLine(string.Join(",", modules) + ")");
                     }
@@ -275,6 +274,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             };
             return result;
         }
+
         public static string GetErrorDescription(this CryptoError cryptoError)
         {
             if (!s_cryptoErrorToDescriptionMap.TryGetValue(cryptoError, out string result))
