@@ -262,13 +262,13 @@
         {
           "ruleId": "BA2006",
           "ruleIndex": 10,
-          "level": "error",
+          "kind": "pass",
+          "level": "none",
           "message": {
-            "id": "Error",
+            "id": "Pass",
             "arguments": [
               "Native_x86_VS2015_AtlProxyStubPS.dll",
-              "",
-              "Microsoft (R) Macro Assembler : masm : 14.0.23406.0 : MSVCRT.lib (_sehprolg4_.obj)\r\n"
+              "17.0.65501.17013"
             ]
           },
           "locations": [
@@ -597,6 +597,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1284,10 +1286,7 @@
               },
               "name": "EnableSpectreMitigations"
             }
-          ],
-          "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [

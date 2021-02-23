@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// Gets a property indicating whether the rule should require that PDBs
         /// can be located for managed assemblies. Some checks that inspect both
-        /// managed and native code require PDBs for the native case but not 
+        /// managed and native code require PDBs for the native case but not
         /// for managed.
         /// </summary>
         public virtual bool EnforcePdbLoadForManagedAssemblies => true;
@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 target.Pdb.LoadTrace = null;
             }
 
-            if ((!target.PE.IsManaged   ||
+            if ((!target.PE.IsManaged ||
                   target.PE.IsMixedMode ||
                   EnforcePdbLoadForManagedAssemblies)
                     && target.Pdb == null)

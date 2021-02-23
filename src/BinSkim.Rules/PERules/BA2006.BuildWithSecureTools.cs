@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-using System.Diagnostics;
-using System.Globalization;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -156,7 +154,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
 
-
                 // See if the item is in our skip list
                 if (!string.IsNullOrEmpty(om.Lib))
                 {
@@ -214,7 +211,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     if (foundIssue)
                     {
-                        // Get the closest compiler version that has mitigations--i.e. if the user is using a 19.0 (VS2015) compiler, we should be recommending an upgrade to the 
+                        // Get the closest compiler version that has mitigations--i.e. if the user is using a 19.0 (VS2015) compiler, we should be recommending an upgrade to the
                         // 19.0 version that has the mitigations, not an upgrade to a 19.10+ (VS2017) compiler.
                         // Limitation--if there are multiple 'upgrade to' versions to recommend, this just going to give users the last one we see in the error.
                         minCompilerVersion = EnableSpectreMitigations.GetClosestCompilerVersionWithSpectreMitigations(context, machineType, actualVersion);
@@ -268,7 +265,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             var languages = new List<string>();
 
-            foreach(Language language in languageToBadModules.Keys)
+            foreach (Language language in languageToBadModules.Keys)
             {
                 Version version = context.Policy.GetProperty(MinimumToolVersions)[language.ToString()];
                 languages.Add($"{language} ({version})");
@@ -287,9 +284,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             return string.Join(string.Empty, coalescedModules);
         }
-    
 
-    private void AnalyzeManagedPE(BinaryAnalyzerContext context)
+        private void AnalyzeManagedPE(BinaryAnalyzerContext context)
         {
             Version minCscVersion =
                 context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CSharp)];
@@ -356,7 +352,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var result = new StringToVersionMap();
 
             // Example entries
-            result["libeay32.lib,unknown"] = new Version("0.0.0.0"); 
+            result["libeay32.lib,unknown"] = new Version("0.0.0.0");
             // result["cplusplusExample.lib,cxx"] = new Version("1.0.0.0")
             // result["masmExample.lib,masm"] = new Version("1.0.0.0")
 
