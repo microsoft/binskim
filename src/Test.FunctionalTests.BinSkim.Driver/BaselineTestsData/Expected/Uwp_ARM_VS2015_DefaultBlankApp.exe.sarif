@@ -402,8 +402,6 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -864,7 +862,10 @@
               },
               "name": "SignSecurely"
             }
-          ]
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [
@@ -881,7 +882,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded."
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
               },
               "level": "error",
               "descriptor": {
@@ -902,7 +903,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded."
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
               },
               "level": "error",
               "descriptor": {
@@ -923,7 +924,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded."
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
               },
               "level": "error",
               "descriptor": {
@@ -944,7 +945,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded."
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
               },
               "level": "error",
               "descriptor": {
@@ -965,7 +966,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded."
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
               },
               "level": "error",
               "descriptor": {
@@ -986,7 +987,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded."
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
               },
               "level": "error",
               "descriptor": {
@@ -1007,7 +1008,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded."
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
               },
               "level": "error",
               "descriptor": {
@@ -1028,7 +1029,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded."
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
               },
               "level": "error",
               "descriptor": {

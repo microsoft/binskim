@@ -398,8 +398,6 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -860,7 +858,10 @@
               },
               "name": "SignSecurely"
             }
-          ]
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [
@@ -877,7 +878,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded."
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded (E_PDB_MAX)."
               },
               "level": "error",
               "descriptor": {
@@ -898,7 +899,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded."
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded (E_PDB_MAX)."
               },
               "level": "error",
               "descriptor": {
@@ -919,7 +920,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded."
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded (E_PDB_MAX)."
               },
               "level": "error",
               "descriptor": {
@@ -940,7 +941,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded."
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded (E_PDB_MAX)."
               },
               "level": "error",
               "descriptor": {
@@ -961,7 +962,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded."
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded (E_PDB_MAX)."
               },
               "level": "error",
               "descriptor": {
@@ -982,7 +983,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded."
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded (E_PDB_MAX)."
               },
               "level": "error",
               "descriptor": {
@@ -1003,7 +1004,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded."
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded (E_PDB_MAX)."
               },
               "level": "error",
               "descriptor": {
@@ -1024,7 +1025,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded."
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded (E_PDB_MAX)."
               },
               "level": "error",
               "descriptor": {

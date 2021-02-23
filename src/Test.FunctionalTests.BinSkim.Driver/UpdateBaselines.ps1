@@ -33,8 +33,8 @@ function Build-Baselines($sourceExtension)
 
         # Actually run the tool
         Remove-Item $outputTemp -ErrorAction SilentlyContinue
-        Write-Host "$utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default --quiet --sarif-output-version Current"
-        &           $utility analyze "$input" --output "$outputTemp" --pretty-print --verbose --hashes --config default --quiet --sarif-output-version Current
+        Write-Host "$utility analyze "$input" --output "$outputTemp" --kind Fail`;Pass`;NotApplicable --level Error`;Warning`;Note --insert Hashes --config default --quiet --sarif-output-version Current"
+        &           $utility analyze "$input" --output "$outputTemp" --kind Fail`;Pass`;NotApplicable --level Error`;Warning`;Note  --insert Hashes --config default --quiet --sarif-output-version Current
 
         # Replace repository root absolute path with Z:\ for machine and enlistment independence
         $text = [IO.File]::ReadAllText($outputTemp)
@@ -56,8 +56,8 @@ function Build-Baselines($sourceExtension)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"product`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"sarifLoggerVersion`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"fullName`"[^\n]+?\n", [Environment]::Newline)
-        $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"Comments`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"CompanyName`"[^\n]+?\n", [Environment]::Newline)
+        $text = [Text.RegularExpressions.Regex]::Replace($text, "(?is),[^`"]+`"properties[^`"]+`"Comments`"[^}]+}\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "\s*`"ProductName`"[^\n]+?\n", [Environment]::Newline)
         $text = [Text.RegularExpressions.Regex]::Replace($text, "    `"version`"[^,]+?,", "    `"version`": `"15.0.0.0`",")
     
