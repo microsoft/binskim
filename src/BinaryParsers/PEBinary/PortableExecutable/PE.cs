@@ -178,7 +178,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 {
                     if (debugDirectoryEntry.Type == DebugDirectoryEntryType.CodeView)
                     {
-                        return this.peReader.ReadCodeViewDebugDirectoryData(debugDirectoryEntry);
+                        try
+                        {
+                            return this.peReader.ReadCodeViewDebugDirectoryData(debugDirectoryEntry);
+                        }
+                        catch (BadImageFormatException)
+                        {
+                            // PE reader has problems with some old binaries.
+                            // TODO: investigate
+                        }
                     }
                 }
                 return new CodeViewDebugDirectoryData();

@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.IL
         [Option(
             "trace",
             Separator = ';',
-            Default = new Traces[] { },
+            Default = null,
             HelpText = "Execution traces, expressed as a semicolon-delimited list, that " +
                        "should be emitted to the console and log file (if appropriate). " +
                        "Valid values: PdbLoad.")]
