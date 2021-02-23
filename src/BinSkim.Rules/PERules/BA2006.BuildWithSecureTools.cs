@@ -281,7 +281,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private string BuildCompilerIdentifier(ObjectModuleDetails omDetails)
         {
-            return omDetails.CompilerName + ":" + omDetails.Language +":" + omDetails.CompilerBackEndVersion;
+            return omDetails.CompilerName + ":" + omDetails.Language + ":" + omDetails.CompilerBackEndVersion;
         }
 
         private string BuildMinimumCompilersList(BinaryAnalyzerContext context, Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
