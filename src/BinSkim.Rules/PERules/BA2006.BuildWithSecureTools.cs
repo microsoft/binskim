@@ -354,7 +354,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 //[nameof(Language.LINK)] = new Version(17, 0, 65501, 17013),
                 //[nameof(Language.CSharp)] = new Version(19, 0, 0, 0),
                 //[nameof(Language.CVTRES)] = new Version(12, 0, 0, 0),
-                [nameof(Language.Unknown)] = new Version(int.MinValue, int.MinValue, int.MinValue, int.MinValue),
+                [nameof(Language.Unknown)] = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue),
                 [MIN_XBOX_COMPILER_VER] = new Version(16, 0, 11886, 0)
             };
 
@@ -363,7 +363,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (!result.ContainsKey(name))
                 {
                     // If we don't have entry for a language, fire on everything.
-                    result[name] = new Version(int.MaxValue, int.MaxValue);
+                    result[name] = new Version(int.MinValue, int.MinValue);
                 }
             }
 
