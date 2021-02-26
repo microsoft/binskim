@@ -132,26 +132,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         break;
                     }
 
-                    case Language.MASM:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.MASM)];
-                        break;
-                    }
+                    //case Language.MASM:
+                    //{
+                    //    minCompilerVersion =
+                    //        context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.MASM)];
+                    //    break;
+                    //}
 
-                    case Language.CVTRES:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CVTRES)];
-                        break;
-                    }
+                    //case Language.CVTRES:
+                    //{
+                    //    minCompilerVersion =
+                    //        context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CVTRES)];
+                    //    break;
+                    //}
 
-                    case Language.CSharp:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CSharp)];
-                        break;
-                    }
+                    //case Language.CSharp:
+                    //{
+                    //    minCompilerVersion =
+                    //        context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CSharp)];
+                    //    break;
+                    //}
 
                     case Language.Unknown:
                     {
@@ -358,14 +358,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 [MIN_XBOX_COMPILER_VER] = new Version(16, 0, 11886, 0)
             };
 
-            foreach (string name in Enum.GetNames(typeof(Language)))
-            {
-                if (!result.ContainsKey(name))
-                {
-                    // If we don't have entry for a language, fire on everything.
-                    result[name] = new Version(int.MinValue, int.MinValue);
-                }
-            }
+            //foreach (string name in Enum.GetNames(typeof(Language)))
+            //{
+            //    if (!result.ContainsKey(name))
+            //    {
+            //        // If we don't have entry for a language, fire on everything.
+            //        result[name] = new Version(int.MaxValue, int.MaxValue);
+            //    }
+            //}
 
             return result;
         }
