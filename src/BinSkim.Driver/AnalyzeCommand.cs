@@ -33,6 +33,13 @@ namespace Microsoft.CodeAnalysis.IL
             binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
 
+#pragma warning disable CS0618 // Type or member is obsolete
+            if (options.Verbose)
+#pragma warning restore CS0618 // Type or member is obsolete
+            {
+                Warnings.LogObsoleteOption(binaryAnalyzerContext, "--verbose", Sdk.SdkResources.Verbose_ReplaceWithLevelAndKind);
+            }
+
             return binaryAnalyzerContext;
         }
 
@@ -48,12 +55,20 @@ namespace Microsoft.CodeAnalysis.IL
                 analyzeOptions.SarifOutputVersion = s_UnitTestOutputVersion;
             }
 
+#pragma warning disable CS0618 // Type or member is obsolete
+            if (analyzeOptions.Verbose)
+#pragma warning restore CS0618 // Type or member is obsolete
+            {
+                analyzeOptions.Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note };
+                analyzeOptions.Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.NotApplicable, ResultKind.Pass };
+            }
+
             int result = base.Run(analyzeOptions);
 
             // In BinSkim, no rule is ever applicable to every target type. For example,
             // we have checks that are only relevant to either 32-bit or 64-bit binaries.
             // Because of this, the return code bit for RuleNotApplicableToTarget is not
-            // interesting (it will always be set). 
+            // interesting (it will always be set).
 
             return analyzeOptions.RichReturnCode
                 ? (int)((uint)result & ~(uint)RuntimeConditions.RuleNotApplicableToTarget)

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 
 using CommandLine;
@@ -36,5 +37,11 @@ namespace Microsoft.CodeAnalysis.IL
             "local-symbol-directories",
             HelpText = "A set of semicolon-delimited local directory paths that will be examined when attempting to locate PDBs.")]
         public string LocalSymbolDirectories { get; internal set; }
+
+        [Option(
+            "verbose",
+            HelpText = "Emit verbose output. The resulting comprehensive report is designed to provide appropriate evidence for compliance scenarios.")]
+        [Obsolete("Use --level and --kind instead.")]
+        public bool Verbose { get; set; }
     }
 }
