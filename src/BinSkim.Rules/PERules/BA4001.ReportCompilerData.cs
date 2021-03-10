@@ -27,9 +27,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA4001_ReportCompilerData_Description };
 
+        public override bool EnabledByDefault => false;
+
         protected override IEnumerable<string> MessageResourceNames => Array.Empty<string>();
 
-        public override bool EnabledByDefault => false;
+        private bool PrintHeader = true;
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -66,7 +68,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
 
-            Console.WriteLine("Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language");
+            if (PrintHeader)
+            {
+                Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Module Name,Module Library");
+                PrintHeader = false;
+            }
+
             foreach (KeyValuePair<string, ObjectModuleDetails> kv in records)
             {
                 string compilerData = kv.Key;

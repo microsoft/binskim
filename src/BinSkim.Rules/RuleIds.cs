@@ -7,12 +7,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         // Analysis check ids
         public const string LoadImageAboveFourGigabyteAddress = "BA2001";
+
         public const string DoNotIncorporateVulnerableDependencies = "BA2002";
 
         // 2004 open. Previously for specific ATL implementation verification
 
         // Id gap relates to unported analysis
         public const string EnableSecureSourceCodeHashing = "BA2004";
+
         public const string DoNotShipVulnerableBinaries = "BA2005";
         public const string BuildWithSecureTools = "BA2006";
         public const string EnableCriticalCompilerWarnings = "BA2007";
@@ -40,15 +42,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         // ELF Checks
         public const string EnablePositionIndependentExecutable = "BA3001";
+
         public const string DoNotMarkStackAsExecutable = "BA3002";
         public const string EnableStackProtector = "BA3003";
+
         // Skipping some check namespace (BA3004-3009) for future checks
         public const string EnableReadOnlyRelocations = "BA3010";
+
         // BA3011 -- saved for a future check.
         // BA3012-3029 -- saved for future non-compiler/language specific checks.
         // Compiler/Language specific checks follow.
         public const string UseCheckedFunctionsWithGcc = "BA3030";
-
 
         // Reporting checks
         public const string ReportCompilerData = "BA4001";
