@@ -15,6 +15,8 @@ namespace Microsoft.CodeAnalysis.IL
 {
     public class AnalyzeCommand : AnalyzeCommandBase<BinaryAnalyzerContext, AnalyzeOptions>
     {
+        private static bool ShouldWarnVerbose = true;
+
         public static HashSet<string> ValidAnalysisFileExtensions = new HashSet<string>(
             new string[] { ".dll", ".exe", ".sys" }
             );
@@ -34,10 +36,11 @@ namespace Microsoft.CodeAnalysis.IL
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
 
 #pragma warning disable CS0618 // Type or member is obsolete
-            if (options.Verbose)
+            if (options.Verbose && ShouldWarnVerbose)
 #pragma warning restore CS0618 // Type or member is obsolete
             {
                 Warnings.LogObsoleteOption(binaryAnalyzerContext, "--verbose", Sdk.SdkResources.Verbose_ReplaceWithLevelAndKind);
+                ShouldWarnVerbose = false;
             }
 
             return binaryAnalyzerContext;
