@@ -584,7 +584,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             if (metadataReader.AssemblyReferences.Count == 0)
             {
                 return ManagedPlatform.DotNetFramework;
-            }    
+            }
 
             foreach (AssemblyReferenceHandle handle in metadataReader.AssemblyReferences)
             {
