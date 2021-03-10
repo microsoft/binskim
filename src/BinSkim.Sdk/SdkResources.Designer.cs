@@ -365,5 +365,14 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
                 return ResourceManager.GetString("TargetNotAnalyzed_NotApplicable", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to use --level and --kind.
+        /// </summary>
+        internal static string Verbose_ReplaceWithLevelAndKind {
+            get {
+                return ResourceManager.GetString("Verbose_ReplaceWithLevelAndKind", resourceCulture);
+            }
+        }
     }
 }
