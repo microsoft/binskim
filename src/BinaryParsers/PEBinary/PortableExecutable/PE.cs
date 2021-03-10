@@ -582,6 +582,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         internal static ManagedPlatform ComputeIsDotNetCore(MetadataReader metadataReader)
         {
+            if (metadataReader.AssemblyReferences.Count == 0)
+            {
+                return ManagedPlatform.DotNetFramework;
+            }    
+
             foreach (AssemblyReferenceHandle handle in metadataReader.AssemblyReferences)
             {
                 AssemblyReference assemblyReference = metadataReader.GetAssemblyReference(handle);

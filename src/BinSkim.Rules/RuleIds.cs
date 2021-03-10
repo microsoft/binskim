@@ -48,5 +48,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // BA3012-3029 -- saved for future non-compiler/language specific checks.
         // Compiler/Language specific checks follow.
         public const string UseCheckedFunctionsWithGcc = "BA3030";
+
+
+        // Reporting checks
+        public const string ReportCompilerData = "BA4001";
     }
 }
