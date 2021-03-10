@@ -3,12 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
-using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
@@ -30,7 +27,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA4001_ReportCompilerData_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] { };
+        protected override IEnumerable<string> MessageResourceNames => Array.Empty<string>();
 
         public override bool EnabledByDefault => false;
 
@@ -69,6 +66,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
 
+            Console.WriteLine("Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language");
             foreach (KeyValuePair<string, ObjectModuleDetails> kv in records)
             {
                 string compilerData = kv.Key;
