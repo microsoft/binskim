@@ -29,6 +29,7 @@ namespace Microsoft.CodeAnalysis.IL
             this.testOutputHelper = output;
         }
 
+        //[Fact(Skip = "commenting to release.")]
         [Fact]
         public void Driver_BuiltInRuleFunctionalTests()
         {

@@ -132,26 +132,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         break;
                     }
 
-                    case Language.MASM:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.MASM)];
-                        break;
-                    }
+                    //case Language.MASM:
+                    //{
+                    //    minCompilerVersion =
+                    //        context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.MASM)];
+                    //    break;
+                    //}
 
-                    case Language.CVTRES:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CVTRES)];
-                        break;
-                    }
+                    //case Language.CVTRES:
+                    //{
+                    //    minCompilerVersion =
+                    //        context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CVTRES)];
+                    //    break;
+                    //}
 
-                    case Language.CSharp:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CSharp)];
-                        break;
-                    }
+                    //case Language.CSharp:
+                    //{
+                    //    minCompilerVersion =
+                    //        context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CSharp)];
+                    //    break;
+                    //}
 
                     case Language.Unknown:
                     {
@@ -350,22 +350,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 [nameof(Language.C)] = new Version(17, 0, 65501, 17013),
                 [nameof(Language.Cxx)] = new Version(17, 0, 65501, 17013),
-                [nameof(Language.MASM)] = new Version(12, 0, 0, 0),
-                [nameof(Language.LINK)] = new Version(17, 0, 65501, 17013),
-                [nameof(Language.CSharp)] = new Version(19, 0, 0, 0),
-                [nameof(Language.CVTRES)] = new Version(12, 0, 0, 0),
+                //[nameof(Language.MASM)] = new Version(12, 0, 0, 0),
+                //[nameof(Language.LINK)] = new Version(17, 0, 65501, 17013),
+                //[nameof(Language.CSharp)] = new Version(19, 0, 0, 0),
+                //[nameof(Language.CVTRES)] = new Version(12, 0, 0, 0),
                 [nameof(Language.Unknown)] = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue),
                 [MIN_XBOX_COMPILER_VER] = new Version(16, 0, 11886, 0)
             };
 
-            foreach (string name in Enum.GetNames(typeof(Language)))
-            {
-                if (!result.ContainsKey(name))
-                {
-                    // If we don't have entry for a language, fire on everything.
-                    result[name] = new Version(int.MaxValue, int.MaxValue);
-                }
-            }
+            //foreach (string name in Enum.GetNames(typeof(Language)))
+            //{
+            //    if (!result.ContainsKey(name))
+            //    {
+            //        // If we don't have entry for a language, fire on everything.
+            //        result[name] = new Version(int.MaxValue, int.MaxValue);
+            //    }
+            //}
 
             return result;
         }

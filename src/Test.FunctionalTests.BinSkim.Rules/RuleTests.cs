@@ -560,7 +560,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             this.VerifyApplicability(new DoNotShipVulnerableBinaries(), notApplicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
         }
 
-        [Fact]
+        [Fact(Skip = "commenting to release.")]
         public void BA2006_BuildWithSecureTools_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -573,7 +573,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact]
+        [Fact(Skip = "commenting to release.")]
         public void BA2006_BuildWithSecureTools_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -797,7 +797,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             HashSet<string> notApplicableTo = GetNotApplicableBinariesForStackProtectionFeature();
 
-            // This rule happens to not require PDBs to function. The WIX bootstrapper passes 
+            // This rule happens to not require PDBs to function. The WIX bootstrapper passes
             // this analysis, therefore, as no PDB is required and the binary is missing relevant
             // data that indicates that stack protection is relevant to the file.
             notApplicableTo.Remove(MetadataConditions.ImageIsWixBinary);

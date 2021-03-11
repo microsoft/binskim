@@ -496,4 +496,7 @@ Modules triggering this check were:
   <data name="BA2006_Pass_Csc" xml:space="preserve">
     <value>'{0}' is a managed assembly that was compiled with toolchain ({1}) that supports all security features that must be enabled by policy.</value>
   </data>
+  <data name="BA4001_ReportCompilerData_Description" xml:space="preserve">
+    <value>This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland.</value>
+  </data>
 </root>

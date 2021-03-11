@@ -12,9 +12,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public abstract class BinarySkimmer : Skimmer<BinaryAnalyzerContext>
     {
-        private static readonly Uri s_helpUri = new Uri($"https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md");
-
-        public override Uri HelpUri => s_helpUri;
+        public override Uri HelpUri => new Uri($"https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-{Id}{Name}");
 
         // TODO: author good help text.
         // https://github.com/Microsoft/binskim/issues/192
@@ -29,9 +27,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 this.SetProperty<string>(BinScopeCompatibility.EquivalentBinScopeRulePropertyName, altId);
             }
 
-            // We should not emit a default level of anything but warning. The reason is that 
+            // We should not emit a default level of anything but warning. The reason is that
             // doing so prevents any rule from overriding this value to warning (as warning
-            // failure levels are elided during serialization). We need to support setting 
+            // failure levels are elided during serialization). We need to support setting
             // result levels to 'null' to indicate they are in a default condition.
             this.DefaultConfiguration.Level = FailureLevel.Warning;
         }
