@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.ReportCompilerData;
 
-        public override bool EnforcePdbLoadForManagedAssemblies => false;
+        public override bool LogPdbLoadException => false;
 
         /// <summary>
         /// This rule emits CSV data to the console for every compiler/language/version

@@ -23,6 +23,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public virtual bool EnforcePdbLoadForManagedAssemblies => true;
 
+        public virtual bool LogPdbLoadException => true;
+
         public sealed override void Analyze(BinaryAnalyzerContext context)
         {
             // Uses PDB Parsing.
@@ -40,11 +42,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 target.Pdb.LoadTrace = null;
             }
 
-            if ((!target.PE.IsManaged || target.PE.IsMixedMode) &&
-                (EnforcePdbLoadForManagedAssemblies && target.Pdb == null))
+            if (LogPdbLoadException)
             {
-                LogExceptionLoadingPdb(context, target.PdbParseException);
-                return;
+                if ((!target.PE.IsManaged ||
+                      target.PE.IsMixedMode ||
+                      EnforcePdbLoadForManagedAssemblies)
+                        && target.Pdb == null)
+                {
+                    LogExceptionLoadingPdb(context, target.PdbParseException);
+                    return;
+                }
             }
 
             this.AnalyzePortableExecutableAndPdb(context);
