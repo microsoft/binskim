@@ -21,6 +21,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.ReportCompilerData;
 
+        public override bool LogPdbLoadException => false;
+
         /// <summary>
         /// This rule emits CSV data to the console for every compiler/language/version
         /// combination that's observed in any PDB-linked compiland.
@@ -44,13 +46,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
 
+            if (PrintHeader)
+            {
+                Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Module Name,Module Library,Hash,Error");
+                PrintHeader = false;
+            }
+
             if (pdb == null)
             {
+                Console.Write(context.TargetUri.LocalPath + ",");
+                Console.WriteLine($",,,,,,{context?.Hashes?.Sha256},{target.PdbParseException.Message}");
                 return;
             }
 
             var records = new Dictionary<string, ObjectModuleDetails>();
-
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
@@ -68,12 +77,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
 
-            if (PrintHeader)
-            {
-                Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Module Name,Module Library");
-                PrintHeader = false;
-            }
-
             foreach (KeyValuePair<string, ObjectModuleDetails> kv in records)
             {
                 string compilerData = kv.Key;
@@ -82,7 +85,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Console.Write(context.TargetUri.LocalPath + ",");
                 Console.Write(compilerData + ",");
                 Console.Write(omDetails.Name + ",");
-                Console.WriteLine(omDetails.Library);
+                Console.Write(omDetails.Library + ",");
+                Console.Write($"{context?.Hashes?.Sha256},");
+                Console.WriteLine();
             }
         }
     }
