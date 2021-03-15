@@ -48,14 +48,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (PrintHeader)
             {
-                Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Module Name,Module Library,Error");
+                Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Module Name,Module Library,Hash,Error");
                 PrintHeader = false;
             }
 
             if (pdb == null)
             {
                 Console.Write(context.TargetUri.LocalPath + ",");
-                Console.WriteLine(",,,,,,COULD_NOT_LOAD_PDB");
+                Console.WriteLine($",,,,,,{context?.Hashes?.Sha256},{target.PdbParseException.Message}");
                 return;
             }
 
@@ -86,6 +86,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Console.Write(compilerData + ",");
                 Console.Write(omDetails.Name + ",");
                 Console.Write(omDetails.Library + ",");
+                Console.Write($"{context?.Hashes?.Sha256},");
                 Console.WriteLine();
             }
         }
