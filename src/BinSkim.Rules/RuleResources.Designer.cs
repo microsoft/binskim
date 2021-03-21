@@ -1023,7 +1023,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
+        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro,-z,full&apos; to enable this..
         /// </summary>
         internal static string BA3010_EnableReadOnlyRelocations_Description {
             get {
@@ -1032,16 +1032,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The GNU_RELRO segment is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,relro&apos; to address this..
+        ///   Looks up a localized string similar to The DF_BIND_NOW flag is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,relro,-z,full&apos; to address this..
         /// </summary>
-        internal static string BA3010_Error {
+        internal static string BA3010_Error_No_BindNow {
             get {
-                return ResourceManager.GetString("BA3010_Error", resourceCulture);
+                return ResourceManager.GetString("BA3010_Error_No_BindNow", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The GNU_RELRO segment was present, so &apos;{0}&apos; is protected..
+        ///   Looks up a localized string similar to The GNU_RELRO segment is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,relro,-z,full&apos; to address this..
+        /// </summary>
+        internal static string BA3010_Error_No_Relro_Segment {
+            get {
+                return ResourceManager.GetString("BA3010_Error_No_Relro_Segment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The GNU_RELRO segment and DF_BIND_NOW flag was present, so &apos;{0}&apos; is protected..
         /// </summary>
         internal static string BA3010_Pass {
             get {
