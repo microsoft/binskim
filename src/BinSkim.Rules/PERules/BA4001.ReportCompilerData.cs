@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
                 string record =
-                    omDetails.CompilerName + "," +
+                    omDetails.CompilerName?.Trim() + "," +
                     omDetails.CompilerBackEndVersion + "," +
                     omDetails.CompilerFrontEndVersion + "," +
                     omDetails.Language;
@@ -84,8 +84,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 Console.Write(context.TargetUri.LocalPath + ",");
                 Console.Write(compilerData + ",");
-                Console.Write(omDetails.Name + ",");
-                Console.Write(omDetails.Library + ",");
+                Console.Write(omDetails.Name?.Replace(",", "_") + ",");
+                Console.Write(omDetails.Library?.Replace(",", ";") + ",");
                 Console.Write($"{context?.Hashes?.Sha256},");
                 Console.WriteLine();
             }
