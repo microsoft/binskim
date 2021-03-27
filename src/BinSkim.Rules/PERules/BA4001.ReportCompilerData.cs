@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
                 string record =
-                    omDetails.CompilerName?.Trim() + "," +
+                    omDetails.CompilerName?.Replace(",", "_").Trim() + "," +
                     omDetails.CompilerBackEndVersion + "," +
                     omDetails.CompilerFrontEndVersion + "," +
                     omDetails.Language;
