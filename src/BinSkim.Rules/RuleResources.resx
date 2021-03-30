@@ -499,4 +499,10 @@ Modules triggering this check were:
   <data name="BA4001_ReportCompilerData_Description" xml:space="preserve">
     <value>This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland.</value>
   </data>
+  <data name="BA3004_Error" xml:space="preserve">
+    <value>Dwarf version should be version 5.</value>
+  </data>
+  <data name="BA3004_Pass" xml:space="preserve">
+    <value>Dwarf version is valid</value>
+  </data>
 </root>

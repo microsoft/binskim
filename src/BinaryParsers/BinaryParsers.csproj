@@ -13,7 +13,7 @@
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
     <PackageReference Include="System.Reflection.Metadata" Version="5.0.0" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
-    <PackageReference Include="ELFSharp" Version="2.11.0" />
+    <PackageReference Include="ELFSharp" Version="2.12.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Update="BinaryParsersResources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -34,7 +34,7 @@
       <DependentUpon>BinaryParsersResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Update="BinaryParsersResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -42,5 +42,4 @@
       <CustomToolNamespace>Microsoft.CodeAnalysis.BinaryParsers</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
-  
 </Project>

@@ -2,9 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using ELFSharp.ELF;
+
+using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
@@ -16,6 +20,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 this.ELF = ELFReader.Load(Path.GetFullPath(uri.LocalPath));
                 this.Compilers = ELFUtility.GetELFCompilers(this.ELF);
+                ELFUtility.GetDebugInfo(this.ELF, out List<byte> debugStr, out List<Abbreviation> abbreviations, out List<CompilationUnit> compilationUnits);
+
+                DebugStr = debugStr;
+                Abbreviations = abbreviations;
+                CompilationUnits = compilationUnits;
+
                 this.Valid = true;
             }
             // At some point, we may want to better enumerate expected vs. unexpected exceptions.
@@ -38,8 +48,59 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             catch (UnauthorizedAccessException) { return false; }
         }
 
-        public IELF ELF { get; private set; }
+        public int GetDwarfVersion()
+        {
+            if (CompilationUnits == null || CompilationUnits.Count == 0)
+            {
+                return -1;
+            }
 
-        public ELFCompiler[] Compilers { get; private set; }
+            return CompilationUnits[0].CompilationUnitHeader?.Version ?? -1;
+        }
+
+        public string GetDwarfCompilerCommand()
+        {
+            if (CompilationUnits == null || CompilationUnits.Count == 0 ||
+                DebugStr == null || DebugStr.Count == 0)
+            {
+                return null;
+            }
+
+            CompilationUnit compilationUnit = CompilationUnits.FirstOrDefault(c => c.DebuggingInformationEntries.Any(d => d.AttributeList.Any(a => a.Name == DW_AT.Producer)));
+            if (compilationUnit == null)
+            {
+                return null;
+            }
+
+            DebuggingInformationEntry debuggingInformationEntry = compilationUnit.DebuggingInformationEntries.First(d => d.AttributeList.Any(a => a.Name == DW_AT.Producer));
+            Dwarf.Attribute attribute = debuggingInformationEntry.AttributeList.First(a => a.Name == DW_AT.Producer);
+
+            return debuggingInformationEntry.GetName(DebugStr, attribute);
+        }
+
+        public string GetLanguage()
+        {
+            if (CompilationUnits == null || CompilationUnits.Count == 0)
+            {
+                return null;
+            }
+
+            CompilationUnit compilationUnit = CompilationUnits.FirstOrDefault(c => c.DebuggingInformationEntries.Any(d => d.AttributeList.Any(a => a.Name == DW_AT.Language)));
+            if (compilationUnit == null)
+            {
+                return null;
+            }
+
+            DebuggingInformationEntry debuggingInformationEntry = compilationUnit.DebuggingInformationEntries.First(d => d.AttributeList.Any(a => a.Name == DW_AT.Language));
+            Dwarf.Attribute attribute = debuggingInformationEntry.AttributeList.First(a => a.Name == DW_AT.Language);
+
+            return ((DW_LANGUAGE)attribute.Value[0]).ToString();
+        }
+
+        public IELF ELF { get; }
+        public ELFCompiler[] Compilers { get; }
+        public List<Abbreviation> Abbreviations { get; }
+        public List<CompilationUnit> CompilationUnits { get; }
+        private List<byte> DebugStr { get; }
     }
 }
