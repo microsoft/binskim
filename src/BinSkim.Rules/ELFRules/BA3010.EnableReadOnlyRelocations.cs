@@ -35,11 +35,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3010_EnableReadOnlyRelocations_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
-                    nameof(RuleResources.BA3010_Pass),
-                    nameof(RuleResources.BA3010_Error_No_BindNow),
-                    nameof(RuleResources.BA3010_Error_No_Relro_Segment),
-                    nameof(RuleResources.NotApplicable_InvalidMetadata)
-                };
+            nameof(RuleResources.BA3010_Pass),
+            nameof(RuleResources.BA3010_Error_No_BindNow),
+            nameof(RuleResources.BA3010_Error_No_Relro_Segment),
+            nameof(RuleResources.NotApplicable_InvalidMetadata)
+        };
 
         public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -68,6 +68,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     return false;
                 }
+
                 foreach (ELFSharp.ELF.Sections.DynamicEntry<ulong> entry in dynamicSection.Entries)
                 {
                     if ((entry.Tag == ELFSharp.ELF.Sections.DynamicTag.BindNow) ||
@@ -77,10 +78,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         return true;
                     }
                 }
-            } catch (InvalidCastException)
+            }
+            catch (InvalidCastException)
             {
                 return false;
             }
+
             return false;
         }
 
