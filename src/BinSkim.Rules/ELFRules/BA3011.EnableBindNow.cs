@@ -17,8 +17,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class EnableBineNow : ELFBinarySkimmerBase
     {
-        private const uint DF_BIND_NOW = 0x8;
         private const uint DF_1_NOW = 0x1;
+        private const uint DF_BIND_NOW = 0x8;
 
         /// <summary>
         /// BA3011
@@ -34,10 +34,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3011_EnableBindNow_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
-                    nameof(RuleResources.BA3011_Pass),
-                    nameof(RuleResources.BA3011_Error),
-                    nameof(RuleResources.NotApplicable_InvalidMetadata)
-                };
+            nameof(RuleResources.BA3011_Pass),
+            nameof(RuleResources.BA3011_Error),
+            nameof(RuleResources.NotApplicable_InvalidMetadata)
+        };
 
         public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -53,12 +53,34 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
+        public override void Analyze(BinaryAnalyzerContext context)
+        {
+            IELF elf = context.ELFBinary().ELF;
+
+            if (HasBindNowFlag(elf))
+            {
+                // Pass
+                context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                    nameof(RuleResources.BA3011_Pass),
+                    context.TargetUri.GetFileName()));
+            }
+            else
+            {
+                // Fail
+                context.Logger.Log(this,
+                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                    nameof(RuleResources.BA3011_Error),
+                    context.TargetUri.GetFileName()));
+            }
+        }
+
         // Pwntools checksec calls out numerous ways an ELF can specify full RELRO to the
         // loader. All have the intended effect of eagerly resolving all plt functions and
         // subsequently marking the entire GOT read-only (at least, when there
         // is also a GNU_RELRO section)
         // https://github.com/Gallopsled/pwntools/blob/ec9dfe108b85ac47983e9a98808fcdbb50cb0cdd/pwnlib/elf/elf.py#L1578
-        private bool HasBindNowFlag(IELF elf)
+        private static bool HasBindNowFlag(IELF elf)
         {
             try
             {
@@ -84,28 +106,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             return false;
-        }
-
-        public override void Analyze(BinaryAnalyzerContext context)
-        {
-            IELF elf = context.ELFBinary().ELF;
-
-            if (HasBindNowFlag(elf))
-            {
-                // Pass
-                context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                    nameof(RuleResources.BA3011_Pass),
-                    context.TargetUri.GetFileName()));
-            }
-            else
-            {
-                // Fail
-                context.Logger.Log(this,
-                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                    nameof(RuleResources.BA3011_Error),
-                    context.TargetUri.GetFileName()));
-            }
         }
     }
 }
