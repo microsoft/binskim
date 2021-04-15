@@ -8,6 +8,13 @@ jobs:
   steps:
   - checkout: self
     submodules: true
+
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core sdk'
+    inputs:
+      packageType: sdk
+      version: 3.1.408
+
   - task: Bash@3
     displayName: 'Build and Test'
     inputs:
@@ -19,6 +26,13 @@ jobs:
   steps:
   - checkout: self
     submodules: true
+
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core sdk'
+    inputs:
+      packageType: sdk
+      version: 3.1.408
+      
   - task: CmdLine@2
     displayName: 'Build and Test'
     inputs:
