@@ -71,6 +71,7 @@ do
 
     # Immediate binding
     $C_COMPILER empty.c -o $OUTPUT_DIR/$C_COMPILER.immediate_binding -Wl,-z,relro,-z,now
+    $C_COMPILER empty.c -o $OUTPUT_DIR/$C_COMPILER.lazy_binding -Wl,-z,relro,-z,lazy
     $C_COMPILER empty.c -o $OUTPUT_DIR/$C_COMPILER.no_immediate_binding
 done
 

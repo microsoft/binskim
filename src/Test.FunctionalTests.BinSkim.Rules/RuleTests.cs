@@ -1164,6 +1164,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA3011_EnableBindNow_Pass()
+        {
+            this.VerifyPass(new EnableBindNow());
+        }
+
+        [Fact]
+        public void BA3011_EnableBindNow_Fail()
+        {
+            this.VerifyFail(new EnableBindNow());
+        }
+
+        [Fact]
+        public void BA3011_EnableBindNow_NotApplicable()
+        {
+            this.VerifyApplicability(new EnableBindNow(), new HashSet<string>());
+        }
+
+        [Fact]
         public void BA3030_UseCheckedFunctionsWithGCC_Pass()
         {
             this.VerifyPass(new UseCheckedFunctionsWithGcc());

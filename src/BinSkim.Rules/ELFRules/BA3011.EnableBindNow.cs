@@ -15,7 +15,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class EnableBineNow : ELFBinarySkimmerBase
+    public class EnableBindNow : ELFBinarySkimmerBase
     {
         private const uint DF_1_NOW = 0x1;
         private const uint DF_BIND_NOW = 0x8;

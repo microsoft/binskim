@@ -572,8 +572,29 @@
           ]
         },
         {
-          "ruleId": "BA3030",
+          "ruleId": "BA3011",
           "ruleIndex": 24,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "gcc.relocationsro"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.relocationsro",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 25,
           "level": "error",
           "message": {
             "id": "Error",
@@ -1254,6 +1275,28 @@
                 }
               },
               "name": "EnableReadOnlyRelocations"
+            },
+            {
+              "id": "BA3011",
+              "fullDescription": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3011EnableBindNow",
+              "help": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The BIND_NOW flag was present, so '{0}' is protected."
+                },
+                "Error": {
+                  "text": "The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,now' to address this."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableBindNow"
             },
             {
               "id": "BA3030",
