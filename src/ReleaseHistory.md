@@ -5,7 +5,7 @@
 ## **v2.0.0** In progress (probably May/June 2021)
 * BREAKING: Change from self-contained to dotnettool.
 
-## **v1.7.5-prerelease1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.7.5-prerelease1)
+## **v1.7.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.7.5)
 * BUGFIX: Fix import/export config using JSON file. [#349](https://github.com/microsoft/binskim/pull/349)
 * FEATURE: Add compiler report rule BA4001, which is disabled by default. [#350](https://github.com/microsoft/binskim/pull/350)
 * FEATURE: Add support to specific rule documentation in `HelpUri`. [#348](https://github.com/microsoft/binskim/pull/348)
