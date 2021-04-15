@@ -365,8 +365,32 @@
           ]
         },
         {
-          "ruleId": "BA3030",
+          "ruleId": "BA3011",
           "ruleIndex": 15,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
+              "EnableBindNow",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 16,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -390,7 +414,7 @@
         },
         {
           "ruleId": "BA2004",
-          "ruleIndex": 16,
+          "ruleIndex": 17,
           "message": {
             "id": "Error_Managed",
             "arguments": [
@@ -410,28 +434,6 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 17,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
           "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
@@ -453,8 +455,30 @@
           ]
         },
         {
-          "ruleId": "BA2015",
+          "ruleId": "BA2009",
           "ruleIndex": 19,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2015",
+          "ruleIndex": 20,
           "level": "error",
           "message": {
             "id": "Error_NoHighEntropyVA",
@@ -475,7 +499,7 @@
         },
         {
           "ruleId": "BA2016",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -497,7 +521,7 @@
         },
         {
           "ruleId": "BA2018",
-          "ruleIndex": 21,
+          "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -519,28 +543,6 @@
         },
         {
           "ruleId": "BA2019",
-          "ruleIndex": 22,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2021",
           "ruleIndex": 23,
           "kind": "pass",
           "level": "none",
@@ -562,8 +564,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 24,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_AnyCPU_VS2017_NoPrefer32Bit.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Managed_AnyCPU_VS2017_NoPrefer32Bit.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 25,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -995,6 +1019,28 @@
                 }
               },
               "name": "EnableReadOnlyRelocations"
+            },
+            {
+              "id": "BA3011",
+              "fullDescription": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3011EnableBindNow",
+              "help": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The BIND_NOW flag was present, so '{0}' is protected."
+                },
+                "Error": {
+                  "text": "The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,now' to address this."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableBindNow"
             },
             {
               "id": "BA3030",

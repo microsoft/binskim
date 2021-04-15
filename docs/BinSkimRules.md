@@ -96,6 +96,28 @@ The GNU_RELRO segment is missing from this binary, so relocation sections in '{0
 
 ---
 
+## Rule `BA3011.EnableBindNow`
+
+### Description
+
+This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this.
+
+### Messages
+
+#### `Pass`: Pass
+
+The BIND_NOW flag was present, so '{0}' is protected.
+
+#### `Error`: Error
+
+The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,now' to address this.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
 ## Rule `BA3030.UseCheckedFunctionsWithGcc`
 
 ### Description

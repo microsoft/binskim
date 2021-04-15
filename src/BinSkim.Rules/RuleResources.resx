@@ -432,6 +432,15 @@ Modules triggering this check were:
   <data name="BA3010_Pass" xml:space="preserve">
     <value>The GNU_RELRO segment was present, so '{0}' is protected.</value>
   </data>
+  <data name="BA3011_EnableBindNow_Description" xml:space="preserve">
+    <value>This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this.</value>
+  </data>
+  <data name="BA3011_Error" xml:space="preserve">
+    <value>The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,now' to address this.</value>
+  </data>
+  <data name="BA3011_Pass" xml:space="preserve">
+    <value>The BIND_NOW flag was present, so '{0}' is protected.</value>
+  </data>
   <data name="BA3030_Error" xml:space="preserve">
     <value>No checked functions are present/used when compiling '{0}', and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 ('-O2') is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings.</value>
   </data>
