@@ -391,7 +391,7 @@ Modules triggering this check were:
     <value>The following modules were compiled with a toolset that supports /Qspectre but the deprecated /d2guardspecload argument was specified on the command-line instead: {0}</value>
   </data>
   <data name="BA3001_EnablePositionIndependentExecutable_Description" xml:space="preserve">
-    <value>A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.</value>
+    <value>A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.</value>
   </data>
   <data name="BA3001_Error" xml:space="preserve">
     <value>PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc.</value>
@@ -498,5 +498,14 @@ Modules triggering this check were:
   </data>
   <data name="BA4001_ReportCompilerData_Description" xml:space="preserve">
     <value>This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland.</value>
+  </data>
+  <data name="BA2025_EnableShadowStack_Description" xml:space="preserve">
+    <value>Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks.</value>
+  </data>
+  <data name="BA2025_Warning" xml:space="preserve">
+    <value>'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines.</value>
+  </data>
+  <data name="BA2025_Pass" xml:space="preserve">
+    <value>'{0}' enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation.</value>
   </data>
 </root>

@@ -924,7 +924,34 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
+        ///   Looks up a localized string similar to Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks..
+        /// </summary>
+        internal static string BA2025_EnableShadowStack_Description {
+            get {
+                return ResourceManager.GetString("BA2025_EnableShadowStack_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation..
+        /// </summary>
+        internal static string BA2025_Pass {
+            get {
+                return ResourceManager.GetString("BA2025_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines..
+        /// </summary>
+        internal static string BA2025_Warning {
+            get {
+                return ResourceManager.GetString("BA2025_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
         internal static string BA3001_EnablePositionIndependentExecutable_Description {
             get {
@@ -1039,7 +1066,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("BA3010_Error", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to The GNU_RELRO segment was present, so &apos;{0}&apos; is protected..
         /// </summary>
@@ -1048,7 +1075,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("BA3010_Pass", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,now&apos; to enable this..
         /// </summary>
@@ -1057,7 +1084,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("BA3011_EnableBindNow_Description", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to The BIND_NOW flag is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,now&apos; to address this..
         /// </summary>
@@ -1066,9 +1093,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("BA3011_Error", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to The BIND_NOW flag was present, so &apos;{0}&apos; is protected.
+        ///   Looks up a localized string similar to The BIND_NOW flag was present, so &apos;{0}&apos; is protected..
         /// </summary>
         internal static string BA3011_Pass {
             get {
