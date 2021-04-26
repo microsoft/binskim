@@ -22,6 +22,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.MachOBinary
                 this.LoadDylibs = this.MachO.GetCommandsOfType<LoadDylib>();
                 this.EntryPoint = this.MachO.GetCommandsOfType<EntryPoint>();
                 this.SymbolTables = this.MachO.GetCommandsOfType<SymbolTable>();
+                this.LoadWeakDylib = this.MachO.GetCommandsOfType<LoadWeakDylib>();
                 this.ReexportDylibs = this.MachO.GetCommandsOfType<ReexportDylib>();
 
                 this.Valid = true;
@@ -52,6 +53,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.MachOBinary
         public IEnumerable<IdDylib> IdDylibs { get; }
 
         public IEnumerable<LoadDylib> LoadDylibs { get; }
+
+        public IEnumerable<LoadWeakDylib> LoadWeakDylib { get; }
 
         public IEnumerable<ReexportDylib> ReexportDylibs { get; }
 
