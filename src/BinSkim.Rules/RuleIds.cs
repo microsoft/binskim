@@ -48,8 +48,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         // Skipping some check namespace (BA3004-3009) for future checks
         public const string EnableReadOnlyRelocations = "BA3010";
+        public const string EnableBindNow = "BA3011";
 
-        // BA3011 -- saved for a future check.
         // BA3012-3029 -- saved for future non-compiler/language specific checks.
         // Compiler/Language specific checks follow.
         public const string UseCheckedFunctionsWithGcc = "BA3030";

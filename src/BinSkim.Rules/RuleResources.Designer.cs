@@ -1039,13 +1039,40 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("BA3010_Error", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The GNU_RELRO segment was present, so &apos;{0}&apos; is protected..
         /// </summary>
         internal static string BA3010_Pass {
             get {
                 return ResourceManager.GetString("BA3010_Pass", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,now&apos; to enable this..
+        /// </summary>
+        internal static string BA3011_EnableBindNow_Description {
+            get {
+                return ResourceManager.GetString("BA3011_EnableBindNow_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The BIND_NOW flag is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,now&apos; to address this..
+        /// </summary>
+        internal static string BA3011_Error {
+            get {
+                return ResourceManager.GetString("BA3011_Error", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The BIND_NOW flag was present, so &apos;{0}&apos; is protected.
+        /// </summary>
+        internal static string BA3011_Pass {
+            get {
+                return ResourceManager.GetString("BA3011_Pass", resourceCulture);
             }
         }
         
