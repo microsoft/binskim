@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -44,10 +45,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (LogPdbLoadException)
             {
-                if ((!target.PE.IsManaged ||
+                if (target.Pdb == null &&
+                    (!target.PE.IsManaged ||
                       target.PE.IsMixedMode ||
-                      EnforcePdbLoadForManagedAssemblies)
-                        && target.Pdb == null)
+                      EnforcePdbLoadForManagedAssemblies))
                 {
                     LogExceptionLoadingPdb(context, target.PdbParseException);
                     return;
@@ -59,10 +60,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public sealed override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
+            PEBinary peBinary = context.PEBinary();
+            PE portableExecutable = peBinary.PE;
+
+            if (portableExecutable == null)
+            {
+                Debug.Assert(peBinary.Pdb != null);
+                reasonForNotAnalyzing = null;
+                return AnalysisApplicability.ApplicableToSpecifiedTarget;
+            }
+
             AnalysisApplicability result = base.CanAnalyze(context, out reasonForNotAnalyzing);
             if (result != AnalysisApplicability.ApplicableToSpecifiedTarget) { return result; }
 
-            PE portableExecutable = context.PEBinary().PE;
             result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsWixBinary;

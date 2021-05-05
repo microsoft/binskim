@@ -126,7 +126,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.C:
                     case Language.Cxx:
                     {
-                        minCompilerVersion = (target.PE.IsXBox)
+                        minCompilerVersion = (target.PE?.IsXBox == true)
                             ? context.Policy.GetProperty(MinimumToolVersions)[MIN_XBOX_COMPILER_VER]
                             : context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.C)];
                         break;
