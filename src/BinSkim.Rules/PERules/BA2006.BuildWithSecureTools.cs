@@ -206,6 +206,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 AdvancedMitigations advancedMitigations = context.Policy.GetProperty(AdvancedMitigationsEnforced);
                 if (!foundIssue &&
+                    target.PE != null &&
                     (advancedMitigations & AdvancedMitigations.Spectre) == AdvancedMitigations.Spectre)
                 {
                     var machineType = (ExtendedMachine)target.PE.Machine;
