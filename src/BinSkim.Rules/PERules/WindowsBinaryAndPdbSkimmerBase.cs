@@ -60,6 +60,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public sealed override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
+            AnalysisApplicability result = base.CanAnalyze(context, out reasonForNotAnalyzing);
+            if (result != AnalysisApplicability.ApplicableToSpecifiedTarget) { return result; }
+
             PEBinary peBinary = context.PEBinary();
             PE portableExecutable = peBinary.PE;
 
@@ -69,9 +72,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 reasonForNotAnalyzing = null;
                 return AnalysisApplicability.ApplicableToSpecifiedTarget;
             }
-
-            AnalysisApplicability result = base.CanAnalyze(context, out reasonForNotAnalyzing);
-            if (result != AnalysisApplicability.ApplicableToSpecifiedTarget) { return result; }
 
             result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
