@@ -107,6 +107,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             PEBinary target = context.PEBinary();
 
+            // This rule requires both a binary + PDB to analyze.
+            // TODO: generally we emit a message of some kind for every binary
+            // and rule combination. We should do something appropriate here.
+            if (target.PE == null)
+            {
+                return;
+            }
+
             Machine reflectionMachineType = target.PE.Machine;
 
             // The current Machine enum does not have support for Arm64, so translate to our Machine enum
