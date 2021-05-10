@@ -5,5 +5,5 @@ set PRERELEASE_PREVIOUS=
 
 set MAJOR=1
 set MINOR=7
-set PATCH=2
+set PATCH=2.1
 set PRERELEASE=

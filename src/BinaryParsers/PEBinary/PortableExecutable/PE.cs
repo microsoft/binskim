@@ -89,7 +89,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-
         public Exception LoadException { get; set; }
 
         public Uri Uri { get; set; }
@@ -251,7 +250,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-
         /// <summary>
         /// Calculate SHA1 over the file contents
         /// </summary>
@@ -354,7 +352,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-
         /// <summary>
         /// Windows OS file version information
         /// </summary>
@@ -369,7 +366,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 return this.version;
             }
         }
-
 
         public Packer Packer
         {
@@ -451,7 +447,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                         peHeader.BoundImportTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT == 11
                         peHeader.LoadConfigTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG == 10
                         peHeader.CopyrightTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_ARCHITECTURE == 7
-                        peHeader.ExceptionTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_EXCEPTION == 3	
+                        peHeader.ExceptionTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_EXCEPTION == 3
                         peHeader.CorHeaderTableDirectory.RelativeVirtualAddress == 0 && // IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR == 14
                         peHeader.ImportTableDirectory.RelativeVirtualAddress == 0); // IMAGE_DIRECTORY_ENTRY_IMPORT == 1
 
@@ -463,7 +459,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     // If the binary only contains forwarders, we should regard it as not containing code
                     this.isResourceOnly = false;
                 }
-
 
                 return this.isResourceOnly.Value;
 
@@ -575,6 +570,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     }
 
                     case "System.Runtime":
+                    case "System.Private.CoreLib":
                     {
                         return ManagedPlatform.DotNetCore;
                     }
@@ -605,7 +601,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 {
                     return (bool)this.isKernelMode;
                 }
-
 
                 this.isKernelMode = false;
 
