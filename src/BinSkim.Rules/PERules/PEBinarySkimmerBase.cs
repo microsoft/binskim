@@ -8,14 +8,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
+            reasonForNotAnalyzing = MetadataConditions.ImageIsNotPE;
+
             if (context.IsPE())
             {
                 PEBinary target = context.PEBinary();
-                return this.CanAnalyzePE(target, context.Policy, out reasonForNotAnalyzing);
+                return target.PE != null
+                    ? this.CanAnalyzePE(target, context.Policy, out reasonForNotAnalyzing)
+                    : AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
             else
             {
-                reasonForNotAnalyzing = MetadataConditions.ImageIsNotPE;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
         }

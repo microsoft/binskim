@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             PE pe = context.PEBinary().PE;
 
-            if (pe.IsManaged && !pe.IsMixedMode)
+            if (pe != null && pe.IsManaged && !pe.IsMixedMode)
             {
                 AnalyzeManagedAssemblyAndPdb(context);
                 return;
