@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                     case DW_FORM.Block2:
                     {
-                        int numBytes = BitConverter.ToInt32(infoData.GetRange(index, 2).ToArray(), 0);
+                        int numBytes = BitConverter.ToInt16(infoData.GetRange(index, 2).ToArray(), 0);
                         index += 2;
                         output.AddRange(infoData.GetRange(index, numBytes));
                         index += numBytes;
