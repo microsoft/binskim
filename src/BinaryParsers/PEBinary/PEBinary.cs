@@ -22,6 +22,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             string localSymbolDirectories = null,
             bool tracePdbLoad = false) : base(uri)
         {
+            // We actively verify our ability to parse this binary as a PE.
+            this.PE = new PE(this.TargetUri.LocalPath);
+
             // We defer attempting to load PDBs, as this won't be necessary
             // for every binary we analyze, depending on the binary itself
             // (managed vs. native) or the current scan rules configuration.
@@ -36,14 +39,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
 
             this.symbolPath = symbolPath;
-            this.tracePdbLoad = tracePdbLoad;
-            this.localSymbolDirectories = localSymbolDirectories;
-
-            // We actively verify our ability to parse this binary as a PE.
-            this.PE = new PE(this.TargetUri.LocalPath);
             this.Valid = this.PE.IsPEFile;
+            this.tracePdbLoad = tracePdbLoad;
             this.LoadException = this.PE.LoadException;
-
+            this.localSymbolDirectories = localSymbolDirectories;
         }
 
         private Pdb LoadPdb()
