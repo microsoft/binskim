@@ -326,30 +326,33 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 {
                     Dictionary<DwarfAttribute, DwarfAttributeValue> attributes = symbol.Attributes as Dictionary<DwarfAttribute, DwarfAttributeValue>;
 
-                    foreach (DwarfAttributeValue value in attributes.Values)
+                    if (attributes != null)
                     {
-                        if (value.Type == DwarfAttributeValueType.Reference)
+                        foreach (DwarfAttributeValue value in attributes.Values)
                         {
-                            if (symbolsByOffset.TryGetValue((int)value.Address, out DwarfSymbol reference))
+                            if (value.Type == DwarfAttributeValueType.Reference)
                             {
-                                value.Type = DwarfAttributeValueType.ResolvedReference;
-                                value.Value = reference;
+                                if (symbolsByOffset.TryGetValue((int)value.Address, out DwarfSymbol reference))
+                                {
+                                    value.Type = DwarfAttributeValueType.ResolvedReference;
+                                    value.Value = reference;
+                                }
+                            }
+                            else if (value.Type == DwarfAttributeValueType.Address)
+                            {
+                                value.Value = addressNormalizer(value.Address);
                             }
                         }
-                        else if (value.Type == DwarfAttributeValueType.Address)
-                        {
-                            value.Value = addressNormalizer(value.Address);
-                        }
-                    }
 
-                    if ((symbol.Tag == DwarfTag.PointerType && !attributes.ContainsKey(DwarfAttribute.Type))
-                        || (symbol.Tag == DwarfTag.Typedef && !attributes.ContainsKey(DwarfAttribute.Type)))
-                    {
-                        attributes.Add(DwarfAttribute.Type, new DwarfAttributeValue()
+                        if ((symbol.Tag == DwarfTag.PointerType && !attributes.ContainsKey(DwarfAttribute.Type))
+                            || (symbol.Tag == DwarfTag.Typedef && !attributes.ContainsKey(DwarfAttribute.Type)))
                         {
-                            Type = DwarfAttributeValueType.ResolvedReference,
-                            Value = voidSymbol,
-                        });
+                            attributes.Add(DwarfAttribute.Type, new DwarfAttributeValue()
+                            {
+                                Type = DwarfAttributeValueType.ResolvedReference,
+                                Value = voidSymbol,
+                            });
+                        }
                     }
                 }
 
@@ -358,16 +361,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 {
                     Dictionary<DwarfAttribute, DwarfAttributeValue> attributes = symbol.Attributes as Dictionary<DwarfAttribute, DwarfAttributeValue>;
 
-                    if (attributes.TryGetValue(DwarfAttribute.Specification, out DwarfAttributeValue specificationValue) && specificationValue.Type == DwarfAttributeValueType.ResolvedReference)
+                    if (attributes != null)
                     {
-                        DwarfSymbol reference = specificationValue.Reference;
-                        Dictionary<DwarfAttribute, DwarfAttributeValue> referenceAttributes = reference.Attributes as Dictionary<DwarfAttribute, DwarfAttributeValue>;
-
-                        foreach (KeyValuePair<DwarfAttribute, DwarfAttributeValue> kvp in attributes)
+                        if (attributes.TryGetValue(DwarfAttribute.Specification, out DwarfAttributeValue specificationValue) && specificationValue.Type == DwarfAttributeValueType.ResolvedReference)
                         {
-                            if (kvp.Key != DwarfAttribute.Specification)
+                            DwarfSymbol reference = specificationValue.Reference;
+                            Dictionary<DwarfAttribute, DwarfAttributeValue> referenceAttributes = reference.Attributes as Dictionary<DwarfAttribute, DwarfAttributeValue>;
+
+                            if (referenceAttributes != null)
                             {
-                                referenceAttributes[kvp.Key] = kvp.Value;
+                                foreach (KeyValuePair<DwarfAttribute, DwarfAttributeValue> kvp in attributes)
+                                {
+                                    if (kvp.Key != DwarfAttribute.Specification)
+                                    {
+                                        referenceAttributes[kvp.Key] = kvp.Value;
+                                    }
+                                }
                             }
                         }
                     }

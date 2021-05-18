@@ -177,11 +177,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         private static List<DwarfFileInformation> ReadData(DwarfMemoryReader debugLine, NormalizeAddressDelegate addressNormalizer)
         {
             // Read header
-            int beginPosition = debugLine.Position;
             ulong length = debugLine.ReadLength(out bool is64bit);
             int endPosition = debugLine.Position + (int)length;
-            ushort version = debugLine.ReadUshort();
-            int headerLength = debugLine.ReadOffset(is64bit);
+            debugLine.ReadUshort(); // version
+            debugLine.ReadOffset(is64bit); // headerLength
             byte minimumInstructionLength = debugLine.ReadByte();
             bool defaultIsStatement = debugLine.ReadByte() != 0;
             sbyte lineBase = (sbyte)debugLine.ReadByte();
@@ -372,14 +371,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             uint lastModification = debugLine.LEB128();
             uint length = debugLine.LEB128();
             string directory = (directoryIndex > 0 && directoryIndex <= directories.Count - 1) ? directories[directoryIndex - 1] : null;
-            string path = name;
+            string path;
 
             try
             {
-                path = string.IsNullOrEmpty(directory) || Path.IsPathRooted(path) ? name : Path.Combine(directory, name);
+                path = string.IsNullOrEmpty(directory) || Path.IsPathRooted(name) ? name : Path.Combine(directory, name);
             }
             catch
             {
+                path = name;
             }
 
             return new DwarfFileInformation()

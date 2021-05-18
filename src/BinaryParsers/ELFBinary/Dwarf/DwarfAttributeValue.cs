@@ -240,31 +240,45 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <returns><c>true</c> if values are equal.</returns>
         public static bool operator ==(DwarfAttributeValue value1, DwarfAttributeValue value2)
         {
-            if (value1?.Type != value2?.Type)
+            bool isValue1Null = object.ReferenceEquals(value1, null);
+            bool isValue2Null = object.ReferenceEquals(value2, null);
+
+            if (isValue1Null && isValue2Null)
+            {
+                return true;
+            }
+            else if (isValue1Null != isValue2Null)
             {
                 return false;
             }
-
-            switch (value1.Type)
+            else
             {
-                case DwarfAttributeValueType.Address:
-                case DwarfAttributeValueType.Constant:
-                case DwarfAttributeValueType.Reference:
-                case DwarfAttributeValueType.SecOffset:
-                    return (ulong)value1.Value == (ulong)value2.Value;
+                if (value1.Type != value2.Type)
+                {
+                    return false;
+                }
 
-                case DwarfAttributeValueType.Block:
-                case DwarfAttributeValueType.ExpressionLocation:
-                    return Enumerable.SequenceEqual((byte[])value1.Value, (byte[])value2.Value);
+                switch (value1.Type)
+                {
+                    case DwarfAttributeValueType.Address:
+                    case DwarfAttributeValueType.Constant:
+                    case DwarfAttributeValueType.Reference:
+                    case DwarfAttributeValueType.SecOffset:
+                        return (ulong)value1.Value == (ulong)value2.Value;
 
-                case DwarfAttributeValueType.Flag:
-                    return (bool)value1.Value == (bool)value2.Value;
+                    case DwarfAttributeValueType.Block:
+                    case DwarfAttributeValueType.ExpressionLocation:
+                        return Enumerable.SequenceEqual((byte[])value1.Value, (byte[])value2.Value);
 
-                case DwarfAttributeValueType.String:
-                    return value1.Value.ToString() == value2.Value.ToString();
+                    case DwarfAttributeValueType.Flag:
+                        return (bool)value1.Value == (bool)value2.Value;
+
+                    case DwarfAttributeValueType.String:
+                        return value1.Value.ToString() == value2.Value.ToString();
+                }
+
+                return true;
             }
-
-            return true;
         }
 
         /// <summary>

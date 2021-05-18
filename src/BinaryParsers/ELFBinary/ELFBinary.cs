@@ -294,7 +294,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 .FirstOrDefault(s => s.Tag == DwarfTag.SkeletonUnit || s.Tag == DwarfTag.CompileUnit);
             KeyValuePair<DwarfAttribute, DwarfAttributeValue>? dwo = skeletonOrCompileSymbol?.Attributes?
                 .FirstOrDefault(a => a.Key == DwarfAttribute.DwoName || a.Key == DwarfAttribute.GnuDwoName);
-            string dwoName = dwo?.Value?.String ?? string.Empty;
+            string dwoName = (dwo == null || !dwo.HasValue) ? string.Empty : dwo.Value.Value?.String;
             if (!string.IsNullOrWhiteSpace(dwoName))
             {
                 var directory = new Uri(TargetUri, ".");
