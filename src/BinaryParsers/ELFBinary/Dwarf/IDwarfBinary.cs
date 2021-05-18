@@ -79,6 +79,5 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         /// <param name="address">Virtual address that points where something should be loaded.</param>
         ulong NormalizeAddress(ulong address);
-
     }
 }

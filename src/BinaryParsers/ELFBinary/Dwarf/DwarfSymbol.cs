@@ -42,7 +42,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         {
             get
             {
-
                 if (Attributes.TryGetValue(DwarfAttribute.Name, out DwarfAttributeValue nameValue))
                 {
                     return nameValue.String;
@@ -89,7 +88,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <returns>Attribute value if available; default value otherwise</returns>
         public ulong GetConstantAttribute(DwarfAttribute attribute, ulong defaultValue = 0)
         {
-
             if (Attributes.TryGetValue(attribute, out DwarfAttributeValue value))
             {
                 return value.Constant;

@@ -262,6 +262,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                     state.AddCurrentLineInfo();
                                     state.Reset(files.FirstOrDefault());
                                     break;
+
                                 case DwarfLineNumberExtendedOpcode.SetAddress:
                                 {
                                     state.Address = debugLine.ReadUint();
@@ -272,19 +273,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                     state.OperationIndex = 0;
                                 }
                                 break;
+
                                 case DwarfLineNumberExtendedOpcode.DefineFile:
                                     state.File = ReadFile(debugLine, directories);
                                     files.Add(state.File);
                                     break;
+
                                 case DwarfLineNumberExtendedOpcode.SetDiscriminator:
                                     state.Discriminator = debugLine.LEB128();
                                     break;
+
                                 default:
                                     break;
                             }
                             debugLine.Position = newPosition;
                         }
                         break;
+
                         case DwarfLineNumberStandardOpcode.Copy:
                             state.AddCurrentLineInfo();
                             state.IsBasicBlock = false;
@@ -292,40 +297,52 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             state.IsEpilogueEnd = false;
                             state.Discriminator = 0;
                             break;
+
                         case DwarfLineNumberStandardOpcode.AdvancePc:
                             state.AdvanceAddress((int)debugLine.LEB128());
                             break;
+
                         case DwarfLineNumberStandardOpcode.AdvanceLine:
                             state.Line += debugLine.SLEB128();
                             break;
+
                         case DwarfLineNumberStandardOpcode.SetFile:
                             state.File = files[(int)debugLine.LEB128() - 1];
                             break;
+
                         case DwarfLineNumberStandardOpcode.SetColumn:
                             state.Column = debugLine.LEB128();
                             break;
+
                         case DwarfLineNumberStandardOpcode.NegateStmt:
                             state.IsStatement = !state.IsStatement;
                             break;
+
                         case DwarfLineNumberStandardOpcode.SetBasicBlock:
                             state.IsBasicBlock = true;
                             break;
+
                         case DwarfLineNumberStandardOpcode.ConstAddPc:
                             state.AdvanceAddress((255 - operationCodeBase) / lineRange);
                             break;
+
                         case DwarfLineNumberStandardOpcode.FixedAdvancePc:
                             state.Address += debugLine.ReadUshort();
                             state.OperationIndex = 0;
                             break;
+
                         case DwarfLineNumberStandardOpcode.SetPrologueEnd:
                             state.IsPrologueEnd = true;
                             break;
+
                         case DwarfLineNumberStandardOpcode.SetEpilogueBegin:
                             state.IsEpilogueEnd = true;
                             break;
+
                         case DwarfLineNumberStandardOpcode.SetIsa:
                             state.Isa = debugLine.LEB128();
                             break;
+
                         default:
                             throw new Exception($"Unsupported DwarfLineNumberStandardOpcode: {(DwarfLineNumberStandardOpcode)operationCode}");
                     }

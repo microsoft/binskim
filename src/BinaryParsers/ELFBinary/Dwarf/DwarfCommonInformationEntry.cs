@@ -370,6 +370,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         baseAddress += input.PcRelativeAddress;
                     }
                     break;
+
                 case DwarfExceptionHandlingEncoding.TextRelative:
                     signExtendValue = true;
                     if (input.TextAddress != ulong.MaxValue)
@@ -377,6 +378,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         baseAddress = input.TextAddress;
                     }
                     break;
+
                 case DwarfExceptionHandlingEncoding.DataRelative:
                     signExtendValue = true;
                     if (input.DataAddress != ulong.MaxValue)
@@ -384,9 +386,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         baseAddress = input.DataAddress;
                     }
                     break;
+
                 case DwarfExceptionHandlingEncoding.FunctionRelative:
                     signExtendValue = true;
                     break;
+
                 case DwarfExceptionHandlingEncoding.Aligned:
                 {
                     int alignment = data.Position % input.DefaultAddressSize;
@@ -407,25 +411,32 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 case DwarfExceptionHandlingEncoding.AbsolutePointer:
                     address = data.ReadUlong(input.DefaultAddressSize);
                     break;
+
                 case DwarfExceptionHandlingEncoding.UnsignedData2:
                     address = data.ReadUshort();
                     break;
+
                 case DwarfExceptionHandlingEncoding.UnsignedData4:
                     address = data.ReadUint();
                     break;
+
                 case DwarfExceptionHandlingEncoding.SignedData8:
                 case DwarfExceptionHandlingEncoding.UnsignedData8:
                     address = data.ReadUlong();
                     break;
+
                 case DwarfExceptionHandlingEncoding.Uleb128:
                     address = data.LEB128();
                     break;
+
                 case DwarfExceptionHandlingEncoding.Sleb128:
                     address = data.SLEB128();
                     break;
+
                 case DwarfExceptionHandlingEncoding.SignedData2:
                     address = (ulong)(long)(short)data.ReadUshort();
                     break;
+
                 case DwarfExceptionHandlingEncoding.SignedData4:
                     address = (ulong)(long)(int)data.ReadUint();
                     break;

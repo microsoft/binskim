@@ -252,11 +252,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 case DwarfAttributeValueType.Reference:
                 case DwarfAttributeValueType.SecOffset:
                     return (ulong)value1.Value == (ulong)value2.Value;
+
                 case DwarfAttributeValueType.Block:
                 case DwarfAttributeValueType.ExpressionLocation:
                     return Enumerable.SequenceEqual((byte[])value1.Value, (byte[])value2.Value);
+
                 case DwarfAttributeValueType.Flag:
                     return (bool)value1.Value == (bool)value2.Value;
+
                 case DwarfAttributeValueType.String:
                     return value1.Value.ToString() == value2.Value.ToString();
             }

@@ -11,7 +11,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     /// </summary>
     public class DwarfCompilationUnit
     {
-
         /// <summary>
         /// The dictionary of symbols located by offset in the debug data stream.
         /// </summary>
@@ -117,95 +116,118 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             attributeValue.Type = DwarfAttributeValueType.Address;
                             attributeValue.Value = debugData.ReadUlong(addressSize);
                             break;
+
                         case DwarfFormat.Block:
                             attributeValue.Type = DwarfAttributeValueType.Block;
                             attributeValue.Value = debugData.ReadBlock(debugData.LEB128());
                             break;
+
                         case DwarfFormat.Block1:
                             attributeValue.Type = DwarfAttributeValueType.Block;
                             attributeValue.Value = debugData.ReadBlock(debugData.ReadByte());
                             break;
+
                         case DwarfFormat.Block2:
                             attributeValue.Type = DwarfAttributeValueType.Block;
                             attributeValue.Value = debugData.ReadBlock(debugData.ReadUshort());
                             break;
+
                         case DwarfFormat.Block4:
                             attributeValue.Type = DwarfAttributeValueType.Block;
                             attributeValue.Value = debugData.ReadBlock(debugData.ReadUint());
                             break;
+
                         case DwarfFormat.Data1:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
                             attributeValue.Value = (ulong)debugData.ReadByte();
                             break;
+
                         case DwarfFormat.Data2:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
                             attributeValue.Value = (ulong)debugData.ReadUshort();
                             break;
+
                         case DwarfFormat.Data4:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
                             attributeValue.Value = (ulong)debugData.ReadUint();
                             break;
+
                         case DwarfFormat.Data8:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
                             attributeValue.Value = (ulong)debugData.ReadUlong();
                             break;
+
                         case DwarfFormat.SData:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
                             attributeValue.Value = (ulong)debugData.SLEB128();
                             break;
+
                         case DwarfFormat.UData:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
                             attributeValue.Value = (ulong)debugData.LEB128();
                             break;
+
                         case DwarfFormat.String:
                             attributeValue.Type = DwarfAttributeValueType.String;
                             attributeValue.Value = debugData.ReadString();
                             break;
+
                         case DwarfFormat.Strp:
                             attributeValue.Type = DwarfAttributeValueType.String;
                             int offsetStrp = debugData.ReadOffset(is64bit);
                             attributeValue.Value = debugStrings.ReadString(offsetStrp);
                             break;
+
                         case DwarfFormat.Flag:
                             attributeValue.Type = DwarfAttributeValueType.Flag;
                             attributeValue.Value = debugData.ReadByte() != 0;
                             break;
+
                         case DwarfFormat.FlagPresent:
                             attributeValue.Type = DwarfAttributeValueType.Flag;
                             attributeValue.Value = true;
                             break;
+
                         case DwarfFormat.Ref1:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
                             attributeValue.Value = (ulong)debugData.ReadByte() + (ulong)beginPosition;
                             break;
+
                         case DwarfFormat.Ref2:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
                             attributeValue.Value = (ulong)debugData.ReadUshort() + (ulong)beginPosition;
                             break;
+
                         case DwarfFormat.Ref4:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
                             attributeValue.Value = (ulong)debugData.ReadUint() + (ulong)beginPosition;
                             break;
+
                         case DwarfFormat.Ref8:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
                             attributeValue.Value = (ulong)debugData.ReadUlong() + (ulong)beginPosition;
                             break;
+
                         case DwarfFormat.RefUData:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
                             attributeValue.Value = (ulong)debugData.LEB128() + (ulong)beginPosition;
                             break;
+
                         case DwarfFormat.RefAddr:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
                             attributeValue.Value = (ulong)debugData.ReadOffset(is64bit);
                             break;
+
                         case DwarfFormat.RefSig8:
                             attributeValue.Type = DwarfAttributeValueType.Invalid;
                             debugData.Position += 8;
                             break;
+
                         case DwarfFormat.ExpressionLocation:
                             attributeValue.Type = DwarfAttributeValueType.ExpressionLocation;
                             attributeValue.Value = debugData.ReadBlock(debugData.LEB128());
                             break;
+
                         case DwarfFormat.SecOffset:
                             attributeValue.Type = DwarfAttributeValueType.SecOffset;
                             attributeValue.Value = (ulong)debugData.ReadOffset(is64bit);
@@ -213,6 +235,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.ImplicitConst:
                             break;
+
                         case DwarfFormat.Strx:
                         case DwarfFormat.GNUStrIndex:
                             attributeValue.Type = DwarfAttributeValueType.String;
@@ -223,10 +246,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             attributeValue.Type = DwarfAttributeValueType.String;
                             attributeValue.Value = (ulong)debugData.LEB128() + (ulong)beginPosition;
                             break;
+
                         case DwarfFormat.Indirect:
                             break;
+
                         case DwarfFormat.GNUAddrIndex:
                             break;
+
                         default:
                             break;
                     }
@@ -304,7 +330,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     {
                         if (value.Type == DwarfAttributeValueType.Reference)
                         {
-
                             if (symbolsByOffset.TryGetValue((int)value.Address, out DwarfSymbol reference))
                             {
                                 value.Type = DwarfAttributeValueType.ResolvedReference;
@@ -428,7 +453,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// <param name="findCode">The code to be found.</param>
             public DataDescription GetDebugDataDescription(uint findCode)
             {
-
                 if (readDescriptions.TryGetValue(findCode, out DataDescription result))
                 {
                     return result;
