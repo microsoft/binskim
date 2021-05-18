@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     /// <param name="address">Virtual address that points where something should be loaded.</param>
     public delegate ulong NormalizeAddressDelegate(ulong address);
 
-    public class DwarfSymbolProvider
+    public static class DwarfSymbolProvider
     {
         /// <summary>
         /// Parses the compilation units.
