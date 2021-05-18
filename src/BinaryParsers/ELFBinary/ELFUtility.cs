@@ -8,8 +8,6 @@ using System.Linq;
 using ELFSharp.ELF;
 using ELFSharp.ELF.Sections;
 
-using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
-
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public static class ELFUtility
@@ -63,28 +61,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 return new ELFCompiler[] { new ELFCompiler(string.Empty) };
             }
-        }
-
-        internal static void GetDebugInfo(IELF elf, out List<byte> debugStr, out List<Abbreviation> abbreviations, out List<CompilationUnit> compilationUnits)
-        {
-            debugStr = default;
-            abbreviations = default;
-            compilationUnits = default;
-
-            ISection section = elf.Sections.FirstOrDefault(s => s.Name == ".debug_str");
-            if (section == null)
-            {
-                return;
-            }
-            debugStr = section.GetContents().ToList();
-
-            abbreviations = Abbreviation.Extract(elf);
-            if (abbreviations == null)
-            {
-                return;
-            }
-
-            compilationUnits = CompilationUnit.Extract(elf, abbreviations);
         }
 
         /// <summary>

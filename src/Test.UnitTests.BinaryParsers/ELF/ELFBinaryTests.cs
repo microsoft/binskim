@@ -7,6 +7,8 @@ using System.Reflection;
 
 using FluentAssertions;
 
+using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
+
 using Xunit;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
@@ -33,7 +35,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
             using var binary = new ELFBinary(new Uri(fileName));
             binary.GetDwarfVersion().Should().Be(4);
             binary.GetDwarfCompilerCommand().Should().Contain("O2");
-            binary.GetLanguage().Should().Be("C99");
+            binary.GetLanguage().Should().Be(DwarfLanguage.C99);
         }
 
         [Fact]
@@ -44,7 +46,47 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
             using var binary = new ELFBinary(new Uri(fileName));
             binary.GetDwarfVersion().Should().Be(5);
             binary.GetDwarfCompilerCommand().Should().Contain("O2");
-            binary.GetLanguage().Should().Be("C11");
+            binary.GetLanguage().Should().Be(DwarfLanguage.C11);
+        }
+
+        [Fact]
+        public void ValidateDwarfV4_WithO2_Split_DebugFileExists()
+        {
+            // dwotest.cpp compiled using: gcc -Wall -O2 -g -gdwarf-4 dwotest.cpp -gsplit-dwarf -o dwotest.gcc.4.o
+            string fileName = Path.Combine(TestData, "Dwarf/DwarfSplitV4/dwotest.gcc.4.o");
+            using var binary = new ELFBinary(new Uri(fileName));
+            binary.GetDwarfVersion().Should().Be(4);
+            binary.GetLanguage().Should().Be(DwarfLanguage.CPlusPlus);
+        }
+
+        [Fact]
+        public void ValidateDwarfV5_WithO2_Split_DebugFileExists()
+        {
+            // dwotest.cpp compiled using: gcc -Wall -O2 -g -gdwarf-5 dwotest.cpp -gsplit-dwarf -o dwotest.gcc.5.o
+            string fileName = Path.Combine(TestData, "Dwarf/DwarfSplitV5/dwotest.gcc.5.o");
+            using var binary = new ELFBinary(new Uri(fileName));
+            binary.GetDwarfVersion().Should().Be(5);
+            binary.GetLanguage().Should().Be(DwarfLanguage.CPlusPlus14);
+        }
+
+        [Fact]
+        public void ValidateDwarfV4_WithO2_Split_DebugFileMissing()
+        {
+            // dwotest.cpp compiled using: gcc -Wall -O2 -g -gdwarf-4 dwotest.cpp -gsplit-dwarf -o dwotest.gcc.4.o
+            string fileName = Path.Combine(TestData, "Dwarf/DwarfSplitV4DebugFileMissing/dwotest.gcc.4.o");
+            using var binary = new ELFBinary(new Uri(fileName));
+            binary.GetDwarfVersion().Should().Be(4);
+            binary.GetLanguage().Should().Be(DwarfLanguage.Unknown); //missing dwo file should not cause exception
+        }
+
+        [Fact]
+        public void ValidateDwarfV5_WithO2_Split_DebugFileMissing()
+        {
+            // dwotest.cpp compiled using: gcc -Wall -O2 -g -gdwarf-5 dwotest.cpp -gsplit-dwarf -o dwotest.gcc.5.o
+            string fileName = Path.Combine(TestData, "Dwarf/DwarfSplitV5DebugFileMissing/dwotest.gcc.5.o");
+            using var binary = new ELFBinary(new Uri(fileName));
+            binary.GetDwarfVersion().Should().Be(5);
+            binary.GetLanguage().Should().Be(DwarfLanguage.Unknown); //missing dwo file should not cause exception
         }
     }
 }
