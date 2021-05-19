@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // Check that it is an executable SO instead of a normal shared library
                 // Looking for a program header segment seems to work well here.
-                if (elf.Segments.Where(seg => seg.Type == SegmentType.ProgramHeader).Any())
+                if (elf.Segments.Any(seg => seg.Type == SegmentType.ProgramHeader))
                 {
                     // PIE enabled on executable '{0}'.
                     context.Logger.Log(this,

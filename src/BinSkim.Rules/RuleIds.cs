@@ -45,6 +45,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public const string DoNotMarkStackAsExecutable = "BA3002";
         public const string EnableStackProtector = "BA3003";
+        public const string GenerateRequiredSymbolFormat = "BA3004";
 
         // Skipping some check namespace (BA3004-3009) for future checks
         public const string EnableReadOnlyRelocations = "BA3010";
