@@ -1050,6 +1050,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is using debugging dwarf version &apos;{1}&apos;. The dwarf version 5 contains more information and should be used. To enable the debugging version 5 use &apos;-gdwarf-5&apos;..
+        /// </summary>
+        internal static string BA3004_Error {
+            get {
+                return ResourceManager.GetString("BA3004_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags &apos;-gdwarf-5&apos; to enable this..
+        /// </summary>
+        internal static string BA3004_GenerateRequiredSymbolFormat_Description {
+            get {
+                return ResourceManager.GetString("BA3004_GenerateRequiredSymbolFormat_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The version of the debugging dwarf format is &apos;{0}&apos; for the file &apos;{1}&apos;.
+        /// </summary>
+        internal static string BA3004_Pass {
+            get {
+                return ResourceManager.GetString("BA3004_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
         /// </summary>
         internal static string BA3010_EnableReadOnlyRelocations_Description {

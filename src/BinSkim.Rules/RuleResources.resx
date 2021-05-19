@@ -508,4 +508,13 @@ Modules triggering this check were:
   <data name="BA2025_Pass" xml:space="preserve">
     <value>'{0}' enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation.</value>
   </data>
+  <data name="BA3004_Error" xml:space="preserve">
+    <value>'{0}' is using debugging dwarf version '{1}'. The dwarf version 5 contains more information and should be used. To enable the debugging version 5 use '-gdwarf-5'.</value>
+  </data>
+  <data name="BA3004_Pass" xml:space="preserve">
+    <value>The version of the debugging dwarf format is '{0}' for the file '{1}'</value>
+  </data>
+  <data name="BA3004_GenerateRequiredSymbolFormat_Description" xml:space="preserve">
+    <value>This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this.</value>
+  </data>
 </root>

@@ -38,26 +38,24 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <returns>List of compiler tools from the .comment section</returns>
         internal static ELFCompiler[] GetELFCompilers(IELF elf)
         {
-            ISection commentSection = elf.Sections.Where(s => s.Name == ".comment").FirstOrDefault();
-            if (commentSection != null)
+            ISection commentSection = elf.Sections.FirstOrDefault(s => s.Name == ".comment");
+            if (commentSection == null)
             {
-                try
-                {
-                    string[] commentData = NullTermAsciiToStrings(commentSection.GetContents());
-                    var compilers = new ELFCompiler[commentData.Length];
-                    for (int i = 0; i < commentData.Length; i++)
-                    {
-                        compilers[i] = new ELFCompiler(commentData[i]);
-                    }
-                    return compilers;
-                }
-                // Catch cases when the .comment section is not formatted the way we expect it to be.
-                catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
-                {
-                    return new ELFCompiler[] { new ELFCompiler(string.Empty) };
-                }
+                return new ELFCompiler[] { new ELFCompiler(string.Empty) };
             }
-            else
+
+            try
+            {
+                string[] commentData = NullTermAsciiToStrings(commentSection.GetContents());
+                var compilers = new ELFCompiler[commentData.Length];
+                for (int i = 0; i < commentData.Length; i++)
+                {
+                    compilers[i] = new ELFCompiler(commentData[i]);
+                }
+                return compilers;
+            }
+            // Catch cases when the .comment section is not formatted the way we expect it to be.
+            catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
             {
                 return new ELFCompiler[] { new ELFCompiler(string.Empty) };
             }
@@ -75,6 +73,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 throw new ArgumentNullException(nameof(data));
             }
+
             if (data.Length == 0)
             {
                 throw new ArgumentException("Data passed to NullTermAsciiToStrings() must be a list of null terminated ascii strings, but the parameter was empty.", nameof(data));
@@ -90,7 +89,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 {
                     throw new ArgumentException("Data passed to NullTermAsciiToStrings() must be a list of null terminated ascii strings. At least one string was not null-terminated.", nameof(data));
                 }
-                strings.Add(System.Text.Encoding.ASCII.GetString(data, curr_start, (curr_end - curr_start)).TrimEnd((char)0));
+                strings.Add(System.Text.Encoding.ASCII.GetString(data, curr_start, curr_end - curr_start).TrimEnd((char)0));
                 curr_start = curr_end + 1;
             }
             return strings.ToArray();
