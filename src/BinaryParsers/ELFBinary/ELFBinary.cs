@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                 foreach (Segment<ulong> segment in ELF.Segments)
                 {
-                    if (segment.Type == ELFSharp.ELF.Segments.SegmentType.ProgramHeader)
+                    if (segment.Type == SegmentType.ProgramHeader)
                     {
                         CodeSegmentOffset = segment.Address - (ulong)segment.Offset;
                         break;
@@ -217,12 +217,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// Gets or sets the LineNumberPrograms.
         /// </summary>
-        public DwarfLineNumberProgram[] LineNumberPrograms { get; set; }
+        public IReadOnlyList<DwarfLineNumberProgram> LineNumberPrograms { get; set; }
 
         /// <summary>
         /// Gets or sets the CommonInformationEntries.
         /// </summary>
-        public DwarfCommonInformationEntry[] CommonInformationEntries { get; set; }
+        public IReadOnlyList<DwarfCommonInformationEntry> CommonInformationEntries { get; set; }
 
         /// <summary>
         /// Gets the Compilers.

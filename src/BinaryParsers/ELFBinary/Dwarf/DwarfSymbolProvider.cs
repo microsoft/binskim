@@ -22,10 +22,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
         internal static List<DwarfCompilationUnit> ParseCompilationUnits(ELFBinary elfBinary, byte[] debugData, byte[] debugDataDescription, byte[] debugStrings, NormalizeAddressDelegate addressNormalizer)
         {
-            using DwarfMemoryReader debugDataReader = new DwarfMemoryReader(debugData);
-            using DwarfMemoryReader debugDataDescriptionReader = new DwarfMemoryReader(debugDataDescription);
-            using DwarfMemoryReader debugStringsReader = new DwarfMemoryReader(debugStrings);
-            List<DwarfCompilationUnit> compilationUnits = new List<DwarfCompilationUnit>();
+            using var debugDataReader = new DwarfMemoryReader(debugData);
+            using var debugDataDescriptionReader = new DwarfMemoryReader(debugDataDescription);
+            using var debugStringsReader = new DwarfMemoryReader(debugStrings);
+            var compilationUnits = new List<DwarfCompilationUnit>();
 
             if (!debugDataReader.IsEnd)
             {
@@ -42,19 +42,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         /// <param name="debugLine">The debug line.</param>
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
-        internal static DwarfLineNumberProgram[] ParseLineNumberPrograms(byte[] debugLine, NormalizeAddressDelegate addressNormalizer)
+        internal static List<DwarfLineNumberProgram> ParseLineNumberPrograms(byte[] debugLine, NormalizeAddressDelegate addressNormalizer)
         {
-            using DwarfMemoryReader debugLineReader = new DwarfMemoryReader(debugLine);
-            List<DwarfLineNumberProgram> programs = new List<DwarfLineNumberProgram>();
+            using var debugLineReader = new DwarfMemoryReader(debugLine);
+            var programs = new List<DwarfLineNumberProgram>();
 
             while (!debugLineReader.IsEnd)
             {
-                DwarfLineNumberProgram program = new DwarfLineNumberProgram(debugLineReader, addressNormalizer);
+                var program = new DwarfLineNumberProgram(debugLineReader, addressNormalizer);
 
                 programs.Add(program);
             }
 
-            return programs.ToArray();
+            return programs;
         }
 
         /// <summary>
@@ -63,21 +63,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="debugFrame">The debug frame.</param>
         /// <param name="ehFrame">The exception handling frames.</param>
         /// <param name="input">The input data for parsing configuration.</param>
-        internal static DwarfCommonInformationEntry[] ParseCommonInformationEntries(byte[] debugFrame, byte[] ehFrame, DwarfExceptionHandlingFrameParsingInput input)
+        internal static List<DwarfCommonInformationEntry> ParseCommonInformationEntries(byte[] debugFrame, byte[] ehFrame, DwarfExceptionHandlingFrameParsingInput input)
         {
-            List<DwarfCommonInformationEntry> entries = new List<DwarfCommonInformationEntry>();
+            var entries = new List<DwarfCommonInformationEntry>();
 
-            using (DwarfMemoryReader debugFrameReader = new DwarfMemoryReader(debugFrame))
+            using (var debugFrameReader = new DwarfMemoryReader(debugFrame))
             {
                 entries.AddRange(DwarfCommonInformationEntry.ParseAll(debugFrameReader, input.DefaultAddressSize));
             }
 
-            using (DwarfMemoryReader ehFrameReader = new DwarfMemoryReader(ehFrame))
+            using (var ehFrameReader = new DwarfMemoryReader(ehFrame))
             {
                 entries.AddRange(DwarfExceptionHandlingCommonInformationEntry.ParseAll(ehFrameReader, input));
             }
 
-            return entries.ToArray();
+            return entries;
         }
     }
 }

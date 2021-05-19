@@ -557,8 +557,8 @@
           "message": {
             "id": "Pass",
             "arguments": [
-              "gcc.requiredsymbol.5.o",
-              "5"
+              "5",
+              "gcc.requiredsymbol.5.o"
             ]
           },
           "locations": [

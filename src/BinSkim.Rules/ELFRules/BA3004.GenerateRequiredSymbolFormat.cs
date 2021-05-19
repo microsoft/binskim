@@ -67,7 +67,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA3004_Pass),
-                    context.TargetUri.GetFileName(), dwarfVersion.ToString()));
+                    dwarfVersion.ToString(), context.TargetUri.GetFileName()));
         }
     }
 }
