@@ -341,8 +341,32 @@
           ]
         },
         {
-          "ruleId": "BA3010",
+          "ruleId": "BA3004",
           "ruleIndex": 14,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Wix_3.11.1_VS2017_Bootstrapper.exe",
+              "GenerateRequiredSymbolFormat",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Wix_3.11.1_VS2017_Bootstrapper.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 15,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -366,7 +390,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 15,
+          "ruleIndex": 16,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -390,7 +414,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 16,
+          "ruleIndex": 17,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -414,28 +438,6 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 17,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Wix_3.11.1_VS2017_Bootstrapper.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Wix_3.11.1_VS2017_Bootstrapper.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
           "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
@@ -457,7 +459,7 @@
           ]
         },
         {
-          "ruleId": "BA2010",
+          "ruleId": "BA2009",
           "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
@@ -479,7 +481,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2010",
           "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
@@ -501,7 +503,7 @@
           ]
         },
         {
-          "ruleId": "BA2016",
+          "ruleId": "BA2012",
           "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
@@ -523,7 +525,7 @@
           ]
         },
         {
-          "ruleId": "BA2018",
+          "ruleId": "BA2016",
           "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
@@ -545,7 +547,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2018",
           "ruleIndex": 23,
           "kind": "pass",
           "level": "none",
@@ -567,7 +569,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2019",
           "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
@@ -589,8 +591,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 25,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Wix_3.11.1_VS2017_Bootstrapper.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Wix_3.11.1_VS2017_Bootstrapper.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 26,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -1000,6 +1024,28 @@
                 }
               },
               "name": "EnableStackProtector"
+            },
+            {
+              "id": "BA3004",
+              "fullDescription": {
+                "text": "This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3004GenerateRequiredSymbolFormat",
+              "help": {
+                "text": "This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The version of the debugging dwarf format is '{0}' for the file '{1}'"
+                },
+                "Error": {
+                  "text": "'{0}' is using debugging dwarf version '{1}'. The dwarf version 5 contains more information and should be used. To enable the debugging version 5 use '-gdwarf-5'."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "GenerateRequiredSymbolFormat"
             },
             {
               "id": "BA3010",

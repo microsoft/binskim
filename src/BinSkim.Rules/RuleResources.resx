@@ -500,12 +500,12 @@ Modules triggering this check were:
     <value>This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland.</value>
   </data>
   <data name="BA3004_Error" xml:space="preserve">
-    <value>Dwarf version should be version 5.</value>
+    <value>'{0}' is using debugging dwarf version '{1}'. The dwarf version 5 contains more information and should be used. To enable the debugging version 5 use '-gdwarf-5'.</value>
   </data>
   <data name="BA3004_Pass" xml:space="preserve">
-    <value>Dwarf version is valid</value>
+    <value>The version of the debugging dwarf format is '{0}' for the file '{1}'</value>
   </data>
   <data name="BA3004_GenerateRequiredSymbolFormat_Description" xml:space="preserve">
-    <value>Description</value>
+    <value>This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this.</value>
   </data>
 </root>

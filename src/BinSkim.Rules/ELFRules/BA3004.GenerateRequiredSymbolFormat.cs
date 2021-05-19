@@ -20,7 +20,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id => RuleIds.GenerateRequiredSymbolFormat;
 
         /// <summary>
-        /// TODO: update
+        /// This check ensures that debugging dwarf version used is 5.
+        /// The dwarf version 5 contains more information and should be used.
+        /// Use the compiler flags '-gdwarf-5' to enable this.
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3004_GenerateRequiredSymbolFormat_Description };
 
@@ -51,17 +53,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (dwarfVersion < 5)
             {
+                // '{0}' is using debugging dwarf version '{1}'.
+                // The dwarf version 5 contains more information and should be used.
+                // To enable the debugging version 5 use '-gdwarf-5'.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA3004_Error),
-                        context.TargetUri.GetFileName()));
+                        context.TargetUri.GetFileName(), dwarfVersion.ToString()));
                 return;
             }
 
+            // The version of the debugging dwarf format is '{0}' for the file '{1}'
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA3004_Pass),
-                    context.TargetUri.GetFileName()));
+                    context.TargetUri.GetFileName(), dwarfVersion.ToString()));
         }
     }
 }

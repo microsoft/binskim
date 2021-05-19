@@ -1149,6 +1149,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA3004_GenerateRequiredSymbolFormat_Pass()
+        {
+            this.VerifyPass(new GenerateRequiredSymbolFormat(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3004_GenerateRequiredSymbolFormat_Fail()
+        {
+            this.VerifyFail(new GenerateRequiredSymbolFormat(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3004_GenerateRequiredSymbolFormat_NotApplicable()
+        {
+            this.VerifyApplicability(new EnablePositionIndependentExecutable(), new HashSet<string>());
+        }
+
+        [Fact]
         public void BA3010_EnableReadOnlyRelocations_Pass()
         {
             this.VerifyPass(new EnableReadOnlyRelocations(), bypassExtensionValidation: true);

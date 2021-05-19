@@ -149,8 +149,32 @@
           ]
         },
         {
-          "ruleId": "BA3010",
+          "ruleId": "BA3004",
           "ruleIndex": 6,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Native_x86_VS2013_Default.exe",
+              "GenerateRequiredSymbolFormat",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_Default.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 7,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -174,7 +198,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 7,
+          "ruleIndex": 8,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -198,7 +222,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 8,
+          "ruleIndex": 9,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -222,7 +246,7 @@
         },
         {
           "ruleId": "BA2002",
-          "ruleIndex": 9,
+          "ruleIndex": 10,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -244,7 +268,7 @@
         },
         {
           "ruleId": "BA2004",
-          "ruleIndex": 10,
+          "ruleIndex": 11,
           "message": {
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
@@ -265,7 +289,7 @@
         },
         {
           "ruleId": "BA2004",
-          "ruleIndex": 10,
+          "ruleIndex": 11,
           "level": "error",
           "message": {
             "id": "Error_NativeWithInsecureDirectCompilands",
@@ -287,7 +311,7 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 11,
+          "ruleIndex": 12,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -309,7 +333,7 @@
         },
         {
           "ruleId": "BA2006",
-          "ruleIndex": 12,
+          "ruleIndex": 13,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -332,7 +356,7 @@
         },
         {
           "ruleId": "BA2007",
-          "ruleIndex": 13,
+          "ruleIndex": 14,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -355,28 +379,6 @@
         },
         {
           "ruleId": "BA2009",
-          "ruleIndex": 14,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2013_Default.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_Default.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
           "ruleIndex": 15,
           "kind": "pass",
           "level": "none",
@@ -398,7 +400,7 @@
           ]
         },
         {
-          "ruleId": "BA2011",
+          "ruleId": "BA2010",
           "ruleIndex": 16,
           "kind": "pass",
           "level": "none",
@@ -420,7 +422,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2011",
           "ruleIndex": 17,
           "kind": "pass",
           "level": "none",
@@ -442,7 +444,7 @@
           ]
         },
         {
-          "ruleId": "BA2013",
+          "ruleId": "BA2012",
           "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
@@ -464,7 +466,7 @@
           ]
         },
         {
-          "ruleId": "BA2014",
+          "ruleId": "BA2013",
           "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
@@ -486,7 +488,7 @@
           ]
         },
         {
-          "ruleId": "BA2016",
+          "ruleId": "BA2014",
           "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
@@ -508,8 +510,30 @@
           ]
         },
         {
-          "ruleId": "BA2018",
+          "ruleId": "BA2016",
           "ruleIndex": 21,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2013_Default.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_Default.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2018",
+          "ruleIndex": 22,
           "level": "error",
           "message": {
             "id": "Error",
@@ -531,7 +555,7 @@
         },
         {
           "ruleId": "BA2019",
-          "ruleIndex": 22,
+          "ruleIndex": 23,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -553,7 +577,7 @@
         },
         {
           "ruleId": "BA2021",
-          "ruleIndex": 23,
+          "ruleIndex": 24,
           "level": "error",
           "message": {
             "id": "Error",
@@ -575,7 +599,7 @@
         },
         {
           "ruleId": "BA2022",
-          "ruleIndex": 24,
+          "ruleIndex": 25,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -599,7 +623,7 @@
         },
         {
           "ruleId": "BA2024",
-          "ruleIndex": 25,
+          "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -780,6 +804,28 @@
                 }
               },
               "name": "EnableStackProtector"
+            },
+            {
+              "id": "BA3004",
+              "fullDescription": {
+                "text": "This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3004GenerateRequiredSymbolFormat",
+              "help": {
+                "text": "This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The version of the debugging dwarf format is '{0}' for the file '{1}'"
+                },
+                "Error": {
+                  "text": "'{0}' is using debugging dwarf version '{1}'. The dwarf version 5 contains more information and should be used. To enable the debugging version 5 use '-gdwarf-5'."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "GenerateRequiredSymbolFormat"
             },
             {
               "id": "BA3010",
