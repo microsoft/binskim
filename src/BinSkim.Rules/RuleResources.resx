@@ -508,4 +508,13 @@ Modules triggering this check were:
   <data name="BA3004_GenerateRequiredSymbolFormat_Description" xml:space="preserve">
     <value>This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this.</value>
   </data>
+  <data name="BA3005_Error" xml:space="preserve">
+    <value>The Stack Clash Protection is missing from this binary, so the stack from '{0}' can clash/colide with another memory region. Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this.</value>
+  </data>
+  <data name="BA3005_EnableStackClashProtection_Description" xml:space="preserve">
+    <value>This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this.</value>
+  </data>
+  <data name="BA3005_Pass" xml:space="preserve">
+    <value>The Stack Clash Protection was present, so '{0}' is protected.</value>
+  </data>
 </root>
