@@ -88,45 +88,5 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
             binary.GetDwarfVersion().Should().Be(5);
             binary.GetLanguage().Should().Be(DwarfLanguage.Unknown); //missing dwo file should not cause exception
         }
-
-        [Fact]
-        public void ValidateDwarfV5_WithO2_No_Stack_Clash_Protection()
-        {
-            // helloworld.cpp compiled using: gcc -fno-stack-clash-protection -Wall -O2 -g -gdwarf-5 helloworld.cpp -o gcc.helloworld.5.o.no-stack-clash-protection
-            string fileName = Path.Combine(TestData, "Dwarf/gcc.helloworld.5.o.no-stack-clash-protection");
-            using var binary = new ELFBinary(new Uri(fileName));
-            binary.GetDwarfCompilerCommand().Should().Contain("-fno-stack-clash-protection");
-            binary.GetDwarfCompilerCommand().Should().NotContain("-fstack-clash-protection");
-        }
-
-        [Fact]
-        public void ValidateDwarfV4_WithO2_No_Stack_Clash_Protection()
-        {
-            // helloworld.cpp compiled using: gcc -fno-stack-clash-protection -Wall -O2 -g -gdwarf-4 helloworld.cpp -o gcc.helloworld.4.o.no-stack-clash-protection
-            string fileName = Path.Combine(TestData, "Dwarf/gcc.helloworld.4.o.no-stack-clash-protection");
-            using var binary = new ELFBinary(new Uri(fileName));
-            binary.GetDwarfCompilerCommand().Should().Contain("-fno-stack-clash-protection");
-            binary.GetDwarfCompilerCommand().Should().NotContain("-fstack-clash-protection");
-        }
-
-        [Fact]
-        public void ValidateDwarfV5_WithO2_With_Stack_Clash_Protection()
-        {
-            // Hello.c compiled using: gcc -Wall -O2 -g -gdwarf-5 hello.c -o hello5
-            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf5-o2");
-            using var binary = new ELFBinary(new Uri(fileName));
-            binary.GetDwarfCompilerCommand().Should().NotContain("-fno-stack-clash-protection");
-            binary.GetDwarfCompilerCommand().Should().Contain("-fstack-clash-protection");
-        }
-
-        [Fact]
-        public void ValidateDwarfV4_WithO2_With_Stack_Clash_Protection()
-        {
-            // Hello.c compiled using: gcc -Wall -O2 -g -gdwarf-4 hello.c -o hello4
-            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
-            using var binary = new ELFBinary(new Uri(fileName));
-            binary.GetDwarfCompilerCommand().Should().NotContain("-fno-stack-clash-protection");
-            binary.GetDwarfCompilerCommand().Should().Contain("-fstack-clash-protection");
-        }
     }
 }
