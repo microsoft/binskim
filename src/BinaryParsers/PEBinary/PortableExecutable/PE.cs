@@ -804,6 +804,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
+        public PEMemoryBlock GetSectionData(int dataRelativeVirtualAddress)
+        {
+            return peReader.GetSectionData(dataRelativeVirtualAddress);
+        }
+
         public ChecksumAlgorithmType ManagedPdbSourceFileChecksumAlgorithm(PdbFileType pdbFileType)
         {
             return pdbFileType == PdbFileType.Windows

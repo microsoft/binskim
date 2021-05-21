@@ -485,8 +485,32 @@
           ]
         },
         {
-          "ruleId": "BA3001",
+          "ruleId": "BA2025",
           "ruleIndex": 20,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "gcc.requiredsymbol.5.o",
+              "EnableShadowStack",
+              "image is not a PE binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.requiredsymbol.5.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -508,7 +532,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 21,
+          "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -530,7 +554,7 @@
         },
         {
           "ruleId": "BA3003",
-          "ruleIndex": 22,
+          "ruleIndex": 23,
           "level": "error",
           "message": {
             "id": "Error",
@@ -551,7 +575,7 @@
         },
         {
           "ruleId": "BA3004",
-          "ruleIndex": 23,
+          "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -574,28 +598,6 @@
         },
         {
           "ruleId": "BA3005",
-          "ruleIndex": 24,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.requiredsymbol.5.o"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.requiredsymbol.5.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3010",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -617,7 +619,7 @@
           ]
         },
         {
-          "ruleId": "BA3011",
+          "ruleId": "BA3010",
           "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
@@ -639,8 +641,30 @@
           ]
         },
         {
-          "ruleId": "BA3030",
+          "ruleId": "BA3011",
           "ruleIndex": 27,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.requiredsymbol.5.o"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.requiredsymbol.5.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 28,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -1230,13 +1254,35 @@
               "name": "EnableSpectreMitigations"
             },
             {
+              "id": "BA2025",
+              "fullDescription": {
+                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2025EnableShadowStack",
+              "help": {
+                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation."
+                },
+                "Warning": {
+                  "text": "'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableShadowStack"
+            },
+            {
               "id": "BA3001",
               "fullDescription": {
-                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3001EnablePositionIndependentExecutable",
               "help": {
-                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
               },
               "messageStrings": {
                 "Pass_Executable": {
