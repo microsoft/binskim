@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// this confusion to overwrite the stack with the other memory region, or the other way around. 
         /// Use the compiler flags '-fstack-clash-protection' to enable this.
         /// </summary>
-        public override MultiformatMessageString FullDescription => 
+        public override MultiformatMessageString FullDescription =>
             new MultiformatMessageString { Text = RuleResources.BA3005_EnableStackClashProtection_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
