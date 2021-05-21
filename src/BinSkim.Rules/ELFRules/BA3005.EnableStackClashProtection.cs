@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -23,14 +24,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// This check ensures that stack clash protection is enabled. 
         /// Each program running on a computer uses a special memory region called the stack. 
-        /// This memory region is special because it grows automatically when the program needs more stack memory. 
-        /// But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. 
-        /// An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. 
+        /// This memory region is special because it grows automatically when the program needs 
+        /// more stack memory. But if it grows too much and gets too close to another memory region, 
+        /// the program may confuse the stack with the other memory region. An attacker can exploit 
+        /// this confusion to overwrite the stack with the other memory region, or the other way around. 
         /// Use the compiler flags '-fstack-clash-protection' to enable this.
         /// </summary>
-        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3005_EnableStackClashProtection_Description };
-
-        protected string dwarfCompilerCommand;
+        public override MultiformatMessageString FullDescription => 
+            new MultiformatMessageString { Text = RuleResources.BA3005_EnableStackClashProtection_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA3005_Pass),
@@ -57,7 +58,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                dwarfCompilerCommand = target.GetDwarfCompilerCommand();
+                string dwarfCompilerCommand = target.GetDwarfCompilerCommand();
 
                 if (string.IsNullOrWhiteSpace(dwarfCompilerCommand))
                 {
@@ -72,8 +73,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            if (!dwarfCompilerCommand.ToLower().Contains("-fstack-clash-protection")
-                || dwarfCompilerCommand.ToLower().Contains("-fno-stack-clash-protection"))
+            ELFBinary elfBinary = context.ELFBinary();
+            string dwarfCompilerCommand = elfBinary.GetDwarfCompilerCommand();
+
+            if (!dwarfCompilerCommand.Contains("-fstack-clash-protection", StringComparison.OrdinalIgnoreCase)
+                || dwarfCompilerCommand.Contains("-fno-stack-clash-protection", StringComparison.OrdinalIgnoreCase))
             {
                 // The Stack Clash Protection is missing from this binary,
                 // so the stack from '{0}' can clash/colide with another memory region.
