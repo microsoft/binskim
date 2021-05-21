@@ -234,7 +234,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             BinarySkimmer skimmer,
             HashSet<string> applicabilityConditions,
             AnalysisApplicability expectedApplicability = AnalysisApplicability.NotApplicableToSpecifiedTarget,
-            bool useDefaultPolicy = false)
+            bool useDefaultPolicy = false,
+            bool bypassExtensionValidation = false)
         {
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = GetTestDirectoryFor(ruleName);
@@ -249,7 +250,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 foreach (string target in Directory.GetFiles(testFilesDirectory, "*", SearchOption.AllDirectories))
                 {
-                    if (AnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
+                    if (bypassExtensionValidation || AnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
                     {
                         targets.Add(target);
                     }
@@ -1176,6 +1177,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public void BA3004_GenerateRequiredSymbolFormat_Fail()
         {
             this.VerifyFail(new GenerateRequiredSymbolFormat(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3005_EnableStackClashProtection_Pass()
+        {
+            this.VerifyPass(new EnableStackClashProtection(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3005_EnableStackClashProtection_Fail()
+        {
+            this.VerifyFail(new EnableStackClashProtection(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3005_EnableStackClashProtection_NotApplicable()
+        {
+            this.VerifyApplicability(new EnableStackClashProtection(), new HashSet<string>(), bypassExtensionValidation: true);
         }
 
         [Fact]

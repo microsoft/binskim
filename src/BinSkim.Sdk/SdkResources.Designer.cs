@@ -97,11 +97,29 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to not compiled with Dwarf debugging.
+        /// </summary>
+        internal static string MetadataCondition_ElfNotBuiltWithDwarfDebugging {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ElfNotBuiltWithDwarfDebugging", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to not compiled solely with gcc.
         /// </summary>
         internal static string MetadataCondition_ElfNotBuiltWithGCC {
             get {
                 return ResourceManager.GetString("MetadataCondition_ElfNotBuiltWithGCC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to not compiled with gcc v8 or later.
+        /// </summary>
+        internal static string MetadataCondition_ElfNotBuiltWithGccV8OrLater {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ElfNotBuiltWithGccV8OrLater", resourceCulture);
             }
         }
         

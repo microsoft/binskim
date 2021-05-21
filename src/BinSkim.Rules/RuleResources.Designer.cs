@@ -1077,6 +1077,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BA3005_EnableStackClashProtection_Description {
+            get {
+                return ResourceManager.GetString("BA3005_EnableStackClashProtection_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Stack Clash Protection is missing from this binary, so the stack from &apos;{0}&apos; can clash/colide with another memory region. Ensure you are compiling with the compiler flags &apos;-fstack-clash-protection&apos; to address this..
+        /// </summary>
+        internal static string BA3005_Error {
+            get {
+                return ResourceManager.GetString("BA3005_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Stack Clash Protection was present, so &apos;{0}&apos; is protected..
+        /// </summary>
+        internal static string BA3005_Pass {
+            get {
+                return ResourceManager.GetString("BA3005_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
         /// </summary>
         internal static string BA3010_EnableReadOnlyRelocations_Description {
