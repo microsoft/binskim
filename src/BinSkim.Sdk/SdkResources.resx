@@ -222,4 +222,10 @@
   <data name="Verbose_ReplaceWithLevelAndKind" xml:space="preserve">
     <value>use --level and --kind</value>
   </data>
+  <data name="MetadataCondition_ElfNotBuiltWithDwarfDebugging" xml:space="preserve">
+    <value>not compiled with Dwarf debugging</value>
+  </data>
+  <data name="MetadataCondition_ElfNotBuiltWithGccV8OrLater" xml:space="preserve">
+    <value>not compiled with gcc v8 or later</value>
+  </data>
 </root>

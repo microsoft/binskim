@@ -173,8 +173,32 @@
           ]
         },
         {
-          "ruleId": "BA3010",
+          "ruleId": "BA3005",
           "ruleIndex": 7,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe",
+              "EnableStackClashProtection",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 8,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -198,7 +222,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 8,
+          "ruleIndex": 9,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -222,7 +246,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 9,
+          "ruleIndex": 10,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -246,28 +270,6 @@
         },
         {
           "ruleId": "BA2001",
-          "ruleIndex": 10,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2002",
           "ruleIndex": 11,
           "kind": "pass",
           "level": "none",
@@ -289,8 +291,30 @@
           ]
         },
         {
-          "ruleId": "BA2004",
+          "ruleId": "BA2002",
           "ruleIndex": 12,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 13,
           "message": {
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
@@ -311,7 +335,7 @@
         },
         {
           "ruleId": "BA2004",
-          "ruleIndex": 12,
+          "ruleIndex": 13,
           "level": "error",
           "message": {
             "id": "Error_NativeWithInsecureDirectCompilands",
@@ -333,7 +357,7 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 13,
+          "ruleIndex": 14,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -355,7 +379,7 @@
         },
         {
           "ruleId": "BA2006",
-          "ruleIndex": 14,
+          "ruleIndex": 15,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -378,7 +402,7 @@
         },
         {
           "ruleId": "BA2007",
-          "ruleIndex": 15,
+          "ruleIndex": 16,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -401,7 +425,7 @@
         },
         {
           "ruleId": "BA2008",
-          "ruleIndex": 16,
+          "ruleIndex": 17,
           "level": "error",
           "message": {
             "id": "Error",
@@ -422,28 +446,6 @@
         },
         {
           "ruleId": "BA2009",
-          "ruleIndex": 17,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
           "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
@@ -465,7 +467,7 @@
           ]
         },
         {
-          "ruleId": "BA2011",
+          "ruleId": "BA2010",
           "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
@@ -487,7 +489,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2011",
           "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
@@ -509,7 +511,7 @@
           ]
         },
         {
-          "ruleId": "BA2013",
+          "ruleId": "BA2012",
           "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
@@ -531,7 +533,7 @@
           ]
         },
         {
-          "ruleId": "BA2014",
+          "ruleId": "BA2013",
           "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
@@ -553,7 +555,7 @@
           ]
         },
         {
-          "ruleId": "BA2015",
+          "ruleId": "BA2014",
           "ruleIndex": 23,
           "kind": "pass",
           "level": "none",
@@ -575,7 +577,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2015",
           "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
@@ -597,7 +599,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2019",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -619,8 +621,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 26,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 27,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -825,6 +849,28 @@
                 }
               },
               "name": "GenerateRequiredSymbolFormat"
+            },
+            {
+              "id": "BA3005",
+              "fullDescription": {
+                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3005EnableStackClashProtection",
+              "help": {
+                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The Stack Clash Protection was present, so '{0}' is protected."
+                },
+                "Error": {
+                  "text": "The Stack Clash Protection is missing from this binary, so the stack from '{0}' can clash/colide with another memory region. Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableStackClashProtection"
             },
             {
               "id": "BA3010",

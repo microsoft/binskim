@@ -389,8 +389,32 @@
           ]
         },
         {
-          "ruleId": "BA3010",
+          "ruleId": "BA3005",
           "ruleIndex": 16,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll",
+              "EnableStackClashProtection",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 17,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -414,7 +438,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -438,7 +462,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 18,
+          "ruleIndex": 19,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -462,7 +486,7 @@
         },
         {
           "ruleId": "BA2004",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "message": {
             "id": "Error_Managed",
             "arguments": [
@@ -482,28 +506,6 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 20,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
           "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
@@ -525,7 +527,7 @@
           ]
         },
         {
-          "ruleId": "BA2016",
+          "ruleId": "BA2009",
           "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
@@ -547,8 +549,30 @@
           ]
         },
         {
-          "ruleId": "BA2018",
+          "ruleId": "BA2016",
           "ruleIndex": 23,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2018",
+          "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -570,28 +594,6 @@
         },
         {
           "ruleId": "BA2019",
-          "ruleIndex": 24,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2021",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -613,8 +615,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 26,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 27,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -1077,6 +1101,28 @@
                 }
               },
               "name": "GenerateRequiredSymbolFormat"
+            },
+            {
+              "id": "BA3005",
+              "fullDescription": {
+                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3005EnableStackClashProtection",
+              "help": {
+                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The Stack Clash Protection was present, so '{0}' is protected."
+                },
+                "Error": {
+                  "text": "The Stack Clash Protection is missing from this binary, so the stack from '{0}' can clash/colide with another memory region. Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableStackClashProtection"
             },
             {
               "id": "BA3010",
