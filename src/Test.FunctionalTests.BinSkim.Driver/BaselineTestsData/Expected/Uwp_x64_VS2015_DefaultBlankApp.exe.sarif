@@ -558,11 +558,11 @@
             {
               "id": "BA3001",
               "fullDescription": {
-                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3001EnablePositionIndependentExecutable",
               "help": {
-                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
               },
               "messageStrings": {
                 "Pass_Executable": {
@@ -1173,6 +1173,27 @@
               },
               "associatedRule": {
                 "id": "BA2024"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2015_DefaultBlankApp.exe"
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'Uwp_x64_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableShadowStack' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              },
+              "associatedRule": {
+                "id": "BA2025"
               }
             }
           ],

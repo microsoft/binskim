@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class EnableShadowStack : WindowsBinaryAndPdbSkimmerBase
     {
         private const int IMAGE_DEBUG_TYPE_EX_DLLCHARACTERISTICS = 20;
@@ -43,16 +43,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
-            AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
+            AnalysisApplicability notApplicable = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyAssembly;
-            if (portableExecutable.IsILOnly) { return result; }
+            if (portableExecutable.IsILOnly)
+            {
+                reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyAssembly;
+                return notApplicable;
+            }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
-            if (portableExecutable.IsResourceOnly) { return result; }
+            if (portableExecutable.IsResourceOnly)
+            {
+                reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
+                return notApplicable;
+            }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsNativeUniversalWindowsPlatformBinary;
-            if (portableExecutable.IsNativeUniversalWindowsPlatform) { return result; }
+            if (portableExecutable.IsNativeUniversalWindowsPlatform)
+            {
+                reasonForNotAnalyzing = MetadataConditions.ImageIsNativeUniversalWindowsPlatformBinary;
+                return notApplicable;
+            }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
