@@ -45,34 +45,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             this.localSymbolDirectories = localSymbolDirectories;
         }
 
-        private Pdb LoadPdb()
-        {
-            Pdb pdb = null;
-            try
-            {
-                pdb = new Pdb(
-                    this.PE?.FileName ?? this.TargetUri.LocalPath,
-                    this.symbolPath,
-                    this.localSymbolDirectories,
-                    this.tracePdbLoad);
-            }
-            catch (PdbException ex)
-            {
-                this.PdbParseException = ex;
-            }
-
-            if (pdb != null && pdb.IsStripped)
-            {
-                this.StrippedPdb = pdb;
-                pdb = null;
-                this.PdbParseException = new PdbException(BinaryParsersResources.PdbStripped)
-                {
-                    LoadTrace = this.StrippedPdb.LoadTrace
-                };
-            }
-            return pdb;
-        }
-
         public PE PE { get; private set; }
 
         public Pdb Pdb => this.pdb?.Value;
@@ -120,6 +92,54 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
             catch (IOException) { return false; }
             catch (UnauthorizedAccessException) { return false; }
+        }
+
+        private Pdb LoadPdb()
+        {
+            string peOrPdbPath = this.PE?.FileName ?? this.TargetUri.LocalPath;
+            string extension = Path.GetExtension(peOrPdbPath);
+            if (!TryLoadPdb(peOrPdbPath, extension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out Pdb pdb))
+            {
+                if (!extension.Equals(".pdb", StringComparison.OrdinalIgnoreCase) &&
+                    this.PdbParseException?.ExceptionCode == DiaHresult.E_PDB_NOT_FOUND)
+                {
+                    peOrPdbPath = peOrPdbPath.Replace(extension, ".pdb", StringComparison.OrdinalIgnoreCase);
+                    if (File.Exists(peOrPdbPath))
+                    {
+                        TryLoadPdb(peOrPdbPath, ".pdb", this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
+                    }
+                }
+            }
+
+            if (pdb != null && pdb.IsStripped)
+            {
+                this.StrippedPdb = pdb;
+                pdb = null;
+                this.PdbParseException = new PdbException(BinaryParsersResources.PdbStripped)
+                {
+                    LoadTrace = this.StrippedPdb.LoadTrace
+                };
+            }
+            return pdb;
+        }
+
+        private bool TryLoadPdb(string peOrPdbPath, string extension, string symbolPath, string localSymbolDirectories, bool tracePdbLoad, out Pdb pdb)
+        {
+            pdb = null;
+
+            try
+            {
+                pdb = extension.Equals(".pdb", StringComparison.OrdinalIgnoreCase)
+                    ? new Pdb(peOrPdbPath, tracePdbLoad)
+                    : new Pdb(peOrPdbPath, symbolPath, localSymbolDirectories, tracePdbLoad);
+                this.PdbParseException = null;
+                return true;
+            }
+            catch (PdbException ex)
+            {
+                this.PdbParseException = ex;
+                return false;
+            }
         }
     }
 }

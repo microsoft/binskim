@@ -174,21 +174,25 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                foreach (DebugDirectoryEntry debugDirectoryEntry in DebugDirectories)
+                if (DebugDirectories != null)
                 {
-                    if (debugDirectoryEntry.Type == DebugDirectoryEntryType.CodeView)
+                    foreach (DebugDirectoryEntry debugDirectoryEntry in DebugDirectories)
                     {
-                        try
+                        if (debugDirectoryEntry.Type == DebugDirectoryEntryType.CodeView)
                         {
-                            return this.peReader.ReadCodeViewDebugDirectoryData(debugDirectoryEntry);
-                        }
-                        catch (BadImageFormatException)
-                        {
-                            // PE reader has problems with some old binaries.
-                            // TODO: investigate
+                            try
+                            {
+                                return this.peReader.ReadCodeViewDebugDirectoryData(debugDirectoryEntry);
+                            }
+                            catch (BadImageFormatException)
+                            {
+                                // PE reader has problems with some old binaries.
+                                // TODO: investigate
+                            }
                         }
                     }
                 }
+
                 return new CodeViewDebugDirectoryData();
             }
         }
@@ -594,6 +598,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 switch (assemblyName)
                 {
+                    case "aacorlib":
                     case "mscorlib":
                     {
                         return ManagedPlatform.DotNetFramework;
@@ -608,11 +613,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     case "netstandard":
                     {
                         return ManagedPlatform.DotNetStandard;
-                    }
-
-                    default:
-                    {
-                        break;
                     }
                 }
             }
