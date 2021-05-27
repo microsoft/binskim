@@ -27,24 +27,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private void VerifyPass(
             BinarySkimmer skimmer,
             IEnumerable<string> additionalTestFiles = null,
-            bool useDefaultPolicy = false)
+            bool useDefaultPolicy = false,
+            bool bypassExtensionValidation = false)
         {
-            this.Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: true);
+            this.Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: true, bypassExtensionValidation: bypassExtensionValidation);
         }
 
         private void VerifyFail(
             BinarySkimmer skimmer,
             IEnumerable<string> additionalTestFiles = null,
-            bool useDefaultPolicy = false)
+            bool useDefaultPolicy = false,
+            bool bypassExtensionValidation = false)
         {
-            this.Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: false);
+            this.Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: false, bypassExtensionValidation: bypassExtensionValidation);
         }
 
         private void Verify(
             BinarySkimmer skimmer,
             IEnumerable<string> additionalTestFiles,
             bool useDefaultPolicy,
-            bool expectToPass)
+            bool expectToPass,
+            bool bypassExtensionValidation = false)
         {
             var targets = new List<string>();
             string ruleName = skimmer.GetType().Name;
@@ -56,7 +59,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (string target in Directory.GetFiles(testFilesDirectory, "*", SearchOption.AllDirectories))
             {
-                if (AnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
+                if (bypassExtensionValidation || AnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
                 {
                     targets.Add(target);
                 }
@@ -231,7 +234,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             BinarySkimmer skimmer,
             HashSet<string> applicabilityConditions,
             AnalysisApplicability expectedApplicability = AnalysisApplicability.NotApplicableToSpecifiedTarget,
-            bool useDefaultPolicy = false)
+            bool useDefaultPolicy = false,
+            bool bypassExtensionValidation = false)
         {
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = GetTestDirectoryFor(ruleName);
@@ -246,7 +250,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 foreach (string target in Directory.GetFiles(testFilesDirectory, "*", SearchOption.AllDirectories))
                 {
-                    if (AnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
+                    if (bypassExtensionValidation || AnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
                     {
                         targets.Add(target);
                     }
@@ -1092,15 +1096,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2025_EnableShadowStack_Pass()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new EnableShadowStack(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA2025_EnableShadowStack_Fail()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyFail(new EnableShadowStack(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
         public void BA3001_EnablePositionIndependentExecutable_Pass()
         {
-            this.VerifyPass(new EnablePositionIndependentExecutable());
+            this.VerifyPass(new EnablePositionIndependentExecutable(), bypassExtensionValidation: true);
         }
 
         [Fact]
         public void BA3001_EnablePositionIndependentExecutable_Fail()
         {
-            this.VerifyFail(new EnablePositionIndependentExecutable());
+            this.VerifyFail(new EnablePositionIndependentExecutable(), bypassExtensionValidation: true);
         }
 
         [Fact]
@@ -1112,13 +1134,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA3002_DoNotMarkStackAsExecutable_Pass()
         {
-            this.VerifyPass(new DoNotMarkStackAsExecutable());
+            this.VerifyPass(new DoNotMarkStackAsExecutable(), bypassExtensionValidation: true);
         }
 
         [Fact]
         public void BA3002_DoNotMarkStackAsExecutable_Fail()
         {
-            this.VerifyFail(new DoNotMarkStackAsExecutable());
+            this.VerifyFail(new DoNotMarkStackAsExecutable(), bypassExtensionValidation: true);
         }
 
         [Fact]
@@ -1130,13 +1152,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA3003_EnableStackProtector_Pass()
         {
-            this.VerifyPass(new EnableStackProtector());
+            this.VerifyPass(new EnableStackProtector(), bypassExtensionValidation: true);
         }
 
         [Fact]
         public void BA3003_EnableStackProtector_Fail()
         {
-            this.VerifyFail(new EnableStackProtector());
+            this.VerifyFail(new EnableStackProtector(), bypassExtensionValidation: true);
         }
 
         [Fact]
@@ -1146,15 +1168,45 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA3004_GenerateRequiredSymbolFormat_Pass()
+        {
+            this.VerifyPass(new GenerateRequiredSymbolFormat(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3004_GenerateRequiredSymbolFormat_Fail()
+        {
+            this.VerifyFail(new GenerateRequiredSymbolFormat(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3005_EnableStackClashProtection_Pass()
+        {
+            this.VerifyPass(new EnableStackClashProtection(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3005_EnableStackClashProtection_Fail()
+        {
+            this.VerifyFail(new EnableStackClashProtection(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3005_EnableStackClashProtection_NotApplicable()
+        {
+            this.VerifyApplicability(new EnableStackClashProtection(), new HashSet<string>(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
         public void BA3010_EnableReadOnlyRelocations_Pass()
         {
-            this.VerifyPass(new EnableReadOnlyRelocations());
+            this.VerifyPass(new EnableReadOnlyRelocations(), bypassExtensionValidation: true);
         }
 
         [Fact]
         public void BA3010_EnableReadOnlyRelocations_Fail()
         {
-            this.VerifyFail(new EnableReadOnlyRelocations());
+            this.VerifyFail(new EnableReadOnlyRelocations(), bypassExtensionValidation: true);
         }
 
         [Fact]
@@ -1166,13 +1218,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA3011_EnableBindNow_Pass()
         {
-            this.VerifyPass(new EnableBindNow());
+            this.VerifyPass(new EnableBindNow(), bypassExtensionValidation: true);
         }
 
         [Fact]
         public void BA3011_EnableBindNow_Fail()
         {
-            this.VerifyFail(new EnableBindNow());
+            this.VerifyFail(new EnableBindNow(), bypassExtensionValidation: true);
         }
 
         [Fact]
@@ -1184,13 +1236,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA3030_UseCheckedFunctionsWithGCC_Pass()
         {
-            this.VerifyPass(new UseCheckedFunctionsWithGcc());
+            this.VerifyPass(new UseCheckedFunctionsWithGcc(), bypassExtensionValidation: true);
         }
 
         [Fact]
         public void BA3030_UseCheckedFunctionsWithGCC_Fail()
         {
-            this.VerifyFail(new UseCheckedFunctionsWithGcc());
+            this.VerifyFail(new UseCheckedFunctionsWithGcc(), bypassExtensionValidation: true);
         }
 
         [Fact]

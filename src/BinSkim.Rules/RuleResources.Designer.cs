@@ -924,7 +924,34 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
+        ///   Looks up a localized string similar to Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks..
+        /// </summary>
+        internal static string BA2025_EnableShadowStack_Description {
+            get {
+                return ResourceManager.GetString("BA2025_EnableShadowStack_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation..
+        /// </summary>
+        internal static string BA2025_Pass {
+            get {
+                return ResourceManager.GetString("BA2025_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines..
+        /// </summary>
+        internal static string BA2025_Warning {
+            get {
+                return ResourceManager.GetString("BA2025_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
         internal static string BA3001_EnablePositionIndependentExecutable_Description {
             get {
@@ -1023,6 +1050,60 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is using debugging dwarf version &apos;{1}&apos;. The dwarf version 5 contains more information and should be used. To enable the debugging version 5 use &apos;-gdwarf-5&apos;..
+        /// </summary>
+        internal static string BA3004_Error {
+            get {
+                return ResourceManager.GetString("BA3004_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags &apos;-gdwarf-5&apos; to enable this..
+        /// </summary>
+        internal static string BA3004_GenerateRequiredSymbolFormat_Description {
+            get {
+                return ResourceManager.GetString("BA3004_GenerateRequiredSymbolFormat_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The version of the debugging dwarf format is &apos;{0}&apos; for the file &apos;{1}&apos;.
+        /// </summary>
+        internal static string BA3004_Pass {
+            get {
+                return ResourceManager.GetString("BA3004_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BA3005_EnableStackClashProtection_Description {
+            get {
+                return ResourceManager.GetString("BA3005_EnableStackClashProtection_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Stack Clash Protection is missing from this binary, so the stack from &apos;{0}&apos; can clash/colide with another memory region. Ensure you are compiling with the compiler flags &apos;-fstack-clash-protection&apos; to address this..
+        /// </summary>
+        internal static string BA3005_Error {
+            get {
+                return ResourceManager.GetString("BA3005_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Stack Clash Protection was present, so &apos;{0}&apos; is protected..
+        /// </summary>
+        internal static string BA3005_Pass {
+            get {
+                return ResourceManager.GetString("BA3005_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
         /// </summary>
         internal static string BA3010_EnableReadOnlyRelocations_Description {
@@ -1039,7 +1120,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("BA3010_Error", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to The GNU_RELRO segment was present, so &apos;{0}&apos; is protected..
         /// </summary>
@@ -1048,7 +1129,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("BA3010_Pass", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,now&apos; to enable this..
         /// </summary>
@@ -1057,7 +1138,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("BA3011_EnableBindNow_Description", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to The BIND_NOW flag is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,now&apos; to address this..
         /// </summary>
@@ -1066,9 +1147,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("BA3011_Error", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to The BIND_NOW flag was present, so &apos;{0}&apos; is protected.
+        ///   Looks up a localized string similar to The BIND_NOW flag was present, so &apos;{0}&apos; is protected..
         /// </summary>
         internal static string BA3011_Pass {
             get {

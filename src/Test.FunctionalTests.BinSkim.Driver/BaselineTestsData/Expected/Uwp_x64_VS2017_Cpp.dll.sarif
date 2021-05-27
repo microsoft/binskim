@@ -77,8 +77,32 @@
           ]
         },
         {
-          "ruleId": "BA3001",
+          "ruleId": "BA2025",
           "ruleIndex": 3,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Uwp_x64_VS2017_Cpp.dll",
+              "EnableShadowStack",
+              "image is a native UWP (Universal Windows Platform) binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2017_Cpp.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 4,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -102,7 +126,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 4,
+          "ruleIndex": 5,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -126,7 +150,7 @@
         },
         {
           "ruleId": "BA3003",
-          "ruleIndex": 5,
+          "ruleIndex": 6,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -149,8 +173,56 @@
           ]
         },
         {
+          "ruleId": "BA3004",
+          "ruleIndex": 7,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Uwp_x64_VS2017_Cpp.dll",
+              "GenerateRequiredSymbolFormat",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2017_Cpp.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3005",
+          "ruleIndex": 8,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Uwp_x64_VS2017_Cpp.dll",
+              "EnableStackClashProtection",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2017_Cpp.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "BA3010",
-          "ruleIndex": 6,
+          "ruleIndex": 9,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -174,7 +246,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 7,
+          "ruleIndex": 10,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -198,7 +270,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 8,
+          "ruleIndex": 11,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -222,7 +294,7 @@
         },
         {
           "ruleId": "BA2002",
-          "ruleIndex": 9,
+          "ruleIndex": 12,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -244,7 +316,7 @@
         },
         {
           "ruleId": "BA2004",
-          "ruleIndex": 10,
+          "ruleIndex": 13,
           "message": {
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
@@ -265,7 +337,7 @@
         },
         {
           "ruleId": "BA2004",
-          "ruleIndex": 10,
+          "ruleIndex": 13,
           "level": "error",
           "message": {
             "id": "Error_NativeWithInsecureDirectCompilands",
@@ -287,7 +359,7 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 11,
+          "ruleIndex": 14,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -309,7 +381,7 @@
         },
         {
           "ruleId": "BA2006",
-          "ruleIndex": 12,
+          "ruleIndex": 15,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -332,7 +404,7 @@
         },
         {
           "ruleId": "BA2007",
-          "ruleIndex": 13,
+          "ruleIndex": 16,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -355,7 +427,7 @@
         },
         {
           "ruleId": "BA2008",
-          "ruleIndex": 14,
+          "ruleIndex": 17,
           "level": "error",
           "message": {
             "id": "Error",
@@ -376,72 +448,6 @@
         },
         {
           "ruleId": "BA2009",
-          "ruleIndex": 15,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2017_Cpp.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2017_Cpp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
-          "ruleIndex": 16,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2017_Cpp.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2017_Cpp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2011",
-          "ruleIndex": 17,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2017_Cpp.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2017_Cpp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2012",
           "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
@@ -463,7 +469,7 @@
           ]
         },
         {
-          "ruleId": "BA2013",
+          "ruleId": "BA2010",
           "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
@@ -485,7 +491,7 @@
           ]
         },
         {
-          "ruleId": "BA2014",
+          "ruleId": "BA2011",
           "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
@@ -507,7 +513,7 @@
           ]
         },
         {
-          "ruleId": "BA2016",
+          "ruleId": "BA2012",
           "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
@@ -529,7 +535,7 @@
           ]
         },
         {
-          "ruleId": "BA2018",
+          "ruleId": "BA2013",
           "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
@@ -551,7 +557,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2014",
           "ruleIndex": 23,
           "kind": "pass",
           "level": "none",
@@ -573,7 +579,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2016",
           "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
@@ -595,8 +601,74 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2018",
           "ruleIndex": 25,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2017_Cpp.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2017_Cpp.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "ruleIndex": 26,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2017_Cpp.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2017_Cpp.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 27,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2017_Cpp.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2017_Cpp.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 28,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -712,13 +784,35 @@
               "name": "EnableSpectreMitigations"
             },
             {
+              "id": "BA2025",
+              "fullDescription": {
+                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2025EnableShadowStack",
+              "help": {
+                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation."
+                },
+                "Warning": {
+                  "text": "'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableShadowStack"
+            },
+            {
               "id": "BA3001",
               "fullDescription": {
-                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3001EnablePositionIndependentExecutable",
               "help": {
-                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
               },
               "messageStrings": {
                 "Pass_Executable": {
@@ -782,6 +876,50 @@
                 }
               },
               "name": "EnableStackProtector"
+            },
+            {
+              "id": "BA3004",
+              "fullDescription": {
+                "text": "This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3004GenerateRequiredSymbolFormat",
+              "help": {
+                "text": "This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The version of the debugging dwarf format is '{0}' for the file '{1}'"
+                },
+                "Error": {
+                  "text": "'{0}' is using debugging dwarf version '{1}'. The dwarf version 5 contains more information and should be used. To enable the debugging version 5 use '-gdwarf-5'."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "GenerateRequiredSymbolFormat"
+            },
+            {
+              "id": "BA3005",
+              "fullDescription": {
+                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3005EnableStackClashProtection",
+              "help": {
+                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The Stack Clash Protection was present, so '{0}' is protected."
+                },
+                "Error": {
+                  "text": "The Stack Clash Protection is missing from this binary, so the stack from '{0}' can clash/colide with another memory region. Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableStackClashProtection"
             },
             {
               "id": "BA3010",

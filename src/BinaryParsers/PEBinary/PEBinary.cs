@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics;
 using System.IO;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -23,19 +22,27 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             string localSymbolDirectories = null,
             bool tracePdbLoad = false) : base(uri)
         {
-            this.symbolPath = symbolPath;
-            this.tracePdbLoad = tracePdbLoad;
-            this.localSymbolDirectories = localSymbolDirectories;
-
             // We actively verify our ability to parse this binary as a PE.
             this.PE = new PE(this.TargetUri.LocalPath);
-            this.Valid = this.PE.IsPEFile;
-            this.LoadException = this.PE.LoadException;
 
-            // But we defer attempting to load PDBs, as this won't be necessary
+            // We defer attempting to load PDBs, as this won't be necessary
             // for every binary we analyze, depending on the binary itself
             // (managed vs. native) or the current scan rules configuration.
             this.pdb = new Lazy<Pdb>(this.LoadPdb, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+
+            if (this.TargetUri.LocalPath.EndsWith(".pdb", StringComparison.OrdinalIgnoreCase))
+            {
+                // If someone has asked us to analyze a PDB, we'll force it to load
+                Pdb pdb = this.pdb?.Value;
+                this.Valid = pdb != null;
+                return;
+            }
+
+            this.symbolPath = symbolPath;
+            this.Valid = this.PE.IsPEFile;
+            this.tracePdbLoad = tracePdbLoad;
+            this.LoadException = this.PE.LoadException;
+            this.localSymbolDirectories = localSymbolDirectories;
         }
 
         private Pdb LoadPdb()
@@ -44,7 +51,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             try
             {
                 pdb = new Pdb(
-                    this.PE.FileName,
+                    this.PE?.FileName ?? this.TargetUri.LocalPath,
                     this.symbolPath,
                     this.localSymbolDirectories,
                     this.tracePdbLoad);
@@ -98,6 +105,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public static bool CanLoadBinary(Uri uri)
         {
+            // TODO: replace this with an actual sniff of PDB binary data.
+            if (uri.LocalPath.EndsWith(".pdb"))
+            {
+                return true;
+            }
+
             try
             {
                 using (FileStream fs = File.OpenRead(Path.GetFullPath(uri.LocalPath)))

@@ -391,7 +391,7 @@ Modules triggering this check were:
     <value>The following modules were compiled with a toolset that supports /Qspectre but the deprecated /d2guardspecload argument was specified on the command-line instead: {0}</value>
   </data>
   <data name="BA3001_EnablePositionIndependentExecutable_Description" xml:space="preserve">
-    <value>A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.</value>
+    <value>A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.</value>
   </data>
   <data name="BA3001_Error" xml:space="preserve">
     <value>PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc.</value>
@@ -498,5 +498,32 @@ Modules triggering this check were:
   </data>
   <data name="BA4001_ReportCompilerData_Description" xml:space="preserve">
     <value>This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland.</value>
+  </data>
+  <data name="BA2025_EnableShadowStack_Description" xml:space="preserve">
+    <value>Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks.</value>
+  </data>
+  <data name="BA2025_Warning" xml:space="preserve">
+    <value>'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines.</value>
+  </data>
+  <data name="BA2025_Pass" xml:space="preserve">
+    <value>'{0}' enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation.</value>
+  </data>
+  <data name="BA3004_Error" xml:space="preserve">
+    <value>'{0}' is using debugging dwarf version '{1}'. The dwarf version 5 contains more information and should be used. To enable the debugging version 5 use '-gdwarf-5'.</value>
+  </data>
+  <data name="BA3004_Pass" xml:space="preserve">
+    <value>The version of the debugging dwarf format is '{0}' for the file '{1}'</value>
+  </data>
+  <data name="BA3004_GenerateRequiredSymbolFormat_Description" xml:space="preserve">
+    <value>This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this.</value>
+  </data>
+  <data name="BA3005_Error" xml:space="preserve">
+    <value>The Stack Clash Protection is missing from this binary, so the stack from '{0}' can clash/colide with another memory region. Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this.</value>
+  </data>
+  <data name="BA3005_EnableStackClashProtection_Description" xml:space="preserve">
+    <value>This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this.</value>
+  </data>
+  <data name="BA3005_Pass" xml:space="preserve">
+    <value>The Stack Clash Protection was present, so '{0}' is protected.</value>
   </data>
 </root>

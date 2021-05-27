@@ -93,13 +93,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
         }
 
-        private void WindowsNativeLoadPdbUsingDia(string pePath, string symbolPath, string localSymbolDirectories)
+        private void WindowsNativeLoadPdbUsingDia(string peOrPdbPath, string symbolPath, string localSymbolDirectories)
         {
             IDiaDataSource diaSource = null;
             Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
             Environment.SetEnvironmentVariable("_NT_ALT_SYMBOL_PATH", "");
 
-            if (!string.IsNullOrEmpty(localSymbolDirectories))
+            object pCallback = this.loadTrace != null ? this : (object)IntPtr.Zero;
+
+            bool loadPdb = peOrPdbPath.EndsWith(".pdb", StringComparison.OrdinalIgnoreCase);
+
+            if (!string.IsNullOrEmpty(localSymbolDirectories) && !loadPdb)
             {
                 // If we have one or more local symbol directories, we want
                 // to probe them before any other default load behavior. If
@@ -109,10 +113,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 try
                 {
                     diaSource = MsdiaComWrapper.GetDiaSource();
-                    diaSource.loadDataForExe(
-                        pePath,
-                        localSymbolDirectories,
-                        this.loadTrace != null ? this : (object)IntPtr.Zero);
+
+                    diaSource.loadDataForExe(peOrPdbPath,
+                                             localSymbolDirectories,
+                                             pCallback);
                 }
                 catch
                 {
@@ -125,10 +129,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 this.restrictReferenceAndOriginalPathAccess = false;
 
                 diaSource = MsdiaComWrapper.GetDiaSource();
-                diaSource.loadDataForExe(
-                    pePath,
-                    symbolPath,
-                    this.loadTrace != null ? this : (object)IntPtr.Zero);
+
+                if (loadPdb)
+                {
+                    diaSource.loadDataFromPdb(peOrPdbPath);
+                }
+                else
+                {
+                    diaSource.loadDataForExe(peOrPdbPath,
+                                             symbolPath,
+                                             pCallback);
+                }
             }
 
             diaSource.openSession(out this.session);

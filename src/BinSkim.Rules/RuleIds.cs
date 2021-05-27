@@ -39,15 +39,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string SignSecurely = "BA2022";
 
         public const string EnableSpectreMitigations = "BA2024";
+        public const string EnableShadowStack = "BA2025";
 
         // ELF Checks
         public const string EnablePositionIndependentExecutable = "BA3001";
 
         public const string DoNotMarkStackAsExecutable = "BA3002";
         public const string EnableStackProtector = "BA3003";
+        public const string GenerateRequiredSymbolFormat = "BA3004";
+        public const string EnableStackClashProtection = "BA3005";
 
         // Skipping some check namespace (BA3004-3009) for future checks
         public const string EnableReadOnlyRelocations = "BA3010";
+
         public const string EnableBindNow = "BA3011";
 
         // BA3012-3029 -- saved for future non-compiler/language specific checks.

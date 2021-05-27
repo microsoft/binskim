@@ -26,9 +26,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageIsResourceOnlyBinary = SdkResources.MetadataCondition_ImageIsResourceOnlyBinary;
         public static readonly string ImageIsDotNetNativeBinary = SdkResources.MetadataCondition_ImageIsDotNetNativeBinary;
         public static readonly string ImageIsResourceOnlyAssembly = SdkResources.MetadataCondition_ImageIsResourceOnlyAssembly;
+        public static readonly string ElfNotBuiltWithGccV8OrLater = SdkResources.MetadataCondition_ElfNotBuiltWithGccV8OrLater;
         public static readonly string ImageIsKernelModeAndNot64Bit = SdkResources.MetadataCondition_ImageIsKernelModeAndNot64Bit;
         public static readonly string ImageIsDotNetCoreBootstrapExe = SdkResources.MetadataCondition_ImageIsDotNetCoreBootstrapExe;
         public static readonly string ImageLikelyLoadsAs32BitProcess = SdkResources.MetadataCondition_ImageLikelyLoads32BitProcess;
+        public static readonly string ElfNotBuiltWithDwarfDebugging = SdkResources.MetadataCondition_ElfNotBuiltWithDwarfDebugging;
         public static readonly string ImageIsDotNetCoreEntryPointDll = SdkResources.MetadataCondition_ImageIsDotNetCoreEntryPointDll;
         public static readonly string ImageCompiledWithOutdatedTools = SdkResources.MetadataCondition_ImageCompiledWithOutdatedTools;
         public static readonly string ImageIsDotNetNativeBootstrapExe = SdkResources.MetadataCondition_ImageIsDotNetNativeBootstrapExe;
