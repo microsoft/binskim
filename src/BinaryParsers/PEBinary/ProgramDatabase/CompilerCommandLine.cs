@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             var explicitWarnings = new Dictionary<int, WarningState>();
             foreach (string argument in ArgumentSplitter.CommandLineToArgvW(commandLine))
             {
-                if (!IsSwitch(argument))
+                if (!IsCommandLineOption(argument))
                 {
                     continue;
                 }
@@ -218,7 +218,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.WarningsExplicitlyDisabled = explicitlyDisabledBuilder.ToImmutable();
         }
 
-        private static bool IsSwitch(string candidate)
+        private static bool IsCommandLineOption(string candidate)
         {
             if (candidate.Length < 2)
             {
@@ -271,7 +271,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
                 foreach (string arg in ArgumentSplitter.CommandLineToArgvW(this.Raw))
                 {
-                    if (IsSwitch(arg))
+                    if (IsCommandLineOption(arg))
                     {
                         string realArg = arg.TrimStart(switchPrefix);
 
@@ -342,6 +342,57 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
 
             return namedswitchesState;
+        }
+
+        /// <summary>
+        /// Get the value of a compiler command-line options
+        /// </summary>
+        /// <param name="optionNames">Array of command line options to search for a value</param>
+        /// <param name="precedence">The precedence ruls for this set of options</param>
+        /// <param name="optionValue">string to recieve the value of the command line option</param>
+        /// <returns>true if one of the options is found, false if none are found</returns>
+        public bool GetOptionValue(string[] optionNames, OrderOfPrecedence precedence, ref string optionValue)
+        {
+            bool optionFound=false;
+
+            if (optionNames != null && optionNames.Length > 0)
+            {
+                // array of strings for the options name without the preceding switchPrefix to make comparison easier
+                string[] optionsArray = new string[optionNames.Length]; ;
+
+                for (int index = 0; index < optionNames.Length; index++)
+                {
+                    // if present remove the slash or minus
+                    optionsArray[index] = optionNames[index].TrimStart(switchPrefix);
+                }
+
+                foreach (string arg in ArgumentSplitter.CommandLineToArgvW(this.Raw))
+                {
+                    if (IsCommandLineOption(arg))
+                    {
+                        string realArg = arg.TrimStart(switchPrefix);
+
+                        // Check if this matches one of the names switches
+                        for (int index = 0; index < optionsArray.Length; index++)
+                        {
+                            if (realArg.StartsWith(optionsArray[index]))
+                            {
+                                optionFound = true;
+                                optionValue = realArg.Substring(optionsArray[index].Length);
+                            }
+                        }
+
+                        if (optionFound == true &&
+                            precedence == OrderOfPrecedence.FirstWins)
+                        {
+                            // we found a switch that impacts the desired state and FirstWins is set
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return optionFound;
         }
     }
 }
