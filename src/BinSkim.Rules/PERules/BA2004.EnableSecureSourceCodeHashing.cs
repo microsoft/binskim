@@ -96,8 +96,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
                 if (omDetails.Language != Language.C &&
-                    omDetails.Language != Language.Cxx && 
-                    omDetails.Language != Language.MASM )
+                    omDetails.Language != Language.Cxx &&
+                    omDetails.Language != Language.MASM)
                 {
                     continue;
                 }

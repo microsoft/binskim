@@ -353,7 +353,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <returns>true if one of the options is found, false if none are found</returns>
         public bool GetOptionValue(string[] optionNames, OrderOfPrecedence precedence, ref string optionValue)
         {
-            bool optionFound=false;
+            bool optionFound = false;
 
             if (optionNames != null && optionNames.Length > 0)
             {
