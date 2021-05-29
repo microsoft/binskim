@@ -363,7 +363,7 @@
             "id": "Pass",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
-              "4"
+              "3"
             ]
           },
           "locations": [

@@ -291,11 +291,12 @@
         {
           "ruleId": "BA2004",
           "ruleIndex": 12,
+          "level": "error",
           "message": {
-            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
+            "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Native_x64_CETShadowStack_Enabled.exe",
-              "Microsoft (R) Optimizing Compiler : c : 19.28.29913.0 : MSVCRTD.lib (cpu_disp.obj,debugger_jmc.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.28.29913.0 : MSVCRTD.lib (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,denormal_control.obj,env_mode.obj,error.obj,exe_main.obj,file_mode.obj,gshandler.obj,gshandlereh4.obj,init.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,pdblkup.obj,stack.obj,thread_locale.obj,tncleanup.obj,ucrt_stubs.obj,userapi.obj,utility.obj,utility_desktop.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 19.28.29915.0 : [directly linked] (Native_CETCOMPAT.obj)\r\n"
             ]
           },
           "locations": [
@@ -340,7 +341,7 @@
             "id": "Pass",
             "arguments": [
               "Native_x64_CETShadowStack_Enabled.exe",
-              "Microsoft (R) Optimizing Compiler:C:19.28.29913.0, Microsoft (R) Optimizing Compiler:Cxx:19.28.29913.0"
+              "Microsoft (R) Optimizing Compiler:Cxx:19.28.29915.0"
             ]
           },
           "locations": [
@@ -489,10 +490,10 @@
         {
           "ruleId": "BA2013",
           "ruleIndex": 21,
-          "kind": "pass",
+          "kind": "notApplicable",
           "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "NotApplicable_FeatureNotEnabled",
             "arguments": [
               "Native_x64_CETShadowStack_Enabled.exe"
             ]
@@ -627,7 +628,7 @@
             "id": "Warning",
             "arguments": [
               "Native_x64_CETShadowStack_Enabled.exe",
-              "The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:\r\nMSVCRTD.lib,c,19.28.29913.0 (cpu_disp.obj,debugger_jmc.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMSVCRTD.lib,cxx,19.28.29913.0 (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,denormal_control.obj,env_mode.obj,error.obj,exe_main.obj,file_mode.obj,gshandler.obj,gshandlereh4.obj,init.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,pdblkup.obj,stack.obj,thread_locale.obj,tncleanup.obj,ucrt_stubs.obj,userapi.obj,utility.obj,utility_desktop.obj)\r\n\r\n"
+              "The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:\r\nNative_CETCOMPAT.obj,cxx,19.28.29915.0 (Native_CETCOMPAT.obj)\r\n\r\n"
             ]
           },
           "locations": [
