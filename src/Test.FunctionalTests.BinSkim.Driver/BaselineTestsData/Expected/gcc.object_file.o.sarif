@@ -605,8 +605,32 @@
           ]
         },
         {
-          "ruleId": "BA3010",
+          "ruleId": "BA3006",
           "ruleIndex": 25,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "gcc.object_file.o",
+              "EnableNonExecutableStack",
+              "ELF does not contain the segment to be analyzed"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.object_file.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 26,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -630,7 +654,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 26,
+          "ruleIndex": 27,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -654,7 +678,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 27,
+          "ruleIndex": 28,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -1360,6 +1384,28 @@
                 }
               },
               "name": "EnableStackClashProtection"
+            },
+            {
+              "id": "BA3006",
+              "fullDescription": {
+                "text": "This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3006EnableNonExecutableStack",
+              "help": {
+                "text": "This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The enable non-executable stack flag was present, so '{0}' is protected."
+                },
+                "Error": {
+                  "text": "The non-executable stack is not enabled from this binary, so '{0}' can have vulnerability of execution of the data written on the stack. Ensure you are compiling with the compiler flags '-z noexecstack' to address this."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableNonExecutableStack"
             },
             {
               "id": "BA3010",

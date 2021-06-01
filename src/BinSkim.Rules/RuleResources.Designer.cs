@@ -1104,6 +1104,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BA3006_EnableNonExecutableStack_Description {
+            get {
+                return ResourceManager.GetString("BA3006_EnableNonExecutableStack_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The non-executable stack is not enabled from this binary, so &apos;{0}&apos; can have vulnerability of execution of the data written on the stack. Ensure you are compiling with the compiler flags &apos;-z noexecstack&apos; to address this..
+        /// </summary>
+        internal static string BA3006_Error {
+            get {
+                return ResourceManager.GetString("BA3006_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The enable non-executable stack flag was present, so &apos;{0}&apos; is protected..
+        /// </summary>
+        internal static string BA3006_Pass {
+            get {
+                return ResourceManager.GetString("BA3006_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
         /// </summary>
         internal static string BA3010_EnableReadOnlyRelocations_Description {
