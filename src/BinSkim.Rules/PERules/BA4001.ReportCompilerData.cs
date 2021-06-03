@@ -82,10 +82,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 string compilerData = kv.Key;
                 ObjectModuleDetails omDetails = kv.Value;
 
-                Console.Write(context.TargetUri.LocalPath + ",");
-                Console.Write(compilerData + ",");
-                Console.Write(omDetails.Name?.Replace(",", "_") + ",");
-                Console.Write(omDetails.Library?.Replace(",", ";") + ",");
+                string name = omDetails.Name?.Replace(",", "_");
+                string library = omDetails.Library?.Replace(",", ";");
+
+                Console.Write($"{context.TargetUri.LocalPath},");
+                Console.Write($"{compilerData},");
+                Console.Write($"{name},");
+                Console.Write($"{(name == library ? string.Empty : library)},");
                 Console.Write($"{context?.Hashes?.Sha256},");
                 Console.WriteLine();
             }

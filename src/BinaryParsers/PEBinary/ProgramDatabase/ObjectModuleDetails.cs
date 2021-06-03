@@ -119,6 +119,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 this.wellKnownCompiler = WellKnownCompilers.MicrosoftCvtRes;
             }
+
+            if (this.Language == Language.MASM &&
+                (this.CompilerName == CompilerNames.MicrosoftMasm ||
+                 this.CompilerName == CompilerNames.MicrosoftARMasm))
+            {
+                this.wellKnownCompiler = WellKnownCompilers.MicrosoftMasm;
+            }
         }
 
         public bool HasSecurityChecks { get; private set; }
@@ -148,6 +155,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             return this.compilerCommandLine.GetSwitchState(switchNames, overrideNames, defaultStateOfFirst, precedence);
         }
 
+        /// <summary>
+        /// Get the value of one of a set of compiler command-line options
+        /// </summary>
+        /// <param name="optionNames">Array of command line options to search for a value</param>
+        /// <param name="precedence">The precedence ruls for this set of options</param>
+        /// <param name="optionValue">string to recieve the value of the command line option</param>
+        /// <returns>true if one of the options is found, false if none are found</returns>
+        public bool GetOptionValue(string[] optionNames, OrderOfPrecedence precedence, ref string optionValue)
+        {
+            return this.compilerCommandLine.GetOptionValue(optionNames, precedence, ref optionValue);
+        }
+
     }
     public enum Language : uint
     {
@@ -175,12 +194,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     public enum WellKnownCompilers
     {
         Unknown,
-        MicrosoftC = 0x1,             // 32|64-bit for x86|x64|ARM|ARM64
-        MicrosoftMasm = 0x2,             // ml.exe
+        MicrosoftC = 0x1,        // 32|64-bit for x86|x64|ARM|ARM64
+        MicrosoftMasm = 0x2,     // ml.exe / ml64.exe / armasm.exe / armasm64.exe
         MicrosoftCsharp = 0x4,   // csc.exe
-        MicrosoftRC = 0x8,      // rc.exe
-        MicrosoftCvtRes = 0x10, // cvtres.exe
-        MicrosoftCxx = 0x20,    // cl.exe
+        MicrosoftRC = 0x8,       // rc.exe
+        MicrosoftCvtRes = 0x10,  // cvtres.exe
+        MicrosoftCxx = 0x20,     // cl.exe
         MicrosoftLink = 0x40,    // cl.exe
     }
 }

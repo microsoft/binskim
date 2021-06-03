@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+using System.IO;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -20,6 +21,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA2004
         /// </summary>
+        public const string MSVCPredefinedTypesFileName = "predefined C++ types (compiler internal)";
+
         public override string Id => RuleIds.EnableSecureSourceCodeHashing;
 
         public override MultiformatMessageString FullDescription => new MultiformatMessageString
@@ -93,7 +96,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
                 if (omDetails.Language != Language.C &&
-                    omDetails.Language != Language.Cxx)
+                    omDetails.Language != Language.Cxx &&
+                    omDetails.Language != Language.MASM)
                 {
                     continue;
                 }
@@ -103,11 +107,67 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
+                bool isMSVC = (omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftC ||
+                               omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftCxx);
+
+                string pchHeaderFile = string.Empty;
+                string pchFileName = string.Empty;
+
+                if (isMSVC)
+                {
+                    // Check to see if the object was compiled using /Yc or /Yu for precompiled headers
+                    string[] pchOptionSwitches = { "/Yc", "/Yu" };
+                    if (omDetails.GetOptionValue(pchOptionSwitches, OrderOfPrecedence.FirstWins, ref pchHeaderFile) == true)
+                    {
+                        // Now check to see if a pch file name was specified using /Fp:
+                        string[] pchFileNameOptions = { "/Fp:" };
+                        if (omDetails.GetOptionValue(pchFileNameOptions, OrderOfPrecedence.FirstWins, ref pchFileName) != true)
+                        {
+                            // no pch filename specified, so the filename defaults to the pchHeaderFile with the extension swapped to ".pch"
+                            pchFileName = Path.ChangeExtension(pchHeaderFile, "pch");
+                        }
+                    }
+                }
+
                 CompilandRecord record = om.CreateCompilandRecord();
 
                 foreach (DisposableEnumerableView<SourceFile> sfView in di.CreateSourceFileIterator(om))
                 {
                     SourceFile sf = sfView.Value;
+
+                    if (sf.HashType == HashType.None)
+                    {
+                        if (isMSVC)
+                        {
+                            // We know of 3 scenarios where this occurs today:
+                            // If we encounter one of these, we should continue the loop to the next SourceFile,
+                            // else fallthrough to the other checks for normal processing and errors.
+
+                            string sfName = Path.GetFileName(sf.FileName);
+
+                            // 1. Some compiler injected code that is listed as being in "predefined C++ types (compiler internal)"
+                            if (sfName == MSVCPredefinedTypesFileName)
+                            {
+                                continue;
+                            }
+                            else if (pchFileName != string.Empty)
+                            {
+                                // 2. The file used to create a precompiled header using the /Yc switch
+                                // TODO - We need a prepass on the library / final link to determine which file was
+                                //        used to create the pch, as this is the file that will have a HashType.None
+                                // 3. The pch file itself
+                                if (sfName == Path.GetFileName(pchFileName))
+                                {
+                                    continue;
+                                }
+                                // TODO - check this against the filename used to create the pch.  For now just let it pass
+                                else // if(sfName == pchCreationTUFileName)
+                                {
+                                    continue;
+                                }
+                            }
+                        }
+                    }
 
                     if (sf.HashType != HashType.SHA256)
                     {

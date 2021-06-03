@@ -343,7 +343,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Native_x64_VS2013_Default.dll",
-              "Microsoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib (atonexit.obj,cinitexe.obj,crtdll.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,gshandler.obj,loadcfg.obj,natstart.obj,pesect.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib (error.obj,init.obj,initsect.obj,pdblkup.obj,tncleanup.obj,userapi.obj)\r\n"
+              "Microsoft (R) Macro Assembler : masm : 12.0.20806.0 : MSVCRTD.lib (amdsecgs.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib (atonexit.obj,cinitexe.obj,crtdll.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,gshandler.obj,loadcfg.obj,natstart.obj,pesect.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib (error.obj,init.obj,initsect.obj,pdblkup.obj,tncleanup.obj,userapi.obj)\r\n"
             ]
           },
           "locations": [
