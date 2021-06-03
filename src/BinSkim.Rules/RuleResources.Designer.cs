@@ -1212,6 +1212,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This rule emits CSV data to the console for every compiler/language/version combination that&apos;s observed..
+        /// </summary>
+        internal static string BA4002_ReportELFCompilerData_Description {
+            get {
+                return ResourceManager.GetString("BA4002_ReportELFCompilerData_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; because its PDB could not be loaded ({2})..
         /// </summary>
         internal static string ERR997_ExceptionLoadingPdb {
