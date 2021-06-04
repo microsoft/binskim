@@ -290,7 +290,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation. An example compiler command line triggering this check was: {1}
-        ///Modules tr [rest of string was truncated]&quot;;.
+        ///Modules tri [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2007_Error_WarningsDisabled {
             get {
@@ -1113,7 +1113,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The non-executable stack is not enabled from this binary, so &apos;{0}&apos; can have vulnerability of execution of the data written on the stack. Ensure you are compiling with the compiler flags &apos;-z noexecstack&apos; to address this..
+        ///   Looks up a localized string similar to The non-executable stack is not enabled for this binary, so &apos;{0}&apos; can have a vulnerability of execution of the data written on the stack. Ensure you are compiling with the flag &apos;-z noexecstack&apos; to address this..
         /// </summary>
         internal static string BA3006_Error {
             get {

@@ -682,7 +682,7 @@
                   "text": "The enable non-executable stack flag was present, so '{0}' is protected."
                 },
                 "Error": {
-                  "text": "The non-executable stack is not enabled from this binary, so '{0}' can have vulnerability of execution of the data written on the stack. Ensure you are compiling with the compiler flags '-z noexecstack' to address this."
+                  "text": "The non-executable stack is not enabled for this binary, so '{0}' can have a vulnerability of execution of the data written on the stack. Ensure you are compiling with the flag '-z noexecstack' to address this."
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."

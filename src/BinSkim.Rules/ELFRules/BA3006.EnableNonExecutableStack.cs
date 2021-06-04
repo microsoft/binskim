@@ -58,9 +58,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if ((elfBinary.GetSegmentFlags(ELFSegmentType.PT_GNU_STACK) & SegmentFlags.Execute) != 0)
             {
-                // The non-executable stack is not enabled from this binary,
-                // so '{0}' can have vulnerability of execution of the data written on the stack.
-                // Ensure you are compiling with the compiler flags '-z noexecstack' to address this.
+                // The non-executable stack is not enabled for this binary,
+                // so '{0}' can have a vulnerability of execution of the data written on the stack.
+                // Ensure you are compiling with the flag '-z noexecstack' to address this.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA3006_Error),
