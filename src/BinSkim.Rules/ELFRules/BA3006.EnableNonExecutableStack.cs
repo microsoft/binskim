@@ -68,7 +68,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            // The enable non-executable stack flag was present, so '{0}' is protected.
+            // The non-executable stack flag was present, so '{0}' is protected.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA3006_Pass),

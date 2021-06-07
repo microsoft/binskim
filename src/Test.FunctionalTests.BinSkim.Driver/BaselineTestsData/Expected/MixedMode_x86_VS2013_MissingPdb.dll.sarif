@@ -709,7 +709,7 @@
               },
               "messageStrings": {
                 "Pass": {
-                  "text": "The enable non-executable stack flag was present, so '{0}' is protected."
+                  "text": "The non-executable stack flag was present, so '{0}' is protected."
                 },
                 "Error": {
                   "text": "The non-executable stack is not enabled for this binary, so '{0}' can have a vulnerability of execution of the data written on the stack. Ensure you are compiling with the flag '-z noexecstack' to address this."
