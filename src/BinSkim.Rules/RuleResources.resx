@@ -526,6 +526,15 @@ Modules triggering this check were:
   <data name="BA3005_Pass" xml:space="preserve">
     <value>The Stack Clash Protection was present, so '{0}' is protected.</value>
   </data>
+  <data name="BA3006_EnableNonExecutableStack_Description" xml:space="preserve">
+    <value>This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this.</value>
+  </data>
+  <data name="BA3006_Error" xml:space="preserve">
+    <value>The non-executable stack is not enabled for this binary, so '{0}' can have a vulnerability of execution of the data written on the stack. Ensure you are compiling with the flag '-z noexecstack' to address this.</value>
+  </data>
+  <data name="BA3006_Pass" xml:space="preserve">
+    <value>The non-executable stack flag was present, so '{0}' is protected.</value>
+  </data>
   <data name="BA4002_ReportELFCompilerData_Description" xml:space="preserve">
     <value>This rule emits CSV data to the console for every compiler/language/version combination that's observed.</value>
   </data>

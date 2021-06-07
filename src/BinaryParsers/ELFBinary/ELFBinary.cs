@@ -11,6 +11,7 @@ using ELFSharp.ELF.Sections;
 using ELFSharp.ELF.Segments;
 
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
+using Microsoft.CodeAnalysis.BinaryParsers.ELF;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
@@ -121,6 +122,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 ? new List<SymbolEntry<ulong>>()
                 : symbolTableSection.Entries.Where(e => e.Type == SymbolType.File && !string.IsNullOrWhiteSpace(e.Name))
                 .GroupBy(x => x.Name).Select(x => x.First()).ToList();
+        }
+
+        public SegmentFlags? GetSegmentFlags(ELFSegmentType segmentType)
+        {
+            ISegment segment = ELF.Segments?.FirstOrDefault(s => (uint)s.Type == (uint)segmentType);
+
+            return segment == null ? null : (SegmentFlags?)segment.Flags;
         }
 
         /// <summary>

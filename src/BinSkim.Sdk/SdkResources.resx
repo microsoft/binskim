@@ -228,4 +228,7 @@
   <data name="MetadataCondition_ElfNotBuiltWithGccV8OrLater" xml:space="preserve">
     <value>not compiled with gcc v8 or later</value>
   </data>
+  <data name="MetadataCondition_ElfNotContainSegment" xml:space="preserve">
+    <value>ELF does not contain the segment to be analyzed</value>
+  </data>
 </root>
