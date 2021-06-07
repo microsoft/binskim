@@ -1198,6 +1198,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA3006_EnableNonExecutableStack_Pass()
+        {
+            this.VerifyPass(new EnableNonExecutableStack(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3006_EnableNonExecutableStack_Fail()
+        {
+            this.VerifyFail(new EnableNonExecutableStack(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3006_EnableNonExecutableStack_NotApplicable()
+        {
+            this.VerifyApplicability(new EnableNonExecutableStack(), new HashSet<string>(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
         public void BA3010_EnableReadOnlyRelocations_Pass()
         {
             this.VerifyPass(new EnableReadOnlyRelocations(), bypassExtensionValidation: true);

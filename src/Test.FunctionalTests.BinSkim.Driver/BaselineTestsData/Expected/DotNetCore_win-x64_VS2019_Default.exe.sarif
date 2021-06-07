@@ -389,8 +389,32 @@
           ]
         },
         {
-          "ruleId": "BA3010",
+          "ruleId": "BA3006",
           "ruleIndex": 16,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "DotNetCore_win-x64_VS2019_Default.exe",
+              "EnableNonExecutableStack",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/DotNetCore_win-x64_VS2019_Default.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 17,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -414,7 +438,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -438,7 +462,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 18,
+          "ruleIndex": 19,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -462,28 +486,6 @@
         },
         {
           "ruleId": "BA2001",
-          "ruleIndex": 19,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "DotNetCore_win-x64_VS2019_Default.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/DotNetCore_win-x64_VS2019_Default.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2005",
           "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
@@ -505,7 +507,7 @@
           ]
         },
         {
-          "ruleId": "BA2008",
+          "ruleId": "BA2005",
           "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
@@ -527,7 +529,7 @@
           ]
         },
         {
-          "ruleId": "BA2009",
+          "ruleId": "BA2008",
           "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
@@ -549,7 +551,7 @@
           ]
         },
         {
-          "ruleId": "BA2010",
+          "ruleId": "BA2009",
           "ruleIndex": 23,
           "kind": "pass",
           "level": "none",
@@ -571,7 +573,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2010",
           "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
@@ -593,7 +595,7 @@
           ]
         },
         {
-          "ruleId": "BA2015",
+          "ruleId": "BA2012",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -615,7 +617,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2015",
           "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
@@ -637,7 +639,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2019",
           "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
@@ -659,8 +661,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 28,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "DotNetCore_win-x64_VS2019_Default.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/DotNetCore_win-x64_VS2019_Default.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 29,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -1105,6 +1129,28 @@
                 }
               },
               "name": "EnableStackClashProtection"
+            },
+            {
+              "id": "BA3006",
+              "fullDescription": {
+                "text": "This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3006EnableNonExecutableStack",
+              "help": {
+                "text": "This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The non-executable stack flag was present, so '{0}' is protected."
+                },
+                "Error": {
+                  "text": "The non-executable stack is not enabled for this binary, so '{0}' can have a vulnerability of execution of the data written on the stack. Ensure you are compiling with the flag '-z noexecstack' to address this."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableNonExecutableStack"
             },
             {
               "id": "BA3010",
