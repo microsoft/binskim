@@ -113,6 +113,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             return language.Key == DwarfAttribute.None ? DwarfLanguage.Unknown : ((DwarfLanguage)(language.Value.Constant));
         }
 
+        public List<SymbolEntry<ulong>> GetSymbolTableFiles()
+        {
+            SymbolTable<ulong> symbolTableSection = ELF.Sections.FirstOrDefault(s => s.Type == SectionType.SymbolTable) as SymbolTable<ulong>;
+
+            return symbolTableSection == null
+                ? new List<SymbolEntry<ulong>>()
+                : symbolTableSection.Entries.Where(e => e.Type == SymbolType.File && !string.IsNullOrWhiteSpace(e.Name))
+                .GroupBy(x => x.Name).Select(x => x.First()).ToList();
+        }
+
         /// <summary>
         /// Gets the public symbols.
         /// </summary>

@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Composition;
 
+using ELFSharp.ELF.Sections;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -43,11 +45,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             ELFBinary elfBinary = context.ELFBinary();
             DwarfLanguage dwarfLanguage = elfBinary.GetLanguage();
-            string dwarfCompilerCommand = elfBinary.GetDwarfCompilerCommand();
+            List<SymbolEntry<ulong>> symbolTableFiles = elfBinary.GetSymbolTableFiles();
 
             if (PrintHeader)
             {
-                Console.WriteLine("Target,Compiler Name,Compiler Version,Dwarf Version,Language,Compiler Command");
+                Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Module Name,Module Library,Hash,Error");
                 PrintHeader = false;
             }
             foreach (ELFCompiler compiler in elfBinary.Compilers)
@@ -56,13 +58,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     continue;
                 }
-                Console.Write($"{context.TargetUri.LocalPath},");
-                Console.Write($"{compiler.Compiler},");
-                Console.Write($"{compiler.Version},");
-                Console.Write($"{elfBinary.DwarfVersion},");
-                Console.Write($"{dwarfLanguage},");
-                Console.Write($"{dwarfCompilerCommand}");
-                Console.WriteLine();
+                foreach (SymbolEntry<ulong> entry in symbolTableFiles)
+                {
+                    Console.Write($"{context.TargetUri.LocalPath},");
+                    Console.Write($"{compiler.Compiler},");
+                    Console.Write($"{compiler.Version},");
+                    Console.Write($"{compiler.Version},");
+                    Console.Write($"{dwarfLanguage},");
+                    Console.Write($"{entry.Name},");
+                    Console.Write($"{entry.Name},");
+                    Console.Write($"{context?.Hashes?.Sha256},");
+                    Console.WriteLine();
+                }
             }
         }
     }
