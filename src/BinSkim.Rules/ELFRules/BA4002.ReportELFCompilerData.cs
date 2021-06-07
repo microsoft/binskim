@@ -52,6 +52,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Module Name,Module Library,Hash,Error");
                 PrintHeader = false;
             }
+
+            var processedRecords = new HashSet<string>();
+
             foreach (ELFCompiler compiler in elfBinary.Compilers)
             {
                 if (compiler.Compiler == ELFCompilerType.Unknown)
@@ -60,6 +63,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
                 foreach (SymbolEntry<ulong> entry in symbolTableFiles)
                 {
+                    string currentRecord = compiler.Compiler + "," + compiler.Version + "," + dwarfLanguage;
+
+                    if (processedRecords.Contains(currentRecord))
+                    {
+                        continue;
+                    }
+
+                    processedRecords.Add(currentRecord);
+
                     Console.Write($"{context.TargetUri.LocalPath},");
                     Console.Write($"{compiler.Compiler},");
                     Console.Write($"{compiler.Version},");
