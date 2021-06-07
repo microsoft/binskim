@@ -7,7 +7,7 @@ using System.IO;
 
 using ELFSharp.MachO;
 
-namespace Microsoft.CodeAnalysis.BinaryParsers.MachOBinary
+namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public class MachOBinary : BinaryBase
     {
