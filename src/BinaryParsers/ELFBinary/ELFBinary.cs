@@ -11,6 +11,7 @@ using ELFSharp.ELF.Sections;
 using ELFSharp.ELF.Segments;
 
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
+using Microsoft.CodeAnalysis.BinaryParsers.ELF;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
@@ -111,6 +112,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 .SelectMany(s => s.Attributes)
                 .FirstOrDefault(a => a.Key == DwarfAttribute.Language);
             return language.Key == DwarfAttribute.None ? DwarfLanguage.Unknown : ((DwarfLanguage)(language.Value.Constant));
+        }
+
+        public SegmentFlags? GetSegmentFlags(ELFSegmentType segmentType)
+        {
+            ISegment segment = ELF.Segments?.FirstOrDefault(s => (uint)s.Type == (uint)segmentType);
+
+            return segment == null ? null : (SegmentFlags?)segment.Flags;
         }
 
         /// <summary>
