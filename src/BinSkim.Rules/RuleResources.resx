@@ -535,4 +535,7 @@ Modules triggering this check were:
   <data name="BA3006_Pass" xml:space="preserve">
     <value>The non-executable stack flag was present, so '{0}' is protected.</value>
   </data>
+  <data name="BA4002_ReportELFCompilerData_Description" xml:space="preserve">
+    <value>This rule emits CSV data to the console for every compiler/language/version combination that's observed.</value>
+  </data>
 </root>
