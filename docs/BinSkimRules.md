@@ -694,7 +694,7 @@ All linked modules '{0}' were compiled with mitigations enabled that help preven
 
 ---
 
-## Rule `BA4001.ReportCompilerData`
+## Rule `BA4001.ReportPECompilerData`
 
 ### Description
 

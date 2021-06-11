@@ -1232,9 +1232,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// <summary>
         ///   Looks up a localized string similar to This rule emits CSV data to the console for every compiler/language/version combination that&apos;s observed in any PDB-linked compiland..
         /// </summary>
-        internal static string BA4001_ReportCompilerData_Description {
+        internal static string BA4001_ReportPECompilerData_Description {
             get {
-                return ResourceManager.GetString("BA4001_ReportCompilerData_Description", resourceCulture);
+                return ResourceManager.GetString("BA4001_ReportPECompilerData_Description", resourceCulture);
             }
         }
         
