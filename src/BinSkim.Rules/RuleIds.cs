@@ -60,7 +60,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string UseCheckedFunctionsWithGcc = "BA3030";
 
         // Reporting checks
-        public const string ReportCompilerData = "BA4001";
+        public const string ReportPECompilerData = "BA4001";
         public const string ReportELFCompilerData = "BA4002";
     }
 }
