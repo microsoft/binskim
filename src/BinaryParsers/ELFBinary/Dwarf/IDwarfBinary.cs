@@ -12,6 +12,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     public interface IDwarfBinary : IDisposable
     {
         /// <summary>
+        /// The version of Dwarf used.
+        /// </summary>
+        public int DwarfVersion { get; set; }
+
+        /// <summary>
+        /// Unit type of Dwarf used.
+        /// </summary>
+        public DwarfUnitType DwarfUnitType { get; set; }
+
+        /// <summary>
         /// Gets the debug data.
         /// </summary>
         byte[] DebugData { get; }
@@ -74,10 +84,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </value>
         bool Is64bit { get; }
 
+        ICompiler[] Compilers { get; }
+
         /// <summary>
         /// Gets address offset within module when it is loaded.
         /// </summary>
         /// <param name="address">Virtual address that points where something should be loaded.</param>
         ulong NormalizeAddress(ulong address);
+
+        /// <summary>
+        /// Gets compiler command arguments from dwarf CompilationUnits
+        /// </summary>
+        /// <returns>compiler argument strings</returns>
+        public string GetDwarfCompilerCommand();
     }
 }

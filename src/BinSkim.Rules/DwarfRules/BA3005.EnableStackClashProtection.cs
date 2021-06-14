@@ -7,6 +7,7 @@ using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -14,7 +15,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class EnableStackClashProtection : ELFBinarySkimmerBase
+    public class EnableStackClashProtection : DwarfSkimmerBase
     {
         /// <summary>
         /// BA3005
@@ -39,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
-        public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             reasonForNotAnalyzing = null;
 
@@ -73,8 +74,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            ELFBinary elfBinary = context.ELFBinary();
-            string dwarfCompilerCommand = elfBinary.GetDwarfCompilerCommand();
+            IDwarfBinary binary = context.DwarfBinary();
+            string dwarfCompilerCommand = binary.GetDwarfCompilerCommand();
 
             if (!dwarfCompilerCommand.Contains("-fstack-clash-protection", StringComparison.OrdinalIgnoreCase)
                 || dwarfCompilerCommand.Contains("-fno-stack-clash-protection", StringComparison.OrdinalIgnoreCase))

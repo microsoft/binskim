@@ -23,9 +23,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="debugDataDescription">The debug data description stream.</param>
         /// <param name="debugStrings">The debug strings.</param>
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
-        public DwarfCompilationUnit(ELFBinary elfBinary, DwarfMemoryReader debugData, DwarfMemoryReader debugDataDescription, DwarfMemoryReader debugStrings, NormalizeAddressDelegate addressNormalizer)
+        public DwarfCompilationUnit(IDwarfBinary dwarfBinary, DwarfMemoryReader debugData, DwarfMemoryReader debugDataDescription, DwarfMemoryReader debugStrings, NormalizeAddressDelegate addressNormalizer)
         {
-            ReadData(elfBinary, debugData, debugDataDescription, debugStrings, addressNormalizer);
+            ReadData(dwarfBinary, debugData, debugDataDescription, debugStrings, addressNormalizer);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="debugDataDescription">The debug data description.</param>
         /// <param name="debugStrings">The debug strings.</param>
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
-        private void ReadData(ELFBinary elfBinary, DwarfMemoryReader debugData, DwarfMemoryReader debugDataDescription, DwarfMemoryReader debugStrings, NormalizeAddressDelegate addressNormalizer)
+        private void ReadData(IDwarfBinary dwarfBinary, DwarfMemoryReader debugData, DwarfMemoryReader debugDataDescription, DwarfMemoryReader debugStrings, NormalizeAddressDelegate addressNormalizer)
         {
             // Read header
             int beginPosition = debugData.Position;
@@ -62,14 +62,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             byte addressSize;
             int debugDataDescriptionOffset;
 
-            elfBinary.DwarfVersion = version;
+            dwarfBinary.DwarfVersion = version;
 
             if (version >= 5)
             {
-                elfBinary.DwarfUnitType = (DwarfUnitType)(debugData.ReadByte());
+                dwarfBinary.DwarfUnitType = (DwarfUnitType)(debugData.ReadByte());
                 addressSize = debugData.ReadByte();
                 debugDataDescriptionOffset = debugData.ReadOffset(is64bit);
-                if (elfBinary.DwarfUnitType == DwarfUnitType.Skeleton || elfBinary.DwarfUnitType == DwarfUnitType.SplitCompile)
+                if (dwarfBinary.DwarfUnitType == DwarfUnitType.Skeleton || dwarfBinary.DwarfUnitType == DwarfUnitType.SplitCompile)
                 {
                     debugData.ReadUlong();
                 }

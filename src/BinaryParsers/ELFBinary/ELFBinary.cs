@@ -245,7 +245,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// Gets the Compilers.
         /// </summary>
-        public ELFCompiler[] Compilers { get; }
+        public ICompiler[] Compilers { get; }
 
         /// <summary>
         /// The ELF interface
@@ -258,7 +258,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public int DwarfVersion { get; set; } = -1;
 
         /// <summary>
-        /// The version of Dwarf used.
+        /// Unit type of Dwarf used..
         /// </summary>
         public DwarfUnitType DwarfUnitType { get; set; } = DwarfUnitType.Unknown;
 
