@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         // These should be ordered so that the generic "catch all" mapping to unknown is last.
         private static readonly List<(Regex Regex, ELFCompilerType Compiler)> compilerRegexes = new List<(Regex, ELFCompilerType)>
         {
-            (new Regex(@"GNU:.+"), ELFCompilerType.GCC), // e.g. "GNU C17 11.1.0 -fPIC -mmacosx-version-min=10.15.0 -mtune=core2 -gdwarf-5"
+            (new Regex(@"GNU .+"), ELFCompilerType.GCC), // e.g. "GNU C17 11.1.0 -fPIC -mmacosx-version-min=10.15.0 -mtune=core2 -gdwarf-5"
             (new Regex(@".*clang version.*"), ELFCompilerType.Clang), // e.g. "clang version 7.0.1-8+deb10u2 (tags/RELEASE_701/final)"
             (new Regex(@".*"), ELFCompilerType.Unknown)
         };

@@ -181,8 +181,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         private byte[] LoadSection(string sectionName)
         {
             Section section = this.Segments.SelectMany(seg => seg.Sections.ToList())
-                                           .Where(sec => sec.Name == sectionName || sec.Name == sectionName + ".dwo")
-                                           .FirstOrDefault();
+                                           .FirstOrDefault(sec => sec.Name == sectionName || sec.Name == sectionName + ".dwo");
 
             return section != null ? section.GetData() : Array.Empty<byte>();
         }
@@ -191,14 +190,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             foreach (Segment segment in this.Segments)
             {
-                Section section = segment.Sections.Where(sec => sec.Name == sectionName).FirstOrDefault();
+                Section section = segment.Sections.FirstOrDefault(sec => sec.Name == sectionName);
                 if (section != null)
                 {
                     ulong CodeSegmentOffset = segment.Address - (ulong)segment.FileOffset;
-                    ulong LoadOffset = 0;
-                    ulong loadOffset = ((0 /*section.Flags*/ & 0x2) > 0) ? LoadOffset : 0;
-
-                    return section.Offset + CodeSegmentOffset + loadOffset;
+                    return section.Offset + CodeSegmentOffset;
                 }
             }
 

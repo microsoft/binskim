@@ -41,9 +41,4 @@
       <CustomToolNamespace>Microsoft.CodeAnalysis.IL.Rules</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="MachORules\" />
-  </ItemGroup>
-
 </Project>
