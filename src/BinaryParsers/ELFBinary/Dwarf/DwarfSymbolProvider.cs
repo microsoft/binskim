@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Parses the compilation units.
         /// </summary>
-        /// <param name="dwarfBinary">instance of a IDwarfBinary</param>
+        /// <param name="dwarfBinary">Instance of a IDwarfBinary</param>
         /// <param name="debugData">The debug data.</param>
         /// <param name="debugDataDescription">The debug data description.</param>
         /// <param name="debugStrings">The debug strings.</param>
