@@ -22,6 +22,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 return new ELFBinary(uri);
             }
+            else if (MachOBinary.CanLoadBinary(uri))
+            {
+                return new MachOBinary(uri);
+            }
             else
             {
                 return null;

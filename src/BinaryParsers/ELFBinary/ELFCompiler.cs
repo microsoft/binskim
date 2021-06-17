@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     ///
     /// This class takes those strings and attempts to match them with a known toolchain & version.
     /// </summary>
-    public class ELFCompiler
+    public class ELFCompiler : ICompiler
     {
         // Regular expressions for extracting compiler types.
         // These should be ordered so that the generic "catch all" mapping to unknown is last.
