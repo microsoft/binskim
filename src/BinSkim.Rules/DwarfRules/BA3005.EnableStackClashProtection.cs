@@ -44,41 +44,65 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             reasonForNotAnalyzing = null;
 
-            // We check for "any usage of non-gcc" as a default/standard compilation with clang leads to [GCC, Clang]
-            // either because it links with a gcc-compiled object (cstdlib) or the linker also reading as GCC.
-            // This has a potential for a False Negative if teams are using GCC and other tools.
-            if (target.Compilers.Any(c => c.Compiler != ELFCompilerType.GCC))
+            Func<IDwarfBinary, CanAnalyzeDwarfResult> canAnalyze = (IDwarfBinary binary) =>
             {
-                reasonForNotAnalyzing = MetadataConditions.ElfNotBuiltWithGcc;
-                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
-            }
-            else if (target.Compilers.Any(c => c.Version.Major < 8))
-            {
-                reasonForNotAnalyzing = MetadataConditions.ElfNotBuiltWithGccV8OrLater;
-                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
-            }
-            else
-            {
-                string dwarfCompilerCommand = target.GetDwarfCompilerCommand();
-
-                if (string.IsNullOrWhiteSpace(dwarfCompilerCommand))
+                // We check for "any usage of non-gcc" as a default/standard compilation with clang leads to [GCC, Clang]
+                // either because it links with a gcc-compiled object (cstdlib) or the linker also reading as GCC.
+                // This has a potential for a False Negative if teams are using GCC and other tools.
+                if (binary.Compilers.Any(c => c.Compiler != ELFCompilerType.GCC))
                 {
-                    reasonForNotAnalyzing = MetadataConditions.ElfNotBuiltWithDwarfDebugging;
-                    return AnalysisApplicability.NotApplicableToSpecifiedTarget;
+                    return new CanAnalyzeDwarfResult
+                    {
+                        Reason = MetadataConditions.ElfNotBuiltWithGcc,
+                        Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
+                    };
                 }
-            }
+                else if (binary.Compilers.Any(c => c.Version.Major < 8))
+                {
+                    return new CanAnalyzeDwarfResult
+                    {
+                        Reason = MetadataConditions.ElfNotBuiltWithGccV8OrLater,
+                        Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
+                    };
+                }
+                else
+                {
+                    string dwarfCompilerCommand = binary.GetDwarfCompilerCommand();
 
-            reasonForNotAnalyzing = null;
-            return AnalysisApplicability.ApplicableToSpecifiedTarget;
+                    if (string.IsNullOrWhiteSpace(dwarfCompilerCommand))
+                    {
+                        return new CanAnalyzeDwarfResult
+                        {
+                            Reason = MetadataConditions.ElfNotBuiltWithDwarfDebugging,
+                            Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
+                        };
+                    }
+                }
+
+                return new CanAnalyzeDwarfResult
+                {
+                    Reason = null,
+                    Result = AnalysisApplicability.ApplicableToSpecifiedTarget
+                };
+            };
+
+            CanAnalyzeDwarfResult result = target.DoDwarfCanAnalyzeCheck(canAnalyze);
+            reasonForNotAnalyzing = result.Reason;
+            return result.Result;
         }
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
             IDwarfBinary binary = context.DwarfBinary();
-            string dwarfCompilerCommand = binary.GetDwarfCompilerCommand();
 
-            if (!dwarfCompilerCommand.Contains("-fstack-clash-protection", StringComparison.OrdinalIgnoreCase)
-                || dwarfCompilerCommand.Contains("-fno-stack-clash-protection", StringComparison.OrdinalIgnoreCase))
+            Func<IDwarfBinary, bool> analyze = (IDwarfBinary binary) =>
+            {
+                string dwarfCompilerCommand = binary.GetDwarfCompilerCommand();
+                return dwarfCompilerCommand.Contains("-fstack-clash-protection", StringComparison.OrdinalIgnoreCase)
+                       && !dwarfCompilerCommand.Contains("-fno-stack-clash-protection", StringComparison.OrdinalIgnoreCase);
+            };
+
+            if (!binary.DoDwarfAnalyze(analyze))
             {
                 // The Stack Clash Protection is missing from this binary,
                 // so the stack from '{0}' can clash/colide with another memory region.
