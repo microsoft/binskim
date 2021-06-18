@@ -341,8 +341,32 @@
           ]
         },
         {
-          "ruleId": "BA3001",
+          "ruleId": "BA2026",
           "ruleIndex": 14,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Native_ARM_VS2015_CvtresResourceOnly.dll",
+              "EnableAdditionalSecurityChecks",
+              "image is a resource-only binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_ARM_VS2015_CvtresResourceOnly.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 15,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -366,7 +390,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 15,
+          "ruleIndex": 16,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -390,7 +414,7 @@
         },
         {
           "ruleId": "BA3003",
-          "ruleIndex": 16,
+          "ruleIndex": 17,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -414,7 +438,7 @@
         },
         {
           "ruleId": "BA3004",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -438,7 +462,7 @@
         },
         {
           "ruleId": "BA3005",
-          "ruleIndex": 18,
+          "ruleIndex": 19,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -462,7 +486,7 @@
         },
         {
           "ruleId": "BA3006",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -486,7 +510,7 @@
         },
         {
           "ruleId": "BA3010",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -510,7 +534,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 21,
+          "ruleIndex": 22,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -534,7 +558,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 22,
+          "ruleIndex": 23,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -558,28 +582,6 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 23,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_ARM_VS2015_CvtresResourceOnly.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_ARM_VS2015_CvtresResourceOnly.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
           "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
@@ -601,7 +603,7 @@
           ]
         },
         {
-          "ruleId": "BA2010",
+          "ruleId": "BA2009",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -623,7 +625,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2010",
           "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
@@ -645,7 +647,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2019",
           "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
@@ -667,8 +669,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 28,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_ARM_VS2015_CvtresResourceOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_ARM_VS2015_CvtresResourceOnly.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 29,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -1087,6 +1111,28 @@
                 }
               },
               "name": "EnableShadowStack"
+            },
+            {
+              "id": "BA2026",
+              "fullDescription": {
+                "text": "/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2026EnableAdditionalSecurityChecks",
+              "help": {
+                "text": "/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' enables the recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features."
+                },
+                "Error": {
+                  "text": "'{0}' does not enable the recommended Security Development Lifecycle (SDL) checks. To Enable the recommended Security Development Lifecycle (SDL) checks pass /sdl"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableAdditionalSecurityChecks"
             },
             {
               "id": "BA3001",
