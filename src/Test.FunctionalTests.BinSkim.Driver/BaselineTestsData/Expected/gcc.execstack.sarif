@@ -509,8 +509,32 @@
           ]
         },
         {
-          "ruleId": "BA3005",
+          "ruleId": "BA2026",
           "ruleIndex": 21,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "gcc.execstack",
+              "EnableAdditionalSecurityChecks",
+              "image is not a PE binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.execstack",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3005",
+          "ruleIndex": 22,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -534,7 +558,7 @@
         },
         {
           "ruleId": "BA3001",
-          "ruleIndex": 22,
+          "ruleIndex": 23,
           "level": "error",
           "message": {
             "id": "Error",
@@ -555,7 +579,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 23,
+          "ruleIndex": 24,
           "level": "error",
           "message": {
             "id": "Error_StackExec",
@@ -576,7 +600,7 @@
         },
         {
           "ruleId": "BA3003",
-          "ruleIndex": 24,
+          "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -598,7 +622,7 @@
         },
         {
           "ruleId": "BA3006",
-          "ruleIndex": 25,
+          "ruleIndex": 26,
           "level": "error",
           "message": {
             "id": "Error",
@@ -619,7 +643,7 @@
         },
         {
           "ruleId": "BA3010",
-          "ruleIndex": 26,
+          "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -641,7 +665,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 27,
+          "ruleIndex": 28,
           "level": "error",
           "message": {
             "id": "Error",
@@ -662,7 +686,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 28,
+          "ruleIndex": 29,
           "level": "error",
           "message": {
             "id": "Error",
@@ -1271,6 +1295,28 @@
                 }
               },
               "name": "EnableShadowStack"
+            },
+            {
+              "id": "BA2026",
+              "fullDescription": {
+                "text": "/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2026EnableAdditionalSecurityChecks",
+              "help": {
+                "text": "/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' enables the recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features."
+                },
+                "Error": {
+                  "text": "'{0}' does not enable the recommended Security Development Lifecycle (SDL) checks. To Enable the recommended Security Development Lifecycle (SDL) checks pass /sdl"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableAdditionalSecurityChecks"
             },
             {
               "id": "BA3005",

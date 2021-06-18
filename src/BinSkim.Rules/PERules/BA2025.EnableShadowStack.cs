@@ -16,9 +16,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class EnableShadowStack : WindowsBinaryAndPdbSkimmerBase
     {
-        private const int IMAGE_DEBUG_TYPE_EX_DLLCHARACTERISTICS = 20;
-        private const ushort IMAGE_DLLCHARACTERISTICS_EX_CET_COMPAT = 0x001;
-
         /// <summary>
         /// BA2025
         /// </summary>
@@ -79,10 +76,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (DebugDirectoryEntry debugDirectory in debugDirectories)
             {
-                if (debugDirectory.Type == (DebugDirectoryEntryType)IMAGE_DEBUG_TYPE_EX_DLLCHARACTERISTICS)
+                if ((ImageDebugType)debugDirectory.Type == ImageDebugType.IMAGE_DEBUG_TYPE_EX_DLLCHARACTERISTICS)
                 {
                     PEMemoryBlock memory = target.PE.GetSectionData(debugDirectory.DataRelativeVirtualAddress);
-                    if ((memory.GetReader().ReadUInt16() & IMAGE_DLLCHARACTERISTICS_EX_CET_COMPAT) == IMAGE_DLLCHARACTERISTICS_EX_CET_COMPAT)
+                    if ((memory.GetReader().ReadUInt16() & (ushort)ImageDllCharacteristicsEx.IMAGE_DLLCHARACTERISTICS_EX_CET_COMPAT)
+                        == (ushort)ImageDllCharacteristicsEx.IMAGE_DLLCHARACTERISTICS_EX_CET_COMPAT)
                     {
                         // '{0}' enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation.
                         context.Logger.Log(this,
