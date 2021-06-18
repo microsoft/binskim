@@ -93,9 +93,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         ulong NormalizeAddress(ulong address);
 
         /// <summary>
-        /// Gets compiler command arguments from dwarf CompilationUnits
+        /// Gets compiler command arguments from dwarf CompilationUnits.
         /// </summary>
         /// <returns>compiler argument strings</returns>
         public string GetDwarfCompilerCommand();
+
+        /// <summary>
+        /// Gets language from dwarf CompilationUnits.
+        /// </summary>
+        /// <returns>Dwarf language.</returns>
+        public DwarfLanguage GetLanguage();
     }
 }

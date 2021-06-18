@@ -214,5 +214,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 return new MachOCompiler[] { new MachOCompiler(string.Empty) };
             }
         }
+
+        public DwarfLanguage GetLanguage()
+        {
+            if (CompilationUnits == null || CompilationUnits.Count == 0)
+            {
+                return DwarfLanguage.Unknown;
+            }
+            KeyValuePair<DwarfAttribute, DwarfAttributeValue> language = CompilationUnits
+                .SelectMany(c => c.Symbols)
+                .Where(s => s.Tag == DwarfTag.CompileUnit)
+                .SelectMany(s => s.Attributes)
+                .FirstOrDefault(a => a.Key == DwarfAttribute.Language);
+            return language.Key == DwarfAttribute.None ? DwarfLanguage.Unknown : ((DwarfLanguage)(language.Value.Constant));
+        }
     }
 }
