@@ -81,11 +81,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             catch (UnauthorizedAccessException) { return false; }
         }
 
-        public int GetDwarfVersion()
-        {
-            return DwarfVersion;
-        }
-
         public string GetDwarfCompilerCommand()
         {
             if (CompilationUnits == null || CompilationUnits.Count == 0)
