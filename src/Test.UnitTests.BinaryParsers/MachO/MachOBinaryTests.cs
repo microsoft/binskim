@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.MachO
         }
 
         [Fact]
-        public void ValidateDwarfV4_WithO2()
+        public void ValidateMachO_WithDwarf5()
         {
             // GNU C17 11.1.0 -fPIC -mmacosx-version-min=10.15.0 -mtune=core2 -gdwarf-5 -fstack-clash-protection
             string fileName = Path.Combine(TestData, "MachO/macho.gcc-lib.o");
