@@ -262,16 +262,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// </summary>
         public DwarfUnitType DwarfUnitType { get; set; } = DwarfUnitType.Unknown;
 
-        public CanAnalyzeDwarfResult DoDwarfCanAnalyzeCheck(Func<IDwarfBinary, CanAnalyzeDwarfResult> canAnalyze)
-        {
-            return canAnalyze(this);
-        }
-
-        public bool DoDwarfAnalyze(Func<IDwarfBinary, bool> analyze)
-        {
-            return analyze(this);
-        }
-
         /// <summary>
         /// Loads the section bytes specified by the name.
         /// </summary>

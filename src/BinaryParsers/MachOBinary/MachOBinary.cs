@@ -56,37 +56,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public IReadOnlyList<SingleMachOBinary> MachOs { get; }
 
-        public CanAnalyzeDwarfResult DoDwarfCanAnalyzeCheck(Func<IDwarfBinary, CanAnalyzeDwarfResult> canAnalyze)
-        {
-            CanAnalyzeDwarfResult result = default(CanAnalyzeDwarfResult);
-
-            foreach (SingleMachOBinary machO in this.MachOs)
-            {
-                result = canAnalyze(machO);
-                if (result.Result == AnalysisApplicability.ApplicableToSpecifiedTarget)
-                {
-                    // if any machO is applicabe
-                    return result;
-                }
-            }
-
-            return result;
-        }
-
-        public bool DoDwarfAnalyze(Func<IDwarfBinary, bool> analyze)
-        {
-            foreach (SingleMachOBinary machO in this.MachOs)
-            {
-                if (!analyze(machO))
-                {
-                    // if any analyze failed
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         // IDwarfBinary which does not implement in this class but implement in SingleMachO class
 
         #region IDwarfBinary interface

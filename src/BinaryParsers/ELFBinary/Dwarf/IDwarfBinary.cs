@@ -97,19 +97,5 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         /// <returns>compiler argument strings</returns>
         public string GetDwarfCompilerCommand();
-
-        /// <summary>
-        /// Execute delegate func to check if the dwarf binary is aaplicable for analysis.
-        /// </summary>
-        /// <param name="canAnalyze">Delegate func of checking binary.</param>
-        /// <returns>Result of checking.</returns>
-        CanAnalyzeDwarfResult DoDwarfCanAnalyzeCheck(Func<IDwarfBinary, CanAnalyzeDwarfResult> canAnalyze);
-
-        /// <summary>
-        /// Execute delegate func to analyze the dwarf binary
-        /// </summary>
-        /// <param name="analyze">Delegate func of analyzing binary</param>
-        /// <returns>Result of analyzing.</returns>
-        bool DoDwarfAnalyze(Func<IDwarfBinary, bool> analyze);
     }
 }

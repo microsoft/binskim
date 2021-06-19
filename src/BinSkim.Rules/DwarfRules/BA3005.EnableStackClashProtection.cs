@@ -42,51 +42,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
-            reasonForNotAnalyzing = null;
+            CanAnalyzeDwarfResult result = default(CanAnalyzeDwarfResult);
 
-            Func<IDwarfBinary, CanAnalyzeDwarfResult> canAnalyze = (IDwarfBinary binary) =>
+            if (target is ELFBinary elf)
             {
-                // We check for "any usage of non-gcc" as a default/standard compilation with clang leads to [GCC, Clang]
-                // either because it links with a gcc-compiled object (cstdlib) or the linker also reading as GCC.
-                // This has a potential for a False Negative if teams are using GCC and other tools.
-                if (binary.Compilers.Any(c => c.Compiler != ELFCompilerType.GCC))
+                result = this.VerifyDwarfBinary(elf);
+            }
+            else if (target is MachOBinary mainMacho)
+            {
+                foreach (SingleMachOBinary subMachO in mainMacho.MachOs)
                 {
-                    return new CanAnalyzeDwarfResult
+                    result = this.VerifyDwarfBinary(subMachO);
+                    if (result.Result == AnalysisApplicability.ApplicableToSpecifiedTarget)
                     {
-                        Reason = MetadataConditions.ElfNotBuiltWithGcc,
-                        Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
-                    };
-                }
-                else if (binary.Compilers.Any(c => c.Version.Major < 8))
-                {
-                    return new CanAnalyzeDwarfResult
-                    {
-                        Reason = MetadataConditions.ElfNotBuiltWithGccV8OrLater,
-                        Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
-                    };
-                }
-                else
-                {
-                    string dwarfCompilerCommand = binary.GetDwarfCompilerCommand();
-
-                    if (string.IsNullOrWhiteSpace(dwarfCompilerCommand))
-                    {
-                        return new CanAnalyzeDwarfResult
-                        {
-                            Reason = MetadataConditions.ElfNotBuiltWithDwarfDebugging,
-                            Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
-                        };
+                        // if any machO is applicable
+                        break;
                     }
                 }
+            }
 
-                return new CanAnalyzeDwarfResult
-                {
-                    Reason = null,
-                    Result = AnalysisApplicability.ApplicableToSpecifiedTarget
-                };
-            };
-
-            CanAnalyzeDwarfResult result = target.DoDwarfCanAnalyzeCheck(canAnalyze);
             reasonForNotAnalyzing = result.Reason;
             return result.Result;
         }
@@ -102,23 +76,98 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                        && !dwarfCompilerCommand.Contains("-fno-stack-clash-protection", StringComparison.OrdinalIgnoreCase);
             };
 
-            if (!binary.DoDwarfAnalyze(analyze))
+            if (binary is ELFBinary elf)
             {
-                // The Stack Clash Protection is missing from this binary,
-                // so the stack from '{0}' can clash/colide with another memory region.
-                // Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this.
+                if (!analyze(elf))
+                {
+                    // The Stack Clash Protection is missing from this binary,
+                    // so the stack from '{0}' can clash/colide with another memory region.
+                    // Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this.
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                            nameof(RuleResources.BA3005_Error),
+                            context.TargetUri.GetFileName()));
+                    return;
+                }
+
+                // The Stack Clash Protection was present, so '{0}' is protected.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                        nameof(RuleResources.BA3005_Error),
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                        nameof(RuleResources.BA3005_Pass),
                         context.TargetUri.GetFileName()));
                 return;
             }
 
-            // The Stack Clash Protection was present, so '{0}' is protected.
-            context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                    nameof(RuleResources.BA3005_Pass),
-                    context.TargetUri.GetFileName()));
+            if (binary is MachOBinary mainBinary)
+            {
+                bool failResult = false;
+                foreach (SingleMachOBinary subBinary in mainBinary.MachOs)
+                {
+                    if (!analyze(subBinary))
+                    {
+                        // The Stack Clash Protection is missing from this binary,
+                        // so the stack from '{0}' can clash/colide with another memory region.
+                        // Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this.
+                        context.Logger.Log(this,
+                            RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                                nameof(RuleResources.BA3005_Error),
+                                $"{context.TargetUri.GetFileName()}, type: {subBinary.MachO.FileType} CPU type: {subBinary.MachO.Machine}"));
+
+                        failResult = true;
+                    }
+                }
+
+                if (!failResult)
+                {
+                    // The Stack Clash Protection was present, so '{0}' is protected.
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                            nameof(RuleResources.BA3005_Pass),
+                            context.TargetUri.GetFileName()));
+                }
+            }
+        }
+
+        private CanAnalyzeDwarfResult VerifyDwarfBinary(IDwarfBinary binary)
+        {
+            // We check for "any usage of non-gcc" as a default/standard compilation with clang leads to [GCC, Clang]
+            // either because it links with a gcc-compiled object (cstdlib) or the linker also reading as GCC.
+            // This has a potential for a False Negative if teams are using GCC and other tools.
+            if (binary.Compilers.Any(c => c.Compiler != ELFCompilerType.GCC))
+            {
+                return new CanAnalyzeDwarfResult
+                {
+                    Reason = MetadataConditions.ElfNotBuiltWithGcc,
+                    Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
+                };
+            }
+            else if (binary.Compilers.Any(c => c.Version.Major < 8))
+            {
+                return new CanAnalyzeDwarfResult
+                {
+                    Reason = MetadataConditions.ElfNotBuiltWithGccV8OrLater,
+                    Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
+                };
+            }
+            else
+            {
+                string dwarfCompilerCommand = binary.GetDwarfCompilerCommand();
+
+                if (string.IsNullOrWhiteSpace(dwarfCompilerCommand))
+                {
+                    return new CanAnalyzeDwarfResult
+                    {
+                        Reason = MetadataConditions.ElfNotBuiltWithDwarfDebugging,
+                        Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
+                    };
+                }
+            }
+
+            return new CanAnalyzeDwarfResult
+            {
+                Reason = null,
+                Result = AnalysisApplicability.ApplicableToSpecifiedTarget
+            };
         }
     }
 }
