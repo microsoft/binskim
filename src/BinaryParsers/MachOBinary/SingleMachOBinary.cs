@@ -102,41 +102,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// </summary>
         public DwarfUnitType DwarfUnitType { get; set; } = DwarfUnitType.Unknown;
 
-        /// <summary>
-        /// Gets address offset within module when it is loaded.
-        /// </summary>
-        /// <param name="address">Virtual address that points where something should be loaded.</param>
-        public ulong NormalizeAddress(ulong address)
-        {
-            ulong codeSegmentOffset = 0;
-            Section section = null;
-            foreach (Segment seg in this.Segments)
-            {
-                section = seg.Sections.FirstOrDefault(sec => sec.Address <= address && sec.Address + sec.Size > address);
-                if (section != null)
-                {
-                    codeSegmentOffset = seg.Address - seg.FileOffset;
-                    break;
-                }
-            }
-
-            return section != null ? address - codeSegmentOffset : 0;
-        }
-
-        public string GetDwarfCompilerCommand()
-        {
-            if (CompilationUnits == null || CompilationUnits.Count == 0)
-            {
-                return string.Empty;
-            }
-            KeyValuePair<DwarfAttribute, DwarfAttributeValue> producer = CompilationUnits
-                .SelectMany(c => c.Symbols)
-                .Where(s => s.Tag == DwarfTag.CompileUnit)
-                .SelectMany(s => s.Attributes)
-                .FirstOrDefault(a => a.Key == DwarfAttribute.Producer);
-            return producer.Key == DwarfAttribute.None ? string.Empty : producer.Value.String;
-        }
-
         byte[] IDwarfBinary.DebugData => throw new NotImplementedException();
 
         byte[] IDwarfBinary.DebugDataDescription => throw new NotImplementedException();
@@ -174,14 +139,54 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 return compilers;
             }
         }
-        public CanAnalyzeDwarfResult DoDwarfCanAnalyzeCheck(Func<IDwarfBinary, CanAnalyzeDwarfResult> canAnalyze)
+
+        /// <summary>
+        /// Gets address offset within module when it is loaded.
+        /// </summary>
+        /// <param name="address">Virtual address that points where something should be loaded.</param>
+        public ulong NormalizeAddress(ulong address)
         {
-            throw new NotImplementedException();
+            ulong codeSegmentOffset = 0;
+            Section section = null;
+            foreach (Segment seg in this.Segments)
+            {
+                section = seg.Sections.FirstOrDefault(sec => sec.Address <= address && sec.Address + sec.Size > address);
+                if (section != null)
+                {
+                    codeSegmentOffset = seg.Address - seg.FileOffset;
+                    break;
+                }
+            }
+
+            return section != null ? address - codeSegmentOffset : 0;
         }
 
-        public bool DoDwarfAnalyze(Func<IDwarfBinary, bool> analyze)
+        public string GetDwarfCompilerCommand()
         {
-            throw new NotImplementedException();
+            if (CompilationUnits == null || CompilationUnits.Count == 0)
+            {
+                return string.Empty;
+            }
+            KeyValuePair<DwarfAttribute, DwarfAttributeValue> producer = CompilationUnits
+                .SelectMany(c => c.Symbols)
+                .Where(s => s.Tag == DwarfTag.CompileUnit)
+                .SelectMany(s => s.Attributes)
+                .FirstOrDefault(a => a.Key == DwarfAttribute.Producer);
+            return producer.Key == DwarfAttribute.None ? string.Empty : producer.Value.String;
+        }
+
+        public DwarfLanguage GetLanguage()
+        {
+            if (CompilationUnits == null || CompilationUnits.Count == 0)
+            {
+                return DwarfLanguage.Unknown;
+            }
+            KeyValuePair<DwarfAttribute, DwarfAttributeValue> language = CompilationUnits
+                .SelectMany(c => c.Symbols)
+                .Where(s => s.Tag == DwarfTag.CompileUnit)
+                .SelectMany(s => s.Attributes)
+                .FirstOrDefault(a => a.Key == DwarfAttribute.Language);
+            return language.Key == DwarfAttribute.None ? DwarfLanguage.Unknown : ((DwarfLanguage)(language.Value.Constant));
         }
 
         #endregion
@@ -229,20 +234,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 return new MachOCompiler[] { new MachOCompiler(string.Empty) };
             }
-        }
-
-        public DwarfLanguage GetLanguage()
-        {
-            if (CompilationUnits == null || CompilationUnits.Count == 0)
-            {
-                return DwarfLanguage.Unknown;
-            }
-            KeyValuePair<DwarfAttribute, DwarfAttributeValue> language = CompilationUnits
-                .SelectMany(c => c.Symbols)
-                .Where(s => s.Tag == DwarfTag.CompileUnit)
-                .SelectMany(s => s.Attributes)
-                .FirstOrDefault(a => a.Key == DwarfAttribute.Language);
-            return language.Key == DwarfAttribute.None ? DwarfLanguage.Unknown : ((DwarfLanguage)(language.Value.Constant));
         }
     }
 }

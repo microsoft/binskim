@@ -111,7 +111,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                                 nameof(RuleResources.BA3005_Error),
-                                $"{context.TargetUri.GetFileName()}, type: {subBinary.MachO.FileType} CPU type: {subBinary.MachO.Machine}"));
+                                context.TargetUri.GetFileName()));
 
                         failResult = true;
                     }
