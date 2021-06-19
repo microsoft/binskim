@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
-            CanAnalyzeDwarfResult result = default(CanAnalyzeDwarfResult);
+            CanAnalyzeDwarfResult result = default;
 
             if (target is ELFBinary elf)
             {
@@ -69,12 +69,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             IDwarfBinary binary = context.DwarfBinary();
 
-            Func<IDwarfBinary, bool> analyze = (IDwarfBinary binary) =>
+            static bool analyze(IDwarfBinary binary)
             {
                 string dwarfCompilerCommand = binary.GetDwarfCompilerCommand();
                 return dwarfCompilerCommand.Contains("-fstack-clash-protection", StringComparison.OrdinalIgnoreCase)
                        && !dwarfCompilerCommand.Contains("-fno-stack-clash-protection", StringComparison.OrdinalIgnoreCase);
-            };
+            }
 
             if (binary is ELFBinary elf)
             {
@@ -100,7 +100,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (binary is MachOBinary mainBinary)
             {
-                bool failResult = false;
                 foreach (SingleMachOBinary subBinary in mainBinary.MachOs)
                 {
                     if (!analyze(subBinary))
@@ -111,20 +110,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                                 nameof(RuleResources.BA3005_Error),
-                                $"{context.TargetUri.GetFileName()}, type: {subBinary.MachO.FileType} CPU type: {subBinary.MachO.Machine}"));
-
-                        failResult = true;
+                                context.TargetUri.GetFileName()));
+                        return;
                     }
                 }
 
-                if (!failResult)
-                {
-                    // The Stack Clash Protection was present, so '{0}' is protected.
-                    context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                            nameof(RuleResources.BA3005_Pass),
-                            context.TargetUri.GetFileName()));
-                }
+                // The Stack Clash Protection was present, so '{0}' is protected.
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                        nameof(RuleResources.BA3005_Pass),
+                        context.TargetUri.GetFileName()));
             }
         }
 
