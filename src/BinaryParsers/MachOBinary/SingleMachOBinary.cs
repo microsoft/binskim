@@ -174,15 +174,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 return compilers;
             }
         }
-        public CanAnalyzeDwarfResult DoDwarfCanAnalyzeCheck(Func<IDwarfBinary, CanAnalyzeDwarfResult> canAnalyze)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DoDwarfAnalyze(Func<IDwarfBinary, bool> analyze)
-        {
-            throw new NotImplementedException();
-        }
 
         #endregion
 
