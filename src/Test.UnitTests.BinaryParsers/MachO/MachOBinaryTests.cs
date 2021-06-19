@@ -33,9 +33,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.MachO
             // GNU C17 11.1.0 -fPIC -mmacosx-version-min=10.15.0 -mtune=core2 -gdwarf-5 -fstack-clash-protection
             string fileName = Path.Combine(TestData, "MachO/macho.gcc-lib.o");
             using var binary = new MachOBinary(new Uri(fileName));
-            binary.DwarfVersion.Should().Be(5);
-            binary.GetLanguage().Should().Be(DwarfLanguage.C11);
-            binary.GetDwarfCompilerCommand().Should().Contain("fstack-clash-protection");
+            foreach (SingleMachOBinary macho in binary.MachOs)
+            {
+                macho.DwarfVersion.Should().Be(5);
+                macho.GetLanguage().Should().Be(DwarfLanguage.C11);
+                macho.GetDwarfCompilerCommand().Should().Contain("fstack-clash-protection");
+            }
         }
     }
 }

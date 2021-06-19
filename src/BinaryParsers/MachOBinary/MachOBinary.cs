@@ -84,6 +84,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             throw new NotImplementedException();
         }
 
+        public DwarfLanguage GetLanguage()
+        {
+            throw new NotImplementedException();
+        }
+
         byte[] IDwarfBinary.DebugData => throw new NotImplementedException();
 
         byte[] IDwarfBinary.DebugDataDescription => throw new NotImplementedException();

@@ -25,6 +25,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public SingleMachOBinary(MachO singleMachO, Uri uri) : base(uri)
         {
             this.MachO = singleMachO;
+            LoadCompilationUnits();
         }
 
         public MachO MachO { get; }
@@ -51,11 +52,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 if (compilationUnits == null)
                 {
-                    byte[] debugData = this.LoadSection(SECTIONNAME_DEBUG_INFO);
-                    byte[] debugAbbrev = this.LoadSection(SECTIONNAME_DEBUG_ABBREV);
-                    byte[] debugStr = this.LoadSection(SECTIONNAME_DEBUG_STR);
-                    compilationUnits = DwarfSymbolProvider.ParseCompilationUnits(this, debugData, debugAbbrev, debugStr, NormalizeAddress);
+                    compilationUnits = LoadCompilationUnits();
                 }
+
                 return compilationUnits;
             }
         }
@@ -187,6 +186,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         #endregion
 
+        private List<DwarfCompilationUnit> LoadCompilationUnits()
+        {
+            byte[] debugData = this.LoadSection(SECTIONNAME_DEBUG_INFO);
+            byte[] debugAbbrev = this.LoadSection(SECTIONNAME_DEBUG_ABBREV);
+            byte[] debugStr = this.LoadSection(SECTIONNAME_DEBUG_STR);
+            return DwarfSymbolProvider.ParseCompilationUnits(this, debugData, debugAbbrev, debugStr, NormalizeAddress);
+        }
+
         private byte[] LoadSection(string sectionName)
         {
             Section section = this.Segments.SelectMany(seg => seg.Sections.ToList())
@@ -222,6 +229,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 return new MachOCompiler[] { new MachOCompiler(string.Empty) };
             }
+        }
+
+        public DwarfLanguage GetLanguage()
+        {
+            if (CompilationUnits == null || CompilationUnits.Count == 0)
+            {
+                return DwarfLanguage.Unknown;
+            }
+            KeyValuePair<DwarfAttribute, DwarfAttributeValue> language = CompilationUnits
+                .SelectMany(c => c.Symbols)
+                .Where(s => s.Tag == DwarfTag.CompileUnit)
+                .SelectMany(s => s.Attributes)
+                .FirstOrDefault(a => a.Key == DwarfAttribute.Language);
+            return language.Key == DwarfAttribute.None ? DwarfLanguage.Unknown : ((DwarfLanguage)(language.Value.Constant));
         }
     }
 }
