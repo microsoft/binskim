@@ -22,11 +22,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MachOBinary target = context.MachOBinary();
                 return this.CanAnalyzeDwarf(target, context.Policy, out reasonForNotAnalyzing);
             }
-            else
-            {
-                reasonForNotAnalyzing = MetadataConditions.ImageIsNotElf; // ImageIsNotDwarfCompatible
-                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
-            }
+
+            reasonForNotAnalyzing = MetadataConditions.ImageIsNotElf; // ImageIsNotDwarfCompatible
+            return AnalysisApplicability.NotApplicableToSpecifiedTarget;
         }
 
         public abstract AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing);
