@@ -60,20 +60,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             var records = new Dictionary<string, ObjectModuleDetails>();
-            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
-            {
-                Symbol om = omView.Value;
-                ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                string record =
-                    omDetails.CompilerName?.Replace(",", "_").Trim() + "," +
-                    omDetails.CompilerBackEndVersion + "," +
-                    omDetails.CompilerFrontEndVersion + "," +
-                    omDetails.Language;
+            if (target.PE.IsManaged)
+            {
+                string record = $".NET Compiler,{target.PE.LinkerVersion},{target.PE.LinkerVersion},{Language.MSIL}";
 
                 if (!records.TryGetValue(record, out ObjectModuleDetails value))
                 {
-                    records[record] = omDetails;
+                    records[record] = null;
+                }
+            }
+            else
+            {
+                foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+                {
+                    Symbol om = omView.Value;
+                    ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
+
+                    string record =
+                        omDetails.CompilerName?.Replace(",", "_").Trim() + "," +
+                        omDetails.CompilerBackEndVersion + "," +
+                        omDetails.CompilerFrontEndVersion + "," +
+                        omDetails.Language;
+
+                    if (!records.TryGetValue(record, out ObjectModuleDetails value))
+                    {
+                        records[record] = omDetails;
+                    }
                 }
             }
 

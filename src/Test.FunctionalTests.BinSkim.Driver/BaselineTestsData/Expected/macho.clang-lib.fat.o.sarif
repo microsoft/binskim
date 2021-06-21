@@ -12,7 +12,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "LoadImageAboveFourGigabyteAddress",
               "image is not a PE binary"
             ]
@@ -21,7 +21,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -36,7 +36,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "DoNotIncorporateVulnerableDependencies",
               "image is not a PE binary"
             ]
@@ -45,7 +45,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -60,7 +60,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "EnableSecureSourceCodeHashing",
               "image is not a PE binary"
             ]
@@ -69,7 +69,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -84,7 +84,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "DoNotShipVulnerableBinaries",
               "image is not a PE binary"
             ]
@@ -93,7 +93,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -108,7 +108,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "BuildWithSecureTools",
               "image is not a PE binary"
             ]
@@ -117,7 +117,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -132,7 +132,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "EnableCriticalCompilerWarnings",
               "image is not a PE binary"
             ]
@@ -141,7 +141,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -156,7 +156,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "EnableControlFlowGuard",
               "image is not a PE binary"
             ]
@@ -165,7 +165,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -180,7 +180,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "EnableAddressSpaceLayoutRandomization",
               "image is not a PE binary"
             ]
@@ -189,7 +189,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -204,7 +204,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "DoNotMarkImportsSectionAsExecutable",
               "image is not a PE binary"
             ]
@@ -213,7 +213,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -228,7 +228,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "EnableStackProtection",
               "image is not a PE binary"
             ]
@@ -237,7 +237,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -252,7 +252,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "DoNotModifyStackProtectionCookie",
               "image is not a PE binary"
             ]
@@ -261,7 +261,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -276,7 +276,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "InitializeStackProtection",
               "image is not a PE binary"
             ]
@@ -285,7 +285,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -300,7 +300,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "DoNotDisableStackProtectionForFunctions",
               "image is not a PE binary"
             ]
@@ -309,7 +309,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -324,7 +324,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "EnableHighEntropyVirtualAddresses",
               "image is not a PE binary"
             ]
@@ -333,7 +333,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -348,7 +348,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "MarkImageAsNXCompatible",
               "image is not a PE binary"
             ]
@@ -357,7 +357,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -372,7 +372,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "EnableSafeSEH",
               "image is not a PE binary"
             ]
@@ -381,7 +381,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -396,7 +396,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "DoNotMarkWritableSectionsAsShared",
               "image is not a PE binary"
             ]
@@ -405,7 +405,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -420,7 +420,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "DoNotMarkWritableSectionsAsExecutable",
               "image is not a PE binary"
             ]
@@ -429,7 +429,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -444,7 +444,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "SignSecurely",
               "image is not a PE binary"
             ]
@@ -453,7 +453,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -468,7 +468,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "EnableSpectreMitigations",
               "image is not a PE binary"
             ]
@@ -477,7 +477,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -492,7 +492,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "EnableShadowStack",
               "image is not a PE binary"
             ]
@@ -501,7 +501,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -516,7 +516,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "EnableAdditionalSecurityChecks",
               "image is not a PE binary"
             ]
@@ -525,7 +525,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -540,7 +540,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "EnablePositionIndependentExecutable",
               "image is not an ELF binary"
             ]
@@ -549,7 +549,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -564,7 +564,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "DoNotMarkStackAsExecutable",
               "image is not an ELF binary"
             ]
@@ -573,7 +573,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -588,7 +588,7 @@
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
+              "macho.clang-lib.fat.o",
               "GenerateRequiredSymbolFormat",
               "image is not an ELF binary"
             ]
@@ -597,124 +597,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3006",
-          "ruleIndex": 25,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
-              "EnableNonExecutableStack",
-              "image is not an ELF binary"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3010",
-          "ruleIndex": 26,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
-              "EnableReadOnlyRelocations",
-              "image is not an ELF binary"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3011",
-          "ruleIndex": 27,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
-              "EnableBindNow",
-              "image is not an ELF binary"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3030",
-          "ruleIndex": 28,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
-              "UseCheckedFunctionsWithGcc",
-              "image is not an ELF binary"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3003",
-          "ruleIndex": 29,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -723,19 +606,140 @@
         },
         {
           "ruleId": "BA3005",
-          "ruleIndex": 30,
-          "level": "error",
+          "ruleIndex": 25,
+          "kind": "notApplicable",
+          "level": "none",
           "message": {
-            "id": "Error",
+            "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o"
+              "macho.clang-lib.fat.o",
+              "EnableStackClashProtection",
+              "not compiled solely with gcc"
             ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3006",
+          "ruleIndex": 26,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "macho.clang-lib.fat.o",
+              "EnableNonExecutableStack",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 27,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "macho.clang-lib.fat.o",
+              "EnableReadOnlyRelocations",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3011",
+          "ruleIndex": 28,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "macho.clang-lib.fat.o",
+              "EnableBindNow",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 29,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "macho.clang-lib.fat.o",
+              "UseCheckedFunctionsWithGcc",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3003",
+          "ruleIndex": 30,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "macho.clang-lib.fat.o"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
                   "index": 0
                 }
               }
@@ -1430,6 +1434,28 @@
               "name": "GenerateRequiredSymbolFormat"
             },
             {
+              "id": "BA3005",
+              "fullDescription": {
+                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3005EnableStackClashProtection",
+              "help": {
+                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The Stack Clash Protection was present, so '{0}' is protected."
+                },
+                "Error": {
+                  "text": "The Stack Clash Protection is missing from this binary, so the stack from '{0}' can clash/colide with another memory region. Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableStackClashProtection"
+            },
+            {
               "id": "BA3006",
               "fullDescription": {
                 "text": "This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this."
@@ -1544,28 +1570,6 @@
                 }
               },
               "name": "EnableStackProtector"
-            },
-            {
-              "id": "BA3005",
-              "fullDescription": {
-                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3005EnableStackClashProtection",
-              "help": {
-                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "The Stack Clash Protection was present, so '{0}' is protected."
-                },
-                "Error": {
-                  "text": "The Stack Clash Protection is missing from this binary, so the stack from '{0}' can clash/colide with another memory region. Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "name": "EnableStackClashProtection"
             }
           ]
         }
@@ -1578,12 +1582,12 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o"
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o"
           },
           "hashes": {
-            "md5": "AC7EA318727E0115A820C27DDFDAE55A",
-            "sha-1": "A0D80EB1F40F8A5D464B52359C2AB789D0137256",
-            "sha-256": "3E0EAA3C62955E43290E284A68DE4E40AAAD648D07E42F6F27E2024557DF6B2F"
+            "md5": "AAE0EA1E3A4E5AC771E5D16301EFCCCF",
+            "sha-1": "A366840FC135EB5D4B141B205D4AD6B49A1D57F6",
+            "sha-256": "EF69905BB1BB2CF5CBF65C31D1873C199176607DEDE9147BF4ED0222DE49C13C"
           }
         }
       ],

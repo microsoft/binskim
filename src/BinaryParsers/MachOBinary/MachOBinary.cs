@@ -9,36 +9,27 @@ using System.Linq;
 using ELFSharp.MachO;
 
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public class MachOBinary : BinaryBase, IDwarfBinary
     {
-        private const string SECTIONNAME_DEBUG_INFO = "__debug_info";
-        private const string SECTIONNAME_DEBUG_ABBREV = "__debug_abbrev";
-        private const string SECTIONNAME_DEBUG_STR = "__debug_str";
-        private const string SECTIONNAME_DEBUG_LINE = "__debug_line";
-        private const string SECTIONNAME_DEBUG_FRAME = "__debug_frame";
-        private const string SECTIONNAME_EH_FRAME = "__eh_frame";
-        private const string SECTIONNAME_TEXT = "__text";
-        private const string SECTIONNAME_DATA = "__data";
-
         public MachOBinary(Uri uri) : base(uri)
         {
             try
             {
-                this.MachO = MachOReader.Load(Path.GetFullPath(uri.LocalPath));
+                MachOResult result = MachOReader.TryLoadFat(
+                                stream: File.OpenRead(Path.GetFullPath(uri.LocalPath)),
+                                shouldOwnStream: true,
+                                machOs: out IReadOnlyList<MachO> machOs);
 
-                this.Segments = this.MachO.GetCommandsOfType<Segment>();
-                this.IdDylibs = this.MachO.GetCommandsOfType<IdDylib>();
-                this.LoadDylibs = this.MachO.GetCommandsOfType<LoadDylib>();
-                this.EntryPoint = this.MachO.GetCommandsOfType<EntryPoint>();
-                this.SymbolTables = this.MachO.GetCommandsOfType<SymbolTable>();
-                this.LoadWeakDylib = this.MachO.GetCommandsOfType<LoadWeakDylib>();
-                this.ReexportDylibs = this.MachO.GetCommandsOfType<ReexportDylib>();
+                if (result == MachOResult.NotMachO)
+                {
+                    throw new Exception($"The binary {uri.LocalPath} is not a valid MachO binary");
+                }
 
-                this.Compilers = this.GetCompilers();
-
+                this.MachOs = machOs.Select(m => new SingleMachOBinary(m, uri)).ToList();
                 this.Valid = true;
             }
             catch (Exception e)
@@ -52,61 +43,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             try
             {
-                return MachOReader.TryLoad(Path.GetFullPath(uri.LocalPath), out _) == MachOResult.OK;
+                return MachOReader.TryLoadFat(
+                        stream: File.OpenRead(Path.GetFullPath(uri.LocalPath)),
+                        shouldOwnStream: true,
+                        machOs: out _) != MachOResult.NotMachO;
             }
             catch (IOException) { return false; }
             catch (UnauthorizedAccessException) { return false; }
         }
 
-        public MachO MachO { get; }
+        public bool IsFatMachO => this.MachOs != null && this.MachOs.Count > 1;
 
-        public ICompiler[] Compilers { get; }
+        public IReadOnlyList<SingleMachOBinary> MachOs { get; }
 
-        public IEnumerable<Segment> Segments { get; }
-
-        public IEnumerable<SymbolTable> SymbolTables { get; }
-
-        public IEnumerable<IdDylib> IdDylibs { get; }
-
-        public IEnumerable<LoadDylib> LoadDylibs { get; }
-
-        public IEnumerable<LoadWeakDylib> LoadWeakDylib { get; }
-
-        public IEnumerable<ReexportDylib> ReexportDylibs { get; }
-
-        public IEnumerable<EntryPoint> EntryPoint { get; }
-
-        public List<DwarfCompilationUnit> CompilationUnits
-        {
-            get
-            {
-                byte[] debugData = this.LoadSection(SECTIONNAME_DEBUG_INFO);
-                byte[] debugAbbrev = this.LoadSection(SECTIONNAME_DEBUG_ABBREV);
-                byte[] debugStr = this.LoadSection(SECTIONNAME_DEBUG_STR);
-                return DwarfSymbolProvider.ParseCompilationUnits(this, debugData, debugAbbrev, debugStr, NormalizeAddress);
-            }
-        }
-
-        public List<DwarfLineNumberProgram> LineNumberPrograms
-        {
-            get
-            {
-                byte[] debugData = this.LoadSection(SECTIONNAME_DEBUG_LINE);
-                return DwarfSymbolProvider.ParseLineNumberPrograms(debugData, NormalizeAddress);
-            }
-        }
-
-        public List<DwarfCommonInformationEntry> CommonInformationEntries
-        {
-            get
-            {
-                byte[] debugFrame = this.LoadSection(SECTIONNAME_DEBUG_FRAME);
-                byte[] ehFrame = this.LoadSection(SECTIONNAME_EH_FRAME);
-                return DwarfSymbolProvider.ParseCommonInformationEntries(debugFrame, ehFrame, new DwarfExceptionHandlingFrameParsingInput(this));
-            }
-        }
+        // IDwarfBinary which does not implement in this class but implement in SingleMachO class
 
         #region IDwarfBinary interface
+
         /// <summary>
         /// The version of Dwarf used.
         /// </summary>
@@ -123,33 +76,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <param name="address">Virtual address that points where something should be loaded.</param>
         public ulong NormalizeAddress(ulong address)
         {
-            ulong codeSegmentOffset = 0;
-            Section section = null;
-            foreach (Segment seg in this.Segments)
-            {
-                section = seg.Sections.FirstOrDefault(sec => sec.Address <= address && sec.Address + sec.Size > address);
-                if (section != null)
-                {
-                    codeSegmentOffset = seg.Address - seg.FileOffset;
-                    break;
-                }
-            }
-
-            return section != null ? address - codeSegmentOffset : 0;
+            throw new NotImplementedException();
         }
 
         public string GetDwarfCompilerCommand()
         {
-            if (CompilationUnits == null || CompilationUnits.Count == 0)
-            {
-                return string.Empty;
-            }
-            KeyValuePair<DwarfAttribute, DwarfAttributeValue> producer = CompilationUnits
-                .SelectMany(c => c.Symbols)
-                .Where(s => s.Tag == DwarfTag.CompileUnit)
-                .SelectMany(s => s.Attributes)
-                .FirstOrDefault(a => a.Key == DwarfAttribute.Producer);
-            return producer.Key == DwarfAttribute.None ? string.Empty : producer.Value.String;
+            throw new NotImplementedException();
+        }
+
+        public DwarfLanguage GetLanguage()
+        {
+            throw new NotImplementedException();
         }
 
         byte[] IDwarfBinary.DebugData => throw new NotImplementedException();
@@ -166,53 +103,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         ulong IDwarfBinary.CodeSegmentOffset => throw new NotImplementedException();
 
-        ulong IDwarfBinary.EhFrameAddress => this.GetSectionAddress(SECTIONNAME_EH_FRAME);
+        ulong IDwarfBinary.EhFrameAddress => throw new NotImplementedException();
 
-        ulong IDwarfBinary.TextSectionAddress => this.GetSectionAddress(SECTIONNAME_TEXT);
+        ulong IDwarfBinary.TextSectionAddress => throw new NotImplementedException();
 
-        ulong IDwarfBinary.DataSectionAddress => this.GetSectionAddress(SECTIONNAME_DATA);
+        ulong IDwarfBinary.DataSectionAddress => throw new NotImplementedException();
 
         IReadOnlyList<DwarfPublicSymbol> IDwarfBinary.PublicSymbols => throw new NotImplementedException();
 
-        bool IDwarfBinary.Is64bit => this.MachO.Is64;
+        bool IDwarfBinary.Is64bit => throw new NotImplementedException();
+
+        public ICompiler[] Compilers => throw new NotImplementedException();
 
         #endregion
-
-        private byte[] LoadSection(string sectionName)
-        {
-            Section section = this.Segments.SelectMany(seg => seg.Sections.ToList())
-                                           .FirstOrDefault(sec => sec.Name == sectionName || sec.Name == sectionName + ".dwo");
-
-            return section != null ? section.GetData() : Array.Empty<byte>();
-        }
-
-        private ulong GetSectionAddress(string sectionName)
-        {
-            foreach (Segment segment in this.Segments)
-            {
-                Section section = segment.Sections.FirstOrDefault(sec => sec.Name == sectionName);
-                if (section != null)
-                {
-                    ulong CodeSegmentOffset = segment.Address - (ulong)segment.FileOffset;
-                    return section.Offset + CodeSegmentOffset;
-                }
-            }
-
-            return ulong.MaxValue;
-        }
-
-        private MachOCompiler[] GetCompilers()
-        {
-            try
-            {
-                string compilerString = this.GetDwarfCompilerCommand(); // return empty string if not found
-                return new MachOCompiler[] { new MachOCompiler(compilerString) };
-            }
-            // Catch cases when the compiler string is not formatted the way we expect it to be.
-            catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
-            {
-                return new MachOCompiler[] { new MachOCompiler(string.Empty) };
-            }
-        }
     }
 }
