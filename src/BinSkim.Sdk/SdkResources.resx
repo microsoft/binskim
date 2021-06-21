@@ -231,7 +231,7 @@
   <data name="MetadataCondition_ElfNotContainSegment" xml:space="preserve">
     <value>ELF does not contain the segment to be analyzed</value>
   </data>
-  <data name="MetadataCondition_MachOIsNotExecutableDynamicLibaryOrObject" xml:space="preserve">
-    <value>MachO is not an executable, dynamic libary  or object.</value>
+  <data name="MetadataCondition_MachOIsNotExecutableDynamicLibraryOrObject" xml:space="preserve">
+    <value>MachO is not an executable, dynamic library or object.</value>
   </data>
 </root>

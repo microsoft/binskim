@@ -69,7 +69,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
 
-                reasonForNotAnalyzing = MetadataConditions.MachOIsNotExecutableDynamicLibaryOrObject;
+                reasonForNotAnalyzing = MetadataConditions.MachOIsNotExecutableDynamicLibraryOrObject;
             }
 
             return AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -133,9 +133,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private bool IsApplicableMachO(SingleMachOBinary macho)
         {
-            return (macho.MachO.FileType == ELFSharp.MachO.FileType.DynamicLibrary
-                || macho.MachO.FileType == ELFSharp.MachO.FileType.Executable
-                || macho.MachO.FileType == ELFSharp.MachO.FileType.Object);
+            return (macho.MachO.FileType == ELFSharp.MachO.FileType.DynamicLibrary ||
+                    macho.MachO.FileType == ELFSharp.MachO.FileType.Executable ||
+                    macho.MachO.FileType == ELFSharp.MachO.FileType.Object);
         }
     }
 }

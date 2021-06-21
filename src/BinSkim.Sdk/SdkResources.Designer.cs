@@ -367,11 +367,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MachO is not an executable, dynamic libary  or object..
+        ///   Looks up a localized string similar to MachO is not an executable, dynamic library or object..
         /// </summary>
-        internal static string MetadataCondition_MachOIsNotExecutableDynamicLibaryOrObject {
+        internal static string MetadataCondition_MachOIsNotExecutableDynamicLibraryOrObject {
             get {
-                return ResourceManager.GetString("MetadataCondition_MachOIsNotExecutableDynamicLibaryOrObject", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_MachOIsNotExecutableDynamicLibraryOrObject", resourceCulture);
             }
         }
         
