@@ -960,20 +960,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the recommended Security Development Lifecycle (SDL) checks. To Enable the recommended Security Development Lifecycle (SDL) checks pass /sdl.
-        /// </summary>
-        internal static string BA2026_Error {
-            get {
-                return ResourceManager.GetString("BA2026_Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; enables the recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features..
         /// </summary>
         internal static string BA2026_Pass {
             get {
                 return ResourceManager.GetString("BA2026_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the recommended Security Development Lifecycle (SDL) checks. To Enable the recommended Security Development Lifecycle (SDL) checks pass /sdl on the cl.exe command-line..
+        /// </summary>
+        internal static string BA2026_Warning {
+            get {
+                return ResourceManager.GetString("BA2026_Warning", resourceCulture);
             }
         }
         

@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA2026_Pass),
-            nameof(RuleResources.BA2026_Error),
+            nameof(RuleResources.BA2026_Warning),
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
@@ -99,10 +99,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     else
                     {
                         // '{0}' does not enable the recommended Security Development Lifecycle (SDL) checks.
-                        // To Enable the recommended Security Development Lifecycle (SDL) checks pass /sdl
+                        // To Enable the recommended Security Development Lifecycle (SDL) checks pass /sdl on the cl.exe command-line.
                         context.Logger.Log(this,
-                            RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                            nameof(RuleResources.BA2026_Error),
+                            RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
+                            nameof(RuleResources.BA2026_Warning),
                             context.TargetUri.GetFileName()));
                         return;
                     }

@@ -541,8 +541,8 @@ Modules triggering this check were:
   <data name="BA2026_EnableAdditionalSecurityChecks_Description" xml:space="preserve">
     <value>/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks.</value>
   </data>
-  <data name="BA2026_Error" xml:space="preserve">
-    <value>'{0}' does not enable the recommended Security Development Lifecycle (SDL) checks. To Enable the recommended Security Development Lifecycle (SDL) checks pass /sdl</value>
+  <data name="BA2026_Warning" xml:space="preserve">
+    <value>'{0}' does not enable the recommended Security Development Lifecycle (SDL) checks. To Enable the recommended Security Development Lifecycle (SDL) checks pass /sdl on the cl.exe command-line.</value>
   </data>
   <data name="BA2026_Pass" xml:space="preserve">
     <value>'{0}' enables the recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features.</value>
