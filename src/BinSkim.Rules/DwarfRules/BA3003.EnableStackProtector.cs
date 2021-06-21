@@ -134,7 +134,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private static bool IsApplicableMachO(SingleMachOBinary macho)
         {
             return (macho.MachO.FileType == ELFSharp.MachO.FileType.Object ||
-                    macho.MachO.FileType == ELFSharp.MachO.FileType.Executable || 
+                    macho.MachO.FileType == ELFSharp.MachO.FileType.Executable ||
                     macho.MachO.FileType == ELFSharp.MachO.FileType.DynamicLibrary);
         }
     }
