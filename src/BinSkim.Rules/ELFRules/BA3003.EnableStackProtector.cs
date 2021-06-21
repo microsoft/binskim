@@ -9,6 +9,7 @@ using ELFSharp.ELF;
 using ELFSharp.ELF.Sections;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -16,11 +17,14 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class EnableStackProtector : ELFBinarySkimmerBase
+    public class EnableStackProtector : DwarfSkimmerBase
     {
         private readonly string[] stack_check_symbols = new string[]{
             "__stack_chk_fail",
-            "__stack_chk_fail_local" // Optimization for some architectures, according to compiler comments.
+            "__stack_chk_fail_local", // Optimization for some architectures, according to compiler comments.
+            // macho symbol names
+            "___stack_chk_fail",
+            "___stack_chk_guard",
         };
 
         /// <summary>
@@ -42,46 +46,96 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
 
-        public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
-            IELF elf = target.ELF;
-
-            if (elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable)
+            reasonForNotAnalyzing = null;
+            if (target is ELFBinary elf)
             {
+                if (elf.ELF.Type == FileType.Executable || elf.ELF.Type == FileType.SharedObject)
+                {
+                    return AnalysisApplicability.ApplicableToSpecifiedTarget;
+                }
+
                 reasonForNotAnalyzing = MetadataConditions.ElfIsCoreNoneOrObject;
-                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
+            }
+            else if (target is MachOBinary mainMachO)
+            {
+                foreach (SingleMachOBinary singleMachO in mainMachO.MachOs)
+                {
+                    if (this.IsApplicableMachO(singleMachO))
+                    {
+                        // if any macho is applicable
+                        return AnalysisApplicability.ApplicableToSpecifiedTarget;
+                    }
+                }
+
+                reasonForNotAnalyzing = MetadataConditions.MachOIsNotExecutableDynamicLibraryOrObject;
             }
 
-            reasonForNotAnalyzing = null;
-            return AnalysisApplicability.ApplicableToSpecifiedTarget;
+            return AnalysisApplicability.NotApplicableToSpecifiedTarget;
         }
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            IELF elf = context.ELFBinary().ELF;
-
-            var symbolNames =
-                new HashSet<string>
-                (
-                    ELFUtility.GetAllSymbols(elf).Select<ISymbolEntry, string>(sym => sym.Name)
-                );
-
-            foreach (string stack_chk in this.stack_check_symbols)
+            HashSet<string> symbolNames = null;
+            bool result = false;
+            if (context.IsELF())
             {
-                if (symbolNames.Contains(stack_chk))
-                {
-                    context.Logger.Log(this,
-                        RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                            nameof(RuleResources.BA3003_Pass),
-                            context.TargetUri.GetFileName()));
-                    return;
-                }
+                IELF elf = context.ELFBinary().ELF;
+                symbolNames =
+                    new HashSet<string>
+                    (
+                        ELFUtility.GetAllSymbols(elf).Select<ISymbolEntry, string>(sym => sym.Name)
+                    );
+
+                result = symbolNames.Any(symbol => this.stack_check_symbols.Contains(symbol));
             }
-            // If we haven't found the stack protector, we assume it wasn't used.
-            context.Logger.Log(this,
-                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                    nameof(RuleResources.BA3003_Error),
-                    context.TargetUri.GetFileName()));
+            else if (context.IsMachO())
+            {
+                MachOBinary mainMachO = context.MachOBinary();
+                foreach (SingleMachOBinary singleMachO in mainMachO.MachOs)
+                {
+                    if (this.IsApplicableMachO(singleMachO))
+                    {
+                        symbolNames = new HashSet<string>
+                            (
+                                singleMachO.SymbolTables.SelectMany(st => st.Symbols).Select(s => s.Name)
+                            );
+
+                        result = symbolNames.Any(symbol => this.stack_check_symbols.Contains(symbol));
+
+                        // if any macho fails the check
+                        if (!result)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+            }
+
+            if (result)
+            {
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                        nameof(RuleResources.BA3003_Pass),
+                        context.TargetUri.GetFileName()));
+            }
+            else
+            {
+                // If we haven't found the stack protector, we assume it wasn't used.
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                        nameof(RuleResources.BA3003_Error),
+                        context.TargetUri.GetFileName()));
+            }
+        }
+
+        private bool IsApplicableMachO(SingleMachOBinary macho)
+        {
+            return (macho.MachO.FileType == ELFSharp.MachO.FileType.DynamicLibrary ||
+                    macho.MachO.FileType == ELFSharp.MachO.FileType.Executable ||
+                    macho.MachO.FileType == ELFSharp.MachO.FileType.Object);
         }
     }
 }
