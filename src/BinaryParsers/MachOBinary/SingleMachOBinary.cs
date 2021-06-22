@@ -90,6 +90,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
         }
 
+        public List<string> GetSymbolTableFiles()
+        {
+            return this.LineNumberPrograms.SelectMany(p => p.Files).Select(f => f.Name).ToList();
+        }
+
         #region IDwarfBinary interface
 
         /// <summary>
