@@ -1241,6 +1241,27 @@
               "associatedRule": {
                 "id": "BA2025"
               }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2015_DefaultBlankApp.exe"
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'Uwp_x64_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableAdditionalSecurityChecks' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              },
+              "associatedRule": {
+                "id": "BA2026"
+              }
             }
           ],
           "executionSuccessful": false
