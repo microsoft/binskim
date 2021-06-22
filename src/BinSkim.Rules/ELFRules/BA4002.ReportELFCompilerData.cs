@@ -61,8 +61,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                         machO.GetSymbolTableFiles())
                 );
             }
-
-            
         }
 
         private void PrintCompilerData(BinaryAnalyzerContext context, string language, ICompiler[] compilers, List<string> files)
