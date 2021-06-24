@@ -1212,6 +1212,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Binaries should be compiled with warning flags that enables format string security-relevant checks. To resolve this issue, compile with flag -Wformat -Wformat-security -Werror=format-security or higher level..
+        /// </summary>
+        internal static string BA3012_EnableFormatStringWarnings_Description {
+            get {
+                return ResourceManager.GetString("BA3012_EnableFormatStringWarnings_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; enables the recommended format string security-relevant checks..
+        /// </summary>
+        internal static string BA3012_Pass {
+            get {
+                return ResourceManager.GetString("BA3012_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the recommended format string security-relevant checks. To Enable the recommended format string security-relevant checks, compile with flag -Wformat -Wformat-security -Werror=format-security or higher level..
+        /// </summary>
+        internal static string BA3012_Warning {
+            get {
+                return ResourceManager.GetString("BA3012_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No checked functions are present/used when compiling &apos;{0}&apos;, and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing &apos;-D_FORTIFY_SOURCE=2&apos; when optimization level 2 (&apos;-O2&apos;) is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings..
         /// </summary>
         internal static string BA3030_Error {

@@ -547,4 +547,13 @@ Modules triggering this check were:
   <data name="BA2026_Pass" xml:space="preserve">
     <value>'{0}' enables the recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features.</value>
   </data>
+  <data name="BA3012_EnableFormatStringWarnings_Description" xml:space="preserve">
+    <value>Binaries should be compiled with warning flags that enables format string security-relevant checks. To resolve this issue, compile with flag -Wformat -Wformat-security -Werror=format-security or higher level.</value>
+  </data>
+  <data name="BA3012_Pass" xml:space="preserve">
+    <value>'{0}' enables the recommended format string security-relevant checks.</value>
+  </data>
+  <data name="BA3012_Warning" xml:space="preserve">
+    <value>'{0}' does not enable the recommended format string security-relevant checks. To Enable the recommended format string security-relevant checks, compile with flag -Wformat -Wformat-security -Werror=format-security or higher level.</value>
+  </data>
 </root>

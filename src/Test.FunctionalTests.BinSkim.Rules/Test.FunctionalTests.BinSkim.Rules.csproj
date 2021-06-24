@@ -41,4 +41,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FunctionalTestsData\BA3012.EnableFormatStringWarnings\Pass\" />
+  </ItemGroup>
+
 </Project>

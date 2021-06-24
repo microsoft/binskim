@@ -1270,6 +1270,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA3012_EnableFormatStringWarnings_Pass()
+        {
+            this.VerifyPass(new EnableFormatStringWarnings(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3012_EnableFormatStringWarnings_Fail()
+        {
+            this.VerifyFail(new EnableFormatStringWarnings(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3012_EnableFormatStringWarnings_NotApplicable()
+        {
+            this.VerifyApplicability(new EnableFormatStringWarnings(), new HashSet<string>());
+        }
+
+        [Fact]
         public void BA3030_UseCheckedFunctionsWithGCC_Pass()
         {
             this.VerifyPass(new UseCheckedFunctionsWithGcc(), bypassExtensionValidation: true);
