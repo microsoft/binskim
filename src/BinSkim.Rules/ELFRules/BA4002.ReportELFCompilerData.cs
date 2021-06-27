@@ -15,7 +15,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class ReportELFCompilerData : DwarfSkimmerBase
+    public class ReportElfCompilerData : DwarfSkimmerBase
     {
         /// <summary>
         /// BA4002
@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id => RuleIds.ReportELFCompilerData;
 
         /// <summary>
-        /// This rule emits CSV data to the console 
+        /// This rule emits CSV data to the console
         /// for every compiler/language/version combination that's observed.
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA4002_ReportELFCompilerData_Description };
@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             IDwarfBinary binary = context.DwarfBinary();
             List<string> symbolTableFiles;
-            if (binary is ELFBinary elf)
+            if (binary is ElfBinary elf)
             {
                 symbolTableFiles = elf.GetSymbolTableFiles().Select(entry => entry.Name).ToList();
                 this.PrintCompilerData(context, binary.GetLanguage().ToString(), binary.Compilers, symbolTableFiles);

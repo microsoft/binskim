@@ -290,7 +290,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation. An example compiler command line triggering this check was: {1}
-        ///Modules tr [rest of string was truncated]&quot;;.
+        ///Modules tri [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2007_Error_WarningsDisabled {
             get {
@@ -960,7 +960,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; enables the recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that wasn&apos;t compiled with a compiler that provides the Microsoft /sdl command-line setting to enable additional compile-time and runtime security checks..
+        /// </summary>
+        internal static string BA2026_NotApplicable {
+            get {
+                return ResourceManager.GetString("BA2026_NotApplicable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that was compiled with recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features..
         /// </summary>
         internal static string BA2026_Pass {
             get {
@@ -969,7 +978,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the recommended Security Development Lifecycle (SDL) checks. To Enable the recommended Security Development Lifecycle (SDL) checks pass /sdl on the cl.exe command-line..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that wasn&apos;t compiled with recommended Security Development Lifecycle (SDL) checks. As a result some critical compile-time and runtime checks may be disabled, increasing the possibility of an exploitable runtime issue. To resolve this problem, pass &apos;/sdl&apos; on the cl.exe command-line, set the &apos;SDL checks&apos; property in the &apos;C/C++ -&gt; General&apos; Configuration property page, or explicitly set the &apos;SDLCheck&apos; property in the project file (nested within a &apos;CLCompile&apos; element) to &apos;true&apos;..
         /// </summary>
         internal static string BA2026_Warning {
             get {

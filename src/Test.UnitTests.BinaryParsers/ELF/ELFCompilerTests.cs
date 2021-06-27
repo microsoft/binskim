@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
-    public class ELFCompilerTests
+    public class ElfCompilerTestsdir
     {
         [Theory]
         [InlineData("not a match", ELFCompilerType.Unknown, "0.0.0.0")]
@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [InlineData(null, ELFCompilerType.Unknown, "0.0.0.0")]
         public void ELFCompiler_ConstructorHandlesKnownInputs(string compilerString, ELFCompilerType expectedType, string expectedVersion)
         {
-            var compiler = new ELFCompiler(compilerString);
+            var compiler = new ElfCompiler(compilerString);
             compiler.Compiler.Should().Be(expectedType);
             compiler.Version.Should().Be(new Version(expectedVersion));
         }

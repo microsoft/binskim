@@ -16,7 +16,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class UseCheckedFunctionsWithGcc : ELFBinarySkimmerBase
+    public class UseCheckedFunctionsWithGcc : ElfBinarySkimmer
     {
         // This list comes from listing all of the functions available in glibc (using readelf), 
         // then filtering to ones with a checked variant (_*_chk).
@@ -120,7 +120,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
 
-        public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeElf(ElfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             IELF elf = target.ELF;
 
@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             IELF elf = context.ELFBinary().ELF;
 
             IEnumerable<ISymbolEntry> symbols =
-                ELFUtility.GetAllSymbols(elf).Where(sym => sym.Type == SymbolType.Function || sym.Type == SymbolType.Object);
+                ElfUtility.GetAllSymbols(elf).Where(sym => sym.Type == SymbolType.Function || sym.Type == SymbolType.Object);
 
             var protectedFunctions = new List<ISymbolEntry>();
             var unprotectedFunctions = new List<ISymbolEntry>();

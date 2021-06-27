@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+dir *elf* /s<?xml version="1.0" encoding="utf-8"?>
 <Project>
   
   <PropertyGroup>

@@ -15,7 +15,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class DoNotMarkStackAsExecutable : ELFBinarySkimmerBase
+    public class DoNotMarkStackAsExecutable : ElfBinarySkimmer
     {
         private const uint GNU_STACK_ID = 0x6474e551;
 
@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
 
-        public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeElf(ElfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             IELF elf = target.ELF;
 

@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     ///
     /// This class takes those strings and attempts to match them with a known toolchain & version.
     /// </summary>
-    public class ELFCompiler : ICompiler
+    public class ElfCompiler : ICompiler
     {
         // Regular expressions for extracting compiler types.
         // These should be ordered so that the generic "catch all" mapping to unknown is last.
@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// Construct a ELFCompiler from a string from the .comments section.
         /// </summary>
         /// <param name="fullDescription">Compiler entry from the .comments section of an ELF binary.</param>
-        public ELFCompiler(string fullDescription)
+        public ElfCompiler(string fullDescription)
         {
             // If for some reason we get a null string, we will simply return an unknown compiler.
             if (fullDescription == null)
