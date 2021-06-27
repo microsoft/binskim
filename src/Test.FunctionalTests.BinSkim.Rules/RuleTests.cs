@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, expectToPass ? "Pass" : "Fail");
 
-            Assert.True(Directory.Exists(testFilesDirectory));
+            Assert.True(Directory.Exists(testFilesDirectory), $"Test directory '{testFilesDirectory}' should exist.");
 
             foreach (string target in Directory.GetFiles(testFilesDirectory, "*", SearchOption.AllDirectories))
             {
@@ -1136,8 +1136,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             var notApplicableTo = new HashSet<string>
             {
-                MetadataConditions.ImageIsNot64BitBinary,
-                MetadataConditions.ImageIsKernelModeBinary,
+                MetadataConditions.ImageIsNativeUniversalWindowsPlatformBinary,
+                MetadataConditions.ImageIsResourceOnlyBinary,
                 MetadataConditions.ImageIsILOnlyAssembly
             };
 
