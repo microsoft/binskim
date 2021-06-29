@@ -194,7 +194,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             return language.Key == DwarfAttribute.None ? DwarfLanguage.Unknown : ((DwarfLanguage)(language.Value.Constant));
         }
 
-        #endregion
+        #endregion IDwarfBinary interface
 
         private List<DwarfCompilationUnit> LoadCompilationUnits()
         {

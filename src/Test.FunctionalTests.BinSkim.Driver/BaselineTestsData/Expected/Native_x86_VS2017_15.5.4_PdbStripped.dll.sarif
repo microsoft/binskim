@@ -494,6 +494,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1042,10 +1044,7 @@
               },
               "name": "SignSecurely"
             }
-          ],
-          "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -1251,7 +1250,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableAdditionalSecurityChecks' because its PDB could not be loaded (E_PDB_MAX)."
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableAdditionalSdlSecurityChecks' because its PDB could not be loaded (E_PDB_MAX)."
               },
               "level": "error",
               "descriptor": {

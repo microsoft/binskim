@@ -496,6 +496,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1044,10 +1046,7 @@
               },
               "name": "SignSecurely"
             }
-          ],
-          "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -1253,7 +1252,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableAdditionalSecurityChecks' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
+                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableAdditionalSdlSecurityChecks' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
               },
               "level": "error",
               "descriptor": {
