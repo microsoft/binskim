@@ -79,6 +79,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     continue;
                 }
+
                 foreach (string file in files)
                 {
                     string currentRecord = compiler.Compiler + "," + compiler.Version + "," + language;
