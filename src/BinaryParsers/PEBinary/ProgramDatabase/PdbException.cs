@@ -12,6 +12,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     {
         public DiaHresult ExceptionCode { get; private set; }
 
+        public string ExceptionDisplayMessage => ExceptionCode != DiaHresult.E_PDB_MAX ? ExceptionCode.ToString() : Message;
+
         public string LoadTrace { get; set; }
 
         /// <summary>
