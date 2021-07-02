@@ -18,9 +18,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 return new PEBinary(uri, symbolPath, localSymbolDirectories, tracePdbLoad);
             }
-            else if (ELFBinary.CanLoadBinary(uri))
+            else if (ElfBinary.CanLoadBinary(uri))
             {
-                return new ELFBinary(uri);
+                return new ElfBinary(uri);
             }
             else if (MachOBinary.CanLoadBinary(uri))
             {

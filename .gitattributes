@@ -1,3 +1,5 @@
+* text=auto eol=crlf
+
 # SLN files should have clrf endings
 *.sln text eol=crlf
 

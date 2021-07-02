@@ -1251,7 +1251,7 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableAdditionalSecurityChecks' because its PDB could not be loaded (Pdb is stripped of cv (CodeView) info)."
+                "text": "'Native_x86_VS2017_15.5.4_PdbStripped.dll' was not evaluated for check 'EnableAdditionalSdlSecurityChecks' because its PDB could not be loaded (Pdb is stripped of cv (CodeView) info)."
               },
               "level": "error",
               "descriptor": {

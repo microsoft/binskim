@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (context.IsELF())
             {
-                ELFBinary target = context.ELFBinary();
+                ElfBinary target = context.ELFBinary();
                 return this.CanAnalyzeDwarf(target, context.Policy, out reasonForNotAnalyzing);
             }
             else if (context.IsMachO())

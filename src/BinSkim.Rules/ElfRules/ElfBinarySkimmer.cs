@@ -7,13 +7,13 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    public abstract class ELFBinarySkimmerBase : BinarySkimmer
+    public abstract class ElfBinarySkimmer : BinarySkimmer
     {
         public sealed override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             if (context.IsELF())
             {
-                ELFBinary target = context.ELFBinary();
+                ElfBinary target = context.ELFBinary();
                 return this.CanAnalyzeElf(target, context.Policy, out reasonForNotAnalyzing);
             }
             else
@@ -23,6 +23,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        public abstract AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing);
+        public abstract AnalysisApplicability CanAnalyzeElf(ElfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing);
     }
 }

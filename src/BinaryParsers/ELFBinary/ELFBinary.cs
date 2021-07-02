@@ -18,16 +18,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     /// <summary>
     /// Simple ELF image reader.
     /// </summary>
-    public class ELFBinary : BinaryBase, IDwarfBinary
+    public class ElfBinary : BinaryBase, IDwarfBinary
     {
-        public ELFBinary(Uri uri) : base(uri)
+        public ElfBinary(Uri uri) : base(uri)
         {
             try
             {
                 string path = Path.GetFullPath(uri.LocalPath);
                 ELF = ELFReader.Load<ulong>(path);
 
-                Compilers = ELFUtility.GetELFCompilers(this.ELF);
+                Compilers = ElfUtility.GetELFCompilers(this.ELF);
 
                 foreach (Segment<ulong> segment in ELF.Segments)
                 {
@@ -314,7 +314,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 var dwoUri = new Uri(Path.Combine(directory.AbsolutePath, dwoName));
                 if (File.Exists(dwoUri.AbsolutePath))
                 {
-                    var dwoELFBinary = new ELFBinary(dwoUri);
+                    var dwoELFBinary = new ElfBinary(dwoUri);
                     DwarfCompilationUnit cwoCompileUnit = dwoELFBinary.CompilationUnits?.FirstOrDefault(c => c.Symbols.Any(s => s.Tag == DwarfTag.CompileUnit));
 
                     if (cwoCompileUnit != null)

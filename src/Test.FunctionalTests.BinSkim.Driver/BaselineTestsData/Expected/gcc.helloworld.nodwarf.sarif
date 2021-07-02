@@ -517,7 +517,7 @@
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.helloworld.nodwarf",
-              "EnableAdditionalSecurityChecks",
+              "EnableAdditionalSdlSecurityChecks",
               "image is not a PE binary"
             ]
           },
@@ -1305,22 +1305,22 @@
               "fullDescription": {
                 "text": "/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks."
               },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2026EnableAdditionalSecurityChecks",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2026EnableAdditionalSdlSecurityChecks",
               "help": {
                 "text": "/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks."
               },
               "messageStrings": {
                 "Pass": {
-                  "text": "'{0}' enables the recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features."
+                  "text": "'{0}' is a Windows PE that was compiled with recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features."
                 },
                 "Warning": {
-                  "text": "'{0}' does not enable the recommended Security Development Lifecycle (SDL) checks. To Enable the recommended Security Development Lifecycle (SDL) checks pass /sdl on the cl.exe command-line."
+                  "text": "'{0}' is a Windows PE that wasn't compiled with recommended Security Development Lifecycle (SDL) checks. As a result some critical compile-time and runtime checks may be disabled, increasing the possibility of an exploitable runtime issue. To resolve this problem, pass '/sdl' on the cl.exe command-line, set the 'SDL checks' property in the 'C/C++ -> General' Configuration property page, or explicitly set the 'SDLCheck' property in the project file (nested within a 'CLCompile' element) to 'true'."
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableAdditionalSecurityChecks"
+              "name": "EnableAdditionalSdlSecurityChecks"
             },
             {
               "id": "BA3005",

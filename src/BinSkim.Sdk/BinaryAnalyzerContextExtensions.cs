@@ -24,12 +24,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public static bool IsELF(this BinaryAnalyzerContext target)
         {
-            return target.Binary is ELFBinary;
+            return target.Binary is ElfBinary;
         }
 
-        public static ELFBinary ELFBinary(this BinaryAnalyzerContext target)
+        public static ElfBinary ELFBinary(this BinaryAnalyzerContext target)
         {
-            if (!(target.Binary is ELFBinary ret))
+            if (!(target.Binary is ElfBinary ret))
             {
                 // Attempted to cast a binary target to a '{0}', but was unable to.  This indicates a programmer error in rules evaluating that sort of target.
                 throw new InvalidOperationException(string.Format(SdkResources.IllegalBinaryCast, "ELFBinary"));
@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public static bool IsDwarf(this BinaryAnalyzerContext target)
         {
-            return target.Binary is ELFBinary || target.Binary is MachOBinary;
+            return target.Binary is ElfBinary || target.Binary is MachOBinary;
         }
 
         public static IDwarfBinary DwarfBinary(this BinaryAnalyzerContext target)
@@ -63,7 +63,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 return machO;
             }
-            else if (target.Binary is ELFBinary elf)
+            else if (target.Binary is ElfBinary elf)
             {
                 return elf;
             }

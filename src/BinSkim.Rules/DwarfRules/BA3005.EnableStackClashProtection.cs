@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             CanAnalyzeDwarfResult result = default;
 
-            if (target is ELFBinary elf)
+            if (target is ElfBinary elf)
             {
                 result = this.VerifyDwarfBinary(elf);
             }
@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                        && !dwarfCompilerCommand.Contains("-fno-stack-clash-protection", StringComparison.OrdinalIgnoreCase);
             }
 
-            if (binary is ELFBinary elf)
+            if (binary is ElfBinary elf)
             {
                 if (!analyze(elf))
                 {
