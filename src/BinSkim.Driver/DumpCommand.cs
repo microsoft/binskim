@@ -107,7 +107,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
             catch (PdbException pdbParseException)
             {
-                sb.AppendLine(pdbParseException.ExceptionCode.ToString());
+                sb.AppendLine(pdbParseException.ExceptionDisplayMessage);
             }
 
             if (pdb != null)
