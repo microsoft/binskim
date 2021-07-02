@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
                 "Dwarf/DwarfSplitV4DebugFileInAnotherDirectory/BinaryDirectory/dwotest.gcc.4.o");
 
             // test for: when not pass in directories
-            using var binaryWithoutPathList = new ELFBinary(new Uri(fileName));
+            using var binaryWithoutPathList = new ElfBinary(new Uri(fileName));
             binaryWithoutPathList.GetLanguage().Should().Be(DwarfLanguage.Unknown);
 
             // test for: when able to find in any of the pass in directories
@@ -109,13 +109,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
             string localSymbolDirectory3 = Path.Combine(TestData,
                 "Dwarf/DwarfSplitV4DebugFileInAnotherDirectory/AnotherLocalSymbolDirectory");
             var pathListFound = new List<string>() { localSymbolDirectory1, localSymbolDirectory2, localSymbolDirectory3 };
-            using var binaryFound = new ELFBinary(new Uri(fileName), string.Join(';', pathListFound));
+            using var binaryFound = new ElfBinary(new Uri(fileName), string.Join(';', pathListFound));
             binaryFound.DwarfVersion.Should().Be(4);
             binaryFound.GetLanguage().Should().Be(DwarfLanguage.CPlusPlus);
 
             // test for: when not able to find in any of the pass in directories, also not able to find in same directory
             var pathListNotFound = new List<string>() { localSymbolDirectory1, localSymbolDirectory2 };
-            using var binaryNotFound = new ELFBinary(new Uri(fileName), string.Join(';', pathListNotFound));
+            using var binaryNotFound = new ElfBinary(new Uri(fileName), string.Join(';', pathListNotFound));
             binaryNotFound.GetLanguage().Should().Be(DwarfLanguage.Unknown);
         }
 
@@ -132,7 +132,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
             string localSymbolDirectory2 = Path.Combine(TestData,
                 "WithoutDwoFiles");
             var pathList = new List<string>() { localSymbolDirectory1, localSymbolDirectory2 };
-            using var binary = new ELFBinary(new Uri(fileName), string.Join(';', pathList));
+            using var binary = new ElfBinary(new Uri(fileName), string.Join(';', pathList));
             binary.DwarfVersion.Should().Be(4);
             binary.GetLanguage().Should().Be(DwarfLanguage.CPlusPlus);
         }
