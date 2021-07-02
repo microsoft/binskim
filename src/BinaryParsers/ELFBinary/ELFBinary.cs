@@ -338,10 +338,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             foreach (string path in searchpathList)
             {
-                var dwoUri = new Uri(Path.Combine(path, dwoName));
-                if (File.Exists(dwoUri.AbsolutePath))
+                if (Directory.Exists(path))
                 {
-                    return dwoUri;
+                    string file = Directory.GetFiles(path, dwoName, SearchOption.AllDirectories).FirstOrDefault();
+                    if (file != null)
+                    {
+                        return new Uri(file);
+                    }
                 }
             }
 
