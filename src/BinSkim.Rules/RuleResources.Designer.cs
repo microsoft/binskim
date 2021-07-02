@@ -960,7 +960,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; enables the recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that wasn&apos;t compiled with a compiler that provides the Microsoft /sdl command-line setting to enable additional compile-time and runtime security checks..
+        /// </summary>
+        internal static string BA2026_NotApplicable {
+            get {
+                return ResourceManager.GetString("BA2026_NotApplicable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that was compiled with recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features..
         /// </summary>
         internal static string BA2026_Pass {
             get {
@@ -969,7 +978,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the recommended Security Development Lifecycle (SDL) checks. To Enable the recommended Security Development Lifecycle (SDL) checks pass /sdl on the cl.exe command-line..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that wasn&apos;t compiled with recommended Security Development Lifecycle (SDL) checks. As a result some critical compile-time and runtime checks may be disabled, increasing the possibility of an exploitable runtime issue. To resolve this problem, pass &apos;/sdl&apos; on the cl.exe command-line, set the &apos;SDL checks&apos; property in the &apos;C/C++ -&gt; General&apos; Configuration property page, or explicitly set the &apos;SDLCheck&apos; property in the project file (nested within a &apos;CLCompile&apos; element) to &apos;true&apos;..
         /// </summary>
         internal static string BA2026_Warning {
             get {

@@ -15,12 +15,12 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class EnableAdditionalSecurityChecks : WindowsBinaryAndPdbSkimmerBase
+    public class EnableAdditionalSdlSecurityChecks : WindowsBinaryAndPdbSkimmerBase
     {
         /// <summary>
         /// BA2026
         /// </summary>
-        public override string Id => RuleIds.EnableAdditionalSecurityChecks;
+        public override string Id => RuleIds.EnableAdditionalSdlSecurityChecks;
 
         /// <summary>
         /// /sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. 
@@ -74,40 +74,66 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
+            uint sdlEnabled = 0xffffffff;
+
             foreach (DebugDirectoryEntry debugDirectory in debugDirectories)
             {
-                if ((ImageDebugType)debugDirectory.Type == ImageDebugType.IMAGE_DEBUG_TYPE_VC_FEATURE)
+                if ((ImageDebugType)debugDirectory.Type != ImageDebugType.IMAGE_DEBUG_TYPE_VC_FEATURE)
                 {
-                    PEMemoryBlock memory = target.PE.GetSectionData(debugDirectory.DataRelativeVirtualAddress);
-                    BlobReader reader = memory.GetReader();
-                    reader.ReadUInt32(); // Pre-VC++ 11.00 flag
-                    reader.ReadUInt32(); // C/C++ Version
-                    reader.ReadUInt32(); // /GS setting
-                    uint sdlSetting = reader.ReadUInt32(); // /sdl setting
-                    reader.ReadUInt32(); // guardN setting
-
-                    if (sdlSetting == 1)
-                    {
-                        // '{0}' enables the recommended Security Development Lifecycle (SDL) checks.
-                        // These checks change security-relevant warnings into errors, and set additional secure code-generation features.
-                        context.Logger.Log(this,
-                            RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                            nameof(RuleResources.BA2026_Pass),
-                            context.TargetUri.GetFileName()));
-                        return;
-                    }
-                    else
-                    {
-                        // '{0}' does not enable the recommended Security Development Lifecycle (SDL) checks.
-                        // To Enable the recommended Security Development Lifecycle (SDL) checks pass /sdl on the cl.exe command-line.
-                        context.Logger.Log(this,
-                            RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
-                            nameof(RuleResources.BA2026_Warning),
-                            context.TargetUri.GetFileName()));
-                        return;
-                    }
+                    continue;
                 }
+
+                PEMemoryBlock memory = target.PE.GetSectionData(debugDirectory.DataRelativeVirtualAddress);
+                BlobReader reader = memory.GetReader();
+
+                reader.ReadUInt32(); // Pre-VC++ 11.00 flag
+                reader.ReadUInt32(); // C/C++ Version
+                reader.ReadUInt32(); // -GS setting
+
+                sdlEnabled = reader.ReadUInt32(); // -sdl setting
+                break;
             }
+
+            switch (sdlEnabled)
+            {
+                case 0:
+                {
+                    // '{0}' is a Windows PE that wasn't compiled with recommended Security
+                    // Development Lifecycle (SDL) checks. As a result some critical compile-time
+                    // and runtime checks may be disabled, increasing the possibility of an
+                    // exploitable runtime issue. To resolve this problem, pass '/sdl' on the
+                    // cl.exe command-line, set the 'SDL checks' property in the 
+                    // 'C/C++ -> General' Configuration property page, or explicitly set the
+                    // 'SDLCheck' property in the project file (nested within a 'CLCompile'
+                    // element) to 'true'.
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
+                        nameof(RuleResources.BA2026_Warning),
+                        context.TargetUri.GetFileName()));
+                    return;
+                }
+
+                case 1:
+                {
+                    // '{0}' is a Windows PE that was compiled with recommended Security
+                    // Development Lifecycle (SDL) checks. These checks change security-relevant
+                    // warnings into errors, and set additional secure code-generation features.
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                        nameof(RuleResources.BA2026_Pass),
+                        context.TargetUri.GetFileName()));
+                    return;
+                }
+
+                default: { break; }
+            }
+
+            // '{0}' is a Windows PE that wasn't compiled with a compiler that provides the Microsoft
+            // /sdl command-line setting to enable additional compile-time and runtime security checks.
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.NotApplicable, context, null,
+                nameof(RuleResources.BA2026_NotApplicable),
+                context.TargetUri.GetFileName()));
         }
     }
 }

@@ -1348,7 +1348,7 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'EnableAdditionalSecurityChecks' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
+                "text": "'Uwp_x86_VS2015_DefaultBlankApp.dll' was not evaluated for check 'EnableAdditionalSdlSecurityChecks' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
               },
               "level": "error",
               "descriptor": {

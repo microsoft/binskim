@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class EnableReadOnlyRelocations : ELFBinarySkimmerBase
+    public class EnableReadOnlyRelocations : ElfBinarySkimmer
     {
         private const uint GNU_RELRO_ID = 0x6474e552;
 
@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
 
-        public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeElf(ElfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             IELF elf = target.ELF;
 
