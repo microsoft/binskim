@@ -11,7 +11,7 @@ using ELFSharp.ELF.Sections;
 using ELFSharp.ELF.Segments;
 
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
-using Microsoft.CodeAnalysis.BinaryParsers.ELF;
+using Microsoft.CodeAnalysis.BinaryParsers.Elf;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 string path = Path.GetFullPath(uri.LocalPath);
                 ELF = ELFReader.Load<ulong>(path);
 
-                Compilers = ELFUtility2.GetELFCompilers(this.ELF);
+                Compilers = ElfUtility.GetELFCompilers(this.ELF);
 
                 foreach (Segment<ulong> segment in ELF.Segments)
                 {

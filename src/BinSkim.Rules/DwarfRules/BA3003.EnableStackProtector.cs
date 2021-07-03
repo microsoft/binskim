@@ -84,7 +84,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 IELF elf = context.ElfBinary().ELF;
                 symbolNames = new HashSet<string>
                 (
-                    ELFUtility2.GetAllSymbols(elf).Select(sym => sym.Name)
+                    ElfUtility.GetAllSymbols(elf).Select(sym => sym.Name)
                 );
 
                 result = symbolNames.Any(symbol => this.stack_check_symbols.Contains(symbol));

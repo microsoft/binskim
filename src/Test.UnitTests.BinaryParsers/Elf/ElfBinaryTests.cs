@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
 
 using Xunit;
 
-namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
+namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
 {
     public class ElfBinaryTests
     {
@@ -122,7 +122,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
         [Fact]
         public void ValidateDwarfV4_WithO2_Split_DebugFileInSameDirectory()
         {
-            // dwotest.cpp compiled using: gcc -Wall -O2 -g -gdwarf-4 dwotest.cpp -gsplit-dwarf -o dwotest.gcc.4.o            
+            // dwotest.cpp compiled using: gcc -Wall -O2 -g -gdwarf-4 dwotest.cpp -gsplit-dwarf -o dwotest.gcc.4.o
             string fileName = Path.Combine(TestData,
                 "Dwarf/DwarfSplitV4/dwotest.gcc.4.o");
 

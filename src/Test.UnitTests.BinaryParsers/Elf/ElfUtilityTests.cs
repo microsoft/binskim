@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 testData.AddRange(System.Text.Encoding.ASCII.GetBytes(str.ToCharArray()));
                 testData.Add(0);
             }
-            string[] output = ELFUtility2.NullTermAsciiToStrings(testData.ToArray());
+            string[] output = ElfUtility.NullTermAsciiToStrings(testData.ToArray());
             output.Should().BeEquivalentTo(testStrings);
         }
 
@@ -36,13 +36,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [InlineData(new byte[] { 01, 02, 00, 01, 01 })]
         public void NullTermAsciiToStrings_ThrowsArgumentExceptionForInvalidData(byte[] data)
         {
-            Assert.Throws<ArgumentException>(() => ELFUtility2.NullTermAsciiToStrings(data));
+            Assert.Throws<ArgumentException>(() => ElfUtility.NullTermAsciiToStrings(data));
         }
 
         [Fact]
         public void NullTermAsciiToStrings_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => ELFUtility2.NullTermAsciiToStrings(null));
+            Assert.Throws<ArgumentNullException>(() => ElfUtility.NullTermAsciiToStrings(null));
         }
     }
 }

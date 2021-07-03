@@ -10,7 +10,7 @@ using ELFSharp.ELF.Sections;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
-    public static class ELFUtility2
+    public static class ElfUtility
     {
         /// <summary>
         /// Gets all of the symbol entries from an ELF binary and returns it

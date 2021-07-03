@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
+namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
 {
     public enum ElfSegmentType : uint
     {
@@ -21,6 +21,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
         // x86-64 program header types.
         // These all contain stack unwind tables.
         PT_GNU_EH_FRAME = 0x6474e550,
+
         PT_SUNW_EH_FRAME = 0x6474e550,
         PT_SUNW_UNWIND = 0x6464e550,
 
@@ -34,12 +35,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
 
         // ARM program header types.
         PT_ARM_ARCHEXT = 0x70000000, // Platform architecture compatibility info
+
                                      // These all contain stack unwind tables.
         PT_ARM_EXIDX = 0x70000001,
+
         PT_ARM_UNWIND = 0x70000001,
 
         // MIPS program header types.
         PT_MIPS_REGINFO = 0x70000000,  // Register usage information.
+
         PT_MIPS_RTPROC = 0x70000001,   // Runtime procedure table.
         PT_MIPS_OPTIONS = 0x70000002,  // Options segment.
         PT_MIPS_ABIFLAGS = 0x70000003, // Abiflags segment.

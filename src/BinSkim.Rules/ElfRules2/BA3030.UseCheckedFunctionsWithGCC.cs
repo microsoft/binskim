@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             IELF elf = context.ElfBinary().ELF;
 
             IEnumerable<ISymbolEntry> symbols =
-                ELFUtility2.GetAllSymbols(elf).Where(sym => sym.Type == SymbolType.Function || sym.Type == SymbolType.Object);
+                ElfUtility.GetAllSymbols(elf).Where(sym => sym.Type == SymbolType.Function || sym.Type == SymbolType.Object);
 
             var protectedFunctions = new List<ISymbolEntry>();
             var unprotectedFunctions = new List<ISymbolEntry>();
