@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     /// </summary>
     public class ElfBinary : BinaryBase, IDwarfBinary
     {
-        public ElfBinary(Uri uri) : base(uri)
+        public ElfBinary(Uri uri, string localSymbolDirectories = null) : base(uri)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 CompilationUnits = DwarfSymbolProvider.ParseCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
                 LineNumberPrograms = DwarfSymbolProvider.ParseLineNumberPrograms(DebugLine, NormalizeAddress);
                 CommonInformationEntries = DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this));
-                LoadDwo();
+                LoadDwo(localSymbolDirectories);
                 this.Valid = true;
             }
             // At some point, we may want to better enumerate expected vs. unexpected exceptions.
@@ -295,7 +295,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             return ulong.MaxValue;
         }
 
-        private void LoadDwo()
+        private void LoadDwo(string localSymbolDirectories = null)
         {
             if (CompilationUnits == null || CompilationUnits.Count == 0)
             {
@@ -311,11 +311,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             if (!string.IsNullOrWhiteSpace(dwoName))
             {
                 var directory = new Uri(TargetUri, ".");
-                var dwoUri = new Uri(Path.Combine(directory.AbsolutePath, dwoName));
-                if (File.Exists(dwoUri.AbsolutePath))
+                Uri dwoUri = GetFirstExistFile(dwoName, directory.AbsolutePath, localSymbolDirectories);
+                if (dwoUri != null)
                 {
-                    var dwoELFBinary = new ElfBinary(dwoUri);
-                    DwarfCompilationUnit cwoCompileUnit = dwoELFBinary.CompilationUnits?.FirstOrDefault(c => c.Symbols.Any(s => s.Tag == DwarfTag.CompileUnit));
+                    var dwoBinary = new ElfBinary(dwoUri);
+                    DwarfCompilationUnit cwoCompileUnit = dwoBinary.CompilationUnits?.FirstOrDefault(c => c.Symbols.Any(s => s.Tag == DwarfTag.CompileUnit));
 
                     if (cwoCompileUnit != null)
                     {
@@ -323,6 +323,32 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     }
                 }
             }
+        }
+
+        private static Uri GetFirstExistFile(string dwoName, string sameDirectory, string localSymbolDirectories = null)
+        {
+            List<string> searchpathList = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(localSymbolDirectories))
+            {
+                searchpathList.AddRange(localSymbolDirectories.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            searchpathList.Add(sameDirectory);
+
+            foreach (string path in searchpathList)
+            {
+                if (Directory.Exists(path))
+                {
+                    string file = Directory.GetFiles(path, dwoName, SearchOption.AllDirectories).FirstOrDefault();
+                    if (file != null)
+                    {
+                        return new Uri(file);
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

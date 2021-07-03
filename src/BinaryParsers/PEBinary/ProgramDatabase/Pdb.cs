@@ -107,7 +107,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 // If we have one or more local symbol directories, we want
                 // to probe them before any other default load behavior. If
-                // this load code path fails, we fill fallback to these
+                // this load code path fails, we will fallback to these
                 // defaults locations in the second load pass below.
                 this.restrictReferenceAndOriginalPathAccess = true;
                 try
