@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
         // ARM program header types.
         PT_ARM_ARCHEXT = 0x70000000, // Platform architecture compatibility info
 
-                                     // These all contain stack unwind tables.
+        // These all contain stack unwind tables.
         PT_ARM_EXIDX = 0x70000001,
 
         PT_ARM_UNWIND = 0x70000001,
