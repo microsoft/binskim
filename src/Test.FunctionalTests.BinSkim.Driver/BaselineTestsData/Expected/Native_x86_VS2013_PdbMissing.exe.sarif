@@ -1241,6 +1241,27 @@
               "associatedRule": {
                 "id": "BA2025"
               }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableAdditionalSdlSecurityChecks' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              },
+              "associatedRule": {
+                "id": "BA2026"
+              }
             }
           ],
           "executionSuccessful": false

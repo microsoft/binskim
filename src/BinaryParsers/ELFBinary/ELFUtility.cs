@@ -10,7 +10,7 @@ using ELFSharp.ELF.Sections;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
-    public static class ELFUtility
+    public static class ElfUtility
     {
         /// <summary>
         /// Gets all of the symbol entries from an ELF binary and returns it
@@ -36,28 +36,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// </summary>
         /// <param name="elf">ELF binary</param>
         /// <returns>List of compiler tools from the .comment section</returns>
-        internal static ELFCompiler[] GetELFCompilers(IELF elf)
+        internal static ElfCompiler[] GetELFCompilers(IELF elf)
         {
             ISection commentSection = elf.Sections.FirstOrDefault(s => s.Name == ".comment");
             if (commentSection == null)
             {
-                return new ELFCompiler[] { new ELFCompiler(string.Empty) };
+                return new ElfCompiler[] { new ElfCompiler(string.Empty) };
             }
 
             try
             {
                 string[] commentData = NullTermAsciiToStrings(commentSection.GetContents());
-                var compilers = new ELFCompiler[commentData.Length];
+                var compilers = new ElfCompiler[commentData.Length];
                 for (int i = 0; i < commentData.Length; i++)
                 {
-                    compilers[i] = new ELFCompiler(commentData[i]);
+                    compilers[i] = new ElfCompiler(commentData[i]);
                 }
                 return compilers;
             }
             // Catch cases when the .comment section is not formatted the way we expect it to be.
             catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
             {
-                return new ELFCompiler[] { new ELFCompiler(string.Empty) };
+                return new ElfCompiler[] { new ElfCompiler(string.Empty) };
             }
         }
 

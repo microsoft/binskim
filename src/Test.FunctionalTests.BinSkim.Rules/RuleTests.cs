@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, expectToPass ? "Pass" : "Fail");
 
-            Assert.True(Directory.Exists(testFilesDirectory));
+            Assert.True(Directory.Exists(testFilesDirectory), $"Test directory '{testFilesDirectory}' should exist.");
 
             foreach (string target in Directory.GetFiles(testFilesDirectory, "*", SearchOption.AllDirectories))
             {
@@ -1112,6 +1112,38 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 this.VerifyFail(new EnableShadowStack(), useDefaultPolicy: true);
             }
         }
+
+        [Fact]
+        public void BA2026_EnableAdditionalSdlSecurityChecks_Pass()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new EnableAdditionalSdlSecurityChecks(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA2026_EnableAdditionalSdlSecurityChecks_Fail()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyFail(new EnableAdditionalSdlSecurityChecks(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA2026_EnableAdditionalSdlSecurityChecks_NotApplicable()
+        {
+            var notApplicableTo = new HashSet<string>
+            {
+                MetadataConditions.ImageIsNativeUniversalWindowsPlatformBinary,
+                MetadataConditions.ImageIsResourceOnlyBinary,
+                MetadataConditions.ImageIsILOnlyAssembly
+            };
+
+            this.VerifyApplicability(new EnableAdditionalSdlSecurityChecks(), notApplicableTo);
+        }
+
 
         [Fact]
         public void BA3001_EnablePositionIndependentExecutable_Pass()

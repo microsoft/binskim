@@ -40,6 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public const string EnableSpectreMitigations = "BA2024";
         public const string EnableShadowStack = "BA2025";
+        public const string EnableAdditionalSdlSecurityChecks = "BA2026";
 
         // ELF Checks
         public const string EnablePositionIndependentExecutable = "BA3001";

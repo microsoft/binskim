@@ -158,7 +158,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// </summary>
             public void AddCurrentLineInfo()
             {
-                File.Lines.Add(new DwarfLineInformation()
+                File?.Lines?.Add(new DwarfLineInformation()
                 {
                     File = File,
                     Address = Address,
@@ -340,6 +340,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfLineNumberStandardOpcode.SetIsa:
                             state.Isa = debugLine.LEB128();
+                            break;
+
+                        case (DwarfLineNumberStandardOpcode)13:
+                            // when reading some dwarf debugline data, get OpCode 13 which is not in dwarf official document
                             break;
 
                         default:

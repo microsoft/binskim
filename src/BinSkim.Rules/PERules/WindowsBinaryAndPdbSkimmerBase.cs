@@ -142,7 +142,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     RuleResources.ERR997_ExceptionLoadingPdb,
                     context.TargetUri.GetFileName(),
                     context.Rule.Name,
-                    pdbException.ExceptionCode.ToString()));
+                    pdbException.ExceptionDisplayMessage));
 
             context.RuntimeErrors |= RuntimeConditions.ExceptionLoadingPdb;
 

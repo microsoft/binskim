@@ -4,8 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
-
-using ELFSharp.ELF.Sections;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
@@ -16,7 +15,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class ReportELFCompilerData : ELFBinarySkimmerBase
+    public class ReportElfCompilerData : DwarfSkimmerBase
     {
         /// <summary>
         /// BA4002
@@ -24,7 +23,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id => RuleIds.ReportELFCompilerData;
 
         /// <summary>
-        /// This rule emits CSV data to the console 
+        /// This rule emits CSV data to the console
         /// for every compiler/language/version combination that's observed.
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA4002_ReportELFCompilerData_Description };
@@ -35,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private bool PrintHeader = true;
 
-        public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -43,27 +42,47 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            ELFBinary elfBinary = context.ELFBinary();
-            DwarfLanguage dwarfLanguage = elfBinary.GetLanguage();
-            List<SymbolEntry<ulong>> symbolTableFiles = elfBinary.GetSymbolTableFiles();
+            IDwarfBinary binary = context.DwarfBinary();
+            List<string> symbolTableFiles;
+            if (binary is ElfBinary elf)
+            {
+                symbolTableFiles = elf.GetSymbolTableFiles().Select(entry => entry.Name).ToList();
+                this.PrintCompilerData(context, binary.GetLanguage().ToString(), binary.Compilers, symbolTableFiles);
+            }
 
-            if (PrintHeader)
+            if (binary is MachOBinary machO)
+            {
+                machO.MachOs.ToList().ForEach
+                (
+                    machO => this.PrintCompilerData(
+                                        context,
+                                        machO.GetLanguage().ToString(),
+                                        machO.Compilers,
+                                        machO.GetSymbolTableFiles())
+                );
+            }
+        }
+
+        private void PrintCompilerData(BinaryAnalyzerContext context, string language, ICompiler[] compilers, List<string> files)
+        {
+            if (this.PrintHeader)
             {
                 Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Module Name,Module Library,Hash,Error");
-                PrintHeader = false;
+                this.PrintHeader = false;
             }
 
             var processedRecords = new HashSet<string>();
 
-            foreach (ELFCompiler compiler in elfBinary.Compilers)
+            foreach (ICompiler compiler in compilers)
             {
                 if (compiler.Compiler == ELFCompilerType.Unknown)
                 {
                     continue;
                 }
-                foreach (SymbolEntry<ulong> entry in symbolTableFiles)
+
+                foreach (string file in files)
                 {
-                    string currentRecord = compiler.Compiler + "," + compiler.Version + "," + dwarfLanguage;
+                    string currentRecord = compiler.Compiler + "," + compiler.Version + "," + language;
 
                     if (processedRecords.Contains(currentRecord))
                     {
@@ -76,9 +95,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Console.Write($"{compiler.Compiler},");
                     Console.Write($"{compiler.Version},");
                     Console.Write($"{compiler.Version},");
-                    Console.Write($"{dwarfLanguage},");
-                    Console.Write($"{entry.Name},");
-                    Console.Write($"{entry.Name},");
+                    Console.Write($"{language},");
+                    Console.Write($"{file},");
+                    Console.Write($"{file},");
                     Console.Write($"{context?.Hashes?.Sha256},");
                     Console.WriteLine();
                 }

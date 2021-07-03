@@ -90,6 +90,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
         }
 
+        public List<string> GetSymbolTableFiles()
+        {
+            return this.LineNumberPrograms.SelectMany(p => p.Files).Select(f => f.Name).ToList();
+        }
+
         #region IDwarfBinary interface
 
         /// <summary>
@@ -189,7 +194,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             return language.Key == DwarfAttribute.None ? DwarfLanguage.Unknown : ((DwarfLanguage)(language.Value.Constant));
         }
 
-        #endregion
+        #endregion IDwarfBinary interface
 
         private List<DwarfCompilationUnit> LoadCompilationUnits()
         {

@@ -101,8 +101,32 @@
           ]
         },
         {
-          "ruleId": "BA3001",
+          "ruleId": "BA2026",
           "ruleIndex": 4,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Uwp_x86_VS2017_Cpp_DirectX11.exe",
+              "EnableAdditionalSdlSecurityChecks",
+              "image is a native UWP (Universal Windows Platform) binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 5,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -126,7 +150,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 5,
+          "ruleIndex": 6,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -150,7 +174,7 @@
         },
         {
           "ruleId": "BA3003",
-          "ruleIndex": 6,
+          "ruleIndex": 7,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -174,7 +198,7 @@
         },
         {
           "ruleId": "BA3004",
-          "ruleIndex": 7,
+          "ruleIndex": 8,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -198,7 +222,7 @@
         },
         {
           "ruleId": "BA3005",
-          "ruleIndex": 8,
+          "ruleIndex": 9,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -222,7 +246,7 @@
         },
         {
           "ruleId": "BA3006",
-          "ruleIndex": 9,
+          "ruleIndex": 10,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -246,7 +270,7 @@
         },
         {
           "ruleId": "BA3010",
-          "ruleIndex": 10,
+          "ruleIndex": 11,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -270,7 +294,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 11,
+          "ruleIndex": 12,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -294,7 +318,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 12,
+          "ruleIndex": 13,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -318,7 +342,7 @@
         },
         {
           "ruleId": "BA2002",
-          "ruleIndex": 13,
+          "ruleIndex": 14,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -340,7 +364,7 @@
         },
         {
           "ruleId": "BA2004",
-          "ruleIndex": 14,
+          "ruleIndex": 15,
           "message": {
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
@@ -361,7 +385,7 @@
         },
         {
           "ruleId": "BA2004",
-          "ruleIndex": 14,
+          "ruleIndex": 15,
           "level": "error",
           "message": {
             "id": "Error_NativeWithInsecureDirectCompilands",
@@ -383,7 +407,7 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 15,
+          "ruleIndex": 16,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -405,7 +429,7 @@
         },
         {
           "ruleId": "BA2006",
-          "ruleIndex": 16,
+          "ruleIndex": 17,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -428,7 +452,7 @@
         },
         {
           "ruleId": "BA2007",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -451,7 +475,7 @@
         },
         {
           "ruleId": "BA2008",
-          "ruleIndex": 18,
+          "ruleIndex": 19,
           "level": "error",
           "message": {
             "id": "Error",
@@ -472,28 +496,6 @@
         },
         {
           "ruleId": "BA2009",
-          "ruleIndex": 19,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x86_VS2017_Cpp_DirectX11.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
           "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
@@ -515,7 +517,7 @@
           ]
         },
         {
-          "ruleId": "BA2011",
+          "ruleId": "BA2010",
           "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
@@ -537,7 +539,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2011",
           "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
@@ -559,7 +561,7 @@
           ]
         },
         {
-          "ruleId": "BA2013",
+          "ruleId": "BA2012",
           "ruleIndex": 23,
           "kind": "pass",
           "level": "none",
@@ -581,7 +583,7 @@
           ]
         },
         {
-          "ruleId": "BA2014",
+          "ruleId": "BA2013",
           "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
@@ -603,7 +605,7 @@
           ]
         },
         {
-          "ruleId": "BA2016",
+          "ruleId": "BA2014",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -625,7 +627,7 @@
           ]
         },
         {
-          "ruleId": "BA2018",
+          "ruleId": "BA2016",
           "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
@@ -647,7 +649,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2018",
           "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
@@ -669,7 +671,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2019",
           "ruleIndex": 28,
           "kind": "pass",
           "level": "none",
@@ -691,8 +693,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 29,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x86_VS2017_Cpp_DirectX11.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 30,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -828,6 +852,28 @@
                 }
               },
               "name": "EnableShadowStack"
+            },
+            {
+              "id": "BA2026",
+              "fullDescription": {
+                "text": "/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2026EnableAdditionalSdlSecurityChecks",
+              "help": {
+                "text": "/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a Windows PE that was compiled with recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features."
+                },
+                "Warning": {
+                  "text": "'{0}' is a Windows PE that wasn't compiled with recommended Security Development Lifecycle (SDL) checks. As a result some critical compile-time and runtime checks may be disabled, increasing the possibility of an exploitable runtime issue. To resolve this problem, pass '/sdl' on the cl.exe command-line, set the 'SDL checks' property in the 'C/C++ -> General' Configuration property page, or explicitly set the 'SDLCheck' property in the project file (nested within a 'CLCompile' element) to 'true'."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableAdditionalSdlSecurityChecks"
             },
             {
               "id": "BA3001",

@@ -951,6 +951,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks..
+        /// </summary>
+        internal static string BA2026_EnableAdditionalSecurityChecks_Description {
+            get {
+                return ResourceManager.GetString("BA2026_EnableAdditionalSecurityChecks_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that wasn&apos;t compiled with a compiler that provides the Microsoft /sdl command-line setting to enable additional compile-time and runtime security checks..
+        /// </summary>
+        internal static string BA2026_NotApplicable {
+            get {
+                return ResourceManager.GetString("BA2026_NotApplicable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that was compiled with recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features..
+        /// </summary>
+        internal static string BA2026_Pass {
+            get {
+                return ResourceManager.GetString("BA2026_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that wasn&apos;t compiled with recommended Security Development Lifecycle (SDL) checks. As a result some critical compile-time and runtime checks may be disabled, increasing the possibility of an exploitable runtime issue. To resolve this problem, pass &apos;/sdl&apos; on the cl.exe command-line, set the &apos;SDL checks&apos; property in the &apos;C/C++ -&gt; General&apos; Configuration property page, or explicitly set the &apos;SDLCheck&apos; property in the project file (nested within a &apos;CLCompile&apos; element) to &apos;true&apos;..
+        /// </summary>
+        internal static string BA2026_Warning {
+            get {
+                return ResourceManager.GetString("BA2026_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
         internal static string BA3001_EnablePositionIndependentExecutable_Description {

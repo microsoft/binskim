@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class GenerateRequiredSymbolFormat : ELFBinarySkimmerBase
+    public class GenerateRequiredSymbolFormat : ElfBinarySkimmer
     {
         /// <summary>
         /// BA3004
@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
-        public override AnalysisApplicability CanAnalyzeElf(ELFBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeElf(ElfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            ELFBinary elfBinary = context.ELFBinary();
+            ElfBinary elfBinary = context.ELFBinary();
             int dwarfVersion = elfBinary.DwarfVersion;
             if (dwarfVersion == -1)
             {

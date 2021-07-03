@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 
@@ -18,9 +21,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 return new PEBinary(uri, symbolPath, localSymbolDirectories, tracePdbLoad);
             }
-            else if (ELFBinary.CanLoadBinary(uri))
+            else if (ElfBinary.CanLoadBinary(uri))
             {
-                return new ELFBinary(uri);
+                return new ElfBinary(uri, localSymbolDirectories);
             }
             else if (MachOBinary.CanLoadBinary(uri))
             {

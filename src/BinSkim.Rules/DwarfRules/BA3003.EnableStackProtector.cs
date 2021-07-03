@@ -49,7 +49,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             reasonForNotAnalyzing = null;
-            if (target is ELFBinary elf)
+            if (target is ElfBinary elf)
             {
                 if (elf.ELF.Type == FileType.Executable || elf.ELF.Type == FileType.SharedObject)
                 {
@@ -84,7 +84,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 IELF elf = context.ELFBinary().ELF;
                 symbolNames = new HashSet<string>
                 (
-                    ELFUtility.GetAllSymbols(elf).Select(sym => sym.Name)
+                    ElfUtility.GetAllSymbols(elf).Select(sym => sym.Name)
                 );
 
                 result = symbolNames.Any(symbol => this.stack_check_symbols.Contains(symbol));
