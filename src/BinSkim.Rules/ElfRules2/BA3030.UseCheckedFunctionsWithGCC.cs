@@ -133,7 +133,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // We check for "any usage of non-gcc" as a default/standard compilation with clang leads to [GCC, Clang]
             // either because it links with a gcc-compiled object (cstdlib) or the linker also reading as GCC.
             // This has a potential for a False Negative if teams are using GCC and other tools.
-            if (target.Compilers.Any(c => c.Compiler != ELFCompilerType.GCC))
+            if (target.Compilers.Any(c => c.Compiler != ElfCompilerType.GCC))
             {
                 reasonForNotAnalyzing = MetadataConditions.ElfNotBuiltWithGcc;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -157,10 +157,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            IELF elf = context.ELFBinary().ELF;
+            IELF elf = context.ElfBinary().ELF;
 
             IEnumerable<ISymbolEntry> symbols =
-                ElfUtility.GetAllSymbols(elf).Where(sym => sym.Type == SymbolType.Function || sym.Type == SymbolType.Object);
+                ELFUtility2.GetAllSymbols(elf).Where(sym => sym.Type == SymbolType.Function || sym.Type == SymbolType.Object);
 
             var protectedFunctions = new List<ISymbolEntry>();
             var unprotectedFunctions = new List<ISymbolEntry>();

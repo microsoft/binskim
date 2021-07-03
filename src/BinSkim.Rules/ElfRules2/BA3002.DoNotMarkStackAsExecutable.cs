@@ -56,7 +56,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            IELF elf = context.ELFBinary().ELF;
+            IELF elf = context.ElfBinary().ELF;
             // Look for the GNU_STACK segment
             foreach (ISegment seg in elf.Segments)
             {

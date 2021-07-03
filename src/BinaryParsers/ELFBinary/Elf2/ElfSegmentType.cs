@@ -3,7 +3,7 @@
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.ELF
 {
-    public enum ELFSegmentType : uint
+    public enum ElfSegmentType : uint
     {
         PT_NULL = 0,            // Unused segment.
         PT_LOAD = 1,            // Loadable segment.

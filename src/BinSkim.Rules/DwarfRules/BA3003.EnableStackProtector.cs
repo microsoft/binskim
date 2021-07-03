@@ -81,10 +81,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             bool result = false;
             if (context.IsELF())
             {
-                IELF elf = context.ELFBinary().ELF;
+                IELF elf = context.ElfBinary().ELF;
                 symbolNames = new HashSet<string>
                 (
-                    ElfUtility.GetAllSymbols(elf).Select(sym => sym.Name)
+                    ELFUtility2.GetAllSymbols(elf).Select(sym => sym.Name)
                 );
 
                 result = symbolNames.Any(symbol => this.stack_check_symbols.Contains(symbol));

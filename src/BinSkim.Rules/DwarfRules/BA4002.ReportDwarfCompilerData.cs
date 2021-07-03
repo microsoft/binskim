@@ -15,7 +15,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class ReportElfCompilerData : DwarfSkimmerBase
+    public class ReportDwarfCompilerData : DwarfSkimmerBase
     {
         /// <summary>
         /// BA4002
@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (ICompiler compiler in compilers)
             {
-                if (compiler.Compiler == ELFCompilerType.Unknown)
+                if (compiler.Compiler == ElfCompilerType.Unknown)
                 {
                     continue;
                 }

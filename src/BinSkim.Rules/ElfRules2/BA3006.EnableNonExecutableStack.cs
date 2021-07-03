@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             reasonForNotAnalyzing = null;
 
-            if (target.GetSegmentFlags(ELFSegmentType.PT_GNU_STACK) == null)
+            if (target.GetSegmentFlags(ElfSegmentType.PT_GNU_STACK) == null)
             {
                 reasonForNotAnalyzing = MetadataConditions.ElfNotContainSegment;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -54,9 +54,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            ElfBinary elfBinary = context.ELFBinary();
+            ElfBinary elfBinary = context.ElfBinary();
 
-            if ((elfBinary.GetSegmentFlags(ELFSegmentType.PT_GNU_STACK) & SegmentFlags.Execute) != 0)
+            if ((elfBinary.GetSegmentFlags(ElfSegmentType.PT_GNU_STACK) & SegmentFlags.Execute) != 0)
             {
                 // The non-executable stack is not enabled for this binary,
                 // so '{0}' can have a vulnerability of execution of the data written on the stack.
