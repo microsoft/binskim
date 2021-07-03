@@ -128,7 +128,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // We check for "any usage of non-gcc" as a default/standard compilation with clang leads to [GCC, Clang]
             // either because it links with a gcc-compiled object (cstdlib) or the linker also reading as GCC.
             // This has a potential for a False Negative if teams are using GCC and other tools.
-            if (binary.Compilers.Any(c => c.Compiler != ELFCompilerType.GCC))
+            if (binary.Compilers.Any(c => c.Compiler != ElfCompilerType.GCC))
             {
                 return new CanAnalyzeDwarfResult
                 {
