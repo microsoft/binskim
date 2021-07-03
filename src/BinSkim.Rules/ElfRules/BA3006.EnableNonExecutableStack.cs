@@ -7,7 +7,7 @@ using System.Composition;
 using ELFSharp.ELF.Segments;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
-using Microsoft.CodeAnalysis.BinaryParsers.ELF;
+using Microsoft.CodeAnalysis.BinaryParsers.Elf;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -23,10 +23,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id => RuleIds.EnableNonExecutableStack;
 
         /// <summary>
-        /// This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. 
-        /// An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, 
-        /// writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. 
-        /// One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections 
+        /// This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow.
+        /// An application receives, from an attacker, more data than it is prepared for and stores this information on its stack,
+        /// writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack.
+        /// One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections
         /// of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this.
         /// </summary>
         public override MultiformatMessageString FullDescription =>
