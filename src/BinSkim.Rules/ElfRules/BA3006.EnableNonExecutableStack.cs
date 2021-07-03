@@ -7,7 +7,7 @@ using System.Composition;
 using ELFSharp.ELF.Segments;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
-using Microsoft.CodeAnalysis.BinaryParsers.ELF;
+using Microsoft.CodeAnalysis.BinaryParsers.Elf;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -23,10 +23,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id => RuleIds.EnableNonExecutableStack;
 
         /// <summary>
-        /// This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. 
-        /// An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, 
-        /// writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. 
-        /// One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections 
+        /// This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow.
+        /// An application receives, from an attacker, more data than it is prepared for and stores this information on its stack,
+        /// writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack.
+        /// One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections
         /// of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this.
         /// </summary>
         public override MultiformatMessageString FullDescription =>
@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             reasonForNotAnalyzing = null;
 
-            if (target.GetSegmentFlags(ELFSegmentType.PT_GNU_STACK) == null)
+            if (target.GetSegmentFlags(ElfSegmentType.PT_GNU_STACK) == null)
             {
                 reasonForNotAnalyzing = MetadataConditions.ElfNotContainSegment;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -54,9 +54,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            ElfBinary elfBinary = context.ELFBinary();
+            ElfBinary elfBinary = context.ElfBinary();
 
-            if ((elfBinary.GetSegmentFlags(ELFSegmentType.PT_GNU_STACK) & SegmentFlags.Execute) != 0)
+            if ((elfBinary.GetSegmentFlags(ElfSegmentType.PT_GNU_STACK) & SegmentFlags.Execute) != 0)
             {
                 // The non-executable stack is not enabled for this binary,
                 // so '{0}' can have a vulnerability of execution of the data written on the stack.

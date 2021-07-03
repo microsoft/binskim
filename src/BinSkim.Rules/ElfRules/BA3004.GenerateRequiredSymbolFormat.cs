@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            ElfBinary elfBinary = context.ELFBinary();
+            ElfBinary elfBinary = context.ElfBinary();
             int dwarfVersion = elfBinary.DwarfVersion;
             if (dwarfVersion == -1)
             {

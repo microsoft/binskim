@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
-            IELF elf = context.ELFBinary().ELF;
+            IELF elf = context.ElfBinary().ELF;
 
             if (HasBindNowFlag(elf))
             {

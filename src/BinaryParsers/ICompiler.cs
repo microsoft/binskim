@@ -7,7 +7,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public interface ICompiler
     {
-        ELFCompilerType Compiler { get; }
+        ElfCompilerType Compiler { get; }
 
         Version Version { get; }
 

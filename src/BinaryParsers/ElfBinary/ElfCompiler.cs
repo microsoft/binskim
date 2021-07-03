@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
-    public enum ELFCompilerType
+    public enum ElfCompilerType
     {
         Unknown = 0,
         Clang = 1,
@@ -25,11 +25,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     {
         // Regular expressions for extracting compiler types.
         // These should be ordered so that the generic "catch all" mapping to unknown is last.
-        private static readonly List<(Regex Regex, ELFCompilerType Compiler)> compilerRegexes = new List<(Regex, ELFCompilerType)>
+        private static readonly List<(Regex Regex, ElfCompilerType Compiler)> compilerRegexes = new List<(Regex, ElfCompilerType)>
         {
-            (new Regex(@"GCC:.+"), ELFCompilerType.GCC),
-            (new Regex(@".*clang version.*"), ELFCompilerType.Clang),
-            (new Regex(@".*"), ELFCompilerType.Unknown)
+            (new Regex(@"GCC:.+"), ElfCompilerType.GCC),
+            (new Regex(@".*clang version.*"), ElfCompilerType.Clang),
+            (new Regex(@".*"), ElfCompilerType.Unknown)
         };
 
         // Regex for extracting something that looks like a version number--Goal is to match at least w.x, and up to w.x.y.z
@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             if (fullDescription == null)
             {
                 this.FullDescription = string.Empty;
-                this.Compiler = ELFCompilerType.Unknown;
+                this.Compiler = ElfCompilerType.Unknown;
                 this.Version = new Version(0, 0, 0, 0);
             }
             else
@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
         }
 
-        public ELFCompilerType Compiler { get; private set; }
+        public ElfCompilerType Compiler { get; private set; }
 
         public Version Version { get; private set; }
 

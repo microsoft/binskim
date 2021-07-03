@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             return target.Binary is ElfBinary;
         }
 
-        public static ElfBinary ELFBinary(this BinaryAnalyzerContext target)
+        public static ElfBinary ElfBinary(this BinaryAnalyzerContext target)
         {
             if (!(target.Binary is ElfBinary ret))
             {
