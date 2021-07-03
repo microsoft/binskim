@@ -96,17 +96,31 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         private Pdb LoadPdb()
         {
+            const string pdbExtension = ".pdb";
             string peOrPdbPath = this.PE?.FileName ?? this.TargetUri.LocalPath;
             string extension = Path.GetExtension(peOrPdbPath);
-            if (!TryLoadPdb(peOrPdbPath, extension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out Pdb pdb))
+
+            // Trying to load exe and pdb
+            if (!TryLoadPdb(peOrPdbPath, extension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out Pdb pdb)
+                && !extension.Equals(pdbExtension, StringComparison.OrdinalIgnoreCase)
+                && this.PdbParseException?.ExceptionCode == DiaHresult.E_PDB_NOT_FOUND)
             {
-                if (!extension.Equals(".pdb", StringComparison.OrdinalIgnoreCase) &&
-                    this.PdbParseException?.ExceptionCode == DiaHresult.E_PDB_NOT_FOUND)
+                peOrPdbPath = peOrPdbPath.Replace(extension, pdbExtension, StringComparison.OrdinalIgnoreCase);
+
+                // If Pdb exists side-by-side with exe, let's try to read
+                if (File.Exists(peOrPdbPath))
                 {
-                    peOrPdbPath = peOrPdbPath.Replace(extension, ".pdb", StringComparison.OrdinalIgnoreCase);
-                    if (File.Exists(peOrPdbPath))
+                    TryLoadPdb(peOrPdbPath, pdbExtension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
+                }
+                else
+                {
+                    string fileName = Path.GetFileName(peOrPdbPath);
+
+                    // Let's search in localSymbolDirectories for the pdb
+                    peOrPdbPath = RetrievePdbPath(fileName);
+                    if (!string.IsNullOrEmpty(peOrPdbPath))
                     {
-                        TryLoadPdb(peOrPdbPath, ".pdb", this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
+                        TryLoadPdb(peOrPdbPath, pdbExtension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
                     }
                 }
             }
@@ -120,6 +134,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     LoadTrace = this.StrippedPdb.LoadTrace
                 };
             }
+
             return pdb;
         }
 
@@ -140,6 +155,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 this.PdbParseException = ex;
                 return false;
             }
+        }
+
+        private string RetrievePdbPath(string pdbName)
+        {
+            if (string.IsNullOrEmpty(this.localSymbolDirectories))
+            {
+                return null;
+            }
+
+            string[] symbolDirectories = this.localSymbolDirectories.Split(';');
+            foreach (string symbolDirectory in symbolDirectories)
+            {
+                string[] files = Directory.GetFiles(symbolDirectory, pdbName, SearchOption.AllDirectories);
+                if (files.Length > 0)
+                {
+                    return files[0];
+                }
+            }
+
+            return null;
         }
     }
 }
