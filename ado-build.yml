@@ -29,15 +29,4 @@ jobs:
   - task: CmdLine@2
     displayName: 'Build and Test'
     inputs:
-      script: 'BuildAndTest.cmd -NoTest'
-
-  - task: VSTest@2
-    displayName: 'Run Tests'
-    inputs:
-      testAssemblyVer2: |
-        **\$(BuildPlatform)_$(BuildConfiguration)\netcoreapp3.1\Test.*.dll
-        !**\obj\**
-      vsTestVersion: latest
-      codeCoverageEnabled: true
-      platform: '$(BuildPlatform)'
-      configuration: '$(BuildConfiguration)'
+      script: 'BuildAndTest.cmd'
