@@ -12,7 +12,10 @@ jobs:
   - task: Bash@3
     displayName: 'Build and Test'
     inputs:
-      filePath: 'BuildAndTest.sh'
+      targetType: 'inline'
+      script: |
+        dotnet build src/Binskim.sln --configuration Release
+        dotnet test src/Binskim.sln --configuration Release --no-build
 
 - job: windows
   pool:
