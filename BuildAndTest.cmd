@@ -53,7 +53,6 @@ call :RunTestProject BinSkim.Rules Functional  || goto :ExitFailed
 
 ::Create the BinSkim platform specific publish packages
 echo Creating Platform Specific BinSkim 'Publish' Packages
-call :CreatePublishPackage netcoreapp3.1 win-x86 || goto :ExitFailed
 call :CreatePublishPackage netcoreapp3.1 win-x64 || goto :ExitFailed
 call :CreatePublishPackage netcoreapp3.1 linux-x64 || goto :ExitFailed
 
