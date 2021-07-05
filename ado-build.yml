@@ -13,14 +13,14 @@ jobs:
     name: 'Build'
     inputs:
       command: 'build'
-      projects: '**/Binskim.sln'
+      projects: '**/*skim.sln'
       arguments: '--configuration Release'
 
   - task: DotNetCoreCLI@2
     name: 'Test'
     inputs:
       command: 'test'
-      projects: '**/Binskim.sln'
+      projects: '**/*skim.sln'
       arguments: '--configuration Release --no-build'
 
 - job: windows
