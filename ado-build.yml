@@ -8,14 +8,15 @@ jobs:
   steps:
   - checkout: self
     submodules: true
-
-  - task: Bash@3
-    displayName: 'Build and Test'
+  - task: DotNetCoreCLI@2
     inputs:
-      targetType: 'inline'
-      script: |
-        dotnet build src/Binskim.sln --configuration Release
-        dotnet test src/Binskim.sln --configuration Release --no-build
+      command: 'build'
+      arguments: '--configuration Release'
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'test'
+      arguments: '--configuration Release --no-build'
 
 - job: windows
   pool:
