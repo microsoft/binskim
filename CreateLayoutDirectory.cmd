@@ -15,7 +15,7 @@ set Configuration=Release
 )
 
 if "%Platform%" EQU "" (
-set Platform=AnyCPU
+set Platform=x64
 )
 
 set BinaryOutputDirectory=%BinaryOutputDirectory%\%Platform%_%Configuration%\Publish
