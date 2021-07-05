@@ -2,14 +2,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
   <Import Project="..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" />
-  
+
   <PropertyGroup>
     <RootNamespace>Microsoft.CodeAnalysis.BinaryParsers</RootNamespace>
     <TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
     <OutputType>Library</OutputType>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
@@ -21,11 +22,11 @@
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Reference Include="Dia2Lib">
       <HintPath>..\..\refs\dia2lib.dll</HintPath>

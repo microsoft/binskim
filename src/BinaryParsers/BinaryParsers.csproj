@@ -5,6 +5,7 @@
     <RootNamespace>Microsoft.CodeAnalysis.BinaryParsers</RootNamespace>
     <TargetFramework>$(NetStandardVersion)</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

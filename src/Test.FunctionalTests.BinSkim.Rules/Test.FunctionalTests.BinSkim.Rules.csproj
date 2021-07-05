@@ -8,6 +8,7 @@
     <TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
     <OutputType>Library</OutputType>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,5 +41,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>

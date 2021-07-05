@@ -8,6 +8,7 @@
     <TargetFramework>$(NetCoreVersion)</TargetFramework>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <OutputType>Exe</OutputType>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -68,7 +69,6 @@
     <!-- May need to be changed to x86 on a 32 bit machine. -->
     <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(TargetFramework)'=='$(NetCoreVersion)' And '$(RuntimeIdentifier)'==''" />
     <!-- Note: Official Release builds on Windows should specify a RID. Build using the BuildAndTest.cmd script. -->
-    <MsDiaLibs Include="..\..\refs\x86\*" Condition="'$(RuntimeIdentifier)'=='win-x86'" />
     <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(RuntimeIdentifier)'=='win-x64'" />
     <MsDiaLibs Include="..\..\refs\msdia140.dll.manifest" />
   </ItemGroup>

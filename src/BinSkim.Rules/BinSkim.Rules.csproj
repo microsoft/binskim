@@ -5,6 +5,7 @@
   <PropertyGroup>
     <RootNamespace>Microsoft.CodeAnalysis.IL.Rules</RootNamespace>
     <TargetFramework>$(NetStandardVersion)</TargetFramework>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
