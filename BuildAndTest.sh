@@ -1,4 +1,4 @@
 #!/bin/bash
 
-dotnet build src/Binskim.sln --configuration Release
-dotnet test src/Binskim.sln --configuration Release --no-build
+dotnet build src/*.sln --configuration Release
+dotnet test src/*.sln --configuration Release --no-build
