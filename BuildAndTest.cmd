@@ -6,7 +6,7 @@ SETLOCAL
 @REM %~dp0.nuget\NuGet.exe update -self
 
 set Configuration=%1
-set Platform=AnyCPU
+set Platform=x64
 
 if "%Configuration%" EQU "" (
 set Configuration=Release
