@@ -29,12 +29,14 @@ namespace Microsoft.CodeAnalysis.IL
             this.testOutputHelper = output;
         }
 
-        //[Fact(Skip = "commenting to release.")]
         [Fact]
         public void Driver_BuiltInRuleFunctionalTests()
         {
-            AnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
-            this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+            if (PlatformSpecificHelpers.RunningOnWindows())
+            {
+                AnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
+                this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+            }
         }
 
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
