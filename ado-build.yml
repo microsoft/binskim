@@ -9,10 +9,17 @@ jobs:
   - checkout: self
     submodules: true
 
-  - task: Bash@3
-    displayName: 'Build and Test'
+  - task: DotNetCoreCLI@2
+    name: 'Build'
     inputs:
-      filePath: 'BuildAndTest.sh'
+      command: 'build'
+      projects: 'src/*.sln'
+      arguments: '--configuration Release'
+
+  # - task: Bash@3
+  #   displayName: 'Build and Test'
+  #   inputs:
+  #     filePath: 'BuildAndTest.sh'
 
 - job: windows
   pool:

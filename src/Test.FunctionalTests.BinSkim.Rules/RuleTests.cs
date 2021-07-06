@@ -473,16 +473,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2002_DoNotIncorporateVulnerableDependencies_NotApplicable()
         {
-            var notApplicableTo = new HashSet<string>
-            {
-                MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsILOnlyAssembly
-            };
-
-            this.VerifyApplicability(new DoNotIncorporateVulnerableDependencies(), notApplicableTo);
-
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
+                var notApplicableTo = new HashSet<string>
+                {
+                    MetadataConditions.ImageIsResourceOnlyBinary,
+                    MetadataConditions.ImageIsILOnlyAssembly
+                };
+
+                this.VerifyApplicability(new DoNotIncorporateVulnerableDependencies(), notApplicableTo);
+
                 var applicableTo = new HashSet<string> { MetadataConditions.ImageIs64BitBinary };
                 this.VerifyApplicability(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
             }
@@ -898,18 +898,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2014_DoNotDisableStackProtectionForFunctions_NotApplicable()
         {
-            var notApplicableTo = new HashSet<string>
-            {
-                MetadataConditions.ImageIsXBoxBinary,
-                MetadataConditions.ImageIsWixBinary,
-                MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsILOnlyAssembly
-            };
-
-            this.VerifyApplicability(new DoNotDisableStackProtectionForFunctions(), notApplicableTo);
-
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
+                var notApplicableTo = new HashSet<string>
+                {
+                    MetadataConditions.ImageIsXBoxBinary,
+                    MetadataConditions.ImageIsWixBinary,
+                    MetadataConditions.ImageIsResourceOnlyBinary,
+                    MetadataConditions.ImageIsILOnlyAssembly
+                };
+
+                this.VerifyApplicability(new DoNotDisableStackProtectionForFunctions(), notApplicableTo);
+
                 var applicableTo = new HashSet<string>
                 {
                     MetadataConditions.ImageIs64BitBinary
@@ -1143,7 +1143,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             this.VerifyApplicability(new EnableAdditionalSdlSecurityChecks(), notApplicableTo);
         }
-
 
         [Fact]
         public void BA3001_EnablePositionIndependentExecutable_Pass()

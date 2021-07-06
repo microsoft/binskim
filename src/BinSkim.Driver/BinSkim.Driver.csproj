@@ -8,6 +8,7 @@
     <TargetFramework>$(NetCoreVersion)</TargetFramework>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <OutputType>Exe</OutputType>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup>

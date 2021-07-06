@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public static readonly ImmutableArray<byte> PortablePdbSignature = ImmutableArray.Create(Encoding.ASCII.GetBytes(s_portablePdbSignature));
 
         /// <summary>
-        /// Load debug info from PE or PDB, using symbolPath to help find symbols
+        /// Load debug info from PE, using symbolPath to help find symbols
         /// </summary>
         /// <param name="pePath">The path to the portable executable.</param>
         /// <param name="symbolPath">The symsrv.dll symbol path.</param>
@@ -51,6 +51,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.Init(pePath, symbolPath, localSymbolDirectories);
         }
 
+        /// <summary>
+        /// Load debug info from PDB
+        /// </summary>
+        /// <param name="pdbPath">The path to the pdb.</param>
+        public Pdb(
+            string pdbPath,
+            bool traceLoads = false)
+        {
+            this.peOrPdbPath = pdbPath;
+            this.loadTrace = traceLoads ? new StringBuilder() : null;
+            this.globalScope = new Lazy<Symbol>(this.GetGlobalScope, LazyThreadSafetyMode.ExecutionAndPublication);
+            this.writableSegmentIds = new Lazy<HashSet<uint>>(this.GenerateWritableSegmentSet);
+            this.executableSectionContribCompilandIds = new Lazy<HashSet<uint>>(this.GenerateExecutableSectionContribIds);
+            this.Init(pdbPath);
+        }
+
         public string LoadTrace
         {
             get
@@ -66,83 +82,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     ? new StringBuilder(value)
                     : null;
             }
-        }
-
-        /// <summary>
-        /// Load debug info
-        /// </summary>
-        /// <param name="peOrPdbPath"></param>
-        /// <param name="symbolPath"></param>
-        private void Init(string peOrPdbPath, string symbolPath, string localSymbolDirectories)
-        {
-            try
-            {
-                PlatformSpecificHelpers.ThrowIfNotOnWindows();
-                this.WindowsNativeLoadPdbUsingDia(peOrPdbPath, symbolPath, localSymbolDirectories);
-            }
-            catch (PlatformNotSupportedException ex)
-            {
-                throw new PdbException(message: BinaryParsersResources.PdbPlatformUnsupported, ex);
-            }
-            catch (COMException ce)
-            {
-                throw new PdbException(ce)
-                {
-                    LoadTrace = this.loadTrace?.ToString()
-                };
-            }
-        }
-
-        private void WindowsNativeLoadPdbUsingDia(string peOrPdbPath, string symbolPath, string localSymbolDirectories)
-        {
-            IDiaDataSource diaSource = null;
-            Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
-            Environment.SetEnvironmentVariable("_NT_ALT_SYMBOL_PATH", "");
-
-            object pCallback = this.loadTrace != null ? this : (object)IntPtr.Zero;
-
-            bool loadPdb = peOrPdbPath.EndsWith(".pdb", StringComparison.OrdinalIgnoreCase);
-
-            if (!string.IsNullOrEmpty(localSymbolDirectories) && !loadPdb)
-            {
-                // If we have one or more local symbol directories, we want
-                // to probe them before any other default load behavior. If
-                // this load code path fails, we will fallback to these
-                // defaults locations in the second load pass below.
-                this.restrictReferenceAndOriginalPathAccess = true;
-                try
-                {
-                    diaSource = MsdiaComWrapper.GetDiaSource();
-
-                    diaSource.loadDataForExe(peOrPdbPath,
-                                             localSymbolDirectories,
-                                             pCallback);
-                }
-                catch
-                {
-                    diaSource = null;
-                }
-            }
-
-            if (diaSource == null)
-            {
-                this.restrictReferenceAndOriginalPathAccess = false;
-
-                diaSource = MsdiaComWrapper.GetDiaSource();
-
-                if (loadPdb)
-                {
-                    diaSource.loadDataFromPdb(peOrPdbPath);
-                }
-                else
-                {
-                    diaSource.loadDataForExe(peOrPdbPath,
-                                             symbolPath,
-                                             pCallback);
-                }
-            }
-
-            diaSource.openSession(out this.session);
         }
 
         /// <summary>
@@ -435,6 +374,107 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 Marshal.ReleaseComObject(this.session);
             }
+        }
+
+        /// <summary>
+        /// Load debug info from a PE path.
+        /// </summary>
+        /// <param name="pePath"></param>
+        /// <param name="symbolPath"></param>
+        private void Init(string pePath, string symbolPath, string localSymbolDirectories)
+        {
+            try
+            {
+                PlatformSpecificHelpers.ThrowIfNotOnWindows();
+                this.WindowsNativeLoadPdbFromPEUsingDia(pePath, symbolPath, localSymbolDirectories);
+            }
+            catch (PlatformNotSupportedException ex)
+            {
+                throw new PdbException(message: BinaryParsersResources.PdbPlatformUnsupported, ex);
+            }
+            catch (COMException ce)
+            {
+                throw new PdbException(ce)
+                {
+                    LoadTrace = this.loadTrace?.ToString()
+                };
+            }
+        }
+
+        /// <summary>
+        /// Load debug info from a PDB path.
+        /// </summary>
+        /// <param name="pdbPath"></param>
+        private void Init(string pdbPath)
+        {
+            try
+            {
+                PlatformSpecificHelpers.ThrowIfNotOnWindows();
+                this.WindowsNativeLoadPdbUsingDia(pdbPath);
+            }
+            catch (PlatformNotSupportedException ex)
+            {
+                throw new PdbException(message: BinaryParsersResources.PdbPlatformUnsupported, ex);
+            }
+            catch (COMException ce)
+            {
+                throw new PdbException(ce)
+                {
+                    LoadTrace = this.loadTrace?.ToString()
+                };
+            }
+        }
+
+        private void WindowsNativeLoadPdbFromPEUsingDia(string peOrPdbPath, string symbolPath, string localSymbolDirectories)
+        {
+            IDiaDataSource diaSource = null;
+            Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
+            Environment.SetEnvironmentVariable("_NT_ALT_SYMBOL_PATH", "");
+
+            object pCallback = this.loadTrace != null ? this : (object)IntPtr.Zero;
+
+            if (!string.IsNullOrEmpty(localSymbolDirectories))
+            {
+                // If we have one or more local symbol directories, we want
+                // to probe them before any other default load behavior. If
+                // this load code path fails, we fill fallback to these
+                // defaults locations in the second load pass below.
+                this.restrictReferenceAndOriginalPathAccess = true;
+                try
+                {
+                    diaSource = MsdiaComWrapper.GetDiaSource();
+
+                    diaSource.loadDataForExe(peOrPdbPath,
+                                             localSymbolDirectories,
+                                             pCallback);
+                }
+                catch
+                {
+                    diaSource = null;
+                }
+            }
+
+            if (diaSource == null)
+            {
+                this.restrictReferenceAndOriginalPathAccess = false;
+
+                diaSource = MsdiaComWrapper.GetDiaSource();
+
+                diaSource.loadDataForExe(peOrPdbPath,
+                                         symbolPath,
+                                         pCallback);
+            }
+
+            diaSource.openSession(out this.session);
+        }
+
+        private void WindowsNativeLoadPdbUsingDia(string pdbPath)
+        {
+            this.restrictReferenceAndOriginalPathAccess = false;
+
+            IDiaDataSource diaSource = MsdiaComWrapper.GetDiaSource();
+            diaSource.loadDataFromPdb(pdbPath);
+            diaSource.openSession(out this.session);
         }
 
         private Symbol GetGlobalScope()

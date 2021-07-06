@@ -103,7 +103,10 @@ namespace Microsoft.CodeAnalysis.IL
             Pdb pdb = null;
             try
             {
-                pdb = new Pdb(pe.FileName);
+                string extension = Path.GetExtension(pe.FileName);
+                pdb = extension.Equals(".pdb", StringComparison.OrdinalIgnoreCase)
+                    ? new Pdb(pe.FileName, false)
+                    : new Pdb(pe.FileName, null, null, false);
             }
             catch (PdbException pdbParseException)
             {

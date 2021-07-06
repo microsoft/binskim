@@ -45,34 +45,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             this.localSymbolDirectories = localSymbolDirectories;
         }
 
-        private Pdb LoadPdb()
-        {
-            Pdb pdb = null;
-            try
-            {
-                pdb = new Pdb(
-                    this.PE?.FileName ?? this.TargetUri.LocalPath,
-                    this.symbolPath,
-                    this.localSymbolDirectories,
-                    this.tracePdbLoad);
-            }
-            catch (PdbException ex)
-            {
-                this.PdbParseException = ex;
-            }
-
-            if (pdb != null && pdb.IsStripped)
-            {
-                this.StrippedPdb = pdb;
-                pdb = null;
-                this.PdbParseException = new PdbException(BinaryParsersResources.PdbStripped)
-                {
-                    LoadTrace = this.StrippedPdb.LoadTrace
-                };
-            }
-            return pdb;
-        }
-
         public PE PE { get; private set; }
 
         public Pdb Pdb => this.pdb?.Value;
@@ -120,6 +92,89 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
             catch (IOException) { return false; }
             catch (UnauthorizedAccessException) { return false; }
+        }
+
+        private Pdb LoadPdb()
+        {
+            const string pdbExtension = ".pdb";
+            string peOrPdbPath = this.PE?.FileName ?? this.TargetUri.LocalPath;
+            string extension = Path.GetExtension(peOrPdbPath);
+
+            // Trying to load exe and pdb
+            if (!TryLoadPdb(peOrPdbPath, extension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out Pdb pdb)
+                && !extension.Equals(pdbExtension, StringComparison.OrdinalIgnoreCase)
+                && this.PdbParseException?.ExceptionCode == DiaHresult.E_PDB_NOT_FOUND)
+            {
+                peOrPdbPath = peOrPdbPath.Replace(extension, pdbExtension, StringComparison.OrdinalIgnoreCase);
+
+                // If Pdb exists side-by-side with exe, let's try to read
+                if (File.Exists(peOrPdbPath))
+                {
+                    TryLoadPdb(peOrPdbPath, pdbExtension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
+                }
+                else
+                {
+                    string fileName = Path.GetFileName(peOrPdbPath);
+
+                    // Let's search in localSymbolDirectories for the pdb
+                    peOrPdbPath = RetrievePdbPath(fileName);
+                    if (!string.IsNullOrEmpty(peOrPdbPath))
+                    {
+                        TryLoadPdb(peOrPdbPath, pdbExtension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
+                    }
+                }
+            }
+
+            if (pdb != null && pdb.IsStripped)
+            {
+                this.StrippedPdb = pdb;
+                pdb = null;
+                this.PdbParseException = new PdbException(BinaryParsersResources.PdbStripped)
+                {
+                    LoadTrace = this.StrippedPdb.LoadTrace
+                };
+            }
+
+            return pdb;
+        }
+
+        private bool TryLoadPdb(string peOrPdbPath, string extension, string symbolPath, string localSymbolDirectories, bool tracePdbLoad, out Pdb pdb)
+        {
+            pdb = null;
+
+            try
+            {
+                pdb = extension.Equals(".pdb", StringComparison.OrdinalIgnoreCase)
+                    ? new Pdb(peOrPdbPath, tracePdbLoad)
+                    : new Pdb(peOrPdbPath, symbolPath, localSymbolDirectories, tracePdbLoad);
+                this.PdbParseException = null;
+                return true;
+            }
+            catch (PdbException ex)
+            {
+                this.PdbParseException = ex;
+                return false;
+            }
+        }
+
+        private string RetrievePdbPath(string pdbName)
+        {
+            if (string.IsNullOrEmpty(this.localSymbolDirectories))
+            {
+                return null;
+            }
+
+            string[] symbolDirectories = this.localSymbolDirectories.Split(';');
+            foreach (string symbolDirectory in symbolDirectories)
+            {
+                string[] files = Directory.GetFiles(symbolDirectory, pdbName, SearchOption.AllDirectories);
+                if (files.Length > 0)
+                {
+                    return files[0];
+                }
+            }
+
+            return null;
         }
     }
 }

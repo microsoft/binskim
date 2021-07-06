@@ -15,6 +15,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public class PEBinaryTests
     {
+        internal static string TestData = GetTestDirectory("Test.UnitTests.BinaryParsers" + Path.DirectorySeparatorChar + "TestsData");
         internal static string BaselineTestsDataDirectory = GetTestDirectory(@"Test.FunctionalTests.BinSkim.Driver" + Path.DirectorySeparatorChar + "BaselineTestsData");
 
         internal static string GetTestDirectory(string relativeDirectory)
@@ -76,6 +77,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             Action action = () => { IDiaDataSource source = ProgramDatabase.MsdiaComWrapper.GetDiaSource(); };
             action.Should().NotThrow();
+        }
+
+        [Fact]
+        public void PEBinary_TryLoadPdbFromSymbolFolder()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            string fileName = Path.Combine(TestData, "PE/Native_x64.dll");
+            using (var peBinary = new PEBinary(new Uri(fileName), localSymbolDirectories: Path.Combine(TestData, "SymbolsFolder")))
+            {
+                peBinary.Pdb.Should().NotBeNull();
+                peBinary.StrippedPdb.Should().BeNull();
+                peBinary.PdbParseException.Should().BeNull();
+            }
         }
     }
 }
