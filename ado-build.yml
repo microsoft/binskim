@@ -24,10 +24,15 @@ jobs:
 - job: windows
   pool:
     vmImage: 'windows-latest'
+  variables:
+    - name: BuildPlatform
+      value: 'AnyCPU'
+    - name: BuildConfiguration
+      value: 'Release'
   steps:
   - checkout: self
     submodules: true
-      
+
   - task: CmdLine@2
     displayName: 'Build and Test'
     inputs:
