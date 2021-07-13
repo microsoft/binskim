@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.IL
                 ShouldWarnVerbose = false;
             }
 
-            binaryAnalyzerContext.CompilerDataLogger = new CompilerDataLogger(binaryAnalyzerContext);
+            binaryAnalyzerContext.CompilerDataLogger = new CompilerDataLogger(binaryAnalyzerContext, options.RepositoryUri, options.PipelineName);
 
             return binaryAnalyzerContext;
         }

@@ -19,13 +19,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         private readonly string sha256;
         private readonly string localPath;
+        private readonly string repositoryUri;
+        private readonly string pipelineName;
 
         private static TelemetryClient s_telemetryClient;
         private static TelemetryConfiguration s_telemetryConfiguration;
 
-        public CompilerDataLogger(IAnalysisContext analysisContext)
+        public CompilerDataLogger(IAnalysisContext analysisContext, string repositoryUri, string pipelineName)
         {
-            if (analysisContext.Policy != null && analysisContext.Policy.TryGetValue("ApplicationInsights", out object kv))
+            if (analysisContext?.Policy != null && analysisContext.Policy.TryGetValue("ApplicationInsights", out object kv))
             {
                 string instrumentationKey = (kv as PropertiesDictionary)["InstrumentationKey"].ToString();
                 this.appInsightsRegistered = !string.IsNullOrEmpty(instrumentationKey);
@@ -36,6 +38,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 }
             }
 
+            this.pipelineName = pipelineName;
+            this.repositoryUri = repositoryUri;
             this.sha256 = analysisContext?.Hashes?.Sha256;
             this.localPath = analysisContext?.TargetUri?.LocalPath;
         }
@@ -50,7 +54,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             if (!appInsightsRegistered)
             {
-                Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Module Name,Module Library,Hash,Error");
+                Console.WriteLine("RepositoryUri,PipelineName,Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Module Name,Module Library,Hash,Error");
             }
         }
 
@@ -64,6 +68,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
+                    { "repositoryUri", repositoryUri },
+                    { "pipelineName", pipelineName },
                     { "target", this.localPath },
                     { "compilerName", compilerDataParts[0] },
                     { "compilerBackEndVersion", compilerDataParts[1] },
@@ -77,6 +83,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
+                Console.Write($"{repositoryUri},");
+                Console.Write($"{pipelineName},");
                 Console.Write($"{this.localPath},");
                 Console.Write($"{compilerData},");
                 Console.Write($"{name},");
@@ -92,6 +100,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
+                    { "repositoryUri", repositoryUri },
+                    { "pipelineName", pipelineName },
                     { "target", this.localPath },
                     { "compilerName", compilerName },
                     { "compilerBackEndVersion", version },
@@ -105,6 +115,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
+                Console.Write($"{repositoryUri},");
+                Console.Write($"{pipelineName},");
                 Console.Write($"{this.localPath},");
                 Console.Write($"{compilerName},");
                 Console.Write($"{version},");
@@ -123,6 +135,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
+                    { "repositoryUri", repositoryUri },
+                    { "pipelineName", pipelineName },
                     { "target", this.localPath },
                     { "compilerName", string.Empty },
                     { "compilerBackEndVersion", string.Empty },
@@ -137,7 +151,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             else
             {
                 Console.Write(this.localPath + ",");
-                Console.WriteLine($",,,,,,{this.sha256},{errorMessage}");
+                Console.WriteLine($",,,,,,,,{this.sha256},{errorMessage}");
             }
         }
     }
