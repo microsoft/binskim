@@ -70,6 +70,8 @@ namespace Microsoft.CodeAnalysis.IL
 
             int result = base.Run(analyzeOptions);
 
+            CompilerDataLogger.Flush();
+
             // In BinSkim, no rule is ever applicable to every target type. For example,
             // we have checks that are only relevant to either 32-bit or 64-bit binaries.
             // Because of this, the return code bit for RuleNotApplicableToTarget is not
