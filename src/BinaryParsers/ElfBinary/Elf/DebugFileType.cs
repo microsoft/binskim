@@ -5,12 +5,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
 {
     public enum DebugFileType
     {
+        FromDwo,
+        NoDebug,
+        Unknown,
+        FromDebuglink,
         DebugIncluded,
         DebugOnlyFileDwo,
         DebugOnlyFileDebuglink,
-        FromDwo,
-        FromDebuglink,
-        NoDebug,
-        Unknown,
     }
 }

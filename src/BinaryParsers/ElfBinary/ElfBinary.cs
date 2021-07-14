@@ -237,42 +237,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         /// <summary>
-        /// Get if section exists
-        /// </summary>
-        public bool SectionExists(string sectionName)
-        {
-            ELF.TryGetSection(sectionName, out Section<ulong> sectionRetrieved);
-            return sectionRetrieved != null;
-        }
-
-        /// <summary>
-        /// Get if section exists and also has bits
-        /// </summary>
-        public bool SectionExistsAndHasBits(string sectionName, out Section<ulong> section)
-        {
-            ELF.TryGetSection(sectionName, out Section<ulong> sectionRetrieved);
-            section = sectionRetrieved;
-            return sectionRetrieved != null && sectionRetrieved.Type != SectionType.NoBits;
-        }
-
-        /// <summary>
-        /// Get if section exists and also has bits
-        /// </summary>
-        public bool SectionExistsAndHasBits(string sectionName)
-        {
-            return SectionExistsAndHasBits(sectionName, out _);
-        }
-
-        /// <summary>
-        /// Get if section exists and also has no bits
-        /// </summary>
-        public bool SectionExistsAndHasNoBits(string sectionName)
-        {
-            ELF.TryGetSection(sectionName, out Section<ulong> sectionRetrieved);
-            return sectionRetrieved != null && sectionRetrieved.Type == SectionType.NoBits;
-        }
-
-        /// <summary>
         /// Cache of ordered sections.
         /// </summary>
         public Section<ulong>[] SectionRegions { get; set; }
@@ -311,6 +275,42 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// The unit type of Dwarf.
         /// </summary>
         public DwarfUnitType DwarfUnitType { get; set; } = DwarfUnitType.Unknown;
+
+        /// <summary>
+        /// Get if section exists
+        /// </summary>
+        private bool SectionExists(string sectionName)
+        {
+            ELF.TryGetSection(sectionName, out Section<ulong> sectionRetrieved);
+            return sectionRetrieved != null;
+        }
+
+        /// <summary>
+        /// Get if section exists and also has bits
+        /// </summary>
+        private bool SectionExistsAndHasBits(string sectionName, out Section<ulong> section)
+        {
+            ELF.TryGetSection(sectionName, out Section<ulong> sectionRetrieved);
+            section = sectionRetrieved;
+            return sectionRetrieved != null && sectionRetrieved.Type != SectionType.NoBits;
+        }
+
+        /// <summary>
+        /// Get if section exists and also has bits
+        /// </summary>
+        private bool SectionExistsAndHasBits(string sectionName)
+        {
+            return SectionExistsAndHasBits(sectionName, out _);
+        }
+
+        /// <summary>
+        /// Get if section exists and also has no bits
+        /// </summary>
+        private bool SectionExistsAndHasNoBits(string sectionName)
+        {
+            ELF.TryGetSection(sectionName, out Section<ulong> sectionRetrieved);
+            return sectionRetrieved != null && sectionRetrieved.Type == SectionType.NoBits;
+        }
 
         /// <summary>
         /// Loads the section bytes specified by the name.
@@ -409,6 +409,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                     if (debugFileCompileUnit != null)
                     {
+                        if (this.CompilationUnits == null)
+                        {
+                            this.CompilationUnits = new List<DwarfCompilationUnit>();
+                        }
                         this.CompilationUnits.Add(debugFileCompileUnit);
                         DebugFileLoaded = true;
                         return;
