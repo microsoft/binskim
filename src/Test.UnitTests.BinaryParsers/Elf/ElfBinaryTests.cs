@@ -136,5 +136,93 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             binary.DwarfVersion.Should().Be(4);
             binary.GetLanguage().Should().Be(DwarfLanguage.CPlusPlus);
         }
+
+        [Fact]
+        public void Validate_DebugFileType()
+        {
+            // test for: build with no debug
+            // compiled using: gcc -o gcc.nodebug gcc.nodebug.c
+            string fileName = Path.Combine(TestData, "Dwarf/DebugFileType/BinaryDirectory/gcc.nodebug");
+            using var binaryNodebug = new ElfBinary(new Uri(fileName));
+            binaryNodebug.DebugFileType.Should().Be(DebugFileType.NoDebug);
+            binaryNodebug.DebugFileLoaded.Should().Be(false);
+
+            // test for: build with debug included
+            // compiled using:
+            // gcc -ggdb -fPIC -fstack-protector-strong --param ssp-buffer-size=4 -fstack-clash-protection
+            // -o gcc.objcopy.stripall.addgnudebuglink gcc.objcopy.stripall.addgnudebuglink.c
+            fileName = Path.Combine(TestData, "Dwarf/DebugFileType/BinaryDirectory/gcc.objcopy.stripall.addgnudebuglink.full");
+            using var binaryDebugIncluded = new ElfBinary(new Uri(fileName));
+            binaryDebugIncluded.DebugFileType.Should().Be(DebugFileType.DebugIncluded);
+            binaryDebugIncluded.DebugFileLoaded.Should().Be(true);
+
+            // test for: build with debug, but stripped, target the debug file itself
+            // compiled using:
+            // 1.
+            // gcc -ggdb -fPIC -fstack-protector-strong --param ssp-buffer-size=4 -fstack-clash-protection
+            // -o gcc.objcopy.stripall.addgnudebuglink gcc.objcopy.stripall.addgnudebuglink.c
+            // 2.
+            // objcopy --only-keep-debug gcc.objcopy.stripall.addgnudebuglink gcc.objcopy.stripall.addgnudebuglink.dbg
+            fileName = Path.Combine(TestData, "Dwarf/DebugFileType/AnotherLocalSymbolDirectory/gcc.objcopy.stripall.addgnudebuglink.dbg");
+            using var binaryDebugOnlyFileDebuglink = new ElfBinary(new Uri(fileName));
+            binaryDebugOnlyFileDebuglink.DebugFileType.Should().Be(DebugFileType.DebugOnlyFileDebuglink);
+            binaryDebugOnlyFileDebuglink.DebugFileLoaded.Should().Be(false);
+
+            // test for: build with debug, but stripped, before link to debug file
+            // compiled using:
+            // 1.
+            // gcc -ggdb -fPIC -fstack-protector-strong --param ssp-buffer-size=4 -fstack-clash-protection
+            // -o gcc.objcopy.stripall.addgnudebuglink gcc.objcopy.stripall.addgnudebuglink.c
+            // 2.
+            // objcopy --strip-all gcc.objcopy.stripall.addgnudebuglink
+            fileName = Path.Combine(TestData, "Dwarf/DebugFileType/BinaryDirectory/gcc.objcopy.stripall.addgnudebuglink.nolink");
+            using var binaryNoLink = new ElfBinary(new Uri(fileName));
+            binaryNoLink.DebugFileType.Should().Be(DebugFileType.NoDebug);
+            binaryNoLink.DebugFileLoaded.Should().Be(false);
+
+            // test for: build with debug, but stripped, after link to debug file, but debug file missing
+            // compiled using:
+            // 1.
+            // gcc -ggdb -fPIC -fstack-protector-strong --param ssp-buffer-size=4 -fstack-clash-protection
+            // -o gcc.objcopy.stripall.addgnudebuglink gcc.objcopy.stripall.addgnudebuglink.c
+            // 2.
+            // objcopy --only-keep-debug gcc.objcopy.stripall.addgnudebuglink gcc.objcopy.stripall.addgnudebuglink.dbg
+            // 3.
+            // objcopy --strip-all gcc.objcopy.stripall.addgnudebuglink
+            // 4.
+            // objcopy --add-gnu-debuglink=gcc.objcopy.stripall.addgnudebuglink.dbg gcc.objcopy.stripall.addgnudebuglink
+            fileName = Path.Combine(TestData, "Dwarf/DebugFileType/BinaryDirectory/gcc.objcopy.stripall.addgnudebuglink");
+            using var binaryWithLinkDebugFileMissing = new ElfBinary(new Uri(fileName));
+            binaryWithLinkDebugFileMissing.DebugFileType.Should().Be(DebugFileType.FromDebuglink);
+            binaryWithLinkDebugFileMissing.DebugFileLoaded.Should().Be(false);
+
+            // test for: build with debug, but stripped, after link to debug file, debug file exists
+            // compiled using same commands.
+            using var binaryWithLink = new ElfBinary(new Uri(fileName), Path.Combine(TestData, "Dwarf/DebugFileType/AnotherLocalSymbolDirectory/"));
+            binaryWithLink.DebugFileType.Should().Be(DebugFileType.FromDebuglink);
+            binaryWithLink.DebugFileLoaded.Should().Be(true);
+
+            // test for: build with split dwarf debug, debug file missing
+            // compiled using:
+            // gcc -g -gdwarf-5 -fPIC -fstack-protector-strong --param ssp-buffer-size=4 -fstack-clash-protection
+            // -o gcc.gsplitdwarf.5 gcc.gsplitdwarf.5.c -gsplit-dwarf
+            fileName = Path.Combine(TestData, "Dwarf/DebugFileType/BinaryDirectory/gcc.gsplitdwarf.5");
+            using var binaryFromDwoDebugFileMissing = new ElfBinary(new Uri(fileName));
+            binaryFromDwoDebugFileMissing.DebugFileType.Should().Be(DebugFileType.FromDwo);
+            binaryFromDwoDebugFileMissing.DebugFileLoaded.Should().Be(false);
+
+            // test for: build with split dwarf debug, debug file exists
+            // compiled using same commands.
+            using var binaryFromDwo = new ElfBinary(new Uri(fileName), Path.Combine(TestData, "Dwarf/DebugFileType/AnotherLocalSymbolDirectory/"));
+            binaryFromDwo.DebugFileType.Should().Be(DebugFileType.FromDwo);
+            binaryFromDwo.DebugFileLoaded.Should().Be(true);
+
+            // test for: build with split dwarf debug, target the debug file itself
+            // compiled using same commands.
+            fileName = Path.Combine(TestData, "Dwarf/DebugFileType/AnotherLocalSymbolDirectory/gcc.gsplitdwarf.5.dwo");
+            using var binaryDebugOnlyFileDwo = new ElfBinary(new Uri(fileName));
+            binaryDebugOnlyFileDwo.DebugFileType.Should().Be(DebugFileType.DebugOnlyFileDwo);
+            binaryDebugOnlyFileDwo.DebugFileLoaded.Should().Be(false);
+        }
     }
 }
