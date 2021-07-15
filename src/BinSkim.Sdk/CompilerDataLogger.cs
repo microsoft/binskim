@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Security;
 
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -27,15 +28,17 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public CompilerDataLogger(IAnalysisContext analysisContext, string repositoryUri, string pipelineName)
         {
-            if (analysisContext?.Policy != null && analysisContext.Policy.TryGetValue("ApplicationInsights", out object kv))
+            try
             {
-                string instrumentationKey = (kv as PropertiesDictionary)["InstrumentationKey"].ToString();
-                this.appInsightsRegistered = !string.IsNullOrEmpty(instrumentationKey);
-
-                if (s_telemetryClient == null && Guid.TryParse(instrumentationKey, out _))
+                string appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey");
+                if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
                 {
-                    Initialize(instrumentationKey);
+                    Initialize(appInsightsKey);
                 }
+            }
+            catch (SecurityException)
+            {
+                // User does not have access to retrieve information from environment variables.
             }
 
             this.pipelineName = pipelineName;
