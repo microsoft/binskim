@@ -34,6 +34,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
                 {
                     Initialize(appInsightsKey);
+                    appInsightsRegistered = true;
                 }
             }
             catch (SecurityException)

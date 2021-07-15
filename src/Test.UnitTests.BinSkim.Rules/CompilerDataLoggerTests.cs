@@ -25,37 +25,13 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 },
                 new
                 {
-                    Context = new BinaryAnalyzerContext
-                    {
-                        Policy = new PropertiesDictionary
-                        {
-                            {
-                                "ApplicationInsights",
-                                new PropertiesDictionary
-                                {
-                                    { "InstrumentationKey", $"{Guid.NewGuid()}" }
-                                }
-                            }
-                        }
-                    } as IAnalysisContext,
+                    Context = new BinaryAnalyzerContext() as IAnalysisContext,
                     RepositoryUri = (string)null,
                     PipelineName = (string)null
                 },
                 new
                 {
-                    Context = new BinaryAnalyzerContext
-                    {
-                        Policy = new PropertiesDictionary
-                        {
-                            {
-                                "ApplicationInsights",
-                                new PropertiesDictionary
-                                {
-                                    { "InstrumentationKey", $"{Guid.NewGuid()}" }
-                                }
-                            }
-                        }
-                    } as IAnalysisContext,
+                    Context = new BinaryAnalyzerContext() as IAnalysisContext,
                     RepositoryUri = "repository-uri",
                     PipelineName = "pipeline-name"
                 },
