@@ -106,7 +106,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
                 byte[] b = new byte[max];
 
-                // PdbLocation is a directory, which means that PdbType is embedded.
+                // When we are at this step, we were able to read the pdb.
+                // If PdbLocation is a directory, it means that PdbType is embedded.
                 if (Directory.Exists(PdbLocation))
                 {
                     return this.pdbFileType;
