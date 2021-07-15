@@ -1531,7 +1531,7 @@
                 }
               ],
               "message": {
-                "text": "'Binskim.linux-x64.dll' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
+                "text": "'Binskim.linux-x64.dll' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded (E_PDB_FORMAT)."
               },
               "level": "error",
               "descriptor": {

@@ -234,4 +234,7 @@
   <data name="MetadataCondition_MachOIsNotExecutableDynamicLibraryOrObject" xml:space="preserve">
     <value>MachO is not an executable, dynamic library or object.</value>
   </data>
+  <data name="MetadataCondition_ImageIsDebugOnly" xml:space="preserve">
+    <value>image is a debug only file</value>
+  </data>
 </root>

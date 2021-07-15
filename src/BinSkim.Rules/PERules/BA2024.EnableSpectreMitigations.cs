@@ -232,7 +232,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // mitigations. We do not report here. BA2006 will fire instead.
                     continue;
                 }
-                string[] mitigationSwitches = new string[] { "/Qspectre", "/guardspecload" };
+                string[] mitigationSwitches = new string[] { "/Qspectre", "/Qspectre-load", "/Qspectre-load-cf", "/guardspecload" };
 
                 SwitchState effectiveState;
 
@@ -257,7 +257,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
 
                     // TODO: https://github.com/Microsoft/binskim/issues/119
-                    // We should flag cases where /d2guardspecload is enabled but the 
+                    // We should flag cases where /d2guardspecload is enabled but the
                     // toolset supports /qSpectre (which should be preferred).
 
                     if (QSpectreState == SwitchState.SwitchNotFound && d2guardspecloadState == SwitchState.SwitchNotFound)
@@ -311,7 +311,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (mitigationNotEnabledModules.Count > 0)
             {
-                // The following modules were compiled with a toolset that supports 
+                // The following modules were compiled with a toolset that supports
                 // /Qspectre but the switch was not enabled on the command-line: {0}
                 line = string.Format(
                         RuleResources.BA2024_Warning_SpectreMitigationNotEnabled,
@@ -433,7 +433,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var result = new StringToVersionMap();
 
             // Example entries
-            // result["cExample.lib,c"] = new Version("1.0.0.0") 
+            // result["cExample.lib,c"] = new Version("1.0.0.0")
             // result["cplusplusExample.lib,cxx"] = new Version("1.0.0.0")
             // result["masmExample.lib,masm"] = new Version("1.0.0.0")
 
@@ -446,22 +446,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static PropertiesDictionary BuildMitigatedCompilersData()
         {
-            // As per https://blogs.msdn.microsoft.com/vcblog/2018/01/15/spectre-mitigations-in-msvc/ 
+            // As per https://blogs.msdn.microsoft.com/vcblog/2018/01/15/spectre-mitigations-in-msvc/
             /*
-            In current versions of the MSVC compiler, the /Qspectre switch only works on optimized code. 
-            You should make sure to compile your code with any of the optimization switches (e.g., /O2 or /O1 but NOT /Od) to have the mitigation applied. 
-            Similarly, inspect any code that uses #pragma optimize([stg], off). Work is ongoing now to make the /Qspectre mitigation work on unoptimized code. 
+            In current versions of the MSVC compiler, the /Qspectre switch only works on optimized code.
+            You should make sure to compile your code with any of the optimization switches (e.g., /O2 or /O1 but NOT /Od) to have the mitigation applied.
+            Similarly, inspect any code that uses #pragma optimize([stg], off). Work is ongoing now to make the /Qspectre mitigation work on unoptimized code.
 
             AND
 
             What versions of MSVC support the /Qspectre switch?
-            All versions of Visual Studio 2017 version 15.5 and all Previews of Visual Studio version 15.6 already include an undocumented switch, /d2guardspecload, that is currently equivalent to /Qspectre. 
-            You can use /d2guardspecload to apply the same mitigations to your code. 
-            Please update to using /Qspectre as soon as you get a compiler that supports the switch as the /Qspectre switch will be maintained with new mitigations going forward. 
+            All versions of Visual Studio 2017 version 15.5 and all Previews of Visual Studio version 15.6 already include an undocumented switch, /d2guardspecload, that is currently equivalent to /Qspectre.
+            You can use /d2guardspecload to apply the same mitigations to your code.
+            Please update to using /Qspectre as soon as you get a compiler that supports the switch as the /Qspectre switch will be maintained with new mitigations going forward.
 
-            The /Qspectre switch will be available in MSVC toolsets included in all future releases of Visual Studio (including Previews).  
-            We will also release updates to some existing versions of Visual Studio to include support for /Qspectre. 
-            Releases of Visual Studio and Previews are announced on the Visual Studio Blog; update notifications are included in the Notification Hub. 
+            The /Qspectre switch will be available in MSVC toolsets included in all future releases of Visual Studio (including Previews).
+            We will also release updates to some existing versions of Visual Studio to include support for /Qspectre.
+            Releases of Visual Studio and Previews are announced on the Visual Studio Blog; update notifications are included in the Notification Hub.
             Visual Studio updates that include support for /Qspectre will be announced on the Visual C++ Team Blog and the @visualc Twitter feed.
 
             We initially plan to include support for /Qspectre in the following:
@@ -470,16 +470,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             A servicing update to Visual Studio 2017 “RTW”
             A servicing update to Visual Studio 2015 Update 3
 
-            If you’re using an older version of MSVC we strongly encourage you to upgrade to a more recent compiler for this and other security improvements that have been developed in the last few years. 
+            If you’re using an older version of MSVC we strongly encourage you to upgrade to a more recent compiler for this and other security improvements that have been developed in the last few years.
             Additionally, you’ll benefit from increased conformance, code quality, and faster compile times as well as many productivity improvements in Visual Studio.
 
              */
 
             // UPDATED version and support information: https://blogs.msdn.microsoft.com/vcblog/2018/04/09/spectre-mitigation-changes-in-visual-studio-2017-version-15-7-preview-3/
-            /* 
-             * 
-            With Visual Studio 2017 version 15.7 Preview 3 we have two new features to announce with regards to our Spectre mitigations. 
-            First, the /Qspectre switch is now supported regardless of the selected optimization level. 
+            /*
+             *
+            With Visual Studio 2017 version 15.7 Preview 3 we have two new features to announce with regards to our Spectre mitigations.
+            First, the /Qspectre switch is now supported regardless of the selected optimization level.
             Second, we have provided Spectre-mitigated implementations of the Microsoft Visual C++ libraries.
 
              */
@@ -491,7 +491,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var armData = new PropertiesDictionary();
 
             // Format of this data and the ranges:
-            // ThrowIfMitigationDataIsInvalid requires a range here from the start of this support 
+            // ThrowIfMitigationDataIsInvalid requires a range here from the start of this support
             //     to a version less than the compiler that implements the next level of mitigation support.
 
             // X86\X64 support
@@ -633,6 +633,7 @@ namespace Microsoft.CodeAnalysis.Sarif
                 case ExtendedMachine.ArmThumb2:
                     isFamily = true;
                     break;
+
                 default:
                     break;
             }
@@ -650,6 +651,7 @@ namespace Microsoft.CodeAnalysis.Sarif
                 case ExtendedMachine.I386:
                     isFamily = true;
                     break;
+
                 default:
                     break;
             }

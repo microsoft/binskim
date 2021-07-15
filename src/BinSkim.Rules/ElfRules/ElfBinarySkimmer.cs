@@ -14,6 +14,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (context.IsELF())
             {
                 ElfBinary target = context.ElfBinary();
+
+                if (target.IsDebugOnlyFile)
+                {
+                    reasonForNotAnalyzing = MetadataConditions.ImageIsDebugOnly;
+                    return AnalysisApplicability.NotApplicableToSpecifiedTarget;
+                }
+
                 return this.CanAnalyzeElf(target, context.Policy, out reasonForNotAnalyzing);
             }
             else
