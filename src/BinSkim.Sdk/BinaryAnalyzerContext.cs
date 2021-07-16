@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public bool AnalysisComplete { get; set; }
         public DefaultTraces Traces { get; set; }
 
-        public ICompilerDataLogger CompilerDataLogger { get; set; }
+        public CompilerDataLogger CompilerDataLogger { get; set; }
 
         private bool disposed = false;
 

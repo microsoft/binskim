@@ -13,14 +13,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public class SingleMachOBinary : BinaryBase, IDwarfBinary
     {
-        private const string SECTIONNAME_DEBUG_INFO = "__debug_info";
-        private const string SECTIONNAME_DEBUG_ABBREV = "__debug_abbrev";
-        private const string SECTIONNAME_DEBUG_STR = "__debug_str";
-        private const string SECTIONNAME_DEBUG_LINE = "__debug_line";
-        private const string SECTIONNAME_DEBUG_FRAME = "__debug_frame";
-        private const string SECTIONNAME_EH_FRAME = "__eh_frame";
         private const string SECTIONNAME_TEXT = "__text";
         private const string SECTIONNAME_DATA = "__data";
+        private const string SECTIONNAME_EH_FRAME = "__eh_frame";
+        private const string SECTIONNAME_DEBUG_STR = "__debug_str";
+        private const string SECTIONNAME_DEBUG_LINE = "__debug_line";
+        private const string SECTIONNAME_DEBUG_INFO = "__debug_info";
+        private const string SECTIONNAME_DEBUG_FRAME = "__debug_frame";
+        private const string SECTIONNAME_DEBUG_ABBREV = "__debug_abbrev";
 
         public SingleMachOBinary(MachO singleMachO, Uri uri) : base(uri)
         {

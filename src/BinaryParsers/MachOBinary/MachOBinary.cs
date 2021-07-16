@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public int DwarfVersion { get; set; } = -1;
 
         /// <summary>
-        /// Unit type of Dwarf used..
+        /// Unit type of Dwarf used.
         /// </summary>
         public DwarfUnitType DwarfUnitType { get; set; }
 

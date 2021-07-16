@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
-    public class CompilerDataLogger : ICompilerDataLogger
+    public class CompilerDataLogger
     {
         private const string CompilerEventName = "CompilerInformation";
 
