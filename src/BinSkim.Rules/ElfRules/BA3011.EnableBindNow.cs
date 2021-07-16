@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Composition;
 
 using ELFSharp.ELF;
+using ELFSharp.ELF.Sections;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -39,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
-        public override AnalysisApplicability CanAnalyzeElf(ElfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeElf(ElfBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             IELF elf = target.ELF;
 
@@ -84,17 +85,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             try
             {
-                var dynamicSection = (ELFSharp.ELF.Sections.IDynamicSection)elf.GetSection(".dynamic");
-                if (dynamicSection == null)
+                if (!elf.TryGetSection(".dynamic", out ISection section))
                 {
                     return false;
                 }
 
-                foreach (ELFSharp.ELF.Sections.DynamicEntry<ulong> entry in dynamicSection.Entries)
+                if (!(section is IDynamicSection dynamicSection))
                 {
-                    if ((entry.Tag == ELFSharp.ELF.Sections.DynamicTag.BindNow) ||
-                        (entry.Tag == ELFSharp.ELF.Sections.DynamicTag.Flags && (entry.Value & DF_BIND_NOW) != 0) ||
-                        (entry.Tag == ELFSharp.ELF.Sections.DynamicTag.Flags1 && (entry.Value & DF_1_NOW) != 0))
+                    return false;
+                }
+
+                foreach (DynamicEntry<ulong> entry in dynamicSection.Entries)
+                {
+                    if ((entry.Tag == DynamicTag.BindNow) ||
+                        (entry.Tag == DynamicTag.Flags && (entry.Value & DF_BIND_NOW) != 0) ||
+                        (entry.Tag == DynamicTag.Flags1 && (entry.Value & DF_1_NOW) != 0))
                     {
                         return true;
                     }
