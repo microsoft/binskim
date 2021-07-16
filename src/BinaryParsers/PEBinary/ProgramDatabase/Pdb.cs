@@ -106,6 +106,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
                 byte[] b = new byte[max];
 
+                // When we are at this step, we were able to read the pdb.
+                // If PdbLocation is a directory, it means that PdbType is embedded.
+                if (Directory.Exists(PdbLocation))
+                {
+                    return this.pdbFileType;
+                }
+
                 using (FileStream fs = File.OpenRead(PdbLocation))
                 {
                     if (fs.Read(b, 0, b.Length) != b.Length)
