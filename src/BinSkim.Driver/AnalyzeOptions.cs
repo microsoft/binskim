@@ -46,12 +46,14 @@ namespace Microsoft.CodeAnalysis.IL
 
         [Option(
             "repository-uri",
-            HelpText = "RepositoryUri is required to rule BA4001 and BA4002.")]
+            HelpText = "RepositoryUri is only required for the reporting rules ('BA4001.ReportPECompilerData' " +
+            "and 'BA4002.ReportDwarfCompilerData'). It will be used to enhance the reporting.")]
         public string RepositoryUri { get; set; }
 
         [Option(
             "pipeline-name",
-            HelpText = "PipelineName is required to rule BA4001 and BA4002.")]
+            HelpText = "PipelineName is only required for the reporting rules ('BA4001.ReportPECompilerData' " +
+            "and 'BA4002.ReportDwarfCompilerData'). It will be used to enhance the reporting.")]
         public string PipelineName { get; set; }
     }
 }

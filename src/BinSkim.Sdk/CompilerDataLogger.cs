@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
                 {
                     Initialize(appInsightsKey);
-                    appInsightsRegistered = true;
+                    this.appInsightsRegistered = true;
                 }
             }
             catch (SecurityException)
@@ -42,10 +42,20 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 // User does not have access to retrieve information from environment variables.
             }
 
+            if (string.IsNullOrEmpty(pipelineName))
+            {
+                throw new ArgumentNullException(nameof(pipelineName));
+            }
+
+            if (string.IsNullOrEmpty(repositoryUri))
+            {
+                throw new ArgumentNullException(nameof(repositoryUri));
+            }
+
             this.pipelineName = pipelineName;
             this.repositoryUri = repositoryUri;
-            this.sha256 = analysisContext?.Hashes?.Sha256;
             this.localPath = analysisContext?.TargetUri?.LocalPath;
+            this.sha256 = analysisContext?.Hashes?.Sha256 ?? string.Empty;
         }
 
         public static void Initialize(string instrumentationKey)
@@ -61,7 +71,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public void PrintHeader()
         {
-            if (!appInsightsRegistered)
+            if (!this.appInsightsRegistered)
             {
                 Console.WriteLine("RepositoryUri,PipelineName,Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Dialect,Module Name,Module Library,Hash,Error");
             }
@@ -71,14 +81,14 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             string name = omDetails?.Name?.Replace(",", "_");
             string library = omDetails?.Library?.Replace(",", ";");
-            if (appInsightsRegistered)
+            if (this.appInsightsRegistered)
             {
                 string[] compilerDataParts = compilerData.Split(',');
 
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
-                    { "repositoryUri", repositoryUri ?? string.Empty },
-                    { "pipelineName", pipelineName ?? string.Empty },
+                    { "repositoryUri", this.repositoryUri },
+                    { "pipelineName", this.pipelineName },
                     { "target", this.localPath },
                     { "compilerName", compilerDataParts[0] },
                     { "compilerBackEndVersion", compilerDataParts[1] },
@@ -93,26 +103,20 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                Console.Write($"{repositoryUri},");
-                Console.Write($"{pipelineName},");
-                Console.Write($"{this.localPath},");
-                Console.Write($"{compilerData},");
-                Console.Write($",");
-                Console.Write($"{name},");
-                Console.Write($"{(name == library ? string.Empty : library)},");
-                Console.Write($"{this.sha256},");
-                Console.WriteLine();
+                string log = $"{this.repositoryUri},{this.pipelineName},{this.localPath}," +
+                    $"{compilerData},,{name},{(name == library ? string.Empty : library)},{this.sha256},";
+                Console.WriteLine(log);
             }
         }
 
         public void Write(string compilerName, string version, string language, string file)
         {
-            if (appInsightsRegistered)
+            if (this.appInsightsRegistered)
             {
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
-                    { "repositoryUri", repositoryUri ?? string.Empty },
-                    { "pipelineName", pipelineName ?? string.Empty },
+                    { "repositoryUri", this.repositoryUri },
+                    { "pipelineName", this.pipelineName },
                     { "target", this.localPath },
                     { "compilerName", compilerName ?? string.Empty },
                     { "compilerBackEndVersion", version ?? string.Empty },
@@ -127,29 +131,20 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                Console.Write($"{repositoryUri},");
-                Console.Write($"{pipelineName},");
-                Console.Write($"{this.localPath},");
-                Console.Write($"{compilerName},");
-                Console.Write($"{version},");
-                Console.Write($"{version},");
-                Console.Write($"{language},");
-                Console.Write($",");
-                Console.Write($"{file},");
-                Console.Write(",");
-                Console.Write($"{this.sha256},");
-                Console.WriteLine();
+                string log = $"{this.repositoryUri},{this.pipelineName},{this.localPath}," +
+                    $"{compilerName},{version},{version},{language},,{file},,{this.sha256},";
+                Console.WriteLine(log);
             }
         }
 
         public void WriteException(string errorMessage)
         {
-            if (appInsightsRegistered)
+            if (this.appInsightsRegistered)
             {
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
-                    { "repositoryUri", repositoryUri ?? string.Empty },
-                    { "pipelineName", pipelineName ?? string.Empty },
+                    { "repositoryUri", this.repositoryUri },
+                    { "pipelineName", this.pipelineName },
                     { "target", this.localPath },
                     { "compilerName", string.Empty },
                     { "compilerBackEndVersion", string.Empty },
@@ -164,8 +159,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                Console.Write(this.localPath + ",");
-                Console.WriteLine($",,,,,,,,,{this.sha256},{errorMessage}");
+                string log = $"{this.repositoryUri},{this.pipelineName},{this.localPath},,,,,,,,{this.sha256 ?? string.Empty},{errorMessage}";
+                Console.WriteLine(log);
             }
         }
     }
