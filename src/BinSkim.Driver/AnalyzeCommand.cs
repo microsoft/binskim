@@ -56,7 +56,10 @@ namespace Microsoft.CodeAnalysis.IL
 
                 if (isRule4001Enabled || isRule4002Enabled)
                 {
-                    binaryAnalyzerContext.CompilerDataLogger = new CompilerDataLogger(binaryAnalyzerContext, options.RepositoryUri, options.PipelineName);
+                    binaryAnalyzerContext.CompilerDataLogger = new CompilerDataLogger(binaryAnalyzerContext,
+                                                                                      options.RepositoryUri,
+                                                                                      options.PipelineName,
+                                                                                      options.TargetFileSpecifiers);
                 }
             }
 

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security;
 
 using Microsoft.ApplicationInsights;
@@ -19,14 +20,17 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private readonly bool appInsightsRegistered;
 
         private readonly string sha256;
-        private readonly string localPath;
-        private readonly string repositoryUri;
         private readonly string pipelineName;
+        private readonly string repositoryUri;
+        private readonly string relativeFilePath;
 
         private static TelemetryClient s_telemetryClient;
         private static TelemetryConfiguration s_telemetryConfiguration;
 
-        public CompilerDataLogger(IAnalysisContext analysisContext, string repositoryUri, string pipelineName)
+        public CompilerDataLogger(IAnalysisContext analysisContext,
+                                  string repositoryUri,
+                                  string pipelineName,
+                                  IEnumerable<string> targetFileSpecifiers)
         {
             try
             {
@@ -54,8 +58,16 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
             this.pipelineName = pipelineName;
             this.repositoryUri = repositoryUri;
-            this.localPath = analysisContext?.TargetUri?.LocalPath;
             this.sha256 = analysisContext?.Hashes?.Sha256 ?? string.Empty;
+            this.relativeFilePath = analysisContext?.TargetUri?.LocalPath ?? string.Empty;
+
+            foreach (string path in targetFileSpecifiers)
+            {
+                // We must get directory name because there are cases where the targetFilePath is
+                // c:\path\*.dll
+                string directoryName = Path.GetDirectoryName(path);
+                this.relativeFilePath = this.relativeFilePath.Replace(directoryName, string.Empty);
+            }
         }
 
         public static void Initialize(string instrumentationKey)
@@ -89,7 +101,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 {
                     { "repositoryUri", this.repositoryUri },
                     { "pipelineName", this.pipelineName },
-                    { "target", this.localPath },
+                    { "target", this.relativeFilePath },
                     { "compilerName", compilerDataParts[0] },
                     { "compilerBackEndVersion", compilerDataParts[1] },
                     { "compilerFrontEndVersion", compilerDataParts[2] },
@@ -103,7 +115,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                string log = $"{this.repositoryUri},{this.pipelineName},{this.localPath}," +
+                string log = $"{this.repositoryUri},{this.pipelineName},{this.relativeFilePath}," +
                     $"{compilerData},,{name},{(name == library ? string.Empty : library)},{this.sha256},";
                 Console.WriteLine(log);
             }
@@ -117,7 +129,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 {
                     { "repositoryUri", this.repositoryUri },
                     { "pipelineName", this.pipelineName },
-                    { "target", this.localPath },
+                    { "target", this.relativeFilePath },
                     { "compilerName", compilerName ?? string.Empty },
                     { "compilerBackEndVersion", version ?? string.Empty },
                     { "compilerFrontEndVersion", version ?? string.Empty },
@@ -131,7 +143,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                string log = $"{this.repositoryUri},{this.pipelineName},{this.localPath}," +
+                string log = $"{this.repositoryUri},{this.pipelineName},{this.relativeFilePath}," +
                     $"{compilerName},{version},{version},{language},,{file},,{this.sha256},";
                 Console.WriteLine(log);
             }
@@ -145,7 +157,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 {
                     { "repositoryUri", this.repositoryUri },
                     { "pipelineName", this.pipelineName },
-                    { "target", this.localPath },
+                    { "target", this.relativeFilePath },
                     { "compilerName", string.Empty },
                     { "compilerBackEndVersion", string.Empty },
                     { "compilerFrontEndVersion", string.Empty },
@@ -159,7 +171,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                string log = $"{this.repositoryUri},{this.pipelineName},{this.localPath},,,,,,,,{this.sha256 ?? string.Empty},{errorMessage}";
+                string log = $"{this.repositoryUri},{this.pipelineName},{this.relativeFilePath},,,,,,,,{this.sha256 ?? string.Empty},{errorMessage}";
                 Console.WriteLine(log);
             }
         }
