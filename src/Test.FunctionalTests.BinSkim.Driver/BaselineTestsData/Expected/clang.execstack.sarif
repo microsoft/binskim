@@ -581,8 +581,32 @@
           ]
         },
         {
-          "ruleId": "BA3001",
+          "ruleId": "BA5001",
           "ruleIndex": 24,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "clang.execstack",
+              "EnablePositionIndependentExecutableMachO",
+              "image is not a MachO binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.execstack",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 25,
           "level": "error",
           "message": {
             "id": "Error",
@@ -603,7 +627,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 25,
+          "ruleIndex": 26,
           "level": "error",
           "message": {
             "id": "Error_StackExec",
@@ -624,27 +648,6 @@
         },
         {
           "ruleId": "BA3003",
-          "ruleIndex": 26,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "clang.execstack"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.execstack",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3006",
           "ruleIndex": 27,
           "level": "error",
           "message": {
@@ -665,8 +668,29 @@
           ]
         },
         {
-          "ruleId": "BA3010",
+          "ruleId": "BA3006",
           "ruleIndex": 28,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "clang.execstack"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.execstack",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 29,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -688,7 +712,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 29,
+          "ruleIndex": 30,
           "level": "error",
           "message": {
             "id": "Error",
@@ -711,6 +735,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1371,6 +1397,28 @@
               "name": "UseCheckedFunctionsWithGcc"
             },
             {
+              "id": "BA5001",
+              "fullDescription": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5001EnablePositionIndependentExecutableMachO",
+              "help": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "PIE enabled on executable '{0}'."
+                },
+                "Error": {
+                  "text": "PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnablePositionIndependentExecutableMachO"
+            },
+            {
               "id": "BA3001",
               "fullDescription": {
                 "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
@@ -1508,10 +1556,7 @@
               },
               "name": "EnableBindNow"
             }
-          ],
-          "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
