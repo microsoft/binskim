@@ -160,6 +160,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is a debug only file.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsDebugOnly {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsDebugOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is a .NET core native bootstrap exe.
         /// </summary>
         internal static string MetadataCondition_ImageIsDotNetCoreBootstrapExe {

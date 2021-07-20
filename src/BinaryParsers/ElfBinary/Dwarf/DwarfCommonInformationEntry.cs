@@ -298,6 +298,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 {
                     int entryOffset = offsetBase - offset;
 
+                    if (entryOffset < 0 || entryOffset >= data.Data.Length)
+                    {
+                        break;
+                    }
+
                     if (!entries.TryGetValue(entryOffset, out entry))
                     {
                         entry = ParseEntry(data, entryOffset, input);
