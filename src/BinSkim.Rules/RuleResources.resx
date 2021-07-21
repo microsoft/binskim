@@ -550,4 +550,18 @@ Modules triggering this check were:
   <data name="BA2026_NotApplicable" xml:space="preserve">
     <value>'{0}' is a Windows PE that wasn't compiled with a compiler that provides the Microsoft /sdl command-line setting to enable additional compile-time and runtime security checks.</value>
   </data>
+  <data name="BA2027_CompileUsingCurrentDialects_Description" xml:space="preserve">
+    <value>/std setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior.</value>
+  </data>
+  <data name="BA2027_Pass" xml:space="preserve">
+    <value>'{0}' is a Windows PE that was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior.</value>
+  </data>
+  <data name="BA2027_Warning" xml:space="preserve">
+    <value>'{0}' is a Windows PE that wasn't compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, pass version 17 or later on the cl.exe command-line, e.g. '/std:c++17' for C++ and '/std:c17' for C or set the corresponding 'Language Standard' property in the 'C/C++ -&gt; General' Configuration property page.
+The following modules were not compiled with current dialects:
+{1}</value>
+  </data>
+  <data name="BA2027_Warning_Item" xml:space="preserve">
+    <value>Library: {0}, Language: {1}, Version: {2}</value>
+  </data>
 </root>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
@@ -350,8 +351,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <param name="optionNames">Array of command line options to search for a value</param>
         /// <param name="precedence">The precedence ruls for this set of options</param>
         /// <param name="optionValue">string to recieve the value of the command line option</param>
+        /// <param name="optionNamesExecluded">Array of command line options to be execluded from the result</param>
         /// <returns>true if one of the options is found, false if none are found</returns>
-        public bool GetOptionValue(string[] optionNames, OrderOfPrecedence precedence, ref string optionValue)
+        public bool GetOptionValue(string[] optionNames, OrderOfPrecedence precedence, ref string optionValue, string[] optionNamesExecluded = null)
         {
             bool optionFound = false;
 
@@ -377,8 +379,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                         {
                             if (realArg.StartsWith(optionsArray[index]))
                             {
-                                optionFound = true;
-                                optionValue = realArg.Substring(optionsArray[index].Length);
+                                if (optionNamesExecluded == null || !optionNamesExecluded.Any(execluded => realArg.StartsWith(execluded)))
+                                {
+                                    optionFound = true;
+                                    optionValue = realArg.Substring(optionsArray[index].Length);
+                                }
                             }
                         }
 

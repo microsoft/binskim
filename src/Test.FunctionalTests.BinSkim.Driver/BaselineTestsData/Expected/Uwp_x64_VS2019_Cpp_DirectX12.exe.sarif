@@ -125,8 +125,32 @@
           ]
         },
         {
-          "ruleId": "BA3001",
+          "ruleId": "BA2027",
           "ruleIndex": 5,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe",
+              "CompileUsingCurrentDialects",
+              "image is a native UWP (Universal Windows Platform) binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 6,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -150,7 +174,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 6,
+          "ruleIndex": 7,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -174,7 +198,7 @@
         },
         {
           "ruleId": "BA3003",
-          "ruleIndex": 7,
+          "ruleIndex": 8,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -198,7 +222,7 @@
         },
         {
           "ruleId": "BA3004",
-          "ruleIndex": 8,
+          "ruleIndex": 9,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -222,7 +246,7 @@
         },
         {
           "ruleId": "BA3005",
-          "ruleIndex": 9,
+          "ruleIndex": 10,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -246,7 +270,7 @@
         },
         {
           "ruleId": "BA3006",
-          "ruleIndex": 10,
+          "ruleIndex": 11,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -270,7 +294,7 @@
         },
         {
           "ruleId": "BA3010",
-          "ruleIndex": 11,
+          "ruleIndex": 12,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -294,7 +318,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 12,
+          "ruleIndex": 13,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -318,7 +342,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 13,
+          "ruleIndex": 14,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -342,28 +366,6 @@
         },
         {
           "ruleId": "BA2001",
-          "ruleIndex": 14,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2002",
           "ruleIndex": 15,
           "kind": "pass",
           "level": "none",
@@ -385,8 +387,30 @@
           ]
         },
         {
-          "ruleId": "BA2004",
+          "ruleId": "BA2002",
           "ruleIndex": 16,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 17,
           "message": {
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
@@ -407,7 +431,7 @@
         },
         {
           "ruleId": "BA2004",
-          "ruleIndex": 16,
+          "ruleIndex": 17,
           "level": "error",
           "message": {
             "id": "Error_NativeWithInsecureDirectCompilands",
@@ -429,7 +453,7 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -451,7 +475,7 @@
         },
         {
           "ruleId": "BA2006",
-          "ruleIndex": 18,
+          "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -474,7 +498,7 @@
         },
         {
           "ruleId": "BA2007",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -497,7 +521,7 @@
         },
         {
           "ruleId": "BA2008",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "level": "error",
           "message": {
             "id": "Error",
@@ -518,28 +542,6 @@
         },
         {
           "ruleId": "BA2009",
-          "ruleIndex": 21,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
           "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
@@ -561,7 +563,7 @@
           ]
         },
         {
-          "ruleId": "BA2011",
+          "ruleId": "BA2010",
           "ruleIndex": 23,
           "kind": "pass",
           "level": "none",
@@ -583,7 +585,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2011",
           "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
@@ -605,7 +607,7 @@
           ]
         },
         {
-          "ruleId": "BA2013",
+          "ruleId": "BA2012",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -627,7 +629,7 @@
           ]
         },
         {
-          "ruleId": "BA2014",
+          "ruleId": "BA2013",
           "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
@@ -649,7 +651,7 @@
           ]
         },
         {
-          "ruleId": "BA2015",
+          "ruleId": "BA2014",
           "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
@@ -671,7 +673,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2015",
           "ruleIndex": 28,
           "kind": "pass",
           "level": "none",
@@ -693,7 +695,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2019",
           "ruleIndex": 29,
           "kind": "pass",
           "level": "none",
@@ -715,8 +717,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 30,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 31,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -871,6 +895,31 @@
                 }
               },
               "name": "EnableAdditionalSdlSecurityChecks"
+            },
+            {
+              "id": "BA2027",
+              "fullDescription": {
+                "text": "/std setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2027CompileUsingCurrentDialects",
+              "help": {
+                "text": "/std setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a Windows PE that was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior."
+                },
+                "Warning": {
+                  "text": "'{0}' is a Windows PE that wasn't compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, pass version 17 or later on the cl.exe command-line, e.g. '/std:c++17' for C++ and '/std:c17' for C or set the corresponding 'Language Standard' property in the 'C/C++ -> General' Configuration property page.\r\nThe following modules were not compiled with current dialects:\r\n{1}"
+                },
+                "Warning_Item": {
+                  "text": "Library: {0}, Language: {1}, Version: {2}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "CompileUsingCurrentDialects"
             },
             {
               "id": "BA3001",

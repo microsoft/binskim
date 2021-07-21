@@ -728,6 +728,27 @@
               }
             }
           ]
+        },
+        {
+          "ruleId": "BA2027",
+          "ruleIndex": 31,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Native_x86_VS2019_SDL_Enabled.exe",
+              "Library: C:\\C\\Native_x64_VS2019\\Native_x64_VS2019\\Debug\\Native_x64_VS2019.obj, Language: Cxx, Version: NotSet\r\nLibrary: C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30037\\lib\\x86\\MSVCRTD.lib, Language: C, Version: NotSet\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2019_SDL_Enabled.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
         }
       ],
       "tool": {
@@ -1551,6 +1572,31 @@
                 }
               },
               "name": "EnableAdditionalSdlSecurityChecks"
+            },
+            {
+              "id": "BA2027",
+              "fullDescription": {
+                "text": "/std setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2027CompileUsingCurrentDialects",
+              "help": {
+                "text": "/std setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a Windows PE that was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior."
+                },
+                "Warning": {
+                  "text": "'{0}' is a Windows PE that wasn't compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, pass version 17 or later on the cl.exe command-line, e.g. '/std:c++17' for C++ and '/std:c17' for C or set the corresponding 'Language Standard' property in the 'C/C++ -> General' Configuration property page.\r\nThe following modules were not compiled with current dialects:\r\n{1}"
+                },
+                "Warning_Item": {
+                  "text": "Library: {0}, Language: {1}, Version: {2}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "CompileUsingCurrentDialects"
             }
           ],
           "properties": {

@@ -987,6 +987,44 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /std setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior..
+        /// </summary>
+        internal static string BA2027_CompileUsingCurrentDialects_Description {
+            get {
+                return ResourceManager.GetString("BA2027_CompileUsingCurrentDialects_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior..
+        /// </summary>
+        internal static string BA2027_Pass {
+            get {
+                return ResourceManager.GetString("BA2027_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that wasn&apos;t compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, pass version 17 or later on the cl.exe command-line, e.g. &apos;/std:c++17&apos; for C++ and &apos;/std:c17&apos; for C or set the corresponding &apos;Language Standard&apos; property in the &apos;C/C++ -&gt; General&apos; Configuration property page.
+        ///The following modules were not compiled with current dialects:
+        ///{1}.
+        /// </summary>
+        internal static string BA2027_Warning {
+            get {
+                return ResourceManager.GetString("BA2027_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library: {0}, Language: {1}, Version: {2}.
+        /// </summary>
+        internal static string BA2027_Warning_Item {
+            get {
+                return ResourceManager.GetString("BA2027_Warning_Item", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
         internal static string BA3001_EnablePositionIndependentExecutable_Description {
