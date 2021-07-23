@@ -13,23 +13,24 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class EnablePositionIndependentExecutableMachO : MachOBinarySkimmer
+    public class DoNotAllowExecutableStack : MachOBinarySkimmer
     {
         /// <summary>
-        /// BA5001
+        /// BA5002
         /// </summary>
-        public override string Id => RuleIds.EnablePositionIndependentExecutableMachO;
+        public override string Id => RuleIds.DoNotAllowExecutableStack;
 
         /// <summary>
-        /// A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section,
-        ///  if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult.
-        ///  This can be enabled by passing '-f pie' to clang/gcc.
+        /// This checks if a binary has an executable stack; an
+        /// executable stack allows attackers to redirect code flow
+        /// into stack memory, which is an easy place for an attacker
+        /// to store shellcode. Ensure do not enable flag "--allow_stack_execute".
         /// </summary>
-        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA5001_EnablePositionIndependentExecutable_Description };
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA5002_DoNotAllowExecutableStack_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
-                    nameof(RuleResources.BA5001_Pass),
-                    nameof(RuleResources.BA5001_Error),
+                    nameof(RuleResources.BA5002_Pass),
+                    nameof(RuleResources.BA5002_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
 
@@ -60,20 +61,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 foreach (SingleMachOBinary subBinary in mainBinary.MachOs)
                 {
-                    if (IsApplicableMachO(subBinary) && !HasPieFlag(subBinary))
+                    if (IsApplicableMachO(subBinary) && HasExecutableStackFlag(subBinary))
                     {
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                                nameof(RuleResources.BA5001_Error),
+                                nameof(RuleResources.BA5002_Error),
                                 context.TargetUri.GetFileName()));
                         return;
                     }
                 }
 
-                // PIE enabled on executable '{0}'.
+                // Executable stack is not allowed on executable '{0}'.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                        nameof(RuleResources.BA5001_Pass),
+                        nameof(RuleResources.BA5002_Pass),
                         context.TargetUri.GetFileName()));
             }
         }
@@ -84,22 +85,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     macho.MachO.FileType == ELFSharp.MachO.FileType.DynamicLibrary);
         }
 
-        private static bool HasPieFlag(SingleMachOBinary binary)
+        private static bool HasExecutableStackFlag(SingleMachOBinary binary)
         {
-            if (binary.MachO.FileType == ELFSharp.MachO.FileType.DynamicLibrary)
-            {
-                // for shared libaries the compiler adds -fPIC by default
-                return true;
-            }
-
-            if (binary.MachO.FileType == ELFSharp.MachO.FileType.Executable)
-            {
-                // for executables, checking file's header flag has PIE flag
-                // https://developer.apple.com/library/archive/qa/qa1788/_index.html
-                return binary.MachO.Flags.HasFlag(ELFSharp.MachO.HeaderFlags.PIE);
-            }
-
-            return false;
+            // reference
+            // https://developer.apple.com/library/archive/documentation/Security/Conceptual/SecureCodingGuide/Articles/BufferOverflows.html
+            return binary.MachO.Flags.HasFlag(ELFSharp.MachO.HeaderFlags.AllowStackExecution);
         }
     }
 }

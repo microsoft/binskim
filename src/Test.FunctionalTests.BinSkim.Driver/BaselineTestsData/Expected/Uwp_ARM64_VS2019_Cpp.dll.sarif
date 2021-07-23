@@ -389,14 +389,16 @@
           ]
         },
         {
-          "ruleId": "BA2001",
+          "ruleId": "BA5002",
           "ruleIndex": 16,
-          "kind": "pass",
+          "kind": "notApplicable",
           "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_ARM64_VS2019_Cpp.dll"
+              "Uwp_ARM64_VS2019_Cpp.dll",
+              "DoNotAllowExecutableStack",
+              "image is not a MachO binary"
             ]
           },
           "locations": [
@@ -411,7 +413,7 @@
           ]
         },
         {
-          "ruleId": "BA2002",
+          "ruleId": "BA2001",
           "ruleIndex": 17,
           "kind": "pass",
           "level": "none",
@@ -433,8 +435,30 @@
           ]
         },
         {
-          "ruleId": "BA2004",
+          "ruleId": "BA2002",
           "ruleIndex": 18,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_ARM64_VS2019_Cpp.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM64_VS2019_Cpp.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 19,
           "message": {
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
@@ -455,7 +479,7 @@
         },
         {
           "ruleId": "BA2004",
-          "ruleIndex": 18,
+          "ruleIndex": 19,
           "level": "error",
           "message": {
             "id": "Error_NativeWithInsecureDirectCompilands",
@@ -477,7 +501,7 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -499,7 +523,7 @@
         },
         {
           "ruleId": "BA2006",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -522,7 +546,7 @@
         },
         {
           "ruleId": "BA2007",
-          "ruleIndex": 21,
+          "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -545,7 +569,7 @@
         },
         {
           "ruleId": "BA2008",
-          "ruleIndex": 22,
+          "ruleIndex": 23,
           "level": "error",
           "message": {
             "id": "Error",
@@ -566,28 +590,6 @@
         },
         {
           "ruleId": "BA2009",
-          "ruleIndex": 23,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_ARM64_VS2019_Cpp.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM64_VS2019_Cpp.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
           "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
@@ -609,7 +611,7 @@
           ]
         },
         {
-          "ruleId": "BA2011",
+          "ruleId": "BA2010",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -631,7 +633,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2011",
           "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
@@ -653,7 +655,7 @@
           ]
         },
         {
-          "ruleId": "BA2013",
+          "ruleId": "BA2012",
           "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
@@ -675,7 +677,7 @@
           ]
         },
         {
-          "ruleId": "BA2014",
+          "ruleId": "BA2013",
           "ruleIndex": 28,
           "kind": "pass",
           "level": "none",
@@ -697,7 +699,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2014",
           "ruleIndex": 29,
           "kind": "pass",
           "level": "none",
@@ -719,7 +721,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2019",
           "ruleIndex": 30,
           "kind": "pass",
           "level": "none",
@@ -741,8 +743,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 31,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_ARM64_VS2019_Cpp.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM64_VS2019_Cpp.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 32,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -1162,6 +1186,28 @@
                 }
               },
               "name": "EnablePositionIndependentExecutableMachO"
+            },
+            {
+              "id": "BA5002",
+              "fullDescription": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5002DoNotAllowExecutableStack",
+              "help": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "Executable stack is not allowed on executable '{0}'."
+                },
+                "Error": {
+                  "text": "Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag \"--allow_stack_execute\" to mark the stack as non-executable."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DoNotAllowExecutableStack"
             },
             {
               "id": "BA2001",

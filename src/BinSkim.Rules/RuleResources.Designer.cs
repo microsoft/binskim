@@ -1311,6 +1311,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag &quot;--allow_stack_execute&quot;..
+        /// </summary>
+        internal static string BA5002_DoNotAllowExecutableStack_Description {
+            get {
+                return ResourceManager.GetString("BA5002_DoNotAllowExecutableStack_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stack on &apos;{0}&apos; is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag &quot;--allow_stack_execute&quot; to mark the stack as non-executable..
+        /// </summary>
+        internal static string BA5002_Error {
+            get {
+                return ResourceManager.GetString("BA5002_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Executable stack is not allowed on executable &apos;{0}&apos;..
+        /// </summary>
+        internal static string BA5002_Pass {
+            get {
+                return ResourceManager.GetString("BA5002_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; because its PDB could not be loaded ({2})..
         /// </summary>
         internal static string ERR997_ExceptionLoadingPdb {
