@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
@@ -80,18 +81,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static bool IsApplicableMachO(SingleMachOBinary macho)
         {
-            return (macho.MachO.FileType == ELFSharp.MachO.FileType.Executable ||
-                    macho.MachO.FileType == ELFSharp.MachO.FileType.DynamicLibrary);
+            // if binary is an executable, or its libary with dwarf so can check its compiler options
+            return macho.MachO.FileType == ELFSharp.MachO.FileType.Executable ||
+                   ((macho.MachO.FileType == ELFSharp.MachO.FileType.DynamicLibrary ||
+                     macho.MachO.FileType == ELFSharp.MachO.FileType.Object ||
+                     macho.MachO.FileType == ELFSharp.MachO.FileType.Debug) &&
+                     IsValidDwarfBinary(macho));
+
         }
 
         private static bool HasPieFlag(SingleMachOBinary binary)
         {
-            if (binary.MachO.FileType == ELFSharp.MachO.FileType.DynamicLibrary)
-            {
-                // for shared libaries the compiler adds -fPIC by default
-                return true;
-            }
-
             if (binary.MachO.FileType == ELFSharp.MachO.FileType.Executable)
             {
                 // for executables, checking file's header flag has PIE flag
@@ -99,7 +99,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return binary.MachO.Flags.HasFlag(ELFSharp.MachO.HeaderFlags.PIE);
             }
 
+            if (binary.MachO.FileType == ELFSharp.MachO.FileType.DynamicLibrary ||
+                binary.MachO.FileType == ELFSharp.MachO.FileType.Object ||
+                binary.MachO.FileType == ELFSharp.MachO.FileType.Debug)
+            {
+                // for libaries, check if compiler includes option "mdynamic-no-pic"
+                return !binary.GetDwarfCompilerCommand().Contains("mdynamic-no-pic", System.StringComparison.OrdinalIgnoreCase);
+            }
+
             return false;
+        }
+
+        private static bool IsValidDwarfBinary(IDwarfBinary binary)
+        {
+            return binary.Compilers.Any(c => c.Compiler == ElfCompilerType.GCC) &&
+                   !string.IsNullOrWhiteSpace(binary.GetDwarfCompilerCommand());
         }
     }
 }
