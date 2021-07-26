@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 this.PrintHeader = false;
             }
 
-            var processedRecords = new HashSet<string>();
+            var processedRecords = new HashSet<CompilerData>();
 
             foreach (ICompiler compiler in compilers)
             {
@@ -82,16 +82,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 foreach (string file in files)
                 {
-                    string currentRecord = compiler.Compiler + "," + compiler.Version + "," + language;
+                    var record = new CompilerData
+                    {
+                        CompilerName = compiler.Compiler.ToString(),
+                        CompilerBackEndVersion = compiler.Version.ToString(),
+                        CompilerFrontEndVersion = compiler.Version.ToString(),
+                        Language = language
+                    };
 
-                    if (processedRecords.Contains(currentRecord))
+                    if (processedRecords.Contains(record))
                     {
                         continue;
                     }
 
-                    processedRecords.Add(currentRecord);
+                    processedRecords.Add(record);
 
-                    context.CompilerDataLogger.Write(compiler.Compiler.ToString(), compiler.Version.ToString(), language, file);
+                    context.CompilerDataLogger.Write(record, file);
                 }
             }
         }

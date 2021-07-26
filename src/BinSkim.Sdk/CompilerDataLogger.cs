@@ -89,23 +89,21 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        public void Write(string compilerData, ObjectModuleDetails omDetails)
+        public void Write(CompilerData compilerData, ObjectModuleDetails omDetails)
         {
             string name = omDetails?.Name?.Replace(",", "_");
             string library = omDetails?.Library?.Replace(",", ";");
             if (this.appInsightsRegistered)
             {
-                string[] compilerDataParts = compilerData.Split(',');
-
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
                     { "repositoryUri", this.repositoryUri },
                     { "pipelineName", this.pipelineName },
                     { "target", this.relativeFilePath },
-                    { "compilerName", compilerDataParts[0] },
-                    { "compilerBackEndVersion", compilerDataParts[1] },
-                    { "compilerFrontEndVersion", compilerDataParts[2] },
-                    { "language", compilerDataParts[3] },
+                    { "compilerName", compilerData.CompilerName },
+                    { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
+                    { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
+                    { "language", compilerData.Language },
                     { "dialect", string.Empty },
                     { "moduleName", name ?? string.Empty },
                     { "moduleLibrary", (name == library ? string.Empty : library) },
@@ -121,7 +119,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        public void Write(string compilerName, string version, string language, string file)
+        public void Write(CompilerData compilerData, string file)
         {
             if (this.appInsightsRegistered)
             {
@@ -130,10 +128,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "repositoryUri", this.repositoryUri },
                     { "pipelineName", this.pipelineName },
                     { "target", this.relativeFilePath },
-                    { "compilerName", compilerName ?? string.Empty },
-                    { "compilerBackEndVersion", version ?? string.Empty },
-                    { "compilerFrontEndVersion", version ?? string.Empty },
-                    { "language", language ?? string.Empty },
+                    { "compilerName", compilerData.CompilerName },
+                    { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
+                    { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
+                    { "language", compilerData.Language },
                     { "dialect", string.Empty },
                     { "moduleName", file ?? string.Empty },
                     { "moduleLibrary", string.Empty },
@@ -144,7 +142,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             else
             {
                 string log = $"{this.repositoryUri},{this.pipelineName},{this.relativeFilePath}," +
-                    $"{compilerName},{version},{version},{language},,{file},,{this.sha256},";
+                    $"{compilerData},,{file},,{this.sha256},";
                 Console.WriteLine(log);
             }
         }

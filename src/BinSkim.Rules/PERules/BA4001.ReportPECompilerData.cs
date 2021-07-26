@@ -59,13 +59,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            var records = new Dictionary<string, ObjectModuleDetails>();
+            var records = new Dictionary<CompilerData, ObjectModuleDetails>();
 
             if (target.PE.IsManaged)
             {
-                string record = $".NET Compiler,{target.PE.LinkerVersion},{target.PE.LinkerVersion},{Language.MSIL}";
+                var record = new CompilerData
+                {
+                    CompilerName = ".NET Compiler",
+                    CompilerBackEndVersion = target.PE.LinkerVersion.ToString(),
+                    CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
+                    Language = nameof(Language.MSIL)
+                };
 
-                if (!records.TryGetValue(record, out ObjectModuleDetails value))
+                if (!records.ContainsKey(record))
                 {
                     records[record] = null;
                 }
@@ -77,11 +83,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Symbol om = omView.Value;
                     ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                    string record =
-                        omDetails.CompilerName?.Replace(",", "_").Trim() + "," +
-                        omDetails.CompilerBackEndVersion + "," +
-                        omDetails.CompilerFrontEndVersion + "," +
-                        omDetails.Language;
+                    var record = new CompilerData
+                    {
+                        CompilerName = omDetails.CompilerName?.Replace(",", "_").Trim(),
+                        CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
+                        CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
+                        Language = omDetails.Language.ToString()
+                    };
 
                     if (!records.ContainsKey(record))
                     {
@@ -90,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
 
-            foreach (KeyValuePair<string, ObjectModuleDetails> kv in records)
+            foreach (KeyValuePair<CompilerData, ObjectModuleDetails> kv in records)
             {
                 context.CompilerDataLogger.Write(kv.Key, kv.Value);
             }
