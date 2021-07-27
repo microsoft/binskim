@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "dialect", string.Empty },
                     { "moduleName", name ?? string.Empty },
                     { "moduleLibrary", (name == library ? string.Empty : library) },
-                    { "hash", this.sha256 ?? string.Empty },
+                    { "hash", this.sha256 },
                     { "error", string.Empty }
                 });
             }
@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "dialect", string.Empty },
                     { "moduleName", file ?? string.Empty },
                     { "moduleLibrary", string.Empty },
-                    { "hash", this.sha256 ?? string.Empty },
+                    { "hash", this.sha256 },
                     { "error", string.Empty }
                 });
             }
@@ -154,13 +154,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "dialect", string.Empty },
                     { "moduleName", string.Empty },
                     { "moduleLibrary", string.Empty },
-                    { "hash", this.sha256 ?? string.Empty },
+                    { "hash", this.sha256 },
                     { "error", errorMessage }
                 });
             }
             else
             {
-                string log = $"{this.relativeFilePath},,,,,,,,,,,,{this.sha256 ?? string.Empty},{errorMessage}";
+                string log = $"{this.relativeFilePath},,,,,,,,,,,,{this.sha256},{errorMessage}";
                 Console.WriteLine(log);
             }
         }
