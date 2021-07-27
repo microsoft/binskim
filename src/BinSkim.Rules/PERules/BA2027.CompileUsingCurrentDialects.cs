@@ -123,7 +123,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                     else if (int.TryParse(cVersionNumberString, out cVersionNumber))
                     {
-                        resultType = cVersionNumber >= 17 ? AnalyzeResultType.Pass : AnalyzeResultType.NotCurrent;
+                        resultType = cVersionNumber >= 17 ? AnalyzeResultType.Current : AnalyzeResultType.NotCurrent;
                     }
                     else
                     {
@@ -131,7 +131,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
 
-                if (resultType != AnalyzeResultType.Pass && resultType != AnalyzeResultType.Latest)
+                if (resultType != AnalyzeResultType.Current && resultType != AnalyzeResultType.Latest)
                 {
                     if (!notCompiledUsingCurrentDialectsModules.Any(l => l.Details.Library == details.Library))
                     {
@@ -184,16 +184,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private class AnalyzeResult
         {
-            public ObjectModuleDetails Details { get; set; }
             public string Version { get; set; }
             public AnalyzeResultType Type { get; set; }
+            public ObjectModuleDetails Details { get; set; }
         }
 
         private enum AnalyzeResultType
         {
-            Pass,
             Latest,
             NotSet,
+            Current,
             NotCurrent,
             Unsupported
         }

@@ -68,8 +68,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             IDwarfBinary binary = context.DwarfBinary();
 
-
-
             static bool analyze(IDwarfBinary binary)
             {
                 string dwarfCompilerCommand = binary.GetDwarfCompilerCommand();
