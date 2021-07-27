@@ -56,6 +56,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string EnableReadOnlyRelocations = "BA3010";
 
         public const string EnableBindNow = "BA3011";
+        public const string DwarfCompileUsingCurrentDialects = "BA3012";
 
         // BA3012-3029 -- saved for future non-compiler/language specific checks.
         // Compiler/Language specific checks follow.

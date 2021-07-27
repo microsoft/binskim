@@ -25,8 +25,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id => RuleIds.CompileUsingCurrentDialects;
 
         /// <summary>
-        /// /std setting enables supported C and C++ language features from the specified version of the C or C++ language standard. 
-        /// Compile using current dialects enables current standard-specific features and behavior.
+        /// The '/std' setting enables supported C and C++ language features from the 
+        /// specified version of the C or C++ language standard. Compile using current 
+        /// dialects enables current standard-specific features and behavior.
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString
         {
@@ -36,7 +37,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         protected override IEnumerable<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA2027_Pass),
             nameof(RuleResources.BA2027_Warning),
-            nameof(RuleResources.BA2027_Warning_Item),
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
@@ -150,10 +150,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
 
                 // '{0}' is a Windows PE that wasn't compiled with current dialects.
-                // Compile using current dialects enables current standard-specific features and behavior.
-                // To resolve this problem, pass version 17 or later on the cl.exe command-line,
-                // e.g. '/std:c++17' for C++ and '/std:c17' for C 
-                // or set the corresponding 'Language Standard' property in the 'C/C++ -> General' Configuration property page.
+                // Compile using current dialects enables current standard-specific
+                // features and behavior. To resolve this problem, pass version 17
+                // or later on the cl.exe command-line, e.g. '/std:c++17' for C++
+                // and '/std:c17' for C or set the corresponding 'Language Standard'
+                // property in the 'C/C++ -> General' Configuration property page.
                 // The following modules were not compiled with current dialects:
                 // {1}
                 context.Logger.Log(this,
@@ -165,7 +166,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             else
             {
                 // '{0}' is a Windows PE that was compiled with current dialects.
-                // Compile using current dialects enables current standard-specific features and behavior.
+                // Compile using current dialects enables current standard-specific
+                // features and behavior.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2027_Pass),

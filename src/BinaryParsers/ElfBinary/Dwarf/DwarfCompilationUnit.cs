@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
@@ -103,6 +104,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                 DataDescription description = dataDescriptionReader.GetDebugDataDescription(code);
                 Dictionary<DwarfAttribute, DwarfAttributeValue> attributes = new Dictionary<DwarfAttribute, DwarfAttributeValue>();
+
+                if (description.Attributes.Any(a => a.Attribute == DwarfAttribute.LinkageName && a.Format == DwarfFormat.Strp))
+                {
+                    description.Attributes.RemoveAll(a => a.Attribute == DwarfAttribute.Name);
+                }
 
                 foreach (DataDescriptionAttribute descriptionAttribute in description.Attributes)
                 {

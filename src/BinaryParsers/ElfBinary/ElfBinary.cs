@@ -90,9 +90,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
             KeyValuePair<DwarfAttribute, DwarfAttributeValue> producer = CompilationUnits
                 .SelectMany(c => c.Symbols)
-                .Where(s => s.Tag == DwarfTag.CompileUnit)
+                .Where(s => s.Tag == DwarfTag.CompileUnit || s.Tag == DwarfTag.Subprogram)
                 .SelectMany(s => s.Attributes)
-                .FirstOrDefault(a => a.Key == DwarfAttribute.Producer);
+                .FirstOrDefault(a => a.Key == DwarfAttribute.Producer || a.Key == DwarfAttribute.LinkageName);
             return producer.Key == DwarfAttribute.None ? string.Empty : producer.Value.String;
         }
 

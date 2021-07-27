@@ -987,7 +987,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /std setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior..
+        ///   Looks up a localized string similar to The &apos;/std&apos; setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior..
         /// </summary>
         internal static string BA2027_CompileUsingCurrentDialects_Description {
             get {
@@ -1255,6 +1255,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA3011_Pass {
             get {
                 return ResourceManager.GetString("BA3011_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;/std&apos; setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior..
+        /// </summary>
+        internal static string BA3012_DwarfCompileUsingCurrentDialects_Description {
+            get {
+                return ResourceManager.GetString("BA3012_DwarfCompileUsingCurrentDialects_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was not compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, compiling with the compiler flags /std with version 17 or later, e.g. &apos;/std:c++17&apos; for C++ and &apos;/std:c17&apos; for C..
+        /// </summary>
+        internal static string BA3012_Error {
+            get {
+                return ResourceManager.GetString("BA3012_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior..
+        /// </summary>
+        internal static string BA3012_Pass {
+            get {
+                return ResourceManager.GetString("BA3012_Pass", resourceCulture);
             }
         }
         
