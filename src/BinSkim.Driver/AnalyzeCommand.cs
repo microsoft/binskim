@@ -43,6 +43,24 @@ namespace Microsoft.CodeAnalysis.IL
                 ShouldWarnVerbose = false;
             }
 
+            if (binaryAnalyzerContext.Policy != null)
+            {
+                bool isRule4001Enabled = (binaryAnalyzerContext.Policy.TryGetValue("BA4001.ReportPECompilerData.Options", out object rule4001)
+                    && rule4001 is PropertiesDictionary property4001
+                    && property4001.TryGetValue("RuleEnabled", out object rule4001Value)
+                    && rule4001Value.ToString() == "Error");
+                bool isRule4002Enabled = (binaryAnalyzerContext.Policy.TryGetValue("BA4002.ReportDwarfCompilerData.Options", out object rule4002)
+                    && rule4002 is PropertiesDictionary property4002
+                    && property4002.TryGetValue("RuleEnabled", out object rule4002Value)
+                    && rule4002Value.ToString() == "Error");
+
+                if (isRule4001Enabled || isRule4002Enabled)
+                {
+                    binaryAnalyzerContext.CompilerDataLogger = new CompilerDataLogger(binaryAnalyzerContext,
+                                                                                      options.TargetFileSpecifiers);
+                }
+            }
+
             return binaryAnalyzerContext;
         }
 
@@ -66,7 +84,20 @@ namespace Microsoft.CodeAnalysis.IL
                 analyzeOptions.Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.NotApplicable, ResultKind.Pass };
             }
 
-            int result = base.Run(analyzeOptions);
+            int result = 0;
+
+            try
+            {
+                result = base.Run(analyzeOptions);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                CompilerDataLogger.Flush();
+            }
 
             // In BinSkim, no rule is ever applicable to every target type. For example,
             // we have checks that are only relevant to either 32-bit or 64-bit binaries.
