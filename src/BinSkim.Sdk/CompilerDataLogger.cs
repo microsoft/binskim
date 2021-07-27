@@ -20,16 +20,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private readonly bool appInsightsRegistered;
 
         private readonly string sha256;
-        private readonly string pipelineName;
-        private readonly string repositoryUri;
         private readonly string relativeFilePath;
 
         private static TelemetryClient s_telemetryClient;
         private static TelemetryConfiguration s_telemetryConfiguration;
 
         public CompilerDataLogger(IAnalysisContext analysisContext,
-                                  string repositoryUri,
-                                  string pipelineName,
                                   IEnumerable<string> targetFileSpecifiers)
         {
             try
@@ -46,18 +42,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 // User does not have access to retrieve information from environment variables.
             }
 
-            if (string.IsNullOrEmpty(pipelineName))
-            {
-                throw new ArgumentNullException(nameof(pipelineName));
-            }
-
-            if (string.IsNullOrEmpty(repositoryUri))
-            {
-                throw new ArgumentNullException(nameof(repositoryUri));
-            }
-
-            this.pipelineName = pipelineName;
-            this.repositoryUri = repositoryUri;
             this.sha256 = analysisContext?.Hashes?.Sha256 ?? string.Empty;
             this.relativeFilePath = analysisContext?.TargetUri?.LocalPath ?? string.Empty;
 
@@ -72,8 +56,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public static void Initialize(string instrumentationKey)
         {
-            s_telemetryConfiguration = new TelemetryConfiguration(instrumentationKey);
-            s_telemetryClient = new TelemetryClient(s_telemetryConfiguration);
+            if (s_telemetryConfiguration == null && s_telemetryClient == null)
+            {
+                s_telemetryConfiguration = new TelemetryConfiguration(instrumentationKey);
+                s_telemetryClient = new TelemetryClient(s_telemetryConfiguration);
+            }
         }
 
         public static void Flush()
@@ -85,7 +72,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             if (!this.appInsightsRegistered)
             {
-                Console.WriteLine("RepositoryUri,PipelineName,Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,File Version,Language,Dialect,Module Name,Module Library,Hash,Error");
+                Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,File Version,Binary Type,Language,Debugging FileName, Debugging FileGuid,Dialect,Module Name,Module Library,Hash,Error");
             }
         }
 
@@ -97,14 +84,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
-                    { "repositoryUri", this.repositoryUri },
-                    { "pipelineName", this.pipelineName },
                     { "target", this.relativeFilePath },
                     { "compilerName", compilerData.CompilerName },
                     { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
                     { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
-                    { "fileVersion", compilerData.FileVersion },
+                    { "fileVersion", compilerData.FileVersion ?? string.Empty },
+                    { "binaryType", compilerData.BinaryType },
                     { "language", compilerData.Language },
+                    { "debuggingFileName", compilerData.DebuggingFileName },
+                    { "debuggingGuid", compilerData.DebuggingFileGuid },
                     { "dialect", string.Empty },
                     { "moduleName", name ?? string.Empty },
                     { "moduleLibrary", (name == library ? string.Empty : library) },
@@ -114,8 +102,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                string log = $"{this.repositoryUri},{this.pipelineName},{this.relativeFilePath}," +
-                    $@"{compilerData},,""{name}"",""{(name == library ? string.Empty : library)}"",{this.sha256},";
+                string log = $@"{this.relativeFilePath},{compilerData},,""{name}"",""{(name == library ? string.Empty : library)}"",{this.sha256},";
                 Console.WriteLine(log);
             }
         }
@@ -126,14 +113,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
-                    { "repositoryUri", this.repositoryUri },
-                    { "pipelineName", this.pipelineName },
                     { "target", this.relativeFilePath },
                     { "compilerName", compilerData.CompilerName },
                     { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
                     { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
                     { "fileVersion", string.Empty },
+                    { "binaryType", compilerData.BinaryType },
                     { "language", compilerData.Language },
+                    { "debuggingFileName", compilerData.DebuggingFileName ?? string.Empty },
+                    { "debuggingGuid", compilerData.DebuggingFileGuid ?? string.Empty },
                     { "dialect", string.Empty },
                     { "moduleName", file ?? string.Empty },
                     { "moduleLibrary", string.Empty },
@@ -143,8 +131,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                string log = $"{this.repositoryUri},{this.pipelineName},{this.relativeFilePath}," +
-                    $"{compilerData},,{file},,{this.sha256},";
+                string log = $"{this.relativeFilePath},{compilerData},,{file},,{this.sha256},";
                 Console.WriteLine(log);
             }
         }
@@ -155,14 +142,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
-                    { "repositoryUri", this.repositoryUri },
-                    { "pipelineName", this.pipelineName },
                     { "target", this.relativeFilePath },
                     { "compilerName", string.Empty },
                     { "compilerBackEndVersion", string.Empty },
                     { "compilerFrontEndVersion", string.Empty },
                     { "fileVersion", string.Empty },
+                    { "binaryType", string.Empty },
                     { "language", string.Empty },
+                    { "debuggingFileName", string.Empty },
+                    { "debuggingGuid", string.Empty },
                     { "dialect", string.Empty },
                     { "moduleName", string.Empty },
                     { "moduleLibrary", string.Empty },
@@ -172,7 +160,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                string log = $"{this.repositoryUri},{this.pipelineName},{this.relativeFilePath},,,,,,,,,{this.sha256 ?? string.Empty},{errorMessage}";
+                string log = $"{this.relativeFilePath},,,,,,,,,,,,{this.sha256 ?? string.Empty},{errorMessage}";
                 Console.WriteLine(log);
             }
         }

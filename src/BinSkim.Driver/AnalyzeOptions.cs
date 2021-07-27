@@ -43,17 +43,5 @@ namespace Microsoft.CodeAnalysis.IL
             HelpText = "Emit verbose output. The resulting comprehensive report is designed to provide appropriate evidence for compliance scenarios.")]
         [Obsolete("Use --level and --kind instead.")]
         public bool Verbose { get; set; }
-
-        [Option(
-            "repository-uri",
-            HelpText = "RepositoryUri is only required for the reporting rules ('BA4001.ReportPECompilerData' " +
-            "and 'BA4002.ReportDwarfCompilerData'). It will be used to enhance the reporting.")]
-        public string RepositoryUri { get; set; }
-
-        [Option(
-            "pipeline-name",
-            HelpText = "PipelineName is only required for the reporting rules ('BA4001.ReportPECompilerData' " +
-            "and 'BA4002.ReportDwarfCompilerData'). It will be used to enhance the reporting.")]
-        public string PipelineName { get; set; }
     }
 }

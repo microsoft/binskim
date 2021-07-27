@@ -57,8 +57,6 @@ namespace Microsoft.CodeAnalysis.IL
                 if (isRule4001Enabled || isRule4002Enabled)
                 {
                     binaryAnalyzerContext.CompilerDataLogger = new CompilerDataLogger(binaryAnalyzerContext,
-                                                                                      options.RepositoryUri,
-                                                                                      options.PipelineName,
                                                                                       options.TargetFileSpecifiers);
                 }
             }
@@ -91,6 +89,10 @@ namespace Microsoft.CodeAnalysis.IL
             try
             {
                 result = base.Run(analyzeOptions);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
             finally
             {

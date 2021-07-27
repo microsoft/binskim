@@ -65,8 +65,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 var record = new CompilerData
                 {
+                    BinaryType = "PE",
                     CompilerName = ".NET Compiler",
                     Language = nameof(Language.MSIL),
+                    DebuggingFileName = pdb.GlobalScope?.Name,
+                    DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
                     FileVersion = target.PE.FileVersion?.FileVersion,
                     CompilerBackEndVersion = target.PE.LinkerVersion.ToString(),
                     CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
@@ -86,9 +89,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     var record = new CompilerData
                     {
+                        BinaryType = "PE",
                         CompilerName = omDetails.CompilerName,
                         Language = omDetails.Language.ToString(),
+                        DebuggingFileName = pdb.GlobalScope?.Name,
                         FileVersion = target.PE.FileVersion?.FileVersion,
+                        DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
                     };

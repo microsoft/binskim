@@ -84,10 +84,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     var record = new CompilerData
                     {
+                        BinaryType = "ELF",
+                        Language = language,
                         CompilerName = compiler.Compiler.ToString(),
                         CompilerBackEndVersion = compiler.Version.ToString(),
                         CompilerFrontEndVersion = compiler.Version.ToString(),
-                        Language = language
                     };
 
                     if (processedRecords.Contains(record))
