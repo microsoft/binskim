@@ -1145,6 +1145,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2027_CompileUsingCurrentDialects_Pass()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new CompileUsingCurrentDialects(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
         public void BA2027_CompileUsingCurrentDialects_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())

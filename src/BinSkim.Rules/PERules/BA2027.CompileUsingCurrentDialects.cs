@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -79,6 +80,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Symbol om = omView.Value;
                 ObjectModuleDetails details = om.GetObjectModuleDetails();
 
+                if (details.Name != details.Library)
+                {
+                    continue;
+                }
+
                 string[] cVersion;
                 string[] cVersionExecluded = null;
                 if (details.WellKnownCompiler == WellKnownCompilers.MicrosoftC)
@@ -143,7 +149,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     // Library: {0}, Language: {1}, Version: {2}
                     line = string.Format(RuleResources.BA2027_Warning_Item,
-                        result.Details.Library,
+                        Path.GetFileName(result.Details.Library),
                         result.Details.Language,
                         result.Type == AnalyzeResultType.NotSet ? "NotSet" : result.Version);
                     sb.AppendLine(line);

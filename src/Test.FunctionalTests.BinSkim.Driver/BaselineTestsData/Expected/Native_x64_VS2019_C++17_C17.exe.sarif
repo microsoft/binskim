@@ -245,8 +245,32 @@
           ]
         },
         {
-          "ruleId": "BA3030",
+          "ruleId": "BA3012",
           "ruleIndex": 10,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Native_x64_VS2019_C++17_C17.exe",
+              "DwarfCompileUsingCurrentDialects",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x64_VS2019_C++17_C17.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 11,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -270,28 +294,6 @@
         },
         {
           "ruleId": "BA2001",
-          "ruleIndex": 11,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VS2019_C++17_C17.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x64_VS2019_C++17_C17.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2002",
           "ruleIndex": 12,
           "kind": "pass",
           "level": "none",
@@ -313,8 +315,30 @@
           ]
         },
         {
-          "ruleId": "BA2004",
+          "ruleId": "BA2002",
           "ruleIndex": 13,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VS2019_C++17_C17.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x64_VS2019_C++17_C17.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 14,
           "message": {
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
@@ -335,7 +359,7 @@
         },
         {
           "ruleId": "BA2004",
-          "ruleIndex": 13,
+          "ruleIndex": 14,
           "level": "error",
           "message": {
             "id": "Error_NativeWithInsecureDirectCompilands",
@@ -357,7 +381,7 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 14,
+          "ruleIndex": 15,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -379,7 +403,7 @@
         },
         {
           "ruleId": "BA2006",
-          "ruleIndex": 15,
+          "ruleIndex": 16,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -402,7 +426,7 @@
         },
         {
           "ruleId": "BA2007",
-          "ruleIndex": 16,
+          "ruleIndex": 17,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -425,28 +449,6 @@
         },
         {
           "ruleId": "BA2008",
-          "ruleIndex": 17,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VS2019_C++17_C17.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x64_VS2019_C++17_C17.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
           "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
@@ -468,7 +470,7 @@
           ]
         },
         {
-          "ruleId": "BA2010",
+          "ruleId": "BA2009",
           "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
@@ -490,7 +492,7 @@
           ]
         },
         {
-          "ruleId": "BA2011",
+          "ruleId": "BA2010",
           "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
@@ -512,7 +514,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2011",
           "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
@@ -534,7 +536,7 @@
           ]
         },
         {
-          "ruleId": "BA2013",
+          "ruleId": "BA2012",
           "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
@@ -556,7 +558,7 @@
           ]
         },
         {
-          "ruleId": "BA2014",
+          "ruleId": "BA2013",
           "ruleIndex": 23,
           "kind": "pass",
           "level": "none",
@@ -578,7 +580,7 @@
           ]
         },
         {
-          "ruleId": "BA2015",
+          "ruleId": "BA2014",
           "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
@@ -600,7 +602,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2015",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -622,7 +624,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2019",
           "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
@@ -644,8 +646,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 27,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VS2019_C++17_C17.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x64_VS2019_C++17_C17.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 28,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -669,7 +693,7 @@
         },
         {
           "ruleId": "BA2024",
-          "ruleIndex": 28,
+          "ruleIndex": 29,
           "message": {
             "id": "Warning",
             "arguments": [
@@ -690,7 +714,7 @@
         },
         {
           "ruleId": "BA2025",
-          "ruleIndex": 29,
+          "ruleIndex": 30,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -712,7 +736,7 @@
         },
         {
           "ruleId": "BA2026",
-          "ruleIndex": 30,
+          "ruleIndex": 31,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -734,12 +758,13 @@
         },
         {
           "ruleId": "BA2027",
-          "ruleIndex": 31,
+          "ruleIndex": 32,
+          "kind": "pass",
+          "level": "none",
           "message": {
-            "id": "Warning",
+            "id": "Pass",
             "arguments": [
-              "Native_x64_VS2019_C++17_C17.exe",
-              "Library: C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30037\\lib\\spectre\\x64\\MSVCRTD.lib, Language: C, Version: NotSet\r\n"
+              "Native_x64_VS2019_C++17_C17.exe"
             ]
           },
           "locations": [
@@ -993,6 +1018,28 @@
                 }
               },
               "name": "EnableBindNow"
+            },
+            {
+              "id": "BA3012",
+              "fullDescription": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3012DwarfCompileUsingCurrentDialects",
+              "help": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior."
+                },
+                "Warning": {
+                  "text": "'{0}' was not compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, compiling with the compiler flags /std with version 17 or later, e.g. '/std:c++17' for C++ and '/std:c17' for C."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DwarfCompileUsingCurrentDialects"
             },
             {
               "id": "BA3030",
@@ -1579,11 +1626,11 @@
             {
               "id": "BA2027",
               "fullDescription": {
-                "text": "/std setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2027CompileUsingCurrentDialects",
               "help": {
-                "text": "/std setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
               },
               "messageStrings": {
                 "Pass": {
@@ -1591,9 +1638,6 @@
                 },
                 "Warning": {
                   "text": "'{0}' is a Windows PE that wasn't compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, pass version 17 or later on the cl.exe command-line, e.g. '/std:c++17' for C++ and '/std:c17' for C or set the corresponding 'Language Standard' property in the 'C/C++ -> General' Configuration property page.\r\nThe following modules were not compiled with current dialects:\r\n{1}"
-                },
-                "Warning_Item": {
-                  "text": "Library: {0}, Language: {1}, Version: {2}"
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."

@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA3012_Pass),
-            nameof(RuleResources.BA3012_Error),
+            nameof(RuleResources.BA3012_Warning),
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
@@ -89,8 +89,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // compiler flags /std with version 17 or later, e.g. '/std:c++17'
                     // for C++ and '/std:c17' for C.
                     context.Logger.Log(this,
-                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                            nameof(RuleResources.BA3012_Error),
+                        RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
+                            nameof(RuleResources.BA3012_Warning),
                             context.TargetUri.GetFileName()));
                     return;
                 }
@@ -116,8 +116,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         // compiler flags /std with version 17 or later, e.g. '/std:c++17'
                         // for C++ and '/std:c17' for C.
                         context.Logger.Log(this,
-                            RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                                nameof(RuleResources.BA3012_Error),
+                            RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
+                                nameof(RuleResources.BA3012_Warning),
                                 context.TargetUri.GetFileName()));
                         return;
                     }
