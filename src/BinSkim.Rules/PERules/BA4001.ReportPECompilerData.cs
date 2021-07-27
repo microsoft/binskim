@@ -66,9 +66,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 var record = new CompilerData
                 {
                     CompilerName = ".NET Compiler",
+                    Language = nameof(Language.MSIL),
+                    FileVersion = target.PE.FileVersion?.FileVersion,
                     CompilerBackEndVersion = target.PE.LinkerVersion.ToString(),
                     CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
-                    Language = nameof(Language.MSIL)
                 };
 
                 if (!records.ContainsKey(record))
@@ -86,9 +87,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     var record = new CompilerData
                     {
                         CompilerName = omDetails.CompilerName,
+                        Language = omDetails.Language.ToString(),
+                        FileVersion = target.PE.FileVersion?.FileVersion,
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
-                        Language = omDetails.Language.ToString()
                     };
 
                     if (!records.ContainsKey(record))

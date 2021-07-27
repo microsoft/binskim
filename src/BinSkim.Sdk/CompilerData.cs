@@ -5,14 +5,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public struct CompilerData
     {
+        public string Language { get; set; }
+        public string FileVersion { get; set; }
         public string CompilerName { get; set; }
         public string CompilerBackEndVersion { get; set; }
         public string CompilerFrontEndVersion { get; set; }
-        public string Language { get; set; }
 
         public override string ToString()
         {
-            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{Language}";
+            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{FileVersion},{Language}";
         }
     }
 }

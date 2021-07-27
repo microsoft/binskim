@@ -85,7 +85,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             if (!this.appInsightsRegistered)
             {
-                Console.WriteLine("RepositoryUri,PipelineName,Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Dialect,Module Name,Module Library,Hash,Error");
+                Console.WriteLine("RepositoryUri,PipelineName,Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,File Version,Language,Dialect,Module Name,Module Library,Hash,Error");
             }
         }
 
@@ -103,6 +103,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "compilerName", compilerData.CompilerName },
                     { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
                     { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
+                    { "fileVersion", compilerData.FileVersion },
                     { "language", compilerData.Language },
                     { "dialect", string.Empty },
                     { "moduleName", name ?? string.Empty },
@@ -131,6 +132,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "compilerName", compilerData.CompilerName },
                     { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
                     { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
+                    { "fileVersion", string.Empty },
                     { "language", compilerData.Language },
                     { "dialect", string.Empty },
                     { "moduleName", file ?? string.Empty },
@@ -159,6 +161,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "compilerName", string.Empty },
                     { "compilerBackEndVersion", string.Empty },
                     { "compilerFrontEndVersion", string.Empty },
+                    { "fileVersion", string.Empty },
                     { "language", string.Empty },
                     { "dialect", string.Empty },
                     { "moduleName", string.Empty },
@@ -169,7 +172,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                string log = $"{this.repositoryUri},{this.pipelineName},{this.relativeFilePath},,,,,,,,{this.sha256 ?? string.Empty},{errorMessage}";
+                string log = $"{this.repositoryUri},{this.pipelineName},{this.relativeFilePath},,,,,,,,,{this.sha256 ?? string.Empty},{errorMessage}";
                 Console.WriteLine(log);
             }
         }
