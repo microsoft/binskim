@@ -85,7 +85,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     var record = new CompilerData
                     {
-                        CompilerName = omDetails.CompilerName?.Replace(",", "_").Trim(),
+                        CompilerName = omDetails.CompilerName,
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
                         Language = omDetails.Language.ToString()

@@ -91,8 +91,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public void Write(CompilerData compilerData, ObjectModuleDetails omDetails)
         {
-            string name = omDetails?.Name?.Replace(",", "_");
-            string library = omDetails?.Library?.Replace(",", ";");
+            string name = omDetails?.Name;
+            string library = omDetails?.Library;
             if (this.appInsightsRegistered)
             {
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             else
             {
                 string log = $"{this.repositoryUri},{this.pipelineName},{this.relativeFilePath}," +
-                    $"{compilerData},,{name},{(name == library ? string.Empty : library)},{this.sha256},";
+                    $@"{compilerData},,""{name}"",""{(name == library ? string.Empty : library)}"",{this.sha256},";
                 Console.WriteLine(log);
             }
         }
