@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 this.PrintHeader = false;
             }
 
-            var processedRecords = new HashSet<string>();
+            var processedRecords = new HashSet<CompilerData>();
 
             foreach (ICompiler compiler in compilers)
             {
@@ -82,24 +82,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 foreach (string file in files)
                 {
-                    string currentRecord = compiler.Compiler + "," + compiler.Version + "," + language;
+                    var record = new CompilerData
+                    {
+                        BinaryType = "ELF",
+                        Language = language,
+                        CompilerName = compiler.Compiler.ToString(),
+                        CompilerBackEndVersion = compiler.Version.ToString(),
+                        CompilerFrontEndVersion = compiler.Version.ToString(),
+                    };
 
-                    if (processedRecords.Contains(currentRecord))
+                    if (processedRecords.Contains(record))
                     {
                         continue;
                     }
 
-                    processedRecords.Add(currentRecord);
+                    processedRecords.Add(record);
 
-                    Console.Write($"{context.TargetUri.LocalPath},");
-                    Console.Write($"{compiler.Compiler},");
-                    Console.Write($"{compiler.Version},");
-                    Console.Write($"{compiler.Version},");
-                    Console.Write($"{language},");
-                    Console.Write($"{file},");
-                    Console.Write($"{file},");
-                    Console.Write($"{context?.Hashes?.Sha256},");
-                    Console.WriteLine();
+                    context.CompilerDataLogger.Write(record, file);
                 }
             }
         }
