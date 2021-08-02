@@ -37,3 +37,5 @@ jobs:
     displayName: 'Build and Test'
     inputs:
       script: 'BuildAndTest.cmd'
+
+  - task: ComponentGovernanceComponentDetection@0
