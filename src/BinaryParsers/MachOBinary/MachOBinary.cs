@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             catch (UnauthorizedAccessException) { return false; }
         }
 
-        public bool IsFatMachO => this.MachOs != null && this.MachOs.Count > 1;
+        public bool IsFatMachO => this.MachOs?.Count > 1;
 
         public IReadOnlyList<SingleMachOBinary> MachOs { get; }
 
@@ -66,9 +66,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public int DwarfVersion { get; set; } = -1;
 
         /// <summary>
-        /// Unit type of Dwarf used..
+        /// Unit type of Dwarf used.
         /// </summary>
-        public DwarfUnitType DwarfUnitType { get; set; } = DwarfUnitType.Unknown;
+        public DwarfUnitType DwarfUnitType { get; set; }
 
         /// <summary>
         /// Gets address offset within module when it is loaded.
@@ -115,6 +115,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public ICompiler[] Compilers => throw new NotImplementedException();
 
-        #endregion
+        #endregion IDwarfBinary interface
     }
 }

@@ -48,24 +48,34 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (PrintHeader)
             {
-                Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Module Name,Module Library,Hash,Error");
+                context.CompilerDataLogger.PrintHeader();
                 PrintHeader = false;
             }
 
             if (pdb == null)
             {
-                Console.Write(context.TargetUri.LocalPath + ",");
-                Console.WriteLine($",,,,,,{context?.Hashes?.Sha256},{target.PdbParseException.Message}");
+                string errorMessage = target.PdbParseException.Message;
+                context.CompilerDataLogger.WriteException(errorMessage);
                 return;
             }
 
-            var records = new Dictionary<string, ObjectModuleDetails>();
+            var records = new Dictionary<CompilerData, ObjectModuleDetails>();
 
             if (target.PE.IsManaged)
             {
-                string record = $".NET Compiler,{target.PE.LinkerVersion},{target.PE.LinkerVersion},{Language.MSIL}";
+                var record = new CompilerData
+                {
+                    BinaryType = "PE",
+                    CompilerName = ".NET Compiler",
+                    Language = nameof(Language.MSIL),
+                    DebuggingFileName = pdb.GlobalScope?.Name,
+                    DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
+                    FileVersion = target.PE.FileVersion?.FileVersion,
+                    CompilerBackEndVersion = target.PE.LinkerVersion.ToString(),
+                    CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
+                };
 
-                if (!records.TryGetValue(record, out ObjectModuleDetails value))
+                if (!records.ContainsKey(record))
                 {
                     records[record] = null;
                 }
@@ -77,33 +87,28 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Symbol om = omView.Value;
                     ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                    string record =
-                        omDetails.CompilerName?.Replace(",", "_").Trim() + "," +
-                        omDetails.CompilerBackEndVersion + "," +
-                        omDetails.CompilerFrontEndVersion + "," +
-                        omDetails.Language;
+                    var record = new CompilerData
+                    {
+                        BinaryType = "PE",
+                        CompilerName = omDetails.CompilerName,
+                        Language = omDetails.Language.ToString(),
+                        DebuggingFileName = pdb.GlobalScope?.Name,
+                        FileVersion = target.PE.FileVersion?.FileVersion,
+                        DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
+                        CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
+                        CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
+                    };
 
-                    if (!records.TryGetValue(record, out ObjectModuleDetails value))
+                    if (!records.ContainsKey(record))
                     {
                         records[record] = omDetails;
                     }
                 }
             }
 
-            foreach (KeyValuePair<string, ObjectModuleDetails> kv in records)
+            foreach (KeyValuePair<CompilerData, ObjectModuleDetails> kv in records)
             {
-                string compilerData = kv.Key;
-                ObjectModuleDetails omDetails = kv.Value;
-
-                string name = omDetails.Name?.Replace(",", "_");
-                string library = omDetails.Library?.Replace(",", ";");
-
-                Console.Write($"{context.TargetUri.LocalPath},");
-                Console.Write($"{compilerData},");
-                Console.Write($"{name},");
-                Console.Write($"{(name == library ? string.Empty : library)},");
-                Console.Write($"{context?.Hashes?.Sha256},");
-                Console.WriteLine();
+                context.CompilerDataLogger.Write(kv.Key, kv.Value);
             }
         }
     }
