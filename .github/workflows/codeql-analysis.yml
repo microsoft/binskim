@@ -34,7 +34,7 @@ jobs:
           $pathToSolution = "src/BinSkim.sln"
           $buildConfiguration = "Release"
           $useSharedCompilation = "false"
-          $testProjects = "Test.FunctionalTests.BinSkim.Rules/Test.FunctionalTests.BinSkim.Rules.csproj", "Test.FunctionalTests.BinSkim.Driver/Test.FunctionalTests.BinSkim.Driver.csproj", "Test.UnitTests.BinaryParsers/Test.UnitTests.BinaryParsers.csproj", "Test.UnitTests.BinSkim.Rules/Test.UnitTests.BinSkim.Rules.csproj", "Test.UnitTests.BinSkim.Driver/Test.UnitTests.BinSkim.Driver.csproj"
+          $testProjects = "src/Test.FunctionalTests.BinSkim.Rules/Test.FunctionalTests.BinSkim.Rules.csproj", "src/Test.FunctionalTests.BinSkim.Driver/Test.FunctionalTests.BinSkim.Driver.csproj", "src/Test.UnitTests.BinaryParsers/Test.UnitTests.BinaryParsers.csproj", "src/Test.UnitTests.BinSkim.Rules/Test.UnitTests.BinSkim.Rules.csproj", "src/Test.UnitTests.BinSkim.Driver/Test.UnitTests.BinSkim.Driver.csproj"
 
           dotnet nuget locals all --clear
 
