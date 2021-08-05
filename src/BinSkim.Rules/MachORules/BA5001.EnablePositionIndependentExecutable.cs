@@ -23,8 +23,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         /// <summary>
         /// A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section,
-        ///  if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult.
-        ///  This can be enabled by passing '-f pie' to clang/gcc.
+        /// if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult.
+        /// This can be enabled by passing '-f pie' to clang/gcc.
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA5001_EnablePositionIndependentExecutable_Description };
 
@@ -94,7 +94,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (binary.MachO.FileType == ELFSharp.MachO.FileType.Executable)
             {
-                // for executables, checking file's header flag has PIE flag
+                // for executables, check if file's header flag has PIE flag
                 // https://developer.apple.com/library/archive/qa/qa1788/_index.html
                 return binary.MachO.Flags.HasFlag(ELFSharp.MachO.HeaderFlags.PIE);
             }
@@ -103,7 +103,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 binary.MachO.FileType == ELFSharp.MachO.FileType.Object ||
                 binary.MachO.FileType == ELFSharp.MachO.FileType.Debug)
             {
-                // for libaries, check if compiler includes option "mdynamic-no-pic"
+                // for libraries, check if compiler includes option "mdynamic-no-pic"
                 return !binary.GetDwarfCompilerCommand().Contains("mdynamic-no-pic", System.StringComparison.OrdinalIgnoreCase);
             }
 
