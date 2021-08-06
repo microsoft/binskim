@@ -557,14 +557,16 @@
           ]
         },
         {
-          "ruleId": "BA2001",
+          "ruleId": "BA5001",
           "ruleIndex": 23,
-          "kind": "pass",
+          "kind": "notApplicable",
           "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "BinSkim.win-x64.ni.dll"
+              "BinSkim.win-x64.ni.dll",
+              "EnablePositionIndependentExecutableMachO",
+              "image is not a MachO binary"
             ]
           },
           "locations": [
@@ -579,14 +581,16 @@
           ]
         },
         {
-          "ruleId": "BA2005",
+          "ruleId": "BA5002",
           "ruleIndex": 24,
-          "kind": "pass",
+          "kind": "notApplicable",
           "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "BinSkim.win-x64.ni.dll"
+              "BinSkim.win-x64.ni.dll",
+              "DoNotAllowExecutableStack",
+              "image is not a MachO binary"
             ]
           },
           "locations": [
@@ -601,7 +605,7 @@
           ]
         },
         {
-          "ruleId": "BA2009",
+          "ruleId": "BA2001",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -623,7 +627,7 @@
           ]
         },
         {
-          "ruleId": "BA2010",
+          "ruleId": "BA2005",
           "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
@@ -645,12 +649,12 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2009",
           "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
           "message": {
-            "id": "Pass_NoLoadConfig",
+            "id": "Pass",
             "arguments": [
               "BinSkim.win-x64.ni.dll"
             ]
@@ -667,7 +671,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2010",
           "ruleIndex": 28,
           "kind": "pass",
           "level": "none",
@@ -689,8 +693,52 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2012",
           "ruleIndex": 29,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass_NoLoadConfig",
+            "arguments": [
+              "BinSkim.win-x64.ni.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/BinSkim.win-x64.ni.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "ruleIndex": 30,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "BinSkim.win-x64.ni.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/BinSkim.win-x64.ni.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 31,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -712,7 +760,7 @@
         },
         {
           "ruleId": "BA2022",
-          "ruleIndex": 30,
+          "ruleIndex": 32,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -738,6 +786,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1334,6 +1384,50 @@
               "name": "UseCheckedFunctionsWithGcc"
             },
             {
+              "id": "BA5001",
+              "fullDescription": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5001EnablePositionIndependentExecutableMachO",
+              "help": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "PIE enabled on executable '{0}'."
+                },
+                "Error": {
+                  "text": "PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnablePositionIndependentExecutableMachO"
+            },
+            {
+              "id": "BA5002",
+              "fullDescription": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5002DoNotAllowExecutableStack",
+              "help": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "Executable stack is not allowed on executable '{0}'."
+                },
+                "Error": {
+                  "text": "Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag \"--allow_stack_execute\" to mark the stack as non-executable."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DoNotAllowExecutableStack"
+            },
+            {
               "id": "BA2001",
               "fullDescription": {
                 "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
@@ -1557,10 +1651,7 @@
               },
               "name": "SignSecurely"
             }
-          ],
-          "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [

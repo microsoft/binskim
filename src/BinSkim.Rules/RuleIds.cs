@@ -63,5 +63,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // Reporting checks
         public const string ReportPECompilerData = "BA4001";
         public const string ReportELFCompilerData = "BA4002";
+
+        // MachO Checks
+        public const string EnablePositionIndependentExecutableMachO = "BA5001";
+        public const string DoNotAllowExecutableStack = "BA5002";
     }
 }

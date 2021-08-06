@@ -1299,5 +1299,41 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             this.VerifyApplicability(new UseCheckedFunctionsWithGcc(), new HashSet<string>());
         }
+
+        [Fact]
+        public void BA5001_EnablePositionIndependentExecutableMachO_Pass()
+        {
+            this.VerifyPass(new EnablePositionIndependentExecutableMachO(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA5001_EnablePositionIndependentExecutableMachO_Fail()
+        {
+            this.VerifyFail(new EnablePositionIndependentExecutableMachO(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA5001_EnablePositionIndependentExecutableMachO_NotApplicable()
+        {
+            this.VerifyApplicability(new EnablePositionIndependentExecutableMachO(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void BA5002_DoNotAllowExecutableStack_Pass()
+        {
+            this.VerifyPass(new DoNotAllowExecutableStack(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA5002_DoNotAllowExecutableStack_Fail()
+        {
+            this.VerifyFail(new DoNotAllowExecutableStack(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA5002_DoNotAllowExecutableStack_NotApplicable()
+        {
+            this.VerifyApplicability(new DoNotAllowExecutableStack(), new HashSet<string>());
+        }
     }
 }

@@ -304,6 +304,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is not a MachO binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotMachO {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotMachO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is not a PE binary.
         /// </summary>
         internal static string MetadataCondition_ImageIsNotPE {

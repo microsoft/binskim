@@ -550,4 +550,22 @@ Modules triggering this check were:
   <data name="BA2026_NotApplicable" xml:space="preserve">
     <value>'{0}' is a Windows PE that wasn't compiled with a compiler that provides the Microsoft /sdl command-line setting to enable additional compile-time and runtime security checks.</value>
   </data>
+  <data name="BA5001_EnablePositionIndependentExecutable_Description" xml:space="preserve">
+    <value>A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.</value>
+  </data>
+  <data name="BA5001_Error" xml:space="preserve">
+    <value>PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc.</value>
+  </data>
+  <data name="BA5001_Pass" xml:space="preserve">
+    <value>PIE enabled on executable '{0}'.</value>
+  </data>
+  <data name="BA5002_DoNotAllowExecutableStack_Description" xml:space="preserve">
+    <value>This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag "--allow_stack_execute".</value>
+  </data>
+  <data name="BA5002_Error" xml:space="preserve">
+    <value>Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag "--allow_stack_execute" to mark the stack as non-executable.</value>
+  </data>
+  <data name="BA5002_Pass" xml:space="preserve">
+    <value>Executable stack is not allowed on executable '{0}'.</value>
+  </data>
 </root>

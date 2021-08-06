@@ -293,35 +293,16 @@
           ]
         },
         {
-          "ruleId": "BA2002",
+          "ruleId": "BA5001",
           "ruleIndex": 12,
-          "kind": "pass",
+          "kind": "notApplicable",
           "level": "none",
           "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2012_SDL_Enabled.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2012_SDL_Enabled.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2004",
-          "ruleIndex": 13,
-          "message": {
-            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
+            "id": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2012_SDL_Enabled.exe",
-              "Microsoft (R) Optimizing Compiler : c : 17.0.50929.0 : MSVCRTD.lib (_newmode.obj,atonexit.obj,chandler4gs.obj,cinitexe.obj,crtexe.obj,dllargv.obj,fp8.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,loadcfg.obj,merr.obj,natstart.obj,pesect.obj,secchk.obj,wildcard.obj,xncommod.obj,xthdloc.obj,xtxtmode.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 17.0.50929.0 : MSVCRTD.lib (ehvecdtr.obj,error.obj,init.obj,initsect.obj,pdblkup.obj,stack.obj,ti_inst.obj,unhandld.obj,userapi.obj)\r\n"
+              "EnablePositionIndependentExecutableMachO",
+              "image is not a MachO binary"
             ]
           },
           "locations": [
@@ -336,14 +317,16 @@
           ]
         },
         {
-          "ruleId": "BA2004",
+          "ruleId": "BA5002",
           "ruleIndex": 13,
-          "level": "error",
+          "kind": "notApplicable",
+          "level": "none",
           "message": {
-            "id": "Error_NativeWithInsecureDirectCompilands",
+            "id": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Native_x86_VS2012_SDL_Enabled.exe",
-              "Microsoft (R) Optimizing Compiler : cxx : 17.0.61232.400 : [directly linked] (Native_x86_VS2012.obj)\r\n"
+              "DoNotAllowExecutableStack",
+              "image is not a MachO binary"
             ]
           },
           "locations": [
@@ -358,7 +341,7 @@
           ]
         },
         {
-          "ruleId": "BA2005",
+          "ruleId": "BA2002",
           "ruleIndex": 14,
           "kind": "pass",
           "level": "none",
@@ -380,8 +363,73 @@
           ]
         },
         {
-          "ruleId": "BA2006",
+          "ruleId": "BA2004",
           "ruleIndex": 15,
+          "message": {
+            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
+            "arguments": [
+              "Native_x86_VS2012_SDL_Enabled.exe",
+              "Microsoft (R) Optimizing Compiler : c : 17.0.50929.0 : MSVCRTD.lib (_newmode.obj,atonexit.obj,chandler4gs.obj,cinitexe.obj,crtexe.obj,dllargv.obj,fp8.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,loadcfg.obj,merr.obj,natstart.obj,pesect.obj,secchk.obj,wildcard.obj,xncommod.obj,xthdloc.obj,xtxtmode.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 17.0.50929.0 : MSVCRTD.lib (ehvecdtr.obj,error.obj,init.obj,initsect.obj,pdblkup.obj,stack.obj,ti_inst.obj,unhandld.obj,userapi.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2012_SDL_Enabled.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 15,
+          "level": "error",
+          "message": {
+            "id": "Error_NativeWithInsecureDirectCompilands",
+            "arguments": [
+              "Native_x86_VS2012_SDL_Enabled.exe",
+              "Microsoft (R) Optimizing Compiler : cxx : 17.0.61232.400 : [directly linked] (Native_x86_VS2012.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2012_SDL_Enabled.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "ruleIndex": 16,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2012_SDL_Enabled.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2012_SDL_Enabled.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2006",
+          "ruleIndex": 17,
           "level": "error",
           "message": {
             "id": "Error",
@@ -404,7 +452,7 @@
         },
         {
           "ruleId": "BA2007",
-          "ruleIndex": 16,
+          "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -427,50 +475,6 @@
         },
         {
           "ruleId": "BA2009",
-          "ruleIndex": 17,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2012_SDL_Enabled.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2012_SDL_Enabled.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
-          "ruleIndex": 18,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2012_SDL_Enabled.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2012_SDL_Enabled.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2011",
           "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
@@ -492,7 +496,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2010",
           "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
@@ -514,7 +518,7 @@
           ]
         },
         {
-          "ruleId": "BA2013",
+          "ruleId": "BA2011",
           "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
@@ -536,7 +540,7 @@
           ]
         },
         {
-          "ruleId": "BA2014",
+          "ruleId": "BA2012",
           "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
@@ -558,7 +562,7 @@
           ]
         },
         {
-          "ruleId": "BA2016",
+          "ruleId": "BA2013",
           "ruleIndex": 23,
           "kind": "pass",
           "level": "none",
@@ -580,14 +584,14 @@
           ]
         },
         {
-          "ruleId": "BA2018",
+          "ruleId": "BA2014",
           "ruleIndex": 24,
-          "level": "error",
+          "kind": "pass",
+          "level": "none",
           "message": {
-            "id": "Error",
+            "id": "Pass",
             "arguments": [
-              "Native_x86_VS2012_SDL_Enabled.exe",
-              "has an empty SE handler table in the load configuration table"
+              "Native_x86_VS2012_SDL_Enabled.exe"
             ]
           },
           "locations": [
@@ -602,7 +606,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2016",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -624,8 +628,52 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2018",
           "ruleIndex": 26,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "Native_x86_VS2012_SDL_Enabled.exe",
+              "has an empty SE handler table in the load configuration table"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2012_SDL_Enabled.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "ruleIndex": 27,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2012_SDL_Enabled.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2012_SDL_Enabled.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 28,
           "level": "error",
           "message": {
             "id": "Error",
@@ -647,7 +695,7 @@
         },
         {
           "ruleId": "BA2022",
-          "ruleIndex": 27,
+          "ruleIndex": 29,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -671,7 +719,7 @@
         },
         {
           "ruleId": "BA2024",
-          "ruleIndex": 28,
+          "ruleIndex": 30,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -693,7 +741,7 @@
         },
         {
           "ruleId": "BA2025",
-          "ruleIndex": 29,
+          "ruleIndex": 31,
           "message": {
             "id": "Warning",
             "arguments": [
@@ -713,7 +761,7 @@
         },
         {
           "ruleId": "BA2026",
-          "ruleIndex": 30,
+          "ruleIndex": 32,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -737,6 +785,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1032,6 +1082,50 @@
                 }
               },
               "name": "UseCheckedFunctionsWithGcc"
+            },
+            {
+              "id": "BA5001",
+              "fullDescription": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5001EnablePositionIndependentExecutableMachO",
+              "help": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "PIE enabled on executable '{0}'."
+                },
+                "Error": {
+                  "text": "PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnablePositionIndependentExecutableMachO"
+            },
+            {
+              "id": "BA5002",
+              "fullDescription": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5002DoNotAllowExecutableStack",
+              "help": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "Executable stack is not allowed on executable '{0}'."
+                },
+                "Error": {
+                  "text": "Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag \"--allow_stack_execute\" to mark the stack as non-executable."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DoNotAllowExecutableStack"
             },
             {
               "id": "BA2002",
@@ -1556,10 +1650,7 @@
               },
               "name": "EnableAdditionalSdlSecurityChecks"
             }
-          ],
-          "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
