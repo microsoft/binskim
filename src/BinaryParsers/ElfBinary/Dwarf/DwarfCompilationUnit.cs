@@ -17,6 +17,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         private readonly Dictionary<int, DwarfSymbol> symbolsByOffset = new Dictionary<int, DwarfSymbol>();
 
         /// <summary>
+        /// The offset of next Compilation Unit
+        /// </summary>
+        public int NextOffset { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DwarfCompilationUnit"/> class.
         /// </summary>
         /// <param name="debugData">The debug data stream.</param>
@@ -57,6 +62,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             int beginPosition = debugData.Position;
             ulong length = debugData.ReadLength(out bool is64bit);
             int endPosition = debugData.Position + (int)length;
+            NextOffset = endPosition;
             ushort version = debugData.ReadUshort();
 
             byte addressSize;
@@ -64,7 +70,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             dwarfBinary.DwarfVersion = version;
 
-            if (version >= 5)
+            if (version == 5)
             {
                 dwarfBinary.DwarfUnitType = (DwarfUnitType)(debugData.ReadByte());
                 addressSize = debugData.ReadByte();
@@ -74,10 +80,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     debugData.ReadUlong();
                 }
             }
-            else
+            else if (version > 0 && version < 5)
             {
                 debugDataDescriptionOffset = debugData.ReadOffset(is64bit);
                 addressSize = debugData.ReadByte();
+            }
+            else
+            {
+                return;
             }
 
             DataDescriptionReader dataDescriptionReader = new DataDescriptionReader(debugDataDescription, debugDataDescriptionOffset);

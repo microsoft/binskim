@@ -56,7 +56,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 PublicSymbols = publicSymbols;
                 SectionRegions = ELF.Sections.Where(s => s.LoadAddress > 0).OrderBy(s => s.LoadAddress).ToArray();
 
-                CompilationUnits = DwarfSymbolProvider.ParseCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
+                CompilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
+                CommandLineInfos = DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits);
                 LineNumberPrograms = DwarfSymbolProvider.ParseLineNumberPrograms(DebugLine, NormalizeAddress);
                 CommonInformationEntries = DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this));
                 LoadDebug(localSymbolDirectories);
@@ -84,7 +85,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public string GetDwarfCompilerCommand()
         {
-            if (CompilationUnits == null || CompilationUnits.Count == 0)
+            if (CompilationUnits.Count == 0)
             {
                 return string.Empty;
             }
@@ -98,7 +99,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public DwarfLanguage GetLanguage()
         {
-            if (CompilationUnits == null || CompilationUnits.Count == 0)
+            if (CompilationUnits.Count == 0)
             {
                 return DwarfLanguage.Unknown;
             }
@@ -244,7 +245,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// Gets or sets the CompilationUnits.
         /// </summary>
-        public List<DwarfCompilationUnit> CompilationUnits { get; set; }
+        public List<DwarfCompilationUnit> CompilationUnits { get; set; } = new List<DwarfCompilationUnit>();
+
+        /// <summary>
+        /// Gets or sets the CommandLineInfos.
+        /// </summary>
+        public List<DwarfCompileCommandLineInfo> CommandLineInfos { get; set; } = new List<DwarfCompileCommandLineInfo>();
 
         /// <summary>
         /// Gets or sets the LineNumberPrograms.
@@ -363,7 +369,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             string debugFileName = null;
 
-            if (CompilationUnits != null && CompilationUnits.Count > 0)
+            if (CompilationUnits.Count > 0)
             {
                 // Load from Dwo
                 DwarfSymbol skeletonOrCompileSymbol = CompilationUnits
@@ -405,15 +411,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 if (debugFileUri != null)
                 {
                     var dwoBinary = new ElfBinary(debugFileUri);
-                    DwarfCompilationUnit debugFileCompileUnit = dwoBinary.CompilationUnits?.FirstOrDefault(c => c.Symbols.Any(s => s.Tag == DwarfTag.CompileUnit));
 
-                    if (debugFileCompileUnit != null)
+                    if (dwoBinary != null
+                        && dwoBinary.CompilationUnits.Count > 0
+                        && dwoBinary.CommandLineInfos.Count > 0
+                        )
                     {
-                        if (this.CompilationUnits == null)
-                        {
-                            this.CompilationUnits = new List<DwarfCompilationUnit>();
-                        }
-                        this.CompilationUnits.Add(debugFileCompileUnit);
+                        this.CompilationUnits.AddRange(dwoBinary.CompilationUnits);
+                        this.CommandLineInfos.AddRange(dwoBinary.CommandLineInfos);
                         DebugFileLoaded = true;
                         return;
                     }

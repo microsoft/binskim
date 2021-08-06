@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
@@ -39,6 +41,64 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         }
 
         /// <summary>
+        /// Parses all compilation units.
+        /// </summary>
+        /// <param name="dwarfBinary">Instance of a IDwarfBinary</param>
+        /// <param name="debugData">The debug data.</param>
+        /// <param name="debugDataDescription">The debug data description.</param>
+        /// <param name="debugStrings">The debug strings.</param>
+        /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
+        internal static List<DwarfCompilationUnit> ParseAllCompilationUnits(IDwarfBinary dwarfBinary, byte[] debugData, byte[] debugDataDescription, byte[] debugStrings, NormalizeAddressDelegate addressNormalizer)
+        {
+            int offset = 0;
+            DwarfCompilationUnit compilationUnit;
+            List<DwarfCompilationUnit> returnValue = new List<DwarfCompilationUnit>();
+
+            while (true)
+            {
+                compilationUnit = ParseOneCompilationUnitByOffset(dwarfBinary, debugData, debugDataDescription, debugStrings, addressNormalizer, offset);
+
+                if (compilationUnit == null || !compilationUnit.Symbols.Any())
+                {
+                    return returnValue;
+                }
+
+                returnValue.Add(compilationUnit);
+
+                if (compilationUnit.NextOffset == offset)
+                {
+                    return returnValue;
+                }
+
+                offset = compilationUnit.NextOffset;
+            }
+        }
+
+        /// <summary>
+        /// Parses one compilation unit from the offset.
+        /// </summary>
+        /// <param name="dwarfBinary">Instance of a IDwarfBinary</param>
+        /// <param name="debugData">The debug data.</param>
+        /// <param name="debugDataDescription">The debug data description.</param>
+        /// <param name="debugStrings">The debug strings.</param>
+        /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
+        /// <param name="offset">The offset to start reading data.</param>
+        internal static DwarfCompilationUnit ParseOneCompilationUnitByOffset(IDwarfBinary dwarfBinary, byte[] debugData, byte[] debugDataDescription, byte[] debugStrings, NormalizeAddressDelegate addressNormalizer, int offset)
+        {
+            using var debugDataReader = new DwarfMemoryReader(debugData);
+            using var debugDataDescriptionReader = new DwarfMemoryReader(debugDataDescription);
+            using var debugStringsReader = new DwarfMemoryReader(debugStrings);
+
+            if (offset >= debugDataReader.Data.Length)
+            {
+                return null;
+            }
+
+            debugDataReader.Position = offset;
+            return new DwarfCompilationUnit(dwarfBinary, debugDataReader, debugDataDescriptionReader, debugStringsReader, addressNormalizer);
+        }
+
+        /// <summary>
         /// Parses the line number programs.
         /// </summary>
         /// <param name="debugLine">The debug line.</param>
@@ -56,6 +116,68 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             }
 
             return programs;
+        }
+
+        /// <summary>
+        /// Parses all command line info.
+        /// </summary>
+        /// <param name="compilationUnits">the compilation units.</param>
+        internal static List<DwarfCompileCommandLineInfo> ParseAllCommandLineInfos(List<DwarfCompilationUnit> compilationUnits)
+        {
+            List<DwarfCompileCommandLineInfo> returnValue = new List<DwarfCompileCommandLineInfo>();
+
+            foreach (DwarfCompilationUnit compilationUnit in compilationUnits)
+            {
+                foreach (DwarfSymbol symbol in compilationUnit.Symbols)
+                {
+                    if (!symbol.Attributes.ContainsKey(DwarfAttribute.Name))
+                    {
+                        continue;
+                    }
+
+                    DwarfCompileCommandLineInfo info = new DwarfCompileCommandLineInfo();
+                    info.Name = symbol.Attributes[DwarfAttribute.Name].Value.ToString();
+                    info.Language = DwarfLanguage.Unknown;
+
+                    if (symbol.Tag == DwarfTag.CompileUnit
+                        && symbol.Attributes.ContainsKey(DwarfAttribute.Producer)
+                        && symbol.Attributes.ContainsKey(DwarfAttribute.Language))
+                    {
+                        DwarfLanguage dwarfLanguage;
+                        if (Enum.TryParse(symbol.Attributes[DwarfAttribute.Language].Value.ToString(), out dwarfLanguage))
+                        {
+                            info.Language = dwarfLanguage;
+                        }
+                        info.CommandLine = symbol.Attributes[DwarfAttribute.Producer].Value.ToString();
+
+                        if (info.Language != DwarfLanguage.C89
+                            && info.Language != DwarfLanguage.C
+                            && info.Language != DwarfLanguage.CPlusPlus
+                            && info.Language != DwarfLanguage.C99
+                            && info.Language != DwarfLanguage.CPlusPlus03
+                            && info.Language != DwarfLanguage.CPlusPlus11
+                            && info.Language != DwarfLanguage.C11
+                            && info.Language != DwarfLanguage.CPlusPlus14)
+                        {
+                            continue;
+                        }
+                    }
+                    else if (symbol.Tag == DwarfTag.Subprogram
+                        && symbol.Attributes.ContainsKey(DwarfAttribute.LinkageName))
+                    {
+                        // No Language property for Subprogram
+                        info.CommandLine = symbol.Attributes[DwarfAttribute.LinkageName].Value.ToString();
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    returnValue.Add(info);
+                }
+            }
+
+            return returnValue;
         }
 
         /// <summary>
