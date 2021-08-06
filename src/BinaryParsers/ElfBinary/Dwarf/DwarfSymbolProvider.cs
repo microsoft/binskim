@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
@@ -130,14 +131,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             {
                 foreach (DwarfSymbol symbol in compilationUnit.Symbols)
                 {
-                    if (!symbol.Attributes.ContainsKey(DwarfAttribute.Name))
-                    {
-                        continue;
-                    }
-
                     DwarfCompileCommandLineInfo info = new DwarfCompileCommandLineInfo();
-                    info.Name = symbol.Attributes[DwarfAttribute.Name].Value.ToString();
+                    info.Name = symbol.Attributes.ContainsKey(DwarfAttribute.Name) ? symbol.Attributes[DwarfAttribute.Name].Value.ToString() : string.Empty;
+                    try
+                    {
+                        info.FileName = Path.GetFileName(info.Name);
+                    }
+                    catch (ArgumentException)
+                    {
+                        info.FileName = string.Empty;
+                    }
                     info.Language = DwarfLanguage.Unknown;
+                    info.Type = symbol.Tag;
 
                     if (symbol.Tag == DwarfTag.CompileUnit
                         && symbol.Attributes.ContainsKey(DwarfAttribute.Producer)
