@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using ELFSharp.ELF;
 using ELFSharp.ELF.Sections;
@@ -93,6 +94,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 curr_start = curr_end + 1;
             }
             return strings.ToArray();
+        }
+
+        /// <summary>
+        /// Convert object list to csv.
+        /// </summary>
+        /// <param name="objectlist">object list.</param>
+        /// <param name="separator">separator, can be tab for tsv format.</param>
+        /// <param name="header">if to print the header.</param>
+        /// <returns>csv format fo the object list.</returns>
+        public static IEnumerable<string> ToCsv<T>(IEnumerable<T> objectlist, string separator = ",", bool header = true)
+        {
+            FieldInfo[] fields = typeof(T).GetFields();
+            PropertyInfo[] properties = typeof(T).GetProperties();
+            if (header)
+            {
+                yield return string.Join(separator, fields.Select(f => f.Name).Concat(properties.Select(p => p.Name)).ToArray());
+            }
+            foreach (T o in objectlist)
+            {
+                yield return string.Join(separator, fields.Select(f => (f.GetValue(o) ?? "").ToString())
+                    .Concat(properties.Select(p => (p.GetValue(o, null) ?? "").ToString())).ToArray());
+            }
         }
     }
 }

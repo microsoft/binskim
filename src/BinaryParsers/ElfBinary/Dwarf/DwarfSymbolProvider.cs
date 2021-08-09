@@ -132,10 +132,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 foreach (DwarfSymbol symbol in compilationUnit.Symbols)
                 {
                     DwarfCompileCommandLineInfo info = new DwarfCompileCommandLineInfo();
-                    info.Name = symbol.Attributes.ContainsKey(DwarfAttribute.Name) ? symbol.Attributes[DwarfAttribute.Name].Value.ToString() : string.Empty;
+                    info.FullName = symbol.Attributes.ContainsKey(DwarfAttribute.Name)
+                        ? symbol.Attributes[DwarfAttribute.Name].Value.ToString() : string.Empty;
+                    info.CompileDirectory = symbol.Attributes.ContainsKey(DwarfAttribute.CompDir)
+                        ? symbol.Attributes[DwarfAttribute.CompDir].Value.ToString() : string.Empty;
                     try
                     {
-                        info.FileName = Path.GetFileName(info.Name);
+                        info.FileName = Path.GetFileName(info.FullName);
                     }
                     catch (ArgumentException)
                     {

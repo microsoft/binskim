@@ -8,10 +8,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     /// </summary>
     public class DwarfCompileCommandLineInfo
     {
-        public string Name { get; set; }
         public DwarfTag Type { get; set; }
+        public string FullName { get; set; }
         public string FileName { get; set; }
         public string CommandLine { get; set; }
         public DwarfLanguage Language { get; set; }
+        public string CompileDirectory { get; set; }
     }
 }
