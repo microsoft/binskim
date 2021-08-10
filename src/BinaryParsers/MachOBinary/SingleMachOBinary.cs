@@ -26,6 +26,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             this.MachO = singleMachO;
             CompilationUnits = LoadCompilationUnits();
+            CommandLineInfos = DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits);
         }
 
         public MachO MachO { get; }
@@ -44,7 +45,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public IEnumerable<EntryPoint> EntryPoint => this.MachO.GetCommandsOfType<EntryPoint>();
 
-        public List<DwarfCompilationUnit> CompilationUnits { get; }
+        public List<DwarfCompilationUnit> CompilationUnits { get; } = new List<DwarfCompilationUnit>();
+
+        public List<DwarfCompileCommandLineInfo> CommandLineInfos { get; set; } = new List<DwarfCompileCommandLineInfo>();
 
         private List<DwarfLineNumberProgram> lineNumberPrograms;
 

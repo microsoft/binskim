@@ -108,8 +108,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 {
                     DwarfCompileCommandLineInfo info = new DwarfCompileCommandLineInfo();
                     info.FullName = symbol.Attributes.ContainsKey(DwarfAttribute.Name)
+                        && symbol.Attributes[DwarfAttribute.Name].Value != null
                         ? symbol.Attributes[DwarfAttribute.Name].Value.ToString() : string.Empty;
                     info.CompileDirectory = symbol.Attributes.ContainsKey(DwarfAttribute.CompDir)
+                        && symbol.Attributes[DwarfAttribute.CompDir].Value != null
                         ? symbol.Attributes[DwarfAttribute.CompDir].Value.ToString() : string.Empty;
                     try
                     {
@@ -127,11 +129,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         && symbol.Attributes.ContainsKey(DwarfAttribute.Language))
                     {
                         DwarfLanguage dwarfLanguage;
-                        if (Enum.TryParse(symbol.Attributes[DwarfAttribute.Language].Value.ToString(), out dwarfLanguage))
+                        if (Enum.TryParse(symbol.Attributes[DwarfAttribute.Language].Value?.ToString(), out dwarfLanguage))
                         {
                             info.Language = dwarfLanguage;
                         }
-                        info.CommandLine = symbol.Attributes[DwarfAttribute.Producer].Value.ToString();
+                        info.CommandLine = symbol.Attributes[DwarfAttribute.Producer].Value?.ToString();
 
                         if (info.Language != DwarfLanguage.C89
                             && info.Language != DwarfLanguage.C
@@ -149,14 +151,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         && symbol.Attributes.ContainsKey(DwarfAttribute.LinkageName))
                     {
                         // No Language property for Subprogram
-                        info.CommandLine = symbol.Attributes[DwarfAttribute.LinkageName].Value.ToString();
+                        info.CommandLine = symbol.Attributes[DwarfAttribute.LinkageName].Value?.ToString();
                     }
                     else
                     {
                         continue;
                     }
 
-                    returnValue.Add(info);
+                    if (info.CommandLine != null && !info.CommandLine.All(char.IsDigit))
+                    {
+                        returnValue.Add(info);
+                    }
                 }
             }
 

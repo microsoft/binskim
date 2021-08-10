@@ -83,20 +83,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             catch (UnauthorizedAccessException) { return false; }
         }
 
-        public string GetDwarfCompilerCommand()
-        {
-            if (CompilationUnits.Count == 0)
-            {
-                return string.Empty;
-            }
-            KeyValuePair<DwarfAttribute, DwarfAttributeValue> producer = CompilationUnits
-                .SelectMany(c => c.Symbols)
-                .Where(s => s.Tag == DwarfTag.CompileUnit)
-                .SelectMany(s => s.Attributes)
-                .FirstOrDefault(a => a.Key == DwarfAttribute.Producer);
-            return producer.Key == DwarfAttribute.None ? string.Empty : producer.Value.String;
-        }
-
         public DwarfLanguage GetLanguage()
         {
             if (CompilationUnits.Count == 0)
@@ -412,13 +398,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 {
                     var dwoBinary = new ElfBinary(debugFileUri);
 
-                    if (dwoBinary != null
-                        && dwoBinary.CompilationUnits.Count > 0
-                        && dwoBinary.CommandLineInfos.Count > 0
-                        )
+                    if (dwoBinary != null && dwoBinary.CompilationUnits.Count > 0)
                     {
                         this.CompilationUnits.AddRange(dwoBinary.CompilationUnits);
-                        this.CommandLineInfos.AddRange(dwoBinary.CommandLineInfos);
+
+                        if (dwoBinary.CommandLineInfos.Count > 0)
+                        {
+                            this.CommandLineInfos.AddRange(dwoBinary.CommandLineInfos);
+                        }
+
                         DebugFileLoaded = true;
                         return;
                     }

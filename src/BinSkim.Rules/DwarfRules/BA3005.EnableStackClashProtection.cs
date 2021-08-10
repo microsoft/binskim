@@ -71,9 +71,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             static bool analyze(IDwarfBinary binary)
             {
-                string dwarfCompilerCommand = binary.GetDwarfCompilerCommand();
-                return dwarfCompilerCommand.Contains("-fstack-clash-protection", StringComparison.OrdinalIgnoreCase)
-                       && !dwarfCompilerCommand.Contains("-fno-stack-clash-protection", StringComparison.OrdinalIgnoreCase);
+                return binary.CommandLineInfos.All(i => i.CommandLine.Contains("-fstack-clash-protection", StringComparison.OrdinalIgnoreCase)
+                && !i.CommandLine.Contains("-fno-stack-clash-protection", StringComparison.OrdinalIgnoreCase));
             }
 
             if (binary is ElfBinary elf)
@@ -144,18 +143,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
                 };
             }
-            else
+            else if (binary.CommandLineInfos.Count == 0)
             {
-                string dwarfCompilerCommand = binary.GetDwarfCompilerCommand();
-
-                if (string.IsNullOrWhiteSpace(dwarfCompilerCommand))
+                return new CanAnalyzeDwarfResult
                 {
-                    return new CanAnalyzeDwarfResult
-                    {
-                        Reason = MetadataConditions.ElfNotBuiltWithDwarfDebugging,
-                        Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
-                    };
-                }
+                    Reason = MetadataConditions.ElfNotBuiltWithDwarfDebugging,
+                    Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
+                };
             }
 
             return new CanAnalyzeDwarfResult
