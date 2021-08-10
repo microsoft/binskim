@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.MachO
             {
                 macho.DwarfVersion.Should().Be(5);
                 macho.GetLanguage().Should().Be(DwarfLanguage.C11);
-                macho.GetDwarfCompilerCommand().Should().Contain("fstack-clash-protection");
+                macho.CommandLineInfos.Should().OnlyContain(x => x.CommandLine.Contains("fstack-clash-protection"));
             }
         }
     }
