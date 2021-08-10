@@ -17,31 +17,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     public static class DwarfSymbolProvider
     {
         /// <summary>
-        /// Parses the compilation units.
-        /// </summary>
-        /// <param name="dwarfBinary">Instance of a IDwarfBinary</param>
-        /// <param name="debugData">The debug data.</param>
-        /// <param name="debugDataDescription">The debug data description.</param>
-        /// <param name="debugStrings">The debug strings.</param>
-        /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
-        internal static List<DwarfCompilationUnit> ParseCompilationUnits(IDwarfBinary dwarfBinary, byte[] debugData, byte[] debugDataDescription, byte[] debugStrings, NormalizeAddressDelegate addressNormalizer)
-        {
-            using var debugDataReader = new DwarfMemoryReader(debugData);
-            using var debugDataDescriptionReader = new DwarfMemoryReader(debugDataDescription);
-            using var debugStringsReader = new DwarfMemoryReader(debugStrings);
-            var compilationUnits = new List<DwarfCompilationUnit>();
-
-            if (!debugDataReader.IsEnd)
-            {
-                DwarfCompilationUnit compilationUnit = new DwarfCompilationUnit(dwarfBinary, debugDataReader, debugDataDescriptionReader, debugStringsReader, addressNormalizer);
-
-                compilationUnits.Add(compilationUnit);
-            }
-
-            return compilationUnits;
-        }
-
-        /// <summary>
         /// Parses all compilation units.
         /// </summary>
         /// <param name="dwarfBinary">Instance of a IDwarfBinary</param>

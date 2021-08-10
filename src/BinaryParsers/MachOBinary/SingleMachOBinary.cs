@@ -188,7 +188,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             byte[] debugData = this.LoadSection(SECTIONNAME_DEBUG_INFO);
             byte[] debugAbbrev = this.LoadSection(SECTIONNAME_DEBUG_ABBREV);
             byte[] debugStr = this.LoadSection(SECTIONNAME_DEBUG_STR);
-            return DwarfSymbolProvider.ParseCompilationUnits(this, debugData, debugAbbrev, debugStr, NormalizeAddress);
+            return DwarfSymbolProvider.ParseAllCompilationUnits(this, debugData, debugAbbrev, debugStr, NormalizeAddress);
         }
 
         private byte[] LoadSection(string sectionName)

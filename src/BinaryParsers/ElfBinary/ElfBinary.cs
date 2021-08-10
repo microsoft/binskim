@@ -62,15 +62,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 CommonInformationEntries = DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this));
                 LoadDebug(localSymbolDirectories);
                 this.Valid = true;
-
-                using (TextWriter tw = File.CreateText(@"C:\Task\binskim\user\NativeCertAgent.csv"))
-                {
-                    foreach (string line in ElfUtility.ToCsv(CommandLineInfos))
-                    {
-                        tw.WriteLine(line);
-                    }
-                }
-
             }
             // At some point, we may want to better enumerate expected vs. unexpected exceptions.
             // For now, though, we'll generically catch any of them--ELFSharp can throw a number of different exceptions
