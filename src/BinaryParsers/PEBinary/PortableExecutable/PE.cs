@@ -109,8 +109,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                PEHeader peHeader = this.PEHeaders.PEHeader;
-                if ((peHeader.DllCharacteristics & DllCharacteristics.AppContainer) == 0)
+                PEHeader peHeader = this.PEHeaders?.PEHeader;
+                if (peHeader == null || (peHeader.DllCharacteristics & DllCharacteristics.AppContainer) == 0)
                 {
                     return false;
                 }
@@ -163,6 +163,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
+                if (this.peReader == null)
+                {
+                    yield break;
+                }
+
                 foreach (DebugDirectoryEntry debugDirectoryEntry in this.peReader.ReadDebugDirectory())
                 {
                     yield return debugDirectoryEntry;
@@ -203,14 +208,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 if (this.asImports == null)
                 {
-                    DirectoryEntry importTableDirectory = this.PEHeaders.PEHeader.ImportTableDirectory;
-                    if (this.PEHeaders.PEHeader.ImportTableDirectory.Size == 0)
+                    DirectoryEntry? importTableDirectory = this.PEHeaders?.PEHeader?.ImportTableDirectory;
+                    if (importTableDirectory == null)
+                    {
+                        return null;
+                    }
+
+                    if (importTableDirectory.Value.Size == 0)
                     {
                         this.asImports = Array.Empty<string>();
                     }
                     else
                     {
-                        var sp = new SafePointer(this.pImage.array, importTableDirectory.RelativeVirtualAddress);
+                        var sp = new SafePointer(this.pImage.array, importTableDirectory.Value.RelativeVirtualAddress);
 
                         var al = new ArrayList();
 
@@ -454,7 +464,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     return this.isResourceOnly.Value;
                 }
 
-                PEHeader peHeader = this.PEHeaders.PEHeader;
+                PEHeader peHeader = this.PEHeaders?.PEHeader;
                 if (peHeader == null)
                 {
                     this.isResourceOnly = false;
@@ -667,7 +677,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         /// <summary>
         /// Returns true if the binary is built for XBox
         /// </summary>
-        public bool IsXBox => this.PEHeaders.PEHeader != null
+        public bool IsXBox => this.PEHeaders?.PEHeader != null
                     ? this.PEHeaders.PEHeader.Subsystem == System.Reflection.PortableExecutable.Subsystem.Xbox
                     : false;
 
@@ -682,7 +692,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 this.isBoot = false;
 
-                if (this.PEHeaders.PEHeader != null)
+                if (this.PEHeaders?.PEHeader != null)
                 {
                     //
                     // Currently SubsystemVersion is an optional field but I would hope we can use this in the future
@@ -703,14 +713,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         /// <summary>
         /// Machine type
         /// </summary>
-        public Machine Machine => this.PEHeaders.PEHeader != null
+        public Machine Machine => this.PEHeaders?.PEHeader != null
                     ? this.PEHeaders.CoffHeader.Machine
                     : Machine.Unknown;
 
         /// <summary>
         /// Subsystem type
         /// </summary>
-        public Subsystem Subsystem => this.PEHeaders.PEHeader != null
+        public Subsystem Subsystem => this.PEHeaders?.PEHeader != null
                     ? this.PEHeaders.PEHeader.Subsystem
                     : Subsystem.Unknown;
 
@@ -763,7 +773,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                PEHeader optionalHeader = this.PEHeaders.PEHeader;
+                PEHeader optionalHeader = this.PEHeaders?.PEHeader;
 
                 if (optionalHeader != null)
                 {

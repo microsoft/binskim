@@ -47,6 +47,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PE portableExecutable = target.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
+            reasonForNotAnalyzing = MetadataConditions.ImageIsNotPE;
+            if (portableExecutable.PEHeaders == null) { return result; }
+
             reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeBinary;
             if (portableExecutable.IsKernelMode) { return result; }
 

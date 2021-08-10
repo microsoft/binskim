@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsNot64BitBinary;
-            if (portableExecutable.PEHeaders.PEHeader.Magic != PEMagic.PE32Plus) { return result; }
+            if (portableExecutable.PEHeaders?.PEHeader?.Magic != PEMagic.PE32Plus) { return result; }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsILOnlyAssembly;
             if (portableExecutable.IsILOnly) { return result; }

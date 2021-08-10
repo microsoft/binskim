@@ -53,6 +53,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
+            AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
+            reasonForNotAnalyzing = MetadataConditions.ImageIsNotPE;
+            if (target.PE.PEHeaders == null) { return result; }
+
             return StackProtectionUtilities.CommonCanAnalyze(target, out reasonForNotAnalyzing);
         }
 
