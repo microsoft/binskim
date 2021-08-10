@@ -533,7 +533,7 @@
           ]
         },
         {
-          "ruleId": "BA3005",
+          "ruleId": "BA5001",
           "ruleIndex": 22,
           "kind": "notApplicable",
           "level": "none",
@@ -541,8 +541,32 @@
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
               "gcc.gsplitdwarf.5",
-              "EnableStackClashProtection",
-              "not compiled with Dwarf debugging"
+              "EnablePositionIndependentExecutableMachO",
+              "image is not a MachO binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.gsplitdwarf.5",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA5002",
+          "ruleIndex": 23,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "gcc.gsplitdwarf.5",
+              "DoNotAllowExecutableStack",
+              "image is not a MachO binary"
             ]
           },
           "locations": [
@@ -558,7 +582,7 @@
         },
         {
           "ruleId": "BA3001",
-          "ruleIndex": 23,
+          "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -580,28 +604,6 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 24,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.gsplitdwarf.5"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.gsplitdwarf.5",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3003",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -623,8 +625,30 @@
           ]
         },
         {
-          "ruleId": "BA3004",
+          "ruleId": "BA3003",
           "ruleIndex": 26,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.gsplitdwarf.5"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.gsplitdwarf.5",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3004",
+          "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -647,28 +671,6 @@
         },
         {
           "ruleId": "BA3006",
-          "ruleIndex": 27,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.gsplitdwarf.5"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.gsplitdwarf.5",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3010",
           "ruleIndex": 28,
           "kind": "pass",
           "level": "none",
@@ -690,7 +692,7 @@
           ]
         },
         {
-          "ruleId": "BA3011",
+          "ruleId": "BA3010",
           "ruleIndex": 29,
           "kind": "pass",
           "level": "none",
@@ -712,8 +714,30 @@
           ]
         },
         {
-          "ruleId": "BA3030",
+          "ruleId": "BA3011",
           "ruleIndex": 30,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.gsplitdwarf.5"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.gsplitdwarf.5",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 31,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -737,6 +761,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1347,26 +1373,48 @@
               "name": "EnableAdditionalSdlSecurityChecks"
             },
             {
-              "id": "BA3005",
+              "id": "BA5001",
               "fullDescription": {
-                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
               },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3005EnableStackClashProtection",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5001EnablePositionIndependentExecutableMachO",
               "help": {
-                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
               },
               "messageStrings": {
                 "Pass": {
-                  "text": "The Stack Clash Protection was present, so '{0}' is protected."
+                  "text": "PIE enabled on executable '{0}'."
                 },
                 "Error": {
-                  "text": "The Stack Clash Protection is missing from this binary, so the stack from '{0}' can clash/colide with another memory region. Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this."
+                  "text": "PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc."
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableStackClashProtection"
+              "name": "EnablePositionIndependentExecutableMachO"
+            },
+            {
+              "id": "BA5002",
+              "fullDescription": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5002DoNotAllowExecutableStack",
+              "help": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "Executable stack is not allowed on executable '{0}'."
+                },
+                "Error": {
+                  "text": "Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag \"--allow_stack_execute\" to mark the stack as non-executable."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DoNotAllowExecutableStack"
             },
             {
               "id": "BA3001",
@@ -1556,15 +1604,121 @@
               },
               "name": "UseCheckedFunctionsWithGcc"
             }
-          ],
-          "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
         {
-          "executionSuccessful": true
+          "toolExecutionNotifications": [
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.gsplitdwarf.5"
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "An exception was raised attempting to determine whether 'gcc.gsplitdwarf.5' is a valid analysis target for check 'EnableStackClashProtection' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however."
+              },
+              "level": "error",
+              "exception": {
+                "kind": "InvalidCastException",
+                "message": "Unable to cast object of type 'System.UInt64' to type 'System.String'.",
+                "stack": {
+                  "frames": [
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/ElfBinary/Dwarf/DwarfAttributeValue.cs"
+                          },
+                          "region": {
+                            "startLine": 146
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.Dwarf.DwarfAttributeValue.get_String()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/ElfBinary/ElfBinary.cs"
+                          },
+                          "region": {
+                            "startLine": 96
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ElfBinary.GetDwarfCompilerCommand()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/DwarfRules/BA3005.EnableStackClashProtection.cs"
+                          },
+                          "region": {
+                            "startLine": 149
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.EnableStackClashProtection.VerifyDwarfBinary(IDwarfBinary binary)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/DwarfRules/BA3005.EnableStackClashProtection.cs"
+                          },
+                          "region": {
+                            "startLine": 49
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.EnableStackClashProtection.CanAnalyzeDwarf(IDwarfBinary target, PropertiesDictionary policy, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.AnalyzeCommandBase`2.DetermineApplicabilityForTarget(IEnumerable`1 skimmers, TContext context, ISet`1 disabledSkimmers)"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              },
+              "descriptor": {
+                "id": "ERR998.ExceptionInCanAnalyze"
+              },
+              "associatedRule": {
+                "id": "BA3005"
+              }
+            }
+          ],
+          "executionSuccessful": false
         }
       ],
       "artifacts": [

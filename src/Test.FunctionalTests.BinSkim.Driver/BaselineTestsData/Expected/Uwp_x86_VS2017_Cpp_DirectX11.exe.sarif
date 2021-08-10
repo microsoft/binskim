@@ -341,35 +341,16 @@
           ]
         },
         {
-          "ruleId": "BA2002",
+          "ruleId": "BA5001",
           "ruleIndex": 14,
-          "kind": "pass",
+          "kind": "notApplicable",
           "level": "none",
           "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x86_VS2017_Cpp_DirectX11.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2004",
-          "ruleIndex": 15,
-          "message": {
-            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
+            "id": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Uwp_x86_VS2017_Cpp_DirectX11.exe",
-              "Microsoft (R) Macro Assembler : masm : 14.15.26706.0 : MSVCRT.lib (atlssup.obj,ftol3.obj,lldiv.obj,sehprolg4.obj,ulldiv.obj,ullrem.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.15.26706.0 : MSVCRT.lib (chandler4gs.obj,cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,ehprolg3.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,secchk.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.15.26706.0 : MSVCRT.lib (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,delete_array.obj,delete_array_size.obj,delete_scalar.obj,delete_scalar_size.obj,denormal_control.obj,ehvecdtr.obj,env_mode.obj,exe_winmain.obj,file_mode.obj,initializers.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,new_scalar.obj,std_type_info_static.obj,thread_locale.obj,thread_safe_statics.obj,throw_bad_alloc.obj,tlssup.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_app.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.15.26706.0 : vccorlib.lib (activation.obj,climain.obj,compiler.obj,init.obj,tmmta.obj,winmain.obj)\r\n"
+              "EnablePositionIndependentExecutableMachO",
+              "image is not a MachO binary"
             ]
           },
           "locations": [
@@ -384,14 +365,16 @@
           ]
         },
         {
-          "ruleId": "BA2004",
+          "ruleId": "BA5002",
           "ruleIndex": 15,
-          "level": "error",
+          "kind": "notApplicable",
+          "level": "none",
           "message": {
-            "id": "Error_NativeWithInsecureDirectCompilands",
+            "id": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Uwp_x86_VS2017_Cpp_DirectX11.exe",
-              "Microsoft (R) Optimizing Compiler : cxx : 19.16.27034.0 : [directly linked] (App.obj,DeviceResources.obj,pch.obj,Sample3DSceneRenderer.obj,SampleFpsTextRenderer.obj,Uwp_x86_VS2017_Cpp_DirectX11_exeMain.obj)\r\n"
+              "DoNotAllowExecutableStack",
+              "image is not a MachO binary"
             ]
           },
           "locations": [
@@ -406,7 +389,7 @@
           ]
         },
         {
-          "ruleId": "BA2005",
+          "ruleId": "BA2002",
           "ruleIndex": 16,
           "kind": "pass",
           "level": "none",
@@ -428,8 +411,73 @@
           ]
         },
         {
-          "ruleId": "BA2006",
+          "ruleId": "BA2004",
           "ruleIndex": 17,
+          "message": {
+            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
+            "arguments": [
+              "Uwp_x86_VS2017_Cpp_DirectX11.exe",
+              "Microsoft (R) Macro Assembler : masm : 14.15.26706.0 : MSVCRT.lib (atlssup.obj,ftol3.obj,lldiv.obj,sehprolg4.obj,ulldiv.obj,ullrem.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.15.26706.0 : MSVCRT.lib (chandler4gs.obj,cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,ehprolg3.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,secchk.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.15.26706.0 : MSVCRT.lib (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,delete_array.obj,delete_array_size.obj,delete_scalar.obj,delete_scalar_size.obj,denormal_control.obj,ehvecdtr.obj,env_mode.obj,exe_winmain.obj,file_mode.obj,initializers.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,new_scalar.obj,std_type_info_static.obj,thread_locale.obj,thread_safe_statics.obj,throw_bad_alloc.obj,tlssup.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_app.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.15.26706.0 : vccorlib.lib (activation.obj,climain.obj,compiler.obj,init.obj,tmmta.obj,winmain.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 17,
+          "level": "error",
+          "message": {
+            "id": "Error_NativeWithInsecureDirectCompilands",
+            "arguments": [
+              "Uwp_x86_VS2017_Cpp_DirectX11.exe",
+              "Microsoft (R) Optimizing Compiler : cxx : 19.16.27034.0 : [directly linked] (App.obj,DeviceResources.obj,pch.obj,Sample3DSceneRenderer.obj,SampleFpsTextRenderer.obj,Uwp_x86_VS2017_Cpp_DirectX11_exeMain.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "ruleIndex": 18,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x86_VS2017_Cpp_DirectX11.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2006",
+          "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -452,7 +500,7 @@
         },
         {
           "ruleId": "BA2007",
-          "ruleIndex": 18,
+          "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -475,7 +523,7 @@
         },
         {
           "ruleId": "BA2008",
-          "ruleIndex": 19,
+          "ruleIndex": 21,
           "level": "error",
           "message": {
             "id": "Error",
@@ -496,50 +544,6 @@
         },
         {
           "ruleId": "BA2009",
-          "ruleIndex": 20,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x86_VS2017_Cpp_DirectX11.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
-          "ruleIndex": 21,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x86_VS2017_Cpp_DirectX11.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2011",
           "ruleIndex": 22,
           "kind": "pass",
           "level": "none",
@@ -561,7 +565,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2010",
           "ruleIndex": 23,
           "kind": "pass",
           "level": "none",
@@ -583,7 +587,7 @@
           ]
         },
         {
-          "ruleId": "BA2013",
+          "ruleId": "BA2011",
           "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
@@ -605,7 +609,7 @@
           ]
         },
         {
-          "ruleId": "BA2014",
+          "ruleId": "BA2012",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -627,7 +631,7 @@
           ]
         },
         {
-          "ruleId": "BA2016",
+          "ruleId": "BA2013",
           "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
@@ -649,7 +653,7 @@
           ]
         },
         {
-          "ruleId": "BA2018",
+          "ruleId": "BA2014",
           "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
@@ -671,7 +675,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2016",
           "ruleIndex": 28,
           "kind": "pass",
           "level": "none",
@@ -693,7 +697,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2018",
           "ruleIndex": 29,
           "kind": "pass",
           "level": "none",
@@ -715,8 +719,52 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2019",
           "ruleIndex": 30,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x86_VS2017_Cpp_DirectX11.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 31,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x86_VS2017_Cpp_DirectX11.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x86_VS2017_Cpp_DirectX11.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 32,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -742,6 +790,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1084,6 +1134,50 @@
                 }
               },
               "name": "UseCheckedFunctionsWithGcc"
+            },
+            {
+              "id": "BA5001",
+              "fullDescription": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5001EnablePositionIndependentExecutableMachO",
+              "help": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "PIE enabled on executable '{0}'."
+                },
+                "Error": {
+                  "text": "PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnablePositionIndependentExecutableMachO"
+            },
+            {
+              "id": "BA5002",
+              "fullDescription": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5002DoNotAllowExecutableStack",
+              "help": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "Executable stack is not allowed on executable '{0}'."
+                },
+                "Error": {
+                  "text": "Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag \"--allow_stack_execute\" to mark the stack as non-executable."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DoNotAllowExecutableStack"
             },
             {
               "id": "BA2002",
@@ -1561,10 +1655,7 @@
               },
               "name": "SignSecurely"
             }
-          ],
-          "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [

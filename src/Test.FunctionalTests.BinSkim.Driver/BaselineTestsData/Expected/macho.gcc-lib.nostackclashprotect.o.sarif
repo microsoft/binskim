@@ -701,8 +701,32 @@
           ]
         },
         {
-          "ruleId": "BA3003",
+          "ruleId": "BA5002",
           "ruleIndex": 29,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "macho.gcc-lib.nostackclashprotect.o",
+              "DoNotAllowExecutableStack",
+              "MachO is not an executable, dynamic library or object."
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3003",
+          "ruleIndex": 30,
           "level": "error",
           "message": {
             "id": "Error",
@@ -723,10 +747,32 @@
         },
         {
           "ruleId": "BA3005",
-          "ruleIndex": 30,
+          "ruleIndex": 31,
           "level": "error",
           "message": {
             "id": "Error",
+            "arguments": [
+              "macho.gcc-lib.nostackclashprotect.o"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.gcc-lib.nostackclashprotect.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA5001",
+          "ruleIndex": 32,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
             "arguments": [
               "macho.gcc-lib.nostackclashprotect.o"
             ]
@@ -1524,6 +1570,28 @@
               "name": "UseCheckedFunctionsWithGcc"
             },
             {
+              "id": "BA5002",
+              "fullDescription": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5002DoNotAllowExecutableStack",
+              "help": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "Executable stack is not allowed on executable '{0}'."
+                },
+                "Error": {
+                  "text": "Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag \"--allow_stack_execute\" to mark the stack as non-executable."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DoNotAllowExecutableStack"
+            },
+            {
               "id": "BA3003",
               "fullDescription": {
                 "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
@@ -1566,6 +1634,28 @@
                 }
               },
               "name": "EnableStackClashProtection"
+            },
+            {
+              "id": "BA5001",
+              "fullDescription": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5001EnablePositionIndependentExecutableMachO",
+              "help": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "PIE enabled on executable '{0}'."
+                },
+                "Error": {
+                  "text": "PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnablePositionIndependentExecutableMachO"
             }
           ]
         }

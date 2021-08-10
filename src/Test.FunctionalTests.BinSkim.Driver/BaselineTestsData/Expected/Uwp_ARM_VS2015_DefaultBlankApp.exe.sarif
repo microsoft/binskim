@@ -317,14 +317,16 @@
           ]
         },
         {
-          "ruleId": "BA2005",
+          "ruleId": "BA5001",
           "ruleIndex": 13,
-          "kind": "pass",
+          "kind": "notApplicable",
           "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
+              "Uwp_ARM_VS2015_DefaultBlankApp.exe",
+              "EnablePositionIndependentExecutableMachO",
+              "image is not a MachO binary"
             ]
           },
           "locations": [
@@ -339,14 +341,16 @@
           ]
         },
         {
-          "ruleId": "BA2009",
+          "ruleId": "BA5002",
           "ruleIndex": 14,
-          "kind": "pass",
+          "kind": "notApplicable",
           "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "NotApplicable_InvalidMetadata",
             "arguments": [
-              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
+              "Uwp_ARM_VS2015_DefaultBlankApp.exe",
+              "DoNotAllowExecutableStack",
+              "image is not a MachO binary"
             ]
           },
           "locations": [
@@ -361,7 +365,7 @@
           ]
         },
         {
-          "ruleId": "BA2010",
+          "ruleId": "BA2005",
           "ruleIndex": 15,
           "kind": "pass",
           "level": "none",
@@ -383,12 +387,12 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2009",
           "ruleIndex": 16,
           "kind": "pass",
           "level": "none",
           "message": {
-            "id": "Pass_NoLoadConfig",
+            "id": "Pass",
             "arguments": [
               "Uwp_ARM_VS2015_DefaultBlankApp.exe"
             ]
@@ -405,7 +409,7 @@
           ]
         },
         {
-          "ruleId": "BA2016",
+          "ruleId": "BA2010",
           "ruleIndex": 17,
           "kind": "pass",
           "level": "none",
@@ -427,12 +431,12 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2012",
           "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "Pass_NoLoadConfig",
             "arguments": [
               "Uwp_ARM_VS2015_DefaultBlankApp.exe"
             ]
@@ -449,7 +453,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2016",
           "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
@@ -471,8 +475,52 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2019",
           "ruleIndex": 20,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 21,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 22,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -498,6 +546,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -823,6 +873,50 @@
               "name": "UseCheckedFunctionsWithGcc"
             },
             {
+              "id": "BA5001",
+              "fullDescription": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5001EnablePositionIndependentExecutableMachO",
+              "help": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "PIE enabled on executable '{0}'."
+                },
+                "Error": {
+                  "text": "PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnablePositionIndependentExecutableMachO"
+            },
+            {
+              "id": "BA5002",
+              "fullDescription": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5002DoNotAllowExecutableStack",
+              "help": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "Executable stack is not allowed on executable '{0}'."
+                },
+                "Error": {
+                  "text": "Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag \"--allow_stack_execute\" to mark the stack as non-executable."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DoNotAllowExecutableStack"
+            },
+            {
               "id": "BA2005",
               "fullDescription": {
                 "text": "Do not ship obsolete libraries for which there are known security vulnerabilities."
@@ -1046,10 +1140,7 @@
               },
               "name": "SignSecurely"
             }
-          ],
-          "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [

@@ -1284,6 +1284,60 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
+        /// </summary>
+        internal static string BA5001_EnablePositionIndependentExecutable_Description {
+            get {
+                return ResourceManager.GetString("BA5001_EnablePositionIndependentExecutable_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PIE disabled on executable &apos;{0}&apos;.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with &apos;-fpie&apos; when using clang/gcc..
+        /// </summary>
+        internal static string BA5001_Error {
+            get {
+                return ResourceManager.GetString("BA5001_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PIE enabled on executable &apos;{0}&apos;..
+        /// </summary>
+        internal static string BA5001_Pass {
+            get {
+                return ResourceManager.GetString("BA5001_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag &quot;--allow_stack_execute&quot;..
+        /// </summary>
+        internal static string BA5002_DoNotAllowExecutableStack_Description {
+            get {
+                return ResourceManager.GetString("BA5002_DoNotAllowExecutableStack_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stack on &apos;{0}&apos; is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag &quot;--allow_stack_execute&quot; to mark the stack as non-executable..
+        /// </summary>
+        internal static string BA5002_Error {
+            get {
+                return ResourceManager.GetString("BA5002_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Executable stack is not allowed on executable &apos;{0}&apos;..
+        /// </summary>
+        internal static string BA5002_Pass {
+            get {
+                return ResourceManager.GetString("BA5002_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; because its PDB could not be loaded ({2})..
         /// </summary>
         internal static string ERR997_ExceptionLoadingPdb {
