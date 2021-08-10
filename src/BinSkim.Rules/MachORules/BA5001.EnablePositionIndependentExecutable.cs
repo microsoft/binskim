@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private static bool IsValidDwarfBinary(IDwarfBinary binary)
         {
             return binary.Compilers.Any(c => c.Compiler == ElfCompilerType.GCC) &&
-                   !string.IsNullOrWhiteSpace(binary.GetDwarfCompilerCommand());
+                   binary.CommandLineInfos.Count > 0;
         }
     }
 }
