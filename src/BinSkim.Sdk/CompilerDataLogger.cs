@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security;
+using System.Threading.Tasks;
 
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -30,7 +31,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             try
             {
-                string appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey");
+                string appInsightsKey = RetrieveAppInsightsKey();
                 if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
                 {
                     Initialize(appInsightsKey);
@@ -63,9 +64,37 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
+        public static string RetrieveAppInsightsKey()
+        {
+            string appInsightsKey = string.Empty;
+
+            try
+            {
+                appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey");
+                if (string.IsNullOrEmpty(appInsightsKey))
+                {
+                    appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.User);
+                    if (string.IsNullOrEmpty(appInsightsKey))
+                    {
+                        appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.Machine);
+                    }
+                }
+            }
+            catch (SecurityException)
+            {
+                // User does not have access to retrieve information from environment variables.
+            }
+
+            return appInsightsKey;
+        }
+
         public static void Flush()
         {
             s_telemetryClient?.Flush();
+
+            // flush is not blocking when not using InMemoryChannel so wait a bit. There is an active issue regarding the need for `Sleep`/`Delay`
+            // which is tracked here: https://github.com/microsoft/ApplicationInsights-dotnet/issues/407
+            Task.Delay(5000).Wait();
         }
 
         public void PrintHeader()
