@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Gets or sets the CommandLineInfos.
         /// </summary>
-        public List<DwarfCompileCommandLineInfo> CommandLineInfos { get; set; }
+        public List<DwarfCompileCommandLineInfo> CommandLineInfos { get; }
 
         /// <summary>
         /// Gets language from dwarf CompilationUnits.

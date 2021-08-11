@@ -57,7 +57,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 SectionRegions = ELF.Sections.Where(s => s.LoadAddress > 0).OrderBy(s => s.LoadAddress).ToArray();
 
                 CompilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
-                CommandLineInfos = DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits);
+                commandLineInfos = new Lazy<List<DwarfCompileCommandLineInfo>>(()
+                    => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits));
                 LineNumberPrograms = DwarfSymbolProvider.ParseLineNumberPrograms(DebugLine, NormalizeAddress);
                 CommonInformationEntries = DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this));
                 LoadDebug(localSymbolDirectories);
@@ -236,7 +237,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// Gets or sets the CommandLineInfos.
         /// </summary>
-        public List<DwarfCompileCommandLineInfo> CommandLineInfos { get; set; } = new List<DwarfCompileCommandLineInfo>();
+        public List<DwarfCompileCommandLineInfo> CommandLineInfos => this.commandLineInfos.Value;
 
         /// <summary>
         /// Gets or sets the LineNumberPrograms.
@@ -445,6 +446,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 }
             }
         }
+
+        private readonly Lazy<List<DwarfCompileCommandLineInfo>> commandLineInfos;
 
         private static Uri GetFirstExistFile(string dwoName, string sameDirectory, string localSymbolDirectories = null)
         {

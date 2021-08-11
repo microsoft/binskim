@@ -107,12 +107,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 foreach (DwarfSymbol symbol in compilationUnit.Symbols)
                 {
                     DwarfCompileCommandLineInfo info = new DwarfCompileCommandLineInfo();
-                    info.FullName = symbol.Attributes.ContainsKey(DwarfAttribute.Name)
-                        && symbol.Attributes[DwarfAttribute.Name].Value != null
-                        ? symbol.Attributes[DwarfAttribute.Name].Value.ToString() : string.Empty;
-                    info.CompileDirectory = symbol.Attributes.ContainsKey(DwarfAttribute.CompDir)
-                        && symbol.Attributes[DwarfAttribute.CompDir].Value != null
-                        ? symbol.Attributes[DwarfAttribute.CompDir].Value.ToString() : string.Empty;
+
+                    symbol.Attributes.TryGetValue(DwarfAttribute.Name, out DwarfAttributeValue name);
+                    info.FullName = name == null ? string.Empty : name.Value?.ToString();
+
+                    symbol.Attributes.TryGetValue(DwarfAttribute.CompDir, out DwarfAttributeValue compDir);
+                    info.CompileDirectory = compDir == null ? string.Empty : compDir.Value?.ToString();
+
                     try
                     {
                         info.FileName = Path.GetFileName(info.FullName);
@@ -125,15 +126,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     info.Type = symbol.Tag;
 
                     if (symbol.Tag == DwarfTag.CompileUnit
-                        && symbol.Attributes.ContainsKey(DwarfAttribute.Producer)
-                        && symbol.Attributes.ContainsKey(DwarfAttribute.Language))
+                        && symbol.Attributes.TryGetValue(DwarfAttribute.Producer, out DwarfAttributeValue producer)
+                        && symbol.Attributes.TryGetValue(DwarfAttribute.Language, out DwarfAttributeValue language))
                     {
                         DwarfLanguage dwarfLanguage;
-                        if (Enum.TryParse(symbol.Attributes[DwarfAttribute.Language].Value?.ToString(), out dwarfLanguage))
+                        if (Enum.TryParse(language.Value?.ToString(), out dwarfLanguage))
                         {
                             info.Language = dwarfLanguage;
                         }
-                        info.CommandLine = symbol.Attributes[DwarfAttribute.Producer].Value?.ToString();
+                        info.CommandLine = producer.Value?.ToString();
 
                         if (info.Language != DwarfLanguage.C89
                             && info.Language != DwarfLanguage.C
@@ -148,10 +149,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         }
                     }
                     else if (symbol.Tag == DwarfTag.Subprogram
-                        && symbol.Attributes.ContainsKey(DwarfAttribute.LinkageName))
+                        && symbol.Attributes.TryGetValue(DwarfAttribute.LinkageName, out DwarfAttributeValue linkageName))
                     {
                         // No Language property for Subprogram
-                        info.CommandLine = symbol.Attributes[DwarfAttribute.LinkageName].Value?.ToString();
+                        info.CommandLine = linkageName.Value?.ToString();
                     }
                     else
                     {
