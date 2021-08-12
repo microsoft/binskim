@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
             using var binary = new ElfBinary(new Uri(fileName));
             binary.DwarfVersion.Should().Be(4);
-            binary.GetDwarfCompilerCommand().Should().Contain("O2");
+            binary.CommandLineInfos.Should().OnlyContain(x => x.CommandLine.Contains("O2"));
             binary.GetLanguage().Should().Be(DwarfLanguage.C99);
         }
 
@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf5-o2");
             using var binary = new ElfBinary(new Uri(fileName));
             binary.DwarfVersion.Should().Be(5);
-            binary.GetDwarfCompilerCommand().Should().Contain("O2");
+            binary.CommandLineInfos.Should().OnlyContain(x => x.CommandLine.Contains("O2"));
             binary.GetLanguage().Should().Be(DwarfLanguage.C11);
         }
 

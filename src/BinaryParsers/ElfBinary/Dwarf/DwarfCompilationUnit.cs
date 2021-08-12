@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
@@ -15,6 +16,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// The dictionary of symbols located by offset in the debug data stream.
         /// </summary>
         private readonly Dictionary<int, DwarfSymbol> symbolsByOffset = new Dictionary<int, DwarfSymbol>();
+
+        /// <summary>
+        /// The offset of next Compilation Unit
+        /// </summary>
+        public int NextOffset { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DwarfCompilationUnit"/> class.
@@ -57,6 +63,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             int beginPosition = debugData.Position;
             ulong length = debugData.ReadLength(out bool is64bit);
             int endPosition = debugData.Position + (int)length;
+            NextOffset = endPosition;
             ushort version = debugData.ReadUshort();
 
             byte addressSize;
@@ -64,7 +71,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             dwarfBinary.DwarfVersion = version;
 
-            if (version >= 5)
+            if (version == 5)
             {
                 dwarfBinary.DwarfUnitType = (DwarfUnitType)(debugData.ReadByte());
                 addressSize = debugData.ReadByte();
@@ -74,10 +81,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     debugData.ReadUlong();
                 }
             }
-            else
+            else if (version > 0 && version < 5)
             {
                 debugDataDescriptionOffset = debugData.ReadOffset(is64bit);
                 addressSize = debugData.ReadByte();
+            }
+            else
+            {
+                return;
             }
 
             DataDescriptionReader dataDescriptionReader = new DataDescriptionReader(debugDataDescription, debugDataDescriptionOffset);
@@ -103,6 +114,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                 DataDescription description = dataDescriptionReader.GetDebugDataDescription(code);
                 Dictionary<DwarfAttribute, DwarfAttributeValue> attributes = new Dictionary<DwarfAttribute, DwarfAttributeValue>();
+
+                if (description.Attributes.Any(a => a.Attribute == DwarfAttribute.LinkageName && a.Format == DwarfFormat.Strp))
+                {
+                    description.Attributes.RemoveAll(a => a.Attribute == DwarfAttribute.Name);
+                }
 
                 foreach (DataDescriptionAttribute descriptionAttribute in description.Attributes)
                 {
