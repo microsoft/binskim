@@ -1,7 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
@@ -14,28 +17,61 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     public static class DwarfSymbolProvider
     {
         /// <summary>
-        /// Parses the compilation units.
+        /// Parses all compilation units.
         /// </summary>
         /// <param name="dwarfBinary">Instance of a IDwarfBinary</param>
         /// <param name="debugData">The debug data.</param>
         /// <param name="debugDataDescription">The debug data description.</param>
         /// <param name="debugStrings">The debug strings.</param>
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
-        internal static List<DwarfCompilationUnit> ParseCompilationUnits(IDwarfBinary dwarfBinary, byte[] debugData, byte[] debugDataDescription, byte[] debugStrings, NormalizeAddressDelegate addressNormalizer)
+        internal static List<DwarfCompilationUnit> ParseAllCompilationUnits(IDwarfBinary dwarfBinary, byte[] debugData, byte[] debugDataDescription, byte[] debugStrings, NormalizeAddressDelegate addressNormalizer)
+        {
+            int offset = 0;
+            DwarfCompilationUnit compilationUnit;
+            List<DwarfCompilationUnit> returnValue = new List<DwarfCompilationUnit>();
+
+            while (true)
+            {
+                compilationUnit = ParseOneCompilationUnitByOffset(dwarfBinary, debugData, debugDataDescription, debugStrings, addressNormalizer, offset);
+
+                if (compilationUnit == null || !compilationUnit.Symbols.Any())
+                {
+                    return returnValue;
+                }
+
+                returnValue.Add(compilationUnit);
+
+                if (compilationUnit.NextOffset == offset)
+                {
+                    return returnValue;
+                }
+
+                offset = compilationUnit.NextOffset;
+            }
+        }
+
+        /// <summary>
+        /// Parses one compilation unit from the offset.
+        /// </summary>
+        /// <param name="dwarfBinary">Instance of a IDwarfBinary</param>
+        /// <param name="debugData">The debug data.</param>
+        /// <param name="debugDataDescription">The debug data description.</param>
+        /// <param name="debugStrings">The debug strings.</param>
+        /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
+        /// <param name="offset">The offset to start reading data.</param>
+        internal static DwarfCompilationUnit ParseOneCompilationUnitByOffset(IDwarfBinary dwarfBinary, byte[] debugData, byte[] debugDataDescription, byte[] debugStrings, NormalizeAddressDelegate addressNormalizer, int offset)
         {
             using var debugDataReader = new DwarfMemoryReader(debugData);
             using var debugDataDescriptionReader = new DwarfMemoryReader(debugDataDescription);
             using var debugStringsReader = new DwarfMemoryReader(debugStrings);
-            var compilationUnits = new List<DwarfCompilationUnit>();
 
-            if (!debugDataReader.IsEnd)
+            if (offset >= debugDataReader.Data.Length)
             {
-                DwarfCompilationUnit compilationUnit = new DwarfCompilationUnit(dwarfBinary, debugDataReader, debugDataDescriptionReader, debugStringsReader, addressNormalizer);
-
-                compilationUnits.Add(compilationUnit);
+                return null;
             }
 
-            return compilationUnits;
+            debugDataReader.Position = offset;
+            return new DwarfCompilationUnit(dwarfBinary, debugDataReader, debugDataDescriptionReader, debugStringsReader, addressNormalizer);
         }
 
         /// <summary>
@@ -56,6 +92,81 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             }
 
             return programs;
+        }
+
+        /// <summary>
+        /// Parses all command line info.
+        /// </summary>
+        /// <param name="compilationUnits">the compilation units.</param>
+        internal static List<DwarfCompileCommandLineInfo> ParseAllCommandLineInfos(List<DwarfCompilationUnit> compilationUnits)
+        {
+            List<DwarfCompileCommandLineInfo> returnValue = new List<DwarfCompileCommandLineInfo>();
+
+            foreach (DwarfCompilationUnit compilationUnit in compilationUnits)
+            {
+                foreach (DwarfSymbol symbol in compilationUnit.Symbols)
+                {
+                    DwarfCompileCommandLineInfo info = new DwarfCompileCommandLineInfo();
+
+                    symbol.Attributes.TryGetValue(DwarfAttribute.Name, out DwarfAttributeValue name);
+                    info.FullName = name == null ? string.Empty : name.Value?.ToString();
+
+                    symbol.Attributes.TryGetValue(DwarfAttribute.CompDir, out DwarfAttributeValue compDir);
+                    info.CompileDirectory = compDir == null ? string.Empty : compDir.Value?.ToString();
+
+                    try
+                    {
+                        info.FileName = Path.GetFileName(info.FullName);
+                    }
+                    catch (ArgumentException)
+                    {
+                        info.FileName = string.Empty;
+                    }
+                    info.Language = DwarfLanguage.Unknown;
+                    info.Type = symbol.Tag;
+
+                    if (symbol.Tag == DwarfTag.CompileUnit
+                        && symbol.Attributes.TryGetValue(DwarfAttribute.Producer, out DwarfAttributeValue producer)
+                        && symbol.Attributes.TryGetValue(DwarfAttribute.Language, out DwarfAttributeValue language))
+                    {
+                        DwarfLanguage dwarfLanguage;
+                        if (Enum.TryParse(language.Value?.ToString(), out dwarfLanguage))
+                        {
+                            info.Language = dwarfLanguage;
+                        }
+                        info.CommandLine = producer.Value?.ToString();
+
+                        if (info.Language != DwarfLanguage.C89
+                            && info.Language != DwarfLanguage.C
+                            && info.Language != DwarfLanguage.CPlusPlus
+                            && info.Language != DwarfLanguage.C99
+                            && info.Language != DwarfLanguage.CPlusPlus03
+                            && info.Language != DwarfLanguage.CPlusPlus11
+                            && info.Language != DwarfLanguage.C11
+                            && info.Language != DwarfLanguage.CPlusPlus14)
+                        {
+                            continue;
+                        }
+                    }
+                    else if (symbol.Tag == DwarfTag.Subprogram
+                        && symbol.Attributes.TryGetValue(DwarfAttribute.LinkageName, out DwarfAttributeValue linkageName))
+                    {
+                        // No Language property for Subprogram
+                        info.CommandLine = linkageName.Value?.ToString();
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    if (info.CommandLine != null && !info.CommandLine.All(char.IsDigit))
+                    {
+                        returnValue.Add(info);
+                    }
+                }
+            }
+
+            return returnValue;
         }
 
         /// <summary>

@@ -104,7 +104,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 binary.MachO.FileType == ELFSharp.MachO.FileType.Debug)
             {
                 // for libraries, check if compiler includes option "mdynamic-no-pic"
-                return !binary.GetDwarfCompilerCommand().Contains("mdynamic-no-pic", System.StringComparison.OrdinalIgnoreCase);
+                return !binary.CommandLineInfos.Any(i => i.CommandLine.Contains("mdynamic-no-pic",
+                    System.StringComparison.OrdinalIgnoreCase));
             }
 
             return false;
@@ -113,7 +114,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private static bool IsValidDwarfBinary(IDwarfBinary binary)
         {
             return binary.Compilers.Any(c => c.Compiler == ElfCompilerType.GCC) &&
-                   !string.IsNullOrWhiteSpace(binary.GetDwarfCompilerCommand());
+                   binary.CommandLineInfos.Count > 0;
         }
     }
 }

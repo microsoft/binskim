@@ -836,14 +836,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         Unknown = 0x0000,
         C89 = 0x0001,
         C = 0x0002,
-        Ada83p = 0x0003,
+        Ada83 = 0x0003,
         CPlusPlus = 0x0004,
-        Cobol74p = 0x0005,
-        Cobol85p = 0x0006,
+        Cobol74 = 0x0005,
+        Cobol85 = 0x0006,
         Fortran77 = 0x0007,
         Fortran90 = 0x0008,
         Pascal83 = 0x0009,
         Modula2 = 0x000a,
+
+        // New in DWARF v3:
         Java = 0x000b,
         C99 = 0x000c,
         Ada95 = 0x000d,
@@ -853,7 +855,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         ObjCPlusPlus = 0x0011,
         UPC = 0x0012,
         D = 0x0013,
+
+        // New in DWARF v4:
         Python = 0x0014,
+
+        // New in DWARF v5:
         OpenCL = 0x0015,
         Go = 0x0016,
         Modula3 = 0x0017,
@@ -871,7 +877,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         Fortran08 = 0x0023,
         RenderScript = 0x0024,
         BLISS = 0x0025,
-        loUser = 0x8000,
-        hiUser = 0xffff
+
+        // Vendor extensions:
+        MipsAssembler = 0x8001,
+        GoogleRenderScript = 0x8e57,
+        Borland_Delphi = 0xb000,
     }
 }
