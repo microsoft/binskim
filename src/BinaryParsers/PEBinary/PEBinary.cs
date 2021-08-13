@@ -2,6 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -15,6 +17,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         private readonly bool tracePdbLoad;
         private readonly string symbolPath;
         private readonly string localSymbolDirectories;
+        private static readonly object sync = new object();
+        private static ConcurrentDictionary<string, string> s_cachedPdbLocation;
 
         public PEBinary(
             Uri uri,
@@ -43,6 +47,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             this.tracePdbLoad = tracePdbLoad;
             this.LoadException = this.PE.LoadException;
             this.localSymbolDirectories = localSymbolDirectories;
+
+            if (s_cachedPdbLocation == null)
+            {
+                lock (sync)
+                {
+                    if (s_cachedPdbLocation == null)
+                    {
+                        MapPdbs(localSymbolDirectories);
+                    }
+                }
+            }
         }
 
         public PE PE { get; private set; }
@@ -159,22 +174,33 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         private string RetrievePdbPath(string pdbName)
         {
-            if (string.IsNullOrEmpty(this.localSymbolDirectories))
+            if (s_cachedPdbLocation?.IsEmpty != false)
             {
                 return null;
             }
 
-            string[] symbolDirectories = this.localSymbolDirectories.Split(';');
-            foreach (string symbolDirectory in symbolDirectories)
+            s_cachedPdbLocation.TryGetValue(pdbName, out string pdbPath);
+            return pdbPath;
+        }
+
+        private static void MapPdbs(string paths)
+        {
+            if (string.IsNullOrEmpty(paths))
             {
-                string[] files = Directory.GetFiles(symbolDirectory, pdbName, SearchOption.AllDirectories);
-                if (files.Length > 0)
-                {
-                    return files[0];
-                }
+                return;
             }
 
-            return null;
+            string[] symbolDirectories = paths.Split(';');
+            s_cachedPdbLocation = new ConcurrentDictionary<string, string>();
+            foreach (string symbolDirectory in symbolDirectories)
+            {
+                IEnumerable<string> files = Directory.EnumerateFiles(symbolDirectory, "*.pdb", SearchOption.AllDirectories);
+                foreach (string file in files)
+                {
+                    string fileName = Path.GetFileName(file);
+                    s_cachedPdbLocation[fileName] = file;
+                }
+            }
         }
     }
 }
