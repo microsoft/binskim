@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                                                              category: "Test",
                                                                              defaultSeverity: DiagnosticSeverity.Info,
                                                                              isEnabledByDefault: true,
-                                                                             description: "Symbol name reporting rule",
+                                                                             description: "Symbol name reporting rule.",
                                                                              helpLinkUri: null,
                                                                              customTags: WellKnownDiagnosticTags.NotConfigurable);
 
@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                                                       category: "Test",
                                                                       defaultSeverity: DiagnosticSeverity.Info,
                                                                       isEnabledByDefault: true,
-                                                                      description: "Roslyn callback reporting rule",
+                                                                      description: "Roslyn callback reporting rule.",
                                                                       helpLinkUri: null,
                                                                       customTags: WellKnownDiagnosticTags.NotConfigurable);
 

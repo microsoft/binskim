@@ -26,6 +26,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             this.MachO = singleMachO;
             CompilationUnits = LoadCompilationUnits();
+            commandLineInfos = new Lazy<List<DwarfCompileCommandLineInfo>>(()
+                    => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits),
+                    System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
         public MachO MachO { get; }
@@ -44,7 +47,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public IEnumerable<EntryPoint> EntryPoint => this.MachO.GetCommandsOfType<EntryPoint>();
 
-        public List<DwarfCompilationUnit> CompilationUnits { get; }
+        public List<DwarfCompilationUnit> CompilationUnits { get; } = new List<DwarfCompilationUnit>();
+
+        public List<DwarfCompileCommandLineInfo> CommandLineInfos => this.commandLineInfos.Value;
 
         private List<DwarfLineNumberProgram> lineNumberPrograms;
 
@@ -188,7 +193,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             byte[] debugData = this.LoadSection(SECTIONNAME_DEBUG_INFO);
             byte[] debugAbbrev = this.LoadSection(SECTIONNAME_DEBUG_ABBREV);
             byte[] debugStr = this.LoadSection(SECTIONNAME_DEBUG_STR);
-            return DwarfSymbolProvider.ParseCompilationUnits(this, debugData, debugAbbrev, debugStr, NormalizeAddress);
+            return DwarfSymbolProvider.ParseAllCompilationUnits(this, debugData, debugAbbrev, debugStr, NormalizeAddress);
         }
 
         private byte[] LoadSection(string sectionName)
@@ -227,5 +232,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 return new MachOCompiler[] { new MachOCompiler(string.Empty) };
             }
         }
+
+        private readonly Lazy<List<DwarfCompileCommandLineInfo>> commandLineInfos;
     }
 }
