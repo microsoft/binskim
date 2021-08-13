@@ -54,7 +54,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 {
                     if (s_cachedPdbLocation == null)
                     {
-                        s_cachedPdbLocation = new ConcurrentDictionary<string, string>();
                         MapPdbs(localSymbolDirectories);
                     }
                 }
@@ -175,7 +174,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         private string RetrievePdbPath(string pdbName)
         {
-            if (s_cachedPdbLocation.Count == 0)
+            if (s_cachedPdbLocation?.IsEmpty != false)
             {
                 return null;
             }
@@ -192,6 +191,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
 
             string[] symbolDirectories = paths.Split(';');
+            s_cachedPdbLocation = new ConcurrentDictionary<string, string>();
             foreach (string symbolDirectory in symbolDirectories)
             {
                 IEnumerable<string> files = Directory.EnumerateFiles(symbolDirectory, "*.pdb", SearchOption.AllDirectories);
