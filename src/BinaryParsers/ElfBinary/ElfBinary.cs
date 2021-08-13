@@ -199,7 +199,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <value>
         ///   <c>true</c> if is debug only file; otherwise, <c>false</c>.
         /// </value>
-        public bool IsDebugOnlyFile => DebugFileType == DebugFileType.DebugOnlyFileDebuglink || DebugFileType == DebugFileType.DebugOnlyFileDwo;
+        public bool IsDebugOnlyFile => DebugFileType ==
+            DebugFileType.DebugOnlyFileDebuglink
+            || DebugFileType == DebugFileType.DebugOnlyFileDwo
+            || DebugFileType == DebugFileType.DebugOnlyFileWithDebugStripped;
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -306,6 +309,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         /// <summary>
+        /// Get if section does not exist or exists but has no bits
+        /// </summary>
+        private bool SectionDoesNotExistOrHasNoBits(string sectionName)
+        {
+            ELF.TryGetSection(sectionName, out Section<ulong> sectionRetrieved);
+            return sectionRetrieved == null || sectionRetrieved.Type == SectionType.NoBits;
+        }
+
+        /// <summary>
         /// Loads the section bytes specified by the name.
         /// </summary>
         /// <param name="sectionName">Name of the section.</param>
@@ -316,7 +328,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 if (section.Name == sectionName + ".dwo" || section.Name == sectionName)
                 {
-                    return section.GetContents();
+                    try
+                    {
+                        return section.GetContents();
+                    }
+                    catch
+                    {
+                        return new byte[0];
+                    }
                 }
             }
 
@@ -424,6 +443,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     )
                 {
                     DebugFileType = DebugFileType.DebugOnlyFileDebuglink;
+                }
+                else if (SectionExistsAndHasNoBits(SectionName.Interp) &&
+                    SectionExistsAndHasNoBits(SectionName.Dynsym) &&
+                    SectionExistsAndHasNoBits(SectionName.Init) &&
+                    SectionExistsAndHasNoBits(SectionName.Data) &&
+                    SectionDoesNotExistOrHasNoBits(SectionName.DebugInfo)
+                    )
+                {
+                    DebugFileType = DebugFileType.DebugOnlyFileWithDebugStripped;
                 }
                 else if (SectionExistsAndHasBits(SectionName.Interp) &&
                     SectionExistsAndHasBits(SectionName.Dynsym) &&

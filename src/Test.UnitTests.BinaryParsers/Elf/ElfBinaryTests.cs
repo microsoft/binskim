@@ -168,6 +168,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             binaryDebugOnlyFileDebuglink.DebugFileType.Should().Be(DebugFileType.DebugOnlyFileDebuglink);
             binaryDebugOnlyFileDebuglink.DebugFileLoaded.Should().Be(false);
 
+            // test for: build with debug, but stripped, and a second strip on the debug file, target the debug file itself
+            // compiled using:
+            // 1.
+            // gcc -ggdb -fPIC -fstack-protector-strong --param ssp-buffer-size=4 -fstack-clash-protection
+            // -o gcc.objcopy.stripall.addgnudebuglink gcc.objcopy.stripall.addgnudebuglink.c
+            // 2.
+            // objcopy --only-keep-debug gcc.objcopy.stripall.addgnudebuglink gcc.objcopy.stripall.addgnudebuglink.dbg
+            // 3.
+            // objcopy --strip-all gcc.objcopy.stripall.addgnudebuglink.dbg
+            fileName = Path.Combine(TestData, "Dwarf/DebugFileType/AnotherLocalSymbolDirectory2/gcc.objcopy.stripall.addgnudebuglink.dbg");
+            using var binaryDebugOnlyFileDebuglinkDebugStripped = new ElfBinary(new Uri(fileName));
+            binaryDebugOnlyFileDebuglinkDebugStripped.DebugFileType.Should().Be(DebugFileType.DebugOnlyFileWithDebugStripped);
+            binaryDebugOnlyFileDebuglinkDebugStripped.DebugFileLoaded.Should().Be(false);
+
             // test for: build with debug, but stripped, before link to debug file
             // compiled using:
             // 1.
@@ -201,6 +215,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             using var binaryWithLink = new ElfBinary(new Uri(fileName), Path.Combine(TestData, "Dwarf/DebugFileType/AnotherLocalSymbolDirectory/"));
             binaryWithLink.DebugFileType.Should().Be(DebugFileType.FromDebuglink);
             binaryWithLink.DebugFileLoaded.Should().Be(true);
+
+
+            // test for: build with debug, but stripped, after link to debug file, debug file exists but also stripped
+            // compiled using same commands. And do another strip on the dbg file.
+            // DebugFileType should be the same but since dbg file is also stripped, the DebugFileLoaded should be false.
+            // 5.
+            // objcopy --strip-all gcc.objcopy.stripall.addgnudebuglink.dbg
+            using var binaryWithLinkDebugStriped = new ElfBinary(new Uri(fileName), Path.Combine(TestData, "Dwarf/DebugFileType/AnotherLocalSymbolDirectory2/"));
+            binaryWithLinkDebugStriped.DebugFileType.Should().Be(DebugFileType.FromDebuglink);
+            binaryWithLinkDebugStriped.DebugFileLoaded.Should().Be(false);
 
             // test for: build with split dwarf debug, debug file missing
             // compiled using:
