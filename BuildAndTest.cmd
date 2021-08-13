@@ -36,6 +36,9 @@ echo         public const string Version = AssemblyVersion + Prerelease;        
 echo     }                                                                           >> %VERSION_CONSTANTS%
 echo  }                                                                              >> %VERSION_CONSTANTS%
 
+::Download Submodules
+if not exist %~dp0src\sarif-sdk\src\Sarif.Sdk.sln (git submodule update --init --recursive)
+
 ::Restore packages
 echo Restoring packages...
 dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --packages "%NuGetPackageDir%
