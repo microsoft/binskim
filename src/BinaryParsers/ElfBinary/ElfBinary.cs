@@ -309,9 +309,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         /// <summary>
-        /// Get if section not exists or also exists but has no bits
+        /// Get if section does not exist or exists but has no bits
         /// </summary>
-        private bool SectionNotExistsOrHasNoBits(string sectionName)
+        private bool SectionDoesNotExistOrHasNoBits(string sectionName)
         {
             ELF.TryGetSection(sectionName, out Section<ulong> sectionRetrieved);
             return sectionRetrieved == null || sectionRetrieved.Type == SectionType.NoBits;
@@ -448,7 +448,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     SectionExistsAndHasNoBits(SectionName.Dynsym) &&
                     SectionExistsAndHasNoBits(SectionName.Init) &&
                     SectionExistsAndHasNoBits(SectionName.Data) &&
-                    SectionNotExistsOrHasNoBits(SectionName.DebugInfo)
+                    SectionDoesNotExistOrHasNoBits(SectionName.DebugInfo)
                     )
                 {
                     DebugFileType = DebugFileType.DebugOnlyFileWithDebugStripped;
