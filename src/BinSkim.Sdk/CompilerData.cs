@@ -7,6 +7,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
     {
         public string Language { get; set; }
         public string BinaryType { get; set; }
+        public string CommandLine { get; set; }
         public string FileVersion { get; set; }
         public string CompilerName { get; set; }
         public string DebuggingFileName { get; set; }
@@ -16,7 +17,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public override string ToString()
         {
-            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{FileVersion},{BinaryType},{Language},{DebuggingFileName},{DebuggingFileGuid}";
+            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{FileVersion},{BinaryType},{Language},{DebuggingFileName},{DebuggingFileGuid},{CommandLine}";
         }
     }
 }

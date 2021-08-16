@@ -32,8 +32,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         protected override IEnumerable<string> MessageResourceNames => Array.Empty<string>();
 
-        private bool PrintHeader = true;
-
         public override AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             reasonForNotAnalyzing = null;
@@ -65,13 +63,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private void PrintCompilerData(BinaryAnalyzerContext context, string language, ICompiler[] compilers, List<string> files)
         {
-            if (this.PrintHeader)
-            {
-                Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,Language,Module Name,Module Library,Hash,Error");
-                this.PrintHeader = false;
-            }
+            context.CompilerDataLogger.PrintHeader();
 
             var processedRecords = new HashSet<CompilerData>();
+            IDwarfBinary binary = context.DwarfBinary();
+            string commandLine = string.Join(' ', binary.CommandLineInfos.Select(cli => cli.CommandLine).Distinct());
 
             foreach (ICompiler compiler in compilers)
             {
@@ -86,6 +82,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     {
                         BinaryType = "ELF",
                         Language = language,
+                        CommandLine = commandLine,
                         CompilerName = compiler.Compiler.ToString(),
                         CompilerBackEndVersion = compiler.Version.ToString(),
                         CompilerFrontEndVersion = compiler.Version.ToString(),

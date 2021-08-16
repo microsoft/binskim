@@ -19,10 +19,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private const string CompilerEventName = "CompilerInformation";
 
         private readonly bool appInsightsRegistered;
-
         private readonly string sha256;
         private readonly string relativeFilePath;
 
+        private static string s_sessionId;
+        private static bool s_printHeader = true;
         private static TelemetryClient s_telemetryClient;
         private static TelemetryConfiguration s_telemetryConfiguration;
 
@@ -59,6 +60,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             if (s_telemetryConfiguration == null && s_telemetryClient == null)
             {
+                s_sessionId = Guid.NewGuid().ToString();
                 s_telemetryConfiguration = new TelemetryConfiguration(instrumentationKey);
                 s_telemetryClient = new TelemetryClient(s_telemetryConfiguration);
             }
@@ -104,7 +106,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             if (!this.appInsightsRegistered)
             {
-                Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,File Version,Binary Type,Language,Debugging FileName, Debugging FileGuid,Dialect,Module Name,Module Library,Hash,Error");
+                if (s_printHeader)
+                {
+                    Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,File Version,Binary Type,Language,Debugging FileName, Debugging FileGuid,Command Line,Dialect,Module Name,Module Library,Hash,Error");
+                    s_printHeader = false;
+                }
             }
         }
 
@@ -118,6 +124,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 {
                     { "target", this.relativeFilePath },
                     { "compilerName", compilerData.CompilerName },
+                    { "commandLine", compilerData.CommandLine },
                     { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
                     { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
                     { "fileVersion", compilerData.FileVersion ?? string.Empty },
@@ -128,6 +135,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "dialect", string.Empty },
                     { "moduleName", name ?? string.Empty },
                     { "moduleLibrary", (name == library ? string.Empty : library) },
+                    { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
                     { "error", string.Empty }
                 });
@@ -147,6 +155,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 {
                     { "target", this.relativeFilePath },
                     { "compilerName", compilerData.CompilerName },
+                    { "commandLine", compilerData.CommandLine },
                     { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
                     { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
                     { "fileVersion", string.Empty },
@@ -157,6 +166,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "dialect", string.Empty },
                     { "moduleName", file ?? string.Empty },
                     { "moduleLibrary", string.Empty },
+                    { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
                     { "error", string.Empty }
                 });
@@ -176,6 +186,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 {
                     { "target", this.relativeFilePath },
                     { "compilerName", string.Empty },
+                    { "commandLine", string.Empty },
                     { "compilerBackEndVersion", string.Empty },
                     { "compilerFrontEndVersion", string.Empty },
                     { "fileVersion", string.Empty },
@@ -186,13 +197,14 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "dialect", string.Empty },
                     { "moduleName", string.Empty },
                     { "moduleLibrary", string.Empty },
+                    { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
                     { "error", errorMessage }
                 });
             }
             else
             {
-                string log = $"{this.relativeFilePath},,,,,,,,,,,,{this.sha256},{errorMessage}";
+                string log = $"{this.relativeFilePath},,,,,,,,,,,,,{this.sha256},{errorMessage}";
                 Console.WriteLine(log);
             }
         }
