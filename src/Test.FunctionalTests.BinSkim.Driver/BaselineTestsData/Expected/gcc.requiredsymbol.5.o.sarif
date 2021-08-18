@@ -627,9 +627,10 @@
         {
           "ruleId": "BA3003",
           "ruleIndex": 26,
-          "level": "error",
+          "kind": "pass",
+          "level": "none",
           "message": {
-            "id": "Error",
+            "id": "Pass",
             "arguments": [
               "gcc.requiredsymbol.5.o"
             ]

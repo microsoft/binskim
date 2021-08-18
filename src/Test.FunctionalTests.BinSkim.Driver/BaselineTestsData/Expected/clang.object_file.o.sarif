@@ -590,7 +590,7 @@
             "arguments": [
               "clang.object_file.o",
               "EnableStackProtector",
-              "ELF is not a shared object or executable"
+              "not compiled solely with gcc"
             ]
           },
           "locations": [
