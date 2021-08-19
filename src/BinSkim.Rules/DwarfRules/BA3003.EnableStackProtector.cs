@@ -67,7 +67,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override void Analyze(BinaryAnalyzerContext context)
         {
             IDwarfBinary binary = context.DwarfBinary();
-            var failedList = new List<DwarfCompileCommandLineInfo>();
+            List<DwarfCompileCommandLineInfo> failedList;
 
             static bool analyze(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
             {
