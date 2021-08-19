@@ -12,6 +12,8 @@ using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
+using static Microsoft.CodeAnalysis.Sarif.Driver.ArgumentSplitter;
+
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
@@ -65,28 +67,61 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override void Analyze(BinaryAnalyzerContext context)
         {
             IDwarfBinary binary = context.DwarfBinary();
+            var failedList = new List<DwarfCompileCommandLineInfo>();
 
-            static bool analyze(IDwarfBinary binary)
+            static bool analyze(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
             {
-                return binary.CommandLineInfos.All(i =>
-                (
-                    i.CommandLine.Contains("-fstack-protector-all", StringComparison.OrdinalIgnoreCase)
-                    || i.CommandLine.Contains("-fstack-protector-strong", StringComparison.OrdinalIgnoreCase)
-                )
-                && !i.CommandLine.Contains("-fno-stack-protector", StringComparison.OrdinalIgnoreCase));
+                failedList = new List<DwarfCompileCommandLineInfo>();
+
+                foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
+                {
+                    bool failed = false;
+                    if ((!info.CommandLine.Contains("-fstack-protector-all", StringComparison.OrdinalIgnoreCase)
+                    && !info.CommandLine.Contains("-fstack-protector-strong", StringComparison.OrdinalIgnoreCase))
+                    || info.CommandLine.Contains("-fno-stack-protector", StringComparison.OrdinalIgnoreCase))
+                    {
+                        failed = true;
+                    }
+                    else
+                    {
+                        string[] paramToCheck = { "--param=ssp-buffer-size=" };
+                        string paramValue = string.Empty;
+                        bool found = GetOptionValue(info.CommandLine, paramToCheck, OrderOfPrecedence.FirstWins, ref paramValue);
+
+                        if (found && !string.IsNullOrWhiteSpace(paramValue))
+                        {
+                            if (int.TryParse(paramValue, out int bufferSize))
+                            {
+                                if (bufferSize > 4)
+                                {
+                                    failed = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (failed)
+                    {
+                        failedList.Add(info);
+                    }
+                }
+
+                return !failedList.Any();
             }
 
             if (binary is ElfBinary elf)
             {
-                if (!analyze(elf))
+                if (!analyze(elf, out failedList))
                 {
                     // The stack protector was not found in '{0}'.
                     // This may be because the binary has no stack-based arrays,
                     // or because '--stack-protector-strong' was not used.
+                    // Following modules did not meet the criteria:
+                    // {1}
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA3003_Error),
-                            context.TargetUri.GetFileName()));
+                            context.TargetUri.GetFileName(), string.Join(Environment.NewLine, failedList)));
                     return;
                 }
 
@@ -102,15 +137,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 foreach (SingleMachOBinary subBinary in mainBinary.MachOs)
                 {
-                    if (!analyze(subBinary))
+                    if (!analyze(subBinary, out failedList))
                     {
                         // The stack protector was not found in '{0}'.
                         // This may be because the binary has no stack-based arrays,
                         // or because '--stack-protector-strong' was not used.
+                        // Following modules did not meet the criteria:
+                        // {1}
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                                 nameof(RuleResources.BA3003_Error),
-                                context.TargetUri.GetFileName()));
+                                context.TargetUri.GetFileName(), string.Join(Environment.NewLine, failedList)));
                         return;
                     }
                 }
