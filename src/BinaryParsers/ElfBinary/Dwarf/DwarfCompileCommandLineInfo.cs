@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
         public override string ToString()
         {
-            return "Module: " + FileName + ", CommandLine: " + CommandLine;
+            return FileName;
         }
     }
 }

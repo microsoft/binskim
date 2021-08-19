@@ -419,8 +419,7 @@ Modules triggering this check were:
   </data>
   <data name="BA3003_Error" xml:space="preserve">
     <value>The stack protector was not found in '{0}'.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used.
-Following modules did not meet the criteria:
-{1}</value>
+Modules did not meet the criteria: {1}</value>
   </data>
   <data name="BA3003_Pass" xml:space="preserve">
     <value>Stack protector was found on '{0}'.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections.</value>

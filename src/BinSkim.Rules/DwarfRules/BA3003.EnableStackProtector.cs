@@ -77,8 +77,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     bool failed = false;
                     if ((!info.CommandLine.Contains("-fstack-protector-all", StringComparison.OrdinalIgnoreCase)
-                    && !info.CommandLine.Contains("-fstack-protector-strong", StringComparison.OrdinalIgnoreCase))
-                    || info.CommandLine.Contains("-fno-stack-protector", StringComparison.OrdinalIgnoreCase))
+                        && !info.CommandLine.Contains("-fstack-protector-strong", StringComparison.OrdinalIgnoreCase))
+                        || info.CommandLine.Contains("-fno-stack-protector", StringComparison.OrdinalIgnoreCase))
                     {
                         failed = true;
                     }
@@ -116,12 +116,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // The stack protector was not found in '{0}'.
                     // This may be because the binary has no stack-based arrays,
                     // or because '--stack-protector-strong' was not used.
-                    // Following modules did not meet the criteria:
-                    // {1}
+                    // Modules did not meet the criteria: {1}
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA3003_Error),
-                            context.TargetUri.GetFileName(), string.Join(Environment.NewLine, failedList)));
+                            context.TargetUri.GetFileName(), string.Join(", ", failedList)));
                     return;
                 }
 
@@ -142,12 +141,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         // The stack protector was not found in '{0}'.
                         // This may be because the binary has no stack-based arrays,
                         // or because '--stack-protector-strong' was not used.
-                        // Following modules did not meet the criteria:
-                        // {1}
+                        // Modules did not meet the criteria: {1}
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                                 nameof(RuleResources.BA3003_Error),
-                                context.TargetUri.GetFileName(), string.Join(Environment.NewLine, failedList)));
+                                context.TargetUri.GetFileName(), string.Join(", ", failedList)));
                         return;
                     }
                 }

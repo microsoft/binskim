@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             if (optionNames != null && optionNames.Length > 0)
             {
                 // array of strings for the options name without the preceding switchPrefix to make comparison easier
-                string[] optionsArray = new string[optionNames.Length]; ;
+                string[] optionsArray = new string[optionNames.Length];
 
                 for (int index = 0; index < optionNames.Length; index++)
                 {

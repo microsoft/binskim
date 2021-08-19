@@ -1069,8 +1069,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         
         /// <summary>
         ///   Looks up a localized string similar to The stack protector was not found in &apos;{0}&apos;.  This may be because the binary has no stack-based arrays, or because &apos;--stack-protector-strong&apos; was not used.
-        ///Following modules did not meet the criteria:
-        ///{1}.
+        ///Modules did not meet the criteria: {1}.
         /// </summary>
         internal static string BA3003_Error {
             get {
