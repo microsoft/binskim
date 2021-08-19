@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             var explicitWarnings = new Dictionary<int, WarningState>();
             foreach (string argument in ArgumentSplitter.CommandLineToArgvW(commandLine))
             {
-                if (!ArgumentSplitter.IsCommandLineOption(argument))
+                if (!CommandLineHelper.IsCommandLineOption(argument))
                 {
                     continue;
                 }

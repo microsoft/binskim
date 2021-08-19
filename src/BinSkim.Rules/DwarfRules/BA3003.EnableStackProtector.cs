@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
-using static Microsoft.CodeAnalysis.Sarif.Driver.ArgumentSplitter;
+using static Microsoft.CodeAnalysis.BinaryParsers.CommandLineHelper;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
