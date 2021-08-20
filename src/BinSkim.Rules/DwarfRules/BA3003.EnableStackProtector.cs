@@ -114,8 +114,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (!analyze(elf, out failedList))
                 {
                     // The stack protector was not found in '{0}'.
-                    // This may be because the binary has no stack-based arrays,
-                    // or because '--stack-protector-strong' was not used.
+                    // This may be because '--stack-protector-strong' was not used,
+                    // or because it was explicitly disabled by '-fno-stack-protectors'.
                     // Modules did not meet the criteria: {1}
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Error, context, null,
@@ -139,8 +139,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     if (!analyze(subBinary, out failedList))
                     {
                         // The stack protector was not found in '{0}'.
-                        // This may be because the binary has no stack-based arrays,
-                        // or because '--stack-protector-strong' was not used.
+                        // This may be because '--stack-protector-strong' was not used,
+                        // or because it was explicitly disabled by '-fno-stack-protectors'.
                         // Modules did not meet the criteria: {1}
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,

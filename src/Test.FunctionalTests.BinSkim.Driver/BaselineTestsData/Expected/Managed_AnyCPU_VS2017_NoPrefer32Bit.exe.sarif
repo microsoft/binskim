@@ -1202,7 +1202,7 @@
                   "text": "Stack protector was found on '{0}'.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections."
                 },
                 "Error": {
-                  "text": "The stack protector was not found in '{0}'.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used.\r\nModules did not meet the criteria: {1}"
+                  "text": "The stack protector was not found in '{0}'. This may be because '--stack-protector-strong' was not used, or because it was explicitly disabled by '-fno-stack-protectors'.\r\nModules did not meet the criteria: {1}"
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
