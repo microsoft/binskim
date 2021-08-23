@@ -4,6 +4,8 @@
 using System;
 using System.Collections.Immutable;
 
+using static Microsoft.CodeAnalysis.BinaryParsers.CommandLineHelper;
+
 namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 {
     // TODO: Consider merging this function into Symbol. (Most of the code to support it is there anyway)
@@ -140,7 +142,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public SwitchState GetSwitchState(string switchName, OrderOfPrecedence precedence)
         {
             string[] switchNames = new string[1] { switchName };
-            return this.compilerCommandLine.GetSwitchState(switchNames, null, SwitchState.SwitchNotFound, precedence);
+            return CommandLineHelper.GetSwitchState(this.compilerCommandLine.Raw, switchNames, null, SwitchState.SwitchNotFound, precedence);
         }
 
         /// <summary>
@@ -152,7 +154,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <param name="precedence">The precedence rules for this set of switches.</param>
         public SwitchState GetSwitchState(string[] switchNames, string[] overrideNames, SwitchState defaultStateOfFirst, OrderOfPrecedence precedence)
         {
-            return this.compilerCommandLine.GetSwitchState(switchNames, overrideNames, defaultStateOfFirst, precedence);
+            return CommandLineHelper.GetSwitchState(this.compilerCommandLine.Raw, switchNames, overrideNames, defaultStateOfFirst, precedence);
         }
 
         /// <summary>
@@ -164,7 +166,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <returns>true if one of the options is found, false if none are found</returns>
         public bool GetOptionValue(string[] optionNames, OrderOfPrecedence precedence, ref string optionValue)
         {
-            return this.compilerCommandLine.GetOptionValue(optionNames, precedence, ref optionValue);
+            return CommandLineHelper.GetOptionValue(this.compilerCommandLine.Raw, optionNames, precedence, ref optionValue);
         }
 
     }

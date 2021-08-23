@@ -401,6 +401,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
             catch (COMException ce)
             {
+                if (!string.IsNullOrEmpty(ce.Message) && ce.Message.StartsWith("Error HRESULT E_FAIL"))
+                {
+                    throw new PdbException(DiaHresult.E_FAIL, ce)
+                    {
+                        LoadTrace = this.loadTrace?.ToString()
+                    };
+                }
+
                 throw new PdbException(ce)
                 {
                     LoadTrace = this.loadTrace?.ToString()
