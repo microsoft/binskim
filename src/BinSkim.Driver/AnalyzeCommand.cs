@@ -94,6 +94,22 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 Console.WriteLine(e);
             }
+
+            try
+            {
+                if (CompilerDataLogger.Enabled &&
+                    !string.IsNullOrEmpty(analyzeOptions.OutputFilePath) &&
+                    this.FileSystem.FileExists(analyzeOptions.OutputFilePath))
+                {
+                    CompilerDataLogger.Summarize(
+                        this.ExtractAnalysisSummary(SarifLog.Load(analyzeOptions.OutputFilePath),
+                                                    analyzeOptions));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
             finally
             {
                 CompilerDataLogger.Flush();
@@ -110,5 +126,30 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         internal static Sarif.SarifVersion s_UnitTestOutputVersion;
+
+        private AnalysisSummary ExtractAnalysisSummary(SarifLog sarifLog, AnalyzeOptions options)
+        {
+            if (sarifLog == null || sarifLog.Runs == null || !sarifLog.Runs.Any())
+            {
+                return null;
+            }
+
+            Tool tool = sarifLog.Runs[0].Tool;
+            Invocation invocation = sarifLog.Runs[0].Invocations[0];
+            IList<Artifact> artifacts = sarifLog.Runs[0].Artifacts;
+
+            return new AnalysisSummary
+            {
+                ToolName = tool.Driver.Name,
+                ToolVersion = tool.Driver.Version,
+                NormalizedPath = string.Join(";", options.TargetFileSpecifiers.Select(p => System.IO.Path.GetDirectoryName(p)).Distinct()),
+                SymbolPath = options.SymbolsPath,
+                FileAnalyzed = artifacts.Count,
+                // FileNotAnalyzed = 
+                StartTimeUtc = invocation.StartTimeUtc,
+                EndTimeUtc = invocation.EndTimeUtc,
+                TimeConsumed = invocation.EndTimeUtc - invocation.StartTimeUtc,
+            };
+        }
     }
 }

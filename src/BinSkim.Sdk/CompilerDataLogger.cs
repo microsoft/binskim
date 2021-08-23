@@ -17,6 +17,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
     public class CompilerDataLogger
     {
         private const string CompilerEventName = "CompilerInformation";
+        private const string SummaryEventName = "AnalysisSummary";
 
         private readonly bool appInsightsRegistered;
         private readonly string sha256;
@@ -137,7 +138,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "moduleLibrary", (name == library ? string.Empty : library) },
                     { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
-                    { "error", string.Empty }
+                    { "error", string.Empty },
+                    { "toolVersion", VersionConstants.Version }
                 });
             }
             else
@@ -168,7 +170,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "moduleLibrary", string.Empty },
                     { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
-                    { "error", string.Empty }
+                    { "error", string.Empty },
+                    { "toolVersion", VersionConstants.Version }
                 });
             }
             else
@@ -199,7 +202,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "moduleLibrary", string.Empty },
                     { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
-                    { "error", errorMessage }
+                    { "error", errorMessage },
+                    { "toolVersion", VersionConstants.Version }
                 });
             }
             else
@@ -208,5 +212,32 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 Console.WriteLine(log);
             }
         }
+
+        public static void Summarize(AnalysisSummary summary)
+        {
+            if (s_telemetryClient != null)
+            {
+                s_telemetryClient.TrackEvent(SummaryEventName, properties: new Dictionary<string, string>
+                {
+                    { "toolName", summary.ToolName },
+                    { "toolVersion", summary.ToolVersion },
+                    { "sessionId", s_sessionId },
+                    { "normalizedPath", summary.NormalizedPath },
+                    { "symbolPath", summary.SymbolPath },
+                    { "numberOfBinaryAnalyzed", summary.FileAnalyzed.ToString() },
+                    { "numberOfBinaryNotAnalyzed", summary.FileNotAnalyzed.ToString() },
+                    { "analysisStartTime", summary.StartTimeUtc.ToString() },
+                    { "analysisEndTime", summary.EndTimeUtc.ToString() },
+                    { "timeConsumed", summary.TimeConsumed.ToString() }
+                });
+            }
+            else
+            {
+                string log = $"{summary.ToolName},{summary.ToolVersion},{s_sessionId},{summary.NormalizedPath},{summary.SymbolPath},{summary.FileAnalyzed},{summary.FileNotAnalyzed},{summary.StartTimeUtc},{summary.EndTimeUtc},{summary.TimeConsumed}";
+                Console.WriteLine(log);
+            }
+        }
+
+        public static bool Enabled => s_telemetryClient != null;
     }
 }
