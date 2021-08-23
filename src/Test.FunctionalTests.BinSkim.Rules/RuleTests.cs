@@ -458,10 +458,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                var failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
                 this.VerifyFail(
                     new DoNotIncorporateVulnerableDependencies(),
-                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
@@ -625,14 +623,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                var failureConditions = new HashSet<string>
-                {
-                    MetadataConditions.CouldNotLoadPdb
-                };
-
                 this.VerifyFail(
                     new EnableCriticalCompilerWarnings(),
-                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
@@ -841,15 +833,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                var failureConditions = new HashSet<string>
-                {
-                    MetadataConditions.CouldNotLoadPdb
-                };
-
                 this.VerifyFail(
                     new InitializeStackProtection(),
-                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 

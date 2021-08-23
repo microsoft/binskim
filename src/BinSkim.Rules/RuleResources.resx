@@ -568,4 +568,7 @@ Modules triggering this check were:
   <data name="BA5002_Pass" xml:space="preserve">
     <value>Executable stack is not allowed on executable '{0}'.</value>
   </data>
+  <data name="ERR997)ExceptionLoadingPdbGeneric" xml:space="preserve">
+    <value>'{0}' was not evaluated because its PDB could not be loaded ({1}).</value>
+  </data>
 </root>
