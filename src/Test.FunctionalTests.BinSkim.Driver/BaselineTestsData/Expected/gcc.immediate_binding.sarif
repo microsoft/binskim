@@ -533,8 +533,32 @@
           ]
         },
         {
-          "ruleId": "BA3005",
+          "ruleId": "BA3003",
           "ruleIndex": 22,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "gcc.immediate_binding",
+              "EnableStackProtector",
+              "not compiled with gcc v8 or later"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.immediate_binding",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3005",
+          "ruleIndex": 23,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -558,7 +582,7 @@
         },
         {
           "ruleId": "BA5001",
-          "ruleIndex": 23,
+          "ruleIndex": 24,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -582,7 +606,7 @@
         },
         {
           "ruleId": "BA5002",
-          "ruleIndex": 24,
+          "ruleIndex": 25,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -606,7 +630,7 @@
         },
         {
           "ruleId": "BA3001",
-          "ruleIndex": 25,
+          "ruleIndex": 26,
           "level": "error",
           "message": {
             "id": "Error",
@@ -627,28 +651,6 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 26,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.immediate_binding"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.immediate_binding",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3003",
           "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
@@ -1370,6 +1372,28 @@
               "name": "EnableAdditionalSdlSecurityChecks"
             },
             {
+              "id": "BA3003",
+              "fullDescription": {
+                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3003EnableStackProtector",
+              "help": {
+                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "Stack protector was found on '{0}'.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections."
+                },
+                "Error": {
+                  "text": "The stack protector was not found in '{0}'. This may be because '--stack-protector-strong' was not used, or because it was explicitly disabled by '-fno-stack-protectors'.\r\nModules did not meet the criteria: {1}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnableStackProtector"
+            },
+            {
               "id": "BA3005",
               "fullDescription": {
                 "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
@@ -1484,28 +1508,6 @@
                 }
               },
               "name": "DoNotMarkStackAsExecutable"
-            },
-            {
-              "id": "BA3003",
-              "fullDescription": {
-                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3003EnableStackProtector",
-              "help": {
-                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "Stack protector was found on '{0}'.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections."
-                },
-                "Error": {
-                  "text": "The stack protector was not found in '{0}'.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "name": "EnableStackProtector"
             },
             {
               "id": "BA3006",

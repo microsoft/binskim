@@ -14,5 +14,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public string CommandLine { get; set; }
         public DwarfLanguage Language { get; set; }
         public string CompileDirectory { get; set; }
+
+        public override string ToString()
+        {
+            return FileName;
+        }
     }
 }

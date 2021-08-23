@@ -202,6 +202,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public bool IsDebugOnlyFile => DebugFileType ==
             DebugFileType.DebugOnlyFileDebuglink
             || DebugFileType == DebugFileType.DebugOnlyFileDwo
+            || DebugFileType == DebugFileType.FromDebuglinkPointingToItself
             || DebugFileType == DebugFileType.DebugOnlyFileWithDebugStripped;
 
         /// <summary>
@@ -416,19 +417,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 Uri debugFileUri = GetFirstExistFile(debugFileName, directory.AbsolutePath, localSymbolDirectories);
                 if (debugFileUri != null)
                 {
-                    var dwoBinary = new ElfBinary(debugFileUri);
-
-                    if (dwoBinary != null && dwoBinary.CompilationUnits.Count > 0)
+                    if (debugFileUri == this.TargetUri)
                     {
-                        this.CompilationUnits.AddRange(dwoBinary.CompilationUnits);
+                        DebugFileType = DebugFileType.FromDebuglinkPointingToItself;
+                    }
+                    else
+                    {
+                        var dwoBinary = new ElfBinary(debugFileUri);
 
-                        if (dwoBinary.CommandLineInfos.Count > 0)
+                        if (dwoBinary != null && dwoBinary.CompilationUnits.Count > 0)
                         {
-                            this.CommandLineInfos.AddRange(dwoBinary.CommandLineInfos);
-                        }
+                            this.CompilationUnits.AddRange(dwoBinary.CompilationUnits);
 
-                        DebugFileLoaded = true;
-                        return;
+                            if (dwoBinary.CommandLineInfos.Count > 0)
+                            {
+                                this.CommandLineInfos.AddRange(dwoBinary.CommandLineInfos);
+                            }
+
+                            DebugFileLoaded = true;
+                            return;
+                        }
                     }
                 }
             }
