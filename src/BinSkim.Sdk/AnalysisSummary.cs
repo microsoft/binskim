@@ -18,5 +18,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public DateTime StartTimeUtc { get; set; }
         public DateTime EndTimeUtc { get; set; }
         public TimeSpan TimeConsumed { get; set; }
+
+        public override string ToString()
+        {
+            return $"{this.ToolName},{this.ToolVersion},{this.NormalizedPath},{this.SymbolPath},{this.FileAnalyzed},{this.FileNotAnalyzed},{this.StartTimeUtc},{this.EndTimeUtc},{this.TimeConsumed}";
+        }
     }
 }

@@ -28,6 +28,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private static TelemetryClient s_telemetryClient;
         private static TelemetryConfiguration s_telemetryConfiguration;
 
+        public static bool Enabled => s_telemetryClient != null;
+
         public CompilerDataLogger(IAnalysisContext analysisContext,
                                   IEnumerable<string> targetFileSpecifiers)
         {
@@ -139,7 +141,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
                     { "error", string.Empty },
-                    { "toolVersion", VersionConstants.Version }
                 });
             }
             else
@@ -171,7 +172,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
                     { "error", string.Empty },
-                    { "toolVersion", VersionConstants.Version }
                 });
             }
             else
@@ -203,7 +203,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
                     { "error", errorMessage },
-                    { "toolVersion", VersionConstants.Version }
                 });
             }
             else
@@ -225,7 +224,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "normalizedPath", summary.NormalizedPath },
                     { "symbolPath", summary.SymbolPath },
                     { "numberOfBinaryAnalyzed", summary.FileAnalyzed.ToString() },
-                    { "numberOfBinaryNotAnalyzed", summary.FileNotAnalyzed.ToString() },
                     { "analysisStartTime", summary.StartTimeUtc.ToString() },
                     { "analysisEndTime", summary.EndTimeUtc.ToString() },
                     { "timeConsumed", summary.TimeConsumed.ToString() }
@@ -233,11 +231,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                string log = $"{summary.ToolName},{summary.ToolVersion},{s_sessionId},{summary.NormalizedPath},{summary.SymbolPath},{summary.FileAnalyzed},{summary.FileNotAnalyzed},{summary.StartTimeUtc},{summary.EndTimeUtc},{summary.TimeConsumed}";
-                Console.WriteLine(log);
+                Console.WriteLine(summary.ToString());
             }
         }
-
-        public static bool Enabled => s_telemetryClient != null;
     }
 }
