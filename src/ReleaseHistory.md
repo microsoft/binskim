@@ -1,5 +1,10 @@
 # BinSkim Release History
 
+## UNRELEASED
+
+* BUGFIX: Fix unhandled exception while loading PE. [#461](https://github.com/microsoft/binskim/pull/461)
+* BREAKING: PDB exceptions will be reported once per target. [#465](https://github.com/microsoft/binskim/pull/465)
+
 ## **v1.9.0-prerelease1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.0-prerelease1)
 
 * FEATURE: Add BA3011.EnableBindNow. [#363](https://github.com/microsoft/binskim/pull/363)
