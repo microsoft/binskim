@@ -134,8 +134,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 throw new ArgumentNullException(nameof(context));
             }
 
-            string fileName = context.TargetUri.GetFileName();
-            string key = $"{fileName}@{pdbException.ExceptionDisplayMessage}";
+            string path = context.TargetUri.OriginalString;
+            string key = $"{path}@{pdbException.ExceptionDisplayMessage}";
             if (s_PdbExceptions.ContainsKey(key))
             {
                 return;
@@ -151,7 +151,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     pdbException,
                     persistExceptionStack: false,
                     RuleResources.ERR997_ExceptionLoadingPdbGeneric,
-                    fileName,
+                    context.TargetUri.GetFileName(),
                     pdbException.ExceptionDisplayMessage));
 
             s_PdbExceptions.TryAdd(key, true);

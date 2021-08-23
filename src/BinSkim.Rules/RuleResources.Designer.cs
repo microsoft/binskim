@@ -1352,7 +1352,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// </summary>
         internal static string ERR997_ExceptionLoadingPdbGeneric {
             get {
-                return ResourceManager.GetString("ERR997)ExceptionLoadingPdbGeneric", resourceCulture);
+                return ResourceManager.GetString("ERR997_ExceptionLoadingPdbGeneric", resourceCulture);
             }
         }
         
