@@ -131,6 +131,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
 
+                int i = 0;
                 CompilandRecord record = om.CreateCompilandRecord();
 
                 foreach (DisposableEnumerableView<SourceFile> sfView in di.CreateSourceFileIterator(om))
@@ -141,30 +142,40 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     {
                         if (isMSVC)
                         {
-                            // We know of 3 scenarios where this occurs today:
+                            // We know of 4 scenarios where this occurs today:
                             // If we encounter one of these, we should continue the loop to the next SourceFile,
                             // else fallthrough to the other checks for normal processing and errors.
 
+                            // 1. If you compile with /Yc, the index = 0 will have hash == none, which can be skipped.
+                            if (i == 0)
+                            {
+                                i++;
+                                continue;
+                            }
+
                             string sfName = Path.GetFileName(sf.FileName);
 
-                            // 1. Some compiler injected code that is listed as being in "predefined C++ types (compiler internal)"
+                            // 2. Some compiler injected code that is listed as being in "predefined C++ types (compiler internal)"
                             if (sfName == MSVCPredefinedTypesFileName)
                             {
+                                i++;
                                 continue;
                             }
                             else if (pchFileName != string.Empty)
                             {
-                                // 2. The file used to create a precompiled header using the /Yc switch
+                                // 3. The file used to create a precompiled header using the /Yc switch
                                 // TODO - We need a prepass on the library / final link to determine which file was
                                 //        used to create the pch, as this is the file that will have a HashType.None
-                                // 3. The pch file itself
+                                // 4. The pch file itself
                                 if (sfName == Path.GetFileName(pchFileName))
                                 {
+                                    i++;
                                     continue;
                                 }
                                 // TODO - check this against the filename used to create the pch.  For now just let it pass
                                 else // if(sfName == pchCreationTUFileName)
                                 {
+                                    i++;
                                     continue;
                                 }
                             }
