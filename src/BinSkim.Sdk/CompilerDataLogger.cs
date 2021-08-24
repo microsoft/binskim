@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 
@@ -16,7 +17,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class CompilerDataLogger
     {
+        private const int ChunkSize = 8192;
         private const string CompilerEventName = "CompilerInformation";
+        private const string CommandLineEventName = "CommandLineInformation";
 
         private readonly bool appInsightsRegistered;
         private readonly string sha256;
@@ -120,11 +123,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             string library = omDetails?.Library;
             if (this.appInsightsRegistered)
             {
-                s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
+                string commandLineId = string.Empty;
+                var properties = new Dictionary<string, string>
                 {
                     { "target", this.relativeFilePath },
                     { "compilerName", compilerData.CompilerName },
-                    { "commandLine", compilerData.CommandLine },
                     { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
                     { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
                     { "fileVersion", compilerData.FileVersion ?? string.Empty },
@@ -138,7 +141,20 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
                     { "error", string.Empty }
-                });
+                };
+
+                if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
+                {
+                    commandLineId = Guid.NewGuid().ToString();
+                    properties.Add("commandLineId", commandLineId);
+                }
+
+                s_telemetryClient.TrackEvent(CompilerEventName, properties: properties);
+
+                if (!string.IsNullOrWhiteSpace(commandLineId))
+                {
+                    SendChunkedCommandLine(commandLineId, compilerData.CommandLine);
+                }
             }
             else
             {
@@ -151,11 +167,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             if (this.appInsightsRegistered)
             {
-                s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
+                string commandLineId = string.Empty;
+                var properties = new Dictionary<string, string>
                 {
                     { "target", this.relativeFilePath },
                     { "compilerName", compilerData.CompilerName },
-                    { "commandLine", compilerData.CommandLine },
                     { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
                     { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
                     { "fileVersion", string.Empty },
@@ -169,7 +185,20 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
                     { "error", string.Empty }
-                });
+                };
+
+                if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
+                {
+                    commandLineId = Guid.NewGuid().ToString();
+                    properties.Add("commandLineId", commandLineId);
+                }
+
+                s_telemetryClient.TrackEvent(CompilerEventName, properties: properties);
+
+                if (!string.IsNullOrWhiteSpace(commandLineId))
+                {
+                    SendChunkedCommandLine(commandLineId, compilerData.CommandLine);
+                }
             }
             else
             {
@@ -206,6 +235,24 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 string log = $"{this.relativeFilePath},,,,,,,,,,,,,{this.sha256},{errorMessage}";
                 Console.WriteLine(log);
+            }
+        }
+
+        private void SendChunkedCommandLine(string commandLineId, string commandLine)
+        {
+            var commandLineArray = Enumerable.Range(0, commandLine.Length / ChunkSize)
+                .Select(i => commandLine.Substring(i * ChunkSize, ChunkSize)).ToList();
+
+            for (int i = 0; i < commandLineArray.Count; i++)
+            {
+                s_telemetryClient.TrackEvent(CommandLineEventName, properties: new Dictionary<string, string>
+                {
+                    { "sessionId", s_sessionId },
+                    { "commandLineId", commandLineId },
+                    { "orderNumber", i.ToString() },
+                    { "totalNumber", commandLineArray.Count.ToString() },
+                    { "chunkedCommandLine", commandLineArray[i] },
+                });
             }
         }
     }
