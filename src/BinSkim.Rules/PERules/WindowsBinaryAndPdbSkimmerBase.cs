@@ -2,6 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
@@ -25,6 +27,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public virtual bool EnforcePdbLoadForManagedAssemblies => true;
 
         public virtual bool LogPdbLoadException => true;
+
+        public static readonly ConcurrentDictionary<string, bool> s_PdbExceptions = new ConcurrentDictionary<string, bool>();
 
         public sealed override void Analyze(BinaryAnalyzerContext context)
         {
@@ -130,20 +134,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 throw new ArgumentNullException(nameof(context));
             }
 
-            // '{0}' was not evaluated for check '{1}' because its PDB could not be loaded ({2}).
+            string path = context.TargetUri.OriginalString;
+            string key = $"{path}@{pdbException.ExceptionDisplayMessage}";
+            if (s_PdbExceptions.ContainsKey(key))
+            {
+                return;
+            }
+
+            // '{0}' was not evaluated because its PDB could not be loaded ({1}).
             context.Logger.LogConfigurationNotification(
                 Errors.CreateNotification(
                     context.TargetUri,
                     "ERR997.ExceptionLoadingPdb",
-                    context.Rule.Id,
+                    string.Empty,
                     FailureLevel.Error,
                     pdbException,
                     persistExceptionStack: false,
-                    RuleResources.ERR997_ExceptionLoadingPdb,
+                    RuleResources.ERR997_ExceptionLoadingPdbGeneric,
                     context.TargetUri.GetFileName(),
-                    context.Rule.Name,
                     pdbException.ExceptionDisplayMessage));
 
+            s_PdbExceptions.TryAdd(key, true);
             context.RuntimeErrors |= RuntimeConditions.ExceptionLoadingPdb;
 
             if (!string.IsNullOrEmpty(pdbException.LoadTrace))
