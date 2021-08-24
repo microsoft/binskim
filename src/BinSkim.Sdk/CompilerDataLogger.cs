@@ -266,19 +266,21 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         private void SendChunkedCommandLine(string commandLineId, string commandLine)
         {
-            var commandLineArray = Enumerable.Range(0, commandLine.Length / ChunkSize)
-                .Select(i => commandLine.Substring(i * ChunkSize, ChunkSize)).ToList();
-
-            for (int i = 0; i < commandLineArray.Count; i++)
+            int j = 1;
+            int size = (int)Math.Ceiling(1.0 * commandLine.Length / ChunkSize);
+            for (int i = 0; i < commandLine.Length; i += ChunkSize)
             {
+                string tempCommandLine = commandLine.Substring(i, Math.Min(ChunkSize, commandLine.Length - i));
+
                 s_telemetryClient.TrackEvent(CommandLineEventName, properties: new Dictionary<string, string>
                 {
                     { "sessionId", s_sessionId },
                     { "commandLineId", commandLineId },
-                    { "orderNumber", i.ToString() },
-                    { "totalNumber", commandLineArray.Count.ToString() },
-                    { "chunkedCommandLine", commandLineArray[i] },
+                    { "orderNumber", j.ToString() },
+                    { "totalNumber", size.ToString() },
+                    { "chunkedCommandLine", tempCommandLine },
                 });
+                j++;
             }
         }
     }

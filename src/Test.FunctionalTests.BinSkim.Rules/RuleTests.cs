@@ -276,8 +276,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 context.Rule = skimmer;
 
-                AnalysisApplicability applicability;
-                applicability = skimmer.CanAnalyze(context, out string reasonForNotAnalyzing);
+                AnalysisApplicability applicability = skimmer.CanAnalyze(context, out string reasonForNotAnalyzing);
                 if (applicability != expectedApplicability)
                 {
                     sb.AppendLine("CanAnalyze did not correct indicate target applicability (unexpected return was " +
@@ -297,8 +296,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
         {
-            string testFilesDirectory;
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestsData");
+            string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestsData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -458,10 +456,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                var failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
                 this.VerifyFail(
                     new DoNotIncorporateVulnerableDependencies(),
-                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
@@ -564,7 +560,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             this.VerifyApplicability(new DoNotShipVulnerableBinaries(), notApplicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
         }
 
-        [Fact(Skip = "commenting to release.")]
+        [Fact]
         public void BA2006_BuildWithSecureTools_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -577,15 +573,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact(Skip = "commenting to release.")]
+        [Fact]
         public void BA2006_BuildWithSecureTools_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                var failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
                 this.VerifyFail(
                     new BuildWithSecureTools(),
-                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
@@ -625,14 +619,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                var failureConditions = new HashSet<string>
-                {
-                    MetadataConditions.CouldNotLoadPdb
-                };
-
                 this.VerifyFail(
                     new EnableCriticalCompilerWarnings(),
-                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
@@ -841,15 +829,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                var failureConditions = new HashSet<string>
-                {
-                    MetadataConditions.CouldNotLoadPdb
-                };
-
                 this.VerifyFail(
                     new InitializeStackProtection(),
-                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 

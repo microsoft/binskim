@@ -13,7 +13,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (context.IsPE())
             {
                 PEBinary target = context.PEBinary();
-                return target.PE != null && target.PE.IsPEFile
+                return target.PE?.IsPEFile == true
                     ? this.CanAnalyzePE(target, context.Policy, out reasonForNotAnalyzing)
                     : AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
