@@ -20,6 +20,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private const int ChunkSize = 8192;
         private const string CompilerEventName = "CompilerInformation";
         private const string CommandLineEventName = "CommandLineInformation";
+        private const string SummaryEventName = "AnalysisSummary";
 
         private readonly bool appInsightsRegistered;
         private readonly string sha256;
@@ -29,6 +30,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private static bool s_printHeader = true;
         private static TelemetryClient s_telemetryClient;
         private static TelemetryConfiguration s_telemetryConfiguration;
+
+        public static bool TelemetryEnabled => s_telemetryClient != null;
 
         public CompilerDataLogger(IAnalysisContext analysisContext,
                                   IEnumerable<string> targetFileSpecifiers)
@@ -95,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public static void Flush()
         {
-            if (s_telemetryClient != null)
+            if (TelemetryEnabled)
             {
                 s_telemetryClient.Flush();
 
@@ -121,7 +124,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             string name = omDetails?.Name;
             string library = omDetails?.Library;
-            if (this.appInsightsRegistered)
+            if (TelemetryEnabled)
             {
                 string commandLineId = string.Empty;
                 var properties = new Dictionary<string, string>
@@ -165,7 +168,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public void Write(CompilerData compilerData, string file)
         {
-            if (this.appInsightsRegistered)
+            if (TelemetryEnabled)
             {
                 string commandLineId = string.Empty;
                 var properties = new Dictionary<string, string>
@@ -209,7 +212,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public void WriteException(string errorMessage)
         {
-            if (this.appInsightsRegistered)
+            if (TelemetryEnabled)
             {
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
@@ -228,13 +231,36 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "moduleLibrary", string.Empty },
                     { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
-                    { "error", errorMessage }
+                    { "error", errorMessage },
                 });
             }
             else
             {
                 string log = $"{this.relativeFilePath},,,,,,,,,,,,,{this.sha256},{errorMessage}";
                 Console.WriteLine(log);
+            }
+        }
+
+        public static void Summarize(AnalysisSummary summary)
+        {
+            if (TelemetryEnabled)
+            {
+                s_telemetryClient.TrackEvent(SummaryEventName, properties: new Dictionary<string, string>
+                {
+                    { "toolName", summary.ToolName },
+                    { "toolVersion", summary.ToolVersion },
+                    { "sessionId", s_sessionId },
+                    { "normalizedPath", summary.NormalizedPath },
+                    { "symbolPath", summary.SymbolPath },
+                    { "numberOfBinaryAnalyzed", summary.FileAnalyzed.ToString() },
+                    { "analysisStartTime", summary.StartTimeUtc.ToString() },
+                    { "analysisEndTime", summary.EndTimeUtc.ToString() },
+                    { "timeConsumed", summary.TimeConsumed.ToString() }
+                });
+            }
+            else
+            {
+                Console.WriteLine(summary.ToString());
             }
         }
 
