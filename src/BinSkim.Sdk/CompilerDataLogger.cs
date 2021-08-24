@@ -241,7 +241,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private void SendChunkedCommandLine(string commandLineId, string commandLine)
         {
             int j = 1;
-            int size = (int)Math.Ceiling(1.0 * commandLine.Length / ChunkSize);            
+            int size = (int)Math.Ceiling(1.0 * commandLine.Length / ChunkSize);
             for (int i = 0; i < commandLine.Length; i += ChunkSize)
             {
                 string tempCommandLine = commandLine.Substring(i, Math.Min(ChunkSize, commandLine.Length - i));
