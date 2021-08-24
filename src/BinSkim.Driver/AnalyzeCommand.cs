@@ -97,7 +97,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             try
             {
-                if (CompilerDataLogger.Enabled &&
+                if (CompilerDataLogger.TelemetryEnabled &&
                     !string.IsNullOrEmpty(analyzeOptions.OutputFilePath) &&
                     this.FileSystem.FileExists(analyzeOptions.OutputFilePath))
                 {

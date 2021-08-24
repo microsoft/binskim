@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private static TelemetryClient s_telemetryClient;
         private static TelemetryConfiguration s_telemetryConfiguration;
 
-        public static bool Enabled => s_telemetryClient != null;
+        public static bool TelemetryEnabled => s_telemetryClient != null;
 
         public CompilerDataLogger(IAnalysisContext analysisContext,
                                   IEnumerable<string> targetFileSpecifiers)
@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public static void Flush()
         {
-            if (s_telemetryClient != null)
+            if (TelemetryEnabled)
             {
                 s_telemetryClient.Flush();
 
@@ -121,7 +121,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             string name = omDetails?.Name;
             string library = omDetails?.Library;
-            if (this.appInsightsRegistered)
+            if (TelemetryEnabled)
             {
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
@@ -152,7 +152,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public void Write(CompilerData compilerData, string file)
         {
-            if (this.appInsightsRegistered)
+            if (TelemetryEnabled)
             {
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
@@ -183,7 +183,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public void WriteException(string errorMessage)
         {
-            if (this.appInsightsRegistered)
+            if (TelemetryEnabled)
             {
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
                 {
@@ -214,7 +214,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public static void Summarize(AnalysisSummary summary)
         {
-            if (s_telemetryClient != null)
+            if (TelemetryEnabled)
             {
                 s_telemetryClient.TrackEvent(SummaryEventName, properties: new Dictionary<string, string>
                 {
