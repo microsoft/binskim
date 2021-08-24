@@ -141,7 +141,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (warningLevel < 3)
                 {
-                    exampleTooLowWarningCommandLine = exampleTooLowWarningCommandLine ?? omDetails.RawCommandLine;
+                    exampleTooLowWarningCommandLine ??= omDetails.RawCommandLine;
 
                     string msg = "[warning level: " + warningLevel.ToString(CultureInfo.InvariantCulture) + "]";
                     warningTooLowModules.Add(om.CreateCompilandRecordWithSuffix(msg));
@@ -151,7 +151,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (requiredDisabledWarnings.Count != 0)
                 {
                     MergeInto(overallDisabledWarnings, requiredDisabledWarnings);
-                    exampleDisabledWarningCommandLine = exampleDisabledWarningCommandLine ?? omDetails.RawCommandLine;
+                    exampleDisabledWarningCommandLine ??= omDetails.RawCommandLine;
 
                     string msg = "[Explicitly disabled warnings: " + CreateTextWarningList(requiredDisabledWarnings) + "]";
                     disabledWarningModules.Add(om.CreateCompilandRecordWithSuffix(msg));
