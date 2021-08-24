@@ -123,7 +123,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             string library = omDetails?.Library;
             if (this.appInsightsRegistered)
             {
-                string commandLineId = Guid.NewGuid().ToString();
+                string commandLineId = string.Empty;
                 var properties = new Dictionary<string, string>
                 {
                     { "target", this.relativeFilePath },
@@ -145,14 +145,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
                 if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
                 {
+                    commandLineId = Guid.NewGuid().ToString();
                     properties.Add("commandLineId", commandLineId);
                 }
 
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: properties);
 
-                if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
+                if (!string.IsNullOrWhiteSpace(commandLineId))
                 {
-                    SendChunkedCommandLine(s_sessionId, commandLineId, compilerData.CommandLine);
+                    SendChunkedCommandLine(commandLineId, compilerData.CommandLine);
                 }
             }
             else
@@ -166,7 +167,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             if (this.appInsightsRegistered)
             {
-                string commandLineId = Guid.NewGuid().ToString();
+                string commandLineId = string.Empty;
                 var properties = new Dictionary<string, string>
                 {
                     { "target", this.relativeFilePath },
@@ -188,14 +189,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
                 if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
                 {
+                    commandLineId = Guid.NewGuid().ToString();
                     properties.Add("commandLineId", commandLineId);
                 }
 
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: properties);
 
-                if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
+                if (!string.IsNullOrWhiteSpace(commandLineId))
                 {
-                    SendChunkedCommandLine(s_sessionId, commandLineId, compilerData.CommandLine);
+                    SendChunkedCommandLine(commandLineId, compilerData.CommandLine);
                 }
             }
             else
@@ -236,7 +238,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        private void SendChunkedCommandLine(string sessionId, string commandLineId, string commandLine)
+        private void SendChunkedCommandLine(string commandLineId, string commandLine)
         {
             var commandLineArray = Enumerable.Range(0, commandLine.Length / ChunkSize)
                 .Select(i => commandLine.Substring(i * ChunkSize, ChunkSize)).ToList();
@@ -245,7 +247,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 s_telemetryClient.TrackEvent(CommandLineEventName, properties: new Dictionary<string, string>
                 {
-                    { "sessionId", sessionId },
+                    { "sessionId", s_sessionId },
                     { "commandLineId", commandLineId },
                     { "orderNumber", i.ToString() },
                     { "totalNumber", commandLineArray.Count.ToString() },
