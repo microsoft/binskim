@@ -17,8 +17,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             get
             {
-                this.iBinary = this.iBinary
-                    ?? BinaryTargetManager.GetBinaryFromFile(
+                this.iBinary ??= BinaryTargetManager.GetBinaryFromFile(
                         this.uri,
                         this.SymbolPath,
                         this.LocalSymbolDirectories,
@@ -31,13 +30,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public Exception TargetLoadException
         {
-            get => this.Binary != null ? this.Binary.LoadException : null;
+            get => this.Binary?.LoadException;
             set => throw new InvalidOperationException();
         }
 
         public bool IsValidAnalysisTarget
         {
-            get => this.Binary != null && this.Binary.Valid;
+            get => this.Binary?.Valid == true;
             set => throw new InvalidOperationException();
         }
 
