@@ -86,11 +86,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
 
                 string[] cVersion;
-                string[] cVersionExecluded = null;
+                string[] cVersionExcluded = null;
                 if (details.WellKnownCompiler == WellKnownCompilers.MicrosoftC)
                 {
                     cVersion = new string[] { "std:c" };
-                    cVersionExecluded = new string[] { "std:c++" };
+                    cVersionExcluded = new string[] { "std:c++" };
                 }
                 else if (details.WellKnownCompiler == WellKnownCompilers.MicrosoftCxx)
                 {
@@ -107,7 +107,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
 
                 string cVersionNumberString = string.Empty;
-                details.GetOptionValue(cVersion, OrderOfPrecedence.FirstWins, ref cVersionNumberString, cVersionExecluded);
+                details.GetOptionValue(cVersion, OrderOfPrecedence.FirstWins, ref cVersionNumberString, cVersionExcluded);
                 AnalyzeResultType resultType = AnalyzeResultType.NotCurrent;
 
                 if (string.IsNullOrWhiteSpace(cVersionNumberString))
