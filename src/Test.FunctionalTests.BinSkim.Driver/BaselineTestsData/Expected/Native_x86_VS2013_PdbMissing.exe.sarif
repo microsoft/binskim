@@ -269,8 +269,32 @@
           ]
         },
         {
-          "ruleId": "BA3030",
+          "ruleId": "BA3012",
           "ruleIndex": 11,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Native_x86_VS2013_PdbMissing.exe",
+              "DwarfCompileUsingCurrentDialects",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 12,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -294,7 +318,7 @@
         },
         {
           "ruleId": "BA5001",
-          "ruleIndex": 12,
+          "ruleIndex": 13,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -318,7 +342,7 @@
         },
         {
           "ruleId": "BA5002",
-          "ruleIndex": 13,
+          "ruleIndex": 14,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -342,28 +366,6 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 14,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2013_PdbMissing.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
           "ruleIndex": 15,
           "kind": "pass",
           "level": "none",
@@ -385,7 +387,7 @@
           ]
         },
         {
-          "ruleId": "BA2010",
+          "ruleId": "BA2009",
           "ruleIndex": 16,
           "kind": "pass",
           "level": "none",
@@ -407,7 +409,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2010",
           "ruleIndex": 17,
           "kind": "pass",
           "level": "none",
@@ -429,7 +431,7 @@
           ]
         },
         {
-          "ruleId": "BA2016",
+          "ruleId": "BA2012",
           "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
@@ -451,8 +453,30 @@
           ]
         },
         {
-          "ruleId": "BA2018",
+          "ruleId": "BA2016",
           "ruleIndex": 19,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2013_PdbMissing.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2018",
+          "ruleIndex": 20,
           "level": "error",
           "message": {
             "id": "Error",
@@ -474,7 +498,7 @@
         },
         {
           "ruleId": "BA2019",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -496,7 +520,7 @@
         },
         {
           "ruleId": "BA2021",
-          "ruleIndex": 21,
+          "ruleIndex": 22,
           "level": "error",
           "message": {
             "id": "Error",
@@ -518,7 +542,7 @@
         },
         {
           "ruleId": "BA2022",
-          "ruleIndex": 22,
+          "ruleIndex": 23,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -811,6 +835,28 @@
                 }
               },
               "name": "EnableBindNow"
+            },
+            {
+              "id": "BA3012",
+              "fullDescription": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3012DwarfCompileUsingCurrentDialects",
+              "help": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior."
+                },
+                "Warning": {
+                  "text": "'{0}' was not compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, compiling with the compiler flags /std with version 17 or later, e.g. '/std:c++17' for C++ and '/std:c17' for C.\r\nModules did not meet the criteria: {1}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DwarfCompileUsingCurrentDialects"
             },
             {
               "id": "BA3030",
@@ -1156,203 +1202,11 @@
                 }
               ],
               "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
+                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated because its PDB could not be loaded (E_PDB_NOT_FOUND)."
               },
               "level": "error",
               "descriptor": {
                 "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2002"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2004"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2006"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2007"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2011"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2013"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2014"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2024"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableShadowStack' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2025"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x86_VS2013_PdbMissing.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Native_x86_VS2013_PdbMissing.exe' was not evaluated for check 'EnableAdditionalSdlSecurityChecks' because its PDB could not be loaded (E_PDB_NOT_FOUND)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2026"
               }
             }
           ],

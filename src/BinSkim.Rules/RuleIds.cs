@@ -41,6 +41,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string EnableSpectreMitigations = "BA2024";
         public const string EnableShadowStack = "BA2025";
         public const string EnableAdditionalSdlSecurityChecks = "BA2026";
+        public const string CompileUsingCurrentDialects = "BA2027";
 
         // ELF Checks
         public const string EnablePositionIndependentExecutable = "BA3001";
@@ -55,6 +56,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string EnableReadOnlyRelocations = "BA3010";
 
         public const string EnableBindNow = "BA3011";
+        public const string DwarfCompileUsingCurrentDialects = "BA3012";
 
         // BA3012-3029 -- saved for future non-compiler/language specific checks.
         // Compiler/Language specific checks follow.

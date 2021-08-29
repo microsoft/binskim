@@ -533,8 +533,32 @@
           ]
         },
         {
-          "ruleId": "BA3003",
+          "ruleId": "BA2027",
           "ruleIndex": 22,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "clang.default_compilation",
+              "CompileUsingCurrentDialects",
+              "image is not a PE binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.default_compilation",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3003",
+          "ruleIndex": 23,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -558,7 +582,7 @@
         },
         {
           "ruleId": "BA3005",
-          "ruleIndex": 23,
+          "ruleIndex": 24,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -581,8 +605,32 @@
           ]
         },
         {
+          "ruleId": "BA3012",
+          "ruleIndex": 25,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "clang.default_compilation",
+              "DwarfCompileUsingCurrentDialects",
+              "not compiled solely with gcc"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.default_compilation",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "BA3030",
-          "ruleIndex": 24,
+          "ruleIndex": 26,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -606,7 +654,7 @@
         },
         {
           "ruleId": "BA5001",
-          "ruleIndex": 25,
+          "ruleIndex": 27,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -630,7 +678,7 @@
         },
         {
           "ruleId": "BA5002",
-          "ruleIndex": 26,
+          "ruleIndex": 28,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -654,7 +702,7 @@
         },
         {
           "ruleId": "BA3001",
-          "ruleIndex": 27,
+          "ruleIndex": 29,
           "level": "error",
           "message": {
             "id": "Error",
@@ -675,50 +723,6 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 28,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "clang.default_compilation"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.default_compilation",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3006",
-          "ruleIndex": 29,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "clang.default_compilation"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.default_compilation",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3010",
           "ruleIndex": 30,
           "kind": "pass",
           "level": "none",
@@ -740,8 +744,52 @@
           ]
         },
         {
-          "ruleId": "BA3011",
+          "ruleId": "BA3006",
           "ruleIndex": 31,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "clang.default_compilation"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.default_compilation",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 32,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "clang.default_compilation"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.default_compilation",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3011",
+          "ruleIndex": 33,
           "level": "error",
           "message": {
             "id": "Error",
@@ -1374,6 +1422,28 @@
               "name": "EnableAdditionalSdlSecurityChecks"
             },
             {
+              "id": "BA2027",
+              "fullDescription": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2027CompileUsingCurrentDialects",
+              "help": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a Windows PE that was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior."
+                },
+                "Warning": {
+                  "text": "'{0}' is a Windows PE that wasn't compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, pass version 17 or later on the cl.exe command-line, e.g. '/std:c++17' for C++ and '/std:c17' for C or set the corresponding 'Language Standard' property in the 'C/C++ -> General' Configuration property page.\r\nThe following modules were not compiled with current dialects:\r\n{1}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "CompileUsingCurrentDialects"
+            },
+            {
               "id": "BA3003",
               "fullDescription": {
                 "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
@@ -1416,6 +1486,28 @@
                 }
               },
               "name": "EnableStackClashProtection"
+            },
+            {
+              "id": "BA3012",
+              "fullDescription": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3012DwarfCompileUsingCurrentDialects",
+              "help": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior."
+                },
+                "Warning": {
+                  "text": "'{0}' was not compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, compiling with the compiler flags /std with version 17 or later, e.g. '/std:c++17' for C++ and '/std:c17' for C.\r\nModules did not meet the criteria: {1}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DwarfCompileUsingCurrentDialects"
             },
             {
               "id": "BA3030",

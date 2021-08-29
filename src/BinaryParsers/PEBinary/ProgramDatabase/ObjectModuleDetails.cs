@@ -163,10 +163,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <param name="optionNames">Array of command line options to search for a value</param>
         /// <param name="precedence">The precedence ruls for this set of options</param>
         /// <param name="optionValue">string to recieve the value of the command line option</param>
+        /// <param name="optionNamesExcluded">Array of command line options to be excluded from the result</param>
         /// <returns>true if one of the options is found, false if none are found</returns>
-        public bool GetOptionValue(string[] optionNames, OrderOfPrecedence precedence, ref string optionValue)
+        public bool GetOptionValue(string[] optionNames, OrderOfPrecedence precedence, ref string optionValue, string[] optionNamesExcluded = null)
         {
-            return CommandLineHelper.GetOptionValue(this.compilerCommandLine.Raw, optionNames, precedence, ref optionValue);
+            return CommandLineHelper.GetOptionValue(this.compilerCommandLine.Raw, optionNames, precedence, ref optionValue, optionNamesExcluded);
         }
 
     }

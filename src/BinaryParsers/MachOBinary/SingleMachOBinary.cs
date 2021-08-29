@@ -158,7 +158,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             return section != null ? address - codeSegmentOffset : 0;
         }
 
-        public string GetDwarfCompilerCommand()
+        public string GetCompilerCommand()
         {
             if (CompilationUnits == null || CompilationUnits.Count == 0)
             {
@@ -166,9 +166,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
             KeyValuePair<DwarfAttribute, DwarfAttributeValue> producer = CompilationUnits
                 .SelectMany(c => c.Symbols)
-                .Where(s => s.Tag == DwarfTag.CompileUnit)
+                .Where(s => s.Tag == DwarfTag.CompileUnit || s.Tag == DwarfTag.Subprogram)
                 .SelectMany(s => s.Attributes)
-                .FirstOrDefault(a => a.Key == DwarfAttribute.Producer);
+                .FirstOrDefault(a => a.Key == DwarfAttribute.Producer || a.Key == DwarfAttribute.LinkageName);
             return producer.Key == DwarfAttribute.None ? string.Empty : producer.Value.String;
         }
 
@@ -223,7 +223,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             try
             {
-                string compilerString = this.GetDwarfCompilerCommand(); // return empty string if not found
+                string compilerString = this.GetCompilerCommand(); // return empty string if not found
                 return new MachOCompiler[] { new MachOCompiler(compilerString) };
             }
             // Catch cases when the compiler string is not formatted the way we expect it to be.

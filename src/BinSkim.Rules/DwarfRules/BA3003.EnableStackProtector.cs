@@ -113,6 +113,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 if (!analyze(elf, out failedList))
                 {
+                    string failedListString = string.Join(", ", failedList);
+                    if (string.IsNullOrWhiteSpace(failedListString))
+                    {
+                        failedListString = context.TargetUri.GetFileName();
+                    }
+
                     // The stack protector was not found in '{0}'.
                     // This may be because '--stack-protector-strong' was not used,
                     // or because it was explicitly disabled by '-fno-stack-protectors'.
@@ -120,7 +126,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA3003_Error),
-                            context.TargetUri.GetFileName(), string.Join(", ", failedList)));
+                            context.TargetUri.GetFileName(), failedListString));
                     return;
                 }
 
@@ -138,6 +144,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     if (!analyze(subBinary, out failedList))
                     {
+                        string failedListString = string.Join(", ", failedList);
+                        if (string.IsNullOrWhiteSpace(failedListString))
+                        {
+                            failedListString = context.TargetUri.GetFileName();
+                        }
+
                         // The stack protector was not found in '{0}'.
                         // This may be because '--stack-protector-strong' was not used,
                         // or because it was explicitly disabled by '-fno-stack-protectors'.
@@ -145,7 +157,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                                 nameof(RuleResources.BA3003_Error),
-                                context.TargetUri.GetFileName(), string.Join(", ", failedList)));
+                                context.TargetUri.GetFileName(), failedListString));
                         return;
                     }
                 }

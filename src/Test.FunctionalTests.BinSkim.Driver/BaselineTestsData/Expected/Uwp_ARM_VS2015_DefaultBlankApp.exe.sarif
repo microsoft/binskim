@@ -293,8 +293,32 @@
           ]
         },
         {
-          "ruleId": "BA3030",
+          "ruleId": "BA3012",
           "ruleIndex": 12,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Uwp_ARM_VS2015_DefaultBlankApp.exe",
+              "DwarfCompileUsingCurrentDialects",
+              "image is not an ELF binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 13,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -318,7 +342,7 @@
         },
         {
           "ruleId": "BA5001",
-          "ruleIndex": 13,
+          "ruleIndex": 14,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -342,7 +366,7 @@
         },
         {
           "ruleId": "BA5002",
-          "ruleIndex": 14,
+          "ruleIndex": 15,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -366,28 +390,6 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 15,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
           "ruleIndex": 16,
           "kind": "pass",
           "level": "none",
@@ -409,7 +411,7 @@
           ]
         },
         {
-          "ruleId": "BA2010",
+          "ruleId": "BA2009",
           "ruleIndex": 17,
           "kind": "pass",
           "level": "none",
@@ -431,8 +433,30 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2010",
           "ruleIndex": 18,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2012",
+          "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -454,28 +478,6 @@
         },
         {
           "ruleId": "BA2016",
-          "ruleIndex": 19,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2019",
           "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
@@ -497,7 +499,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2019",
           "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
@@ -519,8 +521,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 22,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_ARM_VS2015_DefaultBlankApp.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 23,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -843,6 +867,28 @@
               "name": "EnableBindNow"
             },
             {
+              "id": "BA3012",
+              "fullDescription": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3012DwarfCompileUsingCurrentDialects",
+              "help": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior."
+                },
+                "Warning": {
+                  "text": "'{0}' was not compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, compiling with the compiler flags /std with version 17 or later, e.g. '/std:c++17' for C++ and '/std:c17' for C.\r\nModules did not meet the criteria: {1}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DwarfCompileUsingCurrentDialects"
+            },
+            {
               "id": "BA3030",
               "fullDescription": {
                 "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2')."
@@ -1158,203 +1204,11 @@
                 }
               ],
               "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'DoNotIncorporateVulnerableDependencies' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
+                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
               },
               "level": "error",
               "descriptor": {
                 "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2002"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2004"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'BuildWithSecureTools' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2006"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableCriticalCompilerWarnings' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2007"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableStackProtection' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2011"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'InitializeStackProtection' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2013"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'DoNotDisableStackProtectionForFunctions' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2014"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableSpectreMitigations' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2024"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableShadowStack' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2025"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_ARM_VS2015_DefaultBlankApp.exe"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Uwp_ARM_VS2015_DefaultBlankApp.exe' was not evaluated for check 'EnableAdditionalSdlSecurityChecks' because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2026"
               }
             }
           ],
