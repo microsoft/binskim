@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* FEATURE: Add BA3012.DwarfCompileUsingCurrentDialects & BA2027.CompileUsingCurrentDialects.cs. [#416](https://github.com/microsoft/binskim/pull/416)
+* FEATURE: Add BA3012.DwarfCompileUsingCurrentDialects & BA2027.CompileUsingCurrentDialects. [#416](https://github.com/microsoft/binskim/pull/416)
 * BUGFIX: Fix exception handling when PDB cannot be loaded by `IDiaDataSource`. [#461](https://github.com/microsoft/binskim/pull/461)
 * BREAKING: PDB exceptions will be reported once per target. [#465](https://github.com/microsoft/binskim/pull/465)
 
