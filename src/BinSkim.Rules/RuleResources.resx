@@ -569,7 +569,8 @@ The following modules were not compiled with current dialects:
     <value>The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior.</value>
   </data>
   <data name="BA3012_Warning" xml:space="preserve">
-    <value>'{0}' was not compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, compiling with the compiler flags /std with version 17 or later, e.g. '/std:c++17' for C++ and '/std:c17' for C.</value>
+    <value>'{0}' was not compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, compiling with the compiler flags /std with version 17 or later, e.g. '/std:c++17' for C++ and '/std:c17' for C.
+Modules did not meet the criteria: {1}</value>
   </data>
   <data name="BA3012_Pass" xml:space="preserve">
     <value>'{0}' was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior.</value>

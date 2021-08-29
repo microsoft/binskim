@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
                 {
                     List<string> args = ArgumentSplitter.CommandLineToArgvW(info.CommandLine);
-                    if (args.Count < 2 || OldDialectsForC.Contains(args[1]) || OldDialectsForCPlugPlus.Contains(args[1]))
+                    if (args.Count > 2 && (OldDialectsForC.Contains(args[1]) || OldDialectsForCPlugPlus.Contains(args[1])))
                     {
                         failedList.Add(info);
                     }
@@ -89,15 +89,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 if (!analyze(elf, out failedList))
                 {
+                    string failedListString = string.Join(", ", failedList);
+                    if (string.IsNullOrWhiteSpace(failedListString))
+                    {
+                        failedListString = context.TargetUri.GetFileName();
+                    }
+
                     // '{0}' was not compiled with current dialects. Compile using
                     // current dialects enables current standard-specific features
                     // and behavior. To resolve this problem, compiling with the
                     // compiler flags /std with version 17 or later, e.g. '/std:c++17'
                     // for C++ and '/std:c17' for C.
+                    // Modules did not meet the criteria: {1}
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                             nameof(RuleResources.BA3012_Warning),
-                            context.TargetUri.GetFileName(), string.Join(", ", failedList)));
+                            context.TargetUri.GetFileName(), failedListString));
                     return;
                 }
 
@@ -116,15 +123,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     if (!analyze(subBinary, out failedList))
                     {
+                        string failedListString = string.Join(", ", failedList);
+                        if (string.IsNullOrWhiteSpace(failedListString))
+                        {
+                            failedListString = context.TargetUri.GetFileName();
+                        }
+
                         // '{0}' was not compiled with current dialects. Compile using
                         // current dialects enables current standard-specific features
                         // and behavior. To resolve this problem, compiling with the
                         // compiler flags /std with version 17 or later, e.g. '/std:c++17'
                         // for C++ and '/std:c17' for C.
+                        // Modules did not meet the criteria: {1}
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                                 nameof(RuleResources.BA3012_Warning),
-                                context.TargetUri.GetFileName(), string.Join(", ", failedList)));
+                                context.TargetUri.GetFileName(), failedListString));
                         return;
                     }
                 }

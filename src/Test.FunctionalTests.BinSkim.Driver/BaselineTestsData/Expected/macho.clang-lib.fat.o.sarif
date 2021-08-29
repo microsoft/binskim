@@ -533,8 +533,32 @@
           ]
         },
         {
-          "ruleId": "BA3001",
+          "ruleId": "BA2027",
           "ruleIndex": 22,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "macho.clang-lib.fat.o",
+              "CompileUsingCurrentDialects",
+              "image is not a PE binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 23,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -558,7 +582,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 23,
+          "ruleIndex": 24,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -582,7 +606,7 @@
         },
         {
           "ruleId": "BA3003",
-          "ruleIndex": 24,
+          "ruleIndex": 25,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -606,7 +630,7 @@
         },
         {
           "ruleId": "BA3004",
-          "ruleIndex": 25,
+          "ruleIndex": 26,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -630,7 +654,7 @@
         },
         {
           "ruleId": "BA3005",
-          "ruleIndex": 26,
+          "ruleIndex": 27,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -654,7 +678,7 @@
         },
         {
           "ruleId": "BA3006",
-          "ruleIndex": 27,
+          "ruleIndex": 28,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -678,7 +702,7 @@
         },
         {
           "ruleId": "BA3010",
-          "ruleIndex": 28,
+          "ruleIndex": 29,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -702,7 +726,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 29,
+          "ruleIndex": 30,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -725,8 +749,32 @@
           ]
         },
         {
+          "ruleId": "BA3012",
+          "ruleIndex": 31,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "macho.clang-lib.fat.o",
+              "DwarfCompileUsingCurrentDialects",
+              "not compiled solely with gcc"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/macho.clang-lib.fat.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "BA3030",
-          "ruleIndex": 30,
+          "ruleIndex": 32,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -750,7 +798,7 @@
         },
         {
           "ruleId": "BA5001",
-          "ruleIndex": 31,
+          "ruleIndex": 33,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -774,7 +822,7 @@
         },
         {
           "ruleId": "BA5002",
-          "ruleIndex": 32,
+          "ruleIndex": 34,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -1412,6 +1460,28 @@
               "name": "EnableAdditionalSdlSecurityChecks"
             },
             {
+              "id": "BA2027",
+              "fullDescription": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2027CompileUsingCurrentDialects",
+              "help": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a Windows PE that was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior."
+                },
+                "Warning": {
+                  "text": "'{0}' is a Windows PE that wasn't compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, pass version 17 or later on the cl.exe command-line, e.g. '/std:c++17' for C++ and '/std:c17' for C or set the corresponding 'Language Standard' property in the 'C/C++ -> General' Configuration property page.\r\nThe following modules were not compiled with current dialects:\r\n{1}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "CompileUsingCurrentDialects"
+            },
+            {
               "id": "BA3001",
               "fullDescription": {
                 "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
@@ -1475,7 +1545,7 @@
                   "text": "Stack protector was found on '{0}'.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections."
                 },
                 "Error": {
-                  "text": "The stack protector was not found in '{0}'.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used.\r\nModules did not meet the criteria: {1}"
+                  "text": "The stack protector was not found in '{0}'. This may be because '--stack-protector-strong' was not used, or because it was explicitly disabled by '-fno-stack-protectors'.\r\nModules did not meet the criteria: {1}"
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
@@ -1592,6 +1662,28 @@
                 }
               },
               "name": "EnableBindNow"
+            },
+            {
+              "id": "BA3012",
+              "fullDescription": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3012DwarfCompileUsingCurrentDialects",
+              "help": {
+                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior."
+                },
+                "Warning": {
+                  "text": "'{0}' was not compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, compiling with the compiler flags /std with version 17 or later, e.g. '/std:c++17' for C++ and '/std:c17' for C.\r\nModules did not meet the criteria: {1}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DwarfCompileUsingCurrentDialects"
             },
             {
               "id": "BA3030",
