@@ -9,7 +9,6 @@ using System.Linq;
 using ELFSharp.MachO;
 
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
-using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
@@ -79,11 +78,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             throw new NotImplementedException();
         }
 
-        public string GetDwarfCompilerCommand()
-        {
-            throw new NotImplementedException();
-        }
-
         public DwarfLanguage GetLanguage()
         {
             throw new NotImplementedException();
@@ -114,6 +108,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         bool IDwarfBinary.Is64bit => throw new NotImplementedException();
 
         public ICompiler[] Compilers => throw new NotImplementedException();
+
+        public List<DwarfCompileCommandLineInfo> CommandLineInfos
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
 
         #endregion IDwarfBinary interface
     }

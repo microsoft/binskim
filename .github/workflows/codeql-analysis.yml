@@ -1,0 +1,59 @@
+name: CodeQL Analysis
+
+on:
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.411
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          queries: security-and-quality
+          languages: csharp
+
+      - name: Build solution
+        shell: pwsh
+        run: |
+          $pathToSolution = "src/BinSkim.sln"
+          $buildConfiguration = "Release"
+          $useSharedCompilation = "false"
+          $testProjects = "src/Test.FunctionalTests.BinSkim.Rules/Test.FunctionalTests.BinSkim.Rules.csproj", "src/Test.FunctionalTests.BinSkim.Driver/Test.FunctionalTests.BinSkim.Driver.csproj", "src/Test.UnitTests.BinaryParsers/Test.UnitTests.BinaryParsers.csproj", "src/Test.UnitTests.BinSkim.Rules/Test.UnitTests.BinSkim.Rules.csproj", "src/Test.UnitTests.BinSkim.Driver/Test.UnitTests.BinSkim.Driver.csproj"
+
+          dotnet nuget locals all --clear
+
+          # remove one or more test projects, 
+          # so that CodeQL only analyzes the source code
+          dotnet sln $pathToSolution remove $testProjects
+
+          dotnet clean $pathToSolution `
+          --configuration $buildConfiguration
+
+          dotnet restore $pathToSolution
+
+          dotnet build $pathToSolution `
+          -property:UseSharedCompilation=$useSharedCompilation `
+          --configuration $buildConfiguration `
+          --no-incremental `
+          --no-restore
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
+
+# Built with ❤ by [Pipeline Foundation](https://pipeline.foundation)

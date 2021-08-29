@@ -237,4 +237,7 @@
   <data name="MetadataCondition_ImageIsDebugOnly" xml:space="preserve">
     <value>image is a debug only file</value>
   </data>
+  <data name="MetadataCondition_ImageIsNotMachO" xml:space="preserve">
+    <value>image is not a MachO binary</value>
+  </data>
 </root>

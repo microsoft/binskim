@@ -12,5 +12,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
         DebugIncluded,
         DebugOnlyFileDwo,
         DebugOnlyFileDebuglink,
+        FromDebuglinkPointingToItself,
+        DebugOnlyFileWithDebugStripped,
     }
 }

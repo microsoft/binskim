@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // https://github.com/Microsoft/binskim/issues/192
         public override MultiformatMessageString Help => this.FullDescription;
 
-        public BinarySkimmer()
+        protected BinarySkimmer()
         {
             // Set Binscope friendly name for backwards compatibility, if one exists.
             string altId = BinScopeCompatibility.GetBinScopeRuleReadableName(this.Id);

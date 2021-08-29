@@ -276,8 +276,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 context.Rule = skimmer;
 
-                AnalysisApplicability applicability;
-                applicability = skimmer.CanAnalyze(context, out string reasonForNotAnalyzing);
+                AnalysisApplicability applicability = skimmer.CanAnalyze(context, out string reasonForNotAnalyzing);
                 if (applicability != expectedApplicability)
                 {
                     sb.AppendLine("CanAnalyze did not correct indicate target applicability (unexpected return was " +
@@ -297,8 +296,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
         {
-            string testFilesDirectory;
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestsData");
+            string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestsData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -458,10 +456,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                var failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
                 this.VerifyFail(
                     new DoNotIncorporateVulnerableDependencies(),
-                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
@@ -564,7 +560,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             this.VerifyApplicability(new DoNotShipVulnerableBinaries(), notApplicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
         }
 
-        [Fact(Skip = "commenting to release.")]
+        [Fact]
         public void BA2006_BuildWithSecureTools_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -577,15 +573,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact(Skip = "commenting to release.")]
+        [Fact]
         public void BA2006_BuildWithSecureTools_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                var failureConditions = new HashSet<string> { MetadataConditions.CouldNotLoadPdb };
                 this.VerifyFail(
                     new BuildWithSecureTools(),
-                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
@@ -625,14 +619,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                var failureConditions = new HashSet<string>
-                {
-                    MetadataConditions.CouldNotLoadPdb
-                };
-
                 this.VerifyFail(
                     new EnableCriticalCompilerWarnings(),
-                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
@@ -841,15 +829,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                var failureConditions = new HashSet<string>
-                {
-                    MetadataConditions.CouldNotLoadPdb
-                };
-
                 this.VerifyFail(
                     new InitializeStackProtection(),
-                    this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 
@@ -1328,6 +1314,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public void BA3030_UseCheckedFunctionsWithGCC_NotApplicable()
         {
             this.VerifyApplicability(new UseCheckedFunctionsWithGcc(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void BA5001_EnablePositionIndependentExecutableMachO_Pass()
+        {
+            this.VerifyPass(new EnablePositionIndependentExecutableMachO(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA5001_EnablePositionIndependentExecutableMachO_Fail()
+        {
+            this.VerifyFail(new EnablePositionIndependentExecutableMachO(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA5001_EnablePositionIndependentExecutableMachO_NotApplicable()
+        {
+            this.VerifyApplicability(new EnablePositionIndependentExecutableMachO(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void BA5002_DoNotAllowExecutableStack_Pass()
+        {
+            this.VerifyPass(new DoNotAllowExecutableStack(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA5002_DoNotAllowExecutableStack_Fail()
+        {
+            this.VerifyFail(new DoNotAllowExecutableStack(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA5002_DoNotAllowExecutableStack_NotApplicable()
+        {
+            this.VerifyApplicability(new DoNotAllowExecutableStack(), new HashSet<string>());
         }
     }
 }

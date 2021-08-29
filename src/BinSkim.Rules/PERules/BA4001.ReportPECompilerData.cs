@@ -33,8 +33,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         protected override IEnumerable<string> MessageResourceNames => Array.Empty<string>();
 
-        private bool PrintHeader = true;
-
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             reasonForNotAnalyzing = null;
@@ -46,11 +44,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
 
-            if (PrintHeader)
-            {
-                context.CompilerDataLogger.PrintHeader();
-                PrintHeader = false;
-            }
+            context.CompilerDataLogger.PrintHeader();
 
             if (pdb == null)
             {
@@ -91,6 +85,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     {
                         BinaryType = "PE",
                         CompilerName = omDetails.CompilerName,
+                        CommandLine = omDetails.RawCommandLine,
                         Language = omDetails.Language.ToString(),
                         DebuggingFileName = pdb.GlobalScope?.Name,
                         FileVersion = target.PE.FileVersion?.FileVersion,

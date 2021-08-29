@@ -341,32 +341,8 @@
           ]
         },
         {
-          "ruleId": "BA2027",
-          "ruleIndex": 14,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll",
-              "CompileUsingCurrentDialects",
-              "image is a managed IL-only assembly"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA3001",
-          "ruleIndex": 15,
+          "ruleIndex": 14,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -390,7 +366,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 16,
+          "ruleIndex": 15,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -414,7 +390,7 @@
         },
         {
           "ruleId": "BA3003",
-          "ruleIndex": 17,
+          "ruleIndex": 16,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -438,7 +414,7 @@
         },
         {
           "ruleId": "BA3004",
-          "ruleIndex": 18,
+          "ruleIndex": 17,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -462,7 +438,7 @@
         },
         {
           "ruleId": "BA3005",
-          "ruleIndex": 19,
+          "ruleIndex": 18,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -486,7 +462,7 @@
         },
         {
           "ruleId": "BA3006",
-          "ruleIndex": 20,
+          "ruleIndex": 19,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -510,7 +486,7 @@
         },
         {
           "ruleId": "BA3010",
-          "ruleIndex": 21,
+          "ruleIndex": 20,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -534,7 +510,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 22,
+          "ruleIndex": 21,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -557,15 +533,15 @@
           ]
         },
         {
-          "ruleId": "BA3012",
-          "ruleIndex": 23,
+          "ruleId": "BA3030",
+          "ruleIndex": 22,
           "kind": "notApplicable",
           "level": "none",
           "message": {
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll",
-              "DwarfCompileUsingCurrentDialects",
+              "UseCheckedFunctionsWithGcc",
               "image is not an ELF binary"
             ]
           },
@@ -581,7 +557,31 @@
           ]
         },
         {
-          "ruleId": "BA3030",
+          "ruleId": "BA5001",
+          "ruleIndex": 23,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll",
+              "EnablePositionIndependentExecutableMachO",
+              "image is not a MachO binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA5002",
           "ruleIndex": 24,
           "kind": "notApplicable",
           "level": "none",
@@ -589,8 +589,8 @@
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
               "Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll",
-              "UseCheckedFunctionsWithGcc",
-              "image is not an ELF binary"
+              "DoNotAllowExecutableStack",
+              "image is not a MachO binary"
             ]
           },
           "locations": [
@@ -1173,28 +1173,6 @@
               "name": "EnableAdditionalSdlSecurityChecks"
             },
             {
-              "id": "BA2027",
-              "fullDescription": {
-                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2027CompileUsingCurrentDialects",
-              "help": {
-                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' is a Windows PE that was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior."
-                },
-                "Warning": {
-                  "text": "'{0}' is a Windows PE that wasn't compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, pass version 17 or later on the cl.exe command-line, e.g. '/std:c++17' for C++ and '/std:c17' for C or set the corresponding 'Language Standard' property in the 'C/C++ -> General' Configuration property page.\r\nThe following modules were not compiled with current dialects:\r\n{1}"
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "name": "CompileUsingCurrentDialects"
-            },
-            {
               "id": "BA3001",
               "fullDescription": {
                 "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
@@ -1258,7 +1236,7 @@
                   "text": "Stack protector was found on '{0}'.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections."
                 },
                 "Error": {
-                  "text": "The stack protector was not found in '{0}'.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used."
+                  "text": "The stack protector was not found in '{0}'. This may be because '--stack-protector-strong' was not used, or because it was explicitly disabled by '-fno-stack-protectors'.\r\nModules did not meet the criteria: {1}"
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
@@ -1377,28 +1355,6 @@
               "name": "EnableBindNow"
             },
             {
-              "id": "BA3012",
-              "fullDescription": {
-                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3012DwarfCompileUsingCurrentDialects",
-              "help": {
-                "text": "The '/std' setting enables supported C and C++ language features from the specified version of the C or C++ language standard. Compile using current dialects enables current standard-specific features and behavior."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' was compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior."
-                },
-                "Warning": {
-                  "text": "'{0}' was not compiled with current dialects. Compile using current dialects enables current standard-specific features and behavior. To resolve this problem, compiling with the compiler flags /std with version 17 or later, e.g. '/std:c++17' for C++ and '/std:c17' for C."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "name": "DwarfCompileUsingCurrentDialects"
-            },
-            {
               "id": "BA3030",
               "fullDescription": {
                 "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2')."
@@ -1425,6 +1381,50 @@
                 }
               },
               "name": "UseCheckedFunctionsWithGcc"
+            },
+            {
+              "id": "BA5001",
+              "fullDescription": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5001EnablePositionIndependentExecutableMachO",
+              "help": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "PIE enabled on executable '{0}'."
+                },
+                "Error": {
+                  "text": "PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "EnablePositionIndependentExecutableMachO"
+            },
+            {
+              "id": "BA5002",
+              "fullDescription": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5002DoNotAllowExecutableStack",
+              "help": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "Executable stack is not allowed on executable '{0}'."
+                },
+                "Error": {
+                  "text": "Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag \"--allow_stack_execute\" to mark the stack as non-executable."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "name": "DoNotAllowExecutableStack"
             },
             {
               "id": "BA2004",

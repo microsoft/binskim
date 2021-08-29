@@ -56,7 +56,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 PublicSymbols = publicSymbols;
                 SectionRegions = ELF.Sections.Where(s => s.LoadAddress > 0).OrderBy(s => s.LoadAddress).ToArray();
 
-                CompilationUnits = DwarfSymbolProvider.ParseCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
+                CompilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
+                commandLineInfos = new Lazy<List<DwarfCompileCommandLineInfo>>(()
+                    => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits));
                 LineNumberPrograms = DwarfSymbolProvider.ParseLineNumberPrograms(DebugLine, NormalizeAddress);
                 CommonInformationEntries = DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this));
                 LoadDebug(localSymbolDirectories);
@@ -82,23 +84,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             catch (UnauthorizedAccessException) { return false; }
         }
 
-        public string GetDwarfCompilerCommand()
-        {
-            if (CompilationUnits == null || CompilationUnits.Count == 0)
-            {
-                return string.Empty;
-            }
-            KeyValuePair<DwarfAttribute, DwarfAttributeValue> producer = CompilationUnits
-                .SelectMany(c => c.Symbols)
-                .Where(s => s.Tag == DwarfTag.CompileUnit)
-                .SelectMany(s => s.Attributes)
-                .FirstOrDefault(a => a.Key == DwarfAttribute.Producer);
-            return producer.Key == DwarfAttribute.None ? string.Empty : producer.Value.String;
-        }
-
         public DwarfLanguage GetLanguage()
         {
-            if (CompilationUnits == null || CompilationUnits.Count == 0)
+            if (CompilationUnits.Count == 0)
             {
                 return DwarfLanguage.Unknown;
             }
@@ -211,7 +199,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <value>
         ///   <c>true</c> if is debug only file; otherwise, <c>false</c>.
         /// </value>
-        public bool IsDebugOnlyFile => DebugFileType == DebugFileType.DebugOnlyFileDebuglink || DebugFileType == DebugFileType.DebugOnlyFileDwo;
+        public bool IsDebugOnlyFile => DebugFileType ==
+            DebugFileType.DebugOnlyFileDebuglink
+            || DebugFileType == DebugFileType.DebugOnlyFileDwo
+            || DebugFileType == DebugFileType.FromDebuglinkPointingToItself
+            || DebugFileType == DebugFileType.DebugOnlyFileWithDebugStripped;
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -244,7 +236,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// Gets or sets the CompilationUnits.
         /// </summary>
-        public List<DwarfCompilationUnit> CompilationUnits { get; set; }
+        public List<DwarfCompilationUnit> CompilationUnits { get; set; } = new List<DwarfCompilationUnit>();
+
+        /// <summary>
+        /// Gets or sets the CommandLineInfos.
+        /// </summary>
+        public List<DwarfCompileCommandLineInfo> CommandLineInfos => this.commandLineInfos.Value;
 
         /// <summary>
         /// Gets or sets the LineNumberPrograms.
@@ -313,6 +310,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         /// <summary>
+        /// Get if section does not exist or exists but has no bits
+        /// </summary>
+        private bool SectionDoesNotExistOrHasNoBits(string sectionName)
+        {
+            ELF.TryGetSection(sectionName, out Section<ulong> sectionRetrieved);
+            return sectionRetrieved == null || sectionRetrieved.Type == SectionType.NoBits;
+        }
+
+        /// <summary>
         /// Loads the section bytes specified by the name.
         /// </summary>
         /// <param name="sectionName">Name of the section.</param>
@@ -323,7 +329,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 if (section.Name == sectionName + ".dwo" || section.Name == sectionName)
                 {
-                    return section.GetContents();
+                    try
+                    {
+                        return section.GetContents();
+                    }
+                    catch
+                    {
+                        return new byte[0];
+                    }
                 }
             }
 
@@ -363,7 +376,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             string debugFileName = null;
 
-            if (CompilationUnits != null && CompilationUnits.Count > 0)
+            if (CompilationUnits.Count > 0)
             {
                 // Load from Dwo
                 DwarfSymbol skeletonOrCompileSymbol = CompilationUnits
@@ -404,18 +417,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 Uri debugFileUri = GetFirstExistFile(debugFileName, directory.AbsolutePath, localSymbolDirectories);
                 if (debugFileUri != null)
                 {
-                    var dwoBinary = new ElfBinary(debugFileUri);
-                    DwarfCompilationUnit debugFileCompileUnit = dwoBinary.CompilationUnits?.FirstOrDefault(c => c.Symbols.Any(s => s.Tag == DwarfTag.CompileUnit));
-
-                    if (debugFileCompileUnit != null)
+                    if (debugFileUri == this.TargetUri)
                     {
-                        if (this.CompilationUnits == null)
+                        DebugFileType = DebugFileType.FromDebuglinkPointingToItself;
+                    }
+                    else
+                    {
+                        var dwoBinary = new ElfBinary(debugFileUri);
+
+                        if (dwoBinary != null && dwoBinary.CompilationUnits.Count > 0)
                         {
-                            this.CompilationUnits = new List<DwarfCompilationUnit>();
+                            this.CompilationUnits.AddRange(dwoBinary.CompilationUnits);
+
+                            if (dwoBinary.CommandLineInfos.Count > 0)
+                            {
+                                this.CommandLineInfos.AddRange(dwoBinary.CommandLineInfos);
+                            }
+
+                            DebugFileLoaded = true;
+                            return;
                         }
-                        this.CompilationUnits.Add(debugFileCompileUnit);
-                        DebugFileLoaded = true;
-                        return;
                     }
                 }
             }
@@ -430,6 +451,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     )
                 {
                     DebugFileType = DebugFileType.DebugOnlyFileDebuglink;
+                }
+                else if (SectionExistsAndHasNoBits(SectionName.Interp) &&
+                    SectionExistsAndHasNoBits(SectionName.Dynsym) &&
+                    SectionExistsAndHasNoBits(SectionName.Init) &&
+                    SectionExistsAndHasNoBits(SectionName.Data) &&
+                    SectionDoesNotExistOrHasNoBits(SectionName.DebugInfo)
+                    )
+                {
+                    DebugFileType = DebugFileType.DebugOnlyFileWithDebugStripped;
                 }
                 else if (SectionExistsAndHasBits(SectionName.Interp) &&
                     SectionExistsAndHasBits(SectionName.Dynsym) &&
@@ -452,6 +482,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 }
             }
         }
+
+        private readonly Lazy<List<DwarfCompileCommandLineInfo>> commandLineInfos;
 
         private static Uri GetFirstExistFile(string dwoName, string sameDirectory, string localSymbolDirectories = null)
         {

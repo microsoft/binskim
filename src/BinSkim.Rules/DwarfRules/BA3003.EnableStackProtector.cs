@@ -1,12 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-
-using ELFSharp.ELF;
-using ELFSharp.ELF.Sections;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
@@ -14,19 +12,13 @@ using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
+using static Microsoft.CodeAnalysis.BinaryParsers.CommandLineHelper;
+
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class EnableStackProtector : DwarfSkimmerBase
     {
-        private readonly string[] stack_check_symbols = new string[]{
-            "__stack_chk_fail",
-            "__stack_chk_fail_local", // Optimization for some architectures, according to compiler comments.
-            // macho symbol names
-            "___stack_chk_fail",
-            "___stack_chk_guard",
-        };
-
         /// <summary>
         /// BA3003
         /// </summary>
@@ -38,104 +30,169 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// smashing is detected.Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or
         /// '--fstack-protector-all' (all functions) to enable this.
         /// </summary>
-        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3003_EnableStackProtector_Description };
+        public override MultiformatMessageString FullDescription =>
+            new MultiformatMessageString { Text = RuleResources.BA3003_EnableStackProtector_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
-                    nameof(RuleResources.BA3003_Pass),
-                    nameof(RuleResources.BA3003_Error),
-                    nameof(RuleResources.NotApplicable_InvalidMetadata)
-                };
+            nameof(RuleResources.BA3003_Pass),
+            nameof(RuleResources.BA3003_Error),
+            nameof(RuleResources.NotApplicable_InvalidMetadata)
+        };
 
         public override AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
-            reasonForNotAnalyzing = null;
+            CanAnalyzeDwarfResult result = default;
+
             if (target is ElfBinary elf)
             {
-                if (elf.ELF.Type == FileType.Executable || elf.ELF.Type == FileType.SharedObject)
-                {
-                    return AnalysisApplicability.ApplicableToSpecifiedTarget;
-                }
-
-                reasonForNotAnalyzing = MetadataConditions.ElfIsCoreNoneOrObject;
+                result = this.VerifyDwarfBinary(elf);
             }
-            else if (target is MachOBinary mainMachO)
+            else if (target is MachOBinary mainMacho)
             {
-                foreach (SingleMachOBinary singleMachO in mainMachO.MachOs)
+                foreach (SingleMachOBinary subMachO in mainMacho.MachOs)
                 {
-                    if (IsApplicableMachO(singleMachO))
+                    result = this.VerifyDwarfBinary(subMachO);
+                    if (result.Result == AnalysisApplicability.ApplicableToSpecifiedTarget)
                     {
-                        // if any macho is applicable
-                        return AnalysisApplicability.ApplicableToSpecifiedTarget;
-                    }
-                }
-
-                reasonForNotAnalyzing = MetadataConditions.MachOIsNotExecutableDynamicLibraryOrObject;
-            }
-
-            return AnalysisApplicability.NotApplicableToSpecifiedTarget;
-        }
-
-        public override void Analyze(BinaryAnalyzerContext context)
-        {
-            HashSet<string> symbolNames = null;
-            bool result = false;
-            if (context.IsELF())
-            {
-                IELF elf = context.ElfBinary().ELF;
-                symbolNames = new HashSet<string>
-                (
-                    ElfUtility.GetAllSymbols(elf).Select(sym => sym.Name)
-                );
-
-                result = symbolNames.Any(symbol => this.stack_check_symbols.Contains(symbol));
-            }
-            else if (context.IsMachO())
-            {
-                MachOBinary mainMachO = context.MachOBinary();
-                foreach (SingleMachOBinary singleMachO in mainMachO.MachOs)
-                {
-                    if (!IsApplicableMachO(singleMachO))
-                    {
-                        continue;
-                    }
-
-                    symbolNames = new HashSet<string>
-                    (
-                        singleMachO.SymbolTables.SelectMany(st => st.Symbols).Select(s => s.Name)
-                    );
-
-                    result = symbolNames.Any(symbol => this.stack_check_symbols.Contains(symbol));
-
-                    // if any macho fails the check
-                    if (!result)
-                    {
+                        // if any machO is applicable
                         break;
                     }
                 }
             }
 
-            if (result)
+            reasonForNotAnalyzing = result.Reason;
+            return result.Result;
+        }
+
+        public override void Analyze(BinaryAnalyzerContext context)
+        {
+            IDwarfBinary binary = context.DwarfBinary();
+            List<DwarfCompileCommandLineInfo> failedList;
+
+            static bool analyze(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
             {
+                failedList = new List<DwarfCompileCommandLineInfo>();
+
+                foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
+                {
+                    bool failed = false;
+                    if ((!info.CommandLine.Contains("-fstack-protector-all", StringComparison.OrdinalIgnoreCase)
+                        && !info.CommandLine.Contains("-fstack-protector-strong", StringComparison.OrdinalIgnoreCase))
+                        || info.CommandLine.Contains("-fno-stack-protector", StringComparison.OrdinalIgnoreCase))
+                    {
+                        failed = true;
+                    }
+                    else
+                    {
+                        string[] paramToCheck = { "--param=ssp-buffer-size=" };
+                        string paramValue = string.Empty;
+                        bool found = GetOptionValue(info.CommandLine, paramToCheck, OrderOfPrecedence.FirstWins, ref paramValue);
+
+                        if (found && !string.IsNullOrWhiteSpace(paramValue))
+                        {
+                            if (int.TryParse(paramValue, out int bufferSize))
+                            {
+                                if (bufferSize > 4)
+                                {
+                                    failed = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (failed)
+                    {
+                        failedList.Add(info);
+                    }
+                }
+
+                return !failedList.Any();
+            }
+
+            if (binary is ElfBinary elf)
+            {
+                if (!analyze(elf, out failedList))
+                {
+                    // The stack protector was not found in '{0}'.
+                    // This may be because '--stack-protector-strong' was not used,
+                    // or because it was explicitly disabled by '-fno-stack-protectors'.
+                    // Modules did not meet the criteria: {1}
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                            nameof(RuleResources.BA3003_Error),
+                            context.TargetUri.GetFileName(), string.Join(", ", failedList)));
+                    return;
+                }
+
+                // Stack protector was found on '{0}'.
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                        nameof(RuleResources.BA3003_Pass),
+                        context.TargetUri.GetFileName()));
+                return;
+            }
+
+            if (binary is MachOBinary mainBinary)
+            {
+                foreach (SingleMachOBinary subBinary in mainBinary.MachOs)
+                {
+                    if (!analyze(subBinary, out failedList))
+                    {
+                        // The stack protector was not found in '{0}'.
+                        // This may be because '--stack-protector-strong' was not used,
+                        // or because it was explicitly disabled by '-fno-stack-protectors'.
+                        // Modules did not meet the criteria: {1}
+                        context.Logger.Log(this,
+                            RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                                nameof(RuleResources.BA3003_Error),
+                                context.TargetUri.GetFileName(), string.Join(", ", failedList)));
+                        return;
+                    }
+                }
+
+                // Stack protector was found on '{0}'.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA3003_Pass),
                         context.TargetUri.GetFileName()));
             }
-            else
-            {
-                // If we haven't found the stack protector, we assume it wasn't used.
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                        nameof(RuleResources.BA3003_Error),
-                        context.TargetUri.GetFileName()));
-            }
         }
 
-        private static bool IsApplicableMachO(SingleMachOBinary macho)
+        private CanAnalyzeDwarfResult VerifyDwarfBinary(IDwarfBinary binary)
         {
-            return (macho.MachO.FileType == ELFSharp.MachO.FileType.Object ||
-                    macho.MachO.FileType == ELFSharp.MachO.FileType.Executable ||
-                    macho.MachO.FileType == ELFSharp.MachO.FileType.DynamicLibrary);
+            // We check for "any usage of non-gcc" as a default/standard compilation with clang leads to [GCC, Clang]
+            // either because it links with a gcc-compiled object (cstdlib) or the linker also reading as GCC.
+            // This has a potential for a False Negative if teams are using GCC and other tools.
+            if (binary.Compilers.Any(c => c.Compiler != ElfCompilerType.GCC))
+            {
+                return new CanAnalyzeDwarfResult
+                {
+                    Reason = MetadataConditions.ElfNotBuiltWithGcc,
+                    Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
+                };
+            }
+            else if (binary.Compilers.Any(c => c.Version.Major < 8))
+            {
+                return new CanAnalyzeDwarfResult
+                {
+                    Reason = MetadataConditions.ElfNotBuiltWithGccV8OrLater,
+                    Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
+                };
+            }
+            else if (binary.CommandLineInfos.Count == 0)
+            {
+                return new CanAnalyzeDwarfResult
+                {
+                    Reason = MetadataConditions.ElfNotBuiltWithDwarfDebugging,
+                    Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
+                };
+            }
+
+            return new CanAnalyzeDwarfResult
+            {
+                Reason = null,
+                Result = AnalysisApplicability.ApplicableToSpecifiedTarget
+            };
         }
     }
 }
