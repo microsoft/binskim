@@ -67,19 +67,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override void Analyze(BinaryAnalyzerContext context)
         {
             IDwarfBinary binary = context.DwarfBinary();
+            List<DwarfCompileCommandLineInfo> failedList;
 
-            static bool analyze(IDwarfBinary binary)
+            static bool analyze(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
             {
-                string dwarfCompilerCommand = binary.GetDwarfCompilerCommand();
+                failedList = new List<DwarfCompileCommandLineInfo>();
 
-                List<string> args = ArgumentSplitter.CommandLineToArgvW(dwarfCompilerCommand);
+                foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
+                {
+                    List<string> args = ArgumentSplitter.CommandLineToArgvW(info.CommandLine);
+                    if (args.Count < 2 || OldDialectsForC.Contains(args[1]) || OldDialectsForCPlugPlus.Contains(args[1]))
+                    {
+                        failedList.Add(info);
+                    }
+                }
 
-                return args.Count >= 2 && (!OldDialectsForC.Contains(args[1]) && !OldDialectsForCPlugPlus.Contains(args[1]));
+                return !failedList.Any();
             }
 
             if (binary is ElfBinary elf)
             {
-                if (!analyze(elf))
+                if (!analyze(elf, out failedList))
                 {
                     // '{0}' was not compiled with current dialects. Compile using
                     // current dialects enables current standard-specific features
@@ -89,7 +97,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                             nameof(RuleResources.BA3012_Warning),
-                            context.TargetUri.GetFileName()));
+                            context.TargetUri.GetFileName(), string.Join(", ", failedList)));
                     return;
                 }
 
@@ -106,7 +114,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 foreach (SingleMachOBinary subBinary in mainBinary.MachOs)
                 {
-                    if (!analyze(subBinary))
+                    if (!analyze(subBinary, out failedList))
                     {
                         // '{0}' was not compiled with current dialects. Compile using
                         // current dialects enables current standard-specific features
@@ -116,7 +124,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                                 nameof(RuleResources.BA3012_Warning),
-                                context.TargetUri.GetFileName()));
+                                context.TargetUri.GetFileName(), string.Join(", ", failedList)));
                         return;
                     }
                 }
@@ -152,18 +160,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
                 };
             }
-            else
+            else if (binary.CommandLineInfos.Count == 0)
             {
-                string dwarfCompilerCommand = binary.GetDwarfCompilerCommand();
-
-                if (string.IsNullOrWhiteSpace(dwarfCompilerCommand))
+                return new CanAnalyzeDwarfResult
                 {
-                    return new CanAnalyzeDwarfResult
-                    {
-                        Reason = MetadataConditions.ElfNotBuiltWithDwarfDebugging,
-                        Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
-                    };
-                }
+                    Reason = MetadataConditions.ElfNotBuiltWithDwarfDebugging,
+                    Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
+                };
             }
 
             return new CanAnalyzeDwarfResult
