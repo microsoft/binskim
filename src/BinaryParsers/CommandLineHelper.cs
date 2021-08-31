@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Linq;
+
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
@@ -42,8 +44,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <param name="optionNames">Array of command line options to search for a value</param>
         /// <param name="precedence">The precedence ruls for this set of options</param>
         /// <param name="optionValue">string to recieve the value of the command line option</param>
+        /// <param name="optionNamesExcluded">Array of command line options to be excluded from the result</param>
         /// <returns>true if one of the options is found, false if none are found</returns>
-        public static bool GetOptionValue(string commandLine, string[] optionNames, OrderOfPrecedence precedence, ref string optionValue)
+        public static bool GetOptionValue(string commandLine, string[] optionNames, OrderOfPrecedence precedence, ref string optionValue, string[] optionNamesExcluded = null)
         {
             bool optionFound = false;
 
@@ -69,8 +72,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                         {
                             if (realArg.StartsWith(optionsArray[index]))
                             {
-                                optionFound = true;
-                                optionValue = realArg.Substring(optionsArray[index].Length);
+                                if (optionNamesExcluded == null || !optionNamesExcluded.Any(excluded => realArg.StartsWith(excluded)))
+                                {
+                                    optionFound = true;
+                                    optionValue = realArg.Substring(optionsArray[index].Length);
+                                }
                             }
                         }
 
