@@ -179,6 +179,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             // Read header
             ulong length = debugLine.ReadLength(out bool is64bit);
             int endPosition = debugLine.Position + (int)length;
+
+            if (endPosition > debugLine.Data.Length - 1)
+            {
+                endPosition = debugLine.Data.Length - 1;
+            }
+
             debugLine.ReadUshort(); // version
             debugLine.ReadOffset(is64bit); // headerLength
             byte minimumInstructionLength = debugLine.ReadByte();
