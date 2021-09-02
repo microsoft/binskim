@@ -87,10 +87,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         BinaryType = "ELF",
                         Dialect = info.GetDialect(),
                         CommandLine = info.CommandLine,
-                        Language = info.Language == DwarfLanguage.Unknown ? string.Empty : info.Language.ToString(),
                         CompilerName = compiler.Compiler.ToString(),
                         CompilerBackEndVersion = compiler.Version.ToString(),
                         CompilerFrontEndVersion = compiler.Version.ToString(),
+                        Language = info.Language == DwarfLanguage.Unknown ? string.Empty : info.Language.ToString(),
                     };
 
                     if (processedRecords.Contains(record))
