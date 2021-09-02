@@ -5,6 +5,7 @@
 * BUGFIX: Fix exception `System.AccessViolationException` caused by trying to read data out of boundary. [#470](https://github.com/microsoft/binskim/pull/470)
 * BUGFIX: Fix exception handling when PDB cannot be loaded by `IDiaDataSource`. [#461](https://github.com/microsoft/binskim/pull/461)
 * BREAKING: PDB exceptions will be reported once per target. [#465](https://github.com/microsoft/binskim/pull/465)
+* BUGFIX: Include C++ runtime in the package to prevent `DllNotFoundException` when loading `msdia140.dll`. [#474](https://github.com/microsoft/binskim/pull/474)
 
 ## **v1.9.0-prerelease1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.0-prerelease1)
 
