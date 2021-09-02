@@ -70,13 +70,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                         // Check if this matches one of the names switches
                         for (int index = 0; index < optionsArray.Length; index++)
                         {
-                            if (realArg.StartsWith(optionsArray[index]))
+                            if (realArg.StartsWith(optionsArray[index])
+                                && optionNamesExcluded?.Any(excluded => realArg.StartsWith(excluded)) != true)
                             {
-                                if (optionNamesExcluded?.Any(excluded => realArg.StartsWith(excluded)) != true)
-                                {
-                                    optionFound = true;
-                                    optionValue = realArg.Substring(optionsArray[index].Length);
-                                }
+                                optionFound = true;
+                                optionValue = realArg.Substring(optionsArray[index].Length);
                             }
                         }
 
@@ -104,7 +102,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public static SwitchState GetSwitchState(string commandLine, string[] switchNames, string[] overrideNames, SwitchState defaultState, OrderOfPrecedence precedence)
         {
             // TODO-paddymcd-MSFT - This is an OK first pass.
-            // Unfortunately composite switches get tricky and not all switches support the '-' semantics 
+            // Unfortunately composite switches get tricky and not all switches support the '-' semantics
             // e.g. /O1- gets translated to /O1 /O-, the second of which is not supported.
             // Additionally, currently /d2guardspecload is translated into /guardspecload, which may be a bug for ENC
             SwitchState namedswitchesState = SwitchState.SwitchNotFound;
