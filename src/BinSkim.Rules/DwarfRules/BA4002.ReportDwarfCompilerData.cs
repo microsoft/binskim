@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             IDwarfBinary binary = context.DwarfBinary();
 
-            if (binary is ElfBinary elf)
+            if (binary is ElfBinary)
             {
                 this.PrintCompilerData(context, binary.CommandLineInfos, binary.Compilers);
             }
