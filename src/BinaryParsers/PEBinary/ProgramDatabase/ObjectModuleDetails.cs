@@ -220,7 +220,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 }
             }
 
-            return versionNumber;
+            return $"{this.WellKnownCompiler} {versionNumber}";
         }
     }
 
