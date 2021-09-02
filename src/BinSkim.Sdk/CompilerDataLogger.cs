@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 
@@ -114,7 +113,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 if (s_printHeader)
                 {
-                    Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,File Version,Binary Type,Language,Debugging FileName, Debugging FileGuid,Command Line,Dialect,Module Name,Module Library,Hash,Error");
+                    Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,File Version,Binary Type,Language,Debugging FileName,Debugging FileGuid,Command Line,Dialect,Module Name,Module Library,Hash,Error");
                     s_printHeader = false;
                 }
             }
@@ -138,7 +137,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "language", compilerData.Language },
                     { "debuggingFileName", compilerData.DebuggingFileName },
                     { "debuggingGuid", compilerData.DebuggingFileGuid },
-                    { "dialect", string.Empty },
+                    { "dialect", compilerData.Dialect },
                     { "moduleName", name ?? string.Empty },
                     { "moduleLibrary", (name == library ? string.Empty : library) },
                     { "sessionId", s_sessionId },

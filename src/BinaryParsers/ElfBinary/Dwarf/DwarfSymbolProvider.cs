@@ -109,10 +109,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     DwarfCompileCommandLineInfo info = new DwarfCompileCommandLineInfo();
 
                     symbol.Attributes.TryGetValue(DwarfAttribute.Name, out DwarfAttributeValue name);
-                    info.FullName = name == null ? string.Empty : name.Value?.ToString();
+                    info.FullName = (name == null
+                        || name.Value == null
+                        || name.Value.ToString().All(char.IsDigit)
+                        || name.Value.ToString().Equals(ElfUtility.LongUnsignedInt, StringComparison.OrdinalIgnoreCase))
+                        ? string.Empty
+                        : name.Value.ToString();
 
                     symbol.Attributes.TryGetValue(DwarfAttribute.CompDir, out DwarfAttributeValue compDir);
-                    info.CompileDirectory = compDir == null ? string.Empty : compDir.Value?.ToString();
+                    info.CompileDirectory = (compDir == null
+                        || compDir.Value == null
+                        || compDir.Value.ToString().All(char.IsDigit)
+                        || compDir.Value.ToString().Equals(ElfUtility.LongUnsignedInt, StringComparison.OrdinalIgnoreCase))
+                        ? string.Empty
+                        : compDir.Value.ToString();
 
                     try
                     {
@@ -159,7 +169,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         continue;
                     }
 
-                    if (info.CommandLine != null && !info.CommandLine.All(char.IsDigit))
+                    if (info.CommandLine != null
+                        && (info.CommandLine.Equals(ElfUtility.LongUnsignedInt, StringComparison.OrdinalIgnoreCase)
+                        || info.CommandLine.All(char.IsDigit)))
+                    {
+                        info.CommandLine = string.Empty;
+                    }
+
+                    if (info.CommandLine != null)
                     {
                         returnValue.Add(info);
                     }

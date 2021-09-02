@@ -5,6 +5,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public struct CompilerData
     {
+        public string Dialect { get; set; }
         public string Language { get; set; }
         public string BinaryType { get; set; }
         public string CommandLine { get; set; }
@@ -17,7 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public override string ToString()
         {
-            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{FileVersion},{BinaryType},{Language},{DebuggingFileName},{DebuggingFileGuid},{CommandLine}";
+            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{FileVersion},{BinaryType},{Language},{DebuggingFileName},{DebuggingFileGuid},{CommandLine},{Dialect}";
         }
     }
 }
