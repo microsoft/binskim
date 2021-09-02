@@ -75,6 +75,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
                 {
+                    if (ElfUtility.GetDwarfCommandLineType(info.CommandLine) != DwarfCommandLineType.Gcc)
+                    {
+                        continue;
+                    }
+
                     bool failed = false;
                     if ((!info.CommandLine.Contains("-fstack-protector-all", StringComparison.OrdinalIgnoreCase)
                         && !info.CommandLine.Contains("-fstack-protector-strong", StringComparison.OrdinalIgnoreCase))
@@ -179,7 +184,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
                 };
             }
-            else if (binary.CommandLineInfos.Count == 0)
+            else if (!binary.CommandLineInfos.Any(
+                info => ElfUtility.GetDwarfCommandLineType(info.CommandLine) == DwarfCommandLineType.Gcc))
             {
                 return new CanAnalyzeDwarfResult
                 {

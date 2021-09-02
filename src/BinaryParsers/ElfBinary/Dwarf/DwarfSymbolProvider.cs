@@ -24,7 +24,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="debugDataDescription">The debug data description.</param>
         /// <param name="debugStrings">The debug strings.</param>
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
-        internal static List<DwarfCompilationUnit> ParseAllCompilationUnits(IDwarfBinary dwarfBinary, byte[] debugData, byte[] debugDataDescription, byte[] debugStrings, NormalizeAddressDelegate addressNormalizer)
+        internal static List<DwarfCompilationUnit> ParseAllCompilationUnits(IDwarfBinary dwarfBinary,
+                                                                            byte[] debugData,
+                                                                            byte[] debugDataDescription,
+                                                                            byte[] debugStrings,
+                                                                            NormalizeAddressDelegate addressNormalizer)
         {
             int offset = 0;
             DwarfCompilationUnit compilationUnit;
@@ -34,7 +38,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             {
                 compilationUnit = ParseOneCompilationUnitByOffset(dwarfBinary, debugData, debugDataDescription, debugStrings, addressNormalizer, offset);
 
-                if (compilationUnit == null || !compilationUnit.Symbols.Any())
+                if (compilationUnit?.Symbols.Any() != true)
                 {
                     return returnValue;
                 }
@@ -59,7 +63,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="debugStrings">The debug strings.</param>
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
         /// <param name="offset">The offset to start reading data.</param>
-        internal static DwarfCompilationUnit ParseOneCompilationUnitByOffset(IDwarfBinary dwarfBinary, byte[] debugData, byte[] debugDataDescription, byte[] debugStrings, NormalizeAddressDelegate addressNormalizer, int offset)
+        internal static DwarfCompilationUnit ParseOneCompilationUnitByOffset(IDwarfBinary dwarfBinary,
+                                                                             byte[] debugData,
+                                                                             byte[] debugDataDescription,
+                                                                             byte[] debugStrings,
+                                                                             NormalizeAddressDelegate addressNormalizer,
+                                                                             int offset)
         {
             using var debugDataReader = new DwarfMemoryReader(debugData);
             using var debugDataDescriptionReader = new DwarfMemoryReader(debugDataDescription);
@@ -100,19 +109,29 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="compilationUnits">the compilation units.</param>
         internal static List<DwarfCompileCommandLineInfo> ParseAllCommandLineInfos(List<DwarfCompilationUnit> compilationUnits)
         {
-            List<DwarfCompileCommandLineInfo> returnValue = new List<DwarfCompileCommandLineInfo>();
+            var returnValue = new List<DwarfCompileCommandLineInfo>();
 
             foreach (DwarfCompilationUnit compilationUnit in compilationUnits)
             {
                 foreach (DwarfSymbol symbol in compilationUnit.Symbols)
                 {
-                    DwarfCompileCommandLineInfo info = new DwarfCompileCommandLineInfo();
+                    var info = new DwarfCompileCommandLineInfo();
 
                     symbol.Attributes.TryGetValue(DwarfAttribute.Name, out DwarfAttributeValue name);
-                    info.FullName = name == null ? string.Empty : name.Value?.ToString();
+                    info.FullName = (name == null
+                        || name.Value == null
+                        || name.Value.ToString().All(char.IsDigit)
+                        || name.Value.ToString().Equals(ElfUtility.LongUnsignedInt, StringComparison.OrdinalIgnoreCase))
+                        ? string.Empty
+                        : name.Value.ToString();
 
                     symbol.Attributes.TryGetValue(DwarfAttribute.CompDir, out DwarfAttributeValue compDir);
-                    info.CompileDirectory = compDir == null ? string.Empty : compDir.Value?.ToString();
+                    info.CompileDirectory = (compDir == null
+                        || compDir.Value == null
+                        || compDir.Value.ToString().All(char.IsDigit)
+                        || compDir.Value.ToString().Equals(ElfUtility.LongUnsignedInt, StringComparison.OrdinalIgnoreCase))
+                        ? string.Empty
+                        : compDir.Value.ToString();
 
                     try
                     {
@@ -159,7 +178,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         continue;
                     }
 
-                    if (info.CommandLine != null && !info.CommandLine.All(char.IsDigit))
+                    if (info.CommandLine != null
+                        && (info.CommandLine.Equals(ElfUtility.LongUnsignedInt, StringComparison.OrdinalIgnoreCase)
+                        || info.CommandLine.All(char.IsDigit)))
+                    {
+                        info.CommandLine = string.Empty;
+                    }
+
+                    if (info.CommandLine != null)
                     {
                         returnValue.Add(info);
                     }

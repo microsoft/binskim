@@ -8,10 +8,16 @@ using System.Linq;
 using ELFSharp.ELF;
 using ELFSharp.ELF.Sections;
 
+using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
+
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public static class ElfUtility
     {
+        public const string Gnu = "GNU";
+        public const string ClangVersion = "clang version";
+        public const string LongUnsignedInt = "long unsigned int";
+
         /// <summary>
         /// Gets all of the symbol entries from an ELF binary and returns it
         /// as an IEnumerable.
@@ -29,6 +35,29 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                         return agg;
                     }
                 );
+        }
+
+        /// <summary>
+        /// get the type of the command line
+        /// </summary>
+        /// <param name="commanline">command line</param>
+        /// <returns>the type of the command line</returns>
+        public static DwarfCommandLineType GetDwarfCommandLineType(string commandline)
+        {
+            if (!string.IsNullOrWhiteSpace(commandline)
+                && commandline.StartsWith(Gnu, StringComparison.OrdinalIgnoreCase))
+            {
+                return DwarfCommandLineType.Gcc;
+            }
+            else if (!string.IsNullOrWhiteSpace(commandline)
+                && commandline.Contains(ClangVersion, StringComparison.OrdinalIgnoreCase))
+            {
+                return DwarfCommandLineType.Clang;
+            }
+            else
+            {
+                return DwarfCommandLineType.Unknown;
+            }
         }
 
         /// <summary>

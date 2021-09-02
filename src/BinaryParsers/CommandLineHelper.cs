@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Linq;
+
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
@@ -42,8 +44,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <param name="optionNames">Array of command line options to search for a value</param>
         /// <param name="precedence">The precedence ruls for this set of options</param>
         /// <param name="optionValue">string to recieve the value of the command line option</param>
+        /// <param name="optionNamesExcluded">Array of command line options to be excluded from the result</param>
         /// <returns>true if one of the options is found, false if none are found</returns>
-        public static bool GetOptionValue(string commandLine, string[] optionNames, OrderOfPrecedence precedence, ref string optionValue)
+        public static bool GetOptionValue(string commandLine, string[] optionNames, OrderOfPrecedence precedence, ref string optionValue, string[] optionNamesExcluded = null)
         {
             bool optionFound = false;
 
@@ -67,14 +70,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                         // Check if this matches one of the names switches
                         for (int index = 0; index < optionsArray.Length; index++)
                         {
-                            if (realArg.StartsWith(optionsArray[index]))
+                            if (realArg.StartsWith(optionsArray[index])
+                                && optionNamesExcluded?.Any(excluded => realArg.StartsWith(excluded)) != true)
                             {
                                 optionFound = true;
                                 optionValue = realArg.Substring(optionsArray[index].Length);
                             }
                         }
 
-                        if (optionFound == true &&
+                        if (optionFound &&
                             precedence == OrderOfPrecedence.FirstWins)
                         {
                             // we found a switch that impacts the desired state and FirstWins is set
@@ -98,7 +102,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public static SwitchState GetSwitchState(string commandLine, string[] switchNames, string[] overrideNames, SwitchState defaultState, OrderOfPrecedence precedence)
         {
             // TODO-paddymcd-MSFT - This is an OK first pass.
-            // Unfortunately composite switches get tricky and not all switches support the '-' semantics 
+            // Unfortunately composite switches get tricky and not all switches support the '-' semantics
             // e.g. /O1- gets translated to /O1 /O-, the second of which is not supported.
             // Additionally, currently /d2guardspecload is translated into /guardspecload, which may be a bug for ENC
             SwitchState namedswitchesState = SwitchState.SwitchNotFound;

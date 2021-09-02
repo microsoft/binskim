@@ -84,6 +84,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     var record = new CompilerData
                     {
                         BinaryType = "PE",
+                        Dialect = omDetails.GetDialect(out _),
                         CompilerName = omDetails.CompilerName,
                         CommandLine = omDetails.RawCommandLine,
                         Language = omDetails.Language.ToString(),

@@ -163,13 +163,67 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <param name="optionNames">Array of command line options to search for a value</param>
         /// <param name="precedence">The precedence ruls for this set of options</param>
         /// <param name="optionValue">string to recieve the value of the command line option</param>
+        /// <param name="optionNamesExcluded">Array of command line options to be excluded from the result</param>
         /// <returns>true if one of the options is found, false if none are found</returns>
-        public bool GetOptionValue(string[] optionNames, OrderOfPrecedence precedence, ref string optionValue)
+        public bool GetOptionValue(string[] optionNames, OrderOfPrecedence precedence, ref string optionValue, string[] optionNamesExcluded = null)
         {
-            return CommandLineHelper.GetOptionValue(this.compilerCommandLine.Raw, optionNames, precedence, ref optionValue);
+            return CommandLineHelper.GetOptionValue(this.compilerCommandLine.Raw, optionNames, precedence, ref optionValue, optionNamesExcluded);
         }
 
+        /// <summary>
+        /// Get the dialect of the object module detail
+        /// <param name="versionNumber">the version number of the dialect</param>
+        /// </summary>
+        /// <returns>dialect of the object module detail if found</returns>
+        public string GetDialect(out string versionNumber)
+        {
+            string[] cVersion;
+            string[] cVersionExcluded = null;
+            versionNumber = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(RawCommandLine) || !this.HasDebugInfo)
+            {
+                return string.Empty;
+            }
+
+            if (this.WellKnownCompiler == WellKnownCompilers.MicrosoftC)
+            {
+                cVersion = new string[] { "std:c" };
+                cVersionExcluded = new string[] { "std:c++" };
+            }
+            else if (this.WellKnownCompiler == WellKnownCompilers.MicrosoftCxx)
+            {
+                cVersion = new string[] { "std:c++" };
+            }
+            else
+            {
+                return string.Empty;
+            }
+
+            this.GetOptionValue(cVersion, OrderOfPrecedence.FirstWins, ref versionNumber, cVersionExcluded);
+
+            if (string.IsNullOrWhiteSpace(versionNumber))
+            {
+                if (this.WellKnownCompiler == WellKnownCompilers.MicrosoftC)
+                {
+                    // MSDN:
+                    // The default C compiler (that is, the compiler when /std:c11 or /std:c17 isn't specified)
+                    // implements ANSI C89, but includes several Microsoft extensions, some of which are part of ISO C99.
+                    versionNumber = "89";
+                }
+                else if (this.WellKnownCompiler == WellKnownCompilers.MicrosoftCxx)
+                {
+                    // MSDN:
+                    // The /std:c++14 option enables C++14 standard-specific features implemented by the MSVC compiler.
+                    // This option is the default for code compiled as C++.
+                    versionNumber = "14";
+                }
+            }
+
+            return $"{this.WellKnownCompiler} {versionNumber}";
+        }
     }
+
     public enum Language : uint
     {
         C,

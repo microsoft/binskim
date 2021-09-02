@@ -41,33 +41,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override void Analyze(BinaryAnalyzerContext context)
         {
             IDwarfBinary binary = context.DwarfBinary();
-            List<string> symbolTableFiles;
-            if (binary is ElfBinary elf)
+
+            if (binary is ElfBinary)
             {
-                symbolTableFiles = elf.GetSymbolTableFiles().Select(entry => entry.Name).ToList();
-                this.PrintCompilerData(context, binary.GetLanguage().ToString(), binary.Compilers, symbolTableFiles);
+                this.PrintCompilerData(context, binary.CommandLineInfos, binary.Compilers);
             }
 
             if (binary is MachOBinary machO)
             {
                 machO.MachOs.ToList().ForEach
                 (
-                    machO => this.PrintCompilerData(
-                                        context,
-                                        machO.GetLanguage().ToString(),
-                                        machO.Compilers,
-                                        machO.GetSymbolTableFiles())
+                    machO => this.PrintCompilerData(context, machO.CommandLineInfos, machO.Compilers)
                 );
             }
         }
 
-        private void PrintCompilerData(BinaryAnalyzerContext context, string language, ICompiler[] compilers, List<string> files)
+        private void PrintCompilerData(BinaryAnalyzerContext context, List<DwarfCompileCommandLineInfo> commandLineInfos, ICompiler[] compilers)
         {
             context.CompilerDataLogger.PrintHeader();
 
             var processedRecords = new HashSet<CompilerData>();
-            IDwarfBinary binary = context.DwarfBinary();
-            string commandLine = string.Join(' ', binary.CommandLineInfos.Select(cli => cli.CommandLine).Distinct());
 
             foreach (ICompiler compiler in compilers)
             {
@@ -76,16 +69,28 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
-                foreach (string file in files)
+                if (commandLineInfos.Count == 0)
+                {
+                    // if it does not contain valid command line,
+                    // still display a line for the file with valid compiler info.
+                    commandLineInfos.Add(new DwarfCompileCommandLineInfo()
+                    {
+                        CommandLine = string.Empty,
+                        Language = DwarfLanguage.Unknown,
+                    });
+                }
+
+                foreach (DwarfCompileCommandLineInfo info in commandLineInfos)
                 {
                     var record = new CompilerData
                     {
                         BinaryType = "ELF",
-                        Language = language,
-                        CommandLine = commandLine,
+                        Dialect = info.GetDialect(),
+                        CommandLine = info.CommandLine,
                         CompilerName = compiler.Compiler.ToString(),
                         CompilerBackEndVersion = compiler.Version.ToString(),
                         CompilerFrontEndVersion = compiler.Version.ToString(),
+                        Language = info.Language == DwarfLanguage.Unknown ? string.Empty : info.Language.ToString(),
                     };
 
                     if (processedRecords.Contains(record))
@@ -95,7 +100,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     processedRecords.Add(record);
 
-                    context.CompilerDataLogger.Write(record, file);
+                    context.CompilerDataLogger.Write(record, info.FileName);
                 }
             }
         }

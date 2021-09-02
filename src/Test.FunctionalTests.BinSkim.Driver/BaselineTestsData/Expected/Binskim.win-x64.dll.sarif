@@ -1623,14 +1623,11 @@
                 }
               ],
               "message": {
-                "text": "'Binskim.win-x64.dll' was not evaluated for check 'EnableSecureSourceCodeHashing' because its PDB could not be loaded (E_PDB_FORMAT)."
+                "text": "'Binskim.win-x64.dll' was not evaluated because its PDB could not be loaded (E_PDB_FORMAT)."
               },
               "level": "error",
               "descriptor": {
                 "id": "ERR997.ExceptionLoadingPdb"
-              },
-              "associatedRule": {
-                "id": "BA2004"
               }
             }
           ],
