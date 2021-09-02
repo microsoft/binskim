@@ -181,7 +181,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "language", compilerData.Language },
                     { "debuggingFileName", compilerData.DebuggingFileName ?? string.Empty },
                     { "debuggingGuid", compilerData.DebuggingFileGuid ?? string.Empty },
-                    { "dialect", string.Empty },
+                    { "dialect", compilerData.Dialect },
                     { "moduleName", file ?? string.Empty },
                     { "moduleLibrary", string.Empty },
                     { "sessionId", s_sessionId },

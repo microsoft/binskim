@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                         {
                             if (realArg.StartsWith(optionsArray[index]))
                             {
-                                if (optionNamesExcluded == null || !optionNamesExcluded.Any(excluded => realArg.StartsWith(excluded)))
+                                if (optionNamesExcluded?.Any(excluded => realArg.StartsWith(excluded)) != true)
                                 {
                                     optionFound = true;
                                     optionValue = realArg.Substring(optionsArray[index].Length);
@@ -80,7 +80,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                             }
                         }
 
-                        if (optionFound == true &&
+                        if (optionFound &&
                             precedence == OrderOfPrecedence.FirstWins)
                         {
                             // we found a switch that impacts the desired state and FirstWins is set
