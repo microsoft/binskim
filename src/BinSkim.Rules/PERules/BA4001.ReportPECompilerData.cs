@@ -84,6 +84,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     var record = new CompilerData
                     {
                         BinaryType = "PE",
+                        ModuleName = omDetails?.Name,
+                        ModuleLibrary = omDetails?.Library,
                         Dialect = omDetails.GetDialect(out _),
                         CompilerName = omDetails.CompilerName,
                         CommandLine = omDetails.RawCommandLine,
@@ -104,7 +106,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (KeyValuePair<CompilerData, ObjectModuleDetails> kv in records)
             {
-                context.CompilerDataLogger.Write(kv.Key, kv.Value);
+                context.CompilerDataLogger.Write(kv.Key);
             }
         }
     }

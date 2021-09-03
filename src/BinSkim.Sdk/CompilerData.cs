@@ -8,9 +8,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public string Dialect { get; set; }
         public string Language { get; set; }
         public string BinaryType { get; set; }
+        public string ModuleName { get; set; }
         public string CommandLine { get; set; }
         public string FileVersion { get; set; }
         public string CompilerName { get; set; }
+        public string ModuleLibrary { get; set; }
         public string DebuggingFileName { get; set; }
         public string DebuggingFileGuid { get; set; }
         public string CompilerBackEndVersion { get; set; }
@@ -18,7 +20,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public override string ToString()
         {
-            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{FileVersion},{BinaryType},{Language},{DebuggingFileName},{DebuggingFileGuid},{CommandLine},{Dialect}";
+            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{FileVersion},{BinaryType},{Language},{DebuggingFileName},{DebuggingFileGuid},{CommandLine},{Dialect},{ModuleName},{(ModuleLibrary == ModuleName ? string.Empty : ModuleLibrary)}";
         }
     }
 }
