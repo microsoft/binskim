@@ -106,6 +106,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 }
             }
             catch (IOException) { return false; }
+            catch (ArgumentException) { return false; }
             catch (UnauthorizedAccessException) { return false; }
         }
 
