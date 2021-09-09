@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* BUGFIX: Fix opcode handling when reading DWARF line number programs. [#482](https://github.com/microsoft/binskim/pull/482)
 * BUGFIX: Fix exception `System.ArgumentException` when checking file format. [#481](https://github.com/microsoft/binskim/pull/481)
 * BUGFIX: Change compiler report rule to report all modules in file. [#476](https://github.com/microsoft/binskim/pull/476)
 * FEATURE: Add dialects to the reporting rules. [#475](https://github.com/microsoft/binskim/pull/475)
