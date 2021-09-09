@@ -81,6 +81,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 return ELFReader.CheckELFType(Path.GetFullPath(uri.LocalPath)) != Class.NotELF;
             }
             catch (IOException) { return false; }
+            catch (ArgumentException) { return false; }
             catch (UnauthorizedAccessException) { return false; }
         }
 

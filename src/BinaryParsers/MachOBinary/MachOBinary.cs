@@ -48,6 +48,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                         machOs: out _) != MachOResult.NotMachO;
             }
             catch (IOException) { return false; }
+            catch (ArgumentException) { return false; }
             catch (UnauthorizedAccessException) { return false; }
         }
 
