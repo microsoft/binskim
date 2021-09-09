@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* BUGFIX: Fix exception `System.ArgumentException` when checking file format. [#481](https://github.com/microsoft/binskim/pull/481)
 * BUGFIX: Change compiler report rule to report all modules in file. [#476](https://github.com/microsoft/binskim/pull/476)
 * FEATURE: Add dialects to the reporting rules. [#475](https://github.com/microsoft/binskim/pull/475)
 * BUGFIX: Fix exception `System.AccessViolationException` caused by trying to read data out of boundary. [#470](https://github.com/microsoft/binskim/pull/470)
