@@ -85,7 +85,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     var record = new CompilerData
                     {
                         BinaryType = "ELF",
+                        ModuleName = info.FileName,
                         Dialect = info.GetDialect(),
+                        ModuleLibrary = string.Empty,
                         CommandLine = info.CommandLine,
                         CompilerName = compiler.Compiler.ToString(),
                         CompilerBackEndVersion = compiler.Version.ToString(),
@@ -100,7 +102,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     processedRecords.Add(record);
 
-                    context.CompilerDataLogger.Write(record, info.FileName);
+                    context.CompilerDataLogger.Write(record);
                 }
             }
         }

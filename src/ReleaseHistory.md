@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* BUGFIX: Change compiler report rule to report all modules in file. [#476](https://github.com/microsoft/binskim/pull/476)
 * FEATURE: Add dialects to the reporting rules. [#475](https://github.com/microsoft/binskim/pull/475)
 * BUGFIX: Fix exception `System.AccessViolationException` caused by trying to read data out of boundary. [#470](https://github.com/microsoft/binskim/pull/470)
 * BUGFIX: Fix exception handling when PDB cannot be loaded by `IDiaDataSource`. [#461](https://github.com/microsoft/binskim/pull/461)

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
@@ -119,10 +118,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        public void Write(CompilerData compilerData, ObjectModuleDetails omDetails)
+        public void Write(CompilerData compilerData)
         {
-            string name = omDetails?.Name;
-            string library = omDetails?.Library;
             if (TelemetryEnabled)
             {
                 string commandLineId = string.Empty;
@@ -135,55 +132,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "fileVersion", compilerData.FileVersion ?? string.Empty },
                     { "binaryType", compilerData.BinaryType },
                     { "language", compilerData.Language },
-                    { "debuggingFileName", compilerData.DebuggingFileName },
-                    { "debuggingGuid", compilerData.DebuggingFileGuid },
-                    { "dialect", compilerData.Dialect },
-                    { "moduleName", name ?? string.Empty },
-                    { "moduleLibrary", (name == library ? string.Empty : library) },
-                    { "sessionId", s_sessionId },
-                    { "hash", this.sha256 },
-                    { "error", string.Empty }
-                };
-
-                if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
-                {
-                    commandLineId = Guid.NewGuid().ToString();
-                    properties.Add("commandLineId", commandLineId);
-                }
-
-                s_telemetryClient.TrackEvent(CompilerEventName, properties: properties);
-
-                if (!string.IsNullOrWhiteSpace(commandLineId))
-                {
-                    SendChunkedCommandLine(commandLineId, compilerData.CommandLine);
-                }
-            }
-            else
-            {
-                string log = $@"{this.relativeFilePath},{compilerData},,""{name}"",""{(name == library ? string.Empty : library)}"",{this.sha256},";
-                Console.WriteLine(log);
-            }
-        }
-
-        public void Write(CompilerData compilerData, string file)
-        {
-            if (TelemetryEnabled)
-            {
-                string commandLineId = string.Empty;
-                var properties = new Dictionary<string, string>
-                {
-                    { "target", this.relativeFilePath },
-                    { "compilerName", compilerData.CompilerName },
-                    { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
-                    { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
-                    { "fileVersion", string.Empty },
-                    { "binaryType", compilerData.BinaryType },
-                    { "language", compilerData.Language },
                     { "debuggingFileName", compilerData.DebuggingFileName ?? string.Empty },
                     { "debuggingGuid", compilerData.DebuggingFileGuid ?? string.Empty },
                     { "dialect", compilerData.Dialect },
-                    { "moduleName", file ?? string.Empty },
-                    { "moduleLibrary", string.Empty },
+                    { "moduleName", compilerData.ModuleName ?? string.Empty },
+                    { "moduleLibrary", (compilerData.ModuleName == compilerData.ModuleLibrary ? string.Empty : compilerData.ModuleLibrary ?? string.Empty) },
                     { "sessionId", s_sessionId },
                     { "hash", this.sha256 },
                     { "error", string.Empty }
@@ -204,7 +157,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                string log = $"{this.relativeFilePath},{compilerData},,{file},,{this.sha256},";
+                string log = $"{this.relativeFilePath},{compilerData},{this.sha256},";
                 Console.WriteLine(log);
             }
         }
