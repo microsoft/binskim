@@ -193,6 +193,23 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
+        public static void WriteException(ExecutionException exception, AnalysisSummary summary)
+        {
+            if (TelemetryEnabled)
+            {
+                s_telemetryClient.TrackException(exception, new Dictionary<string, string>
+                {
+                    { "toolName", summary.ToolName },
+                    { "toolVersion", summary.ToolVersion },
+                    { "sessionId", s_sessionId },
+                });
+            }
+            else
+            {
+                Console.WriteLine(exception.ToString());
+            }
+        }
+
         public static void Summarize(AnalysisSummary summary)
         {
             if (TelemetryEnabled)

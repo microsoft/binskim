@@ -101,9 +101,17 @@ namespace Microsoft.CodeAnalysis.IL
                     !string.IsNullOrEmpty(analyzeOptions.OutputFilePath) &&
                     this.FileSystem.FileExists(analyzeOptions.OutputFilePath))
                 {
-                    CompilerDataLogger.Summarize(
-                        this.ExtractAnalysisSummary(SarifLog.Load(analyzeOptions.OutputFilePath),
-                                                    analyzeOptions));
+                    SarifLog sarifLog = SarifLog.Load(analyzeOptions.OutputFilePath);
+
+                    AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(
+                        sarifLog, analyzeOptions);
+                    CompilerDataLogger.Summarize(summary);
+
+                    IEnumerable<ExecutionException> exceptions = AnalysisSummaryExtractor.ExtractExceptionData(sarifLog);
+                    foreach (ExecutionException ex in exceptions)
+                    {
+                        CompilerDataLogger.WriteException(ex, summary);
+                    }
                 }
             }
             catch (Exception e)
