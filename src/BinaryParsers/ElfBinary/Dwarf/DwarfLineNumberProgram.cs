@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -193,6 +192,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             byte lineRange = debugLine.ReadByte();
             byte operationCodeBase = debugLine.ReadByte();
 
+            if (operationCodeBase <= 0)
+            {
+                return new List<DwarfFileInformation>();
+            }
+
             // Read operation code lengths
             uint[] operationCodeLengths = new uint[operationCodeBase];
 
@@ -312,7 +316,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         case DwarfLineNumberStandardOpcode.SetFile:
-                            state.File = files[(int)debugLine.LEB128() - 1];
+                            int index = (int)debugLine.LEB128() - 1;
+                            if (index >= 0 && index < files.Count)
+                            {
+                                state.File = files[index];
+                            }
                             break;
 
                         case DwarfLineNumberStandardOpcode.SetColumn:
@@ -348,12 +356,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             state.Isa = debugLine.LEB128();
                             break;
 
-                        case (DwarfLineNumberStandardOpcode)13:
-                            // when reading some dwarf debugline data, get OpCode 13 which is not in dwarf official document
-                            break;
-
                         default:
-                            throw new Exception($"Unsupported DwarfLineNumberStandardOpcode: {(DwarfLineNumberStandardOpcode)operationCode}");
+                            // Special opcodes(13 or greater)
+                            break;
                     }
                 }
             }
