@@ -415,8 +415,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     /// </summary>
     public enum DwarfLineNumberStandardOpcode
     {
-        // Standard opcodes (1 to 12)
         // Extended opcodes (0)
+        // Standard opcodes (1 to 12)
         // Special opcodes (13 or greater)
         Extended = 0,
         Copy = 0x01,
