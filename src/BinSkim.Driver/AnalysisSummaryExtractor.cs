@@ -39,12 +39,12 @@ namespace Microsoft.CodeAnalysis.IL
 
         public static IEnumerable<ExecutionException> ExtractExceptionData(SarifLog sarifLog)
         {
-            if (sarifLog == null || sarifLog.Runs == null || !sarifLog.Runs.Any())
+            IList<Sarif.Notification> notifications = sarifLog?.Runs?[0]?.Invocations?[0]?.ToolExecutionNotifications;
+            if (notifications == null)
             {
                 yield break;
             }
 
-            IList<Sarif.Notification> notifications = sarifLog.Runs[0]?.Invocations[0]?.ToolExecutionNotifications;
 
             foreach (Sarif.Notification notification in notifications)
             {
