@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* BUGFIX: Fix exception `System.AccessViolationException` when reading DWARF string by position. [#483](https://github.com/microsoft/binskim/pull/483)
+* BUGFIX: Fix BA3005 to use similar output as BA3003. [#483](https://github.com/microsoft/binskim/pull/483)
 * BUGFIX: Fix opcode handling when reading DWARF line number programs. [#482](https://github.com/microsoft/binskim/pull/482)
 * BUGFIX: Fix exception `System.ArgumentException` when checking file format. [#481](https://github.com/microsoft/binskim/pull/481)
 * BUGFIX: Change compiler report rule to report all modules in file. [#476](https://github.com/microsoft/binskim/pull/476)
