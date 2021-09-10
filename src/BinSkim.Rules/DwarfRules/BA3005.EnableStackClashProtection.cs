@@ -68,26 +68,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override void Analyze(BinaryAnalyzerContext context)
         {
             IDwarfBinary binary = context.DwarfBinary();
+            List<DwarfCompileCommandLineInfo> failedList;
 
-            static bool analyze(IDwarfBinary binary)
+            static bool analyze(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
             {
-                return binary.CommandLineInfos
-                    .Where(info => ElfUtility.GetDwarfCommandLineType(info.CommandLine) == DwarfCommandLineType.Gcc)
-                    .All(i => i.CommandLine.Contains("-fstack-clash-protection", StringComparison.OrdinalIgnoreCase)
-                    && !i.CommandLine.Contains("-fno-stack-clash-protection", StringComparison.OrdinalIgnoreCase));
+                failedList = new List<DwarfCompileCommandLineInfo>();
+
+                foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
+                {
+                    if (ElfUtility.GetDwarfCommandLineType(info.CommandLine) != DwarfCommandLineType.Gcc)
+                    {
+                        continue;
+                    }
+
+                    if (!info.CommandLine.Contains("-fstack-clash-protection", StringComparison.OrdinalIgnoreCase)
+                        || info.CommandLine.Contains("-fno-stack-clash-protection", StringComparison.OrdinalIgnoreCase))
+                    {
+                        failedList.Add(info);
+                    }
+                }
+
+                return !failedList.Any();
             }
 
             if (binary is ElfBinary elf)
             {
-                if (!analyze(elf))
+                if (!analyze(elf, out failedList))
                 {
                     // The Stack Clash Protection is missing from this binary,
                     // so the stack from '{0}' can clash/colide with another memory region.
                     // Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this.
+                    // Modules did not meet the criteria: {1}
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA3005_Error),
-                            context.TargetUri.GetFileName()));
+                            context.TargetUri.GetFileName(),
+                            DwarfUtility.GetDistinctNames(failedList, context.TargetUri.GetFileName())));
                     return;
                 }
 
@@ -103,15 +119,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 foreach (SingleMachOBinary subBinary in mainBinary.MachOs)
                 {
-                    if (!analyze(subBinary))
+                    if (!analyze(subBinary, out failedList))
                     {
                         // The Stack Clash Protection is missing from this binary,
                         // so the stack from '{0}' can clash/colide with another memory region.
                         // Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this.
+                        // Modules did not meet the criteria: {1}
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                                 nameof(RuleResources.BA3005_Error),
-                                context.TargetUri.GetFileName()));
+                                context.TargetUri.GetFileName(),
+                                DwarfUtility.GetDistinctNames(failedList, context.TargetUri.GetFileName())));
                         return;
                     }
                 }
