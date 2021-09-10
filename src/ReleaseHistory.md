@@ -2,16 +2,18 @@
 
 ## Unreleased
 
-* BUGFIX: Fix BA3005 to use similar output as BA3003. [#483](https://github.com/microsoft/binskim/pull/483)
-* BUGFIX: Fix exception `System.AccessViolationException` when reading DWARF string by position. [#484](https://github.com/microsoft/binskim/pull/484)
-* BUGFIX: Fix opcode handling when reading DWARF line number programs. [#482](https://github.com/microsoft/binskim/pull/482)
-* BUGFIX: Fix exception `System.ArgumentException` when checking file format. [#481](https://github.com/microsoft/binskim/pull/481)
-* BUGFIX: Change compiler report rule to report all modules in file. [#476](https://github.com/microsoft/binskim/pull/476)
-* FEATURE: Add dialects to the reporting rules. [#475](https://github.com/microsoft/binskim/pull/475)
-* BUGFIX: Fix exception `System.AccessViolationException` caused by trying to read data out of boundary. [#470](https://github.com/microsoft/binskim/pull/470)
+## **v1.9.0-prerelease2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.0-prerelease2)
+
 * BUGFIX: Fix exception handling when PDB cannot be loaded by `IDiaDataSource`. [#461](https://github.com/microsoft/binskim/pull/461)
 * BREAKING: PDB exceptions will be reported once per target. [#465](https://github.com/microsoft/binskim/pull/465)
+* BUGFIX: Fix exception `System.AccessViolationException` caused by trying to read data out of boundary. [#470](https://github.com/microsoft/binskim/pull/470)
 * BUGFIX: Include C++ runtime in the package to prevent `DllNotFoundException` when loading `msdia140.dll`. [#474](https://github.com/microsoft/binskim/pull/474)
+* FEATURE: Add dialects to the reporting rules. [#475](https://github.com/microsoft/binskim/pull/475)
+* BUGFIX: Change compiler report rule to report all modules in file. [#476](https://github.com/microsoft/binskim/pull/476)
+* BUGFIX: Fix exception `System.ArgumentException` when checking file format. [#481](https://github.com/microsoft/binskim/pull/481)
+* BUGFIX: Fix opcode handling when reading DWARF line number programs. [#482](https://github.com/microsoft/binskim/pull/482)
+* BUGFIX: Fix BA3005 to use similar output as BA3003. [#483](https://github.com/microsoft/binskim/pull/483)
+* BUGFIX: Fix exception `System.AccessViolationException` when reading DWARF string by position. [#484](https://github.com/microsoft/binskim/pull/484)
 
 ## **v1.9.0-prerelease1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.0-prerelease1)
 
