@@ -249,7 +249,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="position">The position.</param>
         public byte[] ReadBlock(uint size, int position)
         {
-            if (position >= Data.Length)
+            if (position < 0 || position >= Data.Length)
             {
                 return Array.Empty<byte>();
             }
@@ -267,7 +267,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="position">The position.</param>
         public string ReadString(int position)
         {
-            if (position >= Data.Length)
+            if (position < 0 || position >= Data.Length)
             {
                 return string.Empty;
             }
@@ -285,7 +285,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="position">The position.</param>
         public uint ReadUint(int position)
         {
-            if (position >= Data.Length)
+            if (position < 0 || position >= Data.Length)
             {
                 return 0;
             }
@@ -304,7 +304,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="position">The position.</param>
         public T ReadStructure<T>(int position)
         {
-            if (position >= Data.Length)
+            if (position < 0 || position >= Data.Length)
             {
                 return default;
             }

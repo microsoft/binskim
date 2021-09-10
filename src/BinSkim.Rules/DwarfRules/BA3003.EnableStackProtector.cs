@@ -125,7 +125,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA3003_Error),
-                            context.TargetUri.GetFileName(), string.Join(", ", failedList)));
+                            context.TargetUri.GetFileName(),
+                            DwarfUtility.GetDistinctNames(failedList, context.TargetUri.GetFileName())));
                     return;
                 }
 
@@ -150,7 +151,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                                 nameof(RuleResources.BA3003_Error),
-                                context.TargetUri.GetFileName(), string.Join(", ", failedList)));
+                                context.TargetUri.GetFileName(),
+                                DwarfUtility.GetDistinctNames(failedList, context.TargetUri.GetFileName())));
                         return;
                     }
                 }

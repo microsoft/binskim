@@ -1123,7 +1123,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Stack Clash Protection is missing from this binary, so the stack from &apos;{0}&apos; can clash/colide with another memory region. Ensure you are compiling with the compiler flags &apos;-fstack-clash-protection&apos; to address this..
+        ///   Looks up a localized string similar to The Stack Clash Protection is missing from this binary, so the stack from &apos;{0}&apos; can clash/colide with another memory region. Ensure you are compiling with the compiler flags &apos;-fstack-clash-protection&apos; to address this.
+        ///Modules did not meet the criteria: {1}.
         /// </summary>
         internal static string BA3005_Error {
             get {
