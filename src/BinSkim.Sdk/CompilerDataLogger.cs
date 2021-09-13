@@ -56,7 +56,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 // We must get directory name because there are cases where the targetFilePath is
                 // c:\path\*.dll
                 string directoryName = Path.GetDirectoryName(path);
-                this.relativeFilePath = this.relativeFilePath.Replace(directoryName, string.Empty);
+                if (!string.IsNullOrEmpty(directoryName))
+                {
+                    this.relativeFilePath = this.relativeFilePath.Replace(directoryName, string.Empty);
+                }
             }
         }
 
