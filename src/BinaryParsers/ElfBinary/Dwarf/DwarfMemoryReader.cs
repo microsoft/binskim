@@ -192,6 +192,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public uint LEB128()
         {
+            if (Position < 0 || Position >= Data.Length)
+            {
+                return 0;
+            }
+
             uint x = 0;
             int shift = 0;
 
@@ -211,6 +216,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public uint SLEB128()
         {
+            if (Position < 0 || Position >= Data.Length)
+            {
+                return 0;
+            }
+
             int x = 0;
             int shift = 0;
 

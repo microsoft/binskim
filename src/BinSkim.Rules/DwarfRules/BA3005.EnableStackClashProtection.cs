@@ -60,6 +60,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
             }
+            else if (target is PEBinary pe)
+            {
+                result = this.VerifyDwarfBinary(pe);
+            }
 
             reasonForNotAnalyzing = result.Reason;
             return result.Result;
@@ -91,9 +95,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return !failedList.Any();
             }
 
-            if (binary is ElfBinary elf)
+            if (binary is ElfBinary || binary is PEBinary)
             {
-                if (!analyze(elf, out failedList))
+                if (!analyze(binary, out failedList))
                 {
                     // The Stack Clash Protection is missing from this binary,
                     // so the stack from '{0}' can clash/colide with another memory region.
@@ -147,7 +151,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // We check for "any usage of non-gcc" as a default/standard compilation with clang leads to [GCC, Clang]
             // either because it links with a gcc-compiled object (cstdlib) or the linker also reading as GCC.
             // This has a potential for a False Negative if teams are using GCC and other tools.
-            if (binary.Compilers.Any(c => c.Compiler != ElfCompilerType.GCC))
+            if (!(binary is PEBinary) && binary.Compilers.Any(c => c.Compiler != ElfCompilerType.GCC))
             {
                 return new CanAnalyzeDwarfResult
                 {
@@ -155,7 +159,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
                 };
             }
-            else if (binary.Compilers.Any(c => c.Version.Major < 8))
+            else if (!(binary is PEBinary) && binary.Compilers.Any(c => c.Version.Major < 8))
             {
                 return new CanAnalyzeDwarfResult
                 {

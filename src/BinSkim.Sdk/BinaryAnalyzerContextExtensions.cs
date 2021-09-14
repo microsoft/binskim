@@ -67,9 +67,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 return elf;
             }
+            else if (target.Binary is PEBinary pe)
+            {
+                return pe;
+            }
 
             // Attempted to cast a binary target to a '{0}', but was unable to.  This indicates a programmer error in rules evaluating that sort of target.
-            throw new InvalidOperationException(string.Format(SdkResources.IllegalBinaryCast, "MachOBinary"));
+            throw new InvalidOperationException(string.Format(SdkResources.IllegalBinaryCast, "DwarfBinary"));
         }
     }
 }

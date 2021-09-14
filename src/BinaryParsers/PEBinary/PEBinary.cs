@@ -6,12 +6,13 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 
+using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
-    public class PEBinary : BinaryBase
+    public class PEBinary : BinaryBase, IDwarfBinary
     {
         private Lazy<Pdb> pdb;
         private readonly bool tracePdbLoad;
@@ -28,6 +29,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             // We actively verify our ability to parse this binary as a PE.
             this.PE = new PE(this.TargetUri.LocalPath);
+
+            this.CompilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
+            commandLineInfos = new Lazy<List<DwarfCompileCommandLineInfo>>(()
+                    => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits));
 
             // We defer attempting to load PDBs, as this won't be necessary
             // for every binary we analyze, depending on the binary itself
@@ -67,6 +72,38 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public PdbException PdbParseException { get; internal set; }
 
         public Pdb StrippedPdb { get; private set; }
+        public int DwarfVersion { get; set; } = -1;
+        public DwarfUnitType DwarfUnitType { get; set; } = DwarfUnitType.Unknown;
+
+        public byte[] DebugData => this.PE.GetSectionDataByName(Elf.SectionName.DebugInfo);
+
+        public byte[] DebugDataDescription => this.PE.GetSectionDataByName(Elf.SectionName.DebugAbbrev);
+
+        public byte[] DebugDataStrings => this.PE.GetSectionDataByName(Elf.SectionName.DebugStr);
+
+        public byte[] DebugLine => this.PE.GetSectionDataByName(Elf.SectionName.DebugLine);
+
+        public byte[] DebugFrame => this.PE.GetSectionDataByName(Elf.SectionName.DebugFrame);
+
+        public byte[] EhFrame => this.PE.GetSectionDataByName(Elf.SectionName.EhFrame);
+
+        public ulong CodeSegmentOffset { get; private set; }
+
+        public ulong EhFrameAddress => throw new NotImplementedException();
+
+        public ulong TextSectionAddress => throw new NotImplementedException();
+
+        public ulong DataSectionAddress => throw new NotImplementedException();
+
+        public IReadOnlyList<DwarfPublicSymbol> PublicSymbols => throw new NotImplementedException();
+
+        public bool Is64bit => throw new NotImplementedException();
+
+        public ICompiler[] Compilers => throw new NotImplementedException();
+
+        public List<DwarfCompilationUnit> CompilationUnits { get; set; } = new List<DwarfCompilationUnit>();
+
+        public List<DwarfCompileCommandLineInfo> CommandLineInfos => this.commandLineInfos.Value;
 
         public void DisposePortableExecutableData()
         {
@@ -203,5 +240,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 }
             }
         }
+
+        public ulong NormalizeAddress(ulong address)
+        {
+            return 0;
+        }
+
+        public DwarfLanguage GetLanguage()
+        {
+            throw new NotImplementedException();
+        }
+
+        private readonly Lazy<List<DwarfCompileCommandLineInfo>> commandLineInfos;
     }
 }

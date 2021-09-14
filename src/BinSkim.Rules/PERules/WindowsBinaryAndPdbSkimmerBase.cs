@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
@@ -49,16 +48,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (LogPdbLoadException)
             {
-                if (target.Pdb == null &&
+                if (target.DebugData.Length > 0)
+                {
+                    // PE with DWARF, no need to log exception loading pdb
+                    return;
+                }
+                else if (target.Pdb == null &&
                     (!target.PE.IsManaged ||
                       target.PE.IsMixedMode ||
                       EnforcePdbLoadForManagedAssemblies))
                 {
+                    // PE without pdb
                     LogExceptionLoadingPdb(context, target.PdbParseException);
                     return;
                 }
             }
 
+            // PE with pdb
             this.AnalyzePortableExecutableAndPdb(context);
         }
 
