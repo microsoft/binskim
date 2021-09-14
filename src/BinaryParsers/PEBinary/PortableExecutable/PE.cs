@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection.Metadata;
@@ -32,6 +33,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         private PEReader peReader;
         internal SafePointer pImage; // pointer to the beginning of the file in memory
         private readonly MetadataReader metadataReader;
+        private const int nativeSymbolHeaderSize = 18;
         private const string sha256 = "8829d00f-11b8-4213-878b-770e8597ac16";
         private static readonly Guid sha256guid = new Guid(sha256);
 
@@ -49,6 +51,38 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 this.peReader = new PEReader(this.fs);
                 this.PEHeaders = this.peReader.PEHeaders;
+
+                if (this.PEHeaders?.CoffHeader?.PointerToSymbolTable > 0)
+                {
+                    this.fs.Position = this.PEHeaders.CoffHeader.PointerToSymbolTable
+                        + this.PEHeaders.CoffHeader.NumberOfSymbols * nativeSymbolHeaderSize;
+                    this.CoffStringTable = new CoffStringTable(this.fs);
+                }
+
+                ImmutableArray<SectionHeader>? sectionHeaders = this.PEHeaders.SectionHeaders;
+
+                if (sectionHeaders.HasValue && sectionHeaders.Value.Length > 0)
+                {
+                    foreach (SectionHeader sectionHeader in sectionHeaders.Value)
+                    {
+                        if (sectionHeader.Name.StartsWith("/")
+                            && int.TryParse(sectionHeader.Name.Replace("/", string.Empty), out int offset))
+                        {
+                            if (this.CoffStringTable?.StringTable?.Length > 0)
+                            {
+                                string fullName = this.CoffStringTable.GetString(offset);
+
+                                if (!string.IsNullOrWhiteSpace(fullName))
+                                {
+                                    PESectionHeaderMapping.Add(fullName, sectionHeader);
+                                    continue;
+                                }
+                            }
+                        }
+
+                        PESectionHeaderMapping.Add(sectionHeader.Name, sectionHeader);
+                    }
+                }
 
                 this.IsPEFile = true;
 
@@ -155,6 +189,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
+        public CoffStringTable CoffStringTable { get; private set; }
+
         public bool Is64Bit => this.PEHeaders.PEHeader != null
                     ? this.PEHeaders.PEHeader.Magic == PEMagic.PE32Plus
                     : false;
@@ -196,6 +232,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 return new CodeViewDebugDirectoryData();
             }
         }
+
+        public Dictionary<string, SectionHeader> PESectionHeaderMapping { get; private set; }
+            = new Dictionary<string, SectionHeader>();
 
         public string[] Imports
         {
@@ -807,6 +846,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         public PEMemoryBlock GetSectionData(int dataRelativeVirtualAddress)
         {
             return peReader.GetSectionData(dataRelativeVirtualAddress);
+        }
+
+        public byte[] GetSectionDataByName(string sectionName)
+        {
+            if (PESectionHeaderMapping.ContainsKey(sectionName))
+            {
+                int virtualAddress = PESectionHeaderMapping[sectionName].VirtualAddress;
+                if (virtualAddress > 0)
+                {
+                    return this.peReader.GetSectionData(virtualAddress).GetContent().ToBuilder().ToArray();
+                }
+            }
+
+            return Array.Empty<byte>();
         }
 
         public ChecksumAlgorithmType ManagedPdbSourceFileChecksumAlgorithm(PdbFileType pdbFileType)
