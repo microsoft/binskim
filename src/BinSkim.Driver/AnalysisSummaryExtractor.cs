@@ -47,6 +47,8 @@ namespace Microsoft.CodeAnalysis.IL
 
         public static void UpdateBuildPipelineInfo(AnalysisSummary summary)
         {
+            // build pipeline pre-defined variables can be read from environment variables
+            // https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml
             if (summary != null)
             {
                 try
