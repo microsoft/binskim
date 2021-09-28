@@ -18,10 +18,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public DateTime StartTimeUtc { get; set; }
         public DateTime EndTimeUtc { get; set; }
         public TimeSpan TimeConsumed { get; set; }
+        public string BuildDefinitionId { get; set; }
+        public string BuildDefinitionName { get; set; }
+        public string BuildRunId { get; set; }
 
         public override string ToString()
         {
-            return $"{this.ToolName},{this.ToolVersion},{this.NormalizedPath},{this.SymbolPath},{this.FileAnalyzed},{this.FileNotAnalyzed},{this.StartTimeUtc},{this.EndTimeUtc},{this.TimeConsumed}";
+            return $"{this.ToolName},{this.ToolVersion},{this.NormalizedPath},{this.SymbolPath},{this.FileAnalyzed},{this.FileNotAnalyzed},{this.StartTimeUtc},{this.EndTimeUtc},{this.TimeConsumed},{this.BuildDefinitionId},{this.BuildDefinitionName},{this.BuildRunId}";
         }
     }
 }

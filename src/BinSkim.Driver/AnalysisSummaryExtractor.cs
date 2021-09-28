@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
@@ -12,6 +13,10 @@ namespace Microsoft.CodeAnalysis.IL
 {
     public static class AnalysisSummaryExtractor
     {
+        internal const string BuildDefinitionIdVar = "System_DefinitionId";
+        internal const string BuildDefinitionNameVar = "Build_DefinitionName";
+        internal const string BuildDefinitionRunIdVar = "Build_BuildId";
+
         public static AnalysisSummary ExtractAnalysisSummary(SarifLog sarifLog, AnalyzeOptions options)
         {
             if (sarifLog == null || sarifLog.Runs == null || !sarifLog.Runs.Any())
@@ -23,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL
             Invocation invocation = sarifLog.Runs[0].Invocations[0];
             IList<Artifact> artifacts = sarifLog.Runs[0].Artifacts;
 
-            return new AnalysisSummary
+            var summary = new AnalysisSummary
             {
                 ToolName = tool.Driver.Name,
                 ToolVersion = tool.Driver.Version,
@@ -35,6 +40,26 @@ namespace Microsoft.CodeAnalysis.IL
                 EndTimeUtc = invocation.EndTimeUtc,
                 TimeConsumed = invocation.EndTimeUtc - invocation.StartTimeUtc,
             };
+
+            UpdateBuildPipelineInfo(summary);
+            return summary;
+        }
+
+        public static void UpdateBuildPipelineInfo(AnalysisSummary summary)
+        {
+            if (summary != null)
+            {
+                try
+                {
+                    summary.BuildDefinitionId = Environment.GetEnvironmentVariable(BuildDefinitionIdVar);
+                    summary.BuildDefinitionName = Environment.GetEnvironmentVariable(BuildDefinitionNameVar);
+                    summary.BuildRunId = Environment.GetEnvironmentVariable(BuildDefinitionRunIdVar);
+                }
+                catch (SecurityException)
+                {
+                    // User does not have access to retrieve information from environment variables.
+                }
+            }
         }
 
         public static IEnumerable<ExecutionException> ExtractExceptionData(SarifLog sarifLog)
@@ -90,5 +115,6 @@ namespace Microsoft.CodeAnalysis.IL
                 return ConvertSarifException(exceptions.First());
             }
         }
+
     }
 }
