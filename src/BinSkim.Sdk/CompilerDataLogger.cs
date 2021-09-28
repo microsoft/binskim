@@ -15,12 +15,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class CompilerDataLogger
     {
-        private const int ChunkSize = 8192;
         private const string CompilerEventName = "CompilerInformation";
         private const string CommandLineEventName = "CommandLineInformation";
         private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
         private const string SummaryEventName = "AnalysisSummary";
 
+        private readonly int ChunkSize = 8192;
         private readonly bool appInsightsRegistered;
         private readonly string sha256;
         private readonly string relativeFilePath;
@@ -33,20 +33,32 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static bool TelemetryEnabled => s_telemetryClient != null;
 
         public CompilerDataLogger(IAnalysisContext analysisContext,
-                                  IEnumerable<string> targetFileSpecifiers)
+                                  IEnumerable<string> targetFileSpecifiers,
+                                  TelemetryConfiguration telemetryConfiguration = null,
+                                  TelemetryClient telemetryClient = null,
+                                  int chunkSize = 8192)
         {
-            try
+            s_telemetryConfiguration = telemetryConfiguration;
+            s_telemetryClient = telemetryClient;
+            s_sessionId = TelemetryEnabled ? Guid.NewGuid().ToString() : null;
+            ChunkSize = chunkSize;
+
+            if (!TelemetryEnabled)
             {
-                string appInsightsKey = RetrieveAppInsightsKey();
-                if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
+                try
                 {
-                    Initialize(appInsightsKey);
-                    this.appInsightsRegistered = true;
+
+                    string appInsightsKey = RetrieveAppInsightsKey();
+                    if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
+                    {
+                        Initialize(appInsightsKey);
+                        this.appInsightsRegistered = true;
+                    }
                 }
-            }
-            catch (SecurityException)
-            {
-                // User does not have access to retrieve information from environment variables.
+                catch (SecurityException)
+                {
+                    // User does not have access to retrieve information from environment variables.
+                }
             }
 
             this.sha256 = analysisContext?.Hashes?.Sha256 ?? string.Empty;
