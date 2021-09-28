@@ -18,6 +18,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private const int ChunkSize = 8192;
         private const string CompilerEventName = "CompilerInformation";
         private const string CommandLineEventName = "CommandLineInformation";
+        private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
         private const string SummaryEventName = "AnalysisSummary";
 
         private readonly bool appInsightsRegistered;
@@ -126,6 +127,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             if (TelemetryEnabled)
             {
                 string commandLineId = string.Empty;
+                string assemblyReferencesId = string.Empty;
                 var properties = new Dictionary<string, string>
                 {
                     { "target", this.relativeFilePath },
@@ -151,11 +153,23 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     properties.Add("commandLineId", commandLineId);
                 }
 
+                if (!string.IsNullOrWhiteSpace(compilerData.AssemblyReferences))
+                {
+                    assemblyReferencesId = Guid.NewGuid().ToString();
+                    properties.Add("assemblyReferencesId", assemblyReferencesId);
+                }
+
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: properties);
 
+                // send big size content in chunked pieces
                 if (!string.IsNullOrWhiteSpace(commandLineId))
                 {
-                    SendChunkedCommandLine(commandLineId, compilerData.CommandLine);
+                    SendChunkedContent(CommandLineEventName, commandLineId, "commandLine", compilerData.CommandLine);
+                }
+
+                if (!string.IsNullOrWhiteSpace(assemblyReferencesId))
+                {
+                    SendChunkedContent(AssemblyReferencesEventName, assemblyReferencesId, "assemblyReferences", compilerData.AssemblyReferences);
                 }
             }
             else
@@ -239,21 +253,21 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        private void SendChunkedCommandLine(string commandLineId, string commandLine)
+        private void SendChunkedContent(string eventName, string contentId, string contentName, string content)
         {
             int j = 1;
-            int size = (int)Math.Ceiling(1.0 * commandLine.Length / ChunkSize);
-            for (int i = 0; i < commandLine.Length; i += ChunkSize)
+            int size = (int)Math.Ceiling(1.0 * content.Length / ChunkSize);
+            for (int i = 0; i < content.Length; i += ChunkSize)
             {
-                string tempCommandLine = commandLine.Substring(i, Math.Min(ChunkSize, commandLine.Length - i));
+                string chunckedContent = content.Substring(i, Math.Min(ChunkSize, content.Length - i));
 
-                s_telemetryClient.TrackEvent(CommandLineEventName, properties: new Dictionary<string, string>
+                s_telemetryClient.TrackEvent(eventName, properties: new Dictionary<string, string>
                 {
                     { "sessionId", s_sessionId },
-                    { "commandLineId", commandLineId },
+                    { $"{contentName}Id", contentId },
                     { "orderNumber", j.ToString() },
                     { "totalNumber", size.ToString() },
-                    { "chunkedCommandLine", tempCommandLine },
+                    { $"chunked{contentName}", chunckedContent },
                 });
                 j++;
             }

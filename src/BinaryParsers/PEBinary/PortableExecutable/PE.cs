@@ -816,6 +816,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 : ChecksumAlgorithmForPortablePdb();
         }
 
+        public IEnumerable<string> GetAssemblyReferenceStrings()
+        {
+            if (this.IsManaged && this.metadataReader != null)
+            {
+                foreach (AssemblyReferenceHandle handle in metadataReader.AssemblyReferences)
+                {
+                    AssemblyReference assemblyReference = metadataReader.GetAssemblyReference(handle);
+                    string assemblyName = metadataReader.GetString(assemblyReference.Name);
+                    string version = assemblyReference.Version.ToString();
+
+                    yield return $"{assemblyName} ({version})";
+                }
+            }
+        }
+
         private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb()
         {
             if (!this.peReader.TryOpenAssociatedPortablePdb(
