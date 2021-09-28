@@ -227,7 +227,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "numberOfBinaryAnalyzed", summary.FileAnalyzed.ToString() },
                     { "analysisStartTime", summary.StartTimeUtc.ToString() },
                     { "analysisEndTime", summary.EndTimeUtc.ToString() },
-                    { "timeConsumed", summary.TimeConsumed.ToString() }
+                    { "timeConsumed", summary.TimeConsumed.ToString() },
+                    { "buildDefinitionId", summary.BuildDefinitionId },
+                    { "buildDefinitionName", summary.BuildDefinitionName },
+                    { "buildRunId", summary.BuildRunId },
                 });
             }
             else
