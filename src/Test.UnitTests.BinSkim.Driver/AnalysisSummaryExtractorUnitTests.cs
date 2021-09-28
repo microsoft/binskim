@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
         private void PrepareEnvironmentVariables(List<(string, string)> valuePairs)
         {
-            foreach((string, string) pair in valuePairs)
+            foreach ((string, string) pair in valuePairs)
             {
                 Environment.SetEnvironmentVariable(pair.Item1, pair.Item2);
             }
