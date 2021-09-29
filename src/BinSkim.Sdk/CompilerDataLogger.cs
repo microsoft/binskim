@@ -15,11 +15,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class CompilerDataLogger
     {
-        private const int ChunkSize = 8192;
-        private const string CompilerEventName = "CompilerInformation";
+        private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
         private const string CommandLineEventName = "CommandLineInformation";
+        private const string CompilerEventName = "CompilerInformation";
         private const string SummaryEventName = "AnalysisSummary";
 
+        private readonly int ChunkSize;
         private readonly bool appInsightsRegistered;
         private readonly string sha256;
         private readonly string relativeFilePath;
@@ -32,20 +33,31 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static bool TelemetryEnabled => s_telemetryClient != null;
 
         public CompilerDataLogger(IAnalysisContext analysisContext,
-                                  IEnumerable<string> targetFileSpecifiers)
+                                  IEnumerable<string> targetFileSpecifiers,
+                                  TelemetryConfiguration telemetryConfiguration = null,
+                                  TelemetryClient telemetryClient = null,
+                                  int chunkSize = 8192)
         {
-            try
+            s_telemetryConfiguration = telemetryConfiguration;
+            s_telemetryClient = telemetryClient;
+            s_sessionId = TelemetryEnabled ? Guid.NewGuid().ToString() : null;
+            ChunkSize = chunkSize;
+
+            if (!TelemetryEnabled)
             {
-                string appInsightsKey = RetrieveAppInsightsKey();
-                if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
+                try
                 {
-                    Initialize(appInsightsKey);
-                    this.appInsightsRegistered = true;
+                    string appInsightsKey = RetrieveAppInsightsKey();
+                    if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
+                    {
+                        Initialize(appInsightsKey);
+                        this.appInsightsRegistered = true;
+                    }
                 }
-            }
-            catch (SecurityException)
-            {
-                // User does not have access to retrieve information from environment variables.
+                catch (SecurityException)
+                {
+                    // User does not have access to retrieve information from environment variables.
+                }
             }
 
             this.sha256 = analysisContext?.Hashes?.Sha256 ?? string.Empty;
@@ -126,6 +138,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             if (TelemetryEnabled)
             {
                 string commandLineId = string.Empty;
+                string assemblyReferencesId = string.Empty;
                 var properties = new Dictionary<string, string>
                 {
                     { "target", this.relativeFilePath },
@@ -151,11 +164,23 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     properties.Add("commandLineId", commandLineId);
                 }
 
+                if (!string.IsNullOrWhiteSpace(compilerData.AssemblyReferences))
+                {
+                    assemblyReferencesId = Guid.NewGuid().ToString();
+                    properties.Add("assemblyReferencesId", assemblyReferencesId);
+                }
+
                 s_telemetryClient.TrackEvent(CompilerEventName, properties: properties);
 
+                // send big size content in chunked pieces
                 if (!string.IsNullOrWhiteSpace(commandLineId))
                 {
-                    SendChunkedCommandLine(commandLineId, compilerData.CommandLine);
+                    SendChunkedContent(CommandLineEventName, commandLineId, "commandLine", compilerData.CommandLine);
+                }
+
+                if (!string.IsNullOrWhiteSpace(assemblyReferencesId))
+                {
+                    SendChunkedContent(AssemblyReferencesEventName, assemblyReferencesId, "assemblyReferences", compilerData.AssemblyReferences);
                 }
             }
             else
@@ -239,21 +264,21 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        private void SendChunkedCommandLine(string commandLineId, string commandLine)
+        private void SendChunkedContent(string eventName, string contentId, string contentName, string content)
         {
             int j = 1;
-            int size = (int)Math.Ceiling(1.0 * commandLine.Length / ChunkSize);
-            for (int i = 0; i < commandLine.Length; i += ChunkSize)
+            int size = (int)Math.Ceiling(1.0 * content.Length / ChunkSize);
+            for (int i = 0; i < content.Length; i += ChunkSize)
             {
-                string tempCommandLine = commandLine.Substring(i, Math.Min(ChunkSize, commandLine.Length - i));
+                string chunckedContent = content.Substring(i, Math.Min(ChunkSize, content.Length - i));
 
-                s_telemetryClient.TrackEvent(CommandLineEventName, properties: new Dictionary<string, string>
+                s_telemetryClient.TrackEvent(eventName, properties: new Dictionary<string, string>
                 {
                     { "sessionId", s_sessionId },
-                    { "commandLineId", commandLineId },
+                    { $"{contentName}Id", contentId },
                     { "orderNumber", j.ToString() },
                     { "totalNumber", size.ToString() },
-                    { "chunkedCommandLine", tempCommandLine },
+                    { $"chunked{contentName}", chunckedContent },
                 });
                 j++;
             }
