@@ -15,12 +15,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class CompilerDataLogger
     {
-        private const string CompilerEventName = "CompilerInformation";
-        private const string CommandLineEventName = "CommandLineInformation";
         private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
+        private const string CommandLineEventName = "CommandLineInformation";
+        private const string CompilerEventName = "CompilerInformation";
         private const string SummaryEventName = "AnalysisSummary";
 
-        private readonly int ChunkSize = 8192;
+        private readonly int ChunkSize;
         private readonly bool appInsightsRegistered;
         private readonly string sha256;
         private readonly string relativeFilePath;
@@ -47,7 +47,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 try
                 {
-
                     string appInsightsKey = RetrieveAppInsightsKey();
                     if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
                     {
