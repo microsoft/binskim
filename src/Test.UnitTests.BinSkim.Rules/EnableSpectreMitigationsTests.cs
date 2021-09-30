@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 using FluentAssertions;
@@ -32,7 +33,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             this.AddFakeConfigTestData(context.Policy);
 
-            Dictionary<MachineFamily, CompilerVersionToMitigation[]> result = EnableSpectreMitigations.LoadCompilerDataFromConfig(context.Policy);
+            ConcurrentDictionary<MachineFamily, CompilerVersionToMitigation[]> result = EnableSpectreMitigations.LoadCompilerDataFromConfig(context.Policy);
 
             this.ValidateResultFromFakeTestData(result[MachineFamily.X86]);
             result.Should().ContainKeys(new MachineFamily[] { MachineFamily.X86, MachineFamily.Arm });
