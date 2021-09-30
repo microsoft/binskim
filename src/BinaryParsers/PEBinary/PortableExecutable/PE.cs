@@ -860,7 +860,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
-                ObjectModuleDetails details = om.GetObjectModuleDetails();
                 foreach (DisposableEnumerableView<SourceFile> sfView in pdb.CreateSourceFileIterator(om))
                 {
                     SourceFile sf = sfView.Value;
