@@ -13,10 +13,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     /// <seealso cref="T:System.IDisposable"/>
     public sealed class SourceFile : IDisposable
     {
-        private static readonly Guid MD5Guid = new Guid("406ea660-64cf-4c82-b6f0-42d48172a799");
-        private static readonly Guid Sha1Guid = new Guid("ff1816ec-aa5e-4d10-87f7-6f4963833460");
-        private static readonly Guid Sha256Guid = new Guid("8829d00f-11b8-4213-878b-770e8597ac16");
-
         private readonly Pdb parentPdb;
         private readonly IDiaSourceFile sourceFile;
         private readonly Lazy<byte[]> hashBytes;
@@ -158,15 +154,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 Marshal.FreeHGlobal(p);
             }
 
-            if (header.AlgorithmId == MD5Guid)
+            if (header.AlgorithmId == Constant.MD5Guid)
             {
                 this.HashType = HashType.MD5;
             }
-            else if (header.AlgorithmId == Sha1Guid)
+            else if (header.AlgorithmId == Constant.Sha1Guid)
             {
                 this.HashType = HashType.SHA1;
             }
-            else if (header.AlgorithmId == Sha256Guid)
+            else if (header.AlgorithmId == Constant.Sha256Guid)
             {
                 this.HashType = HashType.SHA256;
             }

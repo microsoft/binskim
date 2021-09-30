@@ -32,8 +32,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         private PEReader peReader;
         internal SafePointer pImage; // pointer to the beginning of the file in memory
         private readonly MetadataReader metadataReader;
-        private const string sha256 = "8829d00f-11b8-4213-878b-770e8597ac16";
-        private static readonly Guid sha256guid = new Guid(sha256);
 
         public PE(string fileName)
         {
@@ -849,7 +847,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 Guid hashGuid = metadataReader.GetGuid(doc.HashAlgorithm);
 
-                return hashGuid == sha256guid ? ChecksumAlgorithmType.Sha256 : ChecksumAlgorithmType.Sha1;
+                return hashGuid == Constant.Sha256Guid ? ChecksumAlgorithmType.Sha256 : ChecksumAlgorithmType.Sha1;
             }
 
             return ChecksumAlgorithmType.Unknown;
