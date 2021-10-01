@@ -159,6 +159,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             && info.Language != DwarfLanguage.C
                             && info.Language != DwarfLanguage.CPlusPlus
                             && info.Language != DwarfLanguage.C99
+                            && info.Language != DwarfLanguage.ObjC
+                            && info.Language != DwarfLanguage.ObjCPlusPlus
                             && info.Language != DwarfLanguage.CPlusPlus03
                             && info.Language != DwarfLanguage.CPlusPlus11
                             && info.Language != DwarfLanguage.C11
