@@ -67,6 +67,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     FileVersion = target.PE.FileVersion?.FileVersion,
                     CompilerBackEndVersion = target.PE.LinkerVersion.ToString(),
                     CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
+                    AssemblyReferences = string.Join(';', target.PE.GetAssemblyReferenceStrings()),
                 };
 
                 if (!records.ContainsKey(record))
