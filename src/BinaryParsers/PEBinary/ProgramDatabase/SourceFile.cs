@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 using Dia2Lib;
@@ -12,6 +13,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     /// <seealso cref="T:System.IDisposable"/>
     public sealed class SourceFile : IDisposable
     {
+        private readonly Pdb parentPdb;
         private readonly IDiaSourceFile sourceFile;
         private readonly Lazy<byte[]> hashBytes;
         private bool disposed;
@@ -19,12 +21,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <summary>
         /// Constructs a wrapper object around an <see cref="IDiaSourceFile"/> instance.
         /// </summary>
+        /// <param name="parentPdb">The PDB file that this instance belongs to.</param>
         /// <param name="source">The COM RCW for the IDiaSourceFile. This instance takes ownership of the
         /// RCW.</param>
-        public SourceFile(IDiaSourceFile source)
+        public SourceFile(Pdb parentPdb, IDiaSourceFile source)
         {
             this.hashBytes = new Lazy<byte[]>(this.GetHash);
+            this.parentPdb = parentPdb;
             this.sourceFile = source;
+            this.FindInjectedInformation();
         }
 
         /// <summary>
@@ -42,12 +47,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <summary>
         /// Hash type (SHA1, MD5 or None)
         /// </summary>
-        public HashType HashType
+        public HashType HashType { get; set; } = HashType.None;
+
+        /// <summary>
+        /// In the case of managed languages, the file information such as language and hash are located in an InjectedSourceRecord.
+        /// </summary>
+        private void FindInjectedInformation()
         {
-            get
+            this.AssertNotDisposed();
+            this.HashType = (HashType)this.sourceFile.checksumType;
+            if (this.HashType == HashType.None)
             {
-                this.AssertNotDisposed();
-                return (HashType)this.sourceFile.checksumType;
+                // Could be an injected file and thus need to go farther.
+                IDiaInjectedSource injected = this.parentPdb.InjectedSources(this.FileName).FirstOrDefault();
+                if (injected != null)
+                {
+                    this.GetSourceDataHash(injected);
+                }
             }
         }
 
@@ -108,6 +124,47 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             if (this.disposed)
             {
                 throw new ObjectDisposedException("SourceFile");
+            }
+        }
+
+        private void GetSourceDataHash(IDiaInjectedSource injectedSource)
+        {
+            SourceFormat header = default;
+
+            int headerSize = Marshal.SizeOf<SourceFormat>();
+            uint size = (uint)headerSize;
+            uint count;
+
+            // Initialize unmanaged memory to hold the struct.
+            IntPtr p = Marshal.AllocHGlobal(headerSize);
+
+            try
+            {
+                unsafe
+                {
+                    byte* bp = (byte*)p;
+                    injectedSource.get_source(size, out count, out *bp);
+                }
+
+                header = Marshal.PtrToStructure<SourceFormat>(p);
+            }
+            finally
+            {
+                // Free the unmanaged memory.
+                Marshal.FreeHGlobal(p);
+            }
+
+            if (header.AlgorithmId == Constant.MD5Guid)
+            {
+                this.HashType = HashType.MD5;
+            }
+            else if (header.AlgorithmId == Constant.Sha1Guid)
+            {
+                this.HashType = HashType.SHA1;
+            }
+            else if (header.AlgorithmId == Constant.Sha256Guid)
+            {
+                this.HashType = HashType.SHA256;
             }
         }
     }
