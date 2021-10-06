@@ -69,6 +69,7 @@ namespace Microsoft.CodeAnalysis.IL
 
                 summary.OrganizationId = ExtractValueFromEnvironmentVariable(OrganizationIdVar);
                 summary.OrganizationName = ExtractValueFromEnvironmentVariable(OrganizationNameVar);
+                summary.OrganizationName = summary.OrganizationName.Replace("https://dev.azure.com/", string.Empty).TrimEnd('/');
             }
         }
 
