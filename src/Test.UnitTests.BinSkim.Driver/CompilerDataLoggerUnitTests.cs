@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             this.TestSetup();
 
-            BinaryAnalyzerContext context = new BinaryAnalyzerContext { };
+            var context = new BinaryAnalyzerContext { };
             string[] targetFileSpecifier = new[] { @"E:\applications\Tool\*.exe" };
             int chunksize = 10;
             string assemblies = "Microsoft.DiaSymReader (1.3.0);Newtonsoft.Json (13.0.1)";
@@ -57,7 +57,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             this.TestSetup();
 
-            BinaryAnalyzerContext context = new BinaryAnalyzerContext { };
+            var context = new BinaryAnalyzerContext { };
             string[] targetFileSpecifier = new[] { @"E:\applications\Tool\*.exe" };
             int chunksize = 10;
             string assemblies = null;
