@@ -94,7 +94,7 @@ namespace Microsoft.CodeAnalysis.IL
                 // User does not have access to retrieve information from environment variables.
             }
 
-            return value;
+            return value ?? string.Empty;
         }
 
         public static IEnumerable<ExecutionException> ExtractExceptionData(SarifLog sarifLog)
