@@ -15,13 +15,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class CompilerDataLogger
     {
-        private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
-        private const string CommandLineEventName = "CommandLineInformation";
-        private const string CompilerEventName = "CompilerInformation";
         private const string SummaryEventName = "AnalysisSummary";
+        private const string CompilerEventName = "CompilerInformation";
+        private const string CommandLineEventName = "CommandLineInformation";
+        private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
 
         private readonly int ChunkSize;
-        private readonly bool appInsightsRegistered;
         private readonly string sha256;
         private readonly string relativeFilePath;
 
@@ -51,7 +50,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
                     {
                         Initialize(appInsightsKey);
-                        this.appInsightsRegistered = true;
                     }
                 }
                 catch (SecurityException)
@@ -123,7 +121,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public void PrintHeader()
         {
-            if (!this.appInsightsRegistered)
+            if (!TelemetryEnabled)
             {
                 if (s_printHeader)
                 {
@@ -256,6 +254,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "buildDefinitionId", summary.BuildDefinitionId },
                     { "buildDefinitionName", summary.BuildDefinitionName },
                     { "buildRunId", summary.BuildRunId },
+                    { "repositoryId", summary.RepositoryId },
+                    { "repositoryName", summary.RepositoryName },
+                    { "organizationId", summary.OrganizationId },
+                    { "organizationName", summary.OrganizationName },
+                    { "projectId", summary.ProjectId },
+                    { "projectName", summary.ProjectName },
                 });
             }
             else

@@ -16,10 +16,16 @@ namespace Microsoft.CodeAnalysis.IL
         internal const string BuildDefinitionIdVar = "System_DefinitionId";
         internal const string BuildDefinitionNameVar = "Build_DefinitionName";
         internal const string BuildDefinitionRunIdVar = "Build_BuildId";
+        internal const string RepositoryIdVar = "Build_Repository_ID";
+        internal const string RepositoryNameVar = "Build_Repository_Name";
+        internal const string ProjectIdVar = "System_TeamProjectId";
+        internal const string ProjectNameVar = "System_TeamProject";
+        internal const string OrganizationIdVar = "System_CollectionId";
+        internal const string OrganizationNameVar = "System_CollectionUri";
 
         public static AnalysisSummary ExtractAnalysisSummary(SarifLog sarifLog, AnalyzeOptions options)
         {
-            if (sarifLog == null || sarifLog.Runs == null || !sarifLog.Runs.Any())
+            if (sarifLog == null || sarifLog.Runs?.Any() != true)
             {
                 return null;
             }
@@ -35,7 +41,7 @@ namespace Microsoft.CodeAnalysis.IL
                 NormalizedPath = string.Join(";", options.TargetFileSpecifiers.Select(p => System.IO.Path.GetDirectoryName(p)).Distinct()),
                 SymbolPath = options.SymbolsPath,
                 FileAnalyzed = artifacts.Count,
-                // FileNotAnalyzed = 
+                // FileNotAnalyzed =
                 StartTimeUtc = invocation.StartTimeUtc,
                 EndTimeUtc = invocation.EndTimeUtc,
                 TimeConsumed = invocation.EndTimeUtc - invocation.StartTimeUtc,
@@ -51,17 +57,44 @@ namespace Microsoft.CodeAnalysis.IL
             // https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml
             if (summary != null)
             {
-                try
+                summary.BuildDefinitionId = ExtractValueFromEnvironmentVariable(BuildDefinitionIdVar);
+                summary.BuildDefinitionName = ExtractValueFromEnvironmentVariable(BuildDefinitionNameVar);
+                summary.BuildRunId = ExtractValueFromEnvironmentVariable(BuildDefinitionRunIdVar);
+
+                summary.RepositoryId = ExtractValueFromEnvironmentVariable(RepositoryIdVar);
+                summary.RepositoryName = ExtractValueFromEnvironmentVariable(RepositoryNameVar);
+
+                summary.ProjectId = ExtractValueFromEnvironmentVariable(ProjectIdVar);
+                summary.ProjectName = ExtractValueFromEnvironmentVariable(ProjectNameVar);
+
+                summary.OrganizationId = ExtractValueFromEnvironmentVariable(OrganizationIdVar);
+                summary.OrganizationName = ExtractValueFromEnvironmentVariable(OrganizationNameVar);
+                summary.OrganizationName = summary.OrganizationName.Replace("https://dev.azure.com/", string.Empty, StringComparison.OrdinalIgnoreCase).TrimEnd('/');
+            }
+        }
+
+        public static string ExtractValueFromEnvironmentVariable(string environmentVariable)
+        {
+            string value = string.Empty;
+
+            try
+            {
+                value = Environment.GetEnvironmentVariable(environmentVariable);
+                if (string.IsNullOrEmpty(value))
                 {
-                    summary.BuildDefinitionId = Environment.GetEnvironmentVariable(BuildDefinitionIdVar);
-                    summary.BuildDefinitionName = Environment.GetEnvironmentVariable(BuildDefinitionNameVar);
-                    summary.BuildRunId = Environment.GetEnvironmentVariable(BuildDefinitionRunIdVar);
-                }
-                catch (SecurityException)
-                {
-                    // User does not have access to retrieve information from environment variables.
+                    value = Environment.GetEnvironmentVariable(environmentVariable, EnvironmentVariableTarget.User);
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        value = Environment.GetEnvironmentVariable(environmentVariable, EnvironmentVariableTarget.Machine);
+                    }
                 }
             }
+            catch (SecurityException)
+            {
+                // User does not have access to retrieve information from environment variables.
+            }
+
+            return value ?? string.Empty;
         }
 
         public static IEnumerable<ExecutionException> ExtractExceptionData(SarifLog sarifLog)
@@ -71,7 +104,6 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 yield break;
             }
-
 
             foreach (Sarif.Notification notification in notifications)
             {
@@ -97,7 +129,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private static Exception GetInnerException(IList<ExceptionData> exceptions)
         {
-            if (exceptions == null || !exceptions.Any())
+            if (exceptions?.Any() != true)
             {
                 return null;
             }
@@ -117,6 +149,5 @@ namespace Microsoft.CodeAnalysis.IL
                 return ConvertSarifException(exceptions.First());
             }
         }
-
     }
 }

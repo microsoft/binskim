@@ -63,6 +63,13 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             const string buildDefId = "2097";
             const string buildDefName = "AdoScannerTest-ASP.NET-CI";
             const string buildRunId = "11032";
+            const string repositoryId = "1";
+            const string repositoryName = "repo-name";
+            const string projectId = "2";
+            const string projectName = "project-name";
+            const string organizationId = "3";
+            const string organizationName = "organization-name";
+
             var summary = new AnalysisSummary();
 
             PrepareEnvironmentVariables(new List<(string, string)>
@@ -70,12 +77,27 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 (AnalysisSummaryExtractor.BuildDefinitionIdVar, buildDefId),
                 (AnalysisSummaryExtractor.BuildDefinitionNameVar, buildDefName),
                 (AnalysisSummaryExtractor.BuildDefinitionRunIdVar, buildRunId),
+                (AnalysisSummaryExtractor.RepositoryIdVar, repositoryId),
+                (AnalysisSummaryExtractor.RepositoryNameVar, repositoryName),
+                (AnalysisSummaryExtractor.OrganizationIdVar, organizationId),
+                (AnalysisSummaryExtractor.OrganizationNameVar, organizationName),
+                (AnalysisSummaryExtractor.ProjectIdVar, projectId),
+                (AnalysisSummaryExtractor.ProjectNameVar, projectName),
             });
             AnalysisSummaryExtractor.UpdateBuildPipelineInfo(summary);
 
             summary.BuildDefinitionId.Should().BeEquivalentTo(buildDefId);
             summary.BuildDefinitionName.Should().BeEquivalentTo(buildDefName);
             summary.BuildRunId.Should().BeEquivalentTo(buildRunId);
+
+            summary.OrganizationId.Should().BeEquivalentTo(buildRunId);
+            summary.OrganizationName.Should().BeEquivalentTo(buildRunId);
+
+            summary.ProjectId.Should().BeEquivalentTo(buildRunId);
+            summary.ProjectName.Should().BeEquivalentTo(buildRunId);
+
+            summary.RepositoryId.Should().BeEquivalentTo(buildRunId);
+            summary.RepositoryName.Should().BeEquivalentTo(buildRunId);
         }
 
         [Fact]
@@ -85,8 +107,17 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             AnalysisSummaryExtractor.UpdateBuildPipelineInfo(summary);
 
             summary.BuildDefinitionId.Should().BeNullOrEmpty();
-            summary.BuildDefinitionName.Should().BeNullOrEmpty(); ;
-            summary.BuildRunId.Should().BeNullOrEmpty(); ;
+            summary.BuildDefinitionName.Should().BeNullOrEmpty();
+            summary.BuildRunId.Should().BeNullOrEmpty();
+
+            summary.OrganizationId.Should().BeNullOrEmpty();
+            summary.OrganizationName.Should().BeNullOrEmpty();
+
+            summary.ProjectId.Should().BeNullOrEmpty();
+            summary.ProjectName.Should().BeNullOrEmpty();
+
+            summary.RepositoryId.Should().BeNullOrEmpty();
+            summary.RepositoryName.Should().BeNullOrEmpty();
         }
 
         private SarifLog GenerateSarifLog(string toolName, string toolVersion, DateTime execTime, int numArtifact)
