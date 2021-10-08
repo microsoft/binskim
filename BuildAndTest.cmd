@@ -48,11 +48,11 @@ echo Building solution...
 dotnet build --no-restore /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
 ::Run unit tests
-::echo Run all multitargeting xunit tests
-::call :RunTestProject BinaryParsers Unit || goto :ExitFailed
-::call :RunTestProject BinSkim.Rules Unit || goto :ExitFailed
-::call :RunTestProject BinSkim.Driver Functional || goto :ExitFailed
-::call :RunTestProject BinSkim.Rules Functional  || goto :ExitFailed
+echo Run all multitargeting xunit tests
+call :RunTestProject BinaryParsers Unit || goto :ExitFailed
+call :RunTestProject BinSkim.Rules Unit || goto :ExitFailed
+call :RunTestProject BinSkim.Driver Functional || goto :ExitFailed
+call :RunTestProject BinSkim.Rules Functional  || goto :ExitFailed
 
 ::Create the BinSkim platform specific publish packages
 echo Creating Platform Specific BinSkim 'Publish' Packages
