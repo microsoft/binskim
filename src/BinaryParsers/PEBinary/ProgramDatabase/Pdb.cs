@@ -193,7 +193,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                         break;
                     }
 
-                    yield return new SourceFile(sourceFile);
+                    yield return new SourceFile(this, sourceFile);
                 }
             }
             finally
@@ -202,6 +202,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 {
                     Marshal.ReleaseComObject(sourceFilesEnum);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Returns an IEnumerable collection of injected files filtered by a file name.
+        /// </summary>
+        /// <param name="fileName">The file name to look for.</param>
+        /// <returns>All the sources that match the <paramref name="fileName"/>.</returns>
+        public IEnumerable<IDiaInjectedSource> InjectedSources(string fileName)
+        {
+            this.session.findInjectedSource(fileName, out IDiaEnumInjectedSources enumSources);
+
+            foreach (IDiaInjectedSource diaInjectedSource in enumSources)
+            {
+                yield return diaInjectedSource;
             }
         }
 

@@ -62,7 +62,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb di = target.Pdb;
 
-            if (target.PE.ManagedPdbSourceFileChecksumAlgorithm(di.FileType) != ChecksumAlgorithmType.Sha256)
+            if (target.PE.ManagedPdbSourceFileChecksumAlgorithm(di.FileType, di) != ChecksumAlgorithmType.Sha256)
             {
                 // '{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm.
                 // SHA-1 is subject to collision attacks and its use can compromise supply chain integrity.
