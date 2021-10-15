@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public CompilerDataLogger CompilerDataLogger { get; set; }
 
-        public bool DoNotBreak { get; set; }
+        public bool IgnorePdbLoadError { get; set; }
 
         private bool disposed = false;
 
