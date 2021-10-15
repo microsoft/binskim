@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         [Option(
             "doNotBreak",
-            HelpText = "If enabled, BinSkim won't break if we don't find a PDB.")]
+            HelpText = "If enabled, BinSkim won't break if we have a 'PdbLoadingException'.")]
         public bool DoNotBreak { get; set; }
     }
 }
