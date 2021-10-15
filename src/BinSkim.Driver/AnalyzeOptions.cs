@@ -43,5 +43,10 @@ namespace Microsoft.CodeAnalysis.IL
             HelpText = "Emit verbose output. The resulting comprehensive report is designed to provide appropriate evidence for compliance scenarios.")]
         [Obsolete("Use --level and --kind instead.")]
         public bool Verbose { get; set; }
+
+        [Option(
+            "doNotBreak",
+            HelpText = "If enabled, BinSkim won't break if we don't find a PDB.")]
+        public bool DoNotBreak { get; set; }
     }
 }

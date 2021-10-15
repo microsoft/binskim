@@ -155,7 +155,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     pdbException.ExceptionDisplayMessage));
 
             s_PdbExceptions.TryAdd(key, true);
-            context.RuntimeErrors |= RuntimeConditions.ExceptionLoadingPdb;
+
+            // We should only log if doNotBreak is false
+            if (context is BinaryAnalyzerContext binaryAnalyzerContext && !binaryAnalyzerContext.DoNotBreak)
+            {
+                context.RuntimeErrors |= RuntimeConditions.ExceptionLoadingPdb;
+            }
 
             if (!string.IsNullOrEmpty(pdbException.LoadTrace))
             {
