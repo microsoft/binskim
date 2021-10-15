@@ -43,5 +43,10 @@ namespace Microsoft.CodeAnalysis.IL
             HelpText = "Emit verbose output. The resulting comprehensive report is designed to provide appropriate evidence for compliance scenarios.")]
         [Obsolete("Use --level and --kind instead.")]
         public bool Verbose { get; set; }
+
+        [Option(
+            "ignorePdbLoadError",
+            HelpText = "If enabled, BinSkim won't break if we have a 'PdbLoadingException'.")]
+        public bool IgnorePdbLoadError { get; set; }
     }
 }
