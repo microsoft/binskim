@@ -86,18 +86,18 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             });
             AnalysisSummaryExtractor.UpdateBuildPipelineInfo(summary);
 
-            summary.BuildDefinitionId.Should().BeEquivalentTo(buildDefId);
-            summary.BuildDefinitionName.Should().BeEquivalentTo(buildDefName);
-            summary.BuildRunId.Should().BeEquivalentTo(buildRunId);
+            summary.BuildDefinitionId.Should().Be(buildDefId);
+            summary.BuildDefinitionName.Should().Be(buildDefName);
+            summary.BuildRunId.Should().Be(buildRunId);
 
-            summary.OrganizationId.Should().BeEquivalentTo(buildRunId);
-            summary.OrganizationName.Should().BeEquivalentTo(buildRunId);
+            summary.OrganizationId.Should().Be(organizationId);
+            summary.OrganizationName.Should().Be(organizationName);
 
-            summary.ProjectId.Should().BeEquivalentTo(buildRunId);
-            summary.ProjectName.Should().BeEquivalentTo(buildRunId);
+            summary.ProjectId.Should().Be(projectId);
+            summary.ProjectName.Should().Be(projectName);
 
-            summary.RepositoryId.Should().BeEquivalentTo(buildRunId);
-            summary.RepositoryName.Should().BeEquivalentTo(buildRunId);
+            summary.RepositoryId.Should().Be(repositoryId);
+            summary.RepositoryName.Should().Be(repositoryName);
         }
 
         [Fact]
