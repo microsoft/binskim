@@ -1,9 +1,9 @@
 set MAJOR_PREVIOUS=1
 set MINOR_PREVIOUS=9
 set PATCH_PREVIOUS=0
-set PRERELEASE_PREVIOUS=-prerelease1
+set PRERELEASE_PREVIOUS=-prerelease2
 
 set MAJOR=1
 set MINOR=9
 set PATCH=0
-set PRERELEASE=-prerelease2
+set PRERELEASE=-prerelease3
