@@ -104,6 +104,7 @@ namespace Microsoft.CodeAnalysis.IL
                 Recurse = false,
                 PrettyPrint = true,
                 DataToInsert = new[] { OptionallyEmittedData.Hashes },
+                DataToRemove = new[] { OptionallyEmittedData.NondeterministicProperties },
                 OutputFilePath = actualFileName,
                 ConfigurationFilePath = "default",
                 SarifOutputVersion = Sarif.SarifVersion.Current,
@@ -139,16 +140,6 @@ namespace Microsoft.CodeAnalysis.IL
 
             actualText = Regex.Replace(actualText, @"\s*""fullName""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""semanticVersion""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""sarifLoggerVersion""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""dottedQuadFileVersion""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""Comments""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""CompanyName""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""ProductName""[^\n]+?\n", Environment.NewLine);
-
-            actualText = Regex.Replace(actualText, @"\s*""time""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""endTimeUtc""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""startTimeUtc""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""processId""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"      ""id""[^,]+,\s+""tool""", @"      ""tool""", RegexOptions.Multiline);
 
             // Write back the normalized actual text so that the diff command given on failure shows what was actually compared.
