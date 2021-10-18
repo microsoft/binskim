@@ -8,7 +8,7 @@
 * FEATURE: Collect/Send assembly references when rule BA4001 is enabled. [#493](https://github.com/microsoft/binskim/pull/493)
 * FEATURE: Enable multithread analysis. [#495](https://github.com/microsoft/binskim/pull/495)
 * FEATURE: Package `BinaryParsers` project as a new nuget. [#502](https://github.com/microsoft/binskim/pull/502)
-* FEATURE: Do not return 1 when `DoNotBreak` is enabled for PDB loading issues. [#506](https://github.com/microsoft/binskim/pull/506)
+* FEATURE: Do not return 1 when `ignorePdbLoadError` is enabled for PDB loading issues. [#506](https://github.com/microsoft/binskim/pull/506)
 
 ## **v1.9.0-prerelease2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.0-prerelease2)
 
