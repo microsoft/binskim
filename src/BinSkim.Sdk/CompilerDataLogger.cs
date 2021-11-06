@@ -274,7 +274,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                Console.WriteLine(summary.ToString());
+                Console.WriteLine(summary);
             }
         }
 
