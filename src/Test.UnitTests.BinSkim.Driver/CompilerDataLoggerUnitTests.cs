@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             (TelemetryConfiguration, TelemetryClient, List<ITelemetry>) setup = TestSetup();
 
-            var context = new BinaryAnalyzerContext { };
+            var context = new BinaryAnalyzerContext();
             string[] targetFileSpecifier = new[] { @"E:\applications\Tool\*.exe" };
             int chunksize = 10;
             string assemblies = "Microsoft.DiaSymReader (1.3.0);Newtonsoft.Json (13.0.1)";
@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             (TelemetryConfiguration, TelemetryClient, List<ITelemetry>) setup = TestSetup();
 
-            var context = new BinaryAnalyzerContext { };
+            var context = new BinaryAnalyzerContext();
             string[] targetFileSpecifier = new[] { @"E:\applications\Tool\*.exe" };
             int chunksize = 10;
             string assemblies = null;
@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             string sessionId = string.Empty;
             int numberOfCompilerDataLoggers = 1000;
-            var context = new BinaryAnalyzerContext { };
+            var context = new BinaryAnalyzerContext();
             string[] targetFileSpecifier = new[] { @"E:\applications\Tool\*.exe" };
 
             Environment.SetEnvironmentVariable("BinskimAppInsightsKey", Guid.NewGuid().ToString());
@@ -73,6 +73,31 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
                 sessionId.Should().Be(CompilerDataLogger.s_sessionId);
             });
+
+            CompilerDataLogger.Reset();
+        }
+
+        [Fact]
+        public void CompilerDataLogger_SessionIdShouldNotBeReplacedWhenValid()
+        {
+            var context = new BinaryAnalyzerContext();
+            string[] targetFileSpecifier = new[] { @"E:\applications\Tool\*.exe" };
+
+            _ = new CompilerDataLogger(context, targetFileSpecifier);
+            CompilerDataLogger.s_sessionId.Should().NotBeNullOrWhiteSpace();
+
+            string currentGuid = Guid.NewGuid().ToString();
+            Environment.SetEnvironmentVariable("BinskimAppInsightsKey", currentGuid);
+
+            // SessionId will be created when BinskimAppInsightsKey is retrieved.
+            _ = new CompilerDataLogger(context, targetFileSpecifier);
+            CompilerDataLogger.s_sessionId.Should().Be(currentGuid);
+
+            // Since sessionId is not null, no new session should be created.
+            _ = new CompilerDataLogger(context, targetFileSpecifier);
+            CompilerDataLogger.s_sessionId.Should().Be(currentGuid);
+
+            CompilerDataLogger.Reset();
         }
 
         private (TelemetryConfiguration, TelemetryClient, List<ITelemetry>) TestSetup()
