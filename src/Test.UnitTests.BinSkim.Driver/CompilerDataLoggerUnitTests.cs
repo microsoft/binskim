@@ -9,6 +9,7 @@ using FluentAssertions;
 
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.CodeAnalysis.IL.Sdk;
 
@@ -84,6 +85,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             string[] targetFileSpecifier = new[] { @"E:\applications\Tool\*.exe" };
 
             _ = new CompilerDataLogger(context, targetFileSpecifier);
+            string previousSession = CompilerDataLogger.s_sessionId;
             CompilerDataLogger.s_sessionId.Should().NotBeNullOrWhiteSpace();
 
             string currentGuid = Guid.NewGuid().ToString();
@@ -91,11 +93,33 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             // SessionId will be created when BinskimAppInsightsKey is retrieved.
             _ = new CompilerDataLogger(context, targetFileSpecifier);
-            CompilerDataLogger.s_sessionId.Should().Be(currentGuid);
+            string currentSession = CompilerDataLogger.s_sessionId;
+            CompilerDataLogger.s_sessionId.Should().NotBe(previousSession);
 
             // Since sessionId is not null, no new session should be created.
             _ = new CompilerDataLogger(context, targetFileSpecifier);
-            CompilerDataLogger.s_sessionId.Should().Be(currentGuid);
+            CompilerDataLogger.s_sessionId.Should().Be(currentSession);
+            CompilerDataLogger.s_sessionId.Should().NotBe(previousSession);
+
+            CompilerDataLogger.Reset();
+        }
+
+        [Fact]
+        public void CompilerDataLogger_ShouldLogHashIfValid()
+        {
+            (TelemetryConfiguration, TelemetryClient, List<ITelemetry>) setup = TestSetup();
+
+            var context = new BinaryAnalyzerContext();
+            string[] targetFileSpecifier = new[] { @"E:\applications\Tool\*.exe" };
+
+            var logger = new CompilerDataLogger(context, targetFileSpecifier, setup.Item1, setup.Item2);
+            logger.Write(new CompilerData { CompilerName = ".NET Compiler" });
+
+            ValidateTelemetry(setup.Item3, shouldExist: false);
+            context.Hashes = new Sarif.HashData(null, null, "some-content");
+            logger.Write(new CompilerData { CompilerName = ".NET Compiler" });
+
+            ValidateTelemetry(setup.Item3, shouldExist: true);
 
             CompilerDataLogger.Reset();
         }
@@ -117,6 +141,28 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             }
 
             return (telemetryConfiguration, telemetryClient, sendItems);
+        }
+
+        private void ValidateTelemetry(List<ITelemetry> telemetries, bool shouldExist)
+        {
+            foreach (EventTelemetry telemetry in telemetries)
+            {
+                if (telemetry.Name == "CompilerInformation")
+                {
+                    if (telemetry.Properties.TryGetValue("hash", out string hash))
+                    {
+                        if (shouldExist)
+                        {
+                            hash.Should().NotBeNullOrWhiteSpace();
+                        }
+                        else
+                        {
+                            hash.Should().BeNullOrWhiteSpace();
+                        }
+                    }
+                }
+            }
+            telemetries.Clear();
         }
     }
 }
