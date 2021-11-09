@@ -6,5 +6,3 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("BinSkim SDK")]
 [assembly: AssemblyDescription("BinSkim SDK and utilities for authoring analysis checks")]
-
-[assembly: InternalsVisibleTo("Test.UnitTests.BinSkim.Driver")]

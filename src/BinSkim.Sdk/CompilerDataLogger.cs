@@ -27,10 +27,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private readonly IAnalysisContext context;
 
         internal static string s_sessionId;
+
         private static bool s_printHeader = true;
         private static TelemetryClient s_telemetryClient;
         private static TelemetryConfiguration s_telemetryConfiguration;
-
         private static readonly object s_syncRoot = new object();
 
         public static bool TelemetryEnabled => s_telemetryClient != null;
@@ -278,9 +278,16 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
+        /// <summary>
+        /// This method will clean all static variables.
+        /// </summary>
+        /// <remarks>
+        /// This method should only be used for testing purpose.
+        /// </remarks>
         internal static void Reset()
         {
             s_sessionId = null;
+            s_printHeader = true;
             s_telemetryClient = null;
             s_telemetryConfiguration = null;
         }
