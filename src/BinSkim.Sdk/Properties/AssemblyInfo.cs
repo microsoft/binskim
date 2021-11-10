@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("BinSkim SDK")]
 [assembly: AssemblyDescription("BinSkim SDK and utilities for authoring analysis checks")]
