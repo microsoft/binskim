@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## **v1.9.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.0)
+
+* BUGFIX: Fix telemetry session creation. [515](https://github.com/microsoft/binskim/pull/515)
+
 ## **v1.9.0-prerelease3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.0-prerelease3)
 
 * BUGFIX: Fix exception when collecting telemetry. [486](https://github.com/microsoft/binskim/pull/486), [#487](https://github.com/microsoft/binskim/pull/487)
