@@ -802,6 +802,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
+        public bool IsARM64Binary => Machine == Machine.Arm64;
+
         public PEMemoryBlock GetSectionData(int dataRelativeVirtualAddress)
         {
             return peReader.GetSectionData(dataRelativeVirtualAddress);

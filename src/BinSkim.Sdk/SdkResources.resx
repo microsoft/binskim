@@ -240,4 +240,7 @@
   <data name="MetadataCondition_ImageIsNotMachO" xml:space="preserve">
     <value>image is not a MachO binary</value>
   </data>
+  <data name="MetadataCondition_ImageIsARM64BitBinary" xml:space="preserve">
+    <value>image is an ARM 64 bit binary</value>
+  </data>
 </root>

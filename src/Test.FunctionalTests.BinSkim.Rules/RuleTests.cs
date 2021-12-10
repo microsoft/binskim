@@ -235,7 +235,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             HashSet<string> applicabilityConditions,
             AnalysisApplicability expectedApplicability = AnalysisApplicability.NotApplicableToSpecifiedTarget,
             bool useDefaultPolicy = false,
-            bool bypassExtensionValidation = false)
+            bool bypassExtensionValidation = false,
+            string expectedReasonForNotAnalyzing = null)
         {
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = GetTestDirectoryFor(ruleName);
@@ -277,10 +278,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Rule = skimmer;
 
                 AnalysisApplicability applicability = skimmer.CanAnalyze(context, out string reasonForNotAnalyzing);
+
                 if (applicability != expectedApplicability)
                 {
                     sb.AppendLine("CanAnalyze did not correct indicate target applicability (unexpected return was " +
                         applicability + "): " +
+                        Path.GetFileName(target));
+                    continue;
+                }
+
+                if (expectedReasonForNotAnalyzing != null && reasonForNotAnalyzing != expectedReasonForNotAnalyzing)
+                {
+                    sb.AppendLine("Cannot Analyze but unexpected reason identified (unexpected return was " +
+                        reasonForNotAnalyzing + "but " +
+                        expectedReasonForNotAnalyzing + "was expected): " +
                         Path.GetFileName(target));
                     continue;
                 }
@@ -1097,6 +1108,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 this.VerifyFail(new EnableShadowStack(), useDefaultPolicy: true);
             }
+        }
+
+        [Fact]
+        public void BA2025_EnableShadowStack_NotApplicable()
+        {
+            this.VerifyApplicability(
+                skimmer: new EnableShadowStack(),
+                applicabilityConditions: new HashSet<string>(),
+                expectedReasonForNotAnalyzing: MetadataConditions.ImageIsARM64BitBinary);
         }
 
         [Fact]
