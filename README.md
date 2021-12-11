@@ -19,6 +19,13 @@ This repository contains the source code for BinSkim, a Portable Executable (PE)
 2. Read the **[User Guide](./docs/UserGuide.md)**
 3. Find out more about the Static Analysis Results Interchange Format **([SARIF](https://github.com/sarif-standard/sarif-spec/))** used to output Binskim results
 
+### How to extract the exe file from the nuget package
+If you only want to run the Binskim tool without installing anything, then you can 
+1. Download BinSkim from **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**
+2. Rename the file extension from .nupkg to .zip
+3. Unzip
+4. Executable files are now available in the folder _tools\netcoreapp3.1_
+
 ### Command-Line Quick Guide
 
 | Argument (short form, long form) | Meaning |
