@@ -131,12 +131,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (missingEntirely)
                 {
-                    sb.AppendLine("Expected '" + ruleName + "' " + expectedText + " but saw no result at all for file: " + Path.GetFileName(target));
+                    sb.AppendLine(
+                        string.Format("Expected '{0}' {1} but saw no result at all for file: {2]",
+                            ruleName,
+                            expectedText,
+                            Path.GetFileName(target)));
                 }
                 else
                 {
                     other.Remove(target);
-                    sb.AppendLine("Expected '" + ruleName + "' " + expectedText + " but check " + actualText + " for: " + Path.GetFileName(target));
+                    sb.AppendLine(
+                        string.Format(
+                            "Expected '{0}' {1} but check {2} for: {3}",
+                            ruleName,
+                            expectedText,
+                            actualText,
+                            Path.GetFileName(target)));
                 }
             }
 
@@ -281,18 +291,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (applicability != expectedApplicability)
                 {
-                    sb.AppendLine("CanAnalyze did not correct indicate target applicability (unexpected return was " +
-                        applicability + "): " +
-                        Path.GetFileName(target));
+                    sb.AppendLine(
+                        string.Format(
+                            "Can analyze did not correctly indicate target applicability (unexpected return was {0}): {1}",
+                            applicability,
+                            Path.GetFileName(target)));
+
                     continue;
                 }
 
                 if (expectedReasonForNotAnalyzing != null && reasonForNotAnalyzing != expectedReasonForNotAnalyzing)
                 {
-                    sb.AppendLine("Cannot Analyze but unexpected reason identified (unexpected return was " +
-                        reasonForNotAnalyzing + "but " +
-                        expectedReasonForNotAnalyzing + "was expected): " +
-                        Path.GetFileName(target));
+                    sb.AppendLine(
+                        string.Format(
+                            "Cannot analyze but unexpected reason identified (unexpected return was {0} but {1} was expected): {2}",
+                            reasonForNotAnalyzing,
+                            expectedReasonForNotAnalyzing,
+                            Path.GetFileName(target)));
+
                     continue;
                 }
             }
@@ -1116,7 +1132,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             this.VerifyApplicability(
                 skimmer: new EnableShadowStack(),
                 applicabilityConditions: new HashSet<string>(),
-                expectedReasonForNotAnalyzing: MetadataConditions.ImageIsARM64BitBinary);
+                expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArm64BitBinary);
         }
 
         [Fact]

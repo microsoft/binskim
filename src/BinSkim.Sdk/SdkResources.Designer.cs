@@ -151,7 +151,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to image is an ARM 64 bit binary.
+        ///   Looks up a localized string similar to image is an ARM64 bit binary.
         /// </summary>
         internal static string MetadataCondition_ImageIsARM64BitBinary {
             get {

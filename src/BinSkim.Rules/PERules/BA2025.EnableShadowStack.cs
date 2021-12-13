@@ -60,9 +60,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return notApplicable;
             }
 
-            if (portableExecutable.IsARM64Binary)
+            if (portableExecutable.Machine == Machine.Arm64)
             {
-                reasonForNotAnalyzing = MetadataConditions.ImageIsARM64BitBinary;
+                reasonForNotAnalyzing = MetadataConditions.ImageIsArm64BitBinary;
                 return notApplicable;
             }
 
