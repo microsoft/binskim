@@ -132,7 +132,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (missingEntirely)
                 {
                     sb.AppendLine(
-                        string.Format("Expected '{0}' {1} but saw no result at all for file: {2}",
+                        string.Format("Expected '{0}' '{1}' but saw no result at all for file: '{2}'",
                             ruleName,
                             expectedText,
                             Path.GetFileName(target)));
@@ -142,7 +142,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     other.Remove(target);
                     sb.AppendLine(
                         string.Format(
-                            "Expected '{0}' {1} but check {2} for: {3}",
+                            "Expected '{0}' '{1}' but check '{2}' for: '{3}'",
                             ruleName,
                             expectedText,
                             actualText,
@@ -293,7 +293,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     sb.AppendLine(
                         string.Format(
-                            "Can analyze did not correctly indicate target applicability (unexpected return was {0}): {1}",
+                            "Can analyze did not correctly indicate target applicability (unexpected return was '{0}'): '{1}'",
                             applicability,
                             Path.GetFileName(target)));
 
@@ -304,7 +304,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     sb.AppendLine(
                         string.Format(
-                            "Cannot analyze but unexpected reason identified (unexpected return was {0} but {1} was expected): {2}",
+                            "Cannot analyze but unexpected reason identified (unexpected return was '{0}' but '{1}' was expected): '{2}'",
                             reasonForNotAnalyzing,
                             expectedReasonForNotAnalyzing,
                             Path.GetFileName(target)));
