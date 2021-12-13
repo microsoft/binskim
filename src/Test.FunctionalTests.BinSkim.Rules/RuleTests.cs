@@ -328,7 +328,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Assert.True(Directory.Exists(testFilesDirectory));
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            if(metadataConditions == null)
+            if (metadataConditions == null)
             {
                 return result;
             }
