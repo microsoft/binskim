@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31622.56
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Driver", "BinSkim.Driver\BinSkim.Driver.csproj", "{7B4552DC-901C-4569-BFBD-9EA129D53288}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -18,6 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.FunctionalTests.BinSki
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{39DE5DFD-3349-46F7-BE5D-56D4AF8B2736}"
 	ProjectSection(SolutionItems) = preProject
+		Nuget\BinaryParsers.nuspec = Nuget\BinaryParsers.nuspec
 		Nuget\BinSkim.nuspec = Nuget\BinSkim.nuspec
 	EndProjectSection
 EndProject

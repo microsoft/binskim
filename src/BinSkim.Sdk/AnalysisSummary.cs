@@ -2,8 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
@@ -21,6 +19,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public string BuildDefinitionId { get; set; }
         public string BuildDefinitionName { get; set; }
         public string BuildRunId { get; set; }
+        public string ProjectName { get; set; }
+        public string OrganizationId { get; set; }
+        public string OrganizationName { get; set; }
+        public string ProjectId { get; set; }
+        public string RepositoryName { get; set; }
+        public string RepositoryId { get; set; }
 
         public override string ToString()
         {

@@ -15,20 +15,23 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class CompilerDataLogger
     {
-        private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
-        private const string CommandLineEventName = "CommandLineInformation";
-        private const string CompilerEventName = "CompilerInformation";
         private const string SummaryEventName = "AnalysisSummary";
+        private const string CompilerEventName = "CompilerInformation";
+        private const string CommandLineEventName = "CommandLineInformation";
+        private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
 
-        private readonly int ChunkSize;
-        private readonly bool appInsightsRegistered;
-        private readonly string sha256;
+        private string Sha256 => context?.Hashes?.Sha256;
+
+        private readonly int chunkSize;
         private readonly string relativeFilePath;
+        private readonly IAnalysisContext context;
 
-        private static string s_sessionId;
+        internal static string s_sessionId;
+
         private static bool s_printHeader = true;
         private static TelemetryClient s_telemetryClient;
         private static TelemetryConfiguration s_telemetryConfiguration;
+        private static readonly object s_syncRoot = new object();
 
         public static bool TelemetryEnabled => s_telemetryClient != null;
 
@@ -38,10 +41,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                                   TelemetryClient telemetryClient = null,
                                   int chunkSize = 8192)
         {
-            s_telemetryConfiguration = telemetryConfiguration;
-            s_telemetryClient = telemetryClient;
-            s_sessionId = TelemetryEnabled ? Guid.NewGuid().ToString() : null;
-            ChunkSize = chunkSize;
+            s_telemetryConfiguration ??= telemetryConfiguration;
+            s_telemetryClient ??= telemetryClient;
+            s_sessionId ??= Guid.NewGuid().ToString();
+            this.chunkSize = chunkSize;
 
             if (!TelemetryEnabled)
             {
@@ -51,7 +54,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
                     {
                         Initialize(appInsightsKey);
-                        this.appInsightsRegistered = true;
                     }
                 }
                 catch (SecurityException)
@@ -60,7 +62,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 }
             }
 
-            this.sha256 = analysisContext?.Hashes?.Sha256 ?? string.Empty;
+            this.context = analysisContext;
             this.relativeFilePath = analysisContext?.TargetUri?.LocalPath ?? string.Empty;
 
             foreach (string path in targetFileSpecifiers)
@@ -79,9 +81,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             if (s_telemetryConfiguration == null && s_telemetryClient == null)
             {
-                s_sessionId = Guid.NewGuid().ToString();
-                s_telemetryConfiguration = new TelemetryConfiguration(instrumentationKey);
-                s_telemetryClient = new TelemetryClient(s_telemetryConfiguration);
+                lock (s_syncRoot)
+                {
+                    if (s_telemetryConfiguration == null && s_telemetryClient == null)
+                    {
+                        s_sessionId = Guid.NewGuid().ToString();
+                        s_telemetryConfiguration = new TelemetryConfiguration(instrumentationKey);
+                        s_telemetryClient = new TelemetryClient(s_telemetryConfiguration);
+                    }
+                }
             }
         }
 
@@ -123,7 +131,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public void PrintHeader()
         {
-            if (!this.appInsightsRegistered)
+            if (!TelemetryEnabled)
             {
                 if (s_printHeader)
                 {
@@ -154,7 +162,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "moduleName", compilerData.ModuleName ?? string.Empty },
                     { "moduleLibrary", (compilerData.ModuleName == compilerData.ModuleLibrary ? string.Empty : compilerData.ModuleLibrary ?? string.Empty) },
                     { "sessionId", s_sessionId },
-                    { "hash", this.sha256 },
+                    { "hash", this.Sha256 },
                     { "error", string.Empty }
                 };
 
@@ -185,7 +193,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                string log = $"{this.relativeFilePath},{compilerData},{this.sha256},";
+                string log = $"{this.relativeFilePath},{compilerData},{this.Sha256},";
                 Console.WriteLine(log);
             }
         }
@@ -210,13 +218,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "moduleName", string.Empty },
                     { "moduleLibrary", string.Empty },
                     { "sessionId", s_sessionId },
-                    { "hash", this.sha256 },
+                    { "hash", this.Sha256 },
                     { "error", errorMessage },
                 });
             }
             else
             {
-                string log = $"{this.relativeFilePath},,,,,,,,,,,,,{this.sha256},{errorMessage}";
+                string log = $"{this.relativeFilePath},,,,,,,,,,,,,{this.Sha256},{errorMessage}";
                 Console.WriteLine(log);
             }
         }
@@ -256,21 +264,41 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "buildDefinitionId", summary.BuildDefinitionId },
                     { "buildDefinitionName", summary.BuildDefinitionName },
                     { "buildRunId", summary.BuildRunId },
+                    { "repositoryId", summary.RepositoryId },
+                    { "repositoryName", summary.RepositoryName },
+                    { "organizationId", summary.OrganizationId },
+                    { "organizationName", summary.OrganizationName },
+                    { "projectId", summary.ProjectId },
+                    { "projectName", summary.ProjectName },
                 });
             }
             else
             {
-                Console.WriteLine(summary.ToString());
+                Console.WriteLine(summary);
             }
+        }
+
+        /// <summary>
+        /// This method will clean all static variables.
+        /// </summary>
+        /// <remarks>
+        /// This method should only be used for testing purpose.
+        /// </remarks>
+        internal static void Reset()
+        {
+            s_sessionId = null;
+            s_printHeader = true;
+            s_telemetryClient = null;
+            s_telemetryConfiguration = null;
         }
 
         private void SendChunkedContent(string eventName, string contentId, string contentName, string content)
         {
             int j = 1;
-            int size = (int)Math.Ceiling(1.0 * content.Length / ChunkSize);
-            for (int i = 0; i < content.Length; i += ChunkSize)
+            int size = (int)Math.Ceiling(1.0 * content.Length / this.chunkSize);
+            for (int i = 0; i < content.Length; i += this.chunkSize)
             {
-                string chunckedContent = content.Substring(i, Math.Min(ChunkSize, content.Length - i));
+                string chunckedContent = content.Substring(i, Math.Min(this.chunkSize, content.Length - i));
 
                 s_telemetryClient.TrackEvent(eventName, properties: new Dictionary<string, string>
                 {
@@ -280,6 +308,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "totalNumber", size.ToString() },
                     { $"chunked{contentName}", chunckedContent },
                 });
+
                 j++;
             }
         }

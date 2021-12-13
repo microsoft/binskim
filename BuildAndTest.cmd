@@ -63,10 +63,6 @@ call :CreatePublishPackage netcoreapp3.1 linux-x64 || goto :ExitFailed
 echo BuildPackages.cmd
 call BuildPackages.cmd || goto :ExitFailed
 
-::Create layout directory of assemblies that need to be signed
-echo CreateLayoutDirectory.cmd %~dp0bld\bin %Configuration% %Platform%
-call CreateLayoutDirectory.cmd %~dp0bld\bin %Configuration% %Platform%
-
 echo dotnet-format
 dotnet tool update --global dotnet-format --version 4.1.131201
 dotnet-format --folder --exclude .\src\sarif-sdk\
