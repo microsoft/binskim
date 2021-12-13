@@ -293,7 +293,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     sb.AppendLine(
                         string.Format(
-                            "Can analyze did not correctly indicate target applicability (unexpected return was '{0}'): '{1}'",
+                            "CanAnalyze did not correctly indicate target applicability (unexpected return was '{0}'): '{1}'",
                             applicability,
                             Path.GetFileName(target)));
 
