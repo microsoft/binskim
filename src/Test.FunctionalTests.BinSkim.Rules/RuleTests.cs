@@ -131,8 +131,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (missingEntirely)
                 {
+                    // Generates message such as the following:
+                    // "Expected 'BA2025:EnableShadowStack' success but saw no result at all for file: Native_x64_CETShadowStack_Disabled.exe"
                     sb.AppendLine(
-                        string.Format("Expected '{0}' '{1}' but saw no result at all for file: '{2}'",
+                        string.Format(
+                            "Expected '{0}:{1}' {2} but saw no result at all for file: {3}",
+                            skimmer.Id,
                             ruleName,
                             expectedText,
                             Path.GetFileName(target)));
@@ -140,9 +144,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 else
                 {
                     other.Remove(target);
+
+                    // Generates message such as the following:
+                    // "Expected 'BA2025:EnableShadowStack' success but check failed for: Native_x64_CETShadowStack_Disabled.exe"
                     sb.AppendLine(
                         string.Format(
-                            "Expected '{0}' '{1}' but check '{2}' for: '{3}'",
+                            "Expected '{0}:{1}' {2} but check {3} for: {4}",
+                            skimmer.Id,
                             ruleName,
                             expectedText,
                             actualText,
@@ -291,9 +299,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (applicability != expectedApplicability)
                 {
+                    // Generates message such as the following:
+                    // "'BA2025:EnableShadowStack' - 'CanAnalyze' did not correctly indicate target applicability
+                    // (unexpected return was 'NotApplicableToSpecifiedTarget'): ARM64_CETShadowStack_NotApplicable.exe"
                     sb.AppendLine(
                         string.Format(
-                            "'CanAnalyze' did not correctly indicate target applicability (unexpected return was '{0}'): '{1}'",
+                            "'{0}:{1}' - 'CanAnalyze' did not correctly indicate target applicability (unexpected return was '{2}'): {3}",
+                            skimmer.Id,
+                            ruleName,
                             applicability,
                             Path.GetFileName(target)));
 
@@ -302,9 +315,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (expectedReasonForNotAnalyzing != null && reasonForNotAnalyzing != expectedReasonForNotAnalyzing)
                 {
+                    // Generates message such as the following:
+                    // "'BA2025:EnableShadowStack' - 'CanAnalyze' produced expected outcome but unexpected reason identified
+                    // (unexpected return was 'image is an ARM64 binary' but 'test' was expected): ARM64_CETShadowStack_NotApplicable.exe"
                     sb.AppendLine(
                         string.Format(
-                            "Cannot analyze but unexpected reason identified (unexpected return was '{0}' but '{1}' was expected): '{2}'",
+                            "'{0}:{1}' - 'CanAnalyze' produced expected outcome but unexpected reason identified (unexpected return was '{2}' but '{3}' was expected): {4}",
+                            skimmer.Id,
+                            ruleName,
                             reasonForNotAnalyzing,
                             expectedReasonForNotAnalyzing,
                             Path.GetFileName(target)));
