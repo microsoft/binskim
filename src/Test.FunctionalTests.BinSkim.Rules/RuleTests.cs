@@ -328,6 +328,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Assert.True(Directory.Exists(testFilesDirectory));
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
+            if(metadataConditions == null)
+            {
+                return result;
+            }
+
             if (metadataConditions.Contains(MetadataConditions.ImageIsNotExe))
             {
                 result.Add(Path.Combine(testFilesDirectory, "Native_x64_VS2013_Default.dll"));
@@ -1131,7 +1136,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             this.VerifyApplicability(
                 skimmer: new EnableShadowStack(),
-                applicabilityConditions: new HashSet<string>(),
+                applicabilityConditions: null,
                 expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArm64BitBinary);
         }
 
