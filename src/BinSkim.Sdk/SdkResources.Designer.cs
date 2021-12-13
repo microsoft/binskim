@@ -153,9 +153,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         /// <summary>
         ///   Looks up a localized string similar to image is an ARM64 bit binary.
         /// </summary>
-        internal static string MetadataCondition_ImageIsARM64BitBinary {
+        internal static string MetadataCondition_ImageIsArm64BitBinary {
             get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsARM64BitBinary", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ImageIsArm64BitBinary", resourceCulture);
             }
         }
         
