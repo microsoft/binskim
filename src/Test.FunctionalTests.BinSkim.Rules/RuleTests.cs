@@ -132,7 +132,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (missingEntirely)
                 {
                     sb.AppendLine(
-                        string.Format("Expected '{0}' {1} but saw no result at all for file: {2]",
+                        string.Format("Expected '{0}' {1} but saw no result at all for file: {2}",
                             ruleName,
                             expectedText,
                             Path.GetFileName(target)));
