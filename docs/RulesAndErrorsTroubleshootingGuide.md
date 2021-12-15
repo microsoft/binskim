@@ -29,3 +29,19 @@ By default, BinSkim will only look for a PDB alongside the binary under analysis
 2. **If the PDB is associated with an external dependency**: add or review your `--sympath` argument to ensure it references all required symbol servers. See the [User Guide](https://github.com/microsoft/binskim/blob/master/docs/UserGuide.md) for mor information on this or other command-line arguments. It is important to performance and reliability reasons that your `--sympath` argument include a `CACHE*` argument that points to a writable local cache.
 3. **Enable tracing**: you can enable the `--trace PdbLoad` argument as of BinSkim version 1.7.0 in order to capture BinSkim's PDB path probing logic. When enabled, BinSkim will show every file path that's examine in order to locate a PDB.
 4. **Rerun analysis**: Retrieving a PDB from a symbol server is an inherently unreliable operation, as the server may not be available or may simply fail a specific request. If your PDB failures are for 3rd party PDBs retrieved from a symbol and are intermittent, this may be the problem.
+
+## BA2024.EnableSpectreMitigations
+
+*Example message*:
+
+    warning BA2024: 'test.exe' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities.
+
+### Resolving BA2024 warning
+
+Developers assume the security risk of static libraries that are linked into their binaries (because vulnerabilities in these dependencies may be exploitable once linked into other binaries).
+
+BA2024.EnableSpectreMitigations may fire against Microsoft default C++ static libraries, such as ‘LibCMT.lib’. In order to resolve these warnings, the developer must install and link to the appropriate MSVC Spectre-mitigated C++ runtime libraries. To do so:
+
+1. **Launch the ‘Visual Studio Installer’
+2. **Select the ‘Individual Components’ tab and type ‘spectre’ in the search field.
+3. **Select and install Spectre-mitigated libs for your target platform.
