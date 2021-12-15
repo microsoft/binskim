@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             IfContainsLanguagueCode("clangcl.pe.cpp.codeview.exe", Language.Cxx).Should().BeTrue();
             // as of v1.57 Rust official compiler RustC does not yet use the new CV_CFL_LANG code for Rust.
             // we will have another test file when new version use it.
-            IfContainsLanguagueCode("Native_x64_RustC_Rust_debuginfo2_v1.57.exe", Language.RUST).Should().BeFalse();
+            IfContainsLanguagueCode("Native_x64_RustC_Rust_debuginfo2_v1.57.exe", Language.Rust).Should().BeFalse();
             IfContainsLanguagueCode("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll", Language.Cxx).Should().BeTrue();
         }
 
