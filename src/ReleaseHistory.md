@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* FEATURE: Add new PE CV_CFL_LANG language code for ALIASOBJ and RUST. [530](https://github.com/microsoft/binskim/pull/530)
+
 ## **v1.9.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.0)
 
 * BUGFIX: Fix telemetry session creation. [515](https://github.com/microsoft/binskim/pull/515)

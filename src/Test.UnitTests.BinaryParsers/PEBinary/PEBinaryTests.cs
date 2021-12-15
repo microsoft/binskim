@@ -2,12 +2,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
 using Dia2Lib;
 
 using FluentAssertions;
+
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 using Xunit;
 
@@ -71,6 +75,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
+        public void PEBinary_LanguagueCode()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            IfContainsLanguagueCode("clangcl.pe.c.codeview.exe", Language.C).Should().BeTrue();
+            IfContainsLanguagueCode("clangcl.pe.cpp.codeview.exe", Language.Cxx).Should().BeTrue();
+            // as of v1.57 Rust official compiler RustC does not yet use the new CV_CFL_LANG code for Rust.
+            // we will have another test file when new version use it.
+            IfContainsLanguagueCode("Native_x64_RustC_Rust_debuginfo2_v1.57.exe", Language.RUST).Should().BeFalse();
+            IfContainsLanguagueCode("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll", Language.Cxx).Should().BeTrue();
+        }
+
+        [Fact]
         public void PEBinary_CanCreateIDiaSourceFromMsdia()
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
@@ -90,6 +107,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 peBinary.Pdb.Should().NotBeNull();
                 peBinary.StrippedPdb.Should().BeNull();
                 peBinary.PdbParseException.Should().BeNull();
+            }
+        }
+
+        private static bool IfContainsLanguagueCode(string fileName, Language language)
+        {
+            string fileFullPath = Path.Combine(BaselineTestsDataDirectory, fileName);
+            using (var peBinary = new PEBinary(new Uri(fileFullPath)))
+            {
+                peBinary.Valid.Should().BeTrue();
+                peBinary.Pdb.Should().NotBeNull();
+                peBinary.PdbParseException.Should().BeNull();
+
+                var languages = new HashSet<Language>();
+                foreach (DisposableEnumerableView<Symbol> omView in peBinary.Pdb.CreateObjectModuleIterator())
+                {
+                    ObjectModuleDetails omDetails = omView.Value.GetObjectModuleDetails();
+                    if (omDetails.Library == omDetails.Name)
+                    {
+                        languages.Add(omDetails.Language);
+                    }
+                }
+                return languages.Contains(language);
             }
         }
     }
