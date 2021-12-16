@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* BUGFIX: Fix `NullReferenceException` when `--Hashes` and telemetry rules are enabled. [#531](https://github.com/microsoft/binskim/pull/531)
+
 ## **v1.9.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.0)
 
 * BUGFIX: Fix telemetry session creation. [515](https://github.com/microsoft/binskim/pull/515)
