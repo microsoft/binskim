@@ -85,6 +85,17 @@ namespace Microsoft.CodeAnalysis.IL
                 analyzeOptions.Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.NotApplicable, ResultKind.Pass };
             }
 
+#pragma warning disable CS0618 // Type or member is obsolete
+            if (analyzeOptions.ComputeFileHashes)
+#pragma warning restore CS0618
+            {
+                OptionallyEmittedData dataToInsert = analyzeOptions.DataToInsert.ToFlags();
+                dataToInsert |= OptionallyEmittedData.Hashes;
+
+                analyzeOptions.DataToInsert = Enum.GetValues(typeof(OptionallyEmittedData)).Cast<OptionallyEmittedData>()
+                    .Where(oed => dataToInsert.HasFlag(oed)).ToList();
+            }
+
             int result = 0;
 
             try
@@ -135,30 +146,5 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         internal static Sarif.SarifVersion s_UnitTestOutputVersion;
-
-        private AnalysisSummary ExtractAnalysisSummary(SarifLog sarifLog, AnalyzeOptions options)
-        {
-            if (sarifLog == null || sarifLog.Runs == null || !sarifLog.Runs.Any())
-            {
-                return null;
-            }
-
-            Tool tool = sarifLog.Runs[0].Tool;
-            Invocation invocation = sarifLog.Runs[0].Invocations[0];
-            IList<Artifact> artifacts = sarifLog.Runs[0].Artifacts;
-
-            return new AnalysisSummary
-            {
-                ToolName = tool.Driver.Name,
-                ToolVersion = tool.Driver.Version,
-                NormalizedPath = string.Join(";", options.TargetFileSpecifiers.Select(p => System.IO.Path.GetDirectoryName(p)).Distinct()),
-                SymbolPath = options.SymbolsPath,
-                FileAnalyzed = artifacts.Count,
-                // FileNotAnalyzed =
-                StartTimeUtc = invocation.StartTimeUtc,
-                EndTimeUtc = invocation.EndTimeUtc,
-                TimeConsumed = invocation.EndTimeUtc - invocation.StartTimeUtc,
-            };
-        }
     }
 }
