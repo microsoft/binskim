@@ -46,4 +46,4 @@ BA2024.EnableSpectreMitigations may fire against Microsoft default C++ static li
 2. Select the `Individual Components` tab and type `spectre` in the search field.
 3. Select and install Spectre-mitigated libs for your target platform.
 
-![Installing Spectre-mitigated C++ libraries in the VS Installer ](https://raw.githubusercontent.com/microsoft/binskim/main/docs/images/VS_Installer_Spectre_Mitigated_Libs.JPG "Install Spectre-Mitigated C/C++ Runtime")
+![Installing Spectre-mitigated C++ libraries in the VS Installer ](images/VS_Installer_Spectre_Mitigated_Libs.JPG "Install Spectre-Mitigated C/C++ Runtime")
