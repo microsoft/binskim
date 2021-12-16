@@ -42,6 +42,8 @@ Developers assume the security risk of static libraries that are linked into the
 
 BA2024.EnableSpectreMitigations may fire against Microsoft default C++ static libraries, such as `LibCMT.lib`. In order to resolve these warnings, the developer must install and link to the appropriate MSVC Spectre-mitigated C++ runtime libraries. To do so:
 
-1. Launch the `Visual Studio Installer`.
+1. Launch the `Visual Studio Installer` and click `Modify`
 2. Select the `Individual Components` tab and type `spectre` in the search field.
 3. Select and install Spectre-mitigated libs for your target platform.
+
+![Installing Spectre-mitigated C++ libraries in the VS Installer ](https://raw.githubusercontent.com/microsoft/binskim/main/docs/images/VS_Installer_Spectre_Mitigated_Libs.JPG "Install Spectre-Mitigated C/C++ Runtime")
