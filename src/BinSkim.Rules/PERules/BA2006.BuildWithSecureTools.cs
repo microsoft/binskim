@@ -116,6 +116,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
+                if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftC
+                    && omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftCxx)
+                {
+                    // TODO: https://github.com/Microsoft/binskim/issues/114
+                    continue;
+                }
+
                 switch (omDetails.Language)
                 {
                     case Language.LINK:
@@ -153,12 +160,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     //    break;
                     //}
 
-                    case Language.Unknown:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.Unknown)];
-                        break;
-                    }
+                    // Language data is not always included if it is only compiled with SymTagCompiland without SymTagCompilandDetails
+                    // https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/compilanddetails?view=vs-2022
+                    // Compiland information is split between symbols with a SymTagCompiland tag (low detail)
+                    // and a SymTagCompilandDetails tag (high detail).
+                    //case Language.Unknown:
+                    //{
+                    //    minCompilerVersion =
+                    //        context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.Unknown)];
+                    //    break;
+                    //}
 
                     default:
                     {
