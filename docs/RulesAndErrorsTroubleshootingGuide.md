@@ -40,8 +40,8 @@ By default, BinSkim will only look for a PDB alongside the binary under analysis
 
 Developers assume the security risk of static libraries that are linked into their binaries (because vulnerabilities in these dependencies may be exploitable once linked into other binaries).
 
-BA2024.EnableSpectreMitigations may fire against Microsoft default C++ static libraries, such as ‘LibCMT.lib’. In order to resolve these warnings, the developer must install and link to the appropriate MSVC Spectre-mitigated C++ runtime libraries. To do so:
+BA2024.EnableSpectreMitigations may fire against Microsoft default C++ static libraries, such as `LibCMT.lib`. In order to resolve these warnings, the developer must install and link to the appropriate MSVC Spectre-mitigated C++ runtime libraries. To do so:
 
-1. **Launch the ‘Visual Studio Installer’
-2. **Select the ‘Individual Components’ tab and type ‘spectre’ in the search field.
-3. **Select and install Spectre-mitigated libs for your target platform.
+1. Launch the `Visual Studio Installer`.
+2. Select the `Individual Components` tab and type `spectre` in the search field.
+3. Select and install Spectre-mitigated libs for your target platform.
