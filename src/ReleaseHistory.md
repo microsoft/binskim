@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* BUGFIX: Fix `JsonSerializationException` when reading Sarif v1.0.0 when telemetry is enabled. [#535](https://github.com/microsoft/binskim/pull/535)
+
 ## **v1.9.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.0)
 
 * BUGFIX: Fix telemetry session creation. [515](https://github.com/microsoft/binskim/pull/515)
