@@ -50,7 +50,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 try
                 {
-                    string appInsightsKey = RetrieveAppInsightsKey();
+                    string appInsightsKey = RetrieveAppInsightsKey("BinskimAppInsightsKey");
+                    if (string.IsNullOrEmpty(appInsightsKey))
+                    {
+                        appInsightsKey = RetrieveAppInsightsKey("BINSKIMAPPINSIGHTSKEY");
+                    }
+
                     if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
                     {
                         Initialize(appInsightsKey);
@@ -93,19 +98,19 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        public static string RetrieveAppInsightsKey()
+        public static string RetrieveAppInsightsKey(string key)
         {
             string appInsightsKey = string.Empty;
 
             try
             {
-                appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey");
+                appInsightsKey = Environment.GetEnvironmentVariable(key);
                 if (string.IsNullOrEmpty(appInsightsKey))
                 {
-                    appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.User);
+                    appInsightsKey = Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.User);
                     if (string.IsNullOrEmpty(appInsightsKey))
                     {
-                        appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.Machine);
+                        appInsightsKey = Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
                     }
                 }
             }
