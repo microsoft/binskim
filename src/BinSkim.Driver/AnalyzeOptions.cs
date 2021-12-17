@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         [Option(
             "binskimAppInsightsKey",
-            HelpText = "An ApplicationInsightsKey to which will be send data.")]
+            HelpText = "An ApplicationInsightsKey to which will be send data. If not available, it will read from the environment variable.")]
         public string BinskimAppInsightsKey { get; set; }
     }
 }
