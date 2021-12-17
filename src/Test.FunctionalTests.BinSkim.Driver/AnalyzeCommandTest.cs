@@ -3,10 +3,12 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 
 using FluentAssertions;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL;
 using Microsoft.CodeAnalysis.Sarif;
 
@@ -52,6 +54,24 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             });
             sarifLog.Version.Should().Be(Sarif.SarifVersion.Current);
             sarifLog.Runs[0].Tool.Driver.Name.Should().Be(ToolName);
+            sarifLog.Runs[0].Results.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void AnalyzeCommand_ReadSarifLog_ShouldBeAbleToReadCurrent()
+        {
+            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "Expected", "Binskim.linux-x64.dll.sarif");
+
+            var fileSystem = new Mock<IFileSystem>();
+
+            SarifLog sarifLog = AnalyzeCommand.ReadSarifLog(fileSystem.Object, new AnalyzeOptions
+            {
+                SarifOutputVersion = Sarif.SarifVersion.Current,
+                OutputFilePath = sarifLogPath,
+            });
+            sarifLog.Version.Should().Be(Sarif.SarifVersion.Current);
+            sarifLog.Runs[0].Tool.Driver.Name.Should().NotBeEmpty();
+            sarifLog.Runs[0].Results.Should().NotBeEmpty();
         }
     }
 }
