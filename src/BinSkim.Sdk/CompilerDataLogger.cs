@@ -39,7 +39,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                                   IEnumerable<string> targetFileSpecifiers,
                                   TelemetryConfiguration telemetryConfiguration = null,
                                   TelemetryClient telemetryClient = null,
-                                  int chunkSize = 8192)
+                                  int chunkSize = 8192,
+                                  string appInsightsKey = null)
         {
             s_telemetryConfiguration ??= telemetryConfiguration;
             s_telemetryClient ??= telemetryClient;
@@ -50,10 +51,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 try
                 {
-                    string appInsightsKey = RetrieveAppInsightsKey("BinskimAppInsightsKey");
                     if (string.IsNullOrEmpty(appInsightsKey))
                     {
-                        appInsightsKey = RetrieveAppInsightsKey("BINSKIMAPPINSIGHTSKEY");
+                        appInsightsKey = RetrieveAppInsightsKey();
                     }
 
                     if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
@@ -98,19 +98,19 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        public static string RetrieveAppInsightsKey(string key)
+        public static string RetrieveAppInsightsKey()
         {
             string appInsightsKey = string.Empty;
 
             try
             {
-                appInsightsKey = Environment.GetEnvironmentVariable(key);
+                appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey");
                 if (string.IsNullOrEmpty(appInsightsKey))
                 {
-                    appInsightsKey = Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.User);
+                    appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.User);
                     if (string.IsNullOrEmpty(appInsightsKey))
                     {
-                        appInsightsKey = Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
+                        appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.Machine);
                     }
                 }
             }
