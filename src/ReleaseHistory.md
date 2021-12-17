@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* BUGFIX: Fix Error BA2006: '...' was compiled with one or more modules which were not built using minimum required tool versions [533](https://github.com/microsoft/binskim/pull/533)
+
 ## **v1.9.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.0)
 
 * BUGFIX: Fix telemetry session creation. [515](https://github.com/microsoft/binskim/pull/515)
