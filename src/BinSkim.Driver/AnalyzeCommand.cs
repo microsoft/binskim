@@ -58,8 +58,7 @@ namespace Microsoft.CodeAnalysis.IL
                 if (isRule4001Enabled || isRule4002Enabled)
                 {
                     binaryAnalyzerContext.CompilerDataLogger = new CompilerDataLogger(binaryAnalyzerContext,
-                                                                                      options.TargetFileSpecifiers,
-                                                                                      appInsightsKey: options.BinskimAppInsightsKey);
+                                                                                      options.TargetFileSpecifiers);
                 }
             }
 

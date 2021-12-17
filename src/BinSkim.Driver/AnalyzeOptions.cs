@@ -48,10 +48,5 @@ namespace Microsoft.CodeAnalysis.IL
             "ignorePdbLoadError",
             HelpText = "If enabled, BinSkim won't break if we have a 'PdbLoadingException'.")]
         public bool IgnorePdbLoadError { get; set; }
-
-        [Option(
-            "binskimAppInsightsKey",
-            HelpText = "An ApplicationInsightsKey to which will be send data. If not available, it will read from the environment variable.")]
-        public string BinskimAppInsightsKey { get; set; }
     }
 }

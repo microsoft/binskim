@@ -39,8 +39,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                                   IEnumerable<string> targetFileSpecifiers,
                                   TelemetryConfiguration telemetryConfiguration = null,
                                   TelemetryClient telemetryClient = null,
-                                  int chunkSize = 8192,
-                                  string appInsightsKey = null)
+                                  int chunkSize = 8192)
         {
             s_telemetryConfiguration ??= telemetryConfiguration;
             s_telemetryClient ??= telemetryClient;
@@ -51,11 +50,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 try
                 {
-                    if (string.IsNullOrEmpty(appInsightsKey))
-                    {
-                        appInsightsKey = RetrieveAppInsightsKey();
-                    }
-
+                    string appInsightsKey = RetrieveAppInsightsKey();
                     if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
                     {
                         Initialize(appInsightsKey);
