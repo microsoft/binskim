@@ -37,7 +37,13 @@ namespace Microsoft.CodeAnalysis.IL
                 AnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
                 this.BatchRuleRules(string.Empty, 1, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 2, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 3, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 4, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 8, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 9, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 20, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 50, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 99, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 100, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 1000, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
             }
