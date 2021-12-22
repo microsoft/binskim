@@ -35,11 +35,13 @@ namespace Microsoft.CodeAnalysis.IL
             if (PlatformSpecificHelpers.RunningOnWindows())
             {
                 AnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
-                this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 1, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 2, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 100, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
             }
         }
 
-        private void BatchRuleRules(string ruleName, params string[] inputFilters)
+        private void BatchRuleRules(string ruleName, int threads, params string[] inputFilters)
         {
             var sb = new StringBuilder();
             string testDirectory = PEBinaryTests.BaselineTestsDataDirectory + Path.DirectorySeparatorChar + ruleName;
@@ -50,7 +52,7 @@ namespace Microsoft.CodeAnalysis.IL
 
                 foreach (string file in testFiles)
                 {
-                    this.RunRules(sb, file);
+                    this.RunRules(sb, file, threads);
                 }
             }
 
@@ -76,7 +78,7 @@ namespace Microsoft.CodeAnalysis.IL
             Assert.Equal(0, sb.Length);
         }
 
-        private void RunRules(StringBuilder sb, string inputFileName)
+        private void RunRules(StringBuilder sb, string inputFileName, int threads)
         {
             string fileName = Path.GetFileName(inputFileName);
             string actualDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "Actual");
@@ -112,6 +114,7 @@ namespace Microsoft.CodeAnalysis.IL
                 Traces = Array.Empty<string>(),
                 Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
                 Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.NotApplicable, ResultKind.Pass },
+                Threads = threads
             };
 
             int result = command.Run(options);
