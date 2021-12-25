@@ -39,13 +39,25 @@ namespace Microsoft.CodeAnalysis.IL
                 this.BatchRuleRules(string.Empty, 2, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 3, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 4, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 5, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 6, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 7, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 8, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 9, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 10, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 11, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 12, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 16, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 20, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 24, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 32, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 50, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 64, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 99, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 100, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 500, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                 this.BatchRuleRules(string.Empty, 1000, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, 99999, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
             }
         }
 
