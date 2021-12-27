@@ -125,6 +125,7 @@ namespace Microsoft.CodeAnalysis.IL
                 Force = true,
                 Recurse = false,
                 PrettyPrint = true,
+                // Test 2
                 // DataToInsert = new[] { OptionallyEmittedData.Hashes },
                 // DataToRemove = new[] { OptionallyEmittedData.NondeterministicProperties },
                 OutputFilePath = actualFileName,
