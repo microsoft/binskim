@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 AnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
 
-                for (int i = 0; i < 7; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     this.BatchRuleRules(string.Empty, 1, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
                     this.BatchRuleRules(string.Empty, 2, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
