@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     this.CoffStringTable = new CoffStringTable(this.fs);
                 }
 
-                ImmutableArray<SectionHeader>? sectionHeaders = this.PEHeaders.SectionHeaders;
+                ImmutableArray<SectionHeader>? sectionHeaders = this.PEHeaders?.SectionHeaders;
 
                 if (sectionHeaders.HasValue && sectionHeaders.Value.Length > 0)
                 {

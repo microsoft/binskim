@@ -398,7 +398,7 @@
             "arguments": [
               "Managed_x86_VS2015_FSharp.dll",
               "EnableStackProtector",
-              "image is not an ELF binary"
+              "not compiled with Dwarf debugging"
             ]
           },
           "locations": [
@@ -446,7 +446,7 @@
             "arguments": [
               "Managed_x86_VS2015_FSharp.dll",
               "EnableStackClashProtection",
-              "image is not an ELF binary"
+              "not compiled with Dwarf debugging"
             ]
           },
           "locations": [
@@ -788,11 +788,8 @@
           "rules": [
             {
               "id": "BA2001",
+              "name": "LoadImageAboveFourGigabyteAddress",
               "fullDescription": {
-                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2001LoadImageAboveFourGigabyteAddress",
-              "help": {
                 "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
               },
               "messageStrings": {
@@ -806,18 +803,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "LoadImageAboveFourGigabyteAddress",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2001LoadImageAboveFourGigabyteAddress",
+              "help": {
+                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "FourGbCheck"
               }
             },
             {
               "id": "BA2002",
+              "name": "DoNotIncorporateVulnerableDependencies",
               "fullDescription": {
-                "text": "Binaries should not take dependencies on code with known security vulnerabilities."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2002DoNotIncorporateVulnerableDependencies",
-              "help": {
                 "text": "Binaries should not take dependencies on code with known security vulnerabilities."
               },
               "messageStrings": {
@@ -831,18 +828,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "DoNotIncorporateVulnerableDependencies",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2002DoNotIncorporateVulnerableDependencies",
+              "help": {
+                "text": "Binaries should not take dependencies on code with known security vulnerabilities."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ATLVersionCheck"
               }
             },
             {
               "id": "BA2006",
+              "name": "BuildWithSecureTools",
               "fullDescription": {
-                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2006BuildWithSecureTools",
-              "help": {
                 "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks."
               },
               "messageStrings": {
@@ -859,18 +856,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "BuildWithSecureTools",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2006BuildWithSecureTools",
+              "help": {
+                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "CompilerVersionCheck"
               }
             },
             {
               "id": "BA2007",
+              "name": "EnableCriticalCompilerWarnings",
               "fullDescription": {
-                "text": "Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2007EnableCriticalCompilerWarnings",
-              "help": {
                 "text": "Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted."
               },
               "messageStrings": {
@@ -890,18 +887,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableCriticalCompilerWarnings",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2007EnableCriticalCompilerWarnings",
+              "help": {
+                "text": "Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "CompilerWarningsCheck"
               }
             },
             {
               "id": "BA2008",
+              "name": "EnableControlFlowGuard",
               "fullDescription": {
-                "text": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2008EnableControlFlowGuard",
-              "help": {
                 "text": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program."
               },
               "messageStrings": {
@@ -918,18 +915,18 @@
                   "text": "'{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries."
                 }
               },
-              "name": "EnableControlFlowGuard",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2008EnableControlFlowGuard",
+              "help": {
+                "text": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
               }
             },
             {
               "id": "BA2010",
+              "name": "DoNotMarkImportsSectionAsExecutable",
               "fullDescription": {
-                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2010DoNotMarkImportsSectionAsExecutable",
-              "help": {
                 "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
               },
               "messageStrings": {
@@ -943,18 +940,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "DoNotMarkImportsSectionAsExecutable",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2010DoNotMarkImportsSectionAsExecutable",
+              "help": {
+                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ExecutableImportsCheck"
               }
             },
             {
               "id": "BA2011",
+              "name": "EnableStackProtection",
               "fullDescription": {
-                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2011EnableStackProtection",
-              "help": {
                 "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line."
               },
               "messageStrings": {
@@ -971,18 +968,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableStackProtection",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2011EnableStackProtection",
+              "help": {
+                "text": "Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSCheck"
               }
             },
             {
               "id": "BA2012",
+              "name": "DoNotModifyStackProtectionCookie",
               "fullDescription": {
-                "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2012DoNotModifyStackProtectionCookie",
-              "help": {
                 "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
               },
               "messageStrings": {
@@ -1005,18 +1002,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "DoNotModifyStackProtectionCookie",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2012DoNotModifyStackProtectionCookie",
+              "help": {
+                "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
               }
             },
             {
               "id": "BA2013",
+              "name": "InitializeStackProtection",
               "fullDescription": {
-                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2013InitializeStackProtection",
-              "help": {
                 "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
               },
               "messageStrings": {
@@ -1036,18 +1033,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "InitializeStackProtection",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2013InitializeStackProtection",
+              "help": {
+                "text": "Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
               }
             },
             {
               "id": "BA2014",
+              "name": "DoNotDisableStackProtectionForFunctions",
               "fullDescription": {
-                "text": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2014DoNotDisableStackProtectionForFunctions",
-              "help": {
                 "text": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
               },
               "messageStrings": {
@@ -1061,18 +1058,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "DoNotDisableStackProtectionForFunctions",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2014DoNotDisableStackProtectionForFunctions",
+              "help": {
+                "text": "Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSFunctionSafeBuffersCheck"
               }
             },
             {
               "id": "BA2015",
+              "name": "EnableHighEntropyVirtualAddresses",
               "fullDescription": {
-                "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2015EnableHighEntropyVirtualAddresses",
-              "help": {
                 "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR."
               },
               "messageStrings": {
@@ -1092,18 +1089,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableHighEntropyVirtualAddresses",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2015EnableHighEntropyVirtualAddresses",
+              "help": {
+                "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "HighEntropyVACheck"
               }
             },
             {
               "id": "BA2024",
+              "name": "EnableSpectreMitigations",
               "fullDescription": {
-                "text": "Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2024EnableSpectreMitigations",
-              "help": {
                 "text": "Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it."
               },
               "messageStrings": {
@@ -1126,15 +1123,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableSpectreMitigations"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2024EnableSpectreMitigations",
+              "help": {
+                "text": "Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it."
+              }
             },
             {
               "id": "BA2025",
+              "name": "EnableShadowStack",
               "fullDescription": {
-                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2025EnableShadowStack",
-              "help": {
                 "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
               },
               "messageStrings": {
@@ -1148,15 +1145,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableShadowStack"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2025EnableShadowStack",
+              "help": {
+                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
+              }
             },
             {
               "id": "BA2026",
+              "name": "EnableAdditionalSdlSecurityChecks",
               "fullDescription": {
-                "text": "/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2026EnableAdditionalSdlSecurityChecks",
-              "help": {
                 "text": "/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks."
               },
               "messageStrings": {
@@ -1170,15 +1167,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableAdditionalSdlSecurityChecks"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2026EnableAdditionalSdlSecurityChecks",
+              "help": {
+                "text": "/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks."
+              }
             },
             {
               "id": "BA3001",
+              "name": "EnablePositionIndependentExecutable",
               "fullDescription": {
-                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3001EnablePositionIndependentExecutable",
-              "help": {
                 "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
               },
               "messageStrings": {
@@ -1195,15 +1192,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnablePositionIndependentExecutable"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3001EnablePositionIndependentExecutable",
+              "help": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              }
             },
             {
               "id": "BA3002",
+              "name": "DoNotMarkStackAsExecutable",
               "fullDescription": {
-                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3002DoNotMarkStackAsExecutable",
-              "help": {
                 "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable."
               },
               "messageStrings": {
@@ -1220,15 +1217,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "DoNotMarkStackAsExecutable"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3002DoNotMarkStackAsExecutable",
+              "help": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable."
+              }
             },
             {
               "id": "BA3003",
+              "name": "EnableStackProtector",
               "fullDescription": {
-                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3003EnableStackProtector",
-              "help": {
                 "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
               },
               "messageStrings": {
@@ -1242,15 +1239,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableStackProtector"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3003EnableStackProtector",
+              "help": {
+                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
+              }
             },
             {
               "id": "BA3004",
+              "name": "GenerateRequiredSymbolFormat",
               "fullDescription": {
-                "text": "This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3004GenerateRequiredSymbolFormat",
-              "help": {
                 "text": "This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this."
               },
               "messageStrings": {
@@ -1264,15 +1261,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "GenerateRequiredSymbolFormat"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3004GenerateRequiredSymbolFormat",
+              "help": {
+                "text": "This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this."
+              }
             },
             {
               "id": "BA3005",
+              "name": "EnableStackClashProtection",
               "fullDescription": {
-                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3005EnableStackClashProtection",
-              "help": {
                 "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
               },
               "messageStrings": {
@@ -1286,15 +1283,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableStackClashProtection"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3005EnableStackClashProtection",
+              "help": {
+                "text": "This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this."
+              }
             },
             {
               "id": "BA3006",
+              "name": "EnableNonExecutableStack",
               "fullDescription": {
-                "text": "This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3006EnableNonExecutableStack",
-              "help": {
                 "text": "This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this."
               },
               "messageStrings": {
@@ -1308,15 +1305,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableNonExecutableStack"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3006EnableNonExecutableStack",
+              "help": {
+                "text": "This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this."
+              }
             },
             {
               "id": "BA3010",
+              "name": "EnableReadOnlyRelocations",
               "fullDescription": {
-                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3010EnableReadOnlyRelocations",
-              "help": {
                 "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this."
               },
               "messageStrings": {
@@ -1330,15 +1327,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableReadOnlyRelocations"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3010EnableReadOnlyRelocations",
+              "help": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this."
+              }
             },
             {
               "id": "BA3011",
+              "name": "EnableBindNow",
               "fullDescription": {
-                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3011EnableBindNow",
-              "help": {
                 "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this."
               },
               "messageStrings": {
@@ -1352,15 +1349,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableBindNow"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3011EnableBindNow",
+              "help": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this."
+              }
             },
             {
               "id": "BA3030",
+              "name": "UseCheckedFunctionsWithGcc",
               "fullDescription": {
-                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2')."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseCheckedFunctionsWithGcc",
-              "help": {
                 "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2')."
               },
               "messageStrings": {
@@ -1380,15 +1377,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "UseCheckedFunctionsWithGcc"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseCheckedFunctionsWithGcc",
+              "help": {
+                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2')."
+              }
             },
             {
               "id": "BA5001",
+              "name": "EnablePositionIndependentExecutableMachO",
               "fullDescription": {
-                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5001EnablePositionIndependentExecutableMachO",
-              "help": {
                 "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
               },
               "messageStrings": {
@@ -1402,15 +1399,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnablePositionIndependentExecutableMachO"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5001EnablePositionIndependentExecutableMachO",
+              "help": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              }
             },
             {
               "id": "BA5002",
+              "name": "DoNotAllowExecutableStack",
               "fullDescription": {
-                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5002DoNotAllowExecutableStack",
-              "help": {
                 "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
               },
               "messageStrings": {
@@ -1424,15 +1421,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "DoNotAllowExecutableStack"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA5002DoNotAllowExecutableStack",
+              "help": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag \"--allow_stack_execute\"."
+              }
             },
             {
               "id": "BA2004",
+              "name": "EnableSecureSourceCodeHashing",
               "fullDescription": {
-                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2004EnableSecureSourceCodeHashing",
-              "help": {
                 "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing."
               },
               "messageStrings": {
@@ -1452,15 +1449,15 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableSecureSourceCodeHashing"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2004EnableSecureSourceCodeHashing",
+              "help": {
+                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing."
+              }
             },
             {
               "id": "BA2005",
+              "name": "DoNotShipVulnerableBinaries",
               "fullDescription": {
-                "text": "Do not ship obsolete libraries for which there are known security vulnerabilities."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2005DoNotShipVulnerableBinaries",
-              "help": {
                 "text": "Do not ship obsolete libraries for which there are known security vulnerabilities."
               },
               "messageStrings": {
@@ -1477,18 +1474,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "DoNotShipVulnerableBinaries",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2005DoNotShipVulnerableBinaries",
+              "help": {
+                "text": "Do not ship obsolete libraries for which there are known security vulnerabilities."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "BinaryVersionsCheck"
               }
             },
             {
               "id": "BA2009",
+              "name": "EnableAddressSpaceLayoutRandomization",
               "fullDescription": {
-                "text": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2009EnableAddressSpaceLayoutRandomization",
-              "help": {
                 "text": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later."
               },
               "messageStrings": {
@@ -1508,18 +1505,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableAddressSpaceLayoutRandomization",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2009EnableAddressSpaceLayoutRandomization",
+              "help": {
+                "text": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DBCheck"
               }
             },
             {
               "id": "BA2016",
+              "name": "MarkImageAsNXCompatible",
               "fullDescription": {
-                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2016MarkImageAsNXCompatible",
-              "help": {
                 "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
               },
               "messageStrings": {
@@ -1533,18 +1530,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "MarkImageAsNXCompatible",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2016MarkImageAsNXCompatible",
+              "help": {
+                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "NXCheck"
               }
             },
             {
               "id": "BA2018",
+              "name": "EnableSafeSEH",
               "fullDescription": {
-                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2018EnableSafeSEH",
-              "help": {
                 "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
               },
               "messageStrings": {
@@ -1561,18 +1558,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "EnableSafeSEH",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2018EnableSafeSEH",
+              "help": {
+                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
               }
             },
             {
               "id": "BA2019",
+              "name": "DoNotMarkWritableSectionsAsShared",
               "fullDescription": {
-                "text": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2019DoNotMarkWritableSectionsAsShared",
-              "help": {
                 "text": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
               },
               "messageStrings": {
@@ -1586,18 +1583,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "DoNotMarkWritableSectionsAsShared",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2019DoNotMarkWritableSectionsAsShared",
+              "help": {
+                "text": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "SharedSectionCheck"
               }
             },
             {
               "id": "BA2021",
+              "name": "DoNotMarkWritableSectionsAsExecutable",
               "fullDescription": {
-                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2021DoNotMarkWritableSectionsAsExecutable",
-              "help": {
                 "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function."
               },
               "messageStrings": {
@@ -1614,18 +1611,18 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "DoNotMarkWritableSectionsAsExecutable",
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2021DoNotMarkWritableSectionsAsExecutable",
+              "help": {
+                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function."
+              },
               "properties": {
                 "equivalentBinScopeRuleReadableName": "WXCheck"
               }
             },
             {
               "id": "BA2022",
+              "name": "SignSecurely",
               "fullDescription": {
-                "text": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2022SignSecurely",
-              "help": {
                 "text": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds."
               },
               "messageStrings": {
@@ -1645,7 +1642,10 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "name": "SignSecurely"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2022SignSecurely",
+              "help": {
+                "text": "Images should be correctly signed by trusted publishers using cryptographically secure signature algorithms. This rule invokes WinTrustVerify to validate that binary hash, signing and public key algorithms are secure and, where configurable, that key sizes meet acceptable size thresholds."
+              }
             }
           ],
           "properties": {
@@ -1670,6 +1670,7 @@
           }
         }
       ],
+      "automationDetails": {},
       "columnKind": "utf16CodeUnits"
     }
   ]
