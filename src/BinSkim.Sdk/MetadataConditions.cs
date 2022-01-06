@@ -22,6 +22,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageIsNot32BitBinary = SdkResources.MetadataCondition_ImageIsNot32BitBinary;
         public static readonly string ImageIsNot64BitBinary = SdkResources.MetadataCondition_ImageIsNot64BitBinary;
         public static readonly string ElfIsCoreNoneOrObject = SdkResources.MetadataCondition_ElfIsCoreNoneOrObject;
+        public static readonly string ImageIsArm64BitBinary = SdkResources.MetadataCondition_ImageIsArm64BitBinary;
         public static readonly string ImageIsInteropAssembly = SdkResources.MetadataCondition_ImageIsInteropAssembly;
         public static readonly string ImageIsMixedModeBinary = SdkResources.MetadataCondition_ImageIsMixedModeBinary;
         public static readonly string ImageIsKernelModeBinary = SdkResources.MetadataCondition_ImageIsKernelModeBinary;

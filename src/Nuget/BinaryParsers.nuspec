@@ -1,0 +1,32 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Microsoft.Binary.Parsers</id>
+    <version>$version$</version>
+    <title>Microsoft Binary Parsers</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft,TSE-SecurityTools</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A library that contains binary parsers for Windows portable executables and Linux ELF binaries.</description>
+    <summary>A library that contains binary parsers for Windows portable executables and Linux ELF binaries.</summary>
+    <releaseNotes>Version $version$ of BinSkim</releaseNotes>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <licenseUrl>https://github.com/microsoft/binskim/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/microsoft/binskim</projectUrl>
+    <tags>binary analysis binskim binscope security portable executable linkable format sdl devops devsecops</tags>
+    <iconUrl>https://go.microsoft.com/fwlink/?linkid=2008940</iconUrl>
+    <dependencies>
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="Sarif.Driver" version="2.4.12" exclude="Build,Analyzers" />
+        <dependency id="ELFSharp" version="2.13.2" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+        <dependency id="System.Collections.Immutable" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Reflection.Metadata" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Security.Cryptography.Algorithms" version="4.3.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bld\bin\x64_$configuration$\netstandard2.1\BinaryParsers.dll" target="lib\netstandard2.1" />
+  </files>
+</package>

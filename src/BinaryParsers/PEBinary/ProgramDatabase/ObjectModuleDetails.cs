@@ -226,23 +226,27 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
     public enum Language : uint
     {
-        C,
-        Cxx,
-        FORTRAN,
-        MASM,
-        Pascal,
-        Basic,
-        COBOL,
-        LINK,
-        CVTRES,
-        CVTPGD,
-        CSharp,
-        VisualBasic,
-        ILASM,
-        Java,
-        JScript,
-        MSIL,
-        HLSL,
+        C = 0x00,
+        Cxx = 0x01,
+        FORTRAN = 0x02,
+        MASM = 0x03,
+        Pascal = 0x04,
+        Basic = 0x05,
+        COBOL = 0x06,
+        LINK = 0x07,
+        CVTRES = 0x08,
+        CVTPGD = 0x09,
+        CSharp = 0x0A,
+        VisualBasic = 0x0B,
+        ILASM = 0x0C,
+        Java = 0x0D,
+        JScript = 0x0E,
+        MSIL = 0x0F,
+        HLSL = 0x10, // High Level Shader Language
+        ObjectiveC = 0x11,
+        ObjectiveCxx = 0x12,
+        Swift = 0x13,
+        NASM = 0x4E, // The Netwide Assembler
         Unknown
     }
 

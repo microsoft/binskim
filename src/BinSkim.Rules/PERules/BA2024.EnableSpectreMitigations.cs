@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
@@ -85,7 +86,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         // Internal so that we can reset this during testing.  In practice this should never get reset, but we use several different configs during unit tests.
         // Please do not access this field outside of this class and unit tests.
-        internal static Dictionary<MachineFamily, CompilerVersionToMitigation[]> compilerData = null;
+        internal static ConcurrentDictionary<MachineFamily, CompilerVersionToMitigation[]> compilerData = null;
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -367,7 +368,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         internal static Version GetClosestCompilerVersionWithSpectreMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)
         {
-            Dictionary<MachineFamily, CompilerVersionToMitigation[]> compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
+            ConcurrentDictionary<MachineFamily, CompilerVersionToMitigation[]> compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
             MachineFamily machineFamily = machine.GetMachineFamily();
 
             if (!compilerMitigationData.ContainsKey(machineFamily))
@@ -409,7 +410,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         internal static CompilerMitigations GetAvailableMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)
         {
-            Dictionary<MachineFamily, CompilerVersionToMitigation[]> compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
+            ConcurrentDictionary<MachineFamily, CompilerVersionToMitigation[]> compilerMitigationData = LoadCompilerDataFromConfig(context.Policy);
             MachineFamily machineFamily = machine.GetMachineFamily();
 
             if (!compilerMitigationData.ContainsKey(machineFamily))
@@ -545,16 +546,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return compilersData;
         }
 
-        internal static Dictionary<MachineFamily, CompilerVersionToMitigation[]> LoadCompilerDataFromConfig(PropertiesDictionary policy)
+        internal static ConcurrentDictionary<MachineFamily, CompilerVersionToMitigation[]> LoadCompilerDataFromConfig(PropertiesDictionary policy)
         {
             if (compilerData == null)
             {
-                compilerData = new Dictionary<MachineFamily, CompilerVersionToMitigation[]>();
+                compilerData = new ConcurrentDictionary<MachineFamily, CompilerVersionToMitigation[]>();
                 PropertiesDictionary configData = policy.GetProperty(MitigatedCompilers);
                 foreach (string key in configData.Keys)
                 {
                     var machine = (MachineFamily)Enum.Parse(typeof(MachineFamily), key); // Neaten this up.
-                    compilerData.Add(machine, CreateSortedVersionDictionary((PropertiesDictionary)configData[key]));
+                    compilerData.TryAdd(machine, CreateSortedVersionDictionary((PropertiesDictionary)configData[key]));
                 }
             }
             return compilerData;

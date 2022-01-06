@@ -79,6 +79,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public CompilerDataLogger CompilerDataLogger { get; set; }
 
+        public bool IgnorePdbLoadError { get; set; }
+
         private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)

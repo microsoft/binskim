@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL
 {
-    public class AnalyzeCommand : AnalyzeCommandBase<BinaryAnalyzerContext, AnalyzeOptions>
+    public class AnalyzeCommand : MultithreadedAnalyzeCommandBase<BinaryAnalyzerContext, AnalyzeOptions>
     {
         private static bool ShouldWarnVerbose = true;
 
@@ -32,6 +32,7 @@ namespace Microsoft.CodeAnalysis.IL
             BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, policy, filePath);
 
             binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
+            binaryAnalyzerContext.IgnorePdbLoadError = options.IgnorePdbLoadError;
             binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
 
@@ -153,7 +154,7 @@ namespace Microsoft.CodeAnalysis.IL
                 NormalizedPath = string.Join(";", options.TargetFileSpecifiers.Select(p => System.IO.Path.GetDirectoryName(p)).Distinct()),
                 SymbolPath = options.SymbolsPath,
                 FileAnalyzed = artifacts.Count,
-                // FileNotAnalyzed = 
+                // FileNotAnalyzed =
                 StartTimeUtc = invocation.StartTimeUtc,
                 EndTimeUtc = invocation.EndTimeUtc,
                 TimeConsumed = invocation.EndTimeUtc - invocation.StartTimeUtc,
