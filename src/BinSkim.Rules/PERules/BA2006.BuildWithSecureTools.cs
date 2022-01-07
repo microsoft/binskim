@@ -119,7 +119,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftC
                     && omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftCxx)
                 {
-                    // TODO: https://github.com/Microsoft/binskim/issues/114
+                    // TODO: MikeFan (1/6/2022)
+                    // We need to take a step back and comprehensively review our compiler/language support.
+                    // https://github.com/Microsoft/binskim/issues/114
                     continue;
                 }
 
@@ -139,37 +141,43 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         break;
                     }
 
-                    //case Language.MASM:
-                    //{
-                    //    minCompilerVersion =
-                    //        context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.MASM)];
-                    //    break;
-                    //}
+                    /*
+                    TODO: MikeFan (1/6/2022)
+                    We need to take a step back and comprehensively review our compiler/language support.
+                    https://github.com/Microsoft/binskim/issues/114
 
-                    //case Language.CVTRES:
-                    //{
-                    //    minCompilerVersion =
-                    //        context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CVTRES)];
-                    //    break;
-                    //}
+                    case Language.MASM:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.MASM)];
+                        break;
+                    }
 
-                    //case Language.CSharp:
-                    //{
-                    //    minCompilerVersion =
-                    //        context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CSharp)];
-                    //    break;
-                    //}
+                    case Language.CVTRES:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CVTRES)];
+                        break;
+                    }
 
-                    // Language data is not always included if it is only compiled with SymTagCompiland without SymTagCompilandDetails
-                    // https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/compilanddetails?view=vs-2022
-                    // Compiland information is split between symbols with a SymTagCompiland tag (low detail)
-                    // and a SymTagCompilandDetails tag (high detail).
-                    //case Language.Unknown:
-                    //{
-                    //    minCompilerVersion =
-                    //        context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.Unknown)];
-                    //    break;
-                    //}
+                    case Language.CSharp:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CSharp)];
+                        break;
+                    }
+
+                    Language data is not always included if it is only compiled with SymTagCompiland without SymTagCompilandDetails
+                    https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/compilanddetails?view=vs-2022
+                    Compiland information is split between symbols with a SymTagCompiland tag (low detail)
+                    and a SymTagCompilandDetails tag (high detail).
+                    case Language.Unknown:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.Unknown)];
+                        break;
+                    }
+                    */
 
                     default:
                     {
