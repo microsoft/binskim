@@ -10,6 +10,9 @@ using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.CodeAnalysis.Sarif.Readers;
+using Microsoft.CodeAnalysis.Sarif.VersionOne;
+using Microsoft.CodeAnalysis.Sarif.Visitors;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -113,7 +116,7 @@ namespace Microsoft.CodeAnalysis.IL
                     !string.IsNullOrEmpty(analyzeOptions.OutputFilePath) &&
                     this.FileSystem.FileExists(analyzeOptions.OutputFilePath))
                 {
-                    SarifLog sarifLog = SarifLog.Load(analyzeOptions.OutputFilePath);
+                    SarifLog sarifLog = ReadSarifLog(this.FileSystem, analyzeOptions);
 
                     AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(
                         sarifLog, analyzeOptions);
@@ -143,6 +146,24 @@ namespace Microsoft.CodeAnalysis.IL
             return analyzeOptions.RichReturnCode
                 ? (int)((uint)result & ~(uint)RuntimeConditions.RuleNotApplicableToTarget)
                 : result;
+        }
+
+        internal static SarifLog ReadSarifLog(IFileSystem fileSystem, AnalyzeOptions analyzeOptions)
+        {
+            SarifLog sarifLog;
+            if (analyzeOptions.SarifOutputVersion == Sarif.SarifVersion.Current)
+            {
+                sarifLog = SarifLog.Load(analyzeOptions.OutputFilePath);
+            }
+            else
+            {
+                SarifLogVersionOne actualLog = ReadSarifFile<SarifLogVersionOne>(fileSystem, analyzeOptions.OutputFilePath, SarifContractResolverVersionOne.Instance);
+                var visitor = new SarifVersionOneToCurrentVisitor();
+                visitor.VisitSarifLogVersionOne(actualLog);
+                sarifLog = visitor.SarifLog;
+            }
+
+            return sarifLog;
         }
 
         internal static Sarif.SarifVersion s_UnitTestOutputVersion;
