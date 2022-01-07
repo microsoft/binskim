@@ -41,7 +41,6 @@ namespace Microsoft.CodeAnalysis.IL
                 NormalizedPath = string.Join(";", options.TargetFileSpecifiers.Select(p => System.IO.Path.GetDirectoryName(p)).Distinct()),
                 SymbolPath = options.SymbolsPath,
                 FileAnalyzed = artifacts?.Count ?? 0,
-                // FileNotAnalyzed =
                 StartTimeUtc = invocation.StartTimeUtc,
                 EndTimeUtc = invocation.EndTimeUtc,
                 TimeConsumed = invocation.EndTimeUtc - invocation.StartTimeUtc,
