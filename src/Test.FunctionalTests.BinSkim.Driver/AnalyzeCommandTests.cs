@@ -46,8 +46,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         {
             string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "Expected", "Binskim.linux-x64.dll.sarif");
 
-            var fileSystem = new Mock<IFileSystem>();
-
             SarifLog sarifLog = AnalyzeCommand.ReadSarifLog(fileSystem: null, new AnalyzeOptions
             {
                 SarifOutputVersion = Sarif.SarifVersion.Current,
