@@ -3,7 +3,6 @@
 
 using System;
 using System.IO;
-using System.Reflection;
 using System.Text;
 
 using FluentAssertions;
@@ -14,34 +13,19 @@ using Microsoft.CodeAnalysis.Sarif;
 
 using Moq;
 
-using Newtonsoft.Json;
-
 using Xunit;
 
 namespace Microsoft.CodeAnalysis.BinSkim.Driver
 {
-    public class AnalyzeCommandTest
+    public class AnalyzeCommandTests
     {
-        private const string ToolName = "binskim";
-        private readonly string SarifLogV1 = $@"{{
-  ""$schema"": ""http://json.schemastore.org/sarif-1.0.0"",
-  ""version"": ""1.0.0"",
-  ""runs"": [
-    {{
-      ""tool"": {{
-        ""name"": ""{ToolName}""
-      }},
-      ""results"": []
-    }}
-  ]
-}}";
-
         [Fact]
         public void AnalyzeCommand_ReadSarifLog_ShouldBeAbleToReadOneZeroZero()
         {
+            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "Expected", "Binskim.empty.v1.0.0.sarif");
             var fileSystem = new Mock<IFileSystem>();
-
-            byte[] byteArray = Encoding.UTF8.GetBytes(SarifLogV1);
+            string content = File.ReadAllText(sarifLogPath);
+            byte[] byteArray = Encoding.UTF8.GetBytes(content);
 
             fileSystem
                 .Setup(f => f.FileOpenRead(It.IsAny<string>()))
@@ -53,7 +37,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 OutputFilePath = Guid.NewGuid().ToString(),
             });
             sarifLog.Version.Should().Be(Sarif.SarifVersion.Current);
-            sarifLog.Runs[0].Tool.Driver.Name.Should().Be(ToolName);
+            sarifLog.Runs[0].Tool.Driver.Name.Should().NotBeEmpty();
             sarifLog.Runs[0].Results.Should().BeEmpty();
         }
 
@@ -64,7 +48,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
 
             var fileSystem = new Mock<IFileSystem>();
 
-            SarifLog sarifLog = AnalyzeCommand.ReadSarifLog(fileSystem.Object, new AnalyzeOptions
+            SarifLog sarifLog = AnalyzeCommand.ReadSarifLog(fileSystem: null, new AnalyzeOptions
             {
                 SarifOutputVersion = Sarif.SarifVersion.Current,
                 OutputFilePath = sarifLogPath,
