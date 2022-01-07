@@ -46,8 +46,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             summary.ToolVersion.Should().BeEquivalentTo(toolVersion);
             summary.NormalizedPath.Should().BeEquivalentTo(binaryPath);
             summary.SymbolPath.Should().BeEquivalentTo(symbolPath);
-            summary.StartTimeUtc.Should().Equals(currentTime.AddMinutes(-1).AddSeconds(-10));
-            summary.EndTimeUtc.Should().Equals(currentTime);
+            summary.StartTimeUtc.Should().Be(currentTime.AddMinutes(-1).AddSeconds(-10));
+            summary.EndTimeUtc.Should().Be(currentTime);
         }
 
         [Fact]
