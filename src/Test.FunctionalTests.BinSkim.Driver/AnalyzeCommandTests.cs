@@ -55,5 +55,21 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             sarifLog.Runs[0].Tool.Driver.Name.Should().NotBeEmpty();
             sarifLog.Runs[0].Results.Should().NotBeEmpty();
         }
+
+        [Fact]
+        [Obsolete]
+        public void AnalyzeCommand_Hashes_ShouldUpdateDataToInsert()
+        {
+            var options = new AnalyzeOptions();
+            var command = new AnalyzeCommand();
+
+            options.ComputeFileHashes = false;
+            command.Run(options);
+            options.DataToInsert.Should().BeNull();
+
+            options.ComputeFileHashes = true;
+            command.Run(options);
+            options.DataToInsert.Should().Contain(OptionallyEmittedData.Hashes);
+        }
     }
 }
