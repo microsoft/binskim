@@ -798,9 +798,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "LoadImageAboveFourGigabyteAddress",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "FourGbCheck"
               }
@@ -825,9 +823,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "DoNotIncorporateVulnerableDependencies",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ATLVersionCheck"
               }
@@ -858,9 +854,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "EnableSecureSourceCodeHashing",
-              "guid": null
+              "name": "EnableSecureSourceCodeHashing"
             },
             {
               "id": "BA2005",
@@ -885,9 +879,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "DoNotShipVulnerableBinaries",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "BinaryVersionsCheck"
               }
@@ -915,9 +907,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "BuildWithSecureTools",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "CompilerVersionCheck"
               }
@@ -948,9 +938,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "EnableCriticalCompilerWarnings",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "CompilerWarningsCheck"
               }
@@ -978,9 +966,7 @@
                   "text": "'{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries."
                 }
               },
-              "shortDescription": null,
               "name": "EnableControlFlowGuard",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
               }
@@ -1011,9 +997,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "EnableAddressSpaceLayoutRandomization",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DBCheck"
               }
@@ -1038,9 +1022,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "DoNotMarkImportsSectionAsExecutable",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "ExecutableImportsCheck"
               }
@@ -1068,9 +1050,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "EnableStackProtection",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSCheck"
               }
@@ -1104,9 +1084,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "DoNotModifyStackProtectionCookie",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "DefaultGSCookieCheck"
               }
@@ -1137,9 +1115,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "InitializeStackProtection",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSFriendlyInitCheck"
               }
@@ -1164,9 +1140,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "DoNotDisableStackProtectionForFunctions",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "GSFunctionSafeBuffersCheck"
               }
@@ -1197,9 +1171,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "EnableHighEntropyVirtualAddresses",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "HighEntropyVACheck"
               }
@@ -1224,9 +1196,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "MarkImageAsNXCompatible",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "NXCheck"
               }
@@ -1254,9 +1224,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "EnableSafeSEH",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
               }
@@ -1281,9 +1249,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "DoNotMarkWritableSectionsAsShared",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "SharedSectionCheck"
               }
@@ -1311,9 +1277,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
               "name": "DoNotMarkWritableSectionsAsExecutable",
-              "guid": null,
               "properties": {
                 "equivalentBinScopeRuleReadableName": "WXCheck"
               }
@@ -1344,9 +1308,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "SignSecurely",
-              "guid": null
+              "name": "SignSecurely"
             },
             {
               "id": "BA2024",
@@ -1377,9 +1339,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "EnableSpectreMitigations",
-              "guid": null
+              "name": "EnableSpectreMitigations"
             },
             {
               "id": "BA2025",
@@ -1401,9 +1361,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "EnableShadowStack",
-              "guid": null
+              "name": "EnableShadowStack"
             },
             {
               "id": "BA2026",
@@ -1425,9 +1383,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "EnableAdditionalSdlSecurityChecks",
-              "guid": null
+              "name": "EnableAdditionalSdlSecurityChecks"
             },
             {
               "id": "BA3001",
@@ -1452,9 +1408,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "EnablePositionIndependentExecutable",
-              "guid": null
+              "name": "EnablePositionIndependentExecutable"
             },
             {
               "id": "BA3002",
@@ -1479,9 +1433,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "DoNotMarkStackAsExecutable",
-              "guid": null
+              "name": "DoNotMarkStackAsExecutable"
             },
             {
               "id": "BA3003",
@@ -1503,9 +1455,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "EnableStackProtector",
-              "guid": null
+              "name": "EnableStackProtector"
             },
             {
               "id": "BA3005",
@@ -1527,9 +1477,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "EnableStackClashProtection",
-              "guid": null
+              "name": "EnableStackClashProtection"
             },
             {
               "id": "BA3006",
@@ -1551,9 +1499,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "EnableNonExecutableStack",
-              "guid": null
+              "name": "EnableNonExecutableStack"
             },
             {
               "id": "BA3010",
@@ -1575,9 +1521,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "EnableReadOnlyRelocations",
-              "guid": null
+              "name": "EnableReadOnlyRelocations"
             },
             {
               "id": "BA3011",
@@ -1599,9 +1543,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "EnableBindNow",
-              "guid": null
+              "name": "EnableBindNow"
             },
             {
               "id": "BA3030",
@@ -1629,9 +1571,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "UseCheckedFunctionsWithGcc",
-              "guid": null
+              "name": "UseCheckedFunctionsWithGcc"
             },
             {
               "id": "BA5001",
@@ -1653,9 +1593,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "EnablePositionIndependentExecutableMachO",
-              "guid": null
+              "name": "EnablePositionIndependentExecutableMachO"
             },
             {
               "id": "BA5002",
@@ -1677,9 +1615,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "shortDescription": null,
-              "name": "DoNotAllowExecutableStack",
-              "guid": null
+              "name": "DoNotAllowExecutableStack"
             }
           ],
           "properties": {
