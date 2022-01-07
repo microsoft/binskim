@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* BUGFIX: Fix `JsonSerializationException` that occurs when saving SARIF v1 with telemetry enabled. [#535](https://github.com/microsoft/binskim/pull/535)
+
 ## **v1.9.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.0)
 
 * BUGFIX: Fix telemetry session creation. [515](https://github.com/microsoft/binskim/pull/515)
