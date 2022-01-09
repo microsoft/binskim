@@ -116,8 +116,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftC
-                    && omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftCxx)
+                if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftC &&
+                    omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftCxx)
                 {
                     // TODO: MikeFan (1/6/2022)
                     // We need to take a step back and comprehensively review our compiler/language support.
