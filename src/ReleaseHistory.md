@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* BUGFIX: Fix incorrect analysis for non-Microsoft compiler on BA2006.BuildWithSecureTools [545](https://github.com/microsoft/binskim/pull/545)
 * BUGFIX: Fix `JsonSerializationException` that occurs when saving SARIF v1 with telemetry enabled. [#535](https://github.com/microsoft/binskim/pull/535)
 * BUGFIX: Fix `NullReferenceException` when `--Hashes` and telemetry rules are enabled. [#531](https://github.com/microsoft/binskim/pull/531)
 
