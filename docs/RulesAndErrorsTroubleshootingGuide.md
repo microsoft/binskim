@@ -34,16 +34,18 @@ By default, BinSkim will only look for a PDB alongside the binary under analysis
 
 *Example message*:
 
-    warning BA2024: 'test.exe' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities.
+    warning BA2024: 'test.dll' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities.
 
-### Resolving BA2024 warning
+### Resolving BA2024 warning for C/C++ static libraries
 
 Developers assume the security risk of static libraries that are linked into their binaries (because vulnerabilities in these dependencies may be exploitable once linked into other binaries).
 
 BA2024.EnableSpectreMitigations may fire against Microsoft default C++ static libraries, such as `LibCMT.lib`. In order to resolve these warnings, the developer must install and link to the appropriate MSVC Spectre-mitigated C++ runtime libraries. To do so:
 
-1. Launch the `Visual Studio Installer` and click `Modify`
-2. Select the `Individual Components` tab and type `spectre` in the search field.
-3. Select and install Spectre-mitigated libs for your target platform.
-
-![Installing Spectre-mitigated C++ libraries in the VS Installer ](images/VS_Installer_Spectre_Mitigated_Libs.JPG "Install Spectre-Mitigated C/C++ Runtime")
+1. Launch the `Visual Studio Installer`.
+![Visual Studio Installer Main](VisualStudioInstallerOnLaunch.png)
+2. Click `Modify` for the version of Visual Studio in use.
+![Visual Studio Installer Modify for Visual Studio Enterprise 2022](VisualStudioInstallerOnModify.png)
+3. Select the `Individual Components` tab and type `spectre` in the search field.
+![Visual Studio Installer Individual components search](VisualStudioInstallerModifySearch.png)
+4. Select and install Spectre-mitigated libs for your target platform.
