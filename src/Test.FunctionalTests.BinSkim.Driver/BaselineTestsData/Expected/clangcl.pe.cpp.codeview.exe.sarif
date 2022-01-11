@@ -428,13 +428,13 @@
         {
           "ruleId": "BA2006",
           "ruleIndex": 17,
-          "level": "error",
+          "kind": "pass",
+          "level": "none",
           "message": {
-            "id": "Error",
+            "id": "Pass",
             "arguments": [
               "clangcl.pe.cpp.codeview.exe",
-              "",
-              "clang version 13.0.0 : cxx : 13000.0.0.0 : [directly linked] (hello-d24821.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler:C:19.26.28900.8, Microsoft (R) Optimizing Compiler:C:19.29.30034.2, Microsoft (R) Optimizing Compiler:Cxx:19.26.28900.8, Microsoft (R) Optimizing Compiler:Cxx:19.29.30034.2"
             ]
           },
           "locations": [

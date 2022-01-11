@@ -46,8 +46,34 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             summary.ToolVersion.Should().BeEquivalentTo(toolVersion);
             summary.NormalizedPath.Should().BeEquivalentTo(binaryPath);
             summary.SymbolPath.Should().BeEquivalentTo(symbolPath);
-            summary.StartTimeUtc.Should().Equals(currentTime.AddMinutes(-1).AddSeconds(-10));
-            summary.EndTimeUtc.Should().Equals(currentTime);
+            summary.StartTimeUtc.Should().Be(currentTime.AddMinutes(-1).AddSeconds(-10));
+            summary.EndTimeUtc.Should().Be(currentTime);
+        }
+
+        [Fact]
+        public void ExtractAnalysisSummary_ShouldNotThrowExceptionWhenArtifactsIsNull()
+        {
+            const string toolName = "Test Tool";
+            const string toolVersion = "1.2.0";
+            const string binaryPath = @"F:\Application\Binaries";
+            int numArtifact = 5;
+            DateTime currentTime = DateTime.UtcNow;
+
+            SarifLog log = this.GenerateSarifLog(toolName, toolVersion, currentTime, numArtifact);
+            log.Runs[0].Artifacts = null;
+
+            var option = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new string[]
+                {
+                    $"{binaryPath}\\*.exe",
+                    $"{binaryPath}\\*.dll",
+                },
+                SymbolsPath = @"\\symbolServer\application\",
+            };
+
+            Exception exception = Record.Exception(() => AnalysisSummaryExtractor.ExtractAnalysisSummary(log, option));
+            exception.Should().BeNull();
         }
 
         [Fact]
