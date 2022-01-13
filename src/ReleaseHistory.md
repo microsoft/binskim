@@ -1,5 +1,9 @@
 # BinSkim Release History
 
+## Unreleased
+
+* FEATURE: support analyzing GoLang PE binaries. [#488](https://github.com/microsoft/binskim/pull/488)
+
 ## **v1.9.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.1)
 
 * BUGFIX: Fix incorrect analysis for non-Microsoft compiler on BA2006.BuildWithSecureTools. [545](https://github.com/microsoft/binskim/pull/545)
