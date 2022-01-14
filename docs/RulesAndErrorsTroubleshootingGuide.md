@@ -51,5 +51,5 @@ BA2024.EnableSpectreMitigations may fire against Microsoft default C++ static li
 4. Select and install Spectre-mitigated libs for your target platform.
 
 If the error persists:
-1. Stay up to take with Visual Studio version (use at least Visual Studio 2019).
+1. Stay up to date with Visual Studio version (use at least Visual Studio 2019).
 2. Use release builds instead of debug builds. Some libraries are only compiled with spectre mitigation for release builds.
