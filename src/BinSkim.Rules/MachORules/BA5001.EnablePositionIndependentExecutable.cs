@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // for libraries, check if compiler includes option "mdynamic-no-pic"
                 return !binary.CommandLineInfos
-                    .Where(info => ElfUtility.GetDwarfCommandLineType(info.CommandLine) == DwarfCommandLineType.Gcc)
+                    .Where(info => info.ParametersInCluded)
                     .Any(i => i.CommandLine.Contains("mdynamic-no-pic",
                     System.StringComparison.OrdinalIgnoreCase));
             }
@@ -115,9 +115,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static bool IsValidDwarfBinary(IDwarfBinary binary)
         {
-            return binary.Compilers.Any(c => c.Compiler == ElfCompilerType.GCC) &&
-                   binary.CommandLineInfos.Any(info
-                   => ElfUtility.GetDwarfCommandLineType(info.CommandLine) == DwarfCommandLineType.Gcc);
+            return binary.CommandLineInfos.Any(info => info.ParametersInCluded);
         }
     }
 }

@@ -133,6 +133,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is built without record command line.
+        /// </summary>
+        internal static string MetadataCondition_ImageBuiltWithoutRecordCommandLine {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageBuiltWithoutRecordCommandLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image was compiled with a toolset version ({0}) that is not sufficiently recent ({1} or newer) to provide relevant settings.
         /// </summary>
         internal static string MetadataCondition_ImageCompiledWithOutdatedTools {

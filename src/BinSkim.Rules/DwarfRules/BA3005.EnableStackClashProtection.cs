@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
                 {
-                    if (ElfUtility.GetDwarfCommandLineType(info.CommandLine) != DwarfCommandLineType.Gcc)
+                    if (!info.ParametersInCluded)
                     {
                         continue;
                     }
@@ -147,15 +147,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // We check for "any usage of non-gcc" as a default/standard compilation with clang leads to [GCC, Clang]
             // either because it links with a gcc-compiled object (cstdlib) or the linker also reading as GCC.
             // This has a potential for a False Negative if teams are using GCC and other tools.
-            if (binary.Compilers.Any(c => c.Compiler != ElfCompilerType.GCC))
-            {
-                return new CanAnalyzeDwarfResult
-                {
-                    Reason = MetadataConditions.ElfNotBuiltWithGcc,
-                    Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
-                };
-            }
-            else if (binary.Compilers.Any(c => c.Version.Major < 8))
+            if (binary.Compilers.Any(c => c.Compiler == ElfCompilerType.GCC && c.Version.Major < 8))
             {
                 return new CanAnalyzeDwarfResult
                 {
@@ -163,12 +155,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
                 };
             }
-            else if (!binary.CommandLineInfos.Any(
-                info => ElfUtility.GetDwarfCommandLineType(info.CommandLine) == DwarfCommandLineType.Gcc))
+            else if (!binary.CommandLineInfos.Any())
             {
                 return new CanAnalyzeDwarfResult
                 {
                     Reason = MetadataConditions.ElfNotBuiltWithDwarfDebugging,
+                    Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
+                };
+            }
+            else if (!binary.CommandLineInfos.Any(info => info.ParametersInCluded))
+            {
+                return new CanAnalyzeDwarfResult
+                {
+                    Reason = MetadataConditions.ImageBuiltWithoutRecordCommandLine,
                     Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
                 };
             }

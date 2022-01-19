@@ -542,7 +542,7 @@
             "arguments": [
               "clang.elf.objectivec.dwarf",
               "EnableStackProtector",
-              "not compiled solely with gcc"
+              "not compiled with Dwarf debugging"
             ]
           },
           "locations": [
@@ -566,7 +566,7 @@
             "arguments": [
               "clang.elf.objectivec.dwarf",
               "EnableStackClashProtection",
-              "not compiled solely with gcc"
+              "not compiled with Dwarf debugging"
             ]
           },
           "locations": [

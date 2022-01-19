@@ -39,6 +39,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageCompiledWithOutdatedTools = SdkResources.MetadataCondition_ImageCompiledWithOutdatedTools;
         public static readonly string ImageIsDotNetNativeBootstrapExe = SdkResources.MetadataCondition_ImageIsDotNetNativeBootstrapExe;
         public static readonly string ImageIsPreVersion7WindowsCEBinary = SdkResources.MetadataCondition_ImageIsPreVersion7WindowsCEBinary;
+        public static readonly string ImageBuiltWithoutRecordCommandLine = SdkResources.MetadataCondition_ImageBuiltWithoutRecordCommandLine;
         public static readonly string ImageIsNativeUniversalWindowsPlatformBinary = SdkResources.MetadataCondition_ImageIsNativeUniversalWindowsPlatformBinary;
         public static readonly string MachOIsNotExecutableDynamicLibraryOrObject = SdkResources.MetadataCondition_MachOIsNotExecutableDynamicLibraryOrObject;
     }

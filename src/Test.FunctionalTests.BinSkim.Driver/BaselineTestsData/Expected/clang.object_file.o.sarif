@@ -590,7 +590,7 @@
             "arguments": [
               "clang.object_file.o",
               "EnableStackProtector",
-              "not compiled solely with gcc"
+              "not compiled with Dwarf debugging"
             ]
           },
           "locations": [
@@ -614,7 +614,7 @@
             "arguments": [
               "clang.object_file.o",
               "EnableStackClashProtection",
-              "not compiled solely with gcc"
+              "not compiled with Dwarf debugging"
             ]
           },
           "locations": [

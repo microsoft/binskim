@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.Sarif.Driver;
+
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
     /// <summary>
@@ -187,6 +189,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                     if (info.CommandLine != null)
                     {
+                        info.DwarfCommandLineType = ElfUtility.GetDwarfCommandLineType(info.CommandLine);
+
+                        if (info.DwarfCommandLineType == DwarfCommandLineType.Gcc)
+                        {
+                            info.ParametersInCluded = ArgumentSplitter.CommandLineToArgvW(info.CommandLine).Count > 3 &&
+                                info.CommandLine.Contains(" -");
+                        }
+                        else if (info.DwarfCommandLineType == DwarfCommandLineType.Clang)
+                        {
+                            info.ParametersInCluded = info.CommandLine.Contains("-grecord-command-line") ||
+                                info.CommandLine.Contains("-grecord-gcc-switches");
+                        }
+                        else
+                        {
+                            info.ParametersInCluded = false;
+                        }
+
                         returnValue.Add(info);
                     }
                 }

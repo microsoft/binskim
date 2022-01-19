@@ -542,7 +542,7 @@
             "arguments": [
               "clang.stack_protector",
               "EnableStackProtector",
-              "not compiled solely with gcc"
+              "not compiled with gcc v8 or later"
             ]
           },
           "locations": [
@@ -566,7 +566,7 @@
             "arguments": [
               "clang.stack_protector",
               "EnableStackClashProtection",
-              "not compiled solely with gcc"
+              "not compiled with gcc v8 or later"
             ]
           },
           "locations": [

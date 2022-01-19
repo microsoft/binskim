@@ -590,7 +590,7 @@
             "arguments": [
               "macho.clang-lib.fat.o",
               "EnableStackProtector",
-              "not compiled solely with gcc"
+              "not compiled with Dwarf debugging"
             ]
           },
           "locations": [
@@ -638,7 +638,7 @@
             "arguments": [
               "macho.clang-lib.fat.o",
               "EnableStackClashProtection",
-              "not compiled solely with gcc"
+              "not compiled with Dwarf debugging"
             ]
           },
           "locations": [

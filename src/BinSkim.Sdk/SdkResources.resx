@@ -243,4 +243,7 @@
   <data name="MetadataCondition_ImageIsArm64BitBinary" xml:space="preserve">
     <value>image is an ARM64 binary</value>
   </data>
+  <data name="MetadataCondition_ImageBuiltWithoutRecordCommandLine" xml:space="preserve">
+    <value>image is built without record command line</value>
+  </data>
 </root>

@@ -590,7 +590,7 @@
             "arguments": [
               "gcc.object_file.o",
               "EnableStackProtector",
-              "not compiled solely with gcc"
+              "not compiled with gcc v8 or later"
             ]
           },
           "locations": [
@@ -614,7 +614,7 @@
             "arguments": [
               "gcc.object_file.o",
               "EnableStackClashProtection",
-              "not compiled solely with gcc"
+              "not compiled with gcc v8 or later"
             ]
           },
           "locations": [

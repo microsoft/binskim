@@ -18,10 +18,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public string CommandLine { get; set; }
         public DwarfLanguage Language { get; set; }
         public string CompileDirectory { get; set; }
+        public bool ParametersInCluded { get; set; } = false;
+        public DwarfCommandLineType DwarfCommandLineType { get; set; } = DwarfCommandLineType.Unknown;
 
         public string GetDialect()
         {
-            if (ElfUtility.GetDwarfCommandLineType(CommandLine) != DwarfCommandLineType.Gcc)
+            if (DwarfCommandLineType != DwarfCommandLineType.Gcc)
             {
                 return string.Empty;
             }
