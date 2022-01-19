@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
                 {
-                    if (!info.ParametersInCluded)
+                    if (!info.ParametersIncluded)
                     {
                         continue;
                     }
@@ -163,7 +163,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
                 };
             }
-            else if (!binary.CommandLineInfos.Any(info => info.ParametersInCluded))
+            else if (!binary.CommandLineInfos.Any(info => info.ParametersIncluded))
             {
                 return new CanAnalyzeDwarfResult
                 {

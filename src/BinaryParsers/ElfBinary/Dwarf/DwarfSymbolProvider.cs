@@ -193,17 +193,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         if (info.DwarfCommandLineType == DwarfCommandLineType.Gcc)
                         {
-                            info.ParametersInCluded = ArgumentSplitter.CommandLineToArgvW(info.CommandLine).Count > 3 &&
+                            info.ParametersIncluded = ArgumentSplitter.CommandLineToArgvW(info.CommandLine).Count > 3 &&
                                 info.CommandLine.Contains(" -");
                         }
                         else if (info.DwarfCommandLineType == DwarfCommandLineType.Clang)
                         {
-                            info.ParametersInCluded = info.CommandLine.Contains("-grecord-command-line") ||
+                            info.ParametersIncluded = info.CommandLine.Contains("-grecord-command-line") ||
                                 info.CommandLine.Contains("-grecord-gcc-switches");
                         }
                         else
                         {
-                            info.ParametersInCluded = false;
+                            info.ParametersIncluded = false;
                         }
 
                         returnValue.Add(info);

@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public string CommandLine { get; set; }
         public DwarfLanguage Language { get; set; }
         public string CompileDirectory { get; set; }
-        public bool ParametersInCluded { get; set; } = false;
+        public bool ParametersIncluded { get; set; } = false;
         public DwarfCommandLineType DwarfCommandLineType { get; set; } = DwarfCommandLineType.Unknown;
 
         public string GetDialect()
