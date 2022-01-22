@@ -542,7 +542,7 @@
             "arguments": [
               "clang.linux.13.stackprotector.recordcommandline_default",
               "EnableStackProtector",
-              "image is built without record command line"
+              "image was compiled without recording command line"
             ]
           },
           "locations": [
@@ -566,7 +566,7 @@
             "arguments": [
               "clang.linux.13.stackprotector.recordcommandline_default",
               "EnableStackClashProtection",
-              "image is built without record command line"
+              "image was compiled without recording command line"
             ]
           },
           "locations": [

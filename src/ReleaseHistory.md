@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* FEATURE: support analyzing binaries build with Clang when command line was recorded. [#548](https://github.com/microsoft/binskim/pull/548)
+* FEATURE: Support analyzing binaries build with Clang when command line was recorded. [#548](https://github.com/microsoft/binskim/pull/548)
 
 ## **v1.9.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.1)
 

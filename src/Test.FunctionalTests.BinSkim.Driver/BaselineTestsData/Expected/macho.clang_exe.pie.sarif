@@ -590,7 +590,7 @@
             "arguments": [
               "macho.clang_exe.pie",
               "EnableStackProtector",
-              "not compiled with Dwarf debugging"
+              "not compiled solely with gcc or clang"
             ]
           },
           "locations": [
@@ -638,7 +638,7 @@
             "arguments": [
               "macho.clang_exe.pie",
               "EnableStackClashProtection",
-              "not compiled with Dwarf debugging"
+              "not compiled solely with gcc or clang"
             ]
           },
           "locations": [

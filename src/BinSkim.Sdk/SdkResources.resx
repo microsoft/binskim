@@ -244,6 +244,9 @@
     <value>image is an ARM64 binary</value>
   </data>
   <data name="MetadataCondition_ImageBuiltWithoutRecordCommandLine" xml:space="preserve">
-    <value>image is built without record command line</value>
+    <value>image was compiled without recording command line</value>
+  </data>
+  <data name="MetadataCondition_ImageNotBuiltWithGccOrClang" xml:space="preserve">
+    <value>not compiled solely with gcc or clang</value>
   </data>
 </root>

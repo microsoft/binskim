@@ -542,7 +542,7 @@
             "arguments": [
               "gcc.gsplitdwarf.5",
               "EnableStackProtector",
-              "image is built without record command line"
+              "image was compiled without recording command line"
             ]
           },
           "locations": [
@@ -566,7 +566,7 @@
             "arguments": [
               "gcc.gsplitdwarf.5",
               "EnableStackClashProtection",
-              "image is built without record command line"
+              "image was compiled without recording command line"
             ]
           },
           "locations": [

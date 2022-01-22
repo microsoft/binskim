@@ -133,7 +133,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to image is built without record command line.
+        ///   Looks up a localized string similar to image was compiled without recording command line.
         /// </summary>
         internal static string MetadataCondition_ImageBuiltWithoutRecordCommandLine {
             get {
@@ -399,6 +399,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageLikelyLoads32BitProcess {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageLikelyLoads32BitProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to not compiled solely with gcc or clang.
+        /// </summary>
+        internal static string MetadataCondition_ImageNotBuiltWithGccOrClang {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageNotBuiltWithGccOrClang", resourceCulture);
             }
         }
         

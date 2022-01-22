@@ -542,7 +542,7 @@
             "arguments": [
               "gcc.linux.10.stackprotector.recordgccswitches_no",
               "EnableStackProtector",
-              "image is built without record command line"
+              "image was compiled without recording command line"
             ]
           },
           "locations": [
@@ -566,7 +566,7 @@
             "arguments": [
               "gcc.linux.10.stackprotector.recordgccswitches_no",
               "EnableStackClashProtection",
-              "image is built without record command line"
+              "image was compiled without recording command line"
             ]
           },
           "locations": [

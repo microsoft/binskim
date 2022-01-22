@@ -41,27 +41,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
-            CanAnalyzeDwarfResult result = default;
-
-            if (target is ElfBinary elf)
-            {
-                result = this.VerifyDwarfBinary(elf);
-            }
-            else if (target is MachOBinary mainMacho)
-            {
-                foreach (SingleMachOBinary subMachO in mainMacho.MachOs)
-                {
-                    result = this.VerifyDwarfBinary(subMachO);
-                    if (result.Result == AnalysisApplicability.ApplicableToSpecifiedTarget)
-                    {
-                        // if any machO is applicable
-                        break;
-                    }
-                }
-            }
-
-            reasonForNotAnalyzing = result.Reason;
-            return result.Result;
+            return CommandLineUtilities.CanAnalyzeDwarf(target, out reasonForNotAnalyzing);
         }
 
         public override void Analyze(BinaryAnalyzerContext context)
@@ -163,43 +143,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         nameof(RuleResources.BA3003_Pass),
                         context.TargetUri.GetFileName()));
             }
-        }
-
-        private CanAnalyzeDwarfResult VerifyDwarfBinary(IDwarfBinary binary)
-        {
-            // We check for "any usage of non-gcc" as a default/standard compilation with clang leads to [GCC, Clang]
-            // either because it links with a gcc-compiled object (cstdlib) or the linker also reading as GCC.
-            // This has a potential for a False Negative if teams are using GCC and other tools.
-            if (binary.Compilers.Any(c => c.Compiler == ElfCompilerType.GCC && c.Version.Major < 8))
-            {
-                return new CanAnalyzeDwarfResult
-                {
-                    Reason = MetadataConditions.ElfNotBuiltWithGccV8OrLater,
-                    Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
-                };
-            }
-            else if (!binary.CommandLineInfos.Any())
-            {
-                return new CanAnalyzeDwarfResult
-                {
-                    Reason = MetadataConditions.ElfNotBuiltWithDwarfDebugging,
-                    Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
-                };
-            }
-            else if (!binary.CommandLineInfos.Any(info => info.ParametersIncluded))
-            {
-                return new CanAnalyzeDwarfResult
-                {
-                    Reason = MetadataConditions.ImageBuiltWithoutRecordCommandLine,
-                    Result = AnalysisApplicability.NotApplicableToSpecifiedTarget
-                };
-            }
-
-            return new CanAnalyzeDwarfResult
-            {
-                Reason = null,
-                Result = AnalysisApplicability.ApplicableToSpecifiedTarget
-            };
         }
     }
 }

@@ -189,14 +189,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                     if (info.CommandLine != null)
                     {
-                        info.DwarfCommandLineType = ElfUtility.GetDwarfCommandLineType(info.CommandLine);
+                        info.CommandLineType = ElfUtility.GetDwarfCommandLineType(info.CommandLine);
 
-                        if (info.DwarfCommandLineType == DwarfCommandLineType.Gcc)
+                        if (info.CommandLineType == DwarfCommandLineType.Gcc)
                         {
                             info.ParametersIncluded = ArgumentSplitter.CommandLineToArgvW(info.CommandLine).Count > 3 &&
                                 info.CommandLine.Contains(" -");
                         }
-                        else if (info.DwarfCommandLineType == DwarfCommandLineType.Clang)
+                        else if (info.CommandLineType == DwarfCommandLineType.Clang)
                         {
                             info.ParametersIncluded = info.CommandLine.Contains("-grecord-command-line") ||
                                 info.CommandLine.Contains("-grecord-gcc-switches");
