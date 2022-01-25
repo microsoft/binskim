@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* FEATURE: Add new PE CV_CFL_LANG language code for ALIASOBJ and Rust. [530](https://github.com/microsoft/binskim/pull/530)
+* BUGFIX: Add new PE `CV_CFL_LANG` language code for `ALIASOBJ` and `Rust`. [530](https://github.com/microsoft/binskim/pull/530)
 
 ## **v1.9.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.1)
 

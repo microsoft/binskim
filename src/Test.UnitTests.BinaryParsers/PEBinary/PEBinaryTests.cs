@@ -75,16 +75,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
-        public void PEBinary_LanguagueCode()
+        public void PEBinary_ContainsExpectedLanguageCode()
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
-            IfContainsLanguagueCode("clangcl.pe.c.codeview.exe", Language.C).Should().BeTrue();
-            IfContainsLanguagueCode("clangcl.pe.cpp.codeview.exe", Language.Cxx).Should().BeTrue();
-            // as of v1.57 Rust official compiler RustC does not yet use the new CV_CFL_LANG code for Rust.
-            // we will have another test file when new version use it.
-            IfContainsLanguagueCode("Native_x64_RustC_Rust_debuginfo2_v1.57.exe", Language.Rust).Should().BeFalse();
-            IfContainsLanguagueCode("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll", Language.Cxx).Should().BeTrue();
+            ContainsLanguageCode("clangcl.pe.c.codeview.exe", Language.C).Should().BeTrue();
+            ContainsLanguageCode("clangcl.pe.cpp.codeview.exe", Language.Cxx).Should().BeTrue();
+            // As of v1.57 Rust official compiler RustC does not yet use the new CV_CFL_LANG code for Rust.
+            // We will have another test file when new version use it.
+            ContainsLanguageCode("Native_x64_RustC_Rust_debuginfo2_v1.57.exe", Language.Rust).Should().BeFalse();
+            ContainsLanguageCode("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll", Language.Cxx).Should().BeTrue();
         }
 
         [Fact]
@@ -110,7 +110,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
         }
 
-        private static bool IfContainsLanguagueCode(string fileName, Language language)
+        private static bool ContainsLanguageCode(string fileName, Language language)
         {
             string fileFullPath = Path.Combine(BaselineTestsDataDirectory, fileName);
             using (var peBinary = new PEBinary(new Uri(fileFullPath)))
