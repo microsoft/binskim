@@ -1,6 +1,7 @@
 # Build Scripts
 
-This file records scripts used to compile the test files, by alphabetical order.
+This file records scripts used to compile the test files, in alphabetical order.
+Test files are located in [BaselineTestsData](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData) and [FunctionalTestsData](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestsData)
 
 ## clangcl.pe.c.codeview.exe
 
