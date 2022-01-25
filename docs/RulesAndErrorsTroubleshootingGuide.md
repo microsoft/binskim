@@ -29,3 +29,27 @@ By default, BinSkim will only look for a PDB alongside the binary under analysis
 2. **If the PDB is associated with an external dependency**: add or review your `--sympath` argument to ensure it references all required symbol servers. See the [User Guide](https://github.com/microsoft/binskim/blob/master/docs/UserGuide.md) for mor information on this or other command-line arguments. It is important to performance and reliability reasons that your `--sympath` argument include a `CACHE*` argument that points to a writable local cache.
 3. **Enable tracing**: you can enable the `--trace PdbLoad` argument as of BinSkim version 1.7.0 in order to capture BinSkim's PDB path probing logic. When enabled, BinSkim will show every file path that's examine in order to locate a PDB.
 4. **Rerun analysis**: Retrieving a PDB from a symbol server is an inherently unreliable operation, as the server may not be available or may simply fail a specific request. If your PDB failures are for 3rd party PDBs retrieved from a symbol and are intermittent, this may be the problem.
+
+## BA2024.EnableSpectreMitigations
+
+*Example message*:
+
+    warning BA2024: 'test.dll' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities.
+
+### Resolving BA2024 warning for C/C++ static libraries
+
+Developers assume the security risk of static libraries that are linked into their binaries (because vulnerabilities in these dependencies may be exploitable once linked into other binaries).
+
+BA2024.EnableSpectreMitigations may fire against Microsoft default C++ static libraries, such as `LibCMT.lib`. In order to resolve these warnings, the developer must install and link to the appropriate MSVC Spectre-mitigated C++ runtime libraries. To do so:
+
+1. Launch the `Visual Studio Installer`.
+![Visual Studio Installer Main](VisualStudioInstallerOnLaunch.png)
+2. Click `Modify` for the version of Visual Studio in use.
+![Visual Studio Installer Modify for Visual Studio Enterprise 2022](VisualStudioInstallerOnModify.png)
+3. Select the `Individual Components` tab and type `spectre` in the search field.
+![Visual Studio Installer Individual components search](VisualStudioInstallerModifySearch.png)
+4. Select and install Spectre-mitigated libs for your target platform.
+
+If the error persists:
+1. Stay up to date with Visual Studio version (use at least Visual Studio 2019).
+2. Use release builds instead of debug builds. Some libraries are only compiled with spectre mitigation for release builds.
