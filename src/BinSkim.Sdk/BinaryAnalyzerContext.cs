@@ -79,6 +79,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public CompilerDataLogger CompilerDataLogger { get; set; }
 
+        public static PerLanguageOption<bool> WriteTelemetryToConsole { get; } =
+            new PerLanguageOption<bool>(
+                "CompilerTelemetryOptions", nameof(WriteTelemetryToConsole), defaultValue: () => false);
+
         public bool IgnorePdbLoadError { get; set; }
 
         private bool disposed = false;
