@@ -279,7 +279,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal static void Reset()
         {
             s_sessionId = null;
-            s_printHeader = true;
             s_telemetryClient = null;
             s_telemetryConfiguration = null;
         }
