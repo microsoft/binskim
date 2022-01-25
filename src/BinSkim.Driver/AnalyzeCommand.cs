@@ -47,23 +47,15 @@ namespace Microsoft.CodeAnalysis.IL
                 ShouldWarnVerbose = false;
             }
 
+            bool writeTelemetryToConsole = BinaryAnalyzerContext.WriteTelemetryToConsole.DefaultValue();
+
             if (binaryAnalyzerContext.Policy != null)
             {
-                bool isRule4001Enabled = (binaryAnalyzerContext.Policy.TryGetValue("BA4001.ReportPECompilerData.Options", out object rule4001)
-                    && rule4001 is PropertiesDictionary property4001
-                    && property4001.TryGetValue("RuleEnabled", out object rule4001Value)
-                    && rule4001Value.ToString() == "Error");
-                bool isRule4002Enabled = (binaryAnalyzerContext.Policy.TryGetValue("BA4002.ReportDwarfCompilerData.Options", out object rule4002)
-                    && rule4002 is PropertiesDictionary property4002
-                    && property4002.TryGetValue("RuleEnabled", out object rule4002Value)
-                    && rule4002Value.ToString() == "Error");
-
-                if (isRule4001Enabled || isRule4002Enabled)
-                {
-                    binaryAnalyzerContext.CompilerDataLogger = new CompilerDataLogger(binaryAnalyzerContext,
-                                                                                      options.TargetFileSpecifiers);
-                }
+                writeTelemetryToConsole = binaryAnalyzerContext.Policy.GetProperty(BinaryAnalyzerContext.WriteTelemetryToConsole);
             }
+
+            binaryAnalyzerContext.CompilerDataLogger = new CompilerDataLogger(binaryAnalyzerContext,
+                                                                              options.TargetFileSpecifiers);
 
             return binaryAnalyzerContext;
         }
