@@ -20,19 +20,16 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private const string CommandLineEventName = "CommandLineInformation";
         private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
 
-        private string Sha256 => context?.Hashes?.Sha256;
-
+        private readonly string sha256;
         private readonly int chunkSize;
         private readonly string relativeFilePath;
-        private readonly IAnalysisContext context;
+        private readonly bool writeTelemetryToConsole;
 
         internal static string s_sessionId;
 
         private static TelemetryClient s_telemetryClient;
         private static TelemetryConfiguration s_telemetryConfiguration;
         private static readonly object s_syncRoot = new object();
-
-        private bool writeTelemetryToConsole;
 
         public static bool TelemetryEnabled => s_telemetryClient != null;
 
@@ -46,6 +43,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             s_telemetryClient ??= telemetryClient;
             s_sessionId ??= Guid.NewGuid().ToString();
             this.chunkSize = chunkSize;
+
+            this.sha256 = analysisContext?.Hashes?.Sha256;
 
             this.writeTelemetryToConsole = BinaryAnalyzerContext.WriteTelemetryToConsole.DefaultValue();
 
@@ -70,7 +69,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 }
             }
 
-            this.context = analysisContext;
             this.relativeFilePath = analysisContext?.TargetUri?.LocalPath ?? string.Empty;
 
             foreach (string path in targetFileSpecifiers)
@@ -163,7 +161,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "moduleName", compilerData.ModuleName ?? string.Empty },
                     { "moduleLibrary", (compilerData.ModuleName == compilerData.ModuleLibrary ? string.Empty : compilerData.ModuleLibrary ?? string.Empty) },
                     { "sessionId", s_sessionId },
-                    { "hash", this.Sha256 },
+                    { "hash", this.sha256 },
                     { "error", string.Empty }
                 };
 
@@ -194,7 +192,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else
             {
-                string log = $"{this.relativeFilePath},{compilerData},{this.Sha256},";
+                string log = $"{this.relativeFilePath},{compilerData},{this.sha256},";
                 Console.WriteLine(log);
             }
         }
@@ -219,13 +217,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { "moduleName", string.Empty },
                     { "moduleLibrary", string.Empty },
                     { "sessionId", s_sessionId },
-                    { "hash", this.Sha256 },
+                    { "hash", this.sha256 },
                     { "error", errorMessage },
                 });
             }
             else
             {
-                string log = $"{this.relativeFilePath},,,,,,,,,,,,,{this.Sha256},{errorMessage}";
+                string log = $"{this.relativeFilePath},,,,,,,,,,,,,{this.sha256},{errorMessage}";
                 Console.WriteLine(log);
             }
         }
