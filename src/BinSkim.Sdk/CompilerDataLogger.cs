@@ -32,6 +32,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private static TelemetryConfiguration s_telemetryConfiguration;
         private static readonly object s_syncRoot = new object();
 
+        private bool writeTelemetryToConsole;
+
         public static bool TelemetryEnabled => s_telemetryClient != null;
 
         public CompilerDataLogger(IAnalysisContext analysisContext,
@@ -44,6 +46,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             s_telemetryClient ??= telemetryClient;
             s_sessionId ??= Guid.NewGuid().ToString();
             this.chunkSize = chunkSize;
+
+            this.writeTelemetryToConsole = BinaryAnalyzerContext.WriteTelemetryToConsole.DefaultValue();
+
+            if (analysisContext?.Policy != null)
+            {
+                this.writeTelemetryToConsole = analysisContext.Policy.GetProperty(BinaryAnalyzerContext.WriteTelemetryToConsole);
+            }
 
             if (!TelemetryEnabled)
             {

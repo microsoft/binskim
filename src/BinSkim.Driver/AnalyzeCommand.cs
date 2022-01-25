@@ -47,13 +47,6 @@ namespace Microsoft.CodeAnalysis.IL
                 ShouldWarnVerbose = false;
             }
 
-            bool writeTelemetryToConsole = BinaryAnalyzerContext.WriteTelemetryToConsole.DefaultValue();
-
-            if (binaryAnalyzerContext.Policy != null)
-            {
-                writeTelemetryToConsole = binaryAnalyzerContext.Policy.GetProperty(BinaryAnalyzerContext.WriteTelemetryToConsole);
-            }
-
             binaryAnalyzerContext.CompilerDataLogger = new CompilerDataLogger(binaryAnalyzerContext,
                                                                               options.TargetFileSpecifiers);
 
