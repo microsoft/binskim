@@ -28,7 +28,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         internal static string s_sessionId;
 
-        private static bool s_printHeader = true;
         private static TelemetryClient s_telemetryClient;
         private static TelemetryConfiguration s_telemetryConfiguration;
         private static readonly object s_syncRoot = new object();
@@ -131,14 +130,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public void PrintHeader()
         {
-            if (!TelemetryEnabled)
-            {
-                if (s_printHeader)
-                {
-                    Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,File Version,Binary Type,Language,Debugging FileName,Debugging FileGuid,Command Line,Dialect,Module Name,Module Library,Hash,Error");
-                    s_printHeader = false;
-                }
-            }
+             Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,File Version,Binary Type,Language,Debugging FileName,Debugging FileGuid,Command Line,Dialect,Module Name,Module Library,Hash,Error");
         }
 
         public void Write(CompilerData compilerData)
