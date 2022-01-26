@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Security;
 using System.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         [ThreadStatic]
         internal static int s_chunkSize = 8192;
 
+        // Constant values sent to AppInsights telemetry stream.
         private const string SummaryEventName = "AnalysisSummary";
         private const string CompilerEventName = "CompilerInformation";
         private const string CommandLineEventName = "CommandLineInformation";
@@ -42,10 +44,14 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         // thread-safe.
         private readonly object syncRoot;
 
+        // Data for persisting telemetry to AppInsights and/or a CSV file.
         private StreamWriter writer;
         private readonly string sessionId;
         private TelemetryClient telemetryClient;
         private TelemetryConfiguration telemetryConfiguration;
+
+        // We currently generate telemetry 
+        private readonly string sarifOutputFilePath;
 
         public bool Enabled => this.telemetryClient != null || this.writer != null;
 
@@ -59,8 +65,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 "CompilerTelemetry", nameof(RootToElide), defaultValue: () => string.Empty,
                 "A non-deterministic file path root that should be elided from paths in telemetry, e.g., 'c:\\Users\\SomeUser\\'.");
 
-
-        public CompilerDataLogger(BinaryAnalyzerContext context)
+        public CompilerDataLogger(string sarifOutputFilePath, BinaryAnalyzerContext context)
         {
             this.syncRoot = new object();
             this.sessionId = Guid.NewGuid().ToString();
@@ -72,10 +77,23 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 InitializeTelemetryClientFromEnvironmentData();
             }
-
+           
             bool forceOverwrite = context.ForceOverwrite;
             string csvFilePath = context.Policy.GetProperty(CsvOutputPath);
             CreateCsvOutputFile(csvFilePath, forceOverwrite);
+
+            // If the user has configured compiler telemetry collection, then we require analysis results
+            // are persisted to a disk-based log file (to produce the telemetry 'summary' data persisted
+            // via WriteSummaryData below. Ideally, we wouldn't require this, i.e., why isn't it valid
+            // to simply run the tool with console reporting to collect telemetry? The gap here is that
+            // we haven't figured out how to collect/summarize all published data, but this is a 
+            // solvable problem.
+            if (Enabled && string.IsNullOrEmpty(sarifOutputFilePath))
+            {
+                throw new InvalidOperationException(
+                    "Analysis results must currently be persisted to a log file (using " +
+                    "the --output argument) to generate compiler telemetry data.");
+            }
         }
 
         private void CreateCsvOutputFile(string csvFilePath, bool overwriteExistingCsv)
@@ -308,12 +326,33 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
+        private void WriteSummaryData()
+        {
+            Debug.Assert(this.telemetryClient != null);
+
+            SarifLog sarifLog = SarifLog.Load(this.sarifOutputFilePath);
+
+            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog, 
+                                                                                      serializedFileSpecifiers: null,
+                                                                                      symbolPath: null);
+            Summarize(summary);
+
+            foreach (ExecutionException ex in AnalysisSummaryExtractor.ExtractExceptionData(sarifLog))
+            {
+                WriteException(ex, summary);
+            }
+        }
+
         public void Dispose()
         {
+            // Generate the last of our published telemetry data.
+            WriteSummaryData();
+
+            // Flush and close output to our csv file, if present.
             this.writer?.Dispose();
             this.writer = null;
 
-
+            // Flush and close AppInsights client.
             if (telemetryClient != null)
             {
                 this.telemetryClient.Flush();
@@ -324,7 +363,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 // https://github.com/microsoft/ApplicationInsights-dotnet/issues/407
                 Task.Delay(5000).Wait();
             }
-
             this.telemetryConfiguration?.Dispose();
             this.telemetryConfiguration = null;
         }

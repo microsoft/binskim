@@ -100,15 +100,15 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             PrepareEnvironmentVariables(new List<(string, string)>
             {
-                (AnalysisSummaryExtractor.BuildDefinitionIdVar, buildDefId),
-                (AnalysisSummaryExtractor.BuildDefinitionNameVar, buildDefName),
-                (AnalysisSummaryExtractor.BuildDefinitionRunIdVar, buildRunId),
-                (AnalysisSummaryExtractor.RepositoryIdVar, repositoryId),
-                (AnalysisSummaryExtractor.RepositoryNameVar, repositoryName),
-                (AnalysisSummaryExtractor.OrganizationIdVar, organizationId),
-                (AnalysisSummaryExtractor.OrganizationNameVar, organizationName),
-                (AnalysisSummaryExtractor.ProjectIdVar, projectId),
-                (AnalysisSummaryExtractor.ProjectNameVar, projectName),
+                (AnalysisSummaryExtractor.BuildDefinitionIdVariableName, buildDefId),
+                (AnalysisSummaryExtractor.BuildDefinitionNameVariableName, buildDefName),
+                (AnalysisSummaryExtractor.BuildDefinitionRunIdVariableName, buildRunId),
+                (AnalysisSummaryExtractor.RepositoryIdVariableName, repositoryId),
+                (AnalysisSummaryExtractor.RepositoryNameVariableName, repositoryName),
+                (AnalysisSummaryExtractor.OrganizationIdVariableName, organizationId),
+                (AnalysisSummaryExtractor.OrganizationNameVariableName, organizationName),
+                (AnalysisSummaryExtractor.ProjectIdVariableName, projectId),
+                (AnalysisSummaryExtractor.ProjectNameVariableName, projectName),
             });
             AnalysisSummaryExtractor.UpdateBuildPipelineInfo(summary);
 

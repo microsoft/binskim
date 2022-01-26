@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.IL
             // Command-line provided policy is now initialized. Update context 
             // based on any possible configuration provided in this way.
 
-            context.CompilerDataLogger = new CompilerDataLogger(context);
+            context.CompilerDataLogger = new CompilerDataLogger(options.OutputFilePath, context);
         }
 
         public override int Run(AnalyzeOptions analyzeOptions)
@@ -105,35 +105,6 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 Console.WriteLine(e);
             }
-            /*
-            try
-            {
-                if (CompilerDataLogger.TelemetryEnabled &&
-                    !string.IsNullOrEmpty(analyzeOptions.OutputFilePath) &&
-                    this.FileSystem.FileExists(analyzeOptions.OutputFilePath))
-                {
-                    SarifLog sarifLog = ReadSarifLog(this.FileSystem, analyzeOptions);
-
-                    AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(
-                        sarifLog, analyzeOptions);
-                    CompilerDataLogger.Summarize(summary);
-
-                    IEnumerable<ExecutionException> exceptions = AnalysisSummaryExtractor.ExtractExceptionData(sarifLog);
-                    foreach (ExecutionException ex in exceptions)
-                    {
-                        CompilerDataLogger.WriteException(ex, summary);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                CompilerDataLogger.Flush();
-            }
-            */
 
             // In BinSkim, no rule is ever applicable to every target type. For example,
             // we have checks that are only relevant to either 32-bit or 64-bit binaries.
@@ -143,24 +114,6 @@ namespace Microsoft.CodeAnalysis.IL
             return analyzeOptions.RichReturnCode
                 ? (int)((uint)result & ~(uint)RuntimeConditions.RuleNotApplicableToTarget)
                 : result;
-        }
-
-        internal static SarifLog ReadSarifLog(IFileSystem fileSystem, AnalyzeOptions analyzeOptions)
-        {
-            SarifLog sarifLog;
-            if (analyzeOptions.SarifOutputVersion == Sarif.SarifVersion.Current)
-            {
-                sarifLog = SarifLog.Load(analyzeOptions.OutputFilePath);
-            }
-            else
-            {
-                SarifLogVersionOne actualLog = ReadSarifFile<SarifLogVersionOne>(fileSystem, analyzeOptions.OutputFilePath, SarifContractResolverVersionOne.Instance);
-                var visitor = new SarifVersionOneToCurrentVisitor();
-                visitor.VisitSarifLogVersionOne(actualLog);
-                sarifLog = visitor.SarifLog;
-            }
-
-            return sarifLog;
         }
 
         internal static Sarif.SarifVersion s_UnitTestOutputVersion;
