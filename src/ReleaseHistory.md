@@ -1,5 +1,9 @@
 # BinSkim Release History
 
+## Unreleased
+
+* BUGFIX: Fix BA2014.DoNotDisableStackProtectionForFunctions to allow Gs initialization functions. [551](https://github.com/microsoft/binskim/pull/551)
+
 ## **v1.9.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.1)
 
 * BUGFIX: Fix incorrect analysis for non-Microsoft compiler on BA2006.BuildWithSecureTools. [545](https://github.com/microsoft/binskim/pull/545)
