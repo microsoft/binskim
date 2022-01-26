@@ -53,9 +53,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
-            Pdb di = target.Pdb;
+            Pdb pdb = target.Pdb;
 
-            bool noCode = !di.CreateGlobalFunctionIterator().Any() && !di.ContainsExecutableSectionContribs();
+            bool noCode = !pdb.CreateGlobalFunctionIterator().Any() && !pdb.ContainsExecutableSectionContribs();
 
             if (noCode)
             {
@@ -67,11 +67,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            bool bHasGSCheck = di.CreateGlobalFunctionIterator(
+            bool bHasGSCheck = pdb.CreateGlobalFunctionIterator(
                 StackProtectionUtilities.GSCheckFunctionName, NameSearchOptions.nsfCaseSensitive).Any();
 
             bool bHasGSInit = StackProtectionUtilities.GSInitializationFunctionNames.Any(
-                                functionName => di.CreateGlobalFunctionIterator(functionName,
+                                functionName => pdb.CreateGlobalFunctionIterator(functionName,
                                                                                 NameSearchOptions.nsfCaseSensitive).Any());
 
             if (!bHasGSCheck && !bHasGSInit)

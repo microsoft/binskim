@@ -69,17 +69,24 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public string MimeType
         {
-            get => Microsoft.CodeAnalysis.Sarif.Writers.MimeType.Binary;
+            get => Sarif.Writers.MimeType.Binary;
             set => throw new InvalidOperationException();
         }
 
         public RuntimeConditions RuntimeErrors { get; set; }
+
         public bool AnalysisComplete { get; set; }
+
         public DefaultTraces Traces { get; set; }
 
-        public CompilerDataLogger CompilerDataLogger { get; set; }
+        public CompilerDataLogger CompilerDataLogger 
+        { 
+            get { return this.Policy.GetProperty(SharedCompilerDataLoggerProperty); }
+            set { this.Policy.SetProperty(SharedCompilerDataLoggerProperty, value); }
+        }
 
         public bool IgnorePdbLoadError { get; set; }
+        public bool ForceOverwrite { get; set; }
 
         private bool disposed = false;
 
@@ -87,11 +94,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             if (!this.disposed && disposing)
             {
-                if (this.iBinary != null)
-                {
-                    this.iBinary.Dispose();
-                    this.iBinary = null;
-                }
+                this.iBinary?.Dispose();
+                this.iBinary = null;
+                
+                this.CompilerDataLogger?.Dispose();
+                this.CompilerDataLogger = null;
+
                 this.disposed = true;
             }
         }
@@ -101,5 +109,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
         }
+
+        public static PerLanguageOption<CompilerDataLogger> SharedCompilerDataLoggerProperty { get; } =
+            new PerLanguageOption<CompilerDataLogger>(
+                "CompilerTelemetry", nameof(SharedCompilerDataLoggerProperty), defaultValue: () => null,
+                "A shared CompilerDataLogger instance that will be passed to all skimmers.");
+
     }
 }

@@ -27,6 +27,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override string Id => RuleIds.EnableSecureSourceCodeHashing;
 
+        public override bool LogPdbLoadException => false;
+
         public override MultiformatMessageString FullDescription => new MultiformatMessageString
         { Text = RuleResources.BA2004_EnableSecureSourceCodeHashing_Description };
 
@@ -60,9 +62,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private void AnalyzeManagedAssemblyAndPdb(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
-            Pdb di = target.Pdb;
+            Pdb pdb = target.Pdb;
 
-            if (target.PE.ManagedPdbSourceFileChecksumAlgorithm(di.FileType, di) != ChecksumAlgorithmType.Sha256)
+            if (pdb == null)
+            {
+                return;
+            }
+
+            if (target.PE.ManagedPdbSourceFileChecksumAlgorithm(pdb.FileType, pdb) != ChecksumAlgorithmType.Sha256)
             {
                 // '{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm.
                 // SHA-1 is subject to collision attacks and its use can compromise supply chain integrity.
@@ -87,12 +94,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public void AnalyzeNativeBinaryAndPdb(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
-            Pdb di = target.Pdb;
+            Pdb pdb = target.Pdb;
 
             var compilandsBinaryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
             var compilandsLibraryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
 
-            foreach (DisposableEnumerableView<Symbol> omView in di.CreateObjectModuleIterator())
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
@@ -133,7 +140,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 CompilandRecord record = om.CreateCompilandRecord();
 
-                foreach (DisposableEnumerableView<SourceFile> sfView in di.CreateSourceFileIterator(om))
+                foreach (DisposableEnumerableView<SourceFile> sfView in pdb.CreateSourceFileIterator(om))
                 {
                     SourceFile sf = sfView.Value;
 

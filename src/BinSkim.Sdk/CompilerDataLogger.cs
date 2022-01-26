@@ -13,101 +13,115 @@ using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
-    public class CompilerDataLogger
+    /// <summary>
+    /// This class sends compiler data to AppInsights and/or persists the information
+    /// to a CSV file. This information is used to produce manifests of compiler 
+    /// versions and other data that are useful to verify the provenance of
+    /// code compiled into a project or service.
+    /// 
+    /// This code is intended to be thread-safe.
+    /// </summary>
+    public class CompilerDataLogger : IDisposable
     {
+        [ThreadStatic]
+        internal static TelemetryClient s_injectedTelemetryClient;
+
+        [ThreadStatic]
+        internal static TelemetryConfiguration s_injectedTelemetryConfiguration;
+
+        [ThreadStatic]
+        internal static int s_chunkSize = 8192;
+
         private const string SummaryEventName = "AnalysisSummary";
         private const string CompilerEventName = "CompilerInformation";
         private const string CommandLineEventName = "CommandLineInformation";
         private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
 
-        private string Sha256 => context?.Hashes?.Sha256;
+        // This object is required to synchronize multi-threaded writes
+        // to the CSV writer only. The AppInsights client is already
+        // thread-safe.
+        private readonly object syncRoot;
 
-        private readonly int chunkSize;
-        private readonly string relativeFilePath;
-        private readonly IAnalysisContext context;
+        private StreamWriter writer;
+        private readonly string sessionId;
+        private TelemetryClient telemetryClient;
+        private TelemetryConfiguration telemetryConfiguration;
 
-        internal static string s_sessionId;
+        public bool Enabled => this.telemetryClient != null || this.writer != null;
 
-        private static bool s_printHeader = true;
-        private static TelemetryClient s_telemetryClient;
-        private static TelemetryConfiguration s_telemetryConfiguration;
-        private static readonly object s_syncRoot = new object();
+        public static PerLanguageOption<string> CsvOutputPath { get; } =
+            new PerLanguageOption<string>(
+                "CompilerTelemetry", nameof(CsvOutputPath), defaultValue: () => string.Empty,
+                "An output path to which compiler data will be persisted as CSV, e.g., 'c:\\telemetry.csv'.");
 
-        public static bool TelemetryEnabled => s_telemetryClient != null;
+        public static PerLanguageOption<string> RootToElide { get; } =
+            new PerLanguageOption<string>(
+                "CompilerTelemetry", nameof(RootToElide), defaultValue: () => string.Empty,
+                "A non-deterministic file path root that should be elided from paths in telemetry, e.g., 'c:\\Users\\SomeUser\\'.");
 
-        public CompilerDataLogger(IAnalysisContext analysisContext,
-                                  IEnumerable<string> targetFileSpecifiers,
-                                  TelemetryConfiguration telemetryConfiguration = null,
-                                  TelemetryClient telemetryClient = null,
-                                  int chunkSize = 8192)
+
+        public CompilerDataLogger(BinaryAnalyzerContext context)
         {
-            s_telemetryConfiguration ??= telemetryConfiguration;
-            s_telemetryClient ??= telemetryClient;
-            s_sessionId ??= Guid.NewGuid().ToString();
-            this.chunkSize = chunkSize;
+            this.syncRoot = new object();
+            this.sessionId = Guid.NewGuid().ToString();
 
-            if (!TelemetryEnabled)
+            this.telemetryClient = s_injectedTelemetryClient ?? telemetryClient;
+            this.telemetryConfiguration = s_injectedTelemetryConfiguration ?? telemetryConfiguration;
+
+            if (this.telemetryClient == null)
             {
-                try
-                {
-                    string appInsightsKey = RetrieveAppInsightsKey();
-                    if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
-                    {
-                        Initialize(appInsightsKey);
-                    }
-                }
-                catch (SecurityException)
-                {
-                    // User does not have access to retrieve information from environment variables.
-                }
+                InitializeTelemetryClientFromEnvironmentData();
             }
 
-            this.context = analysisContext;
-            this.relativeFilePath = analysisContext?.TargetUri?.LocalPath ?? string.Empty;
+            bool forceOverwrite = context.ForceOverwrite;
+            string csvFilePath = context.Policy.GetProperty(CsvOutputPath);
+            CreateCsvOutputFile(csvFilePath, forceOverwrite);
+        }
 
-            foreach (string path in targetFileSpecifiers)
+        private void CreateCsvOutputFile(string csvFilePath, bool overwriteExistingCsv)
+        {
+            if (string.IsNullOrWhiteSpace(csvFilePath))
             {
-                // We must get directory name because there are cases where the targetFilePath is
-                // c:\path\*.dll
-                string directoryName = Path.GetDirectoryName(path);
-                if (!string.IsNullOrEmpty(directoryName))
+                return;
+            }
+
+            if (File.Exists(csvFilePath))
+            {
+                if (!overwriteExistingCsv)
                 {
-                    this.relativeFilePath = this.relativeFilePath.Replace(directoryName, string.Empty);
+                    throw new InvalidOperationException($"Output file exists and force overwrite was not specified: {csvFilePath}");
                 }
+                File.Delete(csvFilePath);
+            }
+
+            this.writer = new StreamWriter(new FileStream(csvFilePath, FileMode.OpenOrCreate));
+            PrintHeader();
+        }
+
+        private void InitializeTelemetryClientFromEnvironmentData()
+        {
+            string appInsightsKey = RetrieveAppInsightsKeyFromEnvironment();
+            if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
+            {
+                this.telemetryConfiguration = new TelemetryConfiguration(appInsightsKey);
+                this.telemetryClient = new TelemetryClient(this.telemetryConfiguration);
             }
         }
 
-        public static void Initialize(string instrumentationKey)
+        public static string RetrieveAppInsightsKeyFromEnvironment()
         {
-            if (s_telemetryConfiguration == null && s_telemetryClient == null)
-            {
-                lock (s_syncRoot)
-                {
-                    if (s_telemetryConfiguration == null && s_telemetryClient == null)
-                    {
-                        s_sessionId = Guid.NewGuid().ToString();
-                        s_telemetryConfiguration = new TelemetryConfiguration(instrumentationKey);
-                        s_telemetryClient = new TelemetryClient(s_telemetryConfiguration);
-                    }
-                }
-            }
-        }
-
-        public static string RetrieveAppInsightsKey()
-        {
-            string appInsightsKey = string.Empty;
+            string appInsightsKey = null;
 
             try
             {
-                appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey");
-                if (string.IsNullOrEmpty(appInsightsKey))
-                {
-                    appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.User);
-                    if (string.IsNullOrEmpty(appInsightsKey))
-                    {
-                        appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.Machine);
-                    }
-                }
+                appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.Process);
+                if (!string.IsNullOrEmpty(appInsightsKey)) { return appInsightsKey; }
+
+                appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.User);
+                if (!string.IsNullOrEmpty(appInsightsKey)) { return appInsightsKey; }
+
+                appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.Machine);
+                if (!string.IsNullOrEmpty(appInsightsKey)) { return appInsightsKey; }
             }
             catch (SecurityException)
             {
@@ -117,200 +131,202 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             return appInsightsKey;
         }
 
-        public static void Flush()
+        private void PrintHeader()
         {
-            if (TelemetryEnabled)
-            {
-                s_telemetryClient.Flush();
+            string header = "" +
+                "Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version," +
+                "File Version,Binary Type,Language,Debugging FileName,Debugging FileGuid," +
+                "Command Line,Dialect,Module Name,Module Library,Hash,Error";
 
-                // flush is not blocking when not using InMemoryChannel so wait a bit. There is an active issue regarding the need for `Sleep`/`Delay`
-                // which is tracked here: https://github.com/microsoft/ApplicationInsights-dotnet/issues/407
-                Task.Delay(5000).Wait();
+            WriteToCsv(header);
+        }
+
+        private void WriteToCsv(string line)
+        {
+            if (this.writer == null ) { return; }
+
+            lock (this.syncRoot)
+            {
+                this.writer.WriteLine(line);
             }
         }
 
-        public void PrintHeader()
+        public void Write(BinaryAnalyzerContext context, CompilerData compilerData)
         {
-            if (!TelemetryEnabled)
+            string fileHash = context.Hashes?.Sha256;
+            string filePath = context.TargetUri?.LocalPath;
+
+            WriteToCsv($"{filePath},{compilerData},{fileHash},");
+
+            if (this.telemetryClient == null)
             {
-                if (s_printHeader)
-                {
-                    Console.WriteLine("Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version,File Version,Binary Type,Language,Debugging FileName,Debugging FileGuid,Command Line,Dialect,Module Name,Module Library,Hash,Error");
-                    s_printHeader = false;
-                }
+                return;
             }
+
+            string commandLineId = string.Empty;
+            string assemblyReferencesId = string.Empty;
+            var properties = new Dictionary<string, string>
+            {
+                { "target", context.TargetUri?.LocalPath },
+                { "compilerName", compilerData.CompilerName },
+                { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
+                { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
+                { "fileVersion", compilerData.FileVersion ?? string.Empty },
+                { "binaryType", compilerData.BinaryType },
+                { "language", compilerData.Language },
+                { "debuggingFileName", compilerData.DebuggingFileName ?? string.Empty },
+                { "debuggingGuid", compilerData.DebuggingFileGuid ?? string.Empty },
+                { "dialect", compilerData.Dialect },
+                { "moduleName", compilerData.ModuleName ?? string.Empty },
+                { "moduleLibrary", (compilerData.ModuleName == compilerData.ModuleLibrary ? string.Empty : compilerData.ModuleLibrary ?? string.Empty) },
+                { "sessionId", this.sessionId },
+                { "hash", context.Hashes?.Sha256 },
+                { "error", string.Empty }
+            };
+
+
+            this.telemetryClient.TrackEvent(CompilerEventName, properties: properties);
+
+            if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
+            {
+                commandLineId = Guid.NewGuid().ToString();
+                properties.Add("commandLineId", commandLineId);
+
+                SendChunkedContent(CommandLineEventName,
+                                   commandLineId, 
+                                   "commandLine", 
+                                   compilerData.CommandLine);
+            }
+
+            if (!string.IsNullOrWhiteSpace(compilerData.AssemblyReferences))
+            {
+                assemblyReferencesId = Guid.NewGuid().ToString();
+                properties.Add("assemblyReferencesId", assemblyReferencesId);
+
+                SendChunkedContent(AssemblyReferencesEventName,
+                                   assemblyReferencesId,
+                                   "assemblyReferences",
+                                   compilerData.AssemblyReferences);
+            }
+        }            
+
+        public void WriteException(BinaryAnalyzerContext context, string errorMessage)
+        {
+            string fileHash = context.Hashes?.Sha256;
+            string filePath = context.TargetUri?.LocalPath;
+
+            WriteToCsv($"{filePath},,,,,,,,,,,,,{fileHash},{errorMessage}");
+
+            if (this.telemetryClient == null)
+            {
+                return;
+            }
+
+            this.telemetryClient?.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
+            {
+                { "target", filePath },
+                { "compilerName", string.Empty },
+                { "commandLine", string.Empty },
+                { "compilerBackEndVersion", string.Empty },
+                { "compilerFrontEndVersion", string.Empty },
+                { "fileVersion", string.Empty },
+                { "binaryType", string.Empty },
+                { "language", string.Empty },
+                { "debuggingFileName", string.Empty },
+                { "debuggingGuid", string.Empty },
+                { "dialect", string.Empty },
+                { "moduleName", string.Empty },
+                { "moduleLibrary", string.Empty },
+                { "sessionId", this.sessionId },
+                { "hash", fileHash },
+                { "error", errorMessage },
+            });
         }
 
-        public void Write(CompilerData compilerData)
+        public void WriteException(ExecutionException exception, AnalysisSummary summary)
         {
-            if (TelemetryEnabled)
+            this.writer?.WriteLine(exception.ToString());
+
+            if (this.telemetryClient != null)
             {
-                string commandLineId = string.Empty;
-                string assemblyReferencesId = string.Empty;
-                var properties = new Dictionary<string, string>
-                {
-                    { "target", this.relativeFilePath },
-                    { "compilerName", compilerData.CompilerName },
-                    { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
-                    { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
-                    { "fileVersion", compilerData.FileVersion ?? string.Empty },
-                    { "binaryType", compilerData.BinaryType },
-                    { "language", compilerData.Language },
-                    { "debuggingFileName", compilerData.DebuggingFileName ?? string.Empty },
-                    { "debuggingGuid", compilerData.DebuggingFileGuid ?? string.Empty },
-                    { "dialect", compilerData.Dialect },
-                    { "moduleName", compilerData.ModuleName ?? string.Empty },
-                    { "moduleLibrary", (compilerData.ModuleName == compilerData.ModuleLibrary ? string.Empty : compilerData.ModuleLibrary ?? string.Empty) },
-                    { "sessionId", s_sessionId },
-                    { "hash", this.Sha256 },
-                    { "error", string.Empty }
-                };
-
-                if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
-                {
-                    commandLineId = Guid.NewGuid().ToString();
-                    properties.Add("commandLineId", commandLineId);
-                }
-
-                if (!string.IsNullOrWhiteSpace(compilerData.AssemblyReferences))
-                {
-                    assemblyReferencesId = Guid.NewGuid().ToString();
-                    properties.Add("assemblyReferencesId", assemblyReferencesId);
-                }
-
-                s_telemetryClient.TrackEvent(CompilerEventName, properties: properties);
-
-                // send big size content in chunked pieces
-                if (!string.IsNullOrWhiteSpace(commandLineId))
-                {
-                    SendChunkedContent(CommandLineEventName, commandLineId, "commandLine", compilerData.CommandLine);
-                }
-
-                if (!string.IsNullOrWhiteSpace(assemblyReferencesId))
-                {
-                    SendChunkedContent(AssemblyReferencesEventName, assemblyReferencesId, "assemblyReferences", compilerData.AssemblyReferences);
-                }
-            }
-            else
-            {
-                string log = $"{this.relativeFilePath},{compilerData},{this.Sha256},";
-                Console.WriteLine(log);
-            }
-        }
-
-        public void WriteException(string errorMessage)
-        {
-            if (TelemetryEnabled)
-            {
-                s_telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
-                {
-                    { "target", this.relativeFilePath },
-                    { "compilerName", string.Empty },
-                    { "commandLine", string.Empty },
-                    { "compilerBackEndVersion", string.Empty },
-                    { "compilerFrontEndVersion", string.Empty },
-                    { "fileVersion", string.Empty },
-                    { "binaryType", string.Empty },
-                    { "language", string.Empty },
-                    { "debuggingFileName", string.Empty },
-                    { "debuggingGuid", string.Empty },
-                    { "dialect", string.Empty },
-                    { "moduleName", string.Empty },
-                    { "moduleLibrary", string.Empty },
-                    { "sessionId", s_sessionId },
-                    { "hash", this.Sha256 },
-                    { "error", errorMessage },
-                });
-            }
-            else
-            {
-                string log = $"{this.relativeFilePath},,,,,,,,,,,,,{this.Sha256},{errorMessage}";
-                Console.WriteLine(log);
-            }
-        }
-
-        public static void WriteException(ExecutionException exception, AnalysisSummary summary)
-        {
-            if (TelemetryEnabled)
-            {
-                s_telemetryClient.TrackException(exception, new Dictionary<string, string>
+                this.telemetryClient.TrackException(exception, new Dictionary<string, string>
                 {
                     { "toolName", summary.ToolName },
                     { "toolVersion", summary.ToolVersion },
-                    { "sessionId", s_sessionId },
+                    { "sessionId", this.sessionId },
                 });
-            }
-            else
-            {
-                Console.WriteLine(exception.ToString());
             }
         }
 
-        public static void Summarize(AnalysisSummary summary)
+        public void Summarize(AnalysisSummary summary)
         {
-            if (TelemetryEnabled)
-            {
-                s_telemetryClient.TrackEvent(SummaryEventName, properties: new Dictionary<string, string>
-                {
-                    { "toolName", summary.ToolName },
-                    { "toolVersion", summary.ToolVersion },
-                    { "sessionId", s_sessionId },
-                    { "normalizedPath", summary.NormalizedPath },
-                    { "symbolPath", summary.SymbolPath },
-                    { "numberOfBinaryAnalyzed", summary.FileAnalyzed.ToString() },
-                    { "analysisStartTime", summary.StartTimeUtc.ToString() },
-                    { "analysisEndTime", summary.EndTimeUtc.ToString() },
-                    { "timeConsumed", summary.TimeConsumed.ToString() },
-                    { "buildDefinitionId", summary.BuildDefinitionId },
-                    { "buildDefinitionName", summary.BuildDefinitionName },
-                    { "buildRunId", summary.BuildRunId },
-                    { "repositoryId", summary.RepositoryId },
-                    { "repositoryName", summary.RepositoryName },
-                    { "organizationId", summary.OrganizationId },
-                    { "organizationName", summary.OrganizationName },
-                    { "projectId", summary.ProjectId },
-                    { "projectName", summary.ProjectName },
-                });
-            }
-            else
-            {
-                Console.WriteLine(summary);
-            }
-        }
+            WriteToCsv(summary.ToString());
 
-        /// <summary>
-        /// This method will clean all static variables.
-        /// </summary>
-        /// <remarks>
-        /// This method should only be used for testing purpose.
-        /// </remarks>
-        internal static void Reset()
-        {
-            s_sessionId = null;
-            s_printHeader = true;
-            s_telemetryClient = null;
-            s_telemetryConfiguration = null;
+            if (this.telemetryClient == null)
+            {
+                return;
+            }
+
+            this.telemetryClient.TrackEvent(SummaryEventName, properties: new Dictionary<string, string>
+            {
+                { "toolName", summary.ToolName },
+                { "toolVersion", summary.ToolVersion },
+                { "sessionId", this.sessionId },
+                { "normalizedPath", summary.NormalizedPath },
+                { "symbolPath", summary.SymbolPath },
+                { "numberOfBinaryAnalyzed", summary.FileAnalyzed.ToString() },
+                { "analysisStartTime", summary.StartTimeUtc.ToString() },
+                { "analysisEndTime", summary.EndTimeUtc.ToString() },
+                { "timeConsumed", summary.TimeConsumed.ToString() },
+                { "buildDefinitionId", summary.BuildDefinitionId },
+                { "buildDefinitionName", summary.BuildDefinitionName },
+                { "buildRunId", summary.BuildRunId },
+                { "repositoryId", summary.RepositoryId },
+                { "repositoryName", summary.RepositoryName },
+                { "organizationId", summary.OrganizationId },
+                { "organizationName", summary.OrganizationName },
+                { "projectId", summary.ProjectId },
+                { "projectName", summary.ProjectName },
+            });
         }
 
         private void SendChunkedContent(string eventName, string contentId, string contentName, string content)
         {
-            int j = 1;
-            int size = (int)Math.Ceiling(1.0 * content.Length / this.chunkSize);
-            for (int i = 0; i < content.Length; i += this.chunkSize)
+            int size = (int)Math.Ceiling(1.0 * content.Length / s_chunkSize);
+            for (int i = 0; i < content.Length; i += s_chunkSize)
             {
-                string chunckedContent = content.Substring(i, Math.Min(this.chunkSize, content.Length - i));
+                string chunkedContent = content.Substring(i, Math.Min(s_chunkSize, content.Length - i));
 
-                s_telemetryClient.TrackEvent(eventName, properties: new Dictionary<string, string>
+                this.telemetryClient.TrackEvent(eventName, properties: new Dictionary<string, string>
                 {
-                    { "sessionId", s_sessionId },
+                    { "sessionId", this.sessionId },
                     { $"{contentName}Id", contentId },
-                    { "orderNumber", j.ToString() },
+                    { "orderNumber", (i + 1).ToString() },
                     { "totalNumber", size.ToString() },
-                    { $"chunked{contentName}", chunckedContent },
+                    { $"chunked{contentName}", chunkedContent },
                 });
-
-                j++;
             }
+        }
+
+        public void Dispose()
+        {
+            this.writer?.Dispose();
+            this.writer = null;
+
+
+            if (telemetryClient != null)
+            {
+                this.telemetryClient.Flush();
+
+                // Flush is not blocking when not using InMemoryChannel so wait a bit.
+                // There is an active issue regarding the need for `Sleep`/`Delay`
+                // which is tracked here:
+                // https://github.com/microsoft/ApplicationInsights-dotnet/issues/407
+                Task.Delay(5000).Wait();
+            }
+
+            this.telemetryConfiguration?.Dispose();
+            this.telemetryConfiguration = null;
         }
     }
 }
