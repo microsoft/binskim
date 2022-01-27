@@ -60,52 +60,32 @@ namespace Microsoft.CodeAnalysis.IL
             // https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml
             if (summary != null)
             {
-                summary.ProjectId = RetrieveValue(ProjectIdVariableName);
-                summary.ProjectName = RetrieveValue(ProjectNameVariableName);
+                summary.ProjectId = CompilerDataLogger.RetrieveEnvironmentVariable(ProjectIdVariableName);
+                summary.ProjectName = CompilerDataLogger.RetrieveEnvironmentVariable(ProjectNameVariableName);
 
-                summary.RepositoryId = RetrieveValue(RepositoryIdVariableName);
-                summary.RepositoryName = RetrieveValue(RepositoryNameVariableName);
+                summary.RepositoryId = CompilerDataLogger.RetrieveEnvironmentVariable(RepositoryIdVariableName);
+                summary.RepositoryName = CompilerDataLogger.RetrieveEnvironmentVariable(RepositoryNameVariableName);
 
-                summary.BuildRunId = RetrieveValue(BuildDefinitionRunIdVariableName);
-                summary.BuildDefinitionId = RetrieveValue(BuildDefinitionIdVariableName);
-                summary.BuildDefinitionName = RetrieveValue(BuildDefinitionNameVariableName);
-
-
-                string organizationName = summary.OrganizationName.Replace("https://dev.azure.com/",
-                                                                           string.Empty,
-                                                                           StringComparison.OrdinalIgnoreCase);
-                organizationName = organizationName.TrimEnd('/');
-
-                summary.OrganizationName = organizationName;
-                summary.OrganizationId = RetrieveValue(OrganizationIdVariableName);
-                summary.OrganizationName = RetrieveValue(OrganizationNameVariableName);
+                summary.BuildRunId = CompilerDataLogger.RetrieveEnvironmentVariable(BuildDefinitionRunIdVariableName);
+                summary.BuildDefinitionId = CompilerDataLogger.RetrieveEnvironmentVariable(BuildDefinitionIdVariableName);
+                summary.BuildDefinitionName = CompilerDataLogger.RetrieveEnvironmentVariable(BuildDefinitionNameVariableName);
+                
+                summary.OrganizationName = RetrieveOrganizationName();
+                summary.OrganizationId = CompilerDataLogger.RetrieveEnvironmentVariable(OrganizationIdVariableName);
             }
         }
 
-        public static string RetrieveValue(string environmentVariable)
+        private static string RetrieveOrganizationName()
         {
-            string value = null;
+            string organizationName = CompilerDataLogger.RetrieveEnvironmentVariable(OrganizationNameVariableName);
 
-            try
-            {
-                value = Environment.GetEnvironmentVariable(environmentVariable);
-                if (string.IsNullOrEmpty(value))
-                {
-                    value = Environment.GetEnvironmentVariable(environmentVariable, EnvironmentVariableTarget.User);
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        value = Environment.GetEnvironmentVariable(environmentVariable, EnvironmentVariableTarget.Machine);
-                    }
-                }
-            }
-            catch (SecurityException)
-            {
-                // User does not have access to retrieve information from environment variables.
-            }
+            organizationName = organizationName.Replace("https://dev.azure.com/",
+                                                        string.Empty,
+                                                        StringComparison.OrdinalIgnoreCase);
 
-            return value ?? string.Empty;
+            return organizationName.TrimEnd('/');
         }
-
+        
         public static IEnumerable<ExecutionException> ExtractExceptionData(SarifLog sarifLog)
         {
             IList<Sarif.Notification> notifications = sarifLog?.Runs?[0]?.Invocations?[0]?.ToolExecutionNotifications;
@@ -114,7 +94,7 @@ namespace Microsoft.CodeAnalysis.IL
                 yield break;
             }
 
-            foreach (Sarif.Notification notification in notifications)
+            foreach (Notification notification in notifications)
             {
                 if (notification.Exception != null)
                 {

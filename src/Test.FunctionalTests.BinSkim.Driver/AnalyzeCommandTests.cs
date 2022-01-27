@@ -9,6 +9,7 @@ using FluentAssertions;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL;
+using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif.Readers;
@@ -74,6 +75,15 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             options.ComputeFileHashes = true;
             command.Run(options);
             options.DataToInsert.Should().Contain(OptionallyEmittedData.Hashes);
+        }
+
+        [Fact]
+        public void AnalyzeCommand_RootContextShouldBeDisposed()
+        {
+            var options = new AnalyzeOptions();
+            var command = new MultithreadedAnalyzeCommand();
+            command.Run(options);
+            command._rootContext.disposed.Should().BeTrue();
         }
 
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, AnalyzeOptions analyzeOptions)

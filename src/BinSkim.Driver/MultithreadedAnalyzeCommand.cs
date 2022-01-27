@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -10,9 +11,6 @@ using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif.Readers;
-using Microsoft.CodeAnalysis.Sarif.VersionOne;
-using Microsoft.CodeAnalysis.Sarif.Visitors;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -59,7 +57,21 @@ namespace Microsoft.CodeAnalysis.IL
             // Command-line provided policy is now initialized. Update context 
             // based on any possible configuration provided in this way.
 
-            context.CompilerDataLogger = new CompilerDataLogger(options.OutputFilePath, context);
+            context.CompilerDataLogger = new CompilerDataLogger(options.OutputFilePath, context, this.FileSystem);
+
+            // If the user has hard-coded a non-deterministic file path root to elide from telemetry,
+            // we will honor that. If it has not been specified, and if all file target specifiers
+            // point to a common directory, then we will use that directory as the path to elide.
+            if (string.IsNullOrEmpty(context.CompilerDataLogger.RootPathToElide))
+            {
+                var fileSpecifierDirectories = new HashSet<string>(options.TargetFileSpecifiers.Select(s => Path.GetDirectoryName(Path.GetFullPath(s)) + @"\"),
+                                                                  StringComparer.OrdinalIgnoreCase);
+
+                if (fileSpecifierDirectories.Count == 1)
+                {
+                    context.CompilerDataLogger.RootPathToElide = fileSpecifierDirectories.First();
+                }
+            }
         }
 
         public override int Run(AnalyzeOptions analyzeOptions)

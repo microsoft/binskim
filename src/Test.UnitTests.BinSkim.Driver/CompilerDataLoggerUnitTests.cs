@@ -86,7 +86,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             ValidateTelemetry(setup.Item3, shouldExist: true);
         }
     */
-        private List<ITelemetry> TestSetup(BinaryAnalyzerContext context, out CompilerDataLogger logger)
+        private List<ITelemetry> TestSetup(string sarifLogFilePath, BinaryAnalyzerContext context, out CompilerDataLogger logger)
         {
             List<ITelemetry> sendItems = null;
             TelemetryClient telemetryClient;
@@ -104,7 +104,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             CompilerDataLogger.s_injectedTelemetryClient = telemetryClient;
             CompilerDataLogger.s_injectedTelemetryConfiguration = telemetryConfiguration;
 
-            logger = new CompilerDataLogger(context ?? new BinaryAnalyzerContext());
+            logger = new CompilerDataLogger(sarifLogFilePath, context ?? new BinaryAnalyzerContext());
 
             return sendItems;
         }
@@ -120,15 +120,12 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                         if (shouldExist)
                         {
                             hash.Should().NotBeNullOrWhiteSpace();
+                            continue;
                         }
-                        else
-                        {
-                            hash.Should().BeNullOrWhiteSpace();
-                        }
+                        hash.Should().BeNullOrWhiteSpace();
                     }
                 }
             }
-            telemetries.Clear();
         }
     }
 }

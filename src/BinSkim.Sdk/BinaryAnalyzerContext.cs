@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public bool IgnorePdbLoadError { get; set; }
         public bool ForceOverwrite { get; set; }
 
-        private bool disposed = false;
+        internal bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
         {
@@ -97,9 +97,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 this.iBinary?.Dispose();
                 this.iBinary = null;
                 
-                this.CompilerDataLogger?.Dispose();
-                this.CompilerDataLogger = null;
-
+                if (this.CompilerDataLogger.OwningContextHashCode == this.GetHashCode())
+                {
+                    this.CompilerDataLogger.Dispose();
+                }
+                
                 this.disposed = true;
             }
         }

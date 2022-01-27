@@ -50,25 +50,44 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private TelemetryClient telemetryClient;
         private TelemetryConfiguration telemetryConfiguration;
 
-        // We currently generate telemetry 
+        // We currently generate telemetry (such as exceptions that occurred during
+        // analysis) that is extracted from the SARIF log file. We currently therefore
+        // require that the scan is configured to produce a disk-based report.
         private readonly string sarifOutputFilePath;
+        private readonly IFileSystem fileSystem;
+        private readonly string symbolPath;
 
         public bool Enabled => this.telemetryClient != null || this.writer != null;
+
+        public string RootPathToElide { get; set; }
+
+        // We retain the hash-code of the context that was used to initialize this
+        // instance. This data is subsequently used to determine what analysis
+        // context has the right to dispose of this instance (which is a shared
+        // object across many analysis contexts). This ownership mechanism depends
+        // on the context GetHashCode() value remaining stable during analysis.
+        public int OwningContextHashCode { get; internal set; }
 
         public static PerLanguageOption<string> CsvOutputPath { get; } =
             new PerLanguageOption<string>(
                 "CompilerTelemetry", nameof(CsvOutputPath), defaultValue: () => string.Empty,
                 "An output path to which compiler data will be persisted as CSV, e.g., 'c:\\telemetry.csv'.");
 
-        public static PerLanguageOption<string> RootToElide { get; } =
+        public static PerLanguageOption<string> RootPathToElideProperty { get; } =
             new PerLanguageOption<string>(
-                "CompilerTelemetry", nameof(RootToElide), defaultValue: () => string.Empty,
+                "CompilerTelemetry", nameof(RootPathToElide), defaultValue: () => string.Empty,
                 "A non-deterministic file path root that should be elided from paths in telemetry, e.g., 'c:\\Users\\SomeUser\\'.");
 
-        public CompilerDataLogger(string sarifOutputFilePath, BinaryAnalyzerContext context)
+        public CompilerDataLogger(string sarifOutputFilePath, BinaryAnalyzerContext context, IFileSystem fileSystem = null)
         {
             this.syncRoot = new object();
             this.sessionId = Guid.NewGuid().ToString();
+            this.fileSystem = fileSystem ?? new FileSystem();
+
+            this.sarifOutputFilePath = sarifOutputFilePath;
+            this.RootPathToElide = context.Policy.GetProperty(RootPathToElideProperty);
+            this.OwningContextHashCode = context.GetHashCode();
+            this.symbolPath = context.SymbolPath;
 
             this.telemetryClient = s_injectedTelemetryClient ?? telemetryClient;
             this.telemetryConfiguration = s_injectedTelemetryConfiguration ?? telemetryConfiguration;
@@ -128,25 +147,33 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public static string RetrieveAppInsightsKeyFromEnvironment()
         {
-            string appInsightsKey = null;
+            return RetrieveEnvironmentVariable("BinskimCompilerDataAppInsightsKey");
+        }
 
+        public static string RetrieveEnvironmentVariable(string name)
+        {
             try
             {
-                appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.Process);
-                if (!string.IsNullOrEmpty(appInsightsKey)) { return appInsightsKey; }
+                var targets = new EnvironmentVariableTarget[]
+                {
+                    EnvironmentVariableTarget.Process,
+                    EnvironmentVariableTarget.User,
+                    EnvironmentVariableTarget.Machine
+                };
+                
+                foreach (EnvironmentVariableTarget target in targets) 
+                {
+                    string value = Environment.GetEnvironmentVariable(name, target);
+                    if (!string.IsNullOrEmpty(value)) { return value; }
 
-                appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.User);
-                if (!string.IsNullOrEmpty(appInsightsKey)) { return appInsightsKey; }
-
-                appInsightsKey = Environment.GetEnvironmentVariable("BinskimAppInsightsKey", EnvironmentVariableTarget.Machine);
-                if (!string.IsNullOrEmpty(appInsightsKey)) { return appInsightsKey; }
+                }
             }
             catch (SecurityException)
             {
                 // User does not have access to retrieve information from environment variables.
             }
 
-            return appInsightsKey;
+            return string.Empty;
         }
 
         private void PrintHeader()
@@ -172,7 +199,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public void Write(BinaryAnalyzerContext context, CompilerData compilerData)
         {
             string fileHash = context.Hashes?.Sha256;
-            string filePath = context.TargetUri?.LocalPath;
+            string filePath = context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty);
 
             WriteToCsv($"{filePath},{compilerData},{fileHash},");
 
@@ -181,11 +208,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 return;
             }
 
-            string commandLineId = string.Empty;
-            string assemblyReferencesId = string.Empty;
             var properties = new Dictionary<string, string>
             {
-                { "target", context.TargetUri?.LocalPath },
+                { "target", filePath },
                 { "compilerName", compilerData.CompilerName },
                 { "compilerBackEndVersion", compilerData.CompilerBackEndVersion },
                 { "compilerFrontEndVersion", compilerData.CompilerFrontEndVersion },
@@ -202,12 +227,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "error", string.Empty }
             };
 
-
             this.telemetryClient.TrackEvent(CompilerEventName, properties: properties);
 
             if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
             {
-                commandLineId = Guid.NewGuid().ToString();
+                string commandLineId = Guid.NewGuid().ToString();
                 properties.Add("commandLineId", commandLineId);
 
                 SendChunkedContent(CommandLineEventName,
@@ -218,7 +242,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
             if (!string.IsNullOrWhiteSpace(compilerData.AssemblyReferences))
             {
-                assemblyReferencesId = Guid.NewGuid().ToString();
+                string assemblyReferencesId = Guid.NewGuid().ToString();
                 properties.Add("assemblyReferencesId", assemblyReferencesId);
 
                 SendChunkedContent(AssemblyReferencesEventName,
@@ -231,7 +255,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public void WriteException(BinaryAnalyzerContext context, string errorMessage)
         {
             string fileHash = context.Hashes?.Sha256;
-            string filePath = context.TargetUri?.LocalPath;
+            string filePath = context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty);
 
             WriteToCsv($"{filePath},,,,,,,,,,,,,{fileHash},{errorMessage}");
 
@@ -328,13 +352,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         private void WriteSummaryData()
         {
-            Debug.Assert(this.telemetryClient != null);
+            Debug.Assert(Enabled);
 
             SarifLog sarifLog = SarifLog.Load(this.sarifOutputFilePath);
-
             AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog, 
-                                                                                      serializedFileSpecifiers: null,
-                                                                                      symbolPath: null);
+                                                                                      RootPathToElide,
+                                                                                      this.symbolPath);
             Summarize(summary);
 
             foreach (ExecutionException ex in AnalysisSummaryExtractor.ExtractExceptionData(sarifLog))
@@ -345,6 +368,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public void Dispose()
         {
+            if (!Enabled)
+            {
+                return;
+            }
+
             // Generate the last of our published telemetry data.
             WriteSummaryData();
 
