@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 InitializeTelemetryClientFromEnvironmentData();
             }
-           
+
             bool forceOverwrite = context.ForceOverwrite;
             string csvFilePath = context.Policy.GetProperty(CsvOutputPath);
             CreateCsvOutputFile(csvFilePath, forceOverwrite);
@@ -160,8 +160,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     EnvironmentVariableTarget.User,
                     EnvironmentVariableTarget.Machine
                 };
-                
-                foreach (EnvironmentVariableTarget target in targets) 
+
+                foreach (EnvironmentVariableTarget target in targets)
                 {
                     string value = Environment.GetEnvironmentVariable(name, target);
                     if (!string.IsNullOrEmpty(value)) { return value; }
@@ -188,7 +188,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         private void WriteToCsv(string line)
         {
-            if (this.writer == null ) { return; }
+            if (this.writer == null) { return; }
 
             lock (this.syncRoot)
             {
@@ -235,8 +235,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 properties.Add("commandLineId", commandLineId);
 
                 SendChunkedContent(CommandLineEventName,
-                                   commandLineId, 
-                                   "commandLine", 
+                                   commandLineId,
+                                   "commandLine",
                                    compilerData.CommandLine);
             }
 
@@ -250,7 +250,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                                    "assemblyReferences",
                                    compilerData.AssemblyReferences);
             }
-        }            
+        }
 
         public void WriteException(BinaryAnalyzerContext context, string errorMessage)
         {
@@ -355,7 +355,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             Debug.Assert(Enabled);
 
             SarifLog sarifLog = SarifLog.Load(this.sarifOutputFilePath);
-            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog, 
+            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog,
                                                                                       RootPathToElide,
                                                                                       this.symbolPath);
             Summarize(summary);

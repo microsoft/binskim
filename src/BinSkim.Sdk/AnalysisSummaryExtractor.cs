@@ -69,7 +69,7 @@ namespace Microsoft.CodeAnalysis.IL
                 summary.BuildRunId = CompilerDataLogger.RetrieveEnvironmentVariable(BuildDefinitionRunIdVariableName);
                 summary.BuildDefinitionId = CompilerDataLogger.RetrieveEnvironmentVariable(BuildDefinitionIdVariableName);
                 summary.BuildDefinitionName = CompilerDataLogger.RetrieveEnvironmentVariable(BuildDefinitionNameVariableName);
-                
+
                 summary.OrganizationName = RetrieveOrganizationName();
                 summary.OrganizationId = CompilerDataLogger.RetrieveEnvironmentVariable(OrganizationIdVariableName);
             }
@@ -85,7 +85,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             return organizationName.TrimEnd('/');
         }
-        
+
         public static IEnumerable<ExecutionException> ExtractExceptionData(SarifLog sarifLog)
         {
             IList<Sarif.Notification> notifications = sarifLog?.Runs?[0]?.Invocations?[0]?.ToolExecutionNotifications;

@@ -79,8 +79,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public DefaultTraces Traces { get; set; }
 
-        public CompilerDataLogger CompilerDataLogger 
-        { 
+        public CompilerDataLogger CompilerDataLogger
+        {
             get { return this.Policy.GetProperty(SharedCompilerDataLoggerProperty); }
             set { this.Policy.SetProperty(SharedCompilerDataLoggerProperty, value); }
         }
@@ -96,12 +96,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 this.iBinary?.Dispose();
                 this.iBinary = null;
-                
+
                 if (this.CompilerDataLogger.OwningContextHashCode == this.GetHashCode())
                 {
                     this.CompilerDataLogger.Dispose();
                 }
-                
+
                 this.disposed = true;
             }
         }

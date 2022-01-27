@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis.IL
                 analyzeOptions.SarifOutputVersion = s_UnitTestOutputVersion;
             }
 
-// Type or member is obsolete
+            // Type or member is obsolete
 #pragma warning disable CS0618
             if (analyzeOptions.Verbose)
 #pragma warning restore CS0618
@@ -101,8 +101,8 @@ namespace Microsoft.CodeAnalysis.IL
                 analyzeOptions.Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note };
             }
 
-// Type or member is obsolete
-#pragma warning disable CS0618 
+            // Type or member is obsolete
+#pragma warning disable CS0618
             if (analyzeOptions.ComputeFileHashes)
 #pragma warning restore CS0618
             {

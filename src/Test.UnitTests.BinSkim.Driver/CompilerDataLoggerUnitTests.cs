@@ -43,49 +43,49 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             logger.Write(context, new CompilerData { CompilerName = ".NET Compiler", AssemblyReferences = null });
             sendItems.Count.Should().Be(1);
-        }    
-    /*
-        [Fact]
-        public void CompilerDataLogger_SessionIdShouldNotBeReplacedWhenValid()
-        {
-            var context = new BinaryAnalyzerContext();
-            string[] targetFileSpecifier = new[] { @"E:\applications\Tool\*.exe" };
-
-            _ = new CompilerDataLogger(context, targetFileSpecifier);
-            string previousSession = CompilerDataLogger.s_sessionId;
-            CompilerDataLogger.s_sessionId.Should().NotBeNullOrWhiteSpace();
-
-            string currentGuid = Guid.NewGuid().ToString();
-            Environment.SetEnvironmentVariable("BinskimAppInsightsKey", currentGuid);
-
-            // SessionId will be created when BinskimAppInsightsKey is retrieved.
-            _ = new CompilerDataLogger(context, targetFileSpecifier);
-            string currentSession = CompilerDataLogger.s_sessionId;
-            CompilerDataLogger.s_sessionId.Should().NotBe(previousSession);
-
-            // Since sessionId is not null, no new session should be created.
-            _ = new CompilerDataLogger(context, targetFileSpecifier);
-            CompilerDataLogger.s_sessionId.Should().Be(currentSession);
-            CompilerDataLogger.s_sessionId.Should().NotBe(previousSession);
-
-            CompilerDataLogger.Reset();
         }
+        /*
+            [Fact]
+            public void CompilerDataLogger_SessionIdShouldNotBeReplacedWhenValid()
+            {
+                var context = new BinaryAnalyzerContext();
+                string[] targetFileSpecifier = new[] { @"E:\applications\Tool\*.exe" };
 
-        [Fact]
-        public void CompilerDataLogger_ShouldLogHashIfValid()
-        {
-            List<ITelemetry> sendItems = TestSetup(context: null, out CompilerDataLogger logger);
+                _ = new CompilerDataLogger(context, targetFileSpecifier);
+                string previousSession = CompilerDataLogger.s_sessionId;
+                CompilerDataLogger.s_sessionId.Should().NotBeNullOrWhiteSpace();
 
-            logger.Write(new CompilerData { CompilerName = ".NET Compiler" });
+                string currentGuid = Guid.NewGuid().ToString();
+                Environment.SetEnvironmentVariable("BinskimAppInsightsKey", currentGuid);
 
-            ValidateTelemetry(sendItems, shouldExist: false);
+                // SessionId will be created when BinskimAppInsightsKey is retrieved.
+                _ = new CompilerDataLogger(context, targetFileSpecifier);
+                string currentSession = CompilerDataLogger.s_sessionId;
+                CompilerDataLogger.s_sessionId.Should().NotBe(previousSession);
 
-            context.Hashes = new Sarif.HashData(null, null, "some-content");
-            logger.Write(new CompilerData { CompilerName = ".NET Compiler" });
+                // Since sessionId is not null, no new session should be created.
+                _ = new CompilerDataLogger(context, targetFileSpecifier);
+                CompilerDataLogger.s_sessionId.Should().Be(currentSession);
+                CompilerDataLogger.s_sessionId.Should().NotBe(previousSession);
 
-            ValidateTelemetry(setup.Item3, shouldExist: true);
-        }
-    */
+                CompilerDataLogger.Reset();
+            }
+
+            [Fact]
+            public void CompilerDataLogger_ShouldLogHashIfValid()
+            {
+                List<ITelemetry> sendItems = TestSetup(context: null, out CompilerDataLogger logger);
+
+                logger.Write(new CompilerData { CompilerName = ".NET Compiler" });
+
+                ValidateTelemetry(sendItems, shouldExist: false);
+
+                context.Hashes = new Sarif.HashData(null, null, "some-content");
+                logger.Write(new CompilerData { CompilerName = ".NET Compiler" });
+
+                ValidateTelemetry(setup.Item3, shouldExist: true);
+            }
+        */
         private List<ITelemetry> TestSetup(string sarifLogFilePath, BinaryAnalyzerContext context, out CompilerDataLogger logger)
         {
             List<ITelemetry> sendItems = null;

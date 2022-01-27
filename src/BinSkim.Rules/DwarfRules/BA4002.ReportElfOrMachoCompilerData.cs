@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             reasonForNotAnalyzing = null;
-            return AnalysisApplicability.ApplicableToSpecifiedTarget;               
+            return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
         public IEnumerable<IOption> GetOptions()

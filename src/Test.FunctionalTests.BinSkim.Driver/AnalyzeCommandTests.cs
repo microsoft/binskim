@@ -86,7 +86,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             }
             else
             {
-                SarifLogVersionOne actualLog = CommandBase.ReadSarifFile<SarifLogVersionOne>(fileSystem, 
+                SarifLogVersionOne actualLog = CommandBase.ReadSarifFile<SarifLogVersionOne>(fileSystem,
                                                                                              analyzeOptions.OutputFilePath,
                                                                                              SarifContractResolverVersionOne.Instance);
                 var visitor = new SarifVersionOneToCurrentVisitor();
