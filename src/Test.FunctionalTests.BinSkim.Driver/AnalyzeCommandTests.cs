@@ -77,15 +77,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             options.DataToInsert.Should().Contain(OptionallyEmittedData.Hashes);
         }
 
-        [Fact]
-        public void AnalyzeCommand_RootContextShouldBeDisposed()
-        {
-            var options = new AnalyzeOptions();
-            var command = new MultithreadedAnalyzeCommand();
-            command.Run(options);
-            command._rootContext.disposed.Should().BeTrue();
-        }
-
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, AnalyzeOptions analyzeOptions)
         {
             SarifLog sarifLog;

@@ -57,6 +57,7 @@ namespace Microsoft.CodeAnalysis.IL
             // Command-line provided policy is now initialized. Update context 
             // based on any possible configuration provided in this way.
 
+
             context.CompilerDataLogger = new CompilerDataLogger(options.OutputFilePath, context, this.FileSystem);
 
             // If the user has hard-coded a non-deterministic file path root to elide from telemetry,
@@ -64,14 +65,19 @@ namespace Microsoft.CodeAnalysis.IL
             // point to a common directory, then we will use that directory as the path to elide.
             if (string.IsNullOrEmpty(context.CompilerDataLogger.RootPathToElide))
             {
-                var fileSpecifierDirectories = new HashSet<string>(options.TargetFileSpecifiers.Select(s => Path.GetDirectoryName(Path.GetFullPath(s)) + @"\"),
-                                                                  StringComparer.OrdinalIgnoreCase);
-
-                if (fileSpecifierDirectories.Count == 1)
-                {
-                    context.CompilerDataLogger.RootPathToElide = fileSpecifierDirectories.First();
-                }
+                context.CompilerDataLogger.RootPathToElide =
+                    ReturnCommonPathRootFromTargetSpecifiersIfOneExists(options.TargetFileSpecifiers);
             }
+        }
+        internal static string ReturnCommonPathRootFromTargetSpecifiersIfOneExists(IEnumerable<string> targetFileSpecifiers)
+        {
+
+            var fileSpecifierDirectories = new HashSet<string>(targetFileSpecifiers.Select(s => Path.GetDirectoryName(Path.GetFullPath(s)) + @"\"),
+                                                              StringComparer.OrdinalIgnoreCase);
+
+            return fileSpecifierDirectories.Count == 1
+                ? fileSpecifierDirectories.First()
+                : string.Empty;
         }
 
         public override int Run(AnalyzeOptions analyzeOptions)
