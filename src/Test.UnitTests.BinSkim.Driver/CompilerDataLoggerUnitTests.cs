@@ -19,11 +19,13 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 {
     public class CompilerDataLoggerUnitTests
     {
+        private const string SarifPath = @"C:\example.sarif";
+
         [Fact]
         public void CompilerDataLogger_Write_ShouldSendAssemblyReferencesInChunks_WhenTelemetryIsEnabled()
         {
-            var context = new BinaryAnalyzerContext() { TargetUri = new Uri("file.dll") };
-            List<ITelemetry> sendItems = TestSetup(context, out CompilerDataLogger logger);
+            var context = new BinaryAnalyzerContext() { TargetUri = new Uri(@"c:\file.dll") };
+            List<ITelemetry> sendItems = TestSetup(SarifPath, context, out CompilerDataLogger logger);
 
             string assemblies = "Microsoft.DiaSymReader (1.3.0);Newtonsoft.Json (13.0.1)";
 
@@ -38,8 +40,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         [Fact]
         public void CompilerDataLogger_Write_ShouldNotSend_IfNoAssemblyReferences()
         {
-            var context = new BinaryAnalyzerContext() { TargetUri = new Uri("file.dll") };
-            List<ITelemetry> sendItems = TestSetup(context: null, out CompilerDataLogger logger);
+            var context = new BinaryAnalyzerContext() { TargetUri = new Uri(@"c:\file.dll") };
+            List<ITelemetry> sendItems = TestSetup(SarifPath, context, out CompilerDataLogger logger);
 
             logger.Write(context, new CompilerData { CompilerName = ".NET Compiler", AssemblyReferences = null });
             sendItems.Count.Should().Be(1);
@@ -104,6 +106,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             CompilerDataLogger.s_injectedTelemetryClient = telemetryClient;
             CompilerDataLogger.s_injectedTelemetryConfiguration = telemetryConfiguration;
 
+            context.Policy = new Sarif.PropertiesDictionary();
             logger = new CompilerDataLogger(sarifLogFilePath, context ?? new BinaryAnalyzerContext());
 
             return sendItems;

@@ -24,8 +24,8 @@ namespace Microsoft.CodeAnalysis.IL
         internal const string BuildDefinitionNameVariableName = "Build_DefinitionName";
 
         public static AnalysisSummary ExtractAnalysisSummary(SarifLog sarifLog,
-                                                            string serializedFileSpecifiers,
-                                                            string symbolPath)
+                                                             string serializedFileSpecifiers,
+                                                             string symbolPath)
         {
             if (sarifLog == null || sarifLog.Runs?.Any() != true)
             {

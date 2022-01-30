@@ -199,7 +199,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public void Write(BinaryAnalyzerContext context, CompilerData compilerData)
         {
             string fileHash = context.Hashes?.Sha256;
-            string filePath = context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty);
+            string filePath = string.IsNullOrWhiteSpace(RootPathToElide)
+                ? context.TargetUri?.LocalPath
+                : context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty);
 
             WriteToCsv($"{filePath},{compilerData},{fileHash},");
 

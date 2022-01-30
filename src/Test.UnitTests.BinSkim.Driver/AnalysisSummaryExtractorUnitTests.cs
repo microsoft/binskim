@@ -17,35 +17,29 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 {
     public class AnalysisSummaryExtractorUnitTests
     {
+        private const string ToolName = "Test Tool";
+        private const string ToolVersion = "1.2.0";
+        private const string SerializedPath = @"F:\Application\";
+        private const string BinaryPath = @"F:\Application\Binaries";
+        private const string SymbolPath = @"\\symbolServer\application\";
+
         [Fact]
         public void ExtractAnalysisSummary_Postive()
         {
-            const string toolName = "Test Tool";
-            const string toolVersion = "1.2.0";
-            const string symbolPath = @"\\symbolServer\application\";
-            const string binaryPath = @"F:\Application\Binaries";
             int numArtifact = 5;
             DateTime currentTime = DateTime.UtcNow;
 
-            SarifLog log = this.GenerateSarifLog(toolName, toolVersion, currentTime, numArtifact);
+            SarifLog log = this.GenerateSarifLog(ToolName, ToolVersion, currentTime, numArtifact);
 
-            var option = new AnalyzeOptions
-            {
-                TargetFileSpecifiers = new string[]
-                {
-                    $"{binaryPath}\\*.exe",
-                    $"{binaryPath}\\*.dll",
-                },
-                SymbolsPath = @"\\symbolServer\application\",
-            };
-
-            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(log, option);
+            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(log,
+                                                                                      SerializedPath,
+                                                                                      SymbolPath);
 
             summary.Should().NotBeNull();
-            summary.ToolName.Should().BeEquivalentTo(toolName);
-            summary.ToolVersion.Should().BeEquivalentTo(toolVersion);
-            summary.NormalizedPath.Should().BeEquivalentTo(binaryPath);
-            summary.SymbolPath.Should().BeEquivalentTo(symbolPath);
+            summary.ToolName.Should().Be(ToolName);
+            summary.SymbolPath.Should().Be(SymbolPath);
+            summary.ToolVersion.Should().Be(ToolVersion);
+            summary.NormalizedPath.Should().Be(SerializedPath);
             summary.StartTimeUtc.Should().Be(currentTime.AddMinutes(-1).AddSeconds(-10));
             summary.EndTimeUtc.Should().Be(currentTime);
         }
@@ -53,33 +47,30 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         [Fact]
         public void ExtractAnalysisSummary_ShouldNotThrowExceptionWhenArtifactsIsNull()
         {
-            const string toolName = "Test Tool";
-            const string toolVersion = "1.2.0";
-            const string binaryPath = @"F:\Application\Binaries";
             int numArtifact = 5;
             DateTime currentTime = DateTime.UtcNow;
 
-            SarifLog log = this.GenerateSarifLog(toolName, toolVersion, currentTime, numArtifact);
+            SarifLog log = this.GenerateSarifLog(ToolName, ToolVersion, currentTime, numArtifact);
             log.Runs[0].Artifacts = null;
 
             var option = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[]
                 {
-                    $"{binaryPath}\\*.exe",
-                    $"{binaryPath}\\*.dll",
+                    $"{BinaryPath}\\*.exe",
+                    $"{BinaryPath}\\*.dll",
                 },
                 SymbolsPath = @"\\symbolServer\application\",
             };
 
-            Exception exception = Record.Exception(() => AnalysisSummaryExtractor.ExtractAnalysisSummary(log, option));
+            Exception exception = Record.Exception(() => AnalysisSummaryExtractor.ExtractAnalysisSummary(log, SerializedPath, SymbolPath));
             exception.Should().BeNull();
         }
 
         [Fact]
         public void ExtractAnalysisSummary_NullSarifLog()
         {
-            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(null, new AnalyzeOptions());
+            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(null, SerializedPath, SymbolPath);
             summary.Should().BeNull();
         }
 
