@@ -165,7 +165,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 {
                     string value = Environment.GetEnvironmentVariable(name, target);
                     if (!string.IsNullOrEmpty(value)) { return value; }
-
                 }
             }
             catch (SecurityException)

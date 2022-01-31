@@ -18,7 +18,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     public class ReportPECompilerData : WindowsBinaryAndPdbSkimmerBase, IOptionsProvider
     {
         /// <summary>
-        /// BA4001
+        /// BA4001. This reporting rule writes compiler data to AppInsights and 
+        /// a CSV file (if configured) for every compilation unit that's scanned.
         /// </summary>
         public override string Id => RuleIds.ReportPortableExecutableCompilerData;
 
