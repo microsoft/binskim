@@ -533,8 +533,32 @@
           ]
         },
         {
-          "ruleId": "BA5001",
+          "ruleId": "BA4001",
           "ruleIndex": 22,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "gcc.objcopy.stripall.addgnudebuglink",
+              "ReportPECompilerData",
+              "image is not a PE binary"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.objcopy.stripall.addgnudebuglink",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA5001",
+          "ruleIndex": 23,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -558,7 +582,7 @@
         },
         {
           "ruleId": "BA5002",
-          "ruleIndex": 23,
+          "ruleIndex": 24,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -582,7 +606,7 @@
         },
         {
           "ruleId": "BA3001",
-          "ruleIndex": 24,
+          "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -604,28 +628,6 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 25,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.objcopy.stripall.addgnudebuglink"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3003",
           "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
@@ -647,7 +649,7 @@
           ]
         },
         {
-          "ruleId": "BA3005",
+          "ruleId": "BA3003",
           "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
@@ -669,7 +671,7 @@
           ]
         },
         {
-          "ruleId": "BA3006",
+          "ruleId": "BA3005",
           "ruleIndex": 28,
           "kind": "pass",
           "level": "none",
@@ -691,7 +693,7 @@
           ]
         },
         {
-          "ruleId": "BA3010",
+          "ruleId": "BA3006",
           "ruleIndex": 29,
           "kind": "pass",
           "level": "none",
@@ -713,7 +715,7 @@
           ]
         },
         {
-          "ruleId": "BA3011",
+          "ruleId": "BA3010",
           "ruleIndex": 30,
           "kind": "pass",
           "level": "none",
@@ -735,8 +737,30 @@
           ]
         },
         {
-          "ruleId": "BA3030",
+          "ruleId": "BA3011",
           "ruleIndex": 31,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.objcopy.stripall.addgnudebuglink"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.objcopy.stripall.addgnudebuglink",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 32,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -1368,6 +1392,17 @@
                 }
               },
               "name": "EnableAdditionalSdlSecurityChecks"
+            },
+            {
+              "id": "BA4001",
+              "fullDescription": {
+                "text": "This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA4001ReportPECompilerData",
+              "help": {
+                "text": "This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland."
+              },
+              "name": "ReportPECompilerData"
             },
             {
               "id": "BA5001",

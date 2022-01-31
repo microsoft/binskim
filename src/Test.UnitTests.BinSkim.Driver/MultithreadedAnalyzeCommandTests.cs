@@ -54,6 +54,16 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                     },
                     ExpectedCommonPath = @"C:\path1\"
                 },
+                new
+                {
+                    TargetFileSpecifiers = new[]
+                    {
+                        @"C:\path1\1.dll",
+                        @"C:\path1\2.exe",
+                        @"C:\path1\path2\1.exe"
+                    },
+                    ExpectedCommonPath = string.Empty
+                },
             };
 
             var sb = new StringBuilder();

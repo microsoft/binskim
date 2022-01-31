@@ -1611,27 +1611,7 @@
       },
       "invocations": [
         {
-          "toolConfigurationNotifications": [
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.linux-x64.dll"
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "'Binskim.linux-x64.dll' was not evaluated because its PDB could not be loaded (E_PDB_FORMAT)."
-              },
-              "level": "error",
-              "descriptor": {
-                "id": "ERR997.ExceptionLoadingPdb"
-              }
-            }
-          ],
-          "executionSuccessful": false
+          "executionSuccessful": true
         }
       ],
       "artifacts": [
