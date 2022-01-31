@@ -38,18 +38,6 @@
           "executionSuccessful": true
         }
       ],
-      "artifacts": [
-        {
-          "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.stack_protector.a"
-          },
-          "hashes": {
-            "md5": "764B913022B393EAF22F96014401576F",
-            "sha-1": "4B49DA507C9212490EE09280A5A7AD1F1A389188",
-            "sha-256": "8548292CA34C14D090A1DE7327874010E3A7ACE5846B2E28D743CC0F35C069CB"
-          }
-        }
-      ],
       "columnKind": "utf16CodeUnits"
     }
   ]
