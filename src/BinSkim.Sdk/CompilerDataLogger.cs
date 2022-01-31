@@ -30,7 +30,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         [ThreadStatic]
         internal static TelemetryConfiguration s_injectedTelemetryConfiguration;
 
-        [ThreadStatic]
         internal static int s_chunkSize = 8192;
 
         // Constant values sent to AppInsights telemetry stream.
@@ -45,7 +44,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private readonly object syncRoot;
 
         // Data for persisting telemetry to AppInsights and/or a CSV file.
-        private StreamWriter writer;
+        internal StreamWriter writer;
         private readonly string sessionId;
         private TelemetryClient telemetryClient;
         private TelemetryConfiguration telemetryConfiguration;
@@ -122,13 +121,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 return;
             }
 
-            if (File.Exists(csvFilePath))
+            if (fileSystem.FileExists(csvFilePath))
             {
                 if (!overwriteExistingCsv)
                 {
                     throw new InvalidOperationException($"Output file exists and force overwrite was not specified: {csvFilePath}");
                 }
-                File.Delete(csvFilePath);
+                fileSystem.FileDelete(csvFilePath);
             }
 
             this.writer = new StreamWriter(new FileStream(csvFilePath, FileMode.OpenOrCreate));
@@ -355,7 +354,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             Debug.Assert(Enabled);
 
-            SarifLog sarifLog = SarifLog.Load(this.sarifOutputFilePath);
+            var sarifLog = SarifLog.Load(this.sarifOutputFilePath);
             AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog,
                                                                                       RootPathToElide,
                                                                                       this.symbolPath);

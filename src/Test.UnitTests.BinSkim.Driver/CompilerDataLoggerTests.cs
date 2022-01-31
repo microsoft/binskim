@@ -3,21 +3,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using FluentAssertions;
 
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Channel;
-using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+
+using Moq;
 
 using Xunit;
 
 namespace Microsoft.CodeAnalysis.BinSkim.Rules
 {
-    public class CompilerDataLoggerUnitTests
+    public class CompilerDataLoggerTests
     {
         private const string SarifPath = @"C:\example.sarif";
 
@@ -46,48 +47,68 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             logger.Write(context, new CompilerData { CompilerName = ".NET Compiler", AssemblyReferences = null });
             sendItems.Count.Should().Be(1);
         }
-        /*
-            [Fact]
-            public void CompilerDataLogger_SessionIdShouldNotBeReplacedWhenValid()
+
+        [Fact]
+        public void CompilerDataLogger_Constructor_ShouldThrowException_WhenForceIsDisabledAndCsvIsEnabled()
+        {
+            var fileSystem = new Mock<IFileSystem>();
+            fileSystem.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
+
+            var context = new BinaryAnalyzerContext() { TargetUri = new Uri(@"c:\file.dll") };
+            var compilerOptions = new PropertiesDictionary
             {
-                var context = new BinaryAnalyzerContext();
-                string[] targetFileSpecifier = new[] { @"E:\applications\Tool\*.exe" };
+                { "CsvOutputPath", @"C:\temp\" }
+            };
 
-                _ = new CompilerDataLogger(context, targetFileSpecifier);
-                string previousSession = CompilerDataLogger.s_sessionId;
-                CompilerDataLogger.s_sessionId.Should().NotBeNullOrWhiteSpace();
-
-                string currentGuid = Guid.NewGuid().ToString();
-                Environment.SetEnvironmentVariable("BinskimAppInsightsKey", currentGuid);
-
-                // SessionId will be created when BinskimAppInsightsKey is retrieved.
-                _ = new CompilerDataLogger(context, targetFileSpecifier);
-                string currentSession = CompilerDataLogger.s_sessionId;
-                CompilerDataLogger.s_sessionId.Should().NotBe(previousSession);
-
-                // Since sessionId is not null, no new session should be created.
-                _ = new CompilerDataLogger(context, targetFileSpecifier);
-                CompilerDataLogger.s_sessionId.Should().Be(currentSession);
-                CompilerDataLogger.s_sessionId.Should().NotBe(previousSession);
-
-                CompilerDataLogger.Reset();
-            }
-
-            [Fact]
-            public void CompilerDataLogger_ShouldLogHashIfValid()
+            context.Policy = new PropertiesDictionary
             {
-                List<ITelemetry> sendItems = TestSetup(context: null, out CompilerDataLogger logger);
+                { "CompilerTelemetry.Options", compilerOptions }
+            };
 
-                logger.Write(new CompilerData { CompilerName = ".NET Compiler" });
+            Assert.Throws<InvalidOperationException>(() => new CompilerDataLogger(SarifPath, context, fileSystem.Object));
+        }
 
-                ValidateTelemetry(sendItems, shouldExist: false);
+        [Fact]
+        public void CompilerDataLogger_Constructor_ShouldNotThrowException_WhenForceAndCsvAreEnabled()
+        {
+            var fileSystem = new Mock<IFileSystem>();
+            fileSystem.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
 
-                context.Hashes = new Sarif.HashData(null, null, "some-content");
-                logger.Write(new CompilerData { CompilerName = ".NET Compiler" });
+            var context = new BinaryAnalyzerContext() { TargetUri = new Uri(@"c:\file.dll"), ForceOverwrite = true };
+            var compilerOptions = new PropertiesDictionary
+            {
+                { "CsvOutputPath", @$"C:\temp\{Guid.NewGuid()}.sarif" }
+            };
 
-                ValidateTelemetry(setup.Item3, shouldExist: true);
-            }
-        */
+            context.Policy = new PropertiesDictionary
+            {
+                { "CompilerTelemetry.Options", compilerOptions }
+            };
+
+            var compilerDataLogger = new CompilerDataLogger(SarifPath, context, fileSystem.Object);
+            compilerDataLogger.writer.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void CompilerDataLogger_Constructor_ShouldThrowException_WhenTelemetryIsEnabledAndSarifDoesNotExist()
+        {
+            var fileSystem = new Mock<IFileSystem>();
+            fileSystem.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
+
+            var context = new BinaryAnalyzerContext() { TargetUri = new Uri(@"c:\file.dll"), ForceOverwrite = true };
+            var compilerOptions = new PropertiesDictionary
+            {
+                { "CsvOutputPath", @$"C:\temp\{Guid.NewGuid()}.sarif" }
+            };
+
+            context.Policy = new PropertiesDictionary
+            {
+                { "CompilerTelemetry.Options", compilerOptions }
+            };
+
+            Assert.Throws<InvalidOperationException>(() => new CompilerDataLogger(sarifOutputFilePath: string.Empty, context, fileSystem.Object));
+        }
+
         private List<ITelemetry> TestSetup(string sarifLogFilePath, BinaryAnalyzerContext context, out CompilerDataLogger logger)
         {
             List<ITelemetry> sendItems = null;
@@ -110,25 +131,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             logger = new CompilerDataLogger(sarifLogFilePath, context ?? new BinaryAnalyzerContext());
 
             return sendItems;
-        }
-
-        private void ValidateTelemetry(List<ITelemetry> telemetries, bool shouldExist)
-        {
-            foreach (EventTelemetry telemetry in telemetries)
-            {
-                if (telemetry.Name == "CompilerInformation")
-                {
-                    if (telemetry.Properties.TryGetValue("hash", out string hash))
-                    {
-                        if (shouldExist)
-                        {
-                            hash.Should().NotBeNullOrWhiteSpace();
-                            continue;
-                        }
-                        hash.Should().BeNullOrWhiteSpace();
-                    }
-                }
-            }
         }
     }
 }

@@ -96,6 +96,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
 
+            if (pdb == null)
+            {
+                return;
+            }
+
             var compilandsBinaryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
             var compilandsLibraryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
 
