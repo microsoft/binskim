@@ -38,18 +38,6 @@
           "executionSuccessful": false
         }
       ],
-      "artifacts": [
-        {
-          "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Corrupted_Native_x86_VS2013_Default.exe"
-          },
-          "hashes": {
-            "md5": "992F5D2554195F9F19B9480A0E11AC78",
-            "sha-1": "A88412258FFEAC619F3FD960AD9A48AC2F29CBAE",
-            "sha-256": "9F92EDE722DC8740BFDF02CD199090B249BFBBF268DE3CD541FE9400A5652166"
-          }
-        }
-      ],
       "columnKind": "utf16CodeUnits"
     }
   ]
