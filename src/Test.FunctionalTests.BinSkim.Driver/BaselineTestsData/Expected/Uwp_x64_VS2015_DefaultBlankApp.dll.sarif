@@ -1310,7 +1310,8 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2015_DefaultBlankApp.dll"
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Uwp_x64_VS2015_DefaultBlankApp.dll",
+                      "index": 0
                     }
                   }
                 }

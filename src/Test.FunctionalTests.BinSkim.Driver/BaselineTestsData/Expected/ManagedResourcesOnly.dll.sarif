@@ -1616,7 +1616,8 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/ManagedResourcesOnly.dll"
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/ManagedResourcesOnly.dll",
+                      "index": 0
                     }
                   }
                 }

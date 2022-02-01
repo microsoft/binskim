@@ -1613,7 +1613,8 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x86.dll"
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Binskim.win-x86.dll",
+                      "index": 0
                     }
                   }
                 }

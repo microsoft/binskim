@@ -1615,7 +1615,8 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_ARM_VS2015_CvtresResourceOnly.dll"
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_ARM_VS2015_CvtresResourceOnly.dll",
+                      "index": 0
                     }
                   }
                 }
