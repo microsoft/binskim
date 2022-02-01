@@ -1149,7 +1149,8 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x64_VS2019_Atl_NoPdbGenerated.dll"
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Native_x64_VS2019_Atl_NoPdbGenerated.dll",
+                      "index": 0
                     }
                   }
                 }

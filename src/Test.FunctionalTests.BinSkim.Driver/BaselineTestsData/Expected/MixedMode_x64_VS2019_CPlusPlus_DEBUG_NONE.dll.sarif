@@ -1152,7 +1152,8 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/MixedMode_x64_VS2019_CPlusPlus_DEBUG_NONE.dll"
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/MixedMode_x64_VS2019_CPlusPlus_DEBUG_NONE.dll",
+                      "index": 0
                     }
                   }
                 }
