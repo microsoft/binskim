@@ -725,32 +725,8 @@
           ]
         },
         {
-          "ruleId": "BA4001",
-          "ruleIndex": 30,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "gcc.object_file.o",
-              "ReportPECompilerData",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.object_file.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA5001",
-          "ruleIndex": 31,
+          "ruleIndex": 30,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -774,7 +750,7 @@
         },
         {
           "ruleId": "BA5002",
-          "ruleIndex": 32,
+          "ruleIndex": 31,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -1596,17 +1572,6 @@
                 }
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseCheckedFunctionsWithGcc"
-            },
-            {
-              "id": "BA4001",
-              "name": "ReportPECompilerData",
-              "fullDescription": {
-                "text": "This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland."
-              },
-              "help": {
-                "text": "This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA4001ReportPECompilerData"
             },
             {
               "id": "BA5001",

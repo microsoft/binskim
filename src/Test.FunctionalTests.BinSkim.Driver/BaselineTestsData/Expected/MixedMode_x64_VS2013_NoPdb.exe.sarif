@@ -1150,7 +1150,8 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe"
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/MixedMode_x64_VS2013_NoPdb.exe",
+                      "index": 0
                     }
                   }
                 }

@@ -1148,7 +1148,8 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.pe.objectivec.dwarf.exe"
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/gcc.pe.objectivec.dwarf.exe",
+                      "index": 0
                     }
                   }
                 }

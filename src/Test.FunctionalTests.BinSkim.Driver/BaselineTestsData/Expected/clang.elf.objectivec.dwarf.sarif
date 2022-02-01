@@ -605,32 +605,8 @@
           ]
         },
         {
-          "ruleId": "BA4001",
-          "ruleIndex": 25,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "clang.elf.objectivec.dwarf",
-              "ReportPECompilerData",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.elf.objectivec.dwarf",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA5001",
-          "ruleIndex": 26,
+          "ruleIndex": 25,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -654,7 +630,7 @@
         },
         {
           "ruleId": "BA5002",
-          "ruleIndex": 27,
+          "ruleIndex": 26,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -678,7 +654,7 @@
         },
         {
           "ruleId": "BA3001",
-          "ruleIndex": 28,
+          "ruleIndex": 27,
           "level": "error",
           "message": {
             "id": "Error",
@@ -699,7 +675,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 29,
+          "ruleIndex": 28,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -721,7 +697,7 @@
         },
         {
           "ruleId": "BA3004",
-          "ruleIndex": 30,
+          "ruleIndex": 29,
           "level": "error",
           "message": {
             "id": "Error",
@@ -743,7 +719,7 @@
         },
         {
           "ruleId": "BA3006",
-          "ruleIndex": 31,
+          "ruleIndex": 30,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -765,7 +741,7 @@
         },
         {
           "ruleId": "BA3010",
-          "ruleIndex": 32,
+          "ruleIndex": 31,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -787,7 +763,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 33,
+          "ruleIndex": 32,
           "level": "error",
           "message": {
             "id": "Error",
@@ -1490,17 +1466,6 @@
                 }
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseCheckedFunctionsWithGcc"
-            },
-            {
-              "id": "BA4001",
-              "name": "ReportPECompilerData",
-              "fullDescription": {
-                "text": "This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland."
-              },
-              "help": {
-                "text": "This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA4001ReportPECompilerData"
             },
             {
               "id": "BA5001",
