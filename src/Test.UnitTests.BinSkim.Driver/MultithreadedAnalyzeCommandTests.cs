@@ -131,7 +131,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 commonPath = MultithreadedAnalyzeCommand.ReturnCommonPathRootFromTargetSpecifiersIfOneExists(Shuffle(testCase.TargetFileSpecifiers));
                 if (commonPath != testCase.ExpectedCommonPath)
                 {
-                    sb.AppendLine($"The test was expecting '{testCase.ExpectedCommonPath}' but found '{commonPath}' when shuffed with seed '{s_randomSeed}'.");
+                    sb.AppendLine($"The test was expecting '{testCase.ExpectedCommonPath}' but found '{commonPath}' when shuffled with seed '{s_randomSeed}'.");
                 }
             }
 
