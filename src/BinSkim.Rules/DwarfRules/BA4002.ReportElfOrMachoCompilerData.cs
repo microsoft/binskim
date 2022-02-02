@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 
@@ -14,13 +15,14 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class ReportDwarfCompilerData : DwarfSkimmerBase
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
+    public class ReportElfOrMachoCompilerData : DwarfSkimmerBase, IOptionsProvider
     {
         /// <summary>
-        /// BA4002
+        /// BA4002. This reporting rule writes compiler data to AppInsights and 
+        /// a CSV file (if configured) for every compilation unit that's scanned.
         /// </summary>
-        public override string Id => RuleIds.ReportELFCompilerData;
+        public override string Id => RuleIds.ReportElfOrMachoCompilerData;
 
         /// <summary>
         /// This rule emits CSV data to the console
@@ -38,28 +40,39 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
+        public IEnumerable<IOption> GetOptions()
+        {
+            return new List<IOption>
+            {
+                CompilerDataLogger.CsvOutputPath,
+            }.ToImmutableArray();
+        }
+
         public override void Analyze(BinaryAnalyzerContext context)
         {
+            if (!context.CompilerDataLogger.Enabled)
+            {
+                return;
+            }
+
             IDwarfBinary binary = context.DwarfBinary();
 
             if (binary is ElfBinary)
             {
-                this.PrintCompilerData(context, binary.CommandLineInfos, binary.Compilers);
+                this.WriteCompilerData(context, binary.CommandLineInfos, binary.Compilers);
             }
 
             if (binary is MachOBinary machO)
             {
                 machO.MachOs.ToList().ForEach
                 (
-                    machO => this.PrintCompilerData(context, machO.CommandLineInfos, machO.Compilers)
+                    machO => this.WriteCompilerData(context, machO.CommandLineInfos, machO.Compilers)
                 );
             }
         }
 
-        private void PrintCompilerData(BinaryAnalyzerContext context, List<DwarfCompileCommandLineInfo> commandLineInfos, ICompiler[] compilers)
+        private void WriteCompilerData(BinaryAnalyzerContext context, List<DwarfCompileCommandLineInfo> commandLineInfos, ICompiler[] compilers)
         {
-            context.CompilerDataLogger.PrintHeader();
-
             var processedRecords = new HashSet<CompilerData>();
 
             foreach (ICompiler compiler in compilers)
@@ -101,8 +114,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
 
                     processedRecords.Add(record);
-
-                    context.CompilerDataLogger.Write(record);
+                    context.CompilerDataLogger.Write(context, record);
                 }
             }
         }

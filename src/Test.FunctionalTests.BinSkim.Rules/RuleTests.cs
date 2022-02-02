@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (string target in Directory.GetFiles(testFilesDirectory, "*", SearchOption.AllDirectories))
             {
-                if (bypassExtensionValidation || AnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
+                if (bypassExtensionValidation || MultithreadedAnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
                 {
                     targets.Add(target);
                 }
@@ -269,7 +269,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 foreach (string target in Directory.GetFiles(testFilesDirectory, "*", SearchOption.AllDirectories))
                 {
-                    if (bypassExtensionValidation || AnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
+                    if (bypassExtensionValidation || MultithreadedAnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
                     {
                         targets.Add(target);
                     }
