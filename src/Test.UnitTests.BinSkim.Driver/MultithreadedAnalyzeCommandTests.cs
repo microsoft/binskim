@@ -14,6 +14,15 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 {
     public class MultithreadedAnalyzeCommandTests
     {
+        private static readonly Random s_random;
+        private static readonly double s_randomSeed;
+
+        static MultithreadedAnalyzeCommandTests()
+        {
+            s_randomSeed = DateTime.UtcNow.TimeOfDay.TotalMilliseconds;
+            s_random = new Random((int)s_randomSeed);
+        }
+
         [Fact]
         public void MultithreadedAnalyzeCommand_ReturnCommonPathRootFromTargetSpecifiersIfOneExists()
         {
@@ -122,7 +131,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 commonPath = MultithreadedAnalyzeCommand.ReturnCommonPathRootFromTargetSpecifiersIfOneExists(Shuffle(testCase.TargetFileSpecifiers));
                 if (commonPath != testCase.ExpectedCommonPath)
                 {
-                    sb.AppendLine($"The test was expecting '{testCase.ExpectedCommonPath}' but found '{commonPath}' when shuffed.");
+                    sb.AppendLine($"The test was expecting '{testCase.ExpectedCommonPath}' but found '{commonPath}' when shuffed with seed '{s_randomSeed}'.");
                 }
             }
 
@@ -131,10 +140,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
         private static string[] Shuffle(string[] data)
         {
-            var rand = new Random();
             for (int i = 0; i < data.Length; ++i)
             {
-                int swapWith = rand.Next(i, data.Length);
+                int swapWith = s_random.Next(i, data.Length);
                 string temp = data[i];
                 data[i] = data[swapWith];
                 data[swapWith] = temp;
