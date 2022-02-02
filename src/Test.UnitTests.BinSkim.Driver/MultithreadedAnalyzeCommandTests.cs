@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Text;
 
 using FluentAssertions;
@@ -18,6 +19,14 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             var testCases = new[]
             {
+                new
+                {
+                    TargetFileSpecifiers = new[]
+                    {
+                        @"C:\*.dll"
+                    },
+                    ExpectedCommonPath = @"C:\"
+                },
                 new
                 {
                     TargetFileSpecifiers = new[]
@@ -107,9 +116,29 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 {
                     sb.AppendLine($"The test was expecting '{testCase.ExpectedCommonPath}' but found '{commonPath}'.");
                 }
+
+                commonPath = MultithreadedAnalyzeCommand.ReturnCommonPathRootFromTargetSpecifiersIfOneExists(Shuffle(testCase.TargetFileSpecifiers));
+                if (commonPath != testCase.ExpectedCommonPath)
+                {
+                    sb.AppendLine($"The test was expecting '{testCase.ExpectedCommonPath}' but found '{commonPath}' when shuffed.");
+                }
             }
 
             sb.Length.Should().Be(0, sb.ToString());
+        }
+
+        private static string[] Shuffle(string[] data)
+        {
+            var rand = new Random();
+            for (int i = 0; i < data.Length; ++i)
+            {
+                int swapWith = rand.Next(i, data.Length);
+                string temp = data[i];
+                data[i] = data[swapWith];
+                data[swapWith] = temp;
+            }
+
+            return data;
         }
     }
 }

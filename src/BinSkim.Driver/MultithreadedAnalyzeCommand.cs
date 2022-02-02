@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -71,24 +72,36 @@ namespace Microsoft.CodeAnalysis.IL
 
         internal static string ReturnCommonPathRootFromTargetSpecifiersIfOneExists(IEnumerable<string> targetFileSpecifiers)
         {
-            var fileSpecifierDirectories = new SortedSet<string>(targetFileSpecifiers.Select(s => (Path.GetDirectoryName(Path.GetFullPath(s)) + @"\")),
-                                                                 StringComparer.OrdinalIgnoreCase);
+            Debug.Assert(targetFileSpecifiers != null && targetFileSpecifiers.Any());
+
+            var fileSpecifierDirectories = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            // Normalizing all 'targetFileSpecifiers', guaranteeing that they will always end with only one slash.
+            foreach (string targetFileSpecifier in targetFileSpecifiers)
+            {
+                string targetFileDirectory = Path.GetDirectoryName(Path.GetFullPath(targetFileSpecifier));
+                targetFileDirectory = targetFileDirectory.EndsWith(@"\")
+                    ? targetFileDirectory
+                    : targetFileDirectory + @"\";
+
+                fileSpecifierDirectories.Add(targetFileDirectory);
+            }
 
             string smallestPath = fileSpecifierDirectories.First();
             fileSpecifierDirectories.Remove(smallestPath);
 
+            // We don't need to iterate all characters of 'smallestPath'
+            // if we don't have anything to compare against.
+            if (fileSpecifierDirectories.Count == 0)
+            {
+                return smallestPath;
+            }
+
             for (int i = 0; i < smallestPath.Length; i++)
             {
-                // We don't need to iterate all characters of the smallestPath if we don't have anything
-                // to compare against.
-                if (fileSpecifierDirectories.Count == 0)
+                foreach (string fileSpecifierDirectory in fileSpecifierDirectories)
                 {
-                    break;
-                }
-
-                foreach (string specifier in fileSpecifierDirectories)
-                {
-                    if (char.ToLowerInvariant(smallestPath[i]) != char.ToLowerInvariant(specifier[i]))
+                    if (char.ToLowerInvariant(smallestPath[i]) != char.ToLowerInvariant(fileSpecifierDirectory[i]))
                     {
                         smallestPath = smallestPath.Substring(0, i);
                         break;
@@ -96,22 +109,21 @@ namespace Microsoft.CodeAnalysis.IL
                 }
             }
 
-            if (smallestPath.Length == 0)
+            int smallestPathLegth = smallestPath.Length;
+            if (smallestPathLegth == 0)
             {
                 return string.Empty;
             }
 
-            if (smallestPath[^1] != '\\')
+            if (smallestPath[smallestPathLegth - 1] != '\\')
             {
-                // In this case, smallestPath is equal to 'c:\path1\partial-path' (this is an incomplete path).
-                // Once we execute, our smallestPath will be transformed into 'c:\path1\'.
-                string[] parts = smallestPath.Split('\\');
-                smallestPath = string.Join(@"\", parts[..^1]) + @"\";
+                // In this case, 'smallestPath' is equal to 'c:\path1\partial-path' (this is an incomplete path).
+                // Once we execute, our 'smallestPath' will be transformed into 'c:\path1\'.
+                int lastIndex = smallestPath.LastIndexOf('\\');
+                smallestPath = smallestPath.Substring(0, lastIndex + 1);
             }
 
-            return smallestPath.EndsWith(@"\\")
-                ? smallestPath.Substring(0, smallestPath.Length - 1)
-                : smallestPath;
+            return smallestPath;
         }
 
         public override int Run(AnalyzeOptions analyzeOptions)
