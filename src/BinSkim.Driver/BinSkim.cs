@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL
                 ExportConfigurationOptions,
                 DumpOptions>(args)
               .MapResult(
-                (AnalyzeOptions analyzeOptions) => new AnalyzeCommand().Run(analyzeOptions),
+                (AnalyzeOptions analyzeOptions) => new MultithreadedAnalyzeCommand().Run(analyzeOptions),
                 (ExportRulesMetadataOptions exportRulesMetadataOptions) => new ExportRulesMetadataCommand().Run(exportRulesMetadataOptions),
                 (ExportConfigurationOptions exportConfigurationOptions) => new ExportConfigurationCommand().Run(exportConfigurationOptions),
                 (DumpOptions dumpOptions) => new DumpCommand().Run(dumpOptions),

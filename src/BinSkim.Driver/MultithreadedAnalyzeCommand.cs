@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -10,13 +11,10 @@ using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif.Readers;
-using Microsoft.CodeAnalysis.Sarif.VersionOne;
-using Microsoft.CodeAnalysis.Sarif.Visitors;
 
 namespace Microsoft.CodeAnalysis.IL
 {
-    public class AnalyzeCommand : MultithreadedAnalyzeCommandBase<BinaryAnalyzerContext, AnalyzeOptions>
+    public class MultithreadedAnalyzeCommand : MultithreadedAnalyzeCommandBase<BinaryAnalyzerContext, AnalyzeOptions>
     {
         private static bool ShouldWarnVerbose = true;
 
@@ -34,10 +32,12 @@ namespace Microsoft.CodeAnalysis.IL
         {
             BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, policy, filePath);
 
+            // Update context object based on command-line parameters.
+            binaryAnalyzerContext.ForceOverwrite = options.Force;
             binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
             binaryAnalyzerContext.IgnorePdbLoadError = options.IgnorePdbLoadError;
-            binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
+            binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
 
 #pragma warning disable CS0618 // Type or member is obsolete
             if (options.Verbose && ShouldWarnVerbose)
@@ -47,25 +47,37 @@ namespace Microsoft.CodeAnalysis.IL
                 ShouldWarnVerbose = false;
             }
 
-            if (binaryAnalyzerContext.Policy != null)
-            {
-                bool isRule4001Enabled = (binaryAnalyzerContext.Policy.TryGetValue("BA4001.ReportPECompilerData.Options", out object rule4001)
-                    && rule4001 is PropertiesDictionary property4001
-                    && property4001.TryGetValue("RuleEnabled", out object rule4001Value)
-                    && rule4001Value.ToString() == "Error");
-                bool isRule4002Enabled = (binaryAnalyzerContext.Policy.TryGetValue("BA4002.ReportDwarfCompilerData.Options", out object rule4002)
-                    && rule4002 is PropertiesDictionary property4002
-                    && property4002.TryGetValue("RuleEnabled", out object rule4002Value)
-                    && rule4002Value.ToString() == "Error");
-
-                if (isRule4001Enabled || isRule4002Enabled)
-                {
-                    binaryAnalyzerContext.CompilerDataLogger = new CompilerDataLogger(binaryAnalyzerContext,
-                                                                                      options.TargetFileSpecifiers);
-                }
-            }
-
             return binaryAnalyzerContext;
+        }
+
+        protected override void InitializeConfiguration(AnalyzeOptions options, BinaryAnalyzerContext context)
+        {
+            base.InitializeConfiguration(options, context);
+
+            // Command-line provided policy is now initialized. Update context 
+            // based on any possible configuration provided in this way.
+
+            context.CompilerDataLogger = new CompilerDataLogger(options.OutputFilePath, context, this.FileSystem);
+
+            // If the user has hard-coded a non-deterministic file path root to elide from telemetry,
+            // we will honor that. If it has not been specified, and if all file target specifiers
+            // point to a common directory, then we will use that directory as the path to elide.
+            if (string.IsNullOrEmpty(context.CompilerDataLogger.RootPathToElide))
+            {
+                context.CompilerDataLogger.RootPathToElide =
+                    ReturnCommonPathRootFromTargetSpecifiersIfOneExists(options.TargetFileSpecifiers);
+            }
+        }
+
+        internal static string ReturnCommonPathRootFromTargetSpecifiersIfOneExists(IEnumerable<string> targetFileSpecifiers)
+        {
+
+            var fileSpecifierDirectories = new HashSet<string>(targetFileSpecifiers.Select(s => Path.GetDirectoryName(Path.GetFullPath(s)) + @"\"),
+                                                               StringComparer.OrdinalIgnoreCase);
+
+            return fileSpecifierDirectories.Count == 1
+                ? fileSpecifierDirectories.First()
+                : string.Empty;
         }
 
         public override int Run(AnalyzeOptions analyzeOptions)
@@ -80,15 +92,17 @@ namespace Microsoft.CodeAnalysis.IL
                 analyzeOptions.SarifOutputVersion = s_UnitTestOutputVersion;
             }
 
-#pragma warning disable CS0618 // Type or member is obsolete
+            // Type or member is obsolete
+#pragma warning disable CS0618
             if (analyzeOptions.Verbose)
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618
             {
-                analyzeOptions.Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note };
                 analyzeOptions.Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.NotApplicable, ResultKind.Pass };
+                analyzeOptions.Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note };
             }
 
-#pragma warning disable CS0618 // Type or member is obsolete
+            // Type or member is obsolete
+#pragma warning disable CS0618
             if (analyzeOptions.ComputeFileHashes)
 #pragma warning restore CS0618
             {
@@ -110,34 +124,6 @@ namespace Microsoft.CodeAnalysis.IL
                 Console.WriteLine(e);
             }
 
-            try
-            {
-                if (CompilerDataLogger.TelemetryEnabled &&
-                    !string.IsNullOrEmpty(analyzeOptions.OutputFilePath) &&
-                    this.FileSystem.FileExists(analyzeOptions.OutputFilePath))
-                {
-                    SarifLog sarifLog = ReadSarifLog(this.FileSystem, analyzeOptions);
-
-                    AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(
-                        sarifLog, analyzeOptions);
-                    CompilerDataLogger.Summarize(summary);
-
-                    IEnumerable<ExecutionException> exceptions = AnalysisSummaryExtractor.ExtractExceptionData(sarifLog);
-                    foreach (ExecutionException ex in exceptions)
-                    {
-                        CompilerDataLogger.WriteException(ex, summary);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                CompilerDataLogger.Flush();
-            }
-
             // In BinSkim, no rule is ever applicable to every target type. For example,
             // we have checks that are only relevant to either 32-bit or 64-bit binaries.
             // Because of this, the return code bit for RuleNotApplicableToTarget is not
@@ -146,24 +132,6 @@ namespace Microsoft.CodeAnalysis.IL
             return analyzeOptions.RichReturnCode
                 ? (int)((uint)result & ~(uint)RuntimeConditions.RuleNotApplicableToTarget)
                 : result;
-        }
-
-        internal static SarifLog ReadSarifLog(IFileSystem fileSystem, AnalyzeOptions analyzeOptions)
-        {
-            SarifLog sarifLog;
-            if (analyzeOptions.SarifOutputVersion == Sarif.SarifVersion.Current)
-            {
-                sarifLog = SarifLog.Load(analyzeOptions.OutputFilePath);
-            }
-            else
-            {
-                SarifLogVersionOne actualLog = ReadSarifFile<SarifLogVersionOne>(fileSystem, analyzeOptions.OutputFilePath, SarifContractResolverVersionOne.Instance);
-                var visitor = new SarifVersionOneToCurrentVisitor();
-                visitor.VisitSarifLogVersionOne(actualLog);
-                sarifLog = visitor.SarifLog;
-            }
-
-            return sarifLog;
         }
 
         internal static Sarif.SarifVersion s_UnitTestOutputVersion;

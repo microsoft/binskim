@@ -9,7 +9,12 @@ using FluentAssertions;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL;
+using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.CodeAnalysis.Sarif.Readers;
+using Microsoft.CodeAnalysis.Sarif.VersionOne;
+using Microsoft.CodeAnalysis.Sarif.Visitors;
 
 using Moq;
 
@@ -31,7 +36,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 .Setup(f => f.FileOpenRead(It.IsAny<string>()))
                 .Returns(new MemoryStream(byteArray));
 
-            SarifLog sarifLog = AnalyzeCommand.ReadSarifLog(fileSystem.Object, new AnalyzeOptions
+            SarifLog sarifLog = ReadSarifLog(fileSystem.Object, new AnalyzeOptions
             {
                 SarifOutputVersion = Sarif.SarifVersion.OneZeroZero,
                 OutputFilePath = Guid.NewGuid().ToString(),
@@ -46,7 +51,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         {
             string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "Expected", "Binskim.linux-x64.dll.sarif");
 
-            SarifLog sarifLog = AnalyzeCommand.ReadSarifLog(fileSystem: null, new AnalyzeOptions
+            SarifLog sarifLog = ReadSarifLog(fileSystem: null, new AnalyzeOptions
             {
                 SarifOutputVersion = Sarif.SarifVersion.Current,
                 OutputFilePath = sarifLogPath,
@@ -61,7 +66,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         public void AnalyzeCommand_Hashes_ShouldUpdateDataToInsert()
         {
             var options = new AnalyzeOptions();
-            var command = new AnalyzeCommand();
+            var command = new MultithreadedAnalyzeCommand();
 
             options.ComputeFileHashes = false;
             command.Run(options);
@@ -71,5 +76,26 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             command.Run(options);
             options.DataToInsert.Should().Contain(OptionallyEmittedData.Hashes);
         }
+
+        private static SarifLog ReadSarifLog(IFileSystem fileSystem, AnalyzeOptions analyzeOptions)
+        {
+            SarifLog sarifLog;
+            if (analyzeOptions.SarifOutputVersion == Sarif.SarifVersion.Current)
+            {
+                sarifLog = SarifLog.Load(analyzeOptions.OutputFilePath);
+            }
+            else
+            {
+                SarifLogVersionOne actualLog = CommandBase.ReadSarifFile<SarifLogVersionOne>(fileSystem,
+                                                                                             analyzeOptions.OutputFilePath,
+                                                                                             SarifContractResolverVersionOne.Instance);
+                var visitor = new SarifVersionOneToCurrentVisitor();
+                visitor.VisitSarifLogVersionOne(actualLog);
+                sarifLog = visitor.SarifLog;
+            }
+
+            return sarifLog;
+        }
+
     }
 }

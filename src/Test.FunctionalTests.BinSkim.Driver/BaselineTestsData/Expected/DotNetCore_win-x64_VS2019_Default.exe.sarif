@@ -509,8 +509,32 @@
           ]
         },
         {
-          "ruleId": "BA5001",
+          "ruleId": "BA4001",
           "ruleIndex": 21,
+          "kind": "notApplicable",
+          "level": "none",
+          "message": {
+            "id": "NotApplicable_InvalidMetadata",
+            "arguments": [
+              "DotNetCore_win-x64_VS2019_Default.exe",
+              "ReportPECompilerData",
+              "image is a .NET core native bootstrap exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/DotNetCore_win-x64_VS2019_Default.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA5001",
+          "ruleIndex": 22,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -534,7 +558,7 @@
         },
         {
           "ruleId": "BA5002",
-          "ruleIndex": 22,
+          "ruleIndex": 23,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -558,28 +582,6 @@
         },
         {
           "ruleId": "BA2001",
-          "ruleIndex": 23,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "DotNetCore_win-x64_VS2019_Default.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/DotNetCore_win-x64_VS2019_Default.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2005",
           "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
@@ -601,7 +603,7 @@
           ]
         },
         {
-          "ruleId": "BA2008",
+          "ruleId": "BA2005",
           "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
@@ -623,7 +625,7 @@
           ]
         },
         {
-          "ruleId": "BA2009",
+          "ruleId": "BA2008",
           "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
@@ -645,7 +647,7 @@
           ]
         },
         {
-          "ruleId": "BA2010",
+          "ruleId": "BA2009",
           "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
@@ -667,7 +669,7 @@
           ]
         },
         {
-          "ruleId": "BA2012",
+          "ruleId": "BA2010",
           "ruleIndex": 28,
           "kind": "pass",
           "level": "none",
@@ -689,7 +691,7 @@
           ]
         },
         {
-          "ruleId": "BA2015",
+          "ruleId": "BA2012",
           "ruleIndex": 29,
           "kind": "pass",
           "level": "none",
@@ -711,7 +713,7 @@
           ]
         },
         {
-          "ruleId": "BA2019",
+          "ruleId": "BA2015",
           "ruleIndex": 30,
           "kind": "pass",
           "level": "none",
@@ -733,7 +735,7 @@
           ]
         },
         {
-          "ruleId": "BA2021",
+          "ruleId": "BA2019",
           "ruleIndex": 31,
           "kind": "pass",
           "level": "none",
@@ -755,8 +757,30 @@
           ]
         },
         {
-          "ruleId": "BA2022",
+          "ruleId": "BA2021",
           "ruleIndex": 32,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "DotNetCore_win-x64_VS2019_Default.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/DotNetCore_win-x64_VS2019_Default.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2022",
+          "ruleIndex": 33,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -1317,6 +1341,17 @@
                 }
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseCheckedFunctionsWithGcc"
+            },
+            {
+              "id": "BA4001",
+              "name": "ReportPECompilerData",
+              "fullDescription": {
+                "text": "This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland."
+              },
+              "help": {
+                "text": "This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland."
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA4001ReportPECompilerData"
             },
             {
               "id": "BA5001",

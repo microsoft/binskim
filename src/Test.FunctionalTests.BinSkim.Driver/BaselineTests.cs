@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             if (PlatformSpecificHelpers.RunningOnWindows())
             {
-                AnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
+                MultithreadedAnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
                 this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
             }
         }
@@ -97,7 +97,7 @@ namespace Microsoft.CodeAnalysis.IL
             string expectedFileName = Path.Combine(expectedDirectory, fileName + ".sarif");
             string actualFileName = Path.Combine(actualDirectory, fileName + ".sarif");
 
-            var command = new AnalyzeCommand();
+            var command = new MultithreadedAnalyzeCommand();
             var options = new AnalyzeOptions
             {
                 Force = true,
