@@ -179,7 +179,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             string header = "" +
                 "Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version," +
                 "File Version,Binary Type,Language,Debugging FileName,Debugging FileGuid," +
-                "Command Line,Dialect,Module Name,Module Library,Assembly References,Hash,Error";
+                "Command Line,Dialect,Module Name,Module Library,Hash,Error";
 
             WriteToCsv(header);
         }
@@ -257,7 +257,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             string fileHash = context.Hashes?.Sha256;
             string filePath = context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty);
 
-            WriteToCsv($"{filePath},,,,,,,,,,,,,,{fileHash},{errorMessage}");
+            WriteToCsv($"{filePath},,,,,,,,,,,,,{fileHash},{errorMessage}");
 
             if (this.telemetryClient == null)
             {
