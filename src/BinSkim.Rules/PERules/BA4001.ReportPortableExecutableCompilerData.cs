@@ -15,15 +15,13 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
-    public class ReportPECompilerData : WindowsBinaryAndPdbSkimmerBase, IOptionsProvider
+    public class ReportPortableExecutableCompilerData : PEBinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
         /// BA4001. This reporting rule writes compiler data to AppInsights and 
         /// a CSV file (if configured) for every compilation unit that's scanned.
         /// </summary>
         public override string Id => RuleIds.ReportPortableExecutableCompilerData;
-
-        public override bool LogPdbLoadException => false;
 
         /// <summary>
         /// This rule emits CSV data to the console for every compiler/language/version
@@ -47,7 +45,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
-        public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
+        public override void Analyze(BinaryAnalyzerContext context)
         {
             if (!context.CompilerDataLogger.Enabled)
             {

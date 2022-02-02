@@ -21,7 +21,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public override string ToString()
         {
-            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{FileVersion},{BinaryType},{Language},{DebuggingFileName},{DebuggingFileGuid},{CommandLine},{Dialect},{ModuleName},{(ModuleLibrary == ModuleName ? string.Empty : ModuleLibrary)},{AssemblyReferences}";
+            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{FileVersion},{BinaryType},{Language}," +
+                $"{DebuggingFileName},{DebuggingFileGuid},{CommandLine?.Replace(",", " ")},{Dialect},{ModuleName}," +
+                $"{(ModuleLibrary == ModuleName ? string.Empty : ModuleLibrary)},{AssemblyReferences}";
         }
     }
 }
