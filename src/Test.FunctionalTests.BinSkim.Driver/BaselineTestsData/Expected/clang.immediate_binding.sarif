@@ -613,7 +613,7 @@
             "id": "NotApplicable_InvalidMetadata",
             "arguments": [
               "clang.immediate_binding",
-              "ReportPECompilerData",
+              "ReportPortableExecutableCompilerData",
               "image is not a PE binary"
             ]
           },
@@ -1472,14 +1472,14 @@
             },
             {
               "id": "BA4001",
-              "name": "ReportPECompilerData",
+              "name": "ReportPortableExecutableCompilerData",
               "fullDescription": {
                 "text": "This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland."
               },
               "help": {
                 "text": "This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland."
               },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA4001ReportPECompilerData"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA4001ReportPortableExecutableCompilerData"
             },
             {
               "id": "BA5001",
