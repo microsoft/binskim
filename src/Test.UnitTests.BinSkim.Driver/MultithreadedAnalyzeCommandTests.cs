@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                         @"C:\path1\",
                         @"C:\path2\"
                     },
-                    ExpectedCommonPath = string.Empty
+                    ExpectedCommonPath = @"C:\"
                 },
                 new
                 {

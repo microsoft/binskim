@@ -89,11 +89,22 @@ namespace Microsoft.CodeAnalysis.IL
                 }
             }
 
-            return smallestPath.Length == 0 || smallestPath[^1] != '\\'
-                ? string.Empty
-                : smallestPath.EndsWith(@"\\")
-                    ? smallestPath.Substring(0, smallestPath.Length - 1)
-                    : smallestPath;
+            if (smallestPath.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            if (smallestPath[^1] != '\\')
+            {
+                // In this case, smallestPath is equal to 'c:\path1\partial-path' (this is an incomplete path).
+                // Once we execute, our smallestPath will be transformed into 'c:\path1\'.
+                string[] parts = smallestPath.Split('\\');
+                smallestPath = string.Join(@"\", parts[..^1]) + @"\";
+            }
+
+            return smallestPath.EndsWith(@"\\")
+                ? smallestPath.Substring(0, smallestPath.Length - 1)
+                : smallestPath;
         }
 
         public override int Run(AnalyzeOptions analyzeOptions)
