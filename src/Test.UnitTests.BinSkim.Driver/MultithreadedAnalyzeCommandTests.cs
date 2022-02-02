@@ -117,6 +117,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                     sb.AppendLine($"The test was expecting '{testCase.ExpectedCommonPath}' but found '{commonPath}'.");
                 }
 
+                // Testing the same string array in a random order.
+                // This will guarantee that the sorting is working as expected.
                 commonPath = MultithreadedAnalyzeCommand.ReturnCommonPathRootFromTargetSpecifiersIfOneExists(Shuffle(testCase.TargetFileSpecifiers));
                 if (commonPath != testCase.ExpectedCommonPath)
                 {

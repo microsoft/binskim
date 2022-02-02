@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             var fileSpecifierDirectories = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            // Normalizing all 'targetFileSpecifiers', guaranteeing that they will always end with only one slash.
+            // Normalizing all 'targetFileSpecifiers', ensuring that they will always end with only one slash.
             foreach (string targetFileSpecifier in targetFileSpecifiers)
             {
                 string targetFileDirectory = Path.GetDirectoryName(Path.GetFullPath(targetFileSpecifier));
