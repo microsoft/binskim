@@ -79,6 +79,13 @@ namespace Microsoft.CodeAnalysis.IL
 
             for (int i = 0; i < smallestPath.Length; i++)
             {
+                // We don't need to iterate all characters of the smallestPath if we don't have anything
+                // to compare against.
+                if (fileSpecifierDirectories.Count == 0)
+                {
+                    break;
+                }
+
                 foreach (string specifier in fileSpecifierDirectories)
                 {
                     if (char.ToLowerInvariant(smallestPath[i]) != char.ToLowerInvariant(specifier[i]))
