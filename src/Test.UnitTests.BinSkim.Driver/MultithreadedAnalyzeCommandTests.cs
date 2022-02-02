@@ -40,10 +40,20 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 {
                     TargetFileSpecifiers = new[]
                     {
+                        @"c:\*.dll",
+                        @"c:\*.dll",
+                        @"C:\*.DLL"
+                    },
+                    ExpectedCommonPath = @"c:\"
+                },
+                new
+                {
+                    TargetFileSpecifiers = new[]
+                    {
                         @"C:\path1\",
                         @"C:\path1\path2\"
                     },
-                    ExpectedCommonPath = string.Empty
+                    ExpectedCommonPath = @"C:\path1\"
                 },
                 new
                 {
@@ -58,11 +68,34 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 {
                     TargetFileSpecifiers = new[]
                     {
+                        @"C:\path1\",
                         @"C:\path1\1.dll",
                         @"C:\path1\2.exe",
-                        @"C:\path1\path2\1.exe"
+                        @"C:\path1\path2\",
+                        @"C:\path1\path2\1.exe",
+                        @"C:\path1\path2\path3\",
+                        @"C:\path1\path2\path3\1.sys",
+                        "c:\\path1\\path2\\path3\\path4\\"
                     },
-                    ExpectedCommonPath = string.Empty
+                    ExpectedCommonPath = @"C:\path1\"
+                },
+                new
+                {
+                    TargetFileSpecifiers = new[]
+                    {
+                        @"\\PC1\path1\",
+                        @"\\PC1\path1\path2\",
+                    },
+                    ExpectedCommonPath = @"\\PC1\path1\",
+                },
+                new
+                {
+                    TargetFileSpecifiers = new[]
+                    {
+                        @"C:\path1\..\*.dll",
+                        @"C:\*.dll",
+                    },
+                    ExpectedCommonPath = @"C:\",
                 },
             };
 

@@ -71,13 +71,29 @@ namespace Microsoft.CodeAnalysis.IL
 
         internal static string ReturnCommonPathRootFromTargetSpecifiersIfOneExists(IEnumerable<string> targetFileSpecifiers)
         {
+            var fileSpecifierDirectories = new SortedSet<string>(targetFileSpecifiers.Select(s => (Path.GetDirectoryName(Path.GetFullPath(s)) + @"\")),
+                                                                 StringComparer.OrdinalIgnoreCase);
 
-            var fileSpecifierDirectories = new HashSet<string>(targetFileSpecifiers.Select(s => Path.GetDirectoryName(Path.GetFullPath(s)) + @"\"),
-                                                               StringComparer.OrdinalIgnoreCase);
+            string smallestPath = fileSpecifierDirectories.First();
+            fileSpecifierDirectories.Remove(smallestPath);
 
-            return fileSpecifierDirectories.Count == 1
-                ? fileSpecifierDirectories.First()
-                : string.Empty;
+            for (int i = 0; i < smallestPath.Length; i++)
+            {
+                foreach (string specifier in fileSpecifierDirectories)
+                {
+                    if (char.ToLowerInvariant(smallestPath[i]) != char.ToLowerInvariant(specifier[i]))
+                    {
+                        smallestPath = smallestPath.Substring(0, i);
+                        break;
+                    }
+                }
+            }
+
+            return smallestPath.Length == 0 || smallestPath[^1] != '\\'
+                ? string.Empty
+                : smallestPath.EndsWith(@"\\")
+                    ? smallestPath.Substring(0, smallestPath.Length - 1)
+                    : smallestPath;
         }
 
         public override int Run(AnalyzeOptions analyzeOptions)
