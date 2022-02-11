@@ -1,10 +1,6 @@
 ﻿[CmdletBinding()]
 param(
     [string]
-    [ValidateSet("Custom", "Release")]
-    $Configuration = "Release",
-
-    [string]
     $BinSkimFolder = "bld\bin\x64_Release\netcoreapp3.1",
 
     [string]
