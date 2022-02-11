@@ -66,6 +66,29 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<AdvancedMitigations>(
                 AnalyzerName, nameof(AdvancedMitigationsEnforced), defaultValue: () => AdvancedMitigations.None);
 
+        public override void Initialize(BinaryAnalyzerContext context)
+        {
+            if (context.Policy == null) { return; }
+
+            StringToVersionMap currentMinimumToolVersions = context.Policy.GetProperty(MinimumToolVersions, cacheDefault: false);
+            StringToVersionMap defaultMinimumToolVersions = BuildMinimumToolVersionsMap();
+
+            // If user only overwrite part of the settings, currentMinimumToolVersions will only have those settings.
+            // This is to make sure other default settings are applied as well.
+            foreach (KeyValuePair<string, Version> defaultMinimumToolVersion in defaultMinimumToolVersions)
+            {
+                currentMinimumToolVersions.TryAdd(defaultMinimumToolVersion.Key, defaultMinimumToolVersion.Value);
+            }
+
+            context.Policy.SetProperty(
+                MinimumToolVersions,
+                currentMinimumToolVersions,
+                cacheDescription: false,
+                persistToSettingsContainer: true);
+
+            return;
+        }
+
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
