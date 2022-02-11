@@ -18,7 +18,7 @@ param(
 
 for ($i = 0; $i -lt $Times; $i++)
 {
-    $command = $BinSkimFolder + "\BinSkim.exe analyze --recurse --hashes --force --output " + $OutputFolder + $OutputFile + $i + ".sarif " + $InputFolder
+    $command = $BinSkimFolder + "\BinSkim.exe analyze --recurse --hashes --force --output " + $OutputFolder + $OutputFile + $i + ".sarif " + $InputPaths
     Write-Host $command
     Invoke-Expression $command
 }
