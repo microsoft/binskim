@@ -18,6 +18,7 @@ param(
     $OutputFileName = "binskim-hash-run-",
 
     [string]
+    [Parameter(Mandatory=$true)]
     $InputPaths
 )
 
@@ -30,16 +31,15 @@ while (1)
     $PreviousOutputFilePath = ""
     $CurrentOutputFilePath = $OutputFolder + $OutputFileName + $i + ".sarif"
     
+    $command = $BinSkimFolder + "\BinSkim.exe analyze --recurse --hashes --force --quiet --output " + $CurrentOutputFilePath + " " + $InputPaths
+
+    Write-Host "Analyzing iteration " $i
+    Invoke-Expression $command
+
     if ($i -ne 0)
     {
         $PreviousOutputFilePath = $OutputFolder + $OutputFileName + ($i - 1) + ".sarif"
-    }
-    
-    $command = $BinSkimFolder + "\BinSkim.exe analyze --recurse --hashes --force --output " + $CurrentOutputFilePath + " " + $InputPaths
-    Invoke-Expression $command
 
-    if ($PreviousOutputFilePath -ne "")
-    {
         $CurrentFileSize = (Get-Item $CurrentOutputFilePath).Length/1KB
         $PreviousFileSize = (Get-Item $PreviousOutputFilePath).Length/1KB
 
@@ -49,6 +49,7 @@ while (1)
         }
         else
         {
+            Write-Host "Previous output was $($PreviousFileSize) but latest is $($CurrentFileSize)."
             break
         }
     }
