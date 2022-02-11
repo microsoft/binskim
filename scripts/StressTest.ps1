@@ -6,7 +6,7 @@
 .PARAMETER OutputFileName
     The name that will be used to output the SARIF log file.
 .PARAMETER InputPaths
-    The paths that will as argument in BinSkim.
+    The paths that will be used as argument in BinSkim.
 #>
 
 [CmdletBinding()]
