@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -106,10 +107,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             var goodCompilers = new HashSet<string>();
 
-            var badModules = new List<ObjectModuleDetails>();
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
 
-            var languageToBadModules = new Dictionary<Language, List<ObjectModuleDetails>>();
+            var languagesToBadModules = new Dictionary<Language, List<ObjectModuleDetails>>();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -136,8 +136,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.Cxx:
                     {
                         minCompilerVersion = (target.PE?.IsXBox == true)
-                            ? context.Policy.GetProperty(MinimumToolVersions)[MIN_XBOX_COMPILER_VER]
-                            : context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.C)];
+                            ? RetrieveVersionFromPolicy(context.Policy.GetProperty(MinimumToolVersions), MIN_XBOX_COMPILER_VER)
+                            : RetrieveVersionFromPolicy(context.Policy.GetProperty(MinimumToolVersions), nameof(Language.C));
                         break;
                     }
 
@@ -149,21 +149,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.MASM:
                     {
                         minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.MASM)];
+                            RetrieveVersionFromPolicy(context.Policy.GetProperty(MinimumToolVersions), nameof(Language.MASM));
                         break;
                     }
 
                     case Language.CVTRES:
                     {
                         minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CVTRES)];
+                            RetrieveVersionFromPolicy(context.Policy.GetProperty(MinimumToolVersions), nameof(Language.CVTRES));
                         break;
                     }
 
                     case Language.CSharp:
                     {
                         minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CSharp)];
+                            RetrieveVersionFromPolicy(context.Policy.GetProperty(MinimumToolVersions), nameof(Language.CSharp));
                         break;
                     }
 
@@ -174,7 +174,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.Unknown:
                     {
                         minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.Unknown)];
+                            RetrieveVersionFromPolicy(context.Policy.GetProperty(MinimumToolVersions), nameof(Language.Unknown));
                         break;
                     }
                     */
@@ -258,7 +258,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (foundIssue)
                 {
+                    if (!languagesToBadModules.TryGetValue(omDetails.Language, out List<ObjectModuleDetails> badModules))
+                    {
+                        badModules = new List<ObjectModuleDetails>();
+                    }
+
                     badModules.Add(omDetails);
+                    languagesToBadModules[omDetails.Language] = badModules;
                 }
                 else
                 {
@@ -266,10 +272,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
 
-            if (badModules.Count != 0)
+            if (languagesToBadModules.Count != 0)
             {
-                string badModulesText = badModules.CreateOutputCoalescedByCompiler();
-                string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToBadModules);
+                var sb = new StringBuilder();
+                foreach (KeyValuePair<Language, List<ObjectModuleDetails>> languageToBadModules in languagesToBadModules)
+                {
+                    sb.AppendLine(languageToBadModules.Value.CreateOutputCoalescedByCompiler());
+                }
+
+                string badModulesText = sb.ToString();
+                string minimumRequiredCompilers = BuildMinimumCompilersList(context, languagesToBadModules);
 
                 // '{0}' was compiled with one or more modules which were not built using
                 // minimum required tool versions ({1}). More recent toolchains
@@ -310,7 +322,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (Language language in languageToBadModules.Keys)
             {
-                Version version = context.Policy.GetProperty(MinimumToolVersions)[language.ToString()];
+                Version version = RetrieveVersionFromPolicy(context.Policy.GetProperty(MinimumToolVersions), language.ToString());
                 languages.Add($"{language} ({version})");
             }
             return string.Join(", ", languages);
@@ -331,7 +343,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private void AnalyzeManagedPE(BinaryAnalyzerContext context)
         {
             Version minCscVersion =
-                context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CSharp)];
+                RetrieveVersionFromPolicy(context.Policy.GetProperty(MinimumToolVersions), nameof(Language.CSharp));
 
             PE pe = context.PEBinary().PE;
 
@@ -362,6 +374,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public static Version Minimum(Version lhs, Version rhs)
         {
             return (lhs < rhs) ? lhs : rhs;
+        }
+
+        private static Version RetrieveVersionFromPolicy(StringToVersionMap stringToVersionMap, string key)
+        {
+            if (!stringToVersionMap.TryGetValue(key, out Version version))
+            {
+                version = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
+            }
+
+            return version;
         }
 
         private static StringToVersionMap BuildMinimumToolVersionsMap()
