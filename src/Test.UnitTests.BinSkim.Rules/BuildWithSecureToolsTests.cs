@@ -27,65 +27,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void RetrieveVersionFromMap_ShouldNotKeyNotFoundException_IfKeyDoesNotExist()
-        {
-            const string key1 = "key1";
-
-            StringToVersionMap stringToVersionMap = BuildWithSecureTools.BuildMinimumToolVersionsMap();
-
-            var testCases = new List<dynamic>
-            {
-                new
-                {
-                    Map = (StringToVersionMap)null,
-                    Key = (string)null,
-                    ExpectedVersion = BuildWithSecureTools.MaxVersion,
-                },
-                new
-                {
-                    Map = new StringToVersionMap(),
-                    Key = (string)null,
-                    ExpectedVersion = BuildWithSecureTools.MaxVersion
-                },
-                new
-                {
-                    Map = (StringToVersionMap)null,
-                    Key = key1,
-                    ExpectedVersion = BuildWithSecureTools.MaxVersion
-                },
-                new
-                {
-                    Map = stringToVersionMap,
-                    Key = key1,
-                    ExpectedVersion = BuildWithSecureTools.MaxVersion
-                },
-            };
-
-            foreach (KeyValuePair<string, Version> item in stringToVersionMap)
-            {
-                testCases.Add(new
-                {
-                    Map = stringToVersionMap,
-                    Key = item.Key,
-                    ExpectedVersion = item.Value
-                });
-            }
-
-            var sb = new StringBuilder();
-            foreach (dynamic testCase in testCases)
-            {
-                Version currentVersion = BuildWithSecureTools.RetrieveVersionFromMap(testCase.Map, testCase.Key);
-                if (currentVersion != testCase.ExpectedVersion)
-                {
-                    sb.AppendLine($"The test was expecting '{testCase.ExpectedVersion}' but found '{currentVersion}'" +
-                        $"for '{testCase.Map}' and '{testCase.Key}'");
-                }
-            }
-
-            sb.Length.Should().Be(0, sb.ToString());
-        }
-
-        [Fact]
         public void BuildMinimumCompilersList_ShouldAlwaysBeOrdered()
         {
             var omDetails = new List<ObjectModuleDetails>();
