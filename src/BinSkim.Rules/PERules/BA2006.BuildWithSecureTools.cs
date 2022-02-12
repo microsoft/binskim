@@ -51,6 +51,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
+        internal static readonly Version MaxVersion = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
+
         private const string AnalyzerName = RuleIds.BuildWithSecureTools + "." + nameof(BuildWithSecureTools);
 
         private const string MIN_XBOX_COMPILER_VER = "MinimumXboxCompilerVersion";
@@ -136,8 +138,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.Cxx:
                     {
                         minCompilerVersion = (target.PE?.IsXBox == true)
-                            ? RetrieveVersionFromPolicy(context.Policy.GetProperty(MinimumToolVersions), MIN_XBOX_COMPILER_VER)
-                            : RetrieveVersionFromPolicy(context.Policy.GetProperty(MinimumToolVersions), nameof(Language.C));
+                            ? RetrieveVersionFromMap(context.Policy.GetProperty(MinimumToolVersions), MIN_XBOX_COMPILER_VER)
+                            : RetrieveVersionFromMap(context.Policy.GetProperty(MinimumToolVersions), nameof(Language.C));
                         break;
                     }
 
@@ -275,9 +277,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (languagesToBadModules.Count != 0)
             {
                 var sb = new StringBuilder();
-                foreach (KeyValuePair<Language, List<ObjectModuleDetails>> languageToBadModules in languagesToBadModules)
+                foreach (KeyValuePair<Language, List<ObjectModuleDetails>> languageToBadModules in languagesToBadModules.OrderBy(l => l.Key))
                 {
-                    sb.AppendLine(languageToBadModules.Value.CreateOutputCoalescedByCompiler());
+                    sb.Append(languageToBadModules.Value.CreateOutputCoalescedByCompiler());
                 }
 
                 string badModulesText = sb.ToString();
@@ -316,13 +318,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return omDetails.CompilerName + ":" + omDetails.Language + ":" + omDetails.CompilerBackEndVersion;
         }
 
-        private string BuildMinimumCompilersList(BinaryAnalyzerContext context, Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
+        internal static string BuildMinimumCompilersList(BinaryAnalyzerContext context, Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
         {
             var languages = new List<string>();
 
-            foreach (Language language in languageToBadModules.Keys)
+            foreach (Language language in languageToBadModules.Keys.OrderBy(k => k))
             {
-                Version version = RetrieveVersionFromPolicy(context.Policy.GetProperty(MinimumToolVersions), language.ToString());
+                Version version = RetrieveVersionFromMap(context.Policy.GetProperty(MinimumToolVersions), language.ToString());
                 languages.Add($"{language} ({version})");
             }
             return string.Join(", ", languages);
@@ -343,7 +345,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private void AnalyzeManagedPE(BinaryAnalyzerContext context)
         {
             Version minCscVersion =
-                RetrieveVersionFromPolicy(context.Policy.GetProperty(MinimumToolVersions), nameof(Language.CSharp));
+                RetrieveVersionFromMap(context.Policy.GetProperty(MinimumToolVersions), nameof(Language.CSharp));
 
             PE pe = context.PEBinary().PE;
 
@@ -376,17 +378,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return (lhs < rhs) ? lhs : rhs;
         }
 
-        private static Version RetrieveVersionFromPolicy(StringToVersionMap stringToVersionMap, string key)
+        internal static Version RetrieveVersionFromMap(StringToVersionMap stringToVersionMap, string key)
         {
+            if (stringToVersionMap == null || string.IsNullOrWhiteSpace(key))
+            {
+                return MaxVersion;
+            }
+
             if (!stringToVersionMap.TryGetValue(key, out Version version))
             {
-                version = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
+                version = MaxVersion;
             }
 
             return version;
         }
 
-        private static StringToVersionMap BuildMinimumToolVersionsMap()
+        internal static StringToVersionMap BuildMinimumToolVersionsMap()
         {
             var result = new StringToVersionMap
             {
