@@ -241,7 +241,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         string.Join(", ", sorted)));
         }
 
-        private void GenerateMessageParametersAndLog(BinaryAnalyzerContext context, Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
+        internal void GenerateMessageParametersAndLog(BinaryAnalyzerContext context, Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
         {
             var sb = new StringBuilder();
             var languages = new List<string>();

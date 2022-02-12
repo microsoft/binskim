@@ -13,6 +13,8 @@ using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 
+using Moq;
+
 using Xunit;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -56,6 +58,37 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     version.Should().Be(MinVersion);
                 }
             }
+        }
+
+        [Fact]
+        public void GenerateMessageParametersAndLog_ShouldAlwaysGenerateValidParametersAndLog()
+        {
+            var buildWithSecureTools = new BuildWithSecureTools();
+            var logger = new Mock<IAnalysisLogger>();
+            using var context = new BinaryAnalyzerContext
+            {
+                TargetUri = new Uri(@"c:/file.dll"),
+                Policy = GeneratePolicyOptions(empty: true),
+                Binary = GeneratePEBinary(),
+                Logger = logger.Object,
+                Rule = buildWithSecureTools
+            };
+
+            var omDetails = new ObjectModuleDetails(name: "file.obj",
+                                                    library: "lib.lib",
+                                                    compilerName: "Microsoft (R) Optmizing Compiler",
+                                                    compilerFrontEndVersion: new Version(1, 0, 0, 0),
+                                                    backEndVersion: new Version(1, 0, 0, 0),
+                                                    commandLine: "",
+                                                    language: Language.C,
+                                                    hasSecurityChecks: true,
+                                                    hasDebugInfo: true);
+
+            var languageToBadModules = new Dictionary<Language, List<ObjectModuleDetails>>();
+            languageToBadModules.Add(Language.C, new List<ObjectModuleDetails> { omDetails });
+
+            buildWithSecureTools.GenerateMessageParametersAndLog(context, languageToBadModules);
+            logger.Verify(l => l.Log(It.IsAny<ReportingDescriptor>(), It.IsAny<Result>()), Moq.Times.Once);
         }
 
         private static PEBinary GeneratePEBinary()
