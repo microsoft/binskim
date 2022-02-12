@@ -330,18 +330,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return string.Join(", ", languages);
         }
 
-        private string BuildBadModulesList(Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
-        {
-            var coalescedModules = new List<string>();
-
-            foreach (Language language in languageToBadModules.Keys)
-            {
-                string modulesText = languageToBadModules[language].CreateOutputCoalescedByCompiler();
-                coalescedModules.Add(modulesText);
-            }
-            return string.Join(string.Empty, coalescedModules);
-        }
-
         private void AnalyzeManagedPE(BinaryAnalyzerContext context)
         {
             Version minCscVersion =
