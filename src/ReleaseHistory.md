@@ -1,5 +1,9 @@
 # BinSkim Release History
 
+## Unreleased
+
+* BUGFIX: Fix `KeyNotFoundException` when required properties are removed from the config file. [#565](https://github.com/microsoft/binskim/pull/565)
+
 ## **v1.9.2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.2)
 
 * BUGFIX: Fix `MultithreadedAnalyzeCommandBase` artifacts generation and enforcing JSON properties ordering. [#555](https://github.com/microsoft/binskim/pull/555)
