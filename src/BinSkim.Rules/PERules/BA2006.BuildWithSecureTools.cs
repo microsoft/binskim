@@ -55,6 +55,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private const string MIN_XBOX_COMPILER_VER = "MinimumXboxCompilerVersion";
 
+        public static PerLanguageOption<Version> MinimumCCompilerVersion { get; } =
+            new PerLanguageOption<Version>(AnalyzerName, nameof(Language.C), defaultValue: () => new Version());
+        public static PerLanguageOption<Version> MinimumCxxCompilerVersion { get; } =
+            new PerLanguageOption<Version>(AnalyzerName, nameof(Language.Cxx), defaultValue: () => new Version());
+        public static PerLanguageOption<Version> MinimumUnknownCompilerVersion { get; } =
+            new PerLanguageOption<Version>(AnalyzerName, nameof(Language.Unknown), defaultValue: () => new Version());
+        public static PerLanguageOption<Version> MinimumXboxCompilerVersion { get; } =
+            new PerLanguageOption<Version>(AnalyzerName, MIN_XBOX_COMPILER_VER, defaultValue: () => new Version());
+
         public static PerLanguageOption<StringToVersionMap> MinimumToolVersions { get; } =
             new PerLanguageOption<StringToVersionMap>(
                 AnalyzerName, nameof(MinimumToolVersions), defaultValue: () => BuildMinimumToolVersionsMap());
@@ -125,65 +134,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
-                switch (omDetails.Language)
-                {
-                    case Language.LINK:
-                    {
-                        continue;
-                    }
-
-                    case Language.C:
-                    case Language.Cxx:
-                    {
-                        minCompilerVersion = (target.PE?.IsXBox == true)
-                            ? context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(MIN_XBOX_COMPILER_VER)
-                            : context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.C));
-                        break;
-                    }
-
-                    /*
-                    TODO: MikeFan (1/6/2022)
-                    We need to take a step back and comprehensively review our compiler/language support.
-                    https://github.com/Microsoft/binskim/issues/114
-
-                    case Language.MASM:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.MASM));
-                        break;
-                    }
-
-                    case Language.CVTRES:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.CVTRES));
-                        break;
-                    }
-
-                    case Language.CSharp:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.CSharp));
-                        break;
-                    }
-
-                    Language data is not always included if it is only compiled with SymTagCompiland without SymTagCompilandDetails
-                    https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/compilanddetails?view=vs-2022
-                    Compiland information is split between symbols with a SymTagCompiland tag (low detail)
-                    and a SymTagCompilandDetails tag (high detail).
-                    case Language.Unknown:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.Unknown));
-                        break;
-                    }
-                    */
-
-                    default:
-                    {
-                        continue;
-                    }
-                }
+                minCompilerVersion = RetrieveMinimumCompilerVersionByLanguage(context, omDetails.Language);
 
                 // See if the item is in our skip list
                 if (!string.IsNullOrEmpty(om.Lib))
@@ -316,47 +267,84 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return omDetails.CompilerName + ":" + omDetails.Language + ":" + omDetails.CompilerBackEndVersion;
         }
 
+        internal static Version RetrieveMinimumCompilerVersionByLanguage(BinaryAnalyzerContext context, Language language)
+        {
+            switch (language)
+            {
+                case Language.C:
+                case Language.Cxx:
+                {
+                    PEBinary target = context.PEBinary();
+                    if (target.PE?.IsXBox == true)
+                    {
+                        return context.Policy.GetProperty(MinimumToolVersions).GetProperty(MinimumXboxCompilerVersion);
+
+                    }
+                    else
+                    {
+                        return (language == Language.C)
+                            ? context.Policy.GetProperty(MinimumToolVersions).GetProperty(MinimumCCompilerVersion)
+                            : context.Policy.GetProperty(MinimumToolVersions).GetProperty(MinimumCxxCompilerVersion);
+                    }
+                }
+
+                /*
+                    TODO: MikeFan (1/6/2022)
+                    We need to take a step back and comprehensively review our compiler/language support.
+                    https://github.com/Microsoft/binskim/issues/114
+
+                    case Language.MASM:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.MASM));
+                        break;
+                    }
+
+                    case Language.CVTRES:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.CVTRES));
+                        break;
+                    }
+
+                    case Language.CSharp:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.CSharp));
+                        break;
+                    }
+
+                    Language data is not always included if it is only compiled with SymTagCompiland without SymTagCompilandDetails
+                    https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/compilanddetails?view=vs-2022
+                    Compiland information is split between symbols with a SymTagCompiland tag (low detail)
+                    and a SymTagCompilandDetails tag (high detail).
+                    case Language.Unknown:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.Unknown));
+                        break;
+                    }
+                    */
+
+                default:
+                {
+                    break;
+                }
+            }
+
+            return new Version();
+        }
+
         internal static string BuildMinimumCompilersList(BinaryAnalyzerContext context, Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
         {
             var languages = new List<string>();
 
             foreach (Language language in languageToBadModules.Keys.OrderBy(k => k))
             {
-                Version version = context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(language.ToString());
+                Version version = RetrieveMinimumCompilerVersionByLanguage(context, language);
                 languages.Add($"{language} ({version})");
             }
             return string.Join(", ", languages);
-        }
-
-        private void AnalyzeManagedPE(BinaryAnalyzerContext context)
-        {
-            Version minCscVersion =
-                context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.CSharp));
-
-            PE pe = context.PEBinary().PE;
-
-            if (pe.LinkerVersion < minCscVersion)
-            {
-                // '{0}' is a managed assembly that was compiled with an outdated toolchain
-                // ({1}) that does not support security features (such as SHA256 PDB
-                // checksums and reproducible builds) that must be enabled by policy. To
-                // resolve this issue, compile with more recent tools ({2} or later).
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                    nameof(RuleResources.BA2006_Error_OutdatedCsc),
-                        context.TargetUri.GetFileName(),
-                        pe.LinkerVersion.ToString(),
-                        minCscVersion.ToString()));
-
-                return;
-            }
-
-            // '{0}' is a managed assembly that was compiled with toolchain ({1}) that supports all security features that must be enabled by policy.
-            context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                nameof(RuleResources.BA2006_Pass_Csc),
-                    context.TargetUri.GetFileName(),
-                    pe.LinkerVersion.ToString()));
         }
 
         public static Version Minimum(Version lhs, Version rhs)
@@ -366,26 +354,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         internal static StringToVersionMap BuildMinimumToolVersionsMap()
         {
-            var result = new StringToVersionMap
-            {
-                [nameof(Language.C)] = new Version(17, 0, 65501, 17013),
-                [nameof(Language.Cxx)] = new Version(17, 0, 65501, 17013),
-                //[nameof(Language.MASM)] = new Version(12, 0, 0, 0),
-                //[nameof(Language.LINK)] = new Version(17, 0, 65501, 17013),
-                //[nameof(Language.CSharp)] = new Version(19, 0, 0, 0),
-                //[nameof(Language.CVTRES)] = new Version(12, 0, 0, 0),
-                [nameof(Language.Unknown)] = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue),
-                [MIN_XBOX_COMPILER_VER] = new Version(16, 0, 11886, 0)
-            };
-
-            //foreach (string name in Enum.GetNames(typeof(Language)))
-            //{
-            //    if (!result.ContainsKey(name))
-            //    {
-            //        // If we don't have entry for a language, fire on everything.
-            //        result[name] = new Version(int.MaxValue, int.MaxValue);
-            //    }
-            //}
+            var result = new StringToVersionMap();
+            result.SetProperty(MinimumCCompilerVersion, new Version(17, 0, 65501, 17013));
+            result.SetProperty(MinimumCxxCompilerVersion, new Version(17, 0, 65501, 17013));
+            result.SetProperty(MinimumUnknownCompilerVersion, new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue));
+            result.SetProperty(MinimumXboxCompilerVersion, new Version(16, 0, 11886, 0));
 
             return result;
         }
