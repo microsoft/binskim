@@ -8,8 +8,13 @@ using System.Text;
 
 using FluentAssertions;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+
+using Moq;
 
 using Xunit;
 
@@ -24,6 +29,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             s_randomSeed = (int)DateTime.UtcNow.TimeOfDay.TotalMilliseconds;
             s_random = new Random(s_randomSeed);
+        }
+
+        [Fact]
+        public void RetrieveMinimumCompilerVersionByLanguage_ShouldRetrieveCorrectVersions()
+        {
+            var allOptions = new PropertiesDictionary();
+            var buildWithSecureTools = new BuildWithSecureTools();
+            string ruleOptionsKey = $"{buildWithSecureTools.Id}.{buildWithSecureTools.Name}.Options";
+
+            allOptions[ruleOptionsKey] = new PropertiesDictionary();
+
+            var properties = (PropertiesDictionary)allOptions[ruleOptionsKey];
+            foreach (IOption option in buildWithSecureTools.GetOptions())
+            {
+                properties.SetProperty(option, option.DefaultValue, cacheDescription: true, persistToSettingsContainer: false);
+            }
+
+            var peBinary = new Mock<PEBinary>(new Uri(@"c:/file.pdb"), null, null, false);
+            peBinary.SetupGet(p => p.PE).Returns((PE)null);
+
+            var context = new BinaryAnalyzerContext
+            {
+                Policy = allOptions,
+                Binary = peBinary.Object
+            };
+
+            var version = BuildWithSecureTools.RetrieveMinimumCompilerVersionByLanguage(context, Language.C);
         }
 
         [Fact]
