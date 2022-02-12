@@ -25,26 +25,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 new StringToVersionMapTestCase
                 {
                     Map = null,
-                    Key = null,
-                    ExpectedVersion = BuildWithSecureTools.MaxVersion,
+                    Key = null
                 },
                 new StringToVersionMapTestCase
                 {
                     Map = new StringToVersionMap(),
-                    Key = null,
-                    ExpectedVersion = BuildWithSecureTools.MaxVersion
+                    Key = null
                 },
                 new StringToVersionMapTestCase
                 {
                     Map = null,
-                    Key = key1,
-                    ExpectedVersion = BuildWithSecureTools.MaxVersion
+                    Key = key1
                 },
                 new StringToVersionMapTestCase
                 {
                     Map = stringToVersionMap,
-                    Key = key1,
-                    ExpectedVersion = BuildWithSecureTools.MaxVersion
+                    Key = key1
                 },
             };
 
@@ -61,11 +57,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var sb = new StringBuilder();
             foreach (StringToVersionMapTestCase testCase in testCases)
             {
-                Version currentVersion = testCase.Map.GetVersionByKey(testCase.Key);
-                if (currentVersion != testCase.ExpectedVersion)
+                foreach (bool returnMaxValueIfKeyDoesNotExist in new[] { true, false })
                 {
-                    sb.AppendLine($"The test was expecting '{testCase.ExpectedVersion}' but found '{currentVersion}'" +
-                        $"for '{testCase.Map}' and '{testCase.Key}'");
+                    Version currentVersion = testCase.Map.GetVersionByKey(testCase.Key, returnMaxValueIfKeyDoesNotExist);
+                    Version expectedVersion = testCase.ExpectedVersion ??
+                        (returnMaxValueIfKeyDoesNotExist ? StringToVersionMapExtensions.s_maxVersion : StringToVersionMapExtensions.s_minVersion);
+
+                    if (currentVersion != expectedVersion)
+                    {
+                        sb.AppendLine($"The test was expecting '{expectedVersion}' but found '{currentVersion}'" +
+                            $"for '{testCase.Map}' and '{testCase.Key}'");
+                    }
                 }
             }
 

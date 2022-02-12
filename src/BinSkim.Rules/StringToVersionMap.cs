@@ -14,18 +14,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
     public static class StringToVersionMapExtensions
     {
-        internal static readonly Version MaxVersion = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
+        internal static readonly Version s_maxVersion = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
+        internal static readonly Version s_minVersion = new Version(0, 0, 0, 0);
 
-        public static Version GetVersionByKey(this StringToVersionMap stringToVersionMap, string key)
+        public static Version GetVersionByKey(this StringToVersionMap stringToVersionMap, string key, bool returnMaxValueIfKeyDoesNotExist = true)
         {
             if (stringToVersionMap == null || string.IsNullOrWhiteSpace(key))
             {
-                return MaxVersion;
+                return returnMaxValueIfKeyDoesNotExist ? s_maxVersion : s_minVersion;
             }
 
             if (!stringToVersionMap.TryGetValue(key, out Version version))
             {
-                version = MaxVersion;
+                return returnMaxValueIfKeyDoesNotExist ? s_maxVersion : s_minVersion;
             }
 
             return version;
