@@ -22,6 +22,7 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("BinSkim")]
 [assembly: InternalsVisibleTo("UnitTests.BinSkim.Rules")]
+[assembly: InternalsVisibleTo("Test.UnitTests.BinSkim.Rules")]
 [assembly: InternalsVisibleTo("Test.UnitTests.BinaryParsers")]
 [assembly: InternalsVisibleTo("Test.UnitTests.BinSkim.Driver")]
 [assembly: InternalsVisibleTo("Test.FunctionalTests.BinSkim.Driver")]

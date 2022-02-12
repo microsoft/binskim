@@ -25,5 +25,6 @@
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
     <ProjectReference Include="..\BinSkim.Rules\BinSkim.Rules.csproj" />
     <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
+    <ProjectReference Include="..\Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj" />
   </ItemGroup>
 </Project>

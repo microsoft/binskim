@@ -3,18 +3,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 
 using FluentAssertions;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
-using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
-
-using Moq;
 
 using Xunit;
 
@@ -22,17 +19,52 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public class BuildWithSecureToolsTests
     {
-        private static readonly Random s_random;
-        private static readonly int s_randomSeed;
+        private static readonly Version MinVersion = new Version();
 
-        static BuildWithSecureToolsTests()
+        [Fact]
+        public void RetrieveMinimumCompilerVersionByLanguage_ShouldRetrieveMinVersionWhenLanguagesDoNotExistInTheMap()
         {
-            s_randomSeed = (int)DateTime.UtcNow.TimeOfDay.TotalMilliseconds;
-            s_random = new Random(s_randomSeed);
+            using var context = new BinaryAnalyzerContext
+            {
+                Policy = GeneratePolicyOptions(empty: true),
+                Binary = GeneratePEBinary()
+            };
+
+            Version version = BuildWithSecureTools.RetrieveMinimumCompilerVersionByLanguage(context, Language.C);
+            version.Should().Be(MinVersion);
         }
 
         [Fact]
-        public void RetrieveMinimumCompilerVersionByLanguage_ShouldRetrieveCorrectVersions()
+        public void RetrieveMinimumCompilerVersionByLanguage_ShouldRetrieveVersionWhenLanguagesExistInTheMap()
+        {
+            using var context = new BinaryAnalyzerContext
+            {
+                Policy = GeneratePolicyOptions(empty: false),
+                Binary = GeneratePEBinary()
+            };
+
+            foreach (Language language in Enum.GetValues(typeof(Language)))
+            {
+                Version version = BuildWithSecureTools.RetrieveMinimumCompilerVersionByLanguage(context, language);
+
+                if (new[] { Language.C, Language.Cxx }.Contains(language))
+                {
+                    version.Should().NotBe(MinVersion);
+                }
+                else
+                {
+                    version.Should().Be(MinVersion);
+                }
+            }
+        }
+
+        private static PEBinary GeneratePEBinary()
+        {
+            string fileName = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "Native_x64_VS2013_Default.dll");
+            return new PEBinary(new Uri(fileName));
+        }
+
+        private static PropertiesDictionary GeneratePolicyOptions(bool empty)
         {
             var allOptions = new PropertiesDictionary();
             var buildWithSecureTools = new BuildWithSecureTools();
@@ -43,55 +75,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var properties = (PropertiesDictionary)allOptions[ruleOptionsKey];
             foreach (IOption option in buildWithSecureTools.GetOptions())
             {
-                properties.SetProperty(option, option.DefaultValue, cacheDescription: true, persistToSettingsContainer: false);
+                object values = option.DefaultValue;
+                if (empty)
+                {
+                    values = new StringToVersionMap();
+                }
+
+                properties.SetProperty(option, values, cacheDescription: true, persistToSettingsContainer: false);
             }
 
-            var peBinary = new Mock<PEBinary>(new Uri(@"c:/file.pdb"), null, null, false);
-            peBinary.SetupGet(p => p.PE).Returns((PE)null);
-
-            var context = new BinaryAnalyzerContext
-            {
-                Policy = allOptions,
-                Binary = peBinary.Object
-            };
-
-            var version = BuildWithSecureTools.RetrieveMinimumCompilerVersionByLanguage(context, Language.C);
-        }
-
-        [Fact]
-        public void BuildMinimumCompilersList_ShouldAlwaysBeOrdered()
-        {
-            var omDetails = new List<ObjectModuleDetails>();
-            var context = new BinaryAnalyzerContext
-            {
-                Policy = new Sarif.PropertiesDictionary()
-            };
-
-            var languageToModules = new Dictionary<Language, List<ObjectModuleDetails>>();
-            foreach (Language language in Enum.GetValues(typeof(Language)))
-            {
-                languageToModules.Add(language, omDetails);
-            }
-
-            string orderedVersions = BuildWithSecureTools.BuildMinimumCompilersList(context, languageToModules);
-
-            Dictionary<Language, List<ObjectModuleDetails>> randomLanguageToModules = GenerateRandomLanguageList(omDetails);
-            string versions = BuildWithSecureTools.BuildMinimumCompilersList(context, randomLanguageToModules);
-
-            versions.Should().Be(orderedVersions);
-        }
-
-        private Dictionary<Language, List<ObjectModuleDetails>> GenerateRandomLanguageList(List<ObjectModuleDetails> omDetails)
-        {
-            var languageToModules = new Dictionary<Language, List<ObjectModuleDetails>>();
-
-            var languages = new List<Language>(Enum.GetValues(typeof(Language)) as Language[]);
-            foreach (Language language in languages.OrderBy(k => s_random.Next()))
-            {
-                languageToModules.Add(language, omDetails);
-            }
-
-            return languageToModules;
+            return allOptions;
         }
     }
 }

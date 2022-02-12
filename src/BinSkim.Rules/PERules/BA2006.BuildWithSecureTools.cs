@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -225,29 +226,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (languageToBadModules.Count != 0)
             {
-                var sb = new StringBuilder();
-                foreach (KeyValuePair<Language, List<ObjectModuleDetails>> kp in languageToBadModules.OrderBy(l => l.Key))
-                {
-                    sb.Append(kp.Value.CreateOutputCoalescedByCompiler());
-                }
-
-                string badModulesText = sb.ToString();
-                string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToBadModules);
-
-                // '{0}' was compiled with one or more modules which were not built using
-                // minimum required tool versions ({1}). More recent toolchains
-                // contain mitigations that make it more difficult for an attacker to exploit
-                // vulnerabilities in programs they produce. To resolve this issue, compile
-                // and /or link your binary with more recent tools. If you are servicing a
-                // product where the tool chain cannot be modified (e.g. producing a hotfix
-                // for an already shipped version) ignore this warning. Modules built outside
-                // of policy: {2}
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                    nameof(RuleResources.BA2006_Error),
-                        context.TargetUri.GetFileName(),
-                        minimumRequiredCompilers,
-                        badModulesText));
+                GenerateMessageParametersAndLog(context, languageToBadModules);
                 return;
             }
 
@@ -260,6 +239,40 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2006_Pass),
                         context.TargetUri.GetFileName(),
                         string.Join(", ", sorted)));
+        }
+
+        private void GenerateMessageParametersAndLog(BinaryAnalyzerContext context, Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
+        {
+            var sb = new StringBuilder();
+            var languages = new List<string>();
+            foreach (KeyValuePair<Language, List<ObjectModuleDetails>> kp in languageToBadModules.OrderBy(l => l.Key))
+            {
+                sb.Append(kp.Value.CreateOutputCoalescedByCompiler());
+
+                Version version = RetrieveMinimumCompilerVersionByLanguage(context, kp.Key);
+                languages.Add($"{kp.Key} ({version})");
+            }
+
+            string badModulesText = sb.ToString();
+            string minimumRequiredCompilers = string.Join(", ", languages);
+
+            Debug.Assert(!string.IsNullOrWhiteSpace(badModulesText) ||
+                !string.IsNullOrWhiteSpace(minimumRequiredCompilers));
+
+            // '{0}' was compiled with one or more modules which were not built using
+            // minimum required tool versions ({1}). More recent toolchains
+            // contain mitigations that make it more difficult for an attacker to exploit
+            // vulnerabilities in programs they produce. To resolve this issue, compile
+            // and /or link your binary with more recent tools. If you are servicing a
+            // product where the tool chain cannot be modified (e.g. producing a hotfix
+            // for an already shipped version) ignore this warning. Modules built outside
+            // of policy: {2}
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                nameof(RuleResources.BA2006_Error),
+                    context.TargetUri.GetFileName(),
+                    minimumRequiredCompilers,
+                    badModulesText));
         }
 
         private string BuildCompilerIdentifier(ObjectModuleDetails omDetails)
@@ -278,7 +291,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     if (target.PE?.IsXBox == true)
                     {
                         return context.Policy.GetProperty(MinimumToolVersions).GetProperty(MinimumXboxCompilerVersion);
-
                     }
                     else
                     {
@@ -333,18 +345,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             return new Version();
-        }
-
-        internal static string BuildMinimumCompilersList(BinaryAnalyzerContext context, Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
-        {
-            var languages = new List<string>();
-
-            foreach (Language language in languageToBadModules.Keys.OrderBy(k => k))
-            {
-                Version version = RetrieveMinimumCompilerVersionByLanguage(context, language);
-                languages.Add($"{language} ({version})");
-            }
-            return string.Join(", ", languages);
         }
 
         public static Version Minimum(Version lhs, Version rhs)
