@@ -118,7 +118,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
 
-            var languagesToBadModules = new Dictionary<Language, List<ObjectModuleDetails>>();
+            var languageToBadModules = new Dictionary<Language, List<ObjectModuleDetails>>();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -209,13 +209,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (foundIssue)
                 {
-                    if (!languagesToBadModules.TryGetValue(omDetails.Language, out List<ObjectModuleDetails> badModules))
+                    if (!languageToBadModules.TryGetValue(omDetails.Language, out List<ObjectModuleDetails> badModules))
                     {
                         badModules = new List<ObjectModuleDetails>();
                     }
 
                     badModules.Add(omDetails);
-                    languagesToBadModules[omDetails.Language] = badModules;
+                    languageToBadModules[omDetails.Language] = badModules;
                 }
                 else
                 {
@@ -223,16 +223,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
 
-            if (languagesToBadModules.Count != 0)
+            if (languageToBadModules.Count != 0)
             {
                 var sb = new StringBuilder();
-                foreach (KeyValuePair<Language, List<ObjectModuleDetails>> languageToBadModules in languagesToBadModules.OrderBy(l => l.Key))
+                foreach (KeyValuePair<Language, List<ObjectModuleDetails>> kp in languageToBadModules.OrderBy(l => l.Key))
                 {
-                    sb.Append(languageToBadModules.Value.CreateOutputCoalescedByCompiler());
+                    sb.Append(kp.Value.CreateOutputCoalescedByCompiler());
                 }
 
                 string badModulesText = sb.ToString();
-                string minimumRequiredCompilers = BuildMinimumCompilersList(context, languagesToBadModules);
+                string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToBadModules);
 
                 // '{0}' was compiled with one or more modules which were not built using
                 // minimum required tool versions ({1}). More recent toolchains
