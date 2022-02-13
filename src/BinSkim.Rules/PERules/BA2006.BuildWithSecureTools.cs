@@ -54,16 +54,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private const string AnalyzerName = RuleIds.BuildWithSecureTools + "." + nameof(BuildWithSecureTools);
 
-        private const string MIN_XBOX_COMPILER_VER = "MinimumXboxCompilerVersion";
-
         public static PerLanguageOption<Version> MinimumCCompilerVersion { get; } =
             new PerLanguageOption<Version>(AnalyzerName, nameof(Language.C), defaultValue: () => new Version());
+
         public static PerLanguageOption<Version> MinimumCxxCompilerVersion { get; } =
             new PerLanguageOption<Version>(AnalyzerName, nameof(Language.Cxx), defaultValue: () => new Version());
+
         public static PerLanguageOption<Version> MinimumUnknownCompilerVersion { get; } =
             new PerLanguageOption<Version>(AnalyzerName, nameof(Language.Unknown), defaultValue: () => new Version());
+
         public static PerLanguageOption<Version> MinimumXboxCompilerVersion { get; } =
-            new PerLanguageOption<Version>(AnalyzerName, MIN_XBOX_COMPILER_VER, defaultValue: () => new Version());
+            new PerLanguageOption<Version>(AnalyzerName, nameof(MinimumXboxCompilerVersion), defaultValue: () => new Version());
 
         public static PerLanguageOption<StringToVersionMap> MinimumToolVersions { get; } =
             new PerLanguageOption<StringToVersionMap>(
@@ -115,11 +116,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             Version minCompilerVersion;
 
-            var goodCompilers = new HashSet<string>();
+            var inPolicyCompilers = new HashSet<string>();
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
 
-            var languageToBadModules = new Dictionary<Language, List<ObjectModuleDetails>>();
+            var languageToOutOfPolicyModules = new Dictionary<Language, List<ObjectModuleDetails>>();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -135,7 +136,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
-                minCompilerVersion = RetrieveMinimumCompilerVersionByLanguage(context, omDetails.Language);
+                minCompilerVersion = RetrieveMinimumCompilerVersion(context, omDetails.Language);
 
                 // See if the item is in our skip list
                 if (!string.IsNullOrEmpty(om.Lib))
@@ -210,35 +211,38 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (foundIssue)
                 {
-                    if (!languageToBadModules.TryGetValue(omDetails.Language, out List<ObjectModuleDetails> badModules))
+                    if (!languageToOutOfPolicyModules.TryGetValue(omDetails.Language, out List<ObjectModuleDetails> outOfPolicyModules))
                     {
-                        badModules = new List<ObjectModuleDetails>();
+                        outOfPolicyModules = new List<ObjectModuleDetails>();
+                        languageToOutOfPolicyModules.Add(omDetails.Language, outOfPolicyModules);
                     }
 
-                    badModules.Add(omDetails);
-                    languageToBadModules[omDetails.Language] = badModules;
+                    outOfPolicyModules.Add(omDetails);
                 }
                 else
                 {
-                    goodCompilers.Add(BuildCompilerIdentifier(omDetails));
+                    inPolicyCompilers.Add(BuildCompilerIdentifier(omDetails));
                 }
             }
 
-            if (languageToBadModules.Count != 0)
+            if (languageToOutOfPolicyModules.Count != 0)
             {
-                GenerateMessageParametersAndLog(context, languageToBadModules);
+                GenerateMessageParametersAndLog(context, languageToOutOfPolicyModules);
                 return;
             }
 
-            string[] sorted = goodCompilers.ToArray();
-            Array.Sort(sorted);
+            string[] sortedInPolicyCompilers = inPolicyCompilers.ToArray();
+            Array.Sort(sortedInPolicyCompilers);
 
             // All linked modules of '{0}' satisfy configured policy (observed compilers: {1}).
-            context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                    nameof(RuleResources.BA2006_Pass),
-                        context.TargetUri.GetFileName(),
-                        string.Join(", ", sorted)));
+            Result result = RuleUtilities.BuildResult(ResultKind.Pass,
+                                                      context,
+                                                      null,
+                                                      nameof(RuleResources.BA2006_Pass),
+                                                      context.TargetUri.GetFileName(),
+                                                      string.Join(", ", sortedInPolicyCompilers));
+
+            context.Logger.Log(this, result);
         }
 
         internal void GenerateMessageParametersAndLog(BinaryAnalyzerContext context, Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
@@ -249,7 +253,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 sb.Append(kp.Value.CreateOutputCoalescedByCompiler());
 
-                Version version = RetrieveMinimumCompilerVersionByLanguage(context, kp.Key);
+                Version version = RetrieveMinimumCompilerVersion(context, kp.Key);
                 languages.Add($"{kp.Key} ({version})");
             }
 
@@ -257,7 +261,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string minimumRequiredCompilers = string.Join(", ", languages);
 
             Debug.Assert(!string.IsNullOrWhiteSpace(badModulesText) ||
-                !string.IsNullOrWhiteSpace(minimumRequiredCompilers));
+                         !string.IsNullOrWhiteSpace(minimumRequiredCompilers));
 
             // '{0}' was compiled with one or more modules which were not built using
             // minimum required tool versions ({1}). More recent toolchains
@@ -280,7 +284,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return omDetails.CompilerName + ":" + omDetails.Language + ":" + omDetails.CompilerBackEndVersion;
         }
 
-        internal static Version RetrieveMinimumCompilerVersionByLanguage(BinaryAnalyzerContext context, Language language)
+        internal static Version RetrieveMinimumCompilerVersion(BinaryAnalyzerContext context, Language language)
         {
             switch (language)
             {

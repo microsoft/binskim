@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Binary = GeneratePEBinary()
             };
 
-            Version version = BuildWithSecureTools.RetrieveMinimumCompilerVersionByLanguage(context, Language.C);
+            Version version = BuildWithSecureTools.RetrieveMinimumCompilerVersion(context, Language.C);
             version.Should().Be(MinVersion);
         }
 
@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (Language language in Enum.GetValues(typeof(Language)))
             {
-                Version version = BuildWithSecureTools.RetrieveMinimumCompilerVersionByLanguage(context, language);
+                Version version = BuildWithSecureTools.RetrieveMinimumCompilerVersion(context, language);
 
                 if (new[] { Language.C, Language.Cxx }.Contains(language))
                 {
