@@ -120,7 +120,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
 
-            var languageToOutOfPolicyModules = new Dictionary<Language, List<ObjectModuleDetails>>();
+            var languageToOutOfPolicyModules = new SortedDictionary<Language, List<ObjectModuleDetails>>();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -245,16 +245,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this, result);
         }
 
-        internal void GenerateMessageParametersAndLog(BinaryAnalyzerContext context, Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
+        internal void GenerateMessageParametersAndLog(BinaryAnalyzerContext context,
+                                                      SortedDictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
         {
             var sb = new StringBuilder();
             var languages = new List<string>();
-            foreach (KeyValuePair<Language, List<ObjectModuleDetails>> kp in languageToBadModules.OrderBy(l => l.Key))
+            foreach (KeyValuePair<Language, List<ObjectModuleDetails>> kp in languageToBadModules)
             {
-                sb.Append(kp.Value.CreateOutputCoalescedByCompiler());
+                Language language = kp.Key;
+                List<ObjectModuleDetails> outOfPolicyModules = kp.Value;
 
-                Version version = RetrieveMinimumCompilerVersion(context, kp.Key);
-                languages.Add($"{kp.Key} ({version})");
+                sb.Append(outOfPolicyModules.CreateOutputCoalescedByCompiler());
+
+                Version version = RetrieveMinimumCompilerVersion(context, language);
+                languages.Add($"{language} ({version})");
             }
 
             string badModulesText = sb.ToString();
@@ -271,12 +275,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // product where the tool chain cannot be modified (e.g. producing a hotfix
             // for an already shipped version) ignore this warning. Modules built outside
             // of policy: {2}
-            context.Logger.Log(this,
-                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                nameof(RuleResources.BA2006_Error),
-                    context.TargetUri.GetFileName(),
-                    minimumRequiredCompilers,
-                    badModulesText));
+            Result result = RuleUtilities.BuildResult(FailureLevel.Error,
+                                                      context,
+                                                      null,
+                                                      nameof(RuleResources.BA2006_Error),
+                                                      context.TargetUri.GetFileName(),
+                                                      minimumRequiredCompilers,
+                                                      badModulesText);
+            context.Logger.Log(this, result);
         }
 
         private string BuildCompilerIdentifier(ObjectModuleDetails omDetails)
