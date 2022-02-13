@@ -54,6 +54,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private const string AnalyzerName = RuleIds.BuildWithSecureTools + "." + nameof(BuildWithSecureTools);
 
+        [ThreadStatic]
+        private static StringBuilder s_sb;
+
         public static PerLanguageOption<Version> MinimumCCompilerVersion { get; } =
             new PerLanguageOption<Version>(AnalyzerName, nameof(Language.C), defaultValue: () => new Version());
 
@@ -248,23 +251,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         internal void GenerateMessageParametersAndLog(BinaryAnalyzerContext context,
                                                       SortedDictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
         {
-            var sb = new StringBuilder();
+            s_sb ??= new StringBuilder();
+            s_sb.Clear();
+
             var languages = new List<string>();
             foreach (KeyValuePair<Language, List<ObjectModuleDetails>> kp in languageToBadModules)
             {
                 Language language = kp.Key;
                 List<ObjectModuleDetails> outOfPolicyModules = kp.Value;
 
-                sb.Append(outOfPolicyModules.CreateOutputCoalescedByCompiler());
+                s_sb.Append(outOfPolicyModules.CreateOutputCoalescedByCompiler());
 
                 Version version = RetrieveMinimumCompilerVersion(context, language);
                 languages.Add($"{language} ({version})");
             }
 
-            string badModulesText = sb.ToString();
+            string outOfPolicyModulesText = s_sb.ToString();
             string minimumRequiredCompilers = string.Join(", ", languages);
 
-            Debug.Assert(!string.IsNullOrWhiteSpace(badModulesText) ||
+            Debug.Assert(!string.IsNullOrWhiteSpace(outOfPolicyModulesText) ||
                          !string.IsNullOrWhiteSpace(minimumRequiredCompilers));
 
             // '{0}' was compiled with one or more modules which were not built using
@@ -281,7 +286,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                                       nameof(RuleResources.BA2006_Error),
                                                       context.TargetUri.GetFileName(),
                                                       minimumRequiredCompilers,
-                                                      badModulesText);
+                                                      outOfPolicyModulesText);
             context.Logger.Log(this, result);
         }
 

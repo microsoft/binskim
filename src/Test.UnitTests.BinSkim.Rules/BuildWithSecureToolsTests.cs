@@ -84,7 +84,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                                     hasSecurityChecks: true,
                                                     hasDebugInfo: true);
 
-            var languageToBadModules = new Dictionary<Language, List<ObjectModuleDetails>>();
+            var languageToBadModules = new SortedDictionary<Language, List<ObjectModuleDetails>>();
             languageToBadModules.Add(Language.C, new List<ObjectModuleDetails> { omDetails });
 
             buildWithSecureTools.GenerateMessageParametersAndLog(context, languageToBadModules);
