@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -51,6 +53,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         private const string AnalyzerName = RuleIds.BuildWithSecureTools + "." + nameof(BuildWithSecureTools);
+
+        [ThreadStatic]
+        private static StringBuilder s_sb;
 
         private const string MIN_XBOX_COMPILER_VER = "MinimumXboxCompilerVersion";
 
@@ -127,12 +132,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             Version minCompilerVersion;
 
-            var goodCompilers = new HashSet<string>();
+            var inPolicyCompilers = new HashSet<string>();
 
-            var badModules = new List<ObjectModuleDetails>();
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
 
-            var languageToBadModules = new Dictionary<Language, List<ObjectModuleDetails>>();
+            var languageToOutOfPolicyModules = new SortedDictionary<Language, List<ObjectModuleDetails>>();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -148,65 +152,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
-                switch (omDetails.Language)
-                {
-                    case Language.LINK:
-                    {
-                        continue;
-                    }
-
-                    case Language.C:
-                    case Language.Cxx:
-                    {
-                        minCompilerVersion = (target.PE?.IsXBox == true)
-                            ? context.Policy.GetProperty(MinimumToolVersions)[MIN_XBOX_COMPILER_VER]
-                            : context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.C)];
-                        break;
-                    }
-
-                    /*
-                    TODO: MikeFan (1/6/2022)
-                    We need to take a step back and comprehensively review our compiler/language support.
-                    https://github.com/Microsoft/binskim/issues/114
-
-                    case Language.MASM:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.MASM)];
-                        break;
-                    }
-
-                    case Language.CVTRES:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CVTRES)];
-                        break;
-                    }
-
-                    case Language.CSharp:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.CSharp)];
-                        break;
-                    }
-
-                    Language data is not always included if it is only compiled with SymTagCompiland without SymTagCompilandDetails
-                    https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/compilanddetails?view=vs-2022
-                    Compiland information is split between symbols with a SymTagCompiland tag (low detail)
-                    and a SymTagCompilandDetails tag (high detail).
-                    case Language.Unknown:
-                    {
-                        minCompilerVersion =
-                            context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.Unknown)];
-                        break;
-                    }
-                    */
-
-                    default:
-                    {
-                        continue;
-                    }
-                }
+                minCompilerVersion = RetrieveMinimumCompilerVersion(context, omDetails.Language);
 
                 // See if the item is in our skip list
                 if (!string.IsNullOrEmpty(om.Lib))
@@ -281,37 +227,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (foundIssue)
                 {
-                    badModules.Add(omDetails);
+                    if (!languageToOutOfPolicyModules.TryGetValue(omDetails.Language, out List<ObjectModuleDetails> outOfPolicyModules))
+                    {
+                        outOfPolicyModules = new List<ObjectModuleDetails>();
+                        languageToOutOfPolicyModules.Add(omDetails.Language, outOfPolicyModules);
+                    }
+
+                    outOfPolicyModules.Add(omDetails);
                 }
                 else
                 {
-                    goodCompilers.Add(BuildCompilerIdentifier(omDetails));
+                    inPolicyCompilers.Add(BuildCompilerIdentifier(omDetails));
                 }
             }
 
-            if (badModules.Count != 0)
+            if (languageToOutOfPolicyModules.Count != 0)
             {
-                string badModulesText = badModules.CreateOutputCoalescedByCompiler();
-                string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToBadModules);
-
-                // '{0}' was compiled with one or more modules which were not built using
-                // minimum required tool versions ({1}). More recent toolchains
-                // contain mitigations that make it more difficult for an attacker to exploit
-                // vulnerabilities in programs they produce. To resolve this issue, compile
-                // and /or link your binary with more recent tools. If you are servicing a
-                // product where the tool chain cannot be modified (e.g. producing a hotfix
-                // for an already shipped version) ignore this warning. Modules built outside
-                // of policy: {2}
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                    nameof(RuleResources.BA2006_Error),
-                        context.TargetUri.GetFileName(),
-                        minimumRequiredCompilers,
-                        badModulesText));
+                GenerateMessageParametersAndLog(context, languageToOutOfPolicyModules);
                 return;
             }
 
-            string[] sorted = goodCompilers.ToArray();
+            string[] sorted = inPolicyCompilers.ToArray();
             Array.Sort(sorted);
 
             // All linked modules of '{0}' satisfy configured policy (observed compilers: {1}).
@@ -320,6 +256,115 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2006_Pass),
                         context.TargetUri.GetFileName(),
                         string.Join(", ", sorted)));
+        }
+
+        internal void GenerateMessageParametersAndLog(BinaryAnalyzerContext context,
+                                                      SortedDictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
+        {
+            s_sb ??= new StringBuilder();
+            s_sb.Clear();
+
+            var languages = new List<string>();
+            foreach (KeyValuePair<Language, List<ObjectModuleDetails>> kp in languageToBadModules)
+            {
+                Language language = kp.Key;
+                List<ObjectModuleDetails> outOfPolicyModules = kp.Value;
+
+                s_sb.Append(outOfPolicyModules.CreateOutputCoalescedByCompiler());
+
+                Version version = RetrieveMinimumCompilerVersion(context, language);
+                languages.Add($"{language} ({version})");
+            }
+
+            string outOfPolicyModulesText = s_sb.ToString();
+            string minimumRequiredCompilers = string.Join(", ", languages);
+
+            Debug.Assert(!string.IsNullOrWhiteSpace(outOfPolicyModulesText) ||
+                         !string.IsNullOrWhiteSpace(minimumRequiredCompilers));
+
+            // '{0}' was compiled with one or more modules which were not built using
+            // minimum required tool versions ({1}). More recent toolchains
+            // contain mitigations that make it more difficult for an attacker to exploit
+            // vulnerabilities in programs they produce. To resolve this issue, compile
+            // and /or link your binary with more recent tools. If you are servicing a
+            // product where the tool chain cannot be modified (e.g. producing a hotfix
+            // for an already shipped version) ignore this warning. Modules built outside
+            // of policy: {2}
+            Result result = RuleUtilities.BuildResult(FailureLevel.Error,
+                                                      context,
+                                                      null,
+                                                      nameof(RuleResources.BA2006_Error),
+                                                      context.TargetUri.GetFileName(),
+                                                      minimumRequiredCompilers,
+                                                      outOfPolicyModulesText);
+            context.Logger.Log(this, result);
+        }
+
+        internal static Version RetrieveMinimumCompilerVersion(BinaryAnalyzerContext context, Language language)
+        {
+            switch (language)
+            {
+                case Language.C:
+                case Language.Cxx:
+                {
+                    PEBinary target = context.PEBinary();
+                    if (target.PE?.IsXBox == true)
+                    {
+                        return context.Policy.GetProperty(MinimumToolVersions)[MIN_XBOX_COMPILER_VER];
+                    }
+                    else
+                    {
+                        return (language == Language.C)
+                            ? context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.C)]
+                            : context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.Cxx)];
+                    }
+                }
+
+                /*
+                    TODO: MikeFan (1/6/2022)
+                    We need to take a step back and comprehensively review our compiler/language support.
+                    https://github.com/Microsoft/binskim/issues/114
+
+                    case Language.MASM:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.MASM));
+                        break;
+                    }
+
+                    case Language.CVTRES:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.CVTRES));
+                        break;
+                    }
+
+                    case Language.CSharp:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.CSharp));
+                        break;
+                    }
+
+                    Language data is not always included if it is only compiled with SymTagCompiland without SymTagCompilandDetails
+                    https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/compilanddetails?view=vs-2022
+                    Compiland information is split between symbols with a SymTagCompiland tag (low detail)
+                    and a SymTagCompilandDetails tag (high detail).
+                    case Language.Unknown:
+                    {
+                        minCompilerVersion =
+                            context.Policy.GetProperty(MinimumToolVersions).GetVersionByKey(nameof(Language.Unknown));
+                        break;
+                    }
+                    */
+
+                default:
+                {
+                    break;
+                }
+            }
+
+            return new Version();
         }
 
         private string BuildCompilerIdentifier(ObjectModuleDetails omDetails)
