@@ -9,7 +9,7 @@ Test files are located in [BaselineTestsData](https://github.com/microsoft/binsk
 A simple hello world program, compiled with `clang 13.0.0` that generates a .exe and associated .pdb file. Script to reproduce:  
 `clang-cl -o clangcl.pe.c.codeview.exe -fuse-ld=lld-link hello.c -m32 -Z7 -MTd`
 
-## Native_x64_RustC_Rust_debuginfo2_v1.57.exe
+## Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe
 
-A simple hello world program, compiled with `rustc 1.57.0` that generates a .exe and associated .pdb file. Script to reproduce:  
-`rustc -g -Clink-arg=/DEBUG:FULL src\main.rs -o Native_x64_RustC_Rust_debuginfo2_v1.57.exe`
+A simple hello world program, compiled with `rustc 1.58.1` that generates a .exe and associated .pdb file. Script to reproduce:  
+`rustc -g -Clink-arg=/DEBUG:FULL src\main.rs -o Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe`
