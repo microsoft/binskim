@@ -485,32 +485,8 @@
           ]
         },
         {
-          "ruleId": "BA2025",
-          "ruleIndex": 20,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "clang.object_file.o",
-              "EnableShadowStack",
-              "image is not a PE binary"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/clang.object_file.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA2026",
-          "ruleIndex": 21,
+          "ruleIndex": 20,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -534,7 +510,7 @@
         },
         {
           "ruleId": "BA3001",
-          "ruleIndex": 22,
+          "ruleIndex": 21,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -558,7 +534,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 23,
+          "ruleIndex": 22,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -582,7 +558,7 @@
         },
         {
           "ruleId": "BA3003",
-          "ruleIndex": 24,
+          "ruleIndex": 23,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -606,7 +582,7 @@
         },
         {
           "ruleId": "BA3005",
-          "ruleIndex": 25,
+          "ruleIndex": 24,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -630,7 +606,7 @@
         },
         {
           "ruleId": "BA3006",
-          "ruleIndex": 26,
+          "ruleIndex": 25,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -654,7 +630,7 @@
         },
         {
           "ruleId": "BA3010",
-          "ruleIndex": 27,
+          "ruleIndex": 26,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -678,7 +654,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 28,
+          "ruleIndex": 27,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -702,7 +678,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 29,
+          "ruleIndex": 28,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -726,7 +702,7 @@
         },
         {
           "ruleId": "BA4001",
-          "ruleIndex": 30,
+          "ruleIndex": 29,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -750,7 +726,7 @@
         },
         {
           "ruleId": "BA5001",
-          "ruleIndex": 31,
+          "ruleIndex": 30,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -774,7 +750,7 @@
         },
         {
           "ruleId": "BA5002",
-          "ruleIndex": 32,
+          "ruleIndex": 31,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -1364,28 +1340,6 @@
                 }
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2024EnableSpectreMitigations"
-            },
-            {
-              "id": "BA2025",
-              "name": "EnableShadowStack",
-              "fullDescription": {
-                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
-              },
-              "help": {
-                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation."
-                },
-                "Warning": {
-                  "text": "'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2025EnableShadowStack"
             },
             {
               "id": "BA2026",

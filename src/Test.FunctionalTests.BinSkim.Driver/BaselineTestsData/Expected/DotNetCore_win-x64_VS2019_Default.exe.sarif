@@ -245,32 +245,8 @@
           ]
         },
         {
-          "ruleId": "BA2025",
-          "ruleIndex": 10,
-          "kind": "notApplicable",
-          "level": "none",
-          "message": {
-            "id": "NotApplicable_InvalidMetadata",
-            "arguments": [
-              "DotNetCore_win-x64_VS2019_Default.exe",
-              "EnableShadowStack",
-              "image is a .NET core native bootstrap exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/DotNetCore_win-x64_VS2019_Default.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA2026",
-          "ruleIndex": 11,
+          "ruleIndex": 10,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -294,7 +270,7 @@
         },
         {
           "ruleId": "BA3001",
-          "ruleIndex": 12,
+          "ruleIndex": 11,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -318,7 +294,7 @@
         },
         {
           "ruleId": "BA3002",
-          "ruleIndex": 13,
+          "ruleIndex": 12,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -342,7 +318,7 @@
         },
         {
           "ruleId": "BA3003",
-          "ruleIndex": 14,
+          "ruleIndex": 13,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -366,7 +342,7 @@
         },
         {
           "ruleId": "BA3004",
-          "ruleIndex": 15,
+          "ruleIndex": 14,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -390,7 +366,7 @@
         },
         {
           "ruleId": "BA3005",
-          "ruleIndex": 16,
+          "ruleIndex": 15,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -414,7 +390,7 @@
         },
         {
           "ruleId": "BA3006",
-          "ruleIndex": 17,
+          "ruleIndex": 16,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -438,7 +414,7 @@
         },
         {
           "ruleId": "BA3010",
-          "ruleIndex": 18,
+          "ruleIndex": 17,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -462,7 +438,7 @@
         },
         {
           "ruleId": "BA3011",
-          "ruleIndex": 19,
+          "ruleIndex": 18,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -486,7 +462,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 20,
+          "ruleIndex": 19,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -510,7 +486,7 @@
         },
         {
           "ruleId": "BA4001",
-          "ruleIndex": 21,
+          "ruleIndex": 20,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -534,7 +510,7 @@
         },
         {
           "ruleId": "BA5001",
-          "ruleIndex": 22,
+          "ruleIndex": 21,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -558,7 +534,7 @@
         },
         {
           "ruleId": "BA5002",
-          "ruleIndex": 23,
+          "ruleIndex": 22,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -582,7 +558,7 @@
         },
         {
           "ruleId": "BA2001",
-          "ruleIndex": 24,
+          "ruleIndex": 23,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -604,7 +580,7 @@
         },
         {
           "ruleId": "BA2005",
-          "ruleIndex": 25,
+          "ruleIndex": 24,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -626,7 +602,7 @@
         },
         {
           "ruleId": "BA2008",
-          "ruleIndex": 26,
+          "ruleIndex": 25,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -648,7 +624,7 @@
         },
         {
           "ruleId": "BA2009",
-          "ruleIndex": 27,
+          "ruleIndex": 26,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -670,7 +646,7 @@
         },
         {
           "ruleId": "BA2010",
-          "ruleIndex": 28,
+          "ruleIndex": 27,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -692,7 +668,7 @@
         },
         {
           "ruleId": "BA2012",
-          "ruleIndex": 29,
+          "ruleIndex": 28,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -714,7 +690,7 @@
         },
         {
           "ruleId": "BA2015",
-          "ruleIndex": 30,
+          "ruleIndex": 29,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -736,7 +712,7 @@
         },
         {
           "ruleId": "BA2019",
-          "ruleIndex": 31,
+          "ruleIndex": 30,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -758,7 +734,7 @@
         },
         {
           "ruleId": "BA2021",
-          "ruleIndex": 32,
+          "ruleIndex": 31,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -780,7 +756,7 @@
         },
         {
           "ruleId": "BA2022",
-          "ruleIndex": 33,
+          "ruleIndex": 32,
           "kind": "notApplicable",
           "level": "none",
           "message": {
@@ -1087,28 +1063,6 @@
                 }
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2024EnableSpectreMitigations"
-            },
-            {
-              "id": "BA2025",
-              "name": "EnableShadowStack",
-              "fullDescription": {
-                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
-              },
-              "help": {
-                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation."
-                },
-                "Warning": {
-                  "text": "'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines."
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2025EnableShadowStack"
             },
             {
               "id": "BA2026",
