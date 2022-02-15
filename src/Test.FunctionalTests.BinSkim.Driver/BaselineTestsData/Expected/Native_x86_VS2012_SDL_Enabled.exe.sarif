@@ -435,7 +435,7 @@
             "id": "Error",
             "arguments": [
               "Native_x86_VS2012_SDL_Enabled.exe",
-              "",
+              "C (17.0.65501.17013), Cxx (17.0.65501.17013)",
               "Microsoft (R) Optimizing Compiler : c : 17.0.50929.0 : MSVCRTD.lib (_newmode.obj,atonexit.obj,chandler4gs.obj,cinitexe.obj,crtexe.obj,dllargv.obj,fp8.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,loadcfg.obj,merr.obj,natstart.obj,pesect.obj,secchk.obj,wildcard.obj,xncommod.obj,xthdloc.obj,xtxtmode.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 17.0.50929.0 : MSVCRTD.lib (ehvecdtr.obj,error.obj,init.obj,initsect.obj,pdblkup.obj,stack.obj,ti_inst.obj,unhandld.obj,userapi.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 17.0.61232.400 : [directly linked] (Native_x86_VS2012.obj)\r\n"
             ]
           },
