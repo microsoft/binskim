@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* BUGFIX: Unblock running binskim on MacOS. [#](https://github.com/microsoft/binskim/pull/)
+* BUGFIX: Unblock running binskim on MacOS. [#576](https://github.com/microsoft/binskim/pull/576)
 
 ## **v1.9.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.3)
 
