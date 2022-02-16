@@ -1,8 +1,9 @@
 # BinSkim Release History
 
-## Unreleased
+## **v1.9.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.3)
 
 * BUGFIX: Fix `KeyNotFoundException` exception raised by `BA2006.BuildWithSecureTools` when individual `MinimumToolVersions` properties are removed from XML configuration. [#565](https://github.com/microsoft/binskim/pull/565)
+* BUGFIX: Fix `BA2006.BuildWithSecureTools` is not emitting the compiler list. [Commit SHA 135946](https://github.com/microsoft/binskim/commit/13594680a6ee8beb0ca711d82a7ded2279d3ce4e)
 
 ## **v1.9.2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.2)
 
