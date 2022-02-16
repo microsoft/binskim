@@ -1,5 +1,9 @@
 # BinSkim Release History
 
+## Unreleased
+
+* BUGFIX: Unblock running binskim on MacOS. [#](https://github.com/microsoft/binskim/pull/)
+
 ## **v1.9.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.3)
 
 * BUGFIX: Fix `KeyNotFoundException` exception raised by `BA2006.BuildWithSecureTools` when individual `MinimumToolVersions` properties are removed from XML configuration. [#565](https://github.com/microsoft/binskim/pull/565)
@@ -11,7 +15,7 @@
 
 ## **v1.9.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.1)
 
-* BUGFIX: Fix incorrect analysis for non-Microsoft compiler on BA2006.BuildWithSecureTools. [545](https://github.com/microsoft/binskim/pull/545)
+* BUGFIX: Fix incorrect analysis for non-Microsoft compiler on BA2006.BuildWithSecureTools. [#545](https://github.com/microsoft/binskim/pull/545)
 * BUGFIX: Fix `JsonSerializationException` that occurs when saving SARIF v1 with telemetry enabled. [#535](https://github.com/microsoft/binskim/pull/535)
 * BUGFIX: Fix `NullReferenceException` when `--Hashes` and telemetry rules are enabled. [#531](https://github.com/microsoft/binskim/pull/531)
 
