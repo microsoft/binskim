@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
@@ -13,13 +14,14 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class ReportPECompilerData : WindowsBinaryAndPdbSkimmerBase
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
+    public class ReportPECompilerData : WindowsBinaryAndPdbSkimmerBase, IOptionsProvider
     {
         /// <summary>
-        /// BA4001
+        /// BA4001. This reporting rule writes compiler data to AppInsights and 
+        /// a CSV file (if configured) for every compilation unit that's scanned.
         /// </summary>
-        public override string Id => RuleIds.ReportPECompilerData;
+        public override string Id => RuleIds.ReportPortableExecutableCompilerData;
 
         public override bool LogPdbLoadException => false;
 
@@ -29,9 +31,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA4001_ReportPECompilerData_Description };
 
-        public override bool EnabledByDefault => false;
-
         protected override IEnumerable<string> MessageResourceNames => Array.Empty<string>();
+
+        public IEnumerable<IOption> GetOptions()
+        {
+            return new List<IOption>
+            {
+                CompilerDataLogger.CsvOutputPath,
+            }.ToImmutableArray();
+        }
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -41,15 +49,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
+            if (!context.CompilerDataLogger.Enabled)
+            {
+                return;
+            }
+
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
-
-            context.CompilerDataLogger.PrintHeader();
 
             if (pdb == null)
             {
                 string errorMessage = target.PdbParseException.Message;
-                context.CompilerDataLogger.WriteException(errorMessage);
+                context.CompilerDataLogger.WriteException(context, errorMessage);
                 return;
             }
 
@@ -107,7 +118,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (KeyValuePair<CompilerData, ObjectModuleDetails> kv in records)
             {
-                context.CompilerDataLogger.Write(kv.Key);
+                context.CompilerDataLogger.Write(context, kv.Key);
             }
         }
     }

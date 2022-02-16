@@ -2,7 +2,12 @@
 
 ## Unreleased
 
-* BUGFIX: Fix BA2014.DoNotDisableStackProtectionForFunctions to allow Gs initialization functions. [551](https://github.com/microsoft/binskim/pull/551)
+* BUGFIX: Fix `KeyNotFoundException` exception raised by `BA2006.BuildWithSecureTools` when individual `MinimumToolVersions` properties are removed from XML configuration. [#565](https://github.com/microsoft/binskim/pull/565)
+* BUGFIX: Fix BA2014.DoNotDisableStackProtectionForFunctions to allow `Gs` initialization functions. [551](https://github.com/microsoft/binskim/pull/551)
+
+## **v1.9.2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.2)
+
+* BUGFIX: Fix `MultithreadedAnalyzeCommandBase` artifacts generation and enforcing JSON properties ordering. [#555](https://github.com/microsoft/binskim/pull/555)
 
 ## **v1.9.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.1)
 

@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
-            Pdb di = target.Pdb;
+            Pdb pdb = target.Pdb;
 
             var warningTooLowModules = new TruncatedCompilandRecordList();
             var disabledWarningModules = new TruncatedCompilandRecordList();
@@ -94,7 +94,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string exampleDisabledWarningCommandLine = null;
             var overallDisabledWarnings = new List<int>();
 
-            foreach (DisposableEnumerableView<Symbol> omView in di.CreateObjectModuleIterator())
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
@@ -109,7 +109,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (omDetails.Language == Language.Unknown)
                 {
                     // See if this module contributed to an executable section. If not, we can ignore the module.
-                    if (di.CompilandWithIdIsInExecutableSectionContrib(om.SymIndexId))
+                    if (pdb.CompilandWithIdIsInExecutableSectionContrib(om.SymIndexId))
                     {
                         unknownLanguageModules.Add(om.CreateCompilandRecord());
                     }

@@ -24,8 +24,8 @@ namespace Microsoft.CodeAnalysis.IL
 
         [Option(
             "sympath",
-            HelpText = "Symbols path value, e.g., Cache*c:\\symbols;SRV*http://msdl.microsoft.com/download/symbols " +
-                       "or Cache*d:\\symbols;Srv*http://symweb. See " +
+            HelpText = "Symbols path value, e.g., Cache*c:\\symbols;SRV*https://msdl.microsoft.com/download/symbols " +
+                       "or Cache*d:\\symbols;Srv*https://symweb. See " +
                        "https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/advanced-symsrv-use for " +
                        "syntax information. Note that BinSkim will clear the _NT_SYMBOL_PATH and _NT_ALT_SYMBOL_PATH " +
                        "environment variables at runtime. Use this argument instead for specifying the symbol path." +
