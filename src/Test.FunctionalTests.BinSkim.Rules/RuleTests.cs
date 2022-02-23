@@ -1159,25 +1159,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void BA2026_EnableAdditionalSdlSecurityChecks_Pass()
+        public void BA2026_EnableMicrosoftCompilerSdlSwitch_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyPass(new EnableAdditionalSdlSecurityChecks(), useDefaultPolicy: true);
+                this.VerifyPass(new EnableMicrosoftCompilerSdlSwitch(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
-        public void BA2026_EnableAdditionalSdlSecurityChecks_Fail()
+        public void BA2026_EnableMicrosoftCompilerSdlSwitch_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new EnableAdditionalSdlSecurityChecks(), useDefaultPolicy: true);
+                this.VerifyFail(new EnableMicrosoftCompilerSdlSwitch(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
-        public void BA2026_EnableAdditionalSdlSecurityChecks_NotApplicable()
+        public void BA2026_EnableMicrosoftCompilerSdlSwitch_NotApplicable()
         {
             var notApplicableTo = new HashSet<string>
             {
@@ -1186,7 +1186,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MetadataConditions.ImageIsILOnlyAssembly
             };
 
-            this.VerifyApplicability(new EnableAdditionalSdlSecurityChecks(), notApplicableTo);
+            this.VerifyApplicability(new EnableMicrosoftCompilerSdlSwitch(), notApplicableTo);
         }
 
         [Fact]

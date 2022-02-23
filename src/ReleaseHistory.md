@@ -1,5 +1,9 @@
 # BinSkim Release History
 
+## Unreleased
+
+* BREAKING: Rename `BA2026.EnableAdditionalSdlSecurityChecks` to `BA2026.EnableMicrosoftCompilerSdlSwitch` to clarify rule purpose. []()
+
 ## **v1.9.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.3)
 
 * BUGFIX: Fix `KeyNotFoundException` exception raised by `BA2006.BuildWithSecureTools` when individual `MinimumToolVersions` properties are removed from XML configuration. [#565](https://github.com/microsoft/binskim/pull/565)

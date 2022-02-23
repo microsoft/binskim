@@ -15,12 +15,12 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class EnableAdditionalSdlSecurityChecks : WindowsBinaryAndPdbSkimmerBase
+    public class EnableMicrosoftCompilerSdlSwitch : WindowsBinaryAndPdbSkimmerBase
     {
         /// <summary>
         /// BA2026
         /// </summary>
-        public override string Id => RuleIds.EnableAdditionalSdlSecurityChecks;
+        public override string Id => RuleIds.EnableMicrosoftCompilerSdlSwitch;
 
         /// <summary>
         /// /sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. 

@@ -1625,7 +1625,7 @@
             },
             {
               "id": "BA2026",
-              "name": "EnableAdditionalSdlSecurityChecks",
+              "name": "EnableMicrosoftCompilerSdlSwitch",
               "fullDescription": {
                 "text": "/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks."
               },
@@ -1643,7 +1643,7 @@
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2026EnableAdditionalSdlSecurityChecks"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2026EnableMicrosoftCompilerSdlSwitch"
             }
           ],
           "properties": {
