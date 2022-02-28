@@ -33,8 +33,8 @@ function Build-Baselines($sourceExtension)
 
         # Actually run the tool
         Remove-Item $outputTemp -ErrorAction SilentlyContinue
-        Write-Host "$utility analyze "$input" --output "$outputTemp" --kind Fail`;Pass`;NotApplicable --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet --sarif-output-version Current"
-        &           $utility analyze "$input" --output "$outputTemp" --kind Fail`;Pass`;NotApplicable --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet --sarif-output-version Current
+        Write-Host "$utility analyze "$input" --output "$outputTemp" --kind 'Fail;Pass' --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet --sarif-output-version Current"
+        &           $utility analyze "$input" --output "$outputTemp" --kind 'Fail;Pass' --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet --sarif-output-version Current
 
         # Replace repository root absolute path with Z:\ for machine and enlistment independence
         $text = [IO.File]::ReadAllText($outputTemp)
@@ -71,5 +71,6 @@ Build-Baselines "*.dll"
 Build-Baselines "*.exe"
 Build-Baselines "gcc.*"
 Build-Baselines "clang.*"
+Build-Baselines "macho.*"
 
 Write-Host "Finished! Terminate."
