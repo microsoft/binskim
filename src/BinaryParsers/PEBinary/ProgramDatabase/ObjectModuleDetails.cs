@@ -224,6 +224,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         }
     }
 
+    /// <summary>
+    /// The CV_CFL_LANG enumeration, 
+    /// which specifies the code language of the application or linked module in the debug interface access SDK.
+    /// https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/cv-cfl-lang
+    /// </summary>
     public enum Language : uint
     {
         C = 0x00,
@@ -242,11 +247,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         Java = 0x0D,
         JScript = 0x0E,
         MSIL = 0x0F,
-        HLSL = 0x10, // High Level Shader Language
+        HLSL = 0x10,
         ObjectiveC = 0x11,
         ObjectiveCxx = 0x12,
         Swift = 0x13,
-        NASM = 0x4E, // The Netwide Assembler
+        ALIASOBJ = 0x14,
+        Rust = 0x15,
+        NASM = 0x4E,
         Unknown
     }
 
