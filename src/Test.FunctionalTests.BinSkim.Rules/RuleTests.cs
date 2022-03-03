@@ -900,7 +900,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2014_LoadAllApprovedFunctions()
         {
-            StringSet approvedFunctions = DoNotDisableStackProtectionForFunctions.ApprovedFunctionsThatDisableStackProtection.DefaultValue.Invoke();
+            StringSet approvedFunctions =
+                DoNotDisableStackProtectionForFunctions.ApprovedFunctionsThatDisableStackProtection.DefaultValue.Invoke();
             Assert.Contains("_TlgWrite", approvedFunctions);
             Assert.Contains("GsDriverEntry", approvedFunctions);
             Assert.Contains("_GsDriverEntry", approvedFunctions);
