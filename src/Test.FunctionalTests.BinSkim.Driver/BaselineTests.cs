@@ -110,8 +110,8 @@ namespace Microsoft.CodeAnalysis.IL
                 SarifOutputVersion = Sarif.SarifVersion.Current,
                 TargetFileSpecifiers = new string[] { inputFileName },
                 Traces = Array.Empty<string>(),
-                Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
-                Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.NotApplicable, ResultKind.Pass },
+                Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note },
+                Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.Pass },
             };
 
             int result = command.Run(options);
