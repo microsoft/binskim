@@ -47,3 +47,4 @@ RunBaseline *.dll
 RunBaseline *.exe
 RunBaseline gcc.*
 RunBaseline clang.*
+RunBaseline macho.*
