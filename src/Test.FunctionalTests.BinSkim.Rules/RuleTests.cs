@@ -898,6 +898,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2014_LoadAllApprovedFunctions()
+        {
+            StringSet approvedFunctions = DoNotDisableStackProtectionForFunctions.ApprovedFunctionsThatDisableStackProtection.DefaultValue.Invoke();
+            Assert.Contains("_TlgWrite", approvedFunctions);
+            Assert.Contains("GsDriverEntry", approvedFunctions);
+            Assert.Contains("_GsDriverEntry", approvedFunctions);
+            Assert.Contains("GsDrvEnableDriver", approvedFunctions);
+            Assert.Contains("_GsDrvEnableDriver", approvedFunctions);
+            Assert.Contains("__security_init_cookie", approvedFunctions);
+            Assert.Contains("__vcrt_trace_logging_provider::_TlgWrite", approvedFunctions);
+        }
+
+        [Fact]
         public void BA2014_DoNotDisableStackProtectionForFunctions_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())

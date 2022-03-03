@@ -60,7 +60,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 "__vcrt_trace_logging_provider::_TlgWrite"
             };
 
-            // Also allow Gs initialization functions.
             result.UnionWith(StackProtectionUtilities.GSInitializationFunctionNames);
             return result;
         }

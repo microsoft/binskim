@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* BUGFIX: Fix `BA2014.DoNotDisableStackProtectionForFunctions` to allow `Gs` initialization functions. [551](https://github.com/microsoft/binskim/pull/551)
+* BUGFIX: Fix `BA2014.DoNotDisableStackProtectionForFunctions` to eliminate false positive reports that `GsDriverEntry` has disabled the stack protector. [551](https://github.com/microsoft/binskim/pull/551)
 
 ## **v1.9.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.3)
 
