@@ -35,13 +35,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="BaselineTestsData\**\*">
+    <None Include="BaselineTestData\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="BaselineTestsData\Wix_3.11.1_VS2017_Bootstrapper.exe">
+    <None Update="BaselineTestData\Wix_3.11.1_VS2017_Bootstrapper.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

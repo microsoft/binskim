@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var targets = new List<string>();
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = GetTestDirectoryFor(ruleName);
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", testFilesDirectory);
+            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, expectToPass ? "Pass" : "Fail");
 
             Assert.True(Directory.Exists(testFilesDirectory), $"Test directory '{testFilesDirectory}' should exist.");
@@ -201,7 +201,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string ruleName = skimmer.GetType().Name;
 
             string baseFilesDirectory = GetTestDirectoryFor(ruleName);
-            baseFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", baseFilesDirectory);
+            baseFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", baseFilesDirectory);
 
             string[] testFilesDirectories =
                 new string[]
@@ -258,7 +258,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = GetTestDirectoryFor(ruleName);
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", testFilesDirectory);
+            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, "NotApplicable");
 
             var context = new BinaryAnalyzerContext();
@@ -341,7 +341,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
         {
-            string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestsData");
+            string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
