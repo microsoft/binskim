@@ -17,10 +17,10 @@ BuildTool ()
 RunBaseline () 
 {
     TOOLPATH="$BuildOutputPath/$TOOL"
-    expectedDirectory="$ScriptDir/BaselineTestsData/NonWindowsExpected"
+    expectedDirectory="$ScriptDir/BaselineTestData/NonWindowsExpected"
     mkdir -p $expectedDirectory
 
-    for targetFile in $ScriptDir/BaselineTestsData/$1; do
+    for targetFile in $ScriptDir/BaselineTestData/$1; do
         echo "Analyzing $targetFile"
         input=$targetFile
         outputFile=`basename $targetFile`

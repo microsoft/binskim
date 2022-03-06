@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         [Fact]
         public void AnalyzeCommand_ReadSarifLog_ShouldBeAbleToReadOneZeroZero()
         {
-            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "Expected", "Binskim.empty.v1.0.0.sarif");
+            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Expected", "Binskim.empty.v1.0.0.sarif");
             var fileSystem = new Mock<IFileSystem>();
             string content = File.ReadAllText(sarifLogPath);
             byte[] byteArray = Encoding.UTF8.GetBytes(content);
@@ -49,7 +49,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         [Fact]
         public void AnalyzeCommand_ReadSarifLog_ShouldBeAbleToReadCurrent()
         {
-            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "Expected", "Binskim.linux-x64.dll.sarif");
+            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Expected", "Binskim.linux-x64.dll.sarif");
 
             SarifLog sarifLog = ReadSarifLog(fileSystem: null, new AnalyzeOptions
             {
