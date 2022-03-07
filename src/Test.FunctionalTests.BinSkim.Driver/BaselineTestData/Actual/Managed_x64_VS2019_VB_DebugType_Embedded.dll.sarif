@@ -1,0 +1,386 @@
+﻿{
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 0,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_VB_DebugType_Embedded.dll",
+              "managed"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Embedded.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "ruleIndex": 1,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_VB_DebugType_Embedded.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Embedded.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2009",
+          "ruleIndex": 2,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_VB_DebugType_Embedded.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Embedded.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2016",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_VB_DebugType_Embedded.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Embedded.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2018",
+          "ruleIndex": 4,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass_NoSEH",
+            "arguments": [
+              "Managed_x64_VS2019_VB_DebugType_Embedded.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Embedded.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "ruleIndex": 5,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_VB_DebugType_Embedded.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Embedded.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 6,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_VB_DebugType_Embedded.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Embedded.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
+          "version": "15.0.0.0",
+          "rules": [
+            {
+              "id": "BA2004",
+              "name": "EnableSecureSourceCodeHashing",
+              "fullDescription": {
+                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing."
+              },
+              "help": {
+                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm."
+                },
+                "Warning_NativeWithInsecureStaticLibraryCompilands": {
+                  "text": "'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
+                },
+                "Error_Managed": {
+                  "text": "'{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing."
+                },
+                "Error_NativeWithInsecureDirectCompilands": {
+                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2004EnableSecureSourceCodeHashing"
+            },
+            {
+              "id": "BA2005",
+              "name": "DoNotShipVulnerableBinaries",
+              "fullDescription": {
+                "text": "Do not ship obsolete libraries for which there are known security vulnerabilities."
+              },
+              "help": {
+                "text": "Do not ship obsolete libraries for which there are known security vulnerabilities."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems."
+                },
+                "Error": {
+                  "text": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning."
+                },
+                "Error_CouldNotParseVersion": {
+                  "text": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2005DoNotShipVulnerableBinaries",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "BinaryVersionsCheck"
+              }
+            },
+            {
+              "id": "BA2009",
+              "name": "EnableAddressSpaceLayoutRandomization",
+              "fullDescription": {
+                "text": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later."
+              },
+              "help": {
+                "text": "Binaries should linked as DYNAMICBASE to be eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. Configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is properly compiled to enable Address Space Layout Randomization, reducing an attacker's ability to exploit code in well-known locations."
+                },
+                "Error_NotDynamicBase": {
+                  "text": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later."
+                },
+                "Error_RelocsStripped": {
+                  "text": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. "
+                },
+                "Error_WinCENoRelocationSection": {
+                  "text": "'{0}' is a Windows CE image but does not contain any relocation data, preventing Address Space Layout Randomization."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2009EnableAddressSpaceLayoutRandomization",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "DBCheck"
+              }
+            },
+            {
+              "id": "BA2016",
+              "name": "MarkImageAsNXCompatible",
+              "fullDescription": {
+                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+              },
+              "help": {
+                "text": "Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is marked as NX compatible, helping to prevent attackers from executing code that is injected into data segments."
+                },
+                "Error": {
+                  "text": "'{0}' is not marked NX compatible. The NXCompat bit, also known as \"Data Execution Prevention\" (DEP) or \"Execute Disable\" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2016MarkImageAsNXCompatible",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "NXCheck"
+              }
+            },
+            {
+              "id": "BA2018",
+              "name": "EnableSafeSEH",
+              "fullDescription": {
+                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+              },
+              "help": {
+                "text": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception jump targets are defined as exception handlers in the program (and not shellcode)."
+                },
+                "Pass_NoSEH": {
+                  "text": "'{0}' is an x86 binary that does not use SEH, making it an invalid target for exploits that attempt to replace SEH jump targets with attacker-controlled shellcode."
+                },
+                "Error": {
+                  "text": "'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2018EnableSafeSEH",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
+              }
+            },
+            {
+              "id": "BA2019",
+              "name": "DoNotMarkWritableSectionsAsShared",
+              "fullDescription": {
+                "text": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+              },
+              "help": {
+                "text": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitation of code vulnerabilities."
+                },
+                "Error": {
+                  "text": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2019DoNotMarkWritableSectionsAsShared",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "SharedSectionCheck"
+              }
+            },
+            {
+              "id": "BA2021",
+              "name": "DoNotMarkWritableSectionsAsExecutable",
+              "fullDescription": {
+                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function."
+              },
+              "help": {
+                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities."
+                },
+                "Error": {
+                  "text": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Enabling incremental linking via the /INCREMENTAL argument (the default for Microsoft Visual Studio debug build) can also result in a writable and executable section named 'textbss'. For this case, disable incremental linking (or analyze an alternate build configuration that disables this feature) to resolve the problem."
+                },
+                "Error_UnexpectedSectionAligment": {
+                  "text": "'{0}' has a section alignment ({1}) that is smaller than its page size ({2})."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2021DoNotMarkWritableSectionsAsExecutable",
+              "properties": {
+                "equivalentBinScopeRuleReadableName": "WXCheck"
+              }
+            }
+          ]
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Embedded.dll"
+          },
+          "hashes": {
+            "md5": "17694A6EA6463BC72F9A22BB411C5D1D",
+            "sha-1": "632085E9F4983DEE6879B87A882DCD34079E8499",
+            "sha-256": "0849E02C5F6328D92080E44694F007F557DA02418D5A3276817D229EFCAD73BC"
+          }
+        }
+      ],
+      "columnKind": "utf16CodeUnits"
+    }
+  ]
+}

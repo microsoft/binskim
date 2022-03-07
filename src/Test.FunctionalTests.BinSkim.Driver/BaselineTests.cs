@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.IL
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
         {
             var sb = new StringBuilder();
-            string testDirectory = PEBinaryTests.BaselineTestsDataDirectory + Path.DirectorySeparatorChar + ruleName;
+            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar + ruleName;
 
             foreach (string inputFilter in inputFilters)
             {

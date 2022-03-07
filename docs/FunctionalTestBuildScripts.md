@@ -2,7 +2,7 @@
 
 This file records scripts used to compile the test files, in alphabetical order.
 Base scenario is a simple hello world program built with different parameters for testing purpose.
-Test files are located in [BaselineTestsData](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData) and [FunctionalTestsData](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestsData).
+Test files are located in [BaselineTestData](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) and [FunctionalTestData](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestData).
 
 ## clangcl.pe.c.codeview.exe
 
