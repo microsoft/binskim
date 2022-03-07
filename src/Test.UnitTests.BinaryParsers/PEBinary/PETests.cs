@@ -78,13 +78,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public void PE_ComputePortableExecutableMetadata()
         {
             string[] filters = new[] { "*.dll", "*.exe" };
-            string testsDataDirectory = PEBinaryTests.BaselineTestDataDirectory;
+            string testDataDirectory = PEBinaryTests.BaselineTestDataDirectory;
 
             var sb = new StringBuilder();
 
             foreach (string filter in filters)
             {
-                foreach (string file in Directory.GetFiles(testsDataDirectory, filter))
+                foreach (string file in Directory.GetFiles(testDataDirectory, filter))
                 {
                     this.ExaminePEMetadata(file, sb);
                 }
