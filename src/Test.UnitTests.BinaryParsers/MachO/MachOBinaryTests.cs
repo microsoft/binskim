@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.MachO
 {
     public class MachOBinaryTests
     {
-        internal static string TestData = GetTestDirectory("Test.UnitTests.BinaryParsers" + Path.DirectorySeparatorChar + "TestsData");
+        internal static string TestData = GetTestDirectory("Test.UnitTests.BinaryParsers" + Path.DirectorySeparatorChar + "TestData");
 
         internal static string GetTestDirectory(string relativeDirectory)
         {
