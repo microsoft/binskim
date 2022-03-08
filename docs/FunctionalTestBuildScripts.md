@@ -23,3 +23,27 @@ A simple hello world program, compiled with `gcc 9.3.0` that generates a .o obje
 
 A simple hello world program, compiled with `rustc 1.58.1` that generates a .exe and associated .pdb file. Script to reproduce:  
 `rustc -g -Clink-arg=/DEBUG:FULL src\main.rs -o Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe`
+
+## Native_x64_VS2019_CPlusPlus_GsDriverEntry_And_UserFnUseSafeBuffers.exe
+
+A simple `Windows Kernel Mode Driver` program, created with `Visual Studio 2019` that generates a .exe and associated .pdb file. Code to reproduce:  
+Use `NTSTATUS GsDriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_STRING RegistryPath)` as entry point and decorated with `__declspec(safebuffers)`.
+Also create two user functions `userfn_use_safebuffers_1()` and `userfn_use_safebuffers_2()` decorated with `__declspec(safebuffers)`.
+
+## Native_x64_VS2019_CPlusPlus_GsDriverEntry_Only.exe
+
+A simple `Windows Kernel Mode Driver` program, created with `Visual Studio 2019` that generates a .exe and associated .pdb file. Code to reproduce:  
+Use `NTSTATUS GsDriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_STRING RegistryPath)` as entry point and decorated with `__declspec(safebuffers)`.
+No user functions decorated with `__declspec(safebuffers)`.
+
+## Native_x64_VS2019_CPlusPlus_UserFnUseSafeBuffers_Only.exe
+
+A simple `Windows Kernel Mode Driver` program, created with `Visual Studio 2019` that generates a .exe and associated .pdb file. Code to reproduce:  
+Use `NTSTATUS GsDriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_STRING RegistryPath)` as entry point and do not decorated with `__declspec(safebuffers)`.
+Also create two user functions `userfn_use_safebuffers_1()` and `userfn_use_safebuffers_2()` decorated with `__declspec(safebuffers)`.
+
+## Native_x64_VS2019_CPlusPlus_UseSafeBuffers_None.exe
+
+A simple `Windows Kernel Mode Driver` program, created with `Visual Studio 2019` that generates a .exe and associated .pdb file. Code to reproduce:  
+Use `NTSTATUS GsDriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_STRING RegistryPath)` as entry point and do not decorated with `__declspec(safebuffers)`.
+No user functions decorated with `__declspec(safebuffers)`.
