@@ -18,13 +18,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [Fact]
         public void IsWixBinary()
         {
-            string fileName = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
+            string fileName = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
             var peBinary = new PEBinary(new Uri(fileName));
             peBinary.Pdb.Should().BeNull();
             peBinary.PE.IsWixBinary.Should().BeTrue();
 
             // Verify a random other exe to ensure it is properly reporting as not a WIX bootstrapper
-            fileName = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "MixedMode_x64_VS2015_Default.exe");
+            fileName = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "MixedMode_x64_VS2015_Default.exe");
             peBinary = new PEBinary(new Uri(fileName));
             peBinary.PE.IsWixBinary.Should().BeFalse();
         }
@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [Fact]
         public void PEBinary_IsDotNetCoreBootstrapExe()
         {
-            string fileName = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "DotNetCore_win-x64_VS2019_Default.exe");
+            string fileName = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "DotNetCore_win-x64_VS2019_Default.exe");
             PEBinary peBinary;
             using (peBinary = new PEBinary(new Uri(fileName)))
             {
@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
 
             // Verify a random other exe to ensure it is properly reporting as not a .NET Core bootstrapper
-            fileName = Path.Combine(PEBinaryTests.BaselineTestsDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
+            fileName = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
             using (peBinary = new PEBinary(new Uri(fileName)))
             {
                 peBinary.PE.IsDotNetCoreBootstrapExe.Should().BeFalse();
@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [Fact]
         public void PEBinary_CanRecognizeDotNetBootstrappingExe()
         {
-            foreach (string nativeUwpFileName in Directory.GetFiles(PEBinaryTests.BaselineTestsDataDirectory, "Uwp*Cpp*"))
+            foreach (string nativeUwpFileName in Directory.GetFiles(PEBinaryTests.BaselineTestDataDirectory, "Uwp*Cpp*"))
             {
                 if (nativeUwpFileName.EndsWith(".pdb", StringComparison.OrdinalIgnoreCase)) { continue; }
 
@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 }
             }
 
-            foreach (string nonNativeUwpFileName in Directory.GetFiles(PEBinaryTests.BaselineTestsDataDirectory, "Uwp*"))
+            foreach (string nonNativeUwpFileName in Directory.GetFiles(PEBinaryTests.BaselineTestDataDirectory, "Uwp*"))
             {
                 if (nonNativeUwpFileName.Contains("Cpp")) { continue; }
                 if (nonNativeUwpFileName.EndsWith(".pdb", StringComparison.OrdinalIgnoreCase)) { continue; }
@@ -78,13 +78,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public void PE_ComputePortableExecutableMetadata()
         {
             string[] filters = new[] { "*.dll", "*.exe" };
-            string testsDataDirectory = PEBinaryTests.BaselineTestsDataDirectory;
+            string testDataDirectory = PEBinaryTests.BaselineTestDataDirectory;
 
             var sb = new StringBuilder();
 
             foreach (string filter in filters)
             {
-                foreach (string file in Directory.GetFiles(testsDataDirectory, filter))
+                foreach (string file in Directory.GetFiles(testDataDirectory, filter))
                 {
                     this.ExaminePEMetadata(file, sb);
                 }

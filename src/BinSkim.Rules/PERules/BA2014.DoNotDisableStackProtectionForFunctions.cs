@@ -59,6 +59,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 "_TlgWrite",
                 "__vcrt_trace_logging_provider::_TlgWrite"
             };
+
+            result.UnionWith(StackProtectionUtilities.GSInitializationFunctionNames);
             return result;
         }
 

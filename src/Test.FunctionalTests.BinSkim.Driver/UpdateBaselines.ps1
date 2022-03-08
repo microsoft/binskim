@@ -19,9 +19,9 @@ function Build-Tool()
 function Build-Baselines($sourceExtension)
 {
     Write-Host "Building baselines..."
-    $expectedDirectory = Join-Path "$PSScriptRoot\BaselineTestsData" $ruleName
+    $expectedDirectory = Join-Path "$PSScriptRoot\BaselineTestData" $ruleName
     $expectedDirectory = Join-Path $expectedDirectory "Expected"
-    $testsDirectory = "$PSScriptRoot\BaselineTestsData\" 
+    $testsDirectory = "$PSScriptRoot\BaselineTestData\" 
     Write-Host "$sourceExtension"
 
     Get-ChildItem $testsDirectory -Filter $sourceExtension | ForEach-Object {
