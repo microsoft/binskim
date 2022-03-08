@@ -18,7 +18,7 @@ jobs:
           dotnet-version: 3.1.x
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
 

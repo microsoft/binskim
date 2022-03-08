@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - name: check out code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Install format tool
       run: dotnet tool install -g dotnet-format
