@@ -19,6 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         /// <summary>
         /// BA2026
+        /// Previously EnableAdditionalSdlSecurityChecks.
         /// </summary>
         public override string Id => RuleIds.EnableMicrosoftCompilerSdlSwitch;
 
