@@ -11,7 +11,7 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/bld/bin/AnyCPU_Debug/netcoreapp2.0/BinSkim.dll",
-            "args": ["analyze", "${workspaceFolder}/src/BinSkim.Driver.FunctionalTests/BaselineTestsData/*.*", "--recurse", "--verbose"],
+            "args": ["analyze", "${workspaceFolder}/src/BinSkim.Driver.FunctionalTests/BaselineTestData/*.*", "--recurse", "--verbose"],
             "cwd": "${workspaceFolder}/src/BinSkim.Driver",
             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
             "console": "internalConsole",
