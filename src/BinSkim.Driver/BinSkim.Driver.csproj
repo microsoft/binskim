@@ -32,7 +32,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
-    <PackageReference Include="System.Reflection.Metadata" Version="5.0.0" />
+    <PackageReference Include="System.Reflection.Metadata" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
