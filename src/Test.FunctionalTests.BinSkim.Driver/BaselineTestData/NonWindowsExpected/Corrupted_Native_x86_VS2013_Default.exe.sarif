@@ -1,0 +1,58 @@
+{
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "results": [],
+      "tool": {
+        "driver": {
+          "name": "BinSkim",
+          "organization": "Microsoft",
+          "product": "BinSkim Portable Executable Analyzer",
+          "fullName": "BinSkim 1.9.3.0",
+          "version": "1.9.3.0",
+          "semanticVersion": "1.9.3",
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
+        }
+      },
+      "invocations": [
+        {
+          "startTimeUtc": "2022-03-10T20:40:08.614Z",
+          "endTimeUtc": "2022-03-10T20:40:08.752Z",
+          "toolConfigurationNotifications": [
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Corrupted_Native_x86_VS2013_Default.exe",
+                      "index": 0
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "Could not load analysis target 'Corrupted_Native_x86_VS2013_Default.exe'."
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingAnalysisTarget"
+              }
+            }
+          ],
+          "executionSuccessful": false
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Corrupted_Native_x86_VS2013_Default.exe"
+          }
+        }
+      ],
+      "columnKind": "utf16CodeUnits"
+    }
+  ]
+}
