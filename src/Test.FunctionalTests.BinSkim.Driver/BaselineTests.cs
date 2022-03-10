@@ -124,7 +124,7 @@ namespace Microsoft.CodeAnalysis.IL
             string expectedText = File.ReadAllText(expectedFileName);
             string actualText = File.ReadAllText(actualFileName);
 
-            // Replace repository root absolute path with Z:\ for machine and enlistment independence
+            // Replace repository root absolute path for machine and enlistment independence
             string repoRoot = Path.GetFullPath(Path.Combine(actualDirectory, "..", "..", "..", ".."));
             string normalizedRoot = PlatformSpecificHelpers.RunningOnWindows() ? @"Z:" : @"/home/user";
             actualText = actualText.Replace(repoRoot.Replace(@"\", @"\\"), normalizedRoot);

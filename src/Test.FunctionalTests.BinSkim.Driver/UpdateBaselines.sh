@@ -30,7 +30,7 @@ RunBaseline ()
         echo "$TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet --sarif-output-version Current"
         $TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet --sarif-output-version Current
 
-        # Normalize paths--replace the repository root with '/'
+        # Normalize paths--replace the repository root with '/home/user'
         echo "Normalizing file output"
         sed s#$repoRoot/#\/home\/user/#g $outputTemp -i
 
