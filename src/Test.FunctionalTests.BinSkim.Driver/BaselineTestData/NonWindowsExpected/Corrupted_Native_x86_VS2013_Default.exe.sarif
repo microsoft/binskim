@@ -19,15 +19,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:08.614Z",
-          "endTimeUtc": "2022-03-10T20:40:08.752Z",
+          "startTimeUtc": "2022-03-10T21:05:24.240Z",
+          "endTimeUtc": "2022-03-10T21:05:24.386Z",
           "toolConfigurationNotifications": [
             {
               "locations": [
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Corrupted_Native_x86_VS2013_Default.exe",
+                      "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Corrupted_Native_x86_VS2013_Default.exe",
                       "index": 0
                     }
                   }
@@ -48,7 +48,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Corrupted_Native_x86_VS2013_Default.exe"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Corrupted_Native_x86_VS2013_Default.exe"
           }
         }
       ],

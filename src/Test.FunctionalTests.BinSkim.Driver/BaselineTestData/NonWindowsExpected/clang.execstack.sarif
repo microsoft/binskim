@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack",
                   "index": 0
                 }
               }
@@ -39,7 +39,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack",
                   "index": 0
                 }
               }
@@ -60,7 +60,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack",
                   "index": 0
                 }
               }
@@ -82,7 +82,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack",
                   "index": 0
                 }
               }
@@ -103,7 +103,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack",
                   "index": 0
                 }
               }
@@ -244,15 +244,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:43.621Z",
-          "endTimeUtc": "2022-03-10T20:40:43.891Z",
+          "startTimeUtc": "2022-03-10T21:05:59.473Z",
+          "endTimeUtc": "2022-03-10T21:05:59.732Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack"
           }
         }
       ],

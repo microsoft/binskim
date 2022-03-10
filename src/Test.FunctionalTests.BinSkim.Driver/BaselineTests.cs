@@ -126,8 +126,9 @@ namespace Microsoft.CodeAnalysis.IL
 
             // Replace repository root absolute path with Z:\ for machine and enlistment independence
             string repoRoot = Path.GetFullPath(Path.Combine(actualDirectory, "..", "..", "..", ".."));
-            actualText = actualText.Replace(repoRoot.Replace(@"\", @"\\"), @"Z:");
-            actualText = actualText.Replace(repoRoot.Replace(@"\", @"/"), @"Z:");
+            string normalizedRoot = PlatformSpecificHelpers.RunningOnWindows() ? @"Z:" : @"/home/user";
+            actualText = actualText.Replace(repoRoot.Replace(@"\", @"\\"), normalizedRoot);
+            actualText = actualText.Replace(repoRoot.Replace(@"\", @"/"), normalizedRoot);
 
             // Remove stack traces as they can change due to inlining differences by configuration and runtime.
             actualText = Regex.Replace(actualText, @"\\r\\n   at [^""]+", "");

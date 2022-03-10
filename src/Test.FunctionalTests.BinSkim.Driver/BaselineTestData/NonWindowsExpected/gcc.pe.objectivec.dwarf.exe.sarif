@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
                   "index": 0
                 }
               }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
                   "index": 0
                 }
               }
@@ -62,7 +62,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
                   "index": 0
                 }
               }
@@ -83,7 +83,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
                   "index": 0
                 }
               }
@@ -105,7 +105,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
                   "index": 0
                 }
               }
@@ -127,7 +127,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
                   "index": 0
                 }
               }
@@ -149,7 +149,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
                   "index": 0
                 }
               }
@@ -370,15 +370,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:36.445Z",
-          "endTimeUtc": "2022-03-10T20:40:36.707Z",
+          "startTimeUtc": "2022-03-10T21:05:52.227Z",
+          "endTimeUtc": "2022-03-10T21:05:52.470Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe"
           }
         }
       ],

@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.object_file.dwarf.3.o",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.object_file.dwarf.3.o",
                   "index": 0
                 }
               }
@@ -66,15 +66,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:48.106Z",
-          "endTimeUtc": "2022-03-10T20:40:48.385Z",
+          "startTimeUtc": "2022-03-10T21:06:04.030Z",
+          "endTimeUtc": "2022-03-10T21:06:04.316Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.object_file.dwarf.3.o"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.object_file.dwarf.3.o"
           }
         }
       ],

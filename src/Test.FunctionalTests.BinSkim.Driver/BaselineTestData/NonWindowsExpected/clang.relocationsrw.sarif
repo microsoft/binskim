@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsrw",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsrw",
                   "index": 0
                 }
               }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsrw",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsrw",
                   "index": 0
                 }
               }
@@ -62,7 +62,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsrw",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsrw",
                   "index": 0
                 }
               }
@@ -83,7 +83,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsrw",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsrw",
                   "index": 0
                 }
               }
@@ -104,7 +104,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsrw",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsrw",
                   "index": 0
                 }
               }
@@ -245,15 +245,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:49.812Z",
-          "endTimeUtc": "2022-03-10T20:40:50.081Z",
+          "startTimeUtc": "2022-03-10T21:06:05.748Z",
+          "endTimeUtc": "2022-03-10T21:06:06.011Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsrw"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsrw"
           }
         }
       ],

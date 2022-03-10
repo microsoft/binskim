@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_PdbOnly.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_PdbOnly.dll",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_PdbOnly.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_PdbOnly.dll",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_PdbOnly.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_PdbOnly.dll",
                   "index": 0
                 }
               }
@@ -85,7 +85,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_PdbOnly.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_PdbOnly.dll",
                   "index": 0
                 }
               }
@@ -107,7 +107,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_PdbOnly.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_PdbOnly.dll",
                   "index": 0
                 }
               }
@@ -269,15 +269,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:39:52.214Z",
-          "endTimeUtc": "2022-03-10T20:39:52.459Z",
+          "startTimeUtc": "2022-03-10T21:05:07.703Z",
+          "endTimeUtc": "2022-03-10T21:05:07.950Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_PdbOnly.dll"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_PdbOnly.dll"
           }
         }
       ],

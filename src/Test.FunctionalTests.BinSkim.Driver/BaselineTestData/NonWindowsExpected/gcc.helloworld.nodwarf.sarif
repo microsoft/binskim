@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf",
                   "index": 0
                 }
               }
@@ -85,7 +85,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf",
                   "index": 0
                 }
               }
@@ -107,7 +107,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf",
                   "index": 0
                 }
               }
@@ -129,7 +129,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf",
                   "index": 0
                 }
               }
@@ -298,15 +298,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:29.724Z",
-          "endTimeUtc": "2022-03-10T20:40:30.000Z",
+          "startTimeUtc": "2022-03-10T21:05:45.424Z",
+          "endTimeUtc": "2022-03-10T21:05:45.694Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.nodwarf"
           }
         }
       ],

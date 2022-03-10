@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
                   "index": 0
                 }
               }
@@ -85,7 +85,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
                   "index": 0
                 }
               }
@@ -219,15 +219,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:05.878Z",
-          "endTimeUtc": "2022-03-10T20:40:06.123Z",
+          "startTimeUtc": "2022-03-10T21:05:21.508Z",
+          "endTimeUtc": "2022-03-10T21:05:21.748Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll"
           }
         }
       ],

@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
                   "index": 0
                 }
               }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
                   "index": 0
                 }
               }
@@ -62,7 +62,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
                   "index": 0
                 }
               }
@@ -84,7 +84,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
                   "index": 0
                 }
               }
@@ -106,7 +106,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
                   "index": 0
                 }
               }
@@ -128,7 +128,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
                   "index": 0
                 }
               }
@@ -150,7 +150,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
                   "index": 0
                 }
               }
@@ -172,7 +172,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
                   "index": 0
                 }
               }
@@ -424,15 +424,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:13.932Z",
-          "endTimeUtc": "2022-03-10T20:40:14.206Z",
+          "startTimeUtc": "2022-03-10T21:05:29.742Z",
+          "endTimeUtc": "2022-03-10T21:05:29.997Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe"
           }
         }
       ],

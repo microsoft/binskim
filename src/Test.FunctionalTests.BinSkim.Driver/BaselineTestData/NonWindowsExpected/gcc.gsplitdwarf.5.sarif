@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
                   "index": 0
                 }
               }
@@ -64,7 +64,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
                   "index": 0
                 }
               }
@@ -86,7 +86,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
                   "index": 0
                 }
               }
@@ -108,7 +108,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
                   "index": 0
                 }
               }
@@ -130,7 +130,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
                   "index": 0
                 }
               }
@@ -152,7 +152,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5",
                   "index": 0
                 }
               }
@@ -343,15 +343,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:26.834Z",
-          "endTimeUtc": "2022-03-10T20:40:27.167Z",
+          "startTimeUtc": "2022-03-10T21:05:42.551Z",
+          "endTimeUtc": "2022-03-10T21:05:42.840Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.gsplitdwarf.5"
           }
         }
       ],

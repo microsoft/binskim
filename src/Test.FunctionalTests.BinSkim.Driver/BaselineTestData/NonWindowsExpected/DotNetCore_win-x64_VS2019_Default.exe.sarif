@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
                   "index": 0
                 }
               }
@@ -85,7 +85,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
                   "index": 0
                 }
               }
@@ -107,7 +107,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
                   "index": 0
                 }
               }
@@ -129,7 +129,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
                   "index": 0
                 }
               }
@@ -151,7 +151,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
                   "index": 0
                 }
               }
@@ -173,7 +173,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
                   "index": 0
                 }
               }
@@ -425,15 +425,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:09.104Z",
-          "endTimeUtc": "2022-03-10T20:40:09.353Z",
+          "startTimeUtc": "2022-03-10T21:05:24.753Z",
+          "endTimeUtc": "2022-03-10T21:05:25.019Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe"
           }
         }
       ],

@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
                   "index": 0
                 }
               }
@@ -154,15 +154,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:53.575Z",
-          "endTimeUtc": "2022-03-10T20:40:53.870Z",
+          "startTimeUtc": "2022-03-10T21:06:09.530Z",
+          "endTimeUtc": "2022-03-10T21:06:09.804Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o"
           }
         }
       ],

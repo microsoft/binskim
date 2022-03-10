@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
                   "index": 0
                 }
               }
@@ -86,7 +86,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
                   "index": 0
                 }
               }
@@ -108,7 +108,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
                   "index": 0
                 }
               }
@@ -130,7 +130,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
                   "index": 0
                 }
               }
@@ -152,7 +152,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
                   "index": 0
                 }
               }
@@ -174,7 +174,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
                   "index": 0
                 }
               }
@@ -195,7 +195,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector",
                   "index": 0
                 }
               }
@@ -430,15 +430,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:24.510Z",
-          "endTimeUtc": "2022-03-10T20:40:24.805Z",
+          "startTimeUtc": "2022-03-10T21:05:40.269Z",
+          "endTimeUtc": "2022-03-10T21:05:40.564Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.example2.fstackprotectorstrongsspbuffersize8+fnostackprotector"
           }
         }
       ],

@@ -32,7 +32,7 @@ RunBaseline ()
 
         # Normalize paths--replace the repository root with '/'
         echo "Normalizing file output"
-        sed s#$repoRoot/#Z:/#g $outputTemp -i
+        sed s#$repoRoot/#\/home\/user/#g $outputTemp -i
 
         # Potential future work--remove stack traces/etc., similar to the powershell script.
         # At the moment, BinSkim doesn't include stack traces, and the comparison shouldn't 

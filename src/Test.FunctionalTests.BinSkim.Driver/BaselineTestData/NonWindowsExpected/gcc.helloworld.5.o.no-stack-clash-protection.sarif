@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
                   "index": 0
                 }
               }
@@ -86,7 +86,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
                   "index": 0
                 }
               }
@@ -108,7 +108,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
                   "index": 0
                 }
               }
@@ -130,7 +130,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
                   "index": 0
                 }
               }
@@ -152,7 +152,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
                   "index": 0
                 }
               }
@@ -174,7 +174,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
                   "index": 0
                 }
               }
@@ -196,7 +196,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
                   "index": 0
                 }
               }
@@ -431,15 +431,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:28.560Z",
-          "endTimeUtc": "2022-03-10T20:40:28.860Z",
+          "startTimeUtc": "2022-03-10T21:05:44.233Z",
+          "endTimeUtc": "2022-03-10T21:05:44.527Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection"
           }
         }
       ],

@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll",
                   "index": 0
                 }
               }
@@ -85,7 +85,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll",
                   "index": 0
                 }
               }
@@ -219,15 +219,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:02.021Z",
-          "endTimeUtc": "2022-03-10T20:40:02.264Z",
+          "startTimeUtc": "2022-03-10T21:05:17.567Z",
+          "endTimeUtc": "2022-03-10T21:05:17.812Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll"
           }
         }
       ],

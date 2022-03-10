@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
                   "index": 0
                 }
               }
@@ -85,7 +85,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
                   "index": 0
                 }
               }
@@ -107,7 +107,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_AnyCPU_VS2017_Prefer32Bit.exe",
                   "index": 0
                 }
               }
@@ -269,15 +269,15 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2022-03-10T20:40:10.172Z",
-          "endTimeUtc": "2022-03-10T20:40:10.415Z",
+          "startTimeUtc": "2022-03-10T21:05:25.861Z",
+          "endTimeUtc": "2022-03-10T21:05:26.110Z",
           "executionSuccessful": true
         }
       ],
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_AnyCPU_VS2017_Prefer32Bit.exe"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_AnyCPU_VS2017_Prefer32Bit.exe"
           }
         }
       ],
