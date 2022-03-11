@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 
 using FluentAssertions;
@@ -113,9 +114,35 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         }
 
         [Fact]
+        public void CompilerDataLogger_Dispose_ShouldReadSarifV2()
+        {
+            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Expected", "Native_x86_VS2019_SDL_Enabled.exe.sarif");
+            var fileSystem = new Mock<IFileSystem>();
+            string content = File.ReadAllText(sarifLogPath);
+            byte[] byteArray = Encoding.UTF8.GetBytes(content);
+            var context = new BinaryAnalyzerContext() { TargetUri = new Uri(@"c:\file.dll"), ForceOverwrite = true };
+            var compilerOptions = new PropertiesDictionary
+            {
+                { "CsvOutputPath", @$"C:\temp\{Guid.NewGuid()}.sarif" }
+            };
+
+            context.Policy = new PropertiesDictionary
+            {
+                { "CompilerTelemetry.Options", compilerOptions }
+            };
+
+            List<ITelemetry> sendItems = TestSetup(sarifLogPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger compilerDataLogger, fileSystem.Object);
+            compilerDataLogger.Dispose();
+
+            fileSystem.Verify(fileSystem => fileSystem.FileOpenRead(sarifLogPath), Times.Never);
+            sendItems.Count.Should().Be(1);
+        }
+
+        [Fact]
         public void CompilerDataLogger_Dispose_ShouldReadSarifV1()
         {
-            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Expected", "Native_x86_VS2019_SDL_Enabled_Sarif.v1.0.0.sarif");
+            string testDirectory = GetTestDirectory("Test.UnitTests.BinSkim.Driver");
+            string sarifLogPath = Path.Combine(testDirectory, "Samples", "Native_x86_VS2019_SDL_Enabled_Sarif.v1.0.0.sarif");
             var fileSystem = new Mock<IFileSystem>();
             string content = File.ReadAllText(sarifLogPath);
             byte[] byteArray = Encoding.UTF8.GetBytes(content);
@@ -163,6 +190,16 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             logger = new CompilerDataLogger(sarifLogFilePath, sarifVersion, context ?? new BinaryAnalyzerContext(), fileSystem);
 
             return sendItems;
+        }
+
+        internal static string GetTestDirectory(string relativeDirectory)
+        {
+            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
+            string dirPath = Path.GetDirectoryName(codeBasePath);
+            dirPath = Path.Combine(dirPath, string.Format(@"..{0}..{0}..{0}..{0}src{0}", Path.DirectorySeparatorChar));
+            dirPath = Path.GetFullPath(dirPath);
+            return Path.Combine(dirPath, relativeDirectory);
         }
     }
 }
