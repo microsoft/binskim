@@ -48,7 +48,7 @@ How does BinSkim baseline test work?
 
 The binaries to be tested are added in [BaselineTestData](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) folder,
 when the baseline test run it will dynamically generate .SARIF files in the `Actual` folder under it, and compare to [Expected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Expected) folder when the test is running in Windows, or [NonWindowsExpected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/NonWindowsExpected) folder otherwise.
-`Actual` folder is not checked in to repo.
+`Actual` folder is not checked in.
 
 1. Prepare test binary with the same naming convention provided in above section [## Prepare test assets](#prepare-test-assets).
 2. Add test binary to [BaselineTestData](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) folder.
