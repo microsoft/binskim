@@ -5,6 +5,7 @@
 * FEATURE: Add new PE `CV_CFL_LANG` language code for `ALIASOBJ` and `Rust`. [530](https://github.com/microsoft/binskim/pull/530)
 * BUGFIX: Fix `BA2014.DoNotDisableStackProtectionForFunctions` to eliminate false positive reports that `GsDriverEntry` has disabled the stack protector. [551](https://github.com/microsoft/binskim/pull/551)
 * BREAKING: Rename `BA2026.EnableAdditionalSdlSecurityChecks` to `BA2026.EnableMicrosoftCompilerSdlSwitch` to clarify rule purpose. [#586](https://github.com/microsoft/binskim/pull/586)
+* BUGFIX: Fix `SummaryEvent` production when using SARIF v1.0.0. [613](https://github.com/microsoft/binskim/pull/613)
 
 ## **v1.9.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.3)
 
