@@ -50,7 +50,7 @@ The binaries to be tested are added in [BaselineTestData](https://github.com/mic
 when the baseline test run it will dynamically generate .SARIF files in the `Actual` folder under it, and compare to [Expected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Expected) folder when the test is running in Windows, or [NonWindowsExpected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/NonWindowsExpected) folder otherwise.
 `Actual` folder is not checked in to repo.
 
-1. Prepare test binary with the same naming convention provided in above section [## Prepare test assets](https://github.com/microsoft/binskim/edit/users/shaopeng-gh/devhowtoupdatebaseline/docs/RuleContributions.md#prepare-test-assets).
+1. Prepare test binary with the same naming convention provided in above section [## Prepare test assets](#prepare-test-assets).
 2. Add test binary to [BaselineTestData](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) folder.
 3. In Windows, use PowerShell and cd to folder `\src\Test.FunctionalTests.BinSkim.Driver`, run `.\UpdateBaselines.ps1`. 
 This will create the corresponding .SARIF file in [Expected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Expected) folder.
