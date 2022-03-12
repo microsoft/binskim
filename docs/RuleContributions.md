@@ -52,10 +52,10 @@ when the baseline test run it will dynamically generate .SARIF files in the `Act
 
 1. Prepare test binary with the same naming convention provided in above section [## Prepare test assets](#prepare-test-assets).
 2. Add test binary to [BaselineTestData](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) folder.
-3. In Windows, use PowerShell and cd to folder `\src\Test.FunctionalTests.BinSkim.Driver`, run `.\UpdateBaselines.ps1`. 
+3. In Windows, use PowerShell and `cd` to folder `\src\Test.FunctionalTests.BinSkim.Driver`, run `.\UpdateBaselines.ps1`. 
 This will create the corresponding .SARIF file in [Expected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Expected) folder.
 Verify all new or updated .SARIF files if the results are correct.
-4. In Linux (or Windows Subsystem for Linux), cd to folder `/src/Test.FunctionalTests.BinSkim.Driver`, run `./UpdateBaselines.sh`. 
+4. In Linux (or Windows Subsystem for Linux), `cd` to folder `/src/Test.FunctionalTests.BinSkim.Driver`, run `./UpdateBaselines.sh`. 
 This will create the corresponding .SARIF file in [NonWindowsExpected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/NonWindowsExpected) folder.
 Verify all new or updated .SARIF files if the results are correct.
 5. Include all new and updated files in your PR. This includes the new binary file itself, the expected .SARIF file for Windows, and the expected .SARIF file for non-Windows. If there are also any updates to the existing .SARIF files for existing binaries, verify the changes are correct and include them in the PR as well.
