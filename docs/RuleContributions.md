@@ -41,3 +41,21 @@ By convention, test binary names indicate their language, bittedness/processor, 
 2. Replace `BAXXX` and `RULEFRIENDLYNAME` in the test methods with the actual rule id and friendly name, leaving method names such as `BA2025_EnableControlEnforcementTechnologyShadowStack_Pass`.
 3. Update the test methods, as per the code comments, to properly configure analysis. This mostly entails configuring checks to understand the applicability of a check to various binary conditions (e.g., whether the binary is 32-bit, an MSIL image, etc.).
 4. Open the test explorer window and type your rule id and name prefix in the search field, e.g. `BA2025_EnableControlEnforcementTechnologyShadowStack`. You should be able to see your three tests. If you run them, they should fail. :)
+
+## Author baseline tests
+
+How does BinSkim baseline test work?
+
+The binaries to be tested are added in [BaselineTestData](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) folder,
+when the baseline test run it will dynamically generate .SARIF files in the `Actual` folder under it, and compare to [Expected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Expected) folder when the test is running in Windows, or [NonWindowsExpected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/NonWindowsExpected) folder otherwise.
+`Actual` folder is not checked in.
+
+1. Prepare test binary with the same naming convention provided in above section [## Prepare test assets](#prepare-test-assets).
+2. Add test binary to [BaselineTestData](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) folder.
+3. In Windows, use PowerShell and `cd` to folder `\src\Test.FunctionalTests.BinSkim.Driver`, run `.\UpdateBaselines.ps1`. 
+This will create the corresponding .SARIF file in [Expected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Expected) folder.
+Verify all new or updated .SARIF files if the results are correct.
+4. In Linux (or Windows Subsystem for Linux), `cd` to folder `/src/Test.FunctionalTests.BinSkim.Driver`, run `./UpdateBaselines.sh`. 
+This will create the corresponding .SARIF file in [NonWindowsExpected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/NonWindowsExpected) folder.
+Verify all new or updated .SARIF files if the results are correct.
+5. Include all new and updated files in your PR. This includes the new binary file itself, the expected .SARIF file for Windows, and the expected .SARIF file for non-Windows. If there are also any updates to the existing .SARIF files for existing binaries, verify the changes are correct and include them in the PR as well.
