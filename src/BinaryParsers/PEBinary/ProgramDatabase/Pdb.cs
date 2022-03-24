@@ -270,25 +270,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
             catch (NotImplementedException) { }
 
+            if (enumSegments != null)
+            {
+                return result;
+            }
+
             try
             {
-                if (enumSegments != null)
+                for (uint i = 0; i < (uint)enumSegments.Count; i++)
                 {
-                    // GetEnumerator() fails in netcoreapp2.0--need to iterate without foreach.
-                    for (uint i = 0; i < (uint)enumSegments.Count; i++)
+                    IDiaSegment segment = enumSegments.Item(i);
+                    try
                     {
-                        IDiaSegment segment = enumSegments.Item(i);
-                        try
+                        if (segment.write != 0)
                         {
-                            if (segment.write != 0)
-                            {
-                                result.Add(segment.addressSection);
-                            }
+                            result.Add(segment.addressSection);
                         }
-                        finally
-                        {
-                            Marshal.ReleaseComObject(segment);
-                        }
+                    }
+                    finally
+                    {
+                        Marshal.ReleaseComObject(segment);
                     }
                 }
             }
