@@ -175,7 +175,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         public DisposableEnumerable<SourceFile> CreateSourceFileIterator(Symbol inObjectModule)
         {
-            return new DisposableEnumerable<SourceFile>(this.CreateSourceFileIteratorImpl(inObjectModule.UnderlyingSymbol));
+            return new DisposableEnumerable<SourceFile>(this.CreateSourceFileIteratorImpl(inObjectModule?.UnderlyingSymbol));
         }
 
         private IEnumerable<SourceFile> CreateSourceFileIteratorImpl(IDiaSymbol inObjectModule)
@@ -272,20 +272,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             try
             {
-                // GetEnumerator() fails in netcoreapp2.0--need to iterate without foreach.
-                for (uint i = 0; i < (uint)enumSegments.Count; i++)
+                if (enumSegments != null)
                 {
-                    IDiaSegment segment = enumSegments.Item(i);
-                    try
+                    // GetEnumerator() fails in netcoreapp2.0--need to iterate without foreach.
+                    for (uint i = 0; i < (uint)enumSegments.Count; i++)
                     {
-                        if (segment.write != 0)
+                        IDiaSegment segment = enumSegments.Item(i);
+                        try
                         {
-                            result.Add(segment.addressSection);
+                            if (segment.write != 0)
+                            {
+                                result.Add(segment.addressSection);
+                            }
                         }
-                    }
-                    finally
-                    {
-                        Marshal.ReleaseComObject(segment);
+                        finally
+                        {
+                            Marshal.ReleaseComObject(segment);
+                        }
                     }
                 }
             }
