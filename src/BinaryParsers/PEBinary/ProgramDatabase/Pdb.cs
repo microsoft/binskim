@@ -24,6 +24,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         private StringBuilder loadTrace;
         private readonly string peOrPdbPath;
         private readonly Lazy<Symbol> globalScope;
+        private readonly IDiaDataSource diaDataSource;
         private bool restrictReferenceAndOriginalPathAccess;
         private PdbFileType pdbFileType;
         private const string s_windowsPdbSignature = "Microsoft C/C++ MSF 7.00\r\n\x001ADS\x0000\x0000\x0000";
@@ -57,13 +58,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <param name="pdbPath">The path to the pdb.</param>
         public Pdb(
             string pdbPath,
-            bool traceLoads = false)
+            bool traceLoads = false,
+            IDiaDataSource diaDataSource = null)
         {
             this.peOrPdbPath = pdbPath;
             this.loadTrace = traceLoads ? new StringBuilder() : null;
             this.globalScope = new Lazy<Symbol>(this.GetGlobalScope, LazyThreadSafetyMode.ExecutionAndPublication);
             this.writableSegmentIds = new Lazy<HashSet<uint>>(this.GenerateWritableSegmentSet);
             this.executableSectionContribCompilandIds = new Lazy<HashSet<uint>>(this.GenerateExecutableSectionContribIds);
+            this.diaDataSource = diaDataSource == null ? MsdiaComWrapper.GetDiaSource() : diaDataSource;
             this.Init(pdbPath);
         }
 
@@ -259,7 +262,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private readonly Lazy<HashSet<uint>> writableSegmentIds;
 
-        private HashSet<uint> GenerateWritableSegmentSet()
+        public HashSet<uint> GenerateWritableSegmentSet()
         {
             var result = new HashSet<uint>();
             IDiaEnumSegments enumSegments = null;
@@ -506,7 +509,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             this.restrictReferenceAndOriginalPathAccess = false;
 
-            IDiaDataSource diaSource = MsdiaComWrapper.GetDiaSource();
+            this.diaDataSource.loadDataFromPdb(pdbPath);
+            this.diaDataSource.openSession(out this.session);
+        }
+
+        internal void WindowsNativeLoadPdbUsingDia(string pdbPath, IDiaDataSource diaSource)
+        {
             diaSource.loadDataFromPdb(pdbPath);
             diaSource.openSession(out this.session);
         }
