@@ -270,7 +270,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
             catch (NotImplementedException) { }
 
-            if (enumSegments != null)
+            if (enumSegments == null)
             {
                 return result;
             }
