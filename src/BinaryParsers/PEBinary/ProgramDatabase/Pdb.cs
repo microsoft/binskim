@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.globalScope = new Lazy<Symbol>(this.GetGlobalScope, LazyThreadSafetyMode.ExecutionAndPublication);
             this.writableSegmentIds = new Lazy<HashSet<uint>>(this.GenerateWritableSegmentSet);
             this.executableSectionContribCompilandIds = new Lazy<HashSet<uint>>(this.GenerateExecutableSectionContribIds);
-            this.diaDataSource = diaDataSource == null ? MsdiaComWrapper.GetDiaSource() : diaDataSource;
+            this.diaDataSource = diaDataSource ?? MsdiaComWrapper.GetDiaSource();
             this.Init(pdbPath);
         }
 
@@ -262,7 +262,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private readonly Lazy<HashSet<uint>> writableSegmentIds;
 
-        public HashSet<uint> GenerateWritableSegmentSet()
+        internal HashSet<uint> GenerateWritableSegmentSet()
         {
             var result = new HashSet<uint>();
             IDiaEnumSegments enumSegments = null;
@@ -511,12 +511,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             this.diaDataSource.loadDataFromPdb(pdbPath);
             this.diaDataSource.openSession(out this.session);
-        }
-
-        internal void WindowsNativeLoadPdbUsingDia(string pdbPath, IDiaDataSource diaSource)
-        {
-            diaSource.loadDataFromPdb(pdbPath);
-            diaSource.openSession(out this.session);
         }
 
         private Symbol GetGlobalScope()

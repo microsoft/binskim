@@ -19,16 +19,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public class PdbTests
     {
+        private const string examplePdb = "Native_x86_VS2017_15.5.4_PdbStripped.pdb";
+
         [Fact]
         public void PdbShouldReturnNullResultIfEnumTablesIsNull()
         {
-            // given
             Mock<IDiaDataSource> mockDiaDataSource = new Mock<IDiaDataSource>();
             Mock<IDiaSession> mockDiaSession = new Mock<IDiaSession>();
             IDiaSession passableMockDiaSession = mockDiaSession.Object;
             mockDiaDataSource.Setup(source => source.openSession(out passableMockDiaSession));
 
-            string fileName = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Native_x86_VS2017_15.5.4_PdbStripped.pdb");
+            string fileName = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, examplePdb);
             var testPdb = new Pdb(pdbPath: fileName, diaDataSource: mockDiaDataSource.Object);
 
             HashSet<uint> actualResultSet = testPdb.GenerateWritableSegmentSet();
@@ -39,8 +40,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [Fact]
         public void PdbShouldCreateEmptySourceFileIteratorIfInObjectModuleIsNull()
         {
-
-            string fileName = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Native_x86_VS2017_15.5.4_PdbStripped.pdb");
+            string fileName = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, examplePdb);
             var testPdb = new Pdb(pdbPath: fileName);
 
             DisposableEnumerable<SourceFile> result = testPdb.CreateSourceFileIterator(null);
