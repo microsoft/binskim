@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
-        public void PdbShouldCreateSourceFileIteratorIfInObjectModuleIsNull()
+        public void PdbShouldCreateEmptySourceFileIteratorIfInObjectModuleIsNull()
         {
 
             string fileName = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Native_x86_VS2017_15.5.4_PdbStripped.pdb");
