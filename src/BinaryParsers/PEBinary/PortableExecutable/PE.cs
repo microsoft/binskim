@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         private FileStream fs;
         private PEReader peReader;
-        internal SafePointer pImage; // pointer to the beginning of the file in memory
+        internal readonly SafePointer pImage; // pointer to the beginning of the file in memory
         private readonly MetadataReader metadataReader;
 
         public PE(string fileName)
