@@ -32,11 +32,8 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public void Driver_BuiltInRuleFunctionalTests()
         {
-            if (PlatformSpecificHelpers.RunningOnWindows())
-            {
-                MultithreadedAnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
-                this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
-            }
+            MultithreadedAnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
+            this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
         }
 
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
@@ -127,10 +124,11 @@ namespace Microsoft.CodeAnalysis.IL
             string expectedText = File.ReadAllText(expectedFileName);
             string actualText = File.ReadAllText(actualFileName);
 
-            // Replace repository root absolute path with Z:\ for machine and enlistment independence
+            // Replace repository root absolute path for machine and enlistment independence
             string repoRoot = Path.GetFullPath(Path.Combine(actualDirectory, "..", "..", "..", ".."));
-            actualText = actualText.Replace(repoRoot.Replace(@"\", @"\\"), @"Z:");
-            actualText = actualText.Replace(repoRoot.Replace(@"\", @"/"), @"Z:");
+            string normalizedRoot = PlatformSpecificHelpers.RunningOnWindows() ? @"Z:" : @"/home/user";
+            actualText = actualText.Replace(repoRoot.Replace(@"\", @"\\"), normalizedRoot);
+            actualText = actualText.Replace(repoRoot.Replace(@"\", @"/"), normalizedRoot);
 
             // Remove stack traces as they can change due to inlining differences by configuration and runtime.
             actualText = Regex.Replace(actualText, @"\\r\\n   at [^""]+", "");

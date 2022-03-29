@@ -11,6 +11,11 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Readers;
+using Microsoft.CodeAnalysis.Sarif.VersionOne;
+using Microsoft.CodeAnalysis.Sarif.Visitors;
+
+using Newtonsoft.Json;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
@@ -53,6 +58,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         // analysis) that is extracted from the SARIF log file. We currently therefore
         // require that the scan is configured to produce a disk-based report.
         private readonly string sarifOutputFilePath;
+        private readonly Sarif.SarifVersion sarifVersion;
         private readonly IFileSystem fileSystem;
         private readonly string symbolPath;
 
@@ -77,13 +83,14 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 "CompilerTelemetry", nameof(RootPathToElide), defaultValue: () => string.Empty,
                 "A non-deterministic file path root that should be elided from paths in telemetry, e.g., 'c:\\Users\\SomeUser\\'.");
 
-        public CompilerDataLogger(string sarifOutputFilePath, BinaryAnalyzerContext context, IFileSystem fileSystem = null)
+        public CompilerDataLogger(string sarifOutputFilePath, Sarif.SarifVersion sarifVersion, BinaryAnalyzerContext context, IFileSystem fileSystem = null)
         {
             this.syncRoot = new object();
             this.sessionId = Guid.NewGuid().ToString();
             this.fileSystem = fileSystem ?? new FileSystem();
 
             this.sarifOutputFilePath = sarifOutputFilePath;
+            this.sarifVersion = sarifVersion;
             this.RootPathToElide = context.Policy.GetProperty(RootPathToElideProperty);
             this.OwningContextHashCode = context.GetHashCode();
             this.symbolPath = context.SymbolPath;
@@ -354,7 +361,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             Debug.Assert(Enabled);
 
-            var sarifLog = SarifLog.Load(this.sarifOutputFilePath);
+            SarifLog sarifLog = LoadVersionAgnosticSarifFile();
             AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog,
                                                                                       RootPathToElide,
                                                                                       this.symbolPath);
@@ -364,6 +371,33 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 WriteException(ex, summary);
             }
+        }
+
+        private SarifLog LoadVersionAgnosticSarifFile()
+        {
+            SarifLog sarifLog;
+
+            if (this.sarifVersion == Sarif.SarifVersion.Current)
+            {
+                sarifLog = SarifLog.Load(sarifOutputFilePath);
+            }
+            else
+            {
+                SarifLogVersionOne actualLog;
+
+                var serializer = new JsonSerializer() { ContractResolver = SarifContractResolverVersionOne.Instance };
+
+                using (JsonTextReader reader = new JsonTextReader(new StreamReader(fileSystem.FileOpenRead(sarifOutputFilePath))))
+                {
+                    actualLog = serializer.Deserialize<SarifLogVersionOne>(reader);
+                }
+
+                var visitor = new SarifVersionOneToCurrentVisitor();
+                visitor.VisitSarifLogVersionOne(actualLog);
+                sarifLog = visitor.SarifLog;
+            }
+
+            return sarifLog;
         }
 
         public void Dispose()

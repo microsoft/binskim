@@ -81,7 +81,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public CompilerDataLogger CompilerDataLogger
         {
-            get { return this.Policy.GetProperty(SharedCompilerDataLoggerProperty); }
+            get { return this.Policy?.GetProperty(SharedCompilerDataLoggerProperty); }
             set { this.Policy.SetProperty(SharedCompilerDataLoggerProperty, value); }
         }
 

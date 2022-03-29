@@ -9,9 +9,9 @@
           "name": "BinSkim",
           "organization": "Microsoft",
           "product": "BinSkim Portable Executable Analyzer",
-          "fullName": "BinSkim 1.6.1.0",
-          "version": "1.6.1.0",
-          "semanticVersion": "1.6.1",
+          "fullName": "BinSkim 1.9.3.0",
+          "version": "1.9.3.0",
+          "semanticVersion": "1.9.3",
           "properties": {
             "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
           }
@@ -19,156 +19,22 @@
       },
       "invocations": [
         {
-          "startTimeUtc": "2020-04-26T04:19:04.720Z",
-          "endTimeUtc": "2020-04-26T04:19:04.841Z",
+          "startTimeUtc": "2022-03-10T21:05:24.240Z",
+          "endTimeUtc": "2022-03-10T21:05:24.386Z",
           "toolConfigurationNotifications": [
             {
               "locations": [
                 {
                   "physicalLocation": {
-                    "artifactLocation": {}
-                  }
-                }
-              ],
-              "message": {
-                "text": "Rule 'DoNotIncorporateVulnerableDependencies' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
-              },
-              "descriptor": {
-                "id": "WRN998.UnsupportedPlatform"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {}
-                  }
-                }
-              ],
-              "message": {
-                "text": "Rule 'DoNotShipVulnerableBinaries' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
-              },
-              "descriptor": {
-                "id": "WRN998.UnsupportedPlatform"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {}
-                  }
-                }
-              ],
-              "message": {
-                "text": "Rule 'BuildWithSecureTools' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
-              },
-              "descriptor": {
-                "id": "WRN998.UnsupportedPlatform"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {}
-                  }
-                }
-              ],
-              "message": {
-                "text": "Rule 'EnableCriticalCompilerWarnings' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
-              },
-              "descriptor": {
-                "id": "WRN998.UnsupportedPlatform"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {}
-                  }
-                }
-              ],
-              "message": {
-                "text": "Rule 'EnableStackProtection' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
-              },
-              "descriptor": {
-                "id": "WRN998.UnsupportedPlatform"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {}
-                  }
-                }
-              ],
-              "message": {
-                "text": "Rule 'InitializeStackProtection' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
-              },
-              "descriptor": {
-                "id": "WRN998.UnsupportedPlatform"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {}
-                  }
-                }
-              ],
-              "message": {
-                "text": "Rule 'DoNotDisableStackProtectionForFunctions' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
-              },
-              "descriptor": {
-                "id": "WRN998.UnsupportedPlatform"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {}
-                  }
-                }
-              ],
-              "message": {
-                "text": "Rule 'SignSecurely' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
-              },
-              "descriptor": {
-                "id": "WRN998.UnsupportedPlatform"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {}
-                  }
-                }
-              ],
-              "message": {
-                "text": "Rule 'EnableSpectreMitigations' was disabled as it cannot run on the current platform 'Linux'.  It can only run on 'Windows'."
-              },
-              "descriptor": {
-                "id": "WRN998.UnsupportedPlatform"
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Corrupted_Native_x86_VS2013_Default.exe"
+                      "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Corrupted_Native_x86_VS2013_Default.exe",
+                      "index": 0
                     }
                   }
                 }
               ],
               "message": {
-                "text": "Could not load analysis target 'Corrupted_Native_x86_VS2013_Default.exe'. (Image is either too small or contains an invalid byte offset or count.)"
+                "text": "Could not load analysis target 'Corrupted_Native_x86_VS2013_Default.exe'."
               },
               "level": "error",
               "descriptor": {
@@ -182,7 +48,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file://Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Corrupted_Native_x86_VS2013_Default.exe"
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Corrupted_Native_x86_VS2013_Default.exe"
           }
         }
       ],
