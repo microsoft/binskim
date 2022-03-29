@@ -38,10 +38,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal static int s_chunkSize = 8192;
 
         // Constant values sent to AppInsights telemetry stream.
-        private const string SummaryEventName = "AnalysisSummary";
-        private const string CompilerEventName = "CompilerInformation";
-        private const string CommandLineEventName = "CommandLineInformation";
-        private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
+        internal const string SummaryEventName = "AnalysisSummary";
+        internal const string CompilerEventName = "CompilerInformation";
+        internal const string CommandLineEventName = "CommandLineInformation";
+        internal const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
 
         // This object is required to synchronize multi-threaded writes
         // to the CSV writer only. The AppInsights client is already
@@ -121,7 +121,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        private void CreateCsvOutputFile(string csvFilePath, bool overwriteExistingCsv)
+        internal void CreateCsvOutputFile(string csvFilePath, bool overwriteExistingCsv)
         {
             if (string.IsNullOrWhiteSpace(csvFilePath))
             {
@@ -262,7 +262,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public void WriteException(BinaryAnalyzerContext context, string errorMessage)
         {
             string fileHash = context.Hashes?.Sha256;
-            string filePath = context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty);
+
+            string filePath = RootPathToElide == null ?
+                context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty) :
+                context.TargetUri?.LocalPath;
 
             WriteToCsv($"{filePath},,,,,,,,,,,,,{fileHash},{errorMessage}");
 
@@ -307,7 +310,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        public void Summarize(AnalysisSummary summary)
+        internal void Summarize(AnalysisSummary summary)
         {
             WriteToCsv(summary.ToString());
 
