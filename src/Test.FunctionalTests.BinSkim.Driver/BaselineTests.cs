@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.IL
             MultithreadedAnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
             this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
         }
-        
+
         [Fact]
         public void Driver_ShouldLogCompilerTelemetryEvents_Managed()
         {

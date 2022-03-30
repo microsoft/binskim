@@ -310,7 +310,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 context.Policy = new Sarif.PropertiesDictionary();
                 logger = new CompilerDataLogger(sarifLogFilePath, sarifVersion, context ?? new BinaryAnalyzerContext(), fileSystem);
             }
-            
+
             return sendItems;
         }
 
