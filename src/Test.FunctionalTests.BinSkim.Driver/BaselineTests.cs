@@ -33,15 +33,6 @@ namespace Microsoft.CodeAnalysis.IL
     public class BuiltInRuleFunctionalTests
     {
         private readonly ITestOutputHelper testOutputHelper;
-        private const string ProjectIdVariable = "TestProjectId";
-        private const string ProjectNameVariable = "TestProjectName";
-        private const string RepositoryIdVariable = "TestRepositoryId";
-        private const string OrganizationIdVariable = "TestOrgId";
-        private const string BuildDefinitionRunIdVariable = "TestBuildDefinitionRunId";
-        private const string RepositoryNameVariable = "TestRepositoryName";
-        private const string OrganizationNameVariable = "TestOrgName";
-        private const string BuildDefinitionIdVariable = "TestBuildDefinitionId";
-        private const string BuildDefinitionNameVariable = "TestBuildDefinitionName";
 
         public BuiltInRuleFunctionalTests(ITestOutputHelper output)
         {
@@ -65,6 +56,8 @@ namespace Microsoft.CodeAnalysis.IL
             string testFile = Path.Combine(testDirectory, "DotNetCore_win-x86_VS2019_Default.dll");
 
             SarifLog sarifResult = RunRules(sb, testFile);
+
+            string testEnviornmentVar = Environment.GetEnvironmentVariable(nameof(AnalysisSummaryExtractor.ProjectIdVariableName), EnvironmentVariableTarget.Process);
 
             sendItems.All<ITelemetry>(item => item.GetType() == typeof(EventTelemetry));
             List<EventTelemetry> events = sendItems.OfType<EventTelemetry>().ToList();
@@ -122,7 +115,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             ValidateSummaryEvent(summary, summaryEvents.First(), sb);
 
-            Assert.Equal(0, sb.Length);
+            sb.ToString().Should().Be("");
         }
 
         [Fact]
@@ -300,17 +293,6 @@ namespace Microsoft.CodeAnalysis.IL
 
         private List<ITelemetry> CompilerTelemetryTestSetup()
         {
-            // Setup Environment Variables.
-            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.ProjectIdVariableName), ProjectIdVariable);
-            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.ProjectNameVariableName), ProjectNameVariable);
-            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.RepositoryIdVariableName), RepositoryIdVariable);
-            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.OrganizationIdVariableName), OrganizationIdVariable);
-            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.BuildDefinitionRunIdVariableName), BuildDefinitionRunIdVariable);
-            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.RepositoryNameVariableName), RepositoryNameVariable);
-            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.OrganizationNameVariableName), OrganizationNameVariable);
-            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.BuildDefinitionIdVariableName), BuildDefinitionIdVariable);
-            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.BuildDefinitionNameVariableName), BuildDefinitionNameVariable);
-
             // Setup mocks for CompilerDataLogger.
             MultithreadedAnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
 
@@ -331,6 +313,16 @@ namespace Microsoft.CodeAnalysis.IL
 
         private void ValidateSummaryEvent(AnalysisSummary summary, EventTelemetry eventTelemetry, StringBuilder sb)
         {
+            string projectIdVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.ProjectIdVariableName);
+            string projectNameVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.ProjectNameVariableName);
+            string repositoryIdVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.RepositoryIdVariableName);
+            string organizationIdVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.OrganizationIdVariableName);
+            string buildDefinitionRunIdVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.BuildDefinitionRunIdVariableName);
+            string repositoryNameVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.RepositoryNameVariableName);
+            string OrganizationNameVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.OrganizationNameVariableName);
+            string BuildDefinitionIdVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.BuildDefinitionIdVariableName);
+            string BuildDefinitionNameVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.BuildDefinitionNameVariableName);
+
             if (eventTelemetry.Properties["toolName"] != summary.ToolName)
             {
                 sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
@@ -372,6 +364,70 @@ namespace Microsoft.CodeAnalysis.IL
                     nameof(summary.TimeConsumed),
                     summary.TimeConsumed,
                     eventTelemetry.Properties["timeConsumed"]));
+            }
+
+            if (eventTelemetry.Properties["buildDefinitionId"] != BuildDefinitionIdVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.BuildDefinitionId),
+                    BuildDefinitionIdVariable,
+                    eventTelemetry.Properties["buildDefinitionId"]));
+            }
+            if (eventTelemetry.Properties["buildDefinitionName"] != BuildDefinitionNameVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.BuildDefinitionName),
+                    BuildDefinitionNameVariable,
+                    eventTelemetry.Properties["buildDefinitionName"]));
+            }
+            if (eventTelemetry.Properties["buildRunId"] != buildDefinitionRunIdVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.BuildRunId),
+                    buildDefinitionRunIdVariable,
+                    eventTelemetry.Properties["buildRunId"]));
+            }
+            if (eventTelemetry.Properties["projectName"] != projectNameVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.ProjectName),
+                    projectNameVariable,
+                    eventTelemetry.Properties["projectName"]));
+            }
+            if (eventTelemetry.Properties["organizationId"] != organizationIdVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.OrganizationId),
+                    organizationIdVariable,
+                    eventTelemetry.Properties["organizationId"]));
+            }
+            if (eventTelemetry.Properties["organizationName"] != OrganizationNameVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.OrganizationName),
+                    OrganizationNameVariable,
+                    eventTelemetry.Properties["organizationName"]));
+            }
+            if (eventTelemetry.Properties["projectId"] != projectIdVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.ProjectId),
+                    projectIdVariable,
+                    eventTelemetry.Properties["projectId"]));
+            }
+            if (eventTelemetry.Properties["repositoryName"] != repositoryNameVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.RepositoryName),
+                    repositoryNameVariable,
+                    eventTelemetry.Properties["repositoryName"]));
+            }
+            if (eventTelemetry.Properties["repositoryId"] != repositoryIdVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.RepositoryId),
+                    repositoryIdVariable,
+                    eventTelemetry.Properties["repositoryId"]));
             }
         }
 

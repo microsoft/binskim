@@ -6,6 +6,7 @@
     <OutputType>Library</OutputType>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <Platforms>x64</Platforms>
+	  <RunSettingsFilePath>$(MSBuildProjectDirectory)\BaselineTests.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
   <ItemGroup>
