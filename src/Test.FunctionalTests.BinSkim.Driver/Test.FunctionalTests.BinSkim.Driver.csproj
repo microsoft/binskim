@@ -32,6 +32,8 @@
     <ProjectReference Include="..\BinSkim.Rules\BinSkim.Rules.csproj" />
     <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
     <ProjectReference Include="..\Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj" />
+    <ProjectReference Include="..\Test.UnitTests.BinSkim.Driver\Test.UnitTests.BinSkim.Driver.csproj" />
+    <ProjectReference Include="..\Test.UnitTests.BinSkim.Rules\Test.UnitTests.BinSkim.Rules.csproj" />
   </ItemGroup>
 
   <ItemGroup>

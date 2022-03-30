@@ -5,10 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
+using FluentAssertions;
+
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.BinSkim.Rules;
+using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Readers;
 using Microsoft.CodeAnalysis.Sarif.Writers;
@@ -23,6 +33,15 @@ namespace Microsoft.CodeAnalysis.IL
     public class BuiltInRuleFunctionalTests
     {
         private readonly ITestOutputHelper testOutputHelper;
+        private const string ProjectIdVariable = "TestProjectId";
+        private const string ProjectNameVariable = "TestProjectName";
+        private const string RepositoryIdVariable = "TestRepositoryId";
+        private const string OrganizationIdVariable = "TestOrgId";
+        private const string BuildDefinitionRunIdVariable = "TestBuildDefinitionRunId";
+        private const string RepositoryNameVariable = "TestRepositoryName";
+        private const string OrganizationNameVariable = "TestOrgName";
+        private const string BuildDefinitionIdVariable = "TestBuildDefinitionId";
+        private const string BuildDefinitionNameVariable = "TestBuildDefinitionName";
 
         public BuiltInRuleFunctionalTests(ITestOutputHelper output)
         {
@@ -34,6 +53,116 @@ namespace Microsoft.CodeAnalysis.IL
         {
             MultithreadedAnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
             this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+        }
+        
+        [Fact]
+        public void Driver_ShouldLogCompilerTelemetryEvents_Managed()
+        {
+
+            List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
+            var sb = new StringBuilder();
+            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;
+            string testFile = Path.Combine(testDirectory, "DotNetCore_win-x86_VS2019_Default.dll");
+
+            SarifLog sarifResult = RunRules(sb, testFile);
+
+            sendItems.All<ITelemetry>(item => item.GetType() == typeof(EventTelemetry));
+            List<EventTelemetry> events = sendItems.OfType<EventTelemetry>().ToList();
+
+            List<EventTelemetry> compilerEvents = events.Where(e => e.Name == CompilerDataLogger.CompilerEventName)
+                .OfType<EventTelemetry>().ToList();
+
+            List<EventTelemetry> assemblyReferencesEvents = events.Where(e => e.Name == CompilerDataLogger.AssemblyReferencesEventName)
+                .OfType<EventTelemetry>().ToList();
+
+            List<EventTelemetry> commandLineEvents = events.Where(e => e.Name == CompilerDataLogger.CommandLineEventName)
+                .OfType<EventTelemetry>().ToList();
+
+            List<EventTelemetry> summaryEvents = events.Where(e => e.Name == CompilerDataLogger.SummaryEventName)
+                .OfType<EventTelemetry>().ToList();
+
+            if (summaryEvents.Count != 1)
+            {
+                sb.AppendLine("Expected at least 1 summaryEvent, but found none.");
+            }
+            if (assemblyReferencesEvents.Count != 1)
+            {
+                sb.AppendLine(string.Format("Expected 1 AssemblyReferencesEvent, but found {0}", assemblyReferencesEvents.Count));
+            }
+            if (commandLineEvents.Count != 0)
+            {
+                sb.AppendLine(string.Format("Expected 0 CommandLineEvents, but found {0}", commandLineEvents.Count));
+            }
+            if (compilerEvents.Count != 1)
+            {
+                sb.AppendLine(string.Format("Expected 1 CompilerEvent, but found {0}", compilerEvents.Count));
+            }
+
+            string summaryEventSessionId = summaryEvents.First().Properties["sessionId"];
+            string assemblyReferencesEventSessionId = assemblyReferencesEvents.First().Properties["sessionId"];
+            string compilerEventSessionId = compilerEvents.First().Properties["sessionId"];
+
+            if (summaryEventSessionId != assemblyReferencesEventSessionId)
+            {
+                sb.AppendLine(
+                    string.Format("SessionIds did not match. `SummaryEvent.SessionId` was {0} and `AssemblyReferencesEvent.SessionId` was {1}",
+                    summaryEventSessionId,
+                    assemblyReferencesEventSessionId));
+            }
+
+            if (summaryEventSessionId != compilerEventSessionId)
+            {
+                sb.AppendLine(
+                    string.Format("SessionIds did not match. `SummaryEvent.SessionId` was {0} and `CompilerEvent.SessionId` was {1}",
+                    summaryEventSessionId,
+                    compilerEventSessionId));
+            }
+
+            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifResult, "", null);
+
+            ValidateSummaryEvent(summary, summaryEvents.First(), sb);
+
+            Assert.Equal(0, sb.Length);
+        }
+
+        [Fact]
+        public void Driver_ShouldLogCompilerTelemetryEvents_Unmanaged()
+        {
+
+            List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
+            var sb = new StringBuilder();
+            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;
+            string testFile = Path.Combine(testDirectory, "Native_x64_VS2015_Default.dll");
+
+            SarifLog sarifResult = RunRules(sb, testFile);
+
+            sendItems.All<ITelemetry>(item => item.GetType() == typeof(EventTelemetry));
+            List<EventTelemetry> events = sendItems.OfType<EventTelemetry>().ToList();
+
+            List<EventTelemetry> compilerEvents = events.Where(e => e.Name == CompilerDataLogger.CompilerEventName)
+                .OfType<EventTelemetry>().ToList();
+
+            List<EventTelemetry> assemblyReferencesEvents = events.Where(e => e.Name == CompilerDataLogger.AssemblyReferencesEventName)
+                .OfType<EventTelemetry>().ToList();
+
+            List<EventTelemetry> commandLineEvents = events.Where(e => e.Name == CompilerDataLogger.CommandLineEventName)
+                .OfType<EventTelemetry>().ToList();
+
+            List<EventTelemetry> summaryEvents = events.Where(e => e.Name == CompilerDataLogger.SummaryEventName)
+                .OfType<EventTelemetry>().ToList();
+
+            summaryEvents.Count.Should().Be(1);
+            assemblyReferencesEvents.Count.Should().Be(0);
+            commandLineEvents.Count.Should().Be(25);
+            compilerEvents.Count.Should().Be(35);
+
+            summaryEvents.First().Properties["sessionId"]
+                .Should().Be(commandLineEvents.First().Properties["sessionId"]);
+
+            summaryEvents.First().Properties["sessionId"]
+                .Should().Be(compilerEvents.First().Properties["sessionId"]);
+
+            Assert.Equal(0, sb.Length);
         }
 
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
@@ -73,7 +202,7 @@ namespace Microsoft.CodeAnalysis.IL
             Assert.Equal(0, sb.Length);
         }
 
-        private void RunRules(StringBuilder sb, string inputFileName)
+        private SarifLog RunRules(StringBuilder sb, string inputFileName)
         {
             string fileName = Path.GetFileName(inputFileName);
             string actualDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "Actual");
@@ -164,6 +293,85 @@ namespace Microsoft.CodeAnalysis.IL
                 sb.AppendLine(string.Format(CultureInfo.CurrentCulture, errorMessage, inputFileName));
                 sb.AppendLine("Check differences with:");
                 sb.AppendLine(this.GenerateDiffCommand(expectedFileName, actualFileName));
+            }
+
+            return actualLog;
+        }
+
+        private List<ITelemetry> CompilerTelemetryTestSetup()
+        {
+            // Setup Environment Variables.
+            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.ProjectIdVariableName), ProjectIdVariable);
+            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.ProjectNameVariableName), ProjectNameVariable);
+            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.RepositoryIdVariableName), RepositoryIdVariable);
+            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.OrganizationIdVariableName), OrganizationIdVariable);
+            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.BuildDefinitionRunIdVariableName), BuildDefinitionRunIdVariable);
+            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.RepositoryNameVariableName), RepositoryNameVariable);
+            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.OrganizationNameVariableName), OrganizationNameVariable);
+            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.BuildDefinitionIdVariableName), BuildDefinitionIdVariable);
+            Environment.SetEnvironmentVariable(nameof(AnalysisSummaryExtractor.BuildDefinitionNameVariableName), BuildDefinitionNameVariable);
+
+            // Setup mocks for CompilerDataLogger.
+            MultithreadedAnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
+
+            List<ITelemetry> sendItems = null;
+            sendItems = new List<ITelemetry>();
+            TelemetryClient telemetryClient;
+            TelemetryConfiguration telemetryConfiguration;
+            telemetryConfiguration = new TelemetryConfiguration();
+            telemetryConfiguration.InstrumentationKey = Guid.NewGuid().ToString();
+            telemetryConfiguration.TelemetryChannel = new StubTelemetryChannel { OnSend = item => sendItems.Add(item) };
+            telemetryConfiguration.TelemetryInitializers.Add(new OperationCorrelationTelemetryInitializer());
+            telemetryClient = new TelemetryClient(telemetryConfiguration);
+            CompilerDataLogger.s_injectedTelemetryClient = telemetryClient;
+            CompilerDataLogger.s_injectedTelemetryConfiguration = telemetryConfiguration;
+
+            return sendItems;
+        }
+
+        private void ValidateSummaryEvent(AnalysisSummary summary, EventTelemetry eventTelemetry, StringBuilder sb)
+        {
+            if (eventTelemetry.Properties["toolName"] != summary.ToolName)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.ToolName),
+                    summary.ToolName,
+                    eventTelemetry.Properties["toolName"]));
+            }
+            if (eventTelemetry.Properties["toolVersion"] != summary.ToolVersion)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.ToolVersion),
+                    summary.ToolVersion,
+                    eventTelemetry.Properties["toolVersion"]));
+            }
+            if (eventTelemetry.Properties["numberOfBinaryAnalyzed"] != summary.FileAnalyzed.ToString())
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.FileAnalyzed),
+                    summary.FileAnalyzed,
+                    eventTelemetry.Properties["numberOfBinaryAnalyzed"]));
+            }
+            if (eventTelemetry.Properties["analysisStartTime"] != summary.StartTimeUtc.ToString())
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.StartTimeUtc),
+                    summary.StartTimeUtc,
+                    eventTelemetry.Properties["analysisStartTime"]));
+            }
+            if (eventTelemetry.Properties["analysisEndTime"] != summary.EndTimeUtc.ToString())
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.EndTimeUtc),
+                    summary.EndTimeUtc,
+                    eventTelemetry.Properties["analysisEndTime"]));
+            }
+            if (eventTelemetry.Properties["timeConsumed"] != summary.TimeConsumed.ToString())
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                    nameof(summary.TimeConsumed),
+                    summary.TimeConsumed,
+                    eventTelemetry.Properties["timeConsumed"]));
             }
         }
 
