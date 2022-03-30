@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <RunSettings>
-	<RunConfiguration>
-		<EnvironmentVariables>
-			<System_TeamProjectId>TestProjectId</System_TeamProjectId>
-			<System_TeamProject>TestSystemTeamProject</System_TeamProject>
-			<Build_Repository_ID>TestBuildRepositoryID</Build_Repository_ID>
-			<System_CollectionId>TestSystemCollectionId</System_CollectionId>
-			<Build_BuildId>TestBuildBuildId</Build_BuildId>
-			<Build_Repository_Name>TestBuildRepositoryName</Build_Repository_Name>
-			<System_CollectionUri>TestSystemCollectionUri</System_CollectionUri>
-			<System_DefinitionId>TestSystemDefinitionId</System_DefinitionId>
-			<Build_DefinitionName>TEstBuildDefinitionName</Build_DefinitionName>
-		</EnvironmentVariables>
-	</RunConfiguration>
+....<RunConfiguration>
+........<EnvironmentVariables>
+............<System_TeamProjectId>TestProjectId</System_TeamProjectId>
+............<System_TeamProject>TestSystemTeamProject</System_TeamProject>
+............<Build_Repository_ID>TestBuildRepositoryID</Build_Repository_ID>
+............<System_CollectionId>TestSystemCollectionId</System_CollectionId>
+............<Build_BuildId>TestBuildBuildId</Build_BuildId>
+............<Build_Repository_Name>TestBuildRepositoryName</Build_Repository_Name>
+............<System_CollectionUri>TestSystemCollectionUri</System_CollectionUri>
+............<System_DefinitionId>TestSystemDefinitionId</System_DefinitionId>
+............<Build_DefinitionName>TEstBuildDefinitionName</Build_DefinitionName>
+........</EnvironmentVariables>
+....</RunConfiguration>
 </RunSettings>
