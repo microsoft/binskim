@@ -116,6 +116,10 @@ namespace Microsoft.CodeAnalysis.IL
             ValidateSummaryEvent(summary, summaryEvents.First(), sb);
 
             sb.ToString().Should().Be("");
+
+            // Clean mocks from CompilerDataLogger.
+            CompilerDataLogger.s_injectedTelemetryClient = null;
+            CompilerDataLogger.s_injectedTelemetryConfiguration = null;
         }
 
         [Fact]
@@ -156,6 +160,10 @@ namespace Microsoft.CodeAnalysis.IL
                 .Should().Be(compilerEvents.First().Properties["sessionId"]);
 
             Assert.Equal(0, sb.Length);
+
+            // Clean mocks from CompilerDataLogger.
+            CompilerDataLogger.s_injectedTelemetryClient = null;
+            CompilerDataLogger.s_injectedTelemetryConfiguration = null;
         }
 
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
