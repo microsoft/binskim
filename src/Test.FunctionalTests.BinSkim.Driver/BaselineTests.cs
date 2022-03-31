@@ -49,7 +49,6 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public void Driver_ShouldLogCompilerTelemetryEvents_Managed()
         {
-
             List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
             var sb = new StringBuilder();
             string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;

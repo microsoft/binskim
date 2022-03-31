@@ -26,10 +26,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 {
     public class CompilerDataLoggerTests
     {
-        private const string SarifPath = @"C:\example.sarif";
-        private const string SampleSarifPath = "Native_x86_VS2019_SDL_Enabled.exe.sarif";
         private const string ExpectedFolder = "Expected";
         private const string TargetUriPath = @"c:\file.dll";
+        private const string SarifPath = @"C:\example.sarif";
+        private const string SampleSarifPath = "Native_x86_VS2019_SDL_Enabled.exe.sarif";
 
         [Fact]
         public void CompilerDataLogger_Write_ShouldSendAssemblyReferencesInChunks_WhenTelemetryIsEnabled()
@@ -45,6 +45,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             logger.Write(context, new CompilerData { CompilerName = ".NET Compiler", AssemblyReferences = assemblies });
             sendItems.Count.Should().Be(chunkNumber + 1);
+            context.Dispose();
         }
 
         [Fact]
@@ -64,6 +65,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             logger.Write(context, compilerData);
             sendItems.Count.Should().Be(chunkNumber + 1);
+            context.Dispose();
         }
 
         [Fact]
@@ -74,6 +76,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             logger.Write(context, new CompilerData { CompilerName = ".NET Compiler", AssemblyReferences = null });
             sendItems.Count.Should().Be(1);
+            context.Dispose();
         }
 
         [Fact]
@@ -90,6 +93,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             logger.Write(context, new CompilerData { CompilerName = ".NET Compiler", AssemblyReferences = assemblies });
             sendItems.Count.Should().Be(0);
+            context.Dispose();
         }
 
         [Fact]
@@ -110,6 +114,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             };
 
             Assert.Throws<InvalidOperationException>(() => new CompilerDataLogger(SarifPath, Sarif.SarifVersion.Current, context, fileSystem.Object));
+            context.Dispose();
         }
 
         [Fact]
@@ -120,6 +125,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             BinaryAnalyzerContext context = CreateTestContext();
             var compilerDataLogger = new CompilerDataLogger(SarifPath, Sarif.SarifVersion.Current, context, fileSystem.Object);
             compilerDataLogger.writer.Should().NotBeNull();
+            context.Dispose();
         }
 
         [Fact]
@@ -130,6 +136,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             BinaryAnalyzerContext context = CreateTestContext();
 
             Assert.Throws<InvalidOperationException>(() => new CompilerDataLogger(sarifOutputFilePath: string.Empty, Sarif.SarifVersion.Current, context, fileSystem.Object));
+            context.Dispose();
         }
 
         [Fact]
@@ -146,6 +153,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             fileSystem.Verify(fileSystem => fileSystem.FileOpenRead(sarifLogPath), Times.Never);
             sendItems.Count.Should().Be(1);
+            context.Dispose();
         }
 
         [Fact]
@@ -167,6 +175,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             fileSystem.Verify(fileSystem => fileSystem.FileOpenRead(sarifLogPath), Times.Once);
             sendItems.Count.Should().Be(1);
+            context.Dispose();
         }
 
         [Fact]
@@ -184,6 +193,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             fileSystem.Verify(fileSystem => fileSystem.FileOpenRead(sarifLogPath), Times.Never);
             sendItems.Count.Should().Be(1);
+            context.Dispose();
         }
 
         [Fact]
@@ -209,6 +219,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             fileSystem.Verify(fileSystem => fileSystem.FileOpenRead(sarifLogPath), Times.Never);
             sendItems.Count.Should().Be(0);
+            context.Dispose();
         }
 
         [Fact]
@@ -226,6 +237,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             logger.Should().NotBeNull();
             Environment.SetEnvironmentVariable("BinskimCompilerDataAppInsightsKey", null);
+            context.Dispose();
         }
 
         [Fact]
@@ -236,6 +248,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             List<ITelemetry> sendItems = TestSetup(SarifPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger compilerDataLogger, fileSystem.Object);
             compilerDataLogger.WriteException(context, "testException");
             sendItems.Count.Should().Be(1);
+            context.Dispose();
         }
 
         [Fact]
@@ -246,6 +259,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             List<ITelemetry> sendItems = TestSetup(SarifPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger compilerDataLogger, fileSystem.Object, true);
             compilerDataLogger.WriteException(context, "testException");
             sendItems.Count.Should().Be(0);
+            context.Dispose();
         }
 
         [Fact]
@@ -260,6 +274,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog, "", null);
             compilerDataLogger.WriteException(exception, summary);
             sendItems.Count.Should().Be(1);
+            context.Dispose();
         }
 
         [Fact]
@@ -272,6 +287,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             List<ITelemetry> sendItems = TestSetup(SarifPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger compilerDataLogger, fileSystem.Object);
             compilerDataLogger.WriteException(exception, summary);
             sendItems.Count.Should().Be(1);
+            context.Dispose();
         }
 
         [Fact]
@@ -282,6 +298,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             List<ITelemetry> sendItems = TestSetup(SarifPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger compilerDataLogger, fileSystem.Object);
             compilerDataLogger.CreateCsvOutputFile(null, false);
             sendItems.Count.Should().Be(0);
+            context.Dispose();
         }
 
         private List<ITelemetry> TestSetup(string sarifLogFilePath, BinaryAnalyzerContext context, Sarif.SarifVersion sarifVersion, out CompilerDataLogger logger, IFileSystem fileSystem = null, bool isDisabledLogger = false)
@@ -342,4 +359,3 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         }
     }
 }
-

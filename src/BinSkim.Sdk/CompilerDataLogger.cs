@@ -263,9 +263,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             string fileHash = context.Hashes?.Sha256;
 
-            string filePath = RootPathToElide == null ?
-                context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty) :
-                context.TargetUri?.LocalPath;
+            string filePath = RootPathToElide == null
+                ? context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty)
+                : context.TargetUri?.LocalPath;
 
             WriteToCsv($"{filePath},,,,,,,,,,,,,{fileHash},{errorMessage}");
 

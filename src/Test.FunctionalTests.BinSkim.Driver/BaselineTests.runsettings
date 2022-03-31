@@ -1,16 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- File name extension must be .runsettings -->
 <RunSettings>
-....<RunConfiguration>
-........<EnvironmentVariables>
-............<System_TeamProjectId>TestProjectId</System_TeamProjectId>
-............<System_TeamProject>TestSystemTeamProject</System_TeamProject>
-............<Build_Repository_ID>TestBuildRepositoryID</Build_Repository_ID>
-............<System_CollectionId>TestSystemCollectionId</System_CollectionId>
-............<Build_BuildId>TestBuildBuildId</Build_BuildId>
-............<Build_Repository_Name>TestBuildRepositoryName</Build_Repository_Name>
-............<System_CollectionUri>TestSystemCollectionUri</System_CollectionUri>
-............<System_DefinitionId>TestSystemDefinitionId</System_DefinitionId>
-............<Build_DefinitionName>TEstBuildDefinitionName</Build_DefinitionName>
-........</EnvironmentVariables>
-....</RunConfiguration>
+  <RunConfiguration>
+    <EnvironmentVariables>
+      <!-- List of environment variables we want to set-->
+      <System_TeamProjectId>TestProjectId</System_TeamProjectId>
+      <System_TeamProject>TestSystemTeamProject</System_TeamProject>
+      <Build_Repository_ID>TestBuildRepositoryID</Build_Repository_ID>
+      <System_CollectionId>TestSystemCollectionId</System_CollectionId>
+      <Build_BuildId>TestBuildBuildId</Build_BuildId>
+      <Build_Repository_Name>TestBuildRepositoryName</Build_Repository_Name>
+      <System_CollectionUri>TestSystemCollectionUri</System_CollectionUri>
+      <System_DefinitionId>TestSystemDefinitionId</System_DefinitionId>
+      <Build_DefinitionName>TestBuildDefinitionName</Build_DefinitionName>
+    </EnvironmentVariables>
+  </RunConfiguration>
 </RunSettings>
