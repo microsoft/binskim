@@ -137,6 +137,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 fileSystem.FileDelete(csvFilePath);
             }
 
+            string directoryName = Path.GetDirectoryName(csvFilePath);
+            
+            if (!Directory.Exists(directoryName))
+            {
+                Directory.CreateDirectory(directoryName);  
+            }
+
             this.writer = new StreamWriter(new FileStream(csvFilePath, FileMode.OpenOrCreate));
             PrintHeader();
         }

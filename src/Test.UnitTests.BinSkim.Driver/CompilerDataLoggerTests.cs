@@ -118,14 +118,13 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         }
 
         [Fact]
-        public void CompilerDataLogger_Constructor_ShouldNotLogEvents_WhenForceAndCsvAreEnabled()
+        public void CompilerDataLogger_Constructor_ShouldNotLogTelemetry_WhenForceAndCsvOutputIsEnabled()
         {
             var fileSystem = new Mock<IFileSystem>();
             fileSystem.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
-            BinaryAnalyzerContext context = CreateTestContext();
-            var compilerDataLogger = new CompilerDataLogger(SarifPath, Sarif.SarifVersion.Current, context, fileSystem.Object);
+            using BinaryAnalyzerContext context = CreateTestContext(forceOverwrite: true);
+            using var compilerDataLogger = new CompilerDataLogger(SarifPath, Sarif.SarifVersion.Current, context, fileSystem.Object);
             compilerDataLogger.writer.Should().NotBeNull();
-            context.Dispose();
         }
 
         [Fact]
@@ -331,20 +330,12 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             return sendItems;
         }
 
-        private BinaryAnalyzerContext CreateTestContext(string outputPath = null)
+        private BinaryAnalyzerContext CreateTestContext(bool forceOverwrite = false, string outputPath = null)
         {
             string csvOutputPath = outputPath ?? @$"C:\temp\{Guid.NewGuid()}.sarif";
-            var context = new BinaryAnalyzerContext() { TargetUri = new Uri(TargetUriPath), ForceOverwrite = true };
-            var compilerOptions = new PropertiesDictionary
-            {
-                { "CsvOutputPath", csvOutputPath }
-            };
+            var context = new BinaryAnalyzerContext() { TargetUri = new Uri(TargetUriPath), ForceOverwrite = forceOverwrite };
 
-            context.Policy = new PropertiesDictionary
-            {
-                { "CompilerTelemetry.Options", compilerOptions }
-            };
-
+            context.Policy.SetProperty(CompilerDataLogger.CsvOutputPath, csvOutputPath);
             return context;
         }
 
