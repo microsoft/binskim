@@ -214,7 +214,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
             var fileSystem = new Mock<IFileSystem>();
-            string content = File.ReadAllText(sarifLogPath);
             using BinaryAnalyzerContext context = CreateTestContext();
 
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
