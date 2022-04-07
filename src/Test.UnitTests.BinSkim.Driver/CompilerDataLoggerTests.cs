@@ -29,72 +29,66 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
     {
         private const string ExpectedFolder = "Expected";
         private const string TargetUriPath = @"c:\file.dll";
-        private const string SarifPath = @"C:\example.sarif";
         private const string SampleSarifPath = "Native_x86_VS2019_SDL_Enabled.exe.sarif";
+        private const int SmallChunkSize = 10;
+        private const string TestExceptionMessage = "TestException";
 
         [Fact]
         public void CompilerDataLogger_Write_ShouldSendAssemblyReferencesInChunks_WhenTelemetryIsEnabled()
         {
             using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> sendItems = TestSetup(SarifPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger logger);
-
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context, sarifVersion: Sarif.SarifVersion.Current, logger: out CompilerDataLogger logger);
             string assemblies = "Microsoft.DiaSymReader (1.3.0);Newtonsoft.Json (13.0.1)";
-
-            CompilerDataLogger.s_chunkSize = 10;
-            int chunksize = CompilerDataLogger.s_chunkSize;
-            int chunkNumber = (assemblies.Length + chunksize - 1) / chunksize;
-
+            CompilerDataLogger.s_chunkSize = SmallChunkSize;
+            int chunkNumber = logger.CalculateChunkedContentSize(assemblies.Length);
             logger.Write(context, new CompilerData { CompilerName = ".NET Compiler", AssemblyReferences = assemblies });
-            sendItems.Count.Should().Be(chunkNumber + 1);
-            context.Dispose();
+            telemetryEventOutput.Count.Should().Be(chunkNumber + 1);
         }
 
         [Fact]
         public void CompilerDataLogger_Write_ShouldSendCommandLineDataInChunks_WhenTelemetryIsEnabled()
         {
             using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> sendItems = TestSetup(SarifPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger logger);
-
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context, sarifVersion: Sarif.SarifVersion.Current, logger: out CompilerDataLogger logger);
             string commandLine = "TestCommandLine";
-
-            CompilerDataLogger.s_chunkSize = 10;
+            CompilerDataLogger.s_chunkSize = SmallChunkSize;
             int chunksize = CompilerDataLogger.s_chunkSize;
-
-            int chunkNumber = (commandLine.Length + chunksize - 1) / chunksize;
-
+            int chunkNumber = logger.CalculateChunkedContentSize(commandLine.Length);
             CompilerData compilerData = new CompilerData { CompilerName = ".NET Compiler", CommandLine = commandLine };
-
             logger.Write(context, compilerData);
-            sendItems.Count.Should().Be(chunkNumber + 1);
-            context.Dispose();
+            telemetryEventOutput.Count.Should().Be(chunkNumber + 1);
         }
 
         [Fact]
         public void CompilerDataLogger_Write_ShouldNotSend_IfNoAssemblyReferences()
         {
             using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> sendItems = TestSetup(SarifPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger logger);
-
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context, sarifVersion: Sarif.SarifVersion.Current, logger: out CompilerDataLogger logger);
             logger.Write(context, new CompilerData { CompilerName = ".NET Compiler", AssemblyReferences = null });
-            sendItems.Count.Should().Be(1);
-            context.Dispose();
+            List<EventTelemetry> events = telemetryEventOutput.OfType<EventTelemetry>().ToList();
+            List<EventTelemetry> assemblyEvents = events.Where(e => e.Name == CompilerDataLogger.AssemblyReferencesEventName)
+                    .OfType<EventTelemetry>().ToList();
+
+            assemblyEvents.Count.Should().Be(0);
         }
 
         [Fact]
         public void CompilerDataLogger_Write_ShouldNotSend_IfTelemetryClientDoesNotExist()
         {
             using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> sendItems = TestSetup(SarifPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger logger, null, true);
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                   sarifVersion: Sarif.SarifVersion.Current,
+                                                   logger: out CompilerDataLogger logger,
+                                                   fileSystem: null,
+                                                   isTelemetryOutputEnabled: false,
+                                                   isCsvOutputEnabled: false);
 
             string assemblies = "Microsoft.DiaSymReader (1.3.0);Newtonsoft.Json (13.0.1)";
-
             CompilerDataLogger.s_chunkSize = 10;
             int chunksize = CompilerDataLogger.s_chunkSize;
             int chunkNumber = (assemblies.Length + chunksize - 1) / chunksize;
-
             logger.Write(context, new CompilerData { CompilerName = ".NET Compiler", AssemblyReferences = assemblies });
-            sendItems.Count.Should().Be(0);
-            context.Dispose();
+            telemetryEventOutput.Count.Should().Be(0);
         }
 
         [Fact]
@@ -102,7 +96,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             var fileSystem = new Mock<IFileSystem>();
             fileSystem.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
-
             var context = new BinaryAnalyzerContext() { TargetUri = new Uri(TargetUriPath) };
             var compilerOptions = new PropertiesDictionary
             {
@@ -114,8 +107,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 { "CompilerTelemetry.Options", compilerOptions }
             };
 
-            Assert.Throws<InvalidOperationException>(() => new CompilerDataLogger(SarifPath, Sarif.SarifVersion.Current, context, fileSystem.Object));
-            context.Dispose();
+            Assert.Throws<InvalidOperationException>(() => new CompilerDataLogger(GetExampleSarifPath(Sarif.SarifVersion.Current),
+                                                                                  Sarif.SarifVersion.Current,
+                                                                                  context,
+                                                                                  fileSystem.Object));
         }
 
         [Fact]
@@ -124,7 +119,11 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             var fileSystem = new Mock<IFileSystem>();
             fileSystem.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
             using BinaryAnalyzerContext context = CreateTestContext(forceOverwrite: true, targetUriPath: @"C:\temp\");
-            using var compilerDataLogger = new CompilerDataLogger(GetExampleSarifPath(), Sarif.SarifVersion.Current, context, fileSystem.Object);
+            using var compilerDataLogger = new CompilerDataLogger(GetExampleSarifPath(Sarif.SarifVersion.Current),
+                                                                  Sarif.SarifVersion.Current,
+                                                                  context,
+                                                                  fileSystem.Object);
+
             compilerDataLogger.writer.Should().NotBeNull();
         }
 
@@ -135,25 +134,32 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             fileSystem.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
             using BinaryAnalyzerContext context = CreateTestContext();
 
-            Assert.Throws<InvalidOperationException>(() => new CompilerDataLogger(sarifOutputFilePath: string.Empty, Sarif.SarifVersion.Current, context, fileSystem.Object));
-            context.Dispose();
+            Assert.Throws<InvalidOperationException>(() => new CompilerDataLogger(sarifOutputFilePath: string.Empty,
+                                                                                  Sarif.SarifVersion.Current,
+                                                                                  context,
+                                                                                  fileSystem.Object));
         }
 
         [Fact]
         public void CompilerDataLogger_Dispose_ShouldReadSarifV2()
         {
-            string sarifLogPath = GetExampleSarifPath();
+            string sarifLogPath = GetExampleSarifPath(Sarif.SarifVersion.Current);
             var fileSystem = new Mock<IFileSystem>();
             string content = File.ReadAllText(sarifLogPath);
             byte[] byteArray = Encoding.UTF8.GetBytes(content);
             using BinaryAnalyzerContext context = CreateTestContext();
 
-            List<ITelemetry> sendItems = TestSetup(sarifLogPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger compilerDataLogger, fileSystem.Object);
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                   sarifVersion: Sarif.SarifVersion.Current,
+                                                   logger: out CompilerDataLogger compilerDataLogger,
+                                                   fileSystem: fileSystem.Object);
             compilerDataLogger.Dispose();
 
             // fileSystem will only be used with SARIF V1.
             fileSystem.Verify(fileSystem => fileSystem.FileOpenRead(sarifLogPath), Times.Never);
-            StringBuilder sb = ValidateSummaryEvent(csvOutputPath: string.Empty, telemetryGeneratedEvents: sendItems, sarifLogPath: sarifLogPath);
+            StringBuilder sb = ValidateSummaryEvent(csvOutputPath: string.Empty,
+                                                    telemetryGeneratedEvents: telemetryEventOutput,
+                                                    sarifLogPath: sarifLogPath);
             sb.ToString().Should().BeNullOrEmpty();
         }
 
@@ -171,28 +177,35 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 .Setup(f => f.FileOpenRead(It.IsAny<string>()))
                 .Returns(new MemoryStream(byteArray));
 
-            List<ITelemetry> sendItems = TestSetup(sarifLogPath, context, Sarif.SarifVersion.OneZeroZero, out CompilerDataLogger compilerDataLogger, fileSystem.Object);
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                   sarifVersion: Sarif.SarifVersion.OneZeroZero,
+                                                   logger: out CompilerDataLogger compilerDataLogger,
+                                                   fileSystem: fileSystem.Object);
             compilerDataLogger.Dispose();
 
             fileSystem.Verify(fileSystem => fileSystem.FileOpenRead(sarifLogPath), Times.Once);
-            sendItems.Count.Should().Be(1);
-            context.Dispose();
+            telemetryEventOutput.Count.Should().Be(1);
         }
 
         [Fact]
         public void CompilerDataLogger_Summarize_ShouldLogSummaryEvent()
         {
-            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
+            string sarifLogPath = GetExampleSarifPath(Sarif.SarifVersion.Current);
             var fileSystem = new Mock<IFileSystem>();
             using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> sendItems = TestSetup(sarifLogPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger compilerDataLogger, fileSystem.Object);
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                   sarifVersion: Sarif.SarifVersion.Current,
+                                                   logger: out CompilerDataLogger compilerDataLogger,
+                                                   fileSystem: fileSystem.Object);
+
             SarifLog sarifLog = SarifLog.Load(sarifLogPath);
-            ExecutionException exception = AnalysisSummaryExtractor.ExtractExceptionData(sarifLog).FirstOrDefault();
-            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog, "", null);
+            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog, string.Empty, null);
 
             compilerDataLogger.Summarize(summary);
 
-            StringBuilder sb = ValidateSummaryEvent(csvOutputPath: string.Empty, telemetryGeneratedEvents: sendItems, sarifLogPath: sarifLogPath);
+            StringBuilder sb = ValidateSummaryEvent(csvOutputPath: string.Empty,
+                                                    telemetryGeneratedEvents: telemetryEventOutput,
+                                                    sarifLogPath: sarifLogPath);
             sb.ToString().Should().BeNullOrEmpty();
         }
 
@@ -202,15 +215,14 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
             var fileSystem = new Mock<IFileSystem>();
             string content = File.ReadAllText(sarifLogPath);
-            byte[] byteArray = Encoding.UTF8.GetBytes(content);
             using BinaryAnalyzerContext context = CreateTestContext();
 
-            List<ITelemetry> sendItems = TestSetup(sarifLogPath,
-                                                   context,
-                                                   Sarif.SarifVersion.Current,
-                                                   out CompilerDataLogger compilerDataLogger,
-                                                   fileSystem.Object,
-                                                   true);
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                   sarifVersion: Sarif.SarifVersion.Current,
+                                                   logger: out CompilerDataLogger compilerDataLogger,
+                                                   fileSystem: fileSystem.Object,
+                                                   isTelemetryOutputEnabled: false,
+                                                   isCsvOutputEnabled: false);
 
             // Intentionally disable the logger by removing the TelemetryClient and Writer.
             CompilerDataLogger.s_injectedTelemetryClient = null;
@@ -218,8 +230,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             compilerDataLogger.Dispose();
 
             fileSystem.Verify(fileSystem => fileSystem.FileOpenRead(sarifLogPath), Times.Never);
-            sendItems.Count.Should().Be(0);
-            context.Dispose();
+            telemetryEventOutput.Count.Should().Be(0);
         }
 
         [Fact]
@@ -231,13 +242,17 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             var fileSystem = new Mock<IFileSystem>();
             string randomString = Guid.NewGuid().ToString();
             Environment.SetEnvironmentVariable("BinskimCompilerDataAppInsightsKey", randomString);
-            var sendItems = new List<ITelemetry>();
+            var telemetryEventOutput = new List<ITelemetry>();
             context.Policy = new Sarif.PropertiesDictionary();
-            var logger = new CompilerDataLogger(SarifPath, Sarif.SarifVersion.Current, context, fileSystem.Object);
+            var logger = new CompilerDataLogger(sarifOutputFilePath: GetExampleSarifPath(Sarif.SarifVersion.Current),
+                                                sarifVersion: Sarif.SarifVersion.Current,
+                                                context: context,
+                                                fileSystem: fileSystem.Object);
 
             logger.Should().NotBeNull();
+
+            // Clear environment variable set for this test.
             Environment.SetEnvironmentVariable("BinskimCompilerDataAppInsightsKey", null);
-            context.Dispose();
         }
 
         [Fact]
@@ -245,10 +260,13 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             var fileSystem = new Mock<IFileSystem>();
             using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> sendItems = TestSetup(SarifPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger compilerDataLogger, fileSystem.Object);
-            compilerDataLogger.WriteException(context, "testException");
-            sendItems.Count.Should().Be(1);
-            context.Dispose();
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                   sarifVersion: Sarif.SarifVersion.Current,
+                                                   logger: out CompilerDataLogger compilerDataLogger,
+                                                   fileSystem: fileSystem.Object);
+
+            compilerDataLogger.WriteException(context: context, errorMessage: TestExceptionMessage);
+            telemetryEventOutput.Count.Should().Be(1);
         }
 
         [Fact]
@@ -256,24 +274,36 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             var fileSystem = new Mock<IFileSystem>();
             using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> sendItems = TestSetup(SarifPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger compilerDataLogger, fileSystem.Object, true);
-            compilerDataLogger.WriteException(context, "testException");
-            sendItems.Count.Should().Be(0);
-            context.Dispose();
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                   sarifVersion: Sarif.SarifVersion.Current,
+                                                   logger: out CompilerDataLogger compilerDataLogger,
+                                                   fileSystem: fileSystem.Object,
+                                                   isTelemetryOutputEnabled: false,
+                                                   isCsvOutputEnabled: false);
+
+            compilerDataLogger.WriteException(context: context, errorMessage: TestExceptionMessage);
+            telemetryEventOutput.Count.Should().Be(0);
         }
 
         [Fact]
-        public void CompilerDataLogger_WriteException_ShouldLogExecutionExceptionFromBaseLineTestSarif()
+        public void CompilerDataLogger_WriteException_ShouldLogExecutionExceptions()
         {
             string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
             var fileSystem = new Mock<IFileSystem>();
             using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> sendItems = TestSetup(sarifLogPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger compilerDataLogger, fileSystem.Object);
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                   sarifVersion: Sarif.SarifVersion.Current,
+                                                   logger: out CompilerDataLogger compilerDataLogger,
+                                                   fileSystem: fileSystem.Object);
+
             SarifLog sarifLog = SarifLog.Load(sarifLogPath);
             List<ExecutionException> exceptionList = AnalysisSummaryExtractor.ExtractExceptionData(sarifLog).ToList();
-            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog, "", null);
+            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog, string.Empty, null);
             LogExceptionEvents(exceptionList, compilerDataLogger, summary);
-            StringBuilder sb = ValidateExceptionEvents(csvOutputPath: string.Empty, telemetryGeneratedEvents: sendItems, exceptionList: exceptionList);
+            StringBuilder sb = ValidateExceptionEvents(csvOutputPath: string.Empty,
+                                                       telemetryGeneratedEvents: telemetryEventOutput,
+                                                       exceptionList: exceptionList);
+
 
             sb.ToString().Should().BeNullOrEmpty();
         }
@@ -283,37 +313,56 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             var fileSystem = new Mock<IFileSystem>();
             using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> sendItems = TestSetup(SarifPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger compilerDataLogger, fileSystem.Object);
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                   sarifVersion: Sarif.SarifVersion.Current,
+                                                   logger: out CompilerDataLogger compilerDataLogger,
+                                                   fileSystem: fileSystem.Object);
+
             List<ExecutionException> exceptionList = new List<ExecutionException>();
-            exceptionList.Add(new ExecutionException(type: "test", message: "testExecutionException", stackTrace: "testStackTrace", innerException: new Exception()));
+            exceptionList.Add(new ExecutionException(type: "test",
+                                                     message: "testExecutionException",
+                                                     stackTrace: "testStackTrace",
+                                                     innerException: new Exception()));
 
-            LogExceptionEvents(exceptionList, compilerDataLogger);
+            LogExceptionEvents(exceptions: exceptionList, logger: compilerDataLogger);
 
-            StringBuilder sb = ValidateExceptionEvents(string.Empty, sendItems, exceptionList);
+            StringBuilder sb = ValidateExceptionEvents(csvOutputPath: string.Empty,
+                                                       telemetryGeneratedEvents: telemetryEventOutput,
+                                                       exceptionList: exceptionList);
 
             sb.ToString().Should().BeNullOrEmpty();
-            context.Dispose();
         }
 
         [Fact]
-        public void CompilerDataLogger_CreateScvOutputFile_ShouldSkipIfPathIsNull()
+        public void CompilerDataLogger_CreateCsvOutputFile_ShouldNotThrowExceptionWhenPathIsNull()
         {
             using BinaryAnalyzerContext context = CreateTestContext();
             var fileSystem = new Mock<IFileSystem>();
-            List<ITelemetry> sendItems = TestSetup(SarifPath, context, Sarif.SarifVersion.Current, out CompilerDataLogger compilerDataLogger, fileSystem.Object);
-            compilerDataLogger.CreateCsvOutputFile(null, false);
-            sendItems.Count.Should().Be(0);
-            context.Dispose();
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                   sarifVersion: Sarif.SarifVersion.Current,
+                                                   logger: out CompilerDataLogger compilerDataLogger,
+                                                   fileSystem: fileSystem.Object);
+
+            compilerDataLogger.CreateCsvOutputFile(csvFilePath: null, overwriteExistingCsv: false);
         }
 
-        private List<ITelemetry> TestSetup(string sarifLogFilePath, BinaryAnalyzerContext context, Sarif.SarifVersion sarifVersion, out CompilerDataLogger logger, IFileSystem fileSystem = null, bool isDisabledLogger = false)
+        private List<ITelemetry> TestSetup(BinaryAnalyzerContext context,
+                                           Sarif.SarifVersion sarifVersion,
+                                           out CompilerDataLogger logger,
+                                           IFileSystem fileSystem = null,
+                                           bool isTelemetryOutputEnabled = true,
+                                           bool isCsvOutputEnabled = false)
         {
-            List<ITelemetry> sendItems = null;
-            sendItems = new List<ITelemetry>();
+            List<ITelemetry> telemetryEventOutput = null;
+            telemetryEventOutput = new List<ITelemetry>();
+            string sarifLogFilePath = GetExampleSarifPath(sarifVersion);
 
-            if (isDisabledLogger)
+            if (!isTelemetryOutputEnabled && !isCsvOutputEnabled)
             {
-                logger = new CompilerDataLogger(sarifLogFilePath, sarifVersion, context ?? new BinaryAnalyzerContext(), fileSystem);
+                logger = new CompilerDataLogger(sarifOutputFilePath: sarifLogFilePath,
+                                                sarifVersion: sarifVersion,
+                                                context: context ?? new BinaryAnalyzerContext(),
+                                                fileSystem: fileSystem);
             }
             else
             {
@@ -321,7 +370,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 TelemetryConfiguration telemetryConfiguration;
                 telemetryConfiguration = new TelemetryConfiguration();
                 telemetryConfiguration.InstrumentationKey = Guid.NewGuid().ToString();
-                telemetryConfiguration.TelemetryChannel = new StubTelemetryChannel { OnSend = item => sendItems.Add(item) };
+                telemetryConfiguration.TelemetryChannel =
+                    new StubTelemetryChannel { OnSend = item => telemetryEventOutput.Add(item) };
+
                 telemetryConfiguration.TelemetryInitializers.Add(new OperationCorrelationTelemetryInitializer());
 
                 telemetryClient = new TelemetryClient(telemetryConfiguration);
@@ -330,10 +381,13 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 CompilerDataLogger.s_injectedTelemetryConfiguration = telemetryConfiguration;
 
                 context.Policy = new Sarif.PropertiesDictionary();
-                logger = new CompilerDataLogger(sarifLogFilePath, sarifVersion, context ?? new BinaryAnalyzerContext(), fileSystem);
+                logger = new CompilerDataLogger(sarifOutputFilePath: sarifLogFilePath,
+                                                sarifVersion: sarifVersion,
+                                                context: context ?? new BinaryAnalyzerContext(),
+                                                fileSystem: fileSystem);
             }
 
-            return sendItems;
+            return telemetryEventOutput;
         }
 
         private BinaryAnalyzerContext CreateTestContext(bool forceOverwrite = false, string outputPath = null, string targetUriPath = null)
@@ -542,9 +596,11 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             return sb;
         }
 
-        public static string GetExampleSarifPath()
+        public static string GetExampleSarifPath(Sarif.SarifVersion sarifVersion)
         {
-            return Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
+            return sarifVersion == Sarif.SarifVersion.Current
+                ? Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath)
+                : Path.Combine(GetTestDirectory("Test.UnitTests.BinSkim.Driver"), "Samples", "Native_x86_VS2019_SDL_Enabled_Sarif.v1.0.0.sarif");
         }
 
         internal static string GetTestDirectory(string relativeDirectory)

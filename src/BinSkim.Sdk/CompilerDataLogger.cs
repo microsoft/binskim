@@ -138,10 +138,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
 
             string directoryName = Path.GetDirectoryName(csvFilePath);
-            
+
             if (!Directory.Exists(directoryName))
             {
-                Directory.CreateDirectory(directoryName);  
+                Directory.CreateDirectory(directoryName);
             }
 
             this.writer = new StreamWriter(new FileStream(csvFilePath, FileMode.OpenOrCreate));
@@ -349,9 +349,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             });
         }
 
-        private void SendChunkedContent(string eventName, string contentId, string contentName, string content)
+        internal void SendChunkedContent(string eventName, string contentId, string contentName, string content)
         {
-            int size = (int)Math.Ceiling(1.0 * content.Length / s_chunkSize);
+            int size = CalculateChunkedContentSize(content.Length);
             for (int i = 0; i < content.Length; i += s_chunkSize)
             {
                 string chunkedContent = content.Substring(i, Math.Min(s_chunkSize, content.Length - i));
@@ -365,6 +365,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { $"chunked{contentName}", chunkedContent },
                 });
             }
+        }
+
+        internal int CalculateChunkedContentSize(int contentLength)
+        {
+            return (int)Math.Ceiling(1.0 * contentLength / s_chunkSize);
         }
 
         private void WriteSummaryData()
