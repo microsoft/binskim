@@ -52,7 +52,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         public void CompilerDataLogger_Write_ShouldSendCommandLineDataInChunks_WhenTelemetryIsEnabled()
         {
             using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> telemetryEventOutput = TestSetup(context: context, sarifVersion: Sarif.SarifVersion.Current, logger: out CompilerDataLogger logger);
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger logger);
+
             string commandLine = "TestCommandLine";
             CompilerDataLogger.s_chunkSize = SmallChunkSize;
             int chunksize = CompilerDataLogger.s_chunkSize;
@@ -66,7 +69,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         public void CompilerDataLogger_Write_ShouldNotSend_IfNoAssemblyReferences()
         {
             using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> telemetryEventOutput = TestSetup(context: context, sarifVersion: Sarif.SarifVersion.Current, logger: out CompilerDataLogger logger);
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger logger);
+
             logger.Write(context, new CompilerData { CompilerName = ".NET Compiler", AssemblyReferences = null });
             List<EventTelemetry> events = telemetryEventOutput.OfType<EventTelemetry>().ToList();
             List<EventTelemetry> assemblyEvents = events.Where(e => e.Name == CompilerDataLogger.AssemblyReferencesEventName)
@@ -163,6 +169,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             StringBuilder sb = ValidateSummaryEvent(csvOutputPath: string.Empty,
                                                     telemetryGeneratedEvents: telemetryEventOutput,
                                                     sarifLogPath: sarifLogPath);
+
             sb.ToString().Should().BeNullOrEmpty();
         }
 

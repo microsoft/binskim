@@ -16,9 +16,11 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.BinSkim.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif.Readers;
 using Microsoft.CodeAnalysis.Sarif.Writers;
 
@@ -61,6 +63,12 @@ namespace Microsoft.CodeAnalysis.IL
 
                 sendItems.All<ITelemetry>(item => item.GetType() == typeof(EventTelemetry));
 
+                List<CompilerData> records = CollectCompilerDetails(binaryPath: testFile,
+                                                                    out int expectedSummaryEventCount,
+                                                                    out int expectedCompilerEventCount,
+                                                                    out int expectedAssemblyReferencesEventCount,
+                                                                    out int expectedCommandLineEventCount);
+
                 var compilerEvents = new List<EventTelemetry>();
                 var assemblyReferencesEvents = new List<EventTelemetry>();
                 var commandLineEvents = new List<EventTelemetry>();
@@ -78,28 +86,36 @@ namespace Microsoft.CodeAnalysis.IL
                 }
 
                 summaryEvents.Should().NotBeNull();
-                if (summaryEvents.Count != 1)
+                if (summaryEvents.Count != expectedSummaryEventCount)
                 {
-                    sb.AppendLine(string.Format("Expected one summary event per binary, but found {0}.", summaryEvents.Count));
+                    sb.AppendLine(string.Format("Expected {0} summary event per binary, but found {1}.",
+                                                expectedSummaryEventCount,
+                                                summaryEvents.Count));
                 }
 
                 assemblyReferencesEvents.Should().NotBeNull();
-                if (assemblyReferencesEvents.Count != 1)
+                if (assemblyReferencesEvents.Count != expectedAssemblyReferencesEventCount)
                 {
-                    sb.AppendLine(string.Format("Expected 1 AssemblyReferencesEvent, but found {0}", assemblyReferencesEvents.Count));
+                    sb.AppendLine(string.Format("Expected {0} AssemblyReferencesEvent, but found {1}",
+                                                expectedAssemblyReferencesEventCount,
+                                                assemblyReferencesEvents.Count));
                 }
 
                 // Managed code will not result in any Command Line Events.
                 commandLineEvents.Should().NotBeNull();
-                if (commandLineEvents.Count != 0)
+                if (commandLineEvents.Count != expectedCommandLineEventCount)
                 {
-                    sb.AppendLine(string.Format("Expected 0 CommandLineEvents, but found {0}", commandLineEvents.Count));
+                    sb.AppendLine(string.Format("Expected {0} CommandLineEvents, but found {1}",
+                                                expectedCommandLineEventCount,
+                                                commandLineEvents.Count));
                 }
 
                 compilerEvents.Should().NotBeNull();
-                if (compilerEvents.Count != 1)
+                if (compilerEvents.Count != expectedCompilerEventCount)
                 {
-                    sb.AppendLine(string.Format("Expected 1 CompilerEvent, but found {0}", compilerEvents.Count));
+                    sb.AppendLine(string.Format("Expected {0} CompilerEvent, but found {1}",
+                                                expectedCompilerEventCount,
+                                                compilerEvents.Count));
                 }
 
                 string summaryEventSessionId = summaryEvents.First().Properties["sessionId"];
@@ -125,8 +141,6 @@ namespace Microsoft.CodeAnalysis.IL
                 AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifResult, string.Empty, null);
 
                 ValidateSummaryEvent(summary, summaryEvents.First(), sb);
-
-                sb.ToString().Should().Be(string.Empty);
             }
             finally
             {
@@ -150,6 +164,12 @@ namespace Microsoft.CodeAnalysis.IL
 
                 sendItems.All<ITelemetry>(item => item.GetType() == typeof(EventTelemetry));
 
+                List<CompilerData> records = CollectCompilerDetails(binaryPath: testFile,
+                                                                    out int expectedSummaryEventCount,
+                                                                    out int expectedCompilerEventCount,
+                                                                    out int expectedAssemblyReferencesEventCount,
+                                                                    out int expectedCommandLineEventCount);
+
                 var compilerEvents = new List<EventTelemetry>();
                 var assemblyReferencesEvents = new List<EventTelemetry>();
                 var commandLineEvents = new List<EventTelemetry>();
@@ -166,6 +186,39 @@ namespace Microsoft.CodeAnalysis.IL
                     }
                 }
 
+                summaryEvents.Should().NotBeNull();
+                if (summaryEvents.Count != expectedSummaryEventCount)
+                {
+                    sb.AppendLine(string.Format("Expected {0} summary event per binary, but found {1}.",
+                                                expectedSummaryEventCount,
+                                                summaryEvents.Count));
+                }
+
+                assemblyReferencesEvents.Should().NotBeNull();
+                if (assemblyReferencesEvents.Count != expectedAssemblyReferencesEventCount)
+                {
+                    sb.AppendLine(string.Format("Expected {0} AssemblyReferencesEvent, but found {1}",
+                                                expectedAssemblyReferencesEventCount,
+                                                assemblyReferencesEvents.Count));
+                }
+
+                // Managed code will not result in any Command Line Events.
+                commandLineEvents.Should().NotBeNull();
+                if (commandLineEvents.Count != expectedCommandLineEventCount)
+                {
+                    sb.AppendLine(string.Format("Expected {0} CommandLineEvents, but found {1}",
+                                                expectedCommandLineEventCount,
+                                                commandLineEvents.Count));
+                }
+
+                compilerEvents.Should().NotBeNull();
+                if (compilerEvents.Count != expectedCompilerEventCount)
+                {
+                    sb.AppendLine(string.Format("Expected {0} CompilerEvent, but found {1}",
+                                                expectedCompilerEventCount,
+                                                compilerEvents.Count));
+                }
+
                 summaryEvents.Count.Should().Be(1);
                 assemblyReferencesEvents.Count.Should().Be(0);
                 commandLineEvents.Count.Should().Be(25);
@@ -177,7 +230,9 @@ namespace Microsoft.CodeAnalysis.IL
                 summaryEvents.First().Properties["sessionId"]
                     .Should().Be(compilerEvents.First().Properties["sessionId"]);
 
-                Assert.Equal(0, sb.Length);
+                AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifResult, string.Empty, null);
+
+                ValidateSummaryEvent(summary, summaryEvents.First(), sb);
             }
             finally
             {
@@ -185,6 +240,78 @@ namespace Microsoft.CodeAnalysis.IL
                 CompilerDataLogger.s_injectedTelemetryClient = null;
                 CompilerDataLogger.s_injectedTelemetryConfiguration = null;
             }
+        }
+
+        private List<CompilerData> CollectCompilerDetails(string binaryPath,
+                                                          out int expectedSummaryEvents,
+                                                          out int expectedCompilerEvents,
+                                                          out int expectedAssemblyReferencesEvents,
+                                                          out int expectedCommandLineEvents)
+        {
+            var peBinary = new PEBinary(new Uri(binaryPath));
+            Pdb pdb = peBinary.Pdb;
+            var records = new List<CompilerData>();
+
+            expectedSummaryEvents = 1;
+            expectedCompilerEvents = 0;
+            expectedAssemblyReferencesEvents = 0;
+            expectedCommandLineEvents = 0;
+
+            if (peBinary.PE.IsManaged)
+            {
+                records.Add(new CompilerData
+                {
+                    BinaryType = "PE",
+                    CompilerName = ".NET Compiler",
+                    Language = nameof(Language.MSIL),
+                    DebuggingFileName = pdb.GlobalScope?.Name,
+                    DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
+                    FileVersion = peBinary.PE.FileVersion?.FileVersion,
+                    CompilerBackEndVersion = peBinary.PE.LinkerVersion.ToString(),
+                    CompilerFrontEndVersion = peBinary.PE.LinkerVersion.ToString(),
+                    AssemblyReferences = string.Join(';', peBinary.PE.GetAssemblyReferenceStrings())
+                });
+            }
+            else
+            {
+                foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+                {
+                    Symbol om = omView.Value;
+                    ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
+
+                    records.Add(new CompilerData
+                    {
+                        BinaryType = "PE",
+                        ModuleName = omDetails?.Name,
+                        ModuleLibrary = omDetails?.Library,
+                        Dialect = omDetails.GetDialect(out _),
+                        CompilerName = omDetails.CompilerName,
+                        CommandLine = omDetails.RawCommandLine,
+                        Language = omDetails.Language.ToString(),
+                        DebuggingFileName = pdb.GlobalScope?.Name,
+                        FileVersion = peBinary.PE.FileVersion?.FileVersion,
+                        DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
+                        CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
+                        CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
+                    });
+                }
+            }
+
+            foreach (CompilerData record in records)
+            {
+                expectedCompilerEvents += 1;
+                if (record.AssemblyReferences != null)
+                {
+                    expectedAssemblyReferencesEvents += CalculateChunkedContentSize(record.AssemblyReferences.Length);
+                }
+
+                if (record.CommandLine != null)
+                {
+                    expectedCommandLineEvents += CalculateChunkedContentSize(record.CommandLine.Length);
+                }
+            }
+
+            return records;
         }
 
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
@@ -340,7 +467,9 @@ namespace Microsoft.CodeAnalysis.IL
             return sendItems;
         }
 
-        private StringBuilder ValidateSummaryEvent(AnalysisSummary summary, EventTelemetry eventTelemetry, StringBuilder sb)
+        private StringBuilder ValidateSummaryEvent(AnalysisSummary summary,
+                                                   EventTelemetry eventTelemetry,
+                                                   StringBuilder sb)
         {
             string projectIdVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.ProjectIdVariableName);
             string projectNameVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.ProjectNameVariableName);
@@ -471,6 +600,8 @@ namespace Microsoft.CodeAnalysis.IL
                                         eventTelemetry.Properties[CompilerDataLogger.RepositoryId]));
             }
 
+            sb.ToString().Should().Be(string.Empty);
+
             return sb;
         }
 
@@ -493,6 +624,11 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 return string.Format(CultureInfo.InvariantCulture, "diff \"{0}\", \"{1}\"", expected, actual);
             }
+        }
+
+        private static int CalculateChunkedContentSize(int contentLength)
+        {
+            return (int)Math.Ceiling(1.0 * contentLength / CompilerDataLogger.s_chunkSize);
         }
 
         private static string TryFindBeyondCompare()
