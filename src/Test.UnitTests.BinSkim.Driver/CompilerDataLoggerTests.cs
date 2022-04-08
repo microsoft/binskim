@@ -233,6 +233,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             // Intentionally disable the logger by removing the TelemetryClient and Writer.
             CompilerDataLogger.s_injectedTelemetryClient = null;
+            compilerDataLogger.writer?.Dispose();
             compilerDataLogger.writer = null;
             compilerDataLogger.Dispose();
 
