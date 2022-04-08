@@ -15,7 +15,6 @@ using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinSkim.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -49,120 +48,143 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public void Driver_ShouldLogCompilerTelemetryEvents_Managed()
         {
-            List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
-            var sb = new StringBuilder();
-            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;
-            string testFile = Path.Combine(testDirectory, "DotNetCore_win-x86_VS2019_Default.dll");
-
-            SarifLog sarifResult = RunRules(sb, testFile);
-
-            string testEnviornmentVar = Environment.GetEnvironmentVariable(nameof(AnalysisSummaryExtractor.ProjectIdVariableName), EnvironmentVariableTarget.Process);
-
-            sendItems.All<ITelemetry>(item => item.GetType() == typeof(EventTelemetry));
-            List<EventTelemetry> events = sendItems.OfType<EventTelemetry>().ToList();
-
-            List<EventTelemetry> compilerEvents = events.Where(e => e.Name == CompilerDataLogger.CompilerEventName)
-                .OfType<EventTelemetry>().ToList();
-
-            List<EventTelemetry> assemblyReferencesEvents = events.Where(e => e.Name == CompilerDataLogger.AssemblyReferencesEventName)
-                .OfType<EventTelemetry>().ToList();
-
-            List<EventTelemetry> commandLineEvents = events.Where(e => e.Name == CompilerDataLogger.CommandLineEventName)
-                .OfType<EventTelemetry>().ToList();
-
-            List<EventTelemetry> summaryEvents = events.Where(e => e.Name == CompilerDataLogger.SummaryEventName)
-                .OfType<EventTelemetry>().ToList();
-
-            if (summaryEvents.Count != 1)
+            try
             {
-                sb.AppendLine("Expected at least 1 summaryEvent, but found none.");
+                List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
+                var sb = new StringBuilder();
+                string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;
+                string testFile = Path.Combine(testDirectory, "DotNetCore_win-x86_VS2019_Default.dll");
+
+                SarifLog sarifResult = RunRules(sb, testFile);
+
+                string testEnvironmentVar = Environment.GetEnvironmentVariable(nameof(AnalysisSummaryExtractor.ProjectIdVariableName), EnvironmentVariableTarget.Process);
+
+                sendItems.All<ITelemetry>(item => item.GetType() == typeof(EventTelemetry));
+
+                var compilerEvents = new List<EventTelemetry>();
+                var assemblyReferencesEvents = new List<EventTelemetry>();
+                var commandLineEvents = new List<EventTelemetry>();
+                var summaryEvents = new List<EventTelemetry>();
+
+                foreach (EventTelemetry telemetryEvent in sendItems)
+                {
+                    switch (telemetryEvent.Name)
+                    {
+                        case CompilerDataLogger.CompilerEventName: compilerEvents.Add(telemetryEvent); break;
+                        case CompilerDataLogger.AssemblyReferencesEventName: assemblyReferencesEvents.Add(telemetryEvent); break;
+                        case CompilerDataLogger.CommandLineEventName: commandLineEvents.Add(telemetryEvent); break;
+                        case CompilerDataLogger.SummaryEventName: summaryEvents.Add(telemetryEvent); break;
+                    }
+                }
+
+                summaryEvents.Should().NotBeNull();
+                if (summaryEvents.Count != 1)
+                {
+                    sb.AppendLine(string.Format("Expected one summary event per binary, but found {0}.", summaryEvents.Count));
+                }
+
+                assemblyReferencesEvents.Should().NotBeNull();
+                if (assemblyReferencesEvents.Count != 1)
+                {
+                    sb.AppendLine(string.Format("Expected 1 AssemblyReferencesEvent, but found {0}", assemblyReferencesEvents.Count));
+                }
+
+                // Managed code will not result in any Command Line Events.
+                commandLineEvents.Should().NotBeNull();
+                if (commandLineEvents.Count != 0)
+                {
+                    sb.AppendLine(string.Format("Expected 0 CommandLineEvents, but found {0}", commandLineEvents.Count));
+                }
+
+                compilerEvents.Should().NotBeNull();
+                if (compilerEvents.Count != 1)
+                {
+                    sb.AppendLine(string.Format("Expected 1 CompilerEvent, but found {0}", compilerEvents.Count));
+                }
+
+                string summaryEventSessionId = summaryEvents.First().Properties["sessionId"];
+                string assemblyReferencesEventSessionId = assemblyReferencesEvents.First().Properties["sessionId"];
+                string compilerEventSessionId = compilerEvents.First().Properties["sessionId"];
+
+                if (summaryEventSessionId != assemblyReferencesEventSessionId)
+                {
+                    sb.AppendLine(
+                        string.Format("SessionIds did not match. `SummaryEvent.SessionId` was {0} and `AssemblyReferencesEvent.SessionId` was {1}",
+                        summaryEventSessionId,
+                        assemblyReferencesEventSessionId));
+                }
+
+                if (summaryEventSessionId != compilerEventSessionId)
+                {
+                    sb.AppendLine(
+                        string.Format("SessionIds did not match. `SummaryEvent.SessionId` was {0} and `CompilerEvent.SessionId` was {1}",
+                        summaryEventSessionId,
+                        compilerEventSessionId));
+                }
+
+                AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifResult, string.Empty, null);
+
+                ValidateSummaryEvent(summary, summaryEvents.First(), sb);
+
+                sb.ToString().Should().Be(string.Empty);
             }
-            if (assemblyReferencesEvents.Count != 1)
+            finally
             {
-                sb.AppendLine(string.Format("Expected 1 AssemblyReferencesEvent, but found {0}", assemblyReferencesEvents.Count));
+                // Clean mocks from CompilerDataLogger.
+                CompilerDataLogger.s_injectedTelemetryClient = null;
+                CompilerDataLogger.s_injectedTelemetryConfiguration = null;
             }
-            if (commandLineEvents.Count != 0)
-            {
-                sb.AppendLine(string.Format("Expected 0 CommandLineEvents, but found {0}", commandLineEvents.Count));
-            }
-            if (compilerEvents.Count != 1)
-            {
-                sb.AppendLine(string.Format("Expected 1 CompilerEvent, but found {0}", compilerEvents.Count));
-            }
-
-            string summaryEventSessionId = summaryEvents.First().Properties["sessionId"];
-            string assemblyReferencesEventSessionId = assemblyReferencesEvents.First().Properties["sessionId"];
-            string compilerEventSessionId = compilerEvents.First().Properties["sessionId"];
-
-            if (summaryEventSessionId != assemblyReferencesEventSessionId)
-            {
-                sb.AppendLine(
-                    string.Format("SessionIds did not match. `SummaryEvent.SessionId` was {0} and `AssemblyReferencesEvent.SessionId` was {1}",
-                    summaryEventSessionId,
-                    assemblyReferencesEventSessionId));
-            }
-
-            if (summaryEventSessionId != compilerEventSessionId)
-            {
-                sb.AppendLine(
-                    string.Format("SessionIds did not match. `SummaryEvent.SessionId` was {0} and `CompilerEvent.SessionId` was {1}",
-                    summaryEventSessionId,
-                    compilerEventSessionId));
-            }
-
-            AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifResult, "", null);
-
-            ValidateSummaryEvent(summary, summaryEvents.First(), sb);
-
-            sb.ToString().Should().Be("");
-
-            // Clean mocks from CompilerDataLogger.
-            CompilerDataLogger.s_injectedTelemetryClient = null;
-            CompilerDataLogger.s_injectedTelemetryConfiguration = null;
         }
 
         [Fact]
         public void Driver_ShouldLogCompilerTelemetryEvents_Unmanaged()
         {
+            try
+            {
+                List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
+                var sb = new StringBuilder();
+                string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;
+                string testFile = Path.Combine(testDirectory, "Native_x64_VS2015_Default.dll");
 
-            List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
-            var sb = new StringBuilder();
-            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;
-            string testFile = Path.Combine(testDirectory, "Native_x64_VS2015_Default.dll");
+                SarifLog sarifResult = RunRules(sb, testFile);
 
-            SarifLog sarifResult = RunRules(sb, testFile);
+                sendItems.All<ITelemetry>(item => item.GetType() == typeof(EventTelemetry));
 
-            sendItems.All<ITelemetry>(item => item.GetType() == typeof(EventTelemetry));
-            List<EventTelemetry> events = sendItems.OfType<EventTelemetry>().ToList();
+                var compilerEvents = new List<EventTelemetry>();
+                var assemblyReferencesEvents = new List<EventTelemetry>();
+                var commandLineEvents = new List<EventTelemetry>();
+                var summaryEvents = new List<EventTelemetry>();
 
-            List<EventTelemetry> compilerEvents = events.Where(e => e.Name == CompilerDataLogger.CompilerEventName)
-                .OfType<EventTelemetry>().ToList();
+                foreach (EventTelemetry telemetryEvent in sendItems)
+                {
+                    switch (telemetryEvent.Name)
+                    {
+                        case CompilerDataLogger.CompilerEventName: compilerEvents.Add(telemetryEvent); break;
+                        case CompilerDataLogger.AssemblyReferencesEventName: assemblyReferencesEvents.Add(telemetryEvent); break;
+                        case CompilerDataLogger.CommandLineEventName: commandLineEvents.Add(telemetryEvent); break;
+                        case CompilerDataLogger.SummaryEventName: summaryEvents.Add(telemetryEvent); break;
+                    }
+                }
 
-            List<EventTelemetry> assemblyReferencesEvents = events.Where(e => e.Name == CompilerDataLogger.AssemblyReferencesEventName)
-                .OfType<EventTelemetry>().ToList();
+                summaryEvents.Count.Should().Be(1);
+                assemblyReferencesEvents.Count.Should().Be(0);
+                commandLineEvents.Count.Should().Be(25);
+                compilerEvents.Count.Should().Be(35);
 
-            List<EventTelemetry> commandLineEvents = events.Where(e => e.Name == CompilerDataLogger.CommandLineEventName)
-                .OfType<EventTelemetry>().ToList();
+                summaryEvents.First().Properties["sessionId"]
+                    .Should().Be(commandLineEvents.First().Properties["sessionId"]);
 
-            List<EventTelemetry> summaryEvents = events.Where(e => e.Name == CompilerDataLogger.SummaryEventName)
-                .OfType<EventTelemetry>().ToList();
+                summaryEvents.First().Properties["sessionId"]
+                    .Should().Be(compilerEvents.First().Properties["sessionId"]);
 
-            summaryEvents.Count.Should().Be(1);
-            assemblyReferencesEvents.Count.Should().Be(0);
-            commandLineEvents.Count.Should().Be(25);
-            compilerEvents.Count.Should().Be(35);
-
-            summaryEvents.First().Properties["sessionId"]
-                .Should().Be(commandLineEvents.First().Properties["sessionId"]);
-
-            summaryEvents.First().Properties["sessionId"]
-                .Should().Be(compilerEvents.First().Properties["sessionId"]);
-
-            Assert.Equal(0, sb.Length);
-
-            // Clean mocks from CompilerDataLogger.
-            CompilerDataLogger.s_injectedTelemetryClient = null;
-            CompilerDataLogger.s_injectedTelemetryConfiguration = null;
+                Assert.Equal(0, sb.Length);
+            }
+            finally
+            {
+                // Clean mocks from CompilerDataLogger.
+                CompilerDataLogger.s_injectedTelemetryClient = null;
+                CompilerDataLogger.s_injectedTelemetryConfiguration = null;
+            }
         }
 
         private void BatchRuleRules(string ruleName, params string[] inputFilters)
@@ -318,124 +340,138 @@ namespace Microsoft.CodeAnalysis.IL
             return sendItems;
         }
 
-        private void ValidateSummaryEvent(AnalysisSummary summary, EventTelemetry eventTelemetry, StringBuilder sb)
+        private StringBuilder ValidateSummaryEvent(AnalysisSummary summary, EventTelemetry eventTelemetry, StringBuilder sb)
         {
             string projectIdVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.ProjectIdVariableName);
             string projectNameVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.ProjectNameVariableName);
             string repositoryIdVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.RepositoryIdVariableName);
             string organizationIdVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.OrganizationIdVariableName);
             string repositoryNameVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.RepositoryNameVariableName);
-            string OrganizationNameVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.OrganizationNameVariableName);
-            string BuildDefinitionIdVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.BuildDefinitionIdVariableName);
-            string BuildDefinitionNameVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.BuildDefinitionNameVariableName);
+            string organizationNameVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.OrganizationNameVariableName);
+            string buildDefinitionIdVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.BuildDefinitionIdVariableName);
+            string buildDefinitionNameVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.BuildDefinitionNameVariableName);
             string buildDefinitionRunIdVariable = Environment.GetEnvironmentVariable(AnalysisSummaryExtractor.BuildDefinitionRunIdVariableName);
 
-            if (eventTelemetry.Properties["toolName"] != summary.ToolName)
+            if (eventTelemetry.Properties[CompilerDataLogger.ToolName] != summary.ToolName)
             {
                 sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.ToolName),
-                    summary.ToolName,
-                    eventTelemetry.Properties["toolName"]));
-            }
-            if (eventTelemetry.Properties["toolVersion"] != summary.ToolVersion)
-            {
-                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.ToolVersion),
-                    summary.ToolVersion,
-                    eventTelemetry.Properties["toolVersion"]));
-            }
-            if (eventTelemetry.Properties["numberOfBinaryAnalyzed"] != summary.FileAnalyzed.ToString())
-            {
-                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.FileAnalyzed),
-                    summary.FileAnalyzed,
-                    eventTelemetry.Properties["numberOfBinaryAnalyzed"]));
-            }
-            if (eventTelemetry.Properties["analysisStartTime"] != summary.StartTimeUtc.ToString())
-            {
-                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.StartTimeUtc),
-                    summary.StartTimeUtc,
-                    eventTelemetry.Properties["analysisStartTime"]));
-            }
-            if (eventTelemetry.Properties["analysisEndTime"] != summary.EndTimeUtc.ToString())
-            {
-                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.EndTimeUtc),
-                    summary.EndTimeUtc,
-                    eventTelemetry.Properties["analysisEndTime"]));
-            }
-            if (eventTelemetry.Properties["timeConsumed"] != summary.TimeConsumed.ToString())
-            {
-                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.TimeConsumed),
-                    summary.TimeConsumed,
-                    eventTelemetry.Properties["timeConsumed"]));
+                                        nameof(summary.ToolName),
+                                        summary.ToolName,
+                                        eventTelemetry.Properties[CompilerDataLogger.ToolName]));
             }
 
-            if (eventTelemetry.Properties["buildDefinitionId"] != BuildDefinitionIdVariable)
+            if (eventTelemetry.Properties[CompilerDataLogger.ToolVersion] != summary.ToolVersion)
             {
                 sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.BuildDefinitionId),
-                    BuildDefinitionIdVariable,
-                    eventTelemetry.Properties["buildDefinitionId"]));
+                                        nameof(summary.ToolVersion),
+                                        summary.ToolVersion,
+                                        eventTelemetry.Properties[CompilerDataLogger.ToolVersion]));
             }
-            if (eventTelemetry.Properties["buildDefinitionName"] != BuildDefinitionNameVariable)
+
+            if (eventTelemetry.Properties[CompilerDataLogger.NumberOfBinaryAnalyzed] != summary.FileAnalyzed.ToString())
             {
                 sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.BuildDefinitionName),
-                    BuildDefinitionNameVariable,
-                    eventTelemetry.Properties["buildDefinitionName"]));
+                                        nameof(summary.FileAnalyzed),
+                                        summary.FileAnalyzed,
+                                        eventTelemetry.Properties[CompilerDataLogger.NumberOfBinaryAnalyzed]));
             }
-            if (eventTelemetry.Properties["buildRunId"] != buildDefinitionRunIdVariable)
+
+            if (eventTelemetry.Properties[CompilerDataLogger.AnalysisStartTime] != summary.StartTimeUtc.ToString())
             {
                 sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.BuildRunId),
-                    buildDefinitionRunIdVariable,
-                    eventTelemetry.Properties["buildRunId"]));
+                                        nameof(summary.StartTimeUtc),
+                                        summary.StartTimeUtc,
+                                        eventTelemetry.Properties[CompilerDataLogger.AnalysisStartTime]));
             }
-            if (eventTelemetry.Properties["projectName"] != projectNameVariable)
+
+            if (eventTelemetry.Properties[CompilerDataLogger.AnalysisEndTime] != summary.EndTimeUtc.ToString())
             {
                 sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.ProjectName),
-                    projectNameVariable,
-                    eventTelemetry.Properties["projectName"]));
+                                        nameof(summary.EndTimeUtc),
+                                        summary.EndTimeUtc,
+                                        eventTelemetry.Properties[CompilerDataLogger.AnalysisEndTime]));
             }
-            if (eventTelemetry.Properties["organizationId"] != organizationIdVariable)
+
+            if (eventTelemetry.Properties[CompilerDataLogger.TimeConsumed] != summary.TimeConsumed.ToString())
             {
                 sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.OrganizationId),
-                    organizationIdVariable,
-                    eventTelemetry.Properties["organizationId"]));
+                                        nameof(summary.TimeConsumed),
+                                        summary.TimeConsumed,
+                                        eventTelemetry.Properties[CompilerDataLogger.TimeConsumed]));
             }
-            if (eventTelemetry.Properties["organizationName"] != OrganizationNameVariable)
+
+            if (eventTelemetry.Properties[CompilerDataLogger.BuildDefinitionId] != buildDefinitionIdVariable)
             {
                 sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.OrganizationName),
-                    OrganizationNameVariable,
-                    eventTelemetry.Properties["organizationName"]));
+                                        nameof(summary.BuildDefinitionId),
+                                        buildDefinitionIdVariable,
+                                        eventTelemetry.Properties[CompilerDataLogger.BuildDefinitionId]));
             }
-            if (eventTelemetry.Properties["projectId"] != projectIdVariable)
+
+            if (eventTelemetry.Properties[CompilerDataLogger.BuildDefinitionName] != buildDefinitionNameVariable)
             {
                 sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.ProjectId),
-                    projectIdVariable,
-                    eventTelemetry.Properties["projectId"]));
+                                        nameof(summary.BuildDefinitionName),
+                                        buildDefinitionNameVariable,
+                                        eventTelemetry.Properties[CompilerDataLogger.BuildDefinitionName]));
             }
-            if (eventTelemetry.Properties["repositoryName"] != repositoryNameVariable)
+
+            if (eventTelemetry.Properties[CompilerDataLogger.BuildRunId] != buildDefinitionRunIdVariable)
             {
                 sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.RepositoryName),
-                    repositoryNameVariable,
-                    eventTelemetry.Properties["repositoryName"]));
+                                        nameof(summary.BuildRunId),
+                                        buildDefinitionRunIdVariable,
+                                        eventTelemetry.Properties[CompilerDataLogger.BuildRunId]));
             }
-            if (eventTelemetry.Properties["repositoryId"] != repositoryIdVariable)
+
+            if (eventTelemetry.Properties[CompilerDataLogger.ProjectName] != projectNameVariable)
             {
                 sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
-                    nameof(summary.RepositoryId),
-                    repositoryIdVariable,
-                    eventTelemetry.Properties["repositoryId"]));
+                                        nameof(summary.ProjectName),
+                                        projectNameVariable,
+                                        eventTelemetry.Properties[CompilerDataLogger.ProjectName]));
             }
+
+            if (eventTelemetry.Properties[CompilerDataLogger.OrganizationId] != organizationIdVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                                        nameof(summary.OrganizationId),
+                                        organizationIdVariable,
+                                        eventTelemetry.Properties[CompilerDataLogger.OrganizationId]));
+            }
+
+            if (eventTelemetry.Properties[CompilerDataLogger.OrganizationName] != organizationNameVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                                        nameof(summary.OrganizationName),
+                                        organizationNameVariable,
+                                        eventTelemetry.Properties[CompilerDataLogger.OrganizationName]));
+            }
+            if (eventTelemetry.Properties[CompilerDataLogger.ProjectId] != projectIdVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                                        nameof(summary.ProjectId),
+                                        projectIdVariable,
+                                        eventTelemetry.Properties[CompilerDataLogger.ProjectId]));
+            }
+
+            if (eventTelemetry.Properties[CompilerDataLogger.RepositoryName] != repositoryNameVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                                        nameof(summary.RepositoryName),
+                                        repositoryNameVariable,
+                                        eventTelemetry.Properties[CompilerDataLogger.RepositoryName]));
+            }
+
+            if (eventTelemetry.Properties[CompilerDataLogger.RepositoryId] != repositoryIdVariable)
+            {
+                sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
+                                        nameof(summary.RepositoryId),
+                                        repositoryIdVariable,
+                                        eventTelemetry.Properties[CompilerDataLogger.RepositoryId]));
+            }
+
+            return sb;
         }
 
         private string GenerateDiffCommand(string expected, string actual)

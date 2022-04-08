@@ -37,7 +37,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         public void CompilerDataLogger_Write_ShouldSendAssemblyReferencesInChunks_WhenTelemetryIsEnabled()
         {
             using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> telemetryEventOutput = TestSetup(context: context, sarifVersion: Sarif.SarifVersion.Current, logger: out CompilerDataLogger logger);
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger logger);
+
             string assemblies = "Microsoft.DiaSymReader (1.3.0);Newtonsoft.Json (13.0.1)";
             CompilerDataLogger.s_chunkSize = SmallChunkSize;
             int chunkNumber = logger.CalculateChunkedContentSize(assemblies.Length);
@@ -77,11 +80,11 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             using BinaryAnalyzerContext context = CreateTestContext();
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
-                                                   sarifVersion: Sarif.SarifVersion.Current,
-                                                   logger: out CompilerDataLogger logger,
-                                                   fileSystem: null,
-                                                   isTelemetryOutputEnabled: false,
-                                                   isCsvOutputEnabled: false);
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger logger,
+                                                              fileSystem: null,
+                                                              isTelemetryOutputEnabled: false,
+                                                              isCsvOutputEnabled: false);
 
             string assemblies = "Microsoft.DiaSymReader (1.3.0);Newtonsoft.Json (13.0.1)";
             CompilerDataLogger.s_chunkSize = 10;
@@ -150,9 +153,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             using BinaryAnalyzerContext context = CreateTestContext();
 
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
-                                                   sarifVersion: Sarif.SarifVersion.Current,
-                                                   logger: out CompilerDataLogger compilerDataLogger,
-                                                   fileSystem: fileSystem.Object);
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger compilerDataLogger,
+                                                              fileSystem: fileSystem.Object);
             compilerDataLogger.Dispose();
 
             // fileSystem will only be used with SARIF V1.
@@ -178,9 +181,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 .Returns(new MemoryStream(byteArray));
 
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
-                                                   sarifVersion: Sarif.SarifVersion.OneZeroZero,
-                                                   logger: out CompilerDataLogger compilerDataLogger,
-                                                   fileSystem: fileSystem.Object);
+                                                              sarifVersion: Sarif.SarifVersion.OneZeroZero,
+                                                              logger: out CompilerDataLogger compilerDataLogger,
+                                                              fileSystem: fileSystem.Object);
             compilerDataLogger.Dispose();
 
             fileSystem.Verify(fileSystem => fileSystem.FileOpenRead(sarifLogPath), Times.Once);
@@ -191,12 +194,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         public void CompilerDataLogger_Summarize_ShouldLogSummaryEvent()
         {
             string sarifLogPath = GetExampleSarifPath(Sarif.SarifVersion.Current);
-            var fileSystem = new Mock<IFileSystem>();
             using BinaryAnalyzerContext context = CreateTestContext();
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
-                                                   sarifVersion: Sarif.SarifVersion.Current,
-                                                   logger: out CompilerDataLogger compilerDataLogger,
-                                                   fileSystem: fileSystem.Object);
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger compilerDataLogger);
 
             SarifLog sarifLog = SarifLog.Load(sarifLogPath);
             AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog, string.Empty, null);
@@ -217,11 +218,11 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             using BinaryAnalyzerContext context = CreateTestContext();
 
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
-                                                   sarifVersion: Sarif.SarifVersion.Current,
-                                                   logger: out CompilerDataLogger compilerDataLogger,
-                                                   fileSystem: fileSystem.Object,
-                                                   isTelemetryOutputEnabled: false,
-                                                   isCsvOutputEnabled: false);
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger compilerDataLogger,
+                                                              fileSystem: fileSystem.Object,
+                                                              isTelemetryOutputEnabled: false,
+                                                              isCsvOutputEnabled: false);
 
             // Intentionally disable the logger by removing the TelemetryClient and Writer.
             CompilerDataLogger.s_injectedTelemetryClient = null;
@@ -235,50 +236,57 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         [Fact]
         public void CompilerDataLogger_ShouldInitializeFromEnvironmentVariable()
         {
-            CompilerDataLogger.s_injectedTelemetryClient = null;
-            CompilerDataLogger.s_injectedTelemetryConfiguration = null;
-            using BinaryAnalyzerContext context = CreateTestContext();
-            var fileSystem = new Mock<IFileSystem>();
-            string randomString = Guid.NewGuid().ToString();
-            Environment.SetEnvironmentVariable("BinskimCompilerDataAppInsightsKey", randomString);
-            var telemetryEventOutput = new List<ITelemetry>();
-            context.Policy = new Sarif.PropertiesDictionary();
-            var logger = new CompilerDataLogger(sarifOutputFilePath: GetExampleSarifPath(Sarif.SarifVersion.Current),
-                                                sarifVersion: Sarif.SarifVersion.Current,
-                                                context: context,
-                                                fileSystem: fileSystem.Object);
+            try
+            {
+                CompilerDataLogger.s_injectedTelemetryClient = null;
+                CompilerDataLogger.s_injectedTelemetryConfiguration = null;
+                using BinaryAnalyzerContext context = CreateTestContext();
+                var fileSystem = new Mock<IFileSystem>();
+                string randomString = Guid.NewGuid().ToString();
+                Environment.SetEnvironmentVariable("BinskimCompilerDataAppInsightsKey", randomString);
+                var telemetryEventOutput = new List<ITelemetry>();
+                context.Policy = new Sarif.PropertiesDictionary();
+                var logger = new CompilerDataLogger(sarifOutputFilePath: GetExampleSarifPath(Sarif.SarifVersion.Current),
+                                                    sarifVersion: Sarif.SarifVersion.Current,
+                                                    context: context,
+                                                    fileSystem: fileSystem.Object);
 
-            logger.Should().NotBeNull();
-
-            // Clear environment variable set for this test.
-            Environment.SetEnvironmentVariable("BinskimCompilerDataAppInsightsKey", null);
+                logger.Should().NotBeNull();
+            }
+            finally
+            {
+                // Clear environment variable set for this test.
+                Environment.SetEnvironmentVariable("BinskimCompilerDataAppInsightsKey", null);
+            }
         }
 
         [Fact]
         public void CompilerDataLogger_WriteException_ShouldLogExceptionMessageString()
         {
-            var fileSystem = new Mock<IFileSystem>();
             using BinaryAnalyzerContext context = CreateTestContext();
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
-                                                   sarifVersion: Sarif.SarifVersion.Current,
-                                                   logger: out CompilerDataLogger compilerDataLogger,
-                                                   fileSystem: fileSystem.Object);
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger compilerDataLogger);
 
             compilerDataLogger.WriteException(context: context, errorMessage: TestExceptionMessage);
             telemetryEventOutput.Count.Should().Be(1);
+
+            foreach (EventTelemetry telemetryEvent in telemetryEventOutput)
+            {
+                telemetryEvent.Name.Should().Be(CompilerDataLogger.CompilerEventName);
+                telemetryEvent.Properties["error"].Should().Be(TestExceptionMessage);
+            }
         }
 
         [Fact]
         public void CompilerDataLogger_WriteException_ShouldNotLogExceptionMessage_WhenTelemetryClientIsNull()
         {
-            var fileSystem = new Mock<IFileSystem>();
             using BinaryAnalyzerContext context = CreateTestContext();
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
-                                                   sarifVersion: Sarif.SarifVersion.Current,
-                                                   logger: out CompilerDataLogger compilerDataLogger,
-                                                   fileSystem: fileSystem.Object,
-                                                   isTelemetryOutputEnabled: false,
-                                                   isCsvOutputEnabled: false);
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger compilerDataLogger,
+                                                              isTelemetryOutputEnabled: false,
+                                                              isCsvOutputEnabled: false);
 
             compilerDataLogger.WriteException(context: context, errorMessage: TestExceptionMessage);
             telemetryEventOutput.Count.Should().Be(0);
@@ -288,12 +296,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         public void CompilerDataLogger_WriteException_ShouldLogExecutionExceptions()
         {
             string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
-            var fileSystem = new Mock<IFileSystem>();
             using BinaryAnalyzerContext context = CreateTestContext();
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
-                                                   sarifVersion: Sarif.SarifVersion.Current,
-                                                   logger: out CompilerDataLogger compilerDataLogger,
-                                                   fileSystem: fileSystem.Object);
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger compilerDataLogger);
 
             SarifLog sarifLog = SarifLog.Load(sarifLogPath);
             List<ExecutionException> exceptionList = AnalysisSummaryExtractor.ExtractExceptionData(sarifLog).ToList();
@@ -310,12 +316,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         [Fact]
         public void CompilerDataLogger_WriteException_ShouldLogExecutionException()
         {
-            var fileSystem = new Mock<IFileSystem>();
             using BinaryAnalyzerContext context = CreateTestContext();
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
-                                                   sarifVersion: Sarif.SarifVersion.Current,
-                                                   logger: out CompilerDataLogger compilerDataLogger,
-                                                   fileSystem: fileSystem.Object);
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger compilerDataLogger);
 
             List<ExecutionException> exceptionList = new List<ExecutionException>();
             exceptionList.Add(new ExecutionException(type: "test",
@@ -336,11 +340,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         public void CompilerDataLogger_CreateCsvOutputFile_ShouldNotThrowExceptionWhenPathIsNull()
         {
             using BinaryAnalyzerContext context = CreateTestContext();
-            var fileSystem = new Mock<IFileSystem>();
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
-                                                   sarifVersion: Sarif.SarifVersion.Current,
-                                                   logger: out CompilerDataLogger compilerDataLogger,
-                                                   fileSystem: fileSystem.Object);
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger compilerDataLogger);
 
             compilerDataLogger.CreateCsvOutputFile(csvFilePath: null, overwriteExistingCsv: false);
         }
@@ -352,9 +354,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                                            bool isTelemetryOutputEnabled = true,
                                            bool isCsvOutputEnabled = false)
         {
-            List<ITelemetry> telemetryEventOutput = null;
-            telemetryEventOutput = new List<ITelemetry>();
+            var telemetryEventOutput = new List<ITelemetry>();
             string sarifLogFilePath = GetExampleSarifPath(sarifVersion);
+            fileSystem = fileSystem ?? new Mock<IFileSystem>().Object;
 
             if (!isTelemetryOutputEnabled && !isCsvOutputEnabled)
             {
@@ -428,8 +430,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             if (!string.IsNullOrEmpty(csvOutputPath))
             {
-                // test
+                // TODO: https://github.com/microsoft/binskim/issues/626
             }
+
             if (telemetryGeneratedEvents != null)
             {
                 List<EventTelemetry> events = telemetryGeneratedEvents.OfType<EventTelemetry>().ToList();
@@ -442,114 +445,129 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                     sb.AppendLine(string.Format("Expected {0} summary events, but found {1}",
                                                 expectedSummaryEventCount,
                                                 summaryEvents.Count));
-
+                }
+                else
+                {
                     EventTelemetry eventTelemetry = summaryEvents.First();
 
-                    if (eventTelemetry.Properties["toolName"] != summary.ToolName)
+                    if (eventTelemetry.Properties[CompilerDataLogger.ToolName] != summary.ToolName)
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.ToolName),
                             summary.ToolName,
-                            eventTelemetry.Properties["toolName"]));
+                            eventTelemetry.Properties[CompilerDataLogger.ToolName]));
                     }
-                    if (eventTelemetry.Properties["toolVersion"] != summary.ToolVersion)
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.ToolVersion] != summary.ToolVersion)
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.ToolVersion),
                             summary.ToolVersion,
-                            eventTelemetry.Properties["toolVersion"]));
+                            eventTelemetry.Properties[CompilerDataLogger.ToolVersion]));
                     }
-                    if (eventTelemetry.Properties["numberOfBinaryAnalyzed"] != summary.FileAnalyzed.ToString())
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.NumberOfBinaryAnalyzed] != summary.FileAnalyzed.ToString())
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.FileAnalyzed),
                             summary.FileAnalyzed,
-                            eventTelemetry.Properties["numberOfBinaryAnalyzed"]));
+                            eventTelemetry.Properties[CompilerDataLogger.NumberOfBinaryAnalyzed]));
                     }
-                    if (eventTelemetry.Properties["analysisStartTime"] != summary.StartTimeUtc.ToString())
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.AnalysisStartTime] != summary.StartTimeUtc.ToString())
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.StartTimeUtc),
                             summary.StartTimeUtc,
-                            eventTelemetry.Properties["analysisStartTime"]));
+                            eventTelemetry.Properties[CompilerDataLogger.AnalysisStartTime]));
                     }
-                    if (eventTelemetry.Properties["analysisEndTime"] != summary.EndTimeUtc.ToString())
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.AnalysisEndTime] != summary.EndTimeUtc.ToString())
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.EndTimeUtc),
                             summary.EndTimeUtc,
-                            eventTelemetry.Properties["analysisEndTime"]));
+                            eventTelemetry.Properties[CompilerDataLogger.AnalysisEndTime]));
                     }
-                    if (eventTelemetry.Properties["timeConsumed"] != summary.TimeConsumed.ToString())
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.TimeConsumed] != summary.TimeConsumed.ToString())
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.TimeConsumed),
                             summary.TimeConsumed,
-                            eventTelemetry.Properties["timeConsumed"]));
+                            eventTelemetry.Properties[CompilerDataLogger.TimeConsumed]));
                     }
 
-                    if (eventTelemetry.Properties["buildDefinitionId"] != summary.BuildDefinitionId)
+                    if (eventTelemetry.Properties[CompilerDataLogger.BuildDefinitionId] != summary.BuildDefinitionId)
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.BuildDefinitionId),
                             summary.BuildDefinitionId,
-                            eventTelemetry.Properties["buildDefinitionId"]));
+                            eventTelemetry.Properties[CompilerDataLogger.BuildDefinitionId]));
                     }
-                    if (eventTelemetry.Properties["buildDefinitionName"] != summary.BuildDefinitionName)
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.BuildDefinitionName] != summary.BuildDefinitionName)
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.BuildDefinitionName),
                             summary.BuildDefinitionName,
                             eventTelemetry.Properties["buildDefinitionName"]));
                     }
-                    if (eventTelemetry.Properties["buildRunId"] != summary.BuildRunId)
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.BuildRunId] != summary.BuildRunId)
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.BuildRunId),
                             summary.BuildRunId,
-                            eventTelemetry.Properties["buildRunId"]));
+                            eventTelemetry.Properties[CompilerDataLogger.BuildRunId]));
                     }
-                    if (eventTelemetry.Properties["projectName"] != summary.ProjectName)
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.ProjectName] != summary.ProjectName)
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.ProjectName),
                             summary.ProjectName,
-                            eventTelemetry.Properties["projectName"]));
+                            eventTelemetry.Properties[CompilerDataLogger.ProjectName]));
                     }
-                    if (eventTelemetry.Properties["organizationId"] != summary.OrganizationId)
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.OrganizationId] != summary.OrganizationId)
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.OrganizationId),
                             summary.OrganizationId,
-                            eventTelemetry.Properties["organizationId"]));
+                            eventTelemetry.Properties[CompilerDataLogger.OrganizationId]));
                     }
-                    if (eventTelemetry.Properties["organizationName"] != summary.OrganizationName)
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.OrganizationName] != summary.OrganizationName)
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.OrganizationName),
                             summary.OrganizationName,
-                            eventTelemetry.Properties["organizationName"]));
+                            eventTelemetry.Properties[CompilerDataLogger.OrganizationName]));
                     }
-                    if (eventTelemetry.Properties["projectId"] != summary.ProjectId)
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.ProjectId] != summary.ProjectId)
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.ProjectId),
                             summary.ProjectId,
-                            eventTelemetry.Properties["projectId"]));
+                            eventTelemetry.Properties[CompilerDataLogger.ProjectId]));
                     }
-                    if (eventTelemetry.Properties["repositoryName"] != summary.RepositoryName)
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.RepositoryName] != summary.RepositoryName)
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.RepositoryName),
                             summary.RepositoryName,
-                            eventTelemetry.Properties["repositoryName"]));
+                            eventTelemetry.Properties[CompilerDataLogger.RepositoryName]));
                     }
-                    if (eventTelemetry.Properties["repositoryId"] != summary.RepositoryId)
+
+                    if (eventTelemetry.Properties[CompilerDataLogger.RepositoryId] != summary.RepositoryId)
                     {
                         sb.Append(string.Format("Unexpected {0} in `SummaryEvent`. Expected {1}, found {2}.",
                             nameof(summary.RepositoryId),
                             summary.RepositoryId,
-                            eventTelemetry.Properties["repositoryId"]));
+                            eventTelemetry.Properties[CompilerDataLogger.RepositoryId]));
                     }
                 }
             }
@@ -567,8 +585,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             if (!string.IsNullOrEmpty(csvOutputPath))
             {
-                // test
+                // TODO: https://github.com/microsoft/binskim/issues/626
             }
+
             if (telemetryGeneratedEvents != null)
             {
                 List<ExceptionTelemetry> events = telemetryGeneratedEvents.OfType<ExceptionTelemetry>().ToList();

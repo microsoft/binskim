@@ -43,6 +43,25 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal const string CommandLineEventName = "CommandLineInformation";
         internal const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
 
+        internal const string ToolName = "toolName";
+        internal const string SessionId = "sessionId";
+        internal const string ProjectId = "projectId";
+        internal const string SymbolPath = "symbolPath";
+        internal const string BuildRunId = "buildRunId";
+        internal const string ProjectName = "projectName";
+        internal const string ToolVersion = "toolVersion";
+        internal const string TimeConsumed = "timeConsumed";
+        internal const string RepositoryId = "repositoryId";
+        internal const string RepositoryName = "repositoryName";
+        internal const string OrganizationId = "organizationId";
+        internal const string NormalizedPath = "normalizedPath";
+        internal const string AnalysisEndTime = "analysisEndTime";
+        internal const string OrganizationName = "organizationName";
+        internal const string AnalysisStartTime = "analysisStartTime";
+        internal const string BuildDefinitionId = "buildDefinitionId";
+        internal const string BuildDefinitionName = "buildDefinitionName";
+        internal const string NumberOfBinaryAnalyzed = "numberOfBinaryAnalyzed";
+
         // This object is required to synchronize multi-threaded writes
         // to the CSV writer only. The AppInsights client is already
         // thread-safe.
