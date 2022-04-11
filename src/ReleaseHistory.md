@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* Updating ELFSharp Package to version 2.14.0. [#628](https://github.com/microsoft/binskim/pull/628)
+* Bump ELFSharp from 2.13.2 to 2.14.0. [#628](https://github.com/microsoft/binskim/pull/628)
 
 ## **v1.9.4** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.4)
 
