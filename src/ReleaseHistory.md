@@ -1,5 +1,9 @@
 # BinSkim Release History
 
+## Unreleased
+
+* Updating ELFSharp Package to version 2.14.0. [#628](https://github.com/microsoft/binskim/pull/628)
+
 ## **v1.9.4** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.4)
 
 * FEATURE: Add new PE `CV_CFL_LANG` language code for `ALIASOBJ` and `Rust`. [530](https://github.com/microsoft/binskim/pull/530)
