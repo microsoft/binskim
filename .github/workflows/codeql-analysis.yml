@@ -2,7 +2,9 @@ name: CodeQL Analysis
 
 on:
   push:
-    branches: "*"
+    branches: [ "**" ]
+    branches-ignore:
+      - 'dependabot/**'
   pull_request:
     branches: [ main ]
   schedule:

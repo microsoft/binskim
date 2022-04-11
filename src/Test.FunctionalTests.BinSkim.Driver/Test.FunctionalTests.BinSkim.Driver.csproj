@@ -7,9 +7,12 @@
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <Platforms>x64</Platforms>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunSettingsFilePath>$(MSBuildProjectDirectory)\BaselineTests.runsettings</RunSettingsFilePath>
+  </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="6.5.1" />
+    <PackageReference Include="FluentAssertions" Version="6.6.0" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="Moq" Version="4.17.2" />
@@ -32,6 +35,8 @@
     <ProjectReference Include="..\BinSkim.Rules\BinSkim.Rules.csproj" />
     <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
     <ProjectReference Include="..\Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj" />
+    <ProjectReference Include="..\Test.UnitTests.BinSkim.Driver\Test.UnitTests.BinSkim.Driver.csproj" />
+    <ProjectReference Include="..\Test.UnitTests.BinSkim.Rules\Test.UnitTests.BinSkim.Rules.csproj" />
   </ItemGroup>
 
   <ItemGroup>

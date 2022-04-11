@@ -13,6 +13,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private Uri uri;
         private IBinary iBinary;
 
+        public BinaryAnalyzerContext()
+        {
+            this.Policy = new PropertiesDictionary();
+        }
+
         public IBinary Binary
         {
             get
@@ -81,7 +86,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public CompilerDataLogger CompilerDataLogger
         {
-            get { return this.Policy?.GetProperty(SharedCompilerDataLoggerProperty); }
+            get { return this.Policy.GetProperty(SharedCompilerDataLoggerProperty); }
             set { this.Policy.SetProperty(SharedCompilerDataLoggerProperty, value); }
         }
 
@@ -97,7 +102,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 this.iBinary?.Dispose();
                 this.iBinary = null;
 
-                if (this.CompilerDataLogger.OwningContextHashCode == this.GetHashCode())
+                if (this.CompilerDataLogger?.OwningContextHashCode == this.GetHashCode())
                 {
                     this.CompilerDataLogger.Dispose();
                 }
