@@ -38,10 +38,29 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal static int s_chunkSize = 8192;
 
         // Constant values sent to AppInsights telemetry stream.
-        private const string SummaryEventName = "AnalysisSummary";
-        private const string CompilerEventName = "CompilerInformation";
-        private const string CommandLineEventName = "CommandLineInformation";
-        private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
+        internal const string SummaryEventName = "AnalysisSummary";
+        internal const string CompilerEventName = "CompilerInformation";
+        internal const string CommandLineEventName = "CommandLineInformation";
+        internal const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
+
+        internal const string ToolName = "toolName";
+        internal const string SessionId = "sessionId";
+        internal const string ProjectId = "projectId";
+        internal const string SymbolPath = "symbolPath";
+        internal const string BuildRunId = "buildRunId";
+        internal const string ProjectName = "projectName";
+        internal const string ToolVersion = "toolVersion";
+        internal const string TimeConsumed = "timeConsumed";
+        internal const string RepositoryId = "repositoryId";
+        internal const string RepositoryName = "repositoryName";
+        internal const string OrganizationId = "organizationId";
+        internal const string NormalizedPath = "normalizedPath";
+        internal const string AnalysisEndTime = "analysisEndTime";
+        internal const string OrganizationName = "organizationName";
+        internal const string AnalysisStartTime = "analysisStartTime";
+        internal const string BuildDefinitionId = "buildDefinitionId";
+        internal const string BuildDefinitionName = "buildDefinitionName";
+        internal const string NumberOfBinaryAnalyzed = "numberOfBinaryAnalyzed";
 
         // This object is required to synchronize multi-threaded writes
         // to the CSV writer only. The AppInsights client is already
@@ -121,7 +140,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        private void CreateCsvOutputFile(string csvFilePath, bool overwriteExistingCsv)
+        internal void CreateCsvOutputFile(string csvFilePath, bool overwriteExistingCsv)
         {
             if (string.IsNullOrWhiteSpace(csvFilePath))
             {
@@ -135,6 +154,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     throw new InvalidOperationException($"Output file exists and force overwrite was not specified: {csvFilePath}");
                 }
                 fileSystem.FileDelete(csvFilePath);
+            }
+
+            string directoryName = Path.GetDirectoryName(csvFilePath);
+
+            if (!Directory.Exists(directoryName))
+            {
+                Directory.CreateDirectory(directoryName);
             }
 
             this.writer = new StreamWriter(new FileStream(csvFilePath, FileMode.OpenOrCreate));
@@ -262,7 +288,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public void WriteException(BinaryAnalyzerContext context, string errorMessage)
         {
             string fileHash = context.Hashes?.Sha256;
-            string filePath = context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty);
+
+            string filePath = RootPathToElide == null
+                ? context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty)
+                : context.TargetUri?.LocalPath;
 
             WriteToCsv($"{filePath},,,,,,,,,,,,,{fileHash},{errorMessage}");
 
@@ -307,7 +336,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        public void Summarize(AnalysisSummary summary)
+        internal void Summarize(AnalysisSummary summary)
         {
             WriteToCsv(summary.ToString());
 
@@ -339,9 +368,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             });
         }
 
-        private void SendChunkedContent(string eventName, string contentId, string contentName, string content)
+        internal void SendChunkedContent(string eventName, string contentId, string contentName, string content)
         {
-            int size = (int)Math.Ceiling(1.0 * content.Length / s_chunkSize);
+            int size = CalculateChunkedContentSize(content.Length);
             for (int i = 0; i < content.Length; i += s_chunkSize)
             {
                 string chunkedContent = content.Substring(i, Math.Min(s_chunkSize, content.Length - i));
@@ -355,6 +384,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { $"chunked{contentName}", chunkedContent },
                 });
             }
+        }
+
+        internal int CalculateChunkedContentSize(int contentLength)
+        {
+            return (int)Math.Ceiling(1.0 * contentLength / s_chunkSize);
         }
 
         private void WriteSummaryData()
