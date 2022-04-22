@@ -81,7 +81,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public static explicit operator uint(SafePointer sp)
         {
-            return (((uint)(byte)(sp + 3)) << 24) | (((uint)(byte)(sp + 2)) << 16) | (((uint)(byte)(sp + 1)) << 8) | ((uint)(byte)(sp));
+            return (((uint)(byte)(sp + 3)) << 24) | (((uint)(byte)(sp + 2)) << 16) | (((uint)(byte)(sp + 1)) << 8) | (byte)(sp);
         }
 
         public static explicit operator ushort(SafePointer sp)
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public static explicit operator ulong(SafePointer sp)
         {
-            return ((ulong)(uint)(sp + 4) << 32) | ((ulong)(uint)(sp));
+            return ((ulong)(uint)(sp + 4) << 32) | (uint)(sp);
         }
 
         public static explicit operator string(SafePointer sp)
