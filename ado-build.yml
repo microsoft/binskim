@@ -24,11 +24,6 @@ jobs:
 - job: windows
   pool:
     vmImage: 'windows-latest'
-  variables:
-    - name: BuildPlatform
-      value: 'AnyCPU'
-    - name: BuildConfiguration
-      value: 'Release'
   steps:
   - checkout: self
     submodules: true
@@ -39,3 +34,17 @@ jobs:
       script: 'BuildAndTest.cmd'
 
   - task: ComponentGovernanceComponentDetection@0
+
+- job: mac
+  pool:
+    vmImage: 'macOS-latest'
+  steps:
+  - checkout: self
+    submodules: true
+
+  - task: DotNetCoreCLI@2
+    name: 'Build'
+    inputs:
+      command: 'build'
+      projects: 'src/*.sln'
+      arguments: '--configuration Release'
