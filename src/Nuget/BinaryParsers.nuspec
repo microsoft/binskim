@@ -20,8 +20,8 @@
         <dependency id="Sarif.Driver" version="2.4.12" exclude="Build,Analyzers" />
         <dependency id="ELFSharp" version="2.13.2" exclude="Build,Analyzers" />
         <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
-        <dependency id="System.Collections.Immutable" version="5.0.0" exclude="Build,Analyzers" />
-        <dependency id="System.Reflection.Metadata" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Collections.Immutable" version="6.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Reflection.Metadata" version="6.0.1" exclude="Build,Analyzers" />
         <dependency id="System.Security.Cryptography.Algorithms" version="4.3.1" exclude="Build,Analyzers" />
       </group>
     </dependencies>

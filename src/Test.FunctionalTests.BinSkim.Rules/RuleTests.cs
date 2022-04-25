@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var targets = new List<string>();
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = GetTestDirectoryFor(ruleName);
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", testFilesDirectory);
+            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, expectToPass ? "Pass" : "Fail");
 
             Assert.True(Directory.Exists(testFilesDirectory), $"Test directory '{testFilesDirectory}' should exist.");
@@ -201,7 +201,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string ruleName = skimmer.GetType().Name;
 
             string baseFilesDirectory = GetTestDirectoryFor(ruleName);
-            baseFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", baseFilesDirectory);
+            baseFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", baseFilesDirectory);
 
             string[] testFilesDirectories =
                 new string[]
@@ -258,7 +258,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = GetTestDirectoryFor(ruleName);
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", testFilesDirectory);
+            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, "NotApplicable");
 
             var context = new BinaryAnalyzerContext();
@@ -341,7 +341,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
         {
-            string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestsData");
+            string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -898,6 +898,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2014_LoadAllApprovedFunctions()
+        {
+            StringSet approvedFunctions =
+                DoNotDisableStackProtectionForFunctions.ApprovedFunctionsThatDisableStackProtection.DefaultValue.Invoke();
+            Assert.Contains("_TlgWrite", approvedFunctions);
+            Assert.Contains("GsDriverEntry", approvedFunctions);
+            Assert.Contains("_GsDriverEntry", approvedFunctions);
+            Assert.Contains("GsDrvEnableDriver", approvedFunctions);
+            Assert.Contains("_GsDrvEnableDriver", approvedFunctions);
+            Assert.Contains("__security_init_cookie", approvedFunctions);
+            Assert.Contains("__vcrt_trace_logging_provider::_TlgWrite", approvedFunctions);
+        }
+
+        [Fact]
         public void BA2014_DoNotDisableStackProtectionForFunctions_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1159,25 +1173,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void BA2026_EnableAdditionalSdlSecurityChecks_Pass()
+        public void BA2026_EnableMicrosoftCompilerSdlSwitch_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyPass(new EnableAdditionalSdlSecurityChecks(), useDefaultPolicy: true);
+                this.VerifyPass(new EnableMicrosoftCompilerSdlSwitch(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
-        public void BA2026_EnableAdditionalSdlSecurityChecks_Fail()
+        public void BA2026_EnableMicrosoftCompilerSdlSwitch_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new EnableAdditionalSdlSecurityChecks(), useDefaultPolicy: true);
+                this.VerifyFail(new EnableMicrosoftCompilerSdlSwitch(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
-        public void BA2026_EnableAdditionalSdlSecurityChecks_NotApplicable()
+        public void BA2026_EnableMicrosoftCompilerSdlSwitch_NotApplicable()
         {
             var notApplicableTo = new HashSet<string>
             {
@@ -1186,7 +1200,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MetadataConditions.ImageIsILOnlyAssembly
             };
 
-            this.VerifyApplicability(new EnableAdditionalSdlSecurityChecks(), notApplicableTo);
+            this.VerifyApplicability(new EnableMicrosoftCompilerSdlSwitch(), notApplicableTo);
         }
 
         [Fact]

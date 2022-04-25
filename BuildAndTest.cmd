@@ -68,6 +68,10 @@ echo dotnet-format
 dotnet tool update --global dotnet-format --version 4.1.131201
 dotnet-format --folder --exclude .\src\sarif-sdk\
 
+::Update BinSkimRules.md to cover any xml changes
+echo Exporting any BinSkim rules
+.\bld\bin\x64_Release\netcoreapp3.1\BinSkim.exe export-rules .\docs\BinSkimRules.md
+
 goto :Exit
 
 :RunTestProject

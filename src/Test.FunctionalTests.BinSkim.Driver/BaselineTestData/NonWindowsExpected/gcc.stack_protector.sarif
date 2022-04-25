@@ -1,0 +1,313 @@
+{
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "gcc.stack_protector"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.stack_protector",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3002",
+          "ruleIndex": 1,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.stack_protector"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.stack_protector",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3006",
+          "ruleIndex": 2,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.stack_protector"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.stack_protector",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.stack_protector"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.stack_protector",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3011",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "gcc.stack_protector"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.stack_protector",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "gcc.stack_protector"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.stack_protector",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "BinSkim",
+          "organization": "Microsoft",
+          "product": "BinSkim Portable Executable Analyzer",
+          "fullName": "BinSkim 1.9.3.0",
+          "version": "1.9.3.0",
+          "semanticVersion": "1.9.3",
+          "rules": [
+            {
+              "id": "BA3001",
+              "name": "EnablePositionIndependentExecutable",
+              "fullDescription": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "help": {
+                "text": "A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc."
+              },
+              "messageStrings": {
+                "Pass_Executable": {
+                  "text": "PIE enabled on executable '{0}'."
+                },
+                "Pass_Library": {
+                  "text": "'{0}' is a shared object library rather than an executable, and is automatically position independent."
+                },
+                "Error": {
+                  "text": "PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3001EnablePositionIndependentExecutable"
+            },
+            {
+              "id": "BA3002",
+              "name": "DoNotMarkStackAsExecutable",
+              "fullDescription": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable."
+              },
+              "help": {
+                "text": "This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "GNU_STACK segment marked as non-executable on '{0}'."
+                },
+                "Error_StackExec": {
+                  "text": "Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable."
+                },
+                "Error_NoStackSeg": {
+                  "text": "GNU_STACK segment on '{0}' is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing '-z noexecstack' to the compiler."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3002DoNotMarkStackAsExecutable"
+            },
+            {
+              "id": "BA3006",
+              "name": "EnableNonExecutableStack",
+              "fullDescription": {
+                "text": "This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this."
+              },
+              "help": {
+                "text": "This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The non-executable stack flag was present, so '{0}' is protected."
+                },
+                "Error": {
+                  "text": "The non-executable stack is not enabled for this binary, so '{0}' can have a vulnerability of execution of the data written on the stack. Ensure you are compiling with the flag '-z noexecstack' to address this."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3006EnableNonExecutableStack"
+            },
+            {
+              "id": "BA3010",
+              "name": "EnableReadOnlyRelocations",
+              "fullDescription": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this."
+              },
+              "help": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The GNU_RELRO segment was present, so '{0}' is protected."
+                },
+                "Error": {
+                  "text": "The GNU_RELRO segment is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,relro' to address this."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3010EnableReadOnlyRelocations"
+            },
+            {
+              "id": "BA3011",
+              "name": "EnableBindNow",
+              "fullDescription": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this."
+              },
+              "help": {
+                "text": "This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The BIND_NOW flag was present, so '{0}' is protected."
+                },
+                "Error": {
+                  "text": "The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,now' to address this."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3011EnableBindNow"
+            },
+            {
+              "id": "BA3030",
+              "name": "UseCheckedFunctionsWithGcc",
+              "fullDescription": {
+                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2')."
+              },
+              "help": {
+                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2')."
+              },
+              "messageStrings": {
+                "Pass_AllFunctionsChecked": {
+                  "text": "All functions that can be checked in '{0}' are using the checked versions, so this binary is protected from overflows caused by those function's use."
+                },
+                "Pass_SomeFunctionsChecked": {
+                  "text": "Some checked functions were found in '{0}'; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy."
+                },
+                "Pass_NoCheckableFunctions": {
+                  "text": "No unsafe functions which can be replaced with checked versions are used in '{0}'."
+                },
+                "Error": {
+                  "text": "No checked functions are present/used when compiling '{0}', and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 ('-O2') is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseCheckedFunctionsWithGcc"
+            }
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
+        }
+      },
+      "invocations": [
+        {
+          "startTimeUtc": "2022-03-10T21:05:56.186Z",
+          "endTimeUtc": "2022-03-10T21:05:56.457Z",
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///home/user/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.stack_protector"
+          }
+        }
+      ],
+      "columnKind": "utf16CodeUnits"
+    }
+  ]
+}

@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.IL
             // Command-line provided policy is now initialized. Update context 
             // based on any possible configuration provided in this way.
 
-            context.CompilerDataLogger = new CompilerDataLogger(options.OutputFilePath, context, this.FileSystem);
+            context.CompilerDataLogger = new CompilerDataLogger(options.OutputFilePath, options.SarifOutputVersion, context, this.FileSystem);
 
             // If the user has hard-coded a non-deterministic file path root to elide from telemetry,
             // we will honor that. If it has not been specified, and if all file target specifiers

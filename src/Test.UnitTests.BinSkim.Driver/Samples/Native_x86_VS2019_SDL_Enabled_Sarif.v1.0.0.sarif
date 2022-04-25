@@ -1,0 +1,230 @@
+{
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-1.0.0.json",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "BinSkim",
+        "fullName": "BinSkim 1.9.3.0",
+        "version": "1.9.3.0",
+        "semanticVersion": "1.9.3",
+        "language": "en-US"
+      },
+      "invocation": {
+        "startTime": "2022-03-11T21:02:47.098Z",
+        "endTime": "2022-03-11T21:02:48.327Z"
+      },
+      "files": {
+        "file:///D:/binskimIcM/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2019_SDL_Enabled.exe": {}
+      },
+      "results": [
+        {
+          "ruleId": "BA2004",
+          "formattedRuleMessage": {
+            "formatId": "Warning_NativeWithInsecureStaticLibraryCompilands",
+            "arguments": [
+              "Native_x86_VS2019_SDL_Enabled.exe",
+              "Microsoft (R) Optimizing Compiler : c : 19.29.30034.2 : MSVCRTD.lib (chandler4gs.obj,cpu_disp.obj,debugger_jmc.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,secchk.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.29.30034.2 : MSVCRTD.lib (argv_mode.obj,chandler4_noexcept.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,denormal_control.obj,env_mode.obj,error.obj,exe_main.obj,file_mode.obj,init.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,pdblkup.obj,stack.obj,thread_locale.obj,tncleanup.obj,ucrt_stubs.obj,userapi.obj,utility.obj,utility_desktop.obj,x86_exception_filter.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///D:/binskimIcM/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2019_SDL_Enabled.exe"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "level": "error",
+          "formattedRuleMessage": {
+            "formatId": "Error_NativeWithInsecureDirectCompilands",
+            "arguments": [
+              "Native_x86_VS2019_SDL_Enabled.exe",
+              "Microsoft (R) Optimizing Compiler : cxx : 19.29.30038.1 : [directly linked] (Native_x64_VS2019.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///D:/binskimIcM/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2019_SDL_Enabled.exe"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2008",
+          "level": "error",
+          "formattedRuleMessage": {
+            "formatId": "Error",
+            "arguments": [
+              "Native_x86_VS2019_SDL_Enabled.exe"
+            ]
+          },
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///D:/binskimIcM/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2019_SDL_Enabled.exe"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2018",
+          "level": "error",
+          "formattedRuleMessage": {
+            "formatId": "Error",
+            "arguments": [
+              "Native_x86_VS2019_SDL_Enabled.exe",
+              "has an empty SE handler table in the load configuration table"
+            ]
+          },
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///D:/binskimIcM/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2019_SDL_Enabled.exe"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "level": "error",
+          "formattedRuleMessage": {
+            "formatId": "Error",
+            "arguments": [
+              "Native_x86_VS2019_SDL_Enabled.exe",
+              ".textbss"
+            ]
+          },
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///D:/binskimIcM/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2019_SDL_Enabled.exe"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2024",
+          "formattedRuleMessage": {
+            "formatId": "Warning",
+            "arguments": [
+              "Native_x86_VS2019_SDL_Enabled.exe",
+              "The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:\r\nNative_x64_VS2019.obj,cxx,19.29.30038.1 (Native_x64_VS2019.obj)\r\nMSVCRTD.lib,c,19.29.30034.2 (chandler4gs.obj,cpu_disp.obj,debugger_jmc.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,secchk.obj,ucrt_detection.obj)\r\nMSVCRTD.lib,cxx,19.29.30034.2 (argv_mode.obj,chandler4_noexcept.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,denormal_control.obj,env_mode.obj,error.obj,exe_main.obj,file_mode.obj,init.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,pdblkup.obj,stack.obj,thread_locale.obj,tncleanup.obj,ucrt_stubs.obj,userapi.obj,utility.obj,utility_desktop.obj,x86_exception_filter.obj)\r\n\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///D:/binskimIcM/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2019_SDL_Enabled.exe"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2025",
+          "formattedRuleMessage": {
+            "formatId": "Warning",
+            "arguments": [
+              "Native_x86_VS2019_SDL_Enabled.exe"
+            ]
+          },
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///D:/binskimIcM/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2019_SDL_Enabled.exe"
+              }
+            }
+          ]
+        }
+      ],
+      "rules": {
+        "BA2004": {
+          "id": "BA2004",
+          "name": "EnableSecureSourceCodeHashing",
+          "fullDescription": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing.",
+          "messageFormats": {
+            "Pass": "'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm.",
+            "Warning_NativeWithInsecureStaticLibraryCompilands": "'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}",
+            "Error_Managed": "'{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing.",
+            "Error_NativeWithInsecureDirectCompilands": "'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2004EnableSecureSourceCodeHashing"
+        },
+        "BA2008": {
+          "id": "BA2008",
+          "name": "EnableControlFlowGuard",
+          "fullDescription": "Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program.",
+          "messageFormats": {
+            "Pass": "'{0}' enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location.",
+            "Error": "'{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /guard:cf on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.",
+            "NotApplicable_UnsupportedKernelModeVersion": "'{0}' is a kernel mode portable executable compiled for a version of Windows that does not support the control flow guard feature for kernel mode binaries."
+          },
+          "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2008EnableControlFlowGuard",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "ControlFlowGuardCheck"
+          }
+        },
+        "BA2018": {
+          "id": "BA2018",
+          "name": "EnableSafeSEH",
+          "fullDescription": "X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.",
+          "messageFormats": {
+            "Pass": "'{0}' is an x86 binary that enables SafeSEH, a mitigation that verifies SEH exception jump targets are defined as exception handlers in the program (and not shellcode).",
+            "Pass_NoSEH": "'{0}' is an x86 binary that does not use SEH, making it an invalid target for exploits that attempt to replace SEH jump targets with attacker-controlled shellcode.",
+            "Error": "'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2018EnableSafeSEH",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "SafeSEHCheck"
+          }
+        },
+        "BA2021": {
+          "id": "BA2021",
+          "name": "DoNotMarkWritableSectionsAsExecutable",
+          "fullDescription": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function.",
+          "messageFormats": {
+            "Pass": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities.",
+            "Error": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Enabling incremental linking via the /INCREMENTAL argument (the default for Microsoft Visual Studio debug build) can also result in a writable and executable section named 'textbss'. For this case, disable incremental linking (or analyze an alternate build configuration that disables this feature) to resolve the problem.",
+            "Error_UnexpectedSectionAligment": "'{0}' has a section alignment ({1}) that is smaller than its page size ({2}).",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2021DoNotMarkWritableSectionsAsExecutable",
+          "properties": {
+            "equivalentBinScopeRuleReadableName": "WXCheck"
+          }
+        },
+        "BA2024": {
+          "id": "BA2024",
+          "name": "EnableSpectreMitigations",
+          "fullDescription": "Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it.",
+          "messageFormats": {
+            "Warning": "'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.\r\n{1}",
+            "Warning_OptimizationsDisabled": "The following modules were compiled with optimizations disabled (/Od), a condition that disables Spectre mitigations:\r\n{0}",
+            "Warning_SpectreMitigationNotEnabled": "The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:\r\n{0}",
+            "Warning_SpectreMitigationExplicitlyDisabled": "The following modules were compiled with Spectre mitigations explicitly disabled:\r\n{0}",
+            "Pass": "All linked modules '{0}' were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2024EnableSpectreMitigations"
+        },
+        "BA2025": {
+          "id": "BA2025",
+          "name": "EnableShadowStack",
+          "fullDescription": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks.",
+          "messageFormats": {
+            "Pass": "'{0}' enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation.",
+            "Warning": "'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines.",
+            "NotApplicable_InvalidMetadata": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+          },
+          "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2025EnableShadowStack"
+        }
+      }
+    }
+  ]
+}
