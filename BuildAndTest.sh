@@ -1,12 +1,12 @@
 #!/bin/bash
 
 echo $(uname)
-if [[  "$(uname)" == "Linux" ]]; then
+if [[  "$(uname)" == "Linux" || "$(uname)" == "Darwin" ]]; then
   echo "Changing paths in BinSkim SLN to non-Windows paths due to msbuild issue #1957 (https://github.com/microsoft/msbuild/issues/1957)"
-  sed 's#\\#/#g' src/BinSkim.sln > src/BinSkimLinux.sln
+  sed 's#\\#/#g' src/BinSkim.sln > src/BinSkimUnix.sln
 fi
 
-dotnet build src/BinSkimLinux.sln --configuration Release
+dotnet build src/BinSkimUnix.sln --configuration Release
 
 dotnet test src/Test.FunctionalTests.BinSkim.Driver/Test.FunctionalTests.BinSkim.Driver.csproj --no-build --configuration Release /p:Platform="x64"
 dotnet test src/Test.FunctionalTests.BinSkim.Rules/Test.FunctionalTests.BinSkim.Rules.csproj --no-build --configuration Release /p:Platform="x64"
