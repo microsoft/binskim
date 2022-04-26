@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo $(uname)
 if [[  "$(uname)" == "Linux" ]]; then
   echo "Changing paths in BinSkim SLN to non-Windows paths due to msbuild issue #1957 (https://github.com/microsoft/msbuild/issues/1957)"
   sed 's#\\#/#g' src/BinSkim.sln > src/BinSkimLinux.sln
