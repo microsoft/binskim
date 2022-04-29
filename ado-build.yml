@@ -27,6 +27,8 @@ jobs:
       script: 'BuildAndTest.cmd'
 
   - task: ComponentGovernanceComponentDetection@0
+    inputs:
+      ignoreDirectories: '..\src\sarif-sdk'
 
 - job: mac
   pool:
