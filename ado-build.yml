@@ -46,4 +46,4 @@ jobs:
     displayName: 'Run BinSkim'
     inputs:
       targetType: 'inline'
-      script: './bld/bin/x64_Release/netcoreapp3.1/binskim analyze src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.*'
+      script: 'dotnet bld/bin/x64_Release/netcoreapp3.1/binskim.dll analyze src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.*'
