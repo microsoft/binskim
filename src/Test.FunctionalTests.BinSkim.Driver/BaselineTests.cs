@@ -159,6 +159,12 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public void Driver_ShouldLogCompilerTelemetryEvents_Unmanaged()
         {
+            // We cannot load the .dll on Unix.
+            if (!PlatformSpecificHelpers.RunningOnWindows())
+            {
+                return;
+            }
+
             try
             {
                 List<ITelemetry> sendItems = CompilerTelemetryTestSetup();

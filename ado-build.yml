@@ -39,3 +39,9 @@ jobs:
     displayName: 'Build and Test'
     inputs:
       filePath: 'BuildAndTest.sh'
+
+  - task: Bash@3
+    displayName: 'Run BinSkim'
+    inputs:
+      targetType: 'inline'
+      script: 'dotnet bld\bin\x64_Release\netcoreapp3.1\binskim.dll analyze src\Test.FunctionalTests.BinSkim.Driver\BaselineTestData\macho.*'
