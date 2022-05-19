@@ -17,11 +17,6 @@ jobs:
 - job: windows
   pool:
     vmImage: 'windows-latest'
-  variables:
-    - name: BuildPlatform
-      value: 'AnyCPU'
-    - name: BuildConfiguration
-      value: 'Release'
   steps:
   - checkout: self
     submodules: true
@@ -32,3 +27,23 @@ jobs:
       script: 'BuildAndTest.cmd'
 
   - task: ComponentGovernanceComponentDetection@0
+    inputs:
+      ignoreDirectories: 'src\sarif-sdk'
+
+- job: mac
+  pool:
+    vmImage: 'macOS-latest'
+  steps:
+  - checkout: self
+    submodules: true
+
+  - task: Bash@3
+    displayName: 'Build and Test'
+    inputs:
+      filePath: 'BuildAndTest.sh'
+
+  - task: Bash@3
+    displayName: 'Run BinSkim'
+    inputs:
+      targetType: 'inline'
+      script: 'dotnet bld/bin/x64_Release/netcoreapp3.1/binskim.dll analyze src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.*'

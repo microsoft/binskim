@@ -65,7 +65,11 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         [Obsolete]
         public void AnalyzeCommand_Hashes_ShouldUpdateDataToInsert()
         {
-            var options = new AnalyzeOptions();
+            var options = new AnalyzeOptions
+            {
+                Level = new[] { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
+                Kind = new[] { ResultKind.Fail }
+            };
             var command = new MultithreadedAnalyzeCommand();
 
             options.ComputeFileHashes = false;
