@@ -248,6 +248,30 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
+        private void VerifyApplicabililtyWithReason(
+            BinarySkimmer skimmer,
+            HashSet<string> applicabilityConditions,
+            string expectedReasonForNotAnalyzing,
+            AnalysisApplicability expectedApplicability = AnalysisApplicability.NotApplicableToSpecifiedTarget,
+            bool useDefaultPolicy = false)
+        {
+
+            string ruleName = skimmer.GetType().Name;
+            string testFilesDirectory = GetTestDirectoryFor(ruleName);
+            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
+            testFilesDirectory = Path.Combine(testFilesDirectory, "NotApplicable");
+
+            HashSet<string> targets = this.GetTestFilesMatchingConditions(applicabilityConditions);
+
+            VerifyApplicabilityResults(
+                skimmer,
+                targets,
+                useDefaultPolicy,
+                expectedApplicability,
+                ruleName,
+                expectedReasonForNotAnalyzing);
+        }
+
         private void VerifyApplicability(
             BinarySkimmer skimmer,
             HashSet<string> applicabilityConditions,
@@ -261,8 +285,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, "NotApplicable");
 
-            var context = new BinaryAnalyzerContext();
-
             HashSet<string> targets = this.GetTestFilesMatchingConditions(applicabilityConditions);
 
             if (Directory.Exists(testFilesDirectory))
@@ -275,6 +297,88 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
             }
+
+            VerifyApplicabilityResults(
+                skimmer,
+                targets,
+                useDefaultPolicy,
+                expectedApplicability,
+                ruleName,
+                expectedReasonForNotAnalyzing);
+
+            //var logger = new TestMessageLogger();
+            //context.Logger = logger;
+
+            //var sb = new StringBuilder();
+
+            //foreach (string target in targets)
+            //{
+            //    string extension = Path.GetExtension(target);
+
+            //    context = this.CreateContext(logger, null, target);
+            //    if (!context.IsValidAnalysisTarget) { continue; }
+
+            //    if (useDefaultPolicy)
+            //    {
+            //        context.Policy = new PropertiesDictionary();
+            //    }
+
+            //    context.Rule = skimmer;
+
+            //    AnalysisApplicability applicability = skimmer.CanAnalyze(context, out string reasonForNotAnalyzing);
+
+            //    if (applicability != expectedApplicability)
+            //    {
+            //        // Generates message such as the following:
+            //        // "'BA2025:EnableShadowStack' - 'CanAnalyze' did not correctly indicate target applicability
+            //        // (unexpected return was 'NotApplicableToSpecifiedTarget'): ARM64_CETShadowStack_NotApplicable.exe"
+            //        sb.AppendLine(
+            //            string.Format(
+            //                "'{0}:{1}' - 'CanAnalyze' did not correctly indicate target applicability (unexpected return was '{2}'): {3}",
+            //                skimmer.Id,
+            //                ruleName,
+            //                applicability,
+            //                Path.GetFileName(target)));
+
+            //        continue;
+            //    }
+
+            //    if (expectedReasonForNotAnalyzing != null && reasonForNotAnalyzing != expectedReasonForNotAnalyzing)
+            //    {
+            //        // Generates message such as the following:
+            //        // "'BA2025:EnableShadowStack' - 'CanAnalyze' produced expected outcome but unexpected reason identified
+            //        // (unexpected return was 'image is an ARM64 binary' but 'test' was expected): ARM64_CETShadowStack_NotApplicable.exe"
+            //        sb.AppendLine(
+            //            string.Format(
+            //                "'{0}:{1}' - 'CanAnalyze' produced expected outcome but unexpected reason identified (unexpected return was '{2}' but '{3}' was expected): {4}",
+            //                skimmer.Id,
+            //                ruleName,
+            //                reasonForNotAnalyzing,
+            //                expectedReasonForNotAnalyzing,
+            //                Path.GetFileName(target)));
+
+            //        continue;
+            //    }
+            //}
+
+            //if (sb.Length > 0)
+            //{
+            //    this.testOutputHelper.WriteLine(sb.ToString());
+            //}
+
+            //Assert.Equal(0, sb.Length);
+        }
+
+        private void VerifyApplicabilityResults(
+            BinarySkimmer skimmer,
+            HashSet<string> targets,
+            bool useDefaultPolicy,
+            AnalysisApplicability expectedApplicability,
+            string ruleName,
+            string expectedReasonForNotAnalyzing)
+        {
+
+            var context = new BinaryAnalyzerContext();
 
             var logger = new TestMessageLogger();
             context.Logger = logger;
@@ -458,6 +562,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (metadataConditions.Contains(MetadataConditions.ImageIsDotNetCoreBootstrapExe))
             {
                 result.Add(Path.Combine(testFilesDirectory, "DotnetNative_x86_VS2019_UniversalApp.exe"));
+            }
+
+            if (metadataConditions.Contains(MetadataConditions.ImageIsArmBinary))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "ARM_CETShadowStack_NotApplicable.exe"));
+            }
+
+            if (metadataConditions.Contains(MetadataConditions.ImageIsArm64BitBinary))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "ARM64_CETShadowStack_NotApplicable.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "ARM64_dotnet_CETShadowStack_NotApplicable.exe"));
             }
 
             return result;
@@ -1166,10 +1281,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2025_EnableShadowStack_NotApplicable()
         {
-            this.VerifyApplicability(
+            HashSet<string> notApplicableArm64 = new HashSet<string>() { MetadataConditions.ImageIsArm64BitBinary };
+
+            this.VerifyApplicabililtyWithReason(
                 skimmer: new EnableShadowStack(),
-                applicabilityConditions: null,
+                applicabilityConditions: notApplicableArm64,
                 expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArm64BitBinary);
+
+            HashSet<string> notApplicableArm = new HashSet<string>() { MetadataConditions.ImageIsArmBinary };
+
+            this.VerifyApplicabililtyWithReason(
+                skimmer: new EnableShadowStack(),
+                applicabilityConditions: notApplicableArm64,
+                expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArmBinary);
         }
 
         [Fact]
