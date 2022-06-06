@@ -248,18 +248,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        private void VerifyApplicabililty(
+        private void VerifyApplicabililtyByConditionsOnly(
             BinarySkimmer skimmer,
             HashSet<string> applicabilityConditions,
             string expectedReasonForNotAnalyzing,
             AnalysisApplicability expectedApplicability = AnalysisApplicability.NotApplicableToSpecifiedTarget,
             bool useDefaultPolicy = false)
         {
-
             string ruleName = skimmer.GetType().Name;
-            string testFilesDirectory = GetTestDirectoryFor(ruleName);
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
-            testFilesDirectory = Path.Combine(testFilesDirectory, "NotApplicable");
 
             HashSet<string> targets = this.GetTestFilesMatchingConditions(applicabilityConditions);
 
@@ -1221,14 +1217,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             HashSet<string> notApplicableArm64 = new HashSet<string>() { MetadataConditions.ImageIsArm64BitBinary };
 
-            this.VerifyApplicabililty(
+            this.VerifyApplicabililtyByConditionsOnly(
                 skimmer: new EnableShadowStack(),
                 applicabilityConditions: notApplicableArm64,
                 expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArm64BitBinary);
 
             HashSet<string> notApplicableArm = new HashSet<string>() { MetadataConditions.ImageIsArmBinary };
 
-            this.VerifyApplicabililty(
+            this.VerifyApplicabililtyByConditionsOnly(
                 skimmer: new EnableShadowStack(),
                 applicabilityConditions: notApplicableArm64,
                 expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArmBinary);
