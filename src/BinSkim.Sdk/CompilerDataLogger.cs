@@ -260,8 +260,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "error", string.Empty }
             };
 
-            this.telemetryClient.TrackEvent(CompilerEventName, properties: properties);
-
             if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
             {
                 string commandLineId = Guid.NewGuid().ToString();
@@ -283,6 +281,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                                    "assemblyReferences",
                                    compilerData.AssemblyReferences);
             }
+
+            // This event cannot be sent before AssemblyReferences or CommandLine.
+            this.telemetryClient.TrackEvent(CompilerEventName, properties: properties);
         }
 
         public void WriteException(BinaryAnalyzerContext context, string errorMessage)
