@@ -282,7 +282,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                                    compilerData.AssemblyReferences);
             }
 
-            // This event cannot be sent before AssemblyReferences or CommandLine.
+            // To prevent loss of relationship between compiler and assembly/commandline data
+            // this event cannot be sent before AssemblyReferences or CommandLine.
             this.telemetryClient.TrackEvent(CompilerEventName, properties: properties);
         }
 
