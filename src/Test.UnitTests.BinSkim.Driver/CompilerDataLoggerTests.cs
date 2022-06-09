@@ -641,48 +641,57 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             foreach (EventTelemetry telemetryEvent in telemetryGeneratedEvents)
             {
+                IDictionary<string, string> properties = telemetryEvent.Properties;
+
                 switch (telemetryEvent.Name)
                 {
                     case CompilerDataLogger.CompilerEventName:
+                    {
                         compilerEvents.Add(telemetryEvent);
 
-                        if (commandLineEventsId.Equals(string.Empty) && telemetryEvent.Properties.ContainsKey("commandLineId"))
+                        if (string.IsNullOrWhiteSpace(commandLineEventsId)
+                            && properties.TryGetValue(CompilerDataLogger.CommandLineId, out string commandLineEventId))
                         {
-                            commandLineEventsId = telemetryEvent.Properties["commandLineId"];
+                            commandLineEventsId = commandLineEventId;
                         }
 
-                        if (assemblyEventsId.Equals(string.Empty) && telemetryEvent.Properties.ContainsKey("assemblyReferencesId"))
+                        if (string.IsNullOrWhiteSpace(assemblyEventsId)
+                            && properties.TryGetValue(CompilerDataLogger.AssemblyReferencesId, out string assemblyEventId))
                         {
-                            assemblyEventsId = telemetryEvent.Properties["assemblyReferencesId"];
+                            assemblyEventsId = assemblyEventId;
                         }
 
-                        if (expectedEventName == CompilerDataLogger.AssemblyReferencesEventName && !telemetryEvent.Properties.ContainsKey("assemblyReferencesId"))
+                        if (expectedEventName == CompilerDataLogger.AssemblyReferencesEventName
+                            && !properties.ContainsKey("assemblyReferencesId"))
                         {
                             sb.AppendLine("Compiler Event is missing the `assemblyReferencesId`");
                         }
-                        else if (expectedEventName == CompilerDataLogger.CommandLineEventName && !telemetryEvent.Properties.ContainsKey("commandLineId"))
+                        else if (expectedEventName == CompilerDataLogger.CommandLineEventName
+                            && !properties.ContainsKey("commandLineId"))
                         {
                             sb.AppendLine("Compiler Event is missing the `commandLineId`");
                         }
                         break;
-
+                    }
                     case CompilerDataLogger.AssemblyReferencesEventName:
+                    {
                         assemblyReferencesEvents.Add(telemetryEvent);
 
                         if (expectedEventName == CompilerDataLogger.AssemblyReferencesEventName
-                            && !expectedChunkedContent.Contains(telemetryEvent.Properties["chunkedassemblyReferences"]))
+                            && !expectedChunkedContent.Contains(properties[CompilerDataLogger.ChunkedAssemblyReferences]))
                         {
-                            sb.AppendLine(string.Format("Unexpected {0} chunked content: {1}",
-                                CompilerDataLogger.AssemblyReferencesEventName,
-                                telemetryEvent.Properties[$"{CompilerDataLogger.AssemblyReferencesEventName}Id"]));
+                            sb.AppendLine(
+                                $"Unexpected `{CompilerDataLogger.AssemblyReferencesEventName}` chunked content: "
+                                + $"`{properties[CompilerDataLogger.ChunkedAssemblyReferences]}` "
+                                + $"expected: expectedChunkedContent");
                         }
 
-                        string currentAssemblyEventId = telemetryEvent.Properties["assemblyReferencesId"];
+                        string currentAssemblyEventId = properties["assemblyReferencesId"];
                         if (assemblyEventsId.Equals(string.Empty))
                         {
                             assemblyEventsId = currentAssemblyEventId;
                         }
-                        else if (assemblyEventsId != telemetryEvent.Properties["assemblyReferencesId"])
+                        else if (assemblyEventsId != properties["assemblyReferencesId"])
                         {
                             sb.AppendLine(string.Format("{0} event detected with unexpected Id. Expected {1}, but found {2}",
                                 CompilerDataLogger.AssemblyReferencesEventName,
@@ -691,24 +700,25 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                         }
 
                         break;
-
+                    }
                     case CompilerDataLogger.CommandLineEventName:
+                    {
                         commandLineEvents.Add(telemetryEvent);
 
                         if (expectedEventName == CompilerDataLogger.CommandLineEventName
-                            && !expectedChunkedContent.Contains(telemetryEvent.Properties["chunkedcommandLine"]))
+                            && !expectedChunkedContent.Contains(properties["chunkedcommandLine"]))
                         {
                             sb.AppendLine(string.Format("Unexpected {0} chunked content: {1}",
-                                CompilerDataLogger.AssemblyReferencesEventName,
+                                CompilerDataLogger.AssemblyReferencesEventName, 
                                 telemetryEvent.Properties["commandLineId"]));
                         }
 
-                        string currentCommandLineEventId = telemetryEvent.Properties["commandLineId"];
+                        string currentCommandLineEventId = properties["commandLineId"];
                         if (assemblyEventsId.Equals(string.Empty))
                         {
                             commandLineEventsId = currentCommandLineEventId;
                         }
-                        else if (assemblyEventsId != telemetryEvent.Properties["commandLineId"])
+                        else if (assemblyEventsId != properties["commandLineId"])
                         {
                             sb.AppendLine(string.Format("{0} event detected with unexpected Id. Expected {1}, but found {2}",
                                 CompilerDataLogger.AssemblyReferencesEventName,
@@ -716,25 +726,30 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                                 currentCommandLineEventId));
                         }
                         break;
-
+                    }
                     case CompilerDataLogger.SummaryEventName:
+                    {
                         summaryEvents.Add(telemetryEvent);
                         break;
+                    }
                 }
             }
 
-            if (expectedEventName == CompilerDataLogger.AssemblyReferencesEventName && assemblyReferencesEvents.Count != chunkNumber)
+            if (expectedEventName == CompilerDataLogger.AssemblyReferencesEventName
+                && assemblyReferencesEvents.Count != chunkNumber)
             {
                 sb.AppendLine(string.Format("Expected {0} {1} events, but {2} were found.",
                     chunkNumber, expectedEventName,
                     assemblyReferencesEvents.Count));
             }
-            else if (expectedEventName == CompilerDataLogger.CommandLineEventName && commandLineEvents.Count != chunkNumber)
+            else if (expectedEventName == CompilerDataLogger.CommandLineEventName
+                && commandLineEvents.Count != chunkNumber)
             {
                 sb.AppendLine(string.Format("Expected {0} {1} events, but {2} were found.",
                     chunkNumber, expectedEventName,
                     commandLineEvents.Count));
             }
+
             return sb;
         }
 
