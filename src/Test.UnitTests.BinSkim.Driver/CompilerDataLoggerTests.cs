@@ -673,7 +673,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                             {
                                 sb.AppendLine("Compiler Event is missing the `assemblyReferencesId`");
                             }
-                            else if(assemblyEventsId != compilerAssemblyReferencesId)
+                            else if (assemblyEventsId != compilerAssemblyReferencesId)
                             {
                                 sb.AppendLine(
                                     $"`{CompilerDataLogger.CompilerEventName}` event detected with unexpected Id. " +
@@ -686,7 +686,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                             {
                                 sb.AppendLine("Compiler Event is missing the `commandLineId`");
                             }
-                            else if(commandLineEventsId != compilerCommandLineEventId)
+                            else if (commandLineEventsId != compilerCommandLineEventId)
                             {
                                 sb.AppendLine(
                                     $"`{CompilerDataLogger.CommandLineEventName}` event detected with unexpected Id. " +
