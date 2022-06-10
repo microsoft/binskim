@@ -649,7 +649,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             {
                 IDictionary<string, string> properties = telemetryEvent.Properties;
 
-
                 if (string.IsNullOrWhiteSpace(commandLineEventsId)
                     && properties.TryGetValue(CompilerDataLogger.CommandLineId, out string commandLineEventId))
                 {
@@ -668,15 +667,31 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                     {
                         compilerEvents.Add(telemetryEvent);
 
-                        if (expectedEventName == CompilerDataLogger.AssemblyReferencesEventName
-                            && !properties.ContainsKey(CompilerDataLogger.AssemblyReferencesId))
+                        if (expectedEventName == CompilerDataLogger.AssemblyReferencesEventName)
                         {
-                            sb.AppendLine("Compiler Event is missing the `assemblyReferencesId`");
+                            if (!properties.TryGetValue(CompilerDataLogger.AssemblyReferencesId, out string compilerAssemblyReferencesId))
+                            {
+                                sb.AppendLine("Compiler Event is missing the `assemblyReferencesId`");
+                            }
+                            else if(assemblyEventsId != compilerAssemblyReferencesId)
+                            {
+                                sb.AppendLine(
+                                    $"`{CompilerDataLogger.CompilerEventName}` event detected with unexpected Id. " +
+                                    $"Expected `{assemblyEventsId}` but found `{compilerAssemblyReferencesId}`.");
+                            }
                         }
-                        else if (expectedEventName == CompilerDataLogger.CommandLineEventName
-                            && !properties.ContainsKey(CompilerDataLogger.CommandLineId))
+                        else if (expectedEventName == CompilerDataLogger.CommandLineEventName)
                         {
-                            sb.AppendLine("Compiler Event is missing the `commandLineId`");
+                            if (!properties.TryGetValue(CompilerDataLogger.CommandLineId, out string compilerCommandLineEventId))
+                            {
+                                sb.AppendLine("Compiler Event is missing the `commandLineId`");
+                            }
+                            else if(commandLineEventsId != compilerCommandLineEventId)
+                            {
+                                sb.AppendLine(
+                                    $"`{CompilerDataLogger.CommandLineEventName}` event detected with unexpected Id. " +
+                                    $"Expected `{commandLineEventsId}` but found `{compilerCommandLineEventId}`.");
+                            }
                         }
                         break;
                     }
@@ -693,9 +708,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                                 $"expected: `{expectedChunkedContent}`");
                         }
 
-                        string currentAssemblyEventId = properties["assemblyReferencesId"];
+                        string currentAssemblyEventId = properties[CompilerDataLogger.AssemblyReferencesId];
 
-                        if (assemblyEventsId != properties["assemblyReferencesId"])
+                        if (assemblyEventsId != currentAssemblyEventId)
                         {
                             sb.AppendLine(
                                 $"`{CompilerDataLogger.AssemblyReferencesEventName}` event detected with unexpected Id. " +
