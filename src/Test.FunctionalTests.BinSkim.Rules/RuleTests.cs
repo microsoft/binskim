@@ -311,7 +311,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string ruleName,
             string expectedReasonForNotAnalyzing)
         {
-
             var context = new BinaryAnalyzerContext();
 
             var logger = new TestMessageLogger();
