@@ -10,6 +10,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageIsNotExe = SdkResources.MetadataCondition_ImageIsNotExe;
         public static readonly string ImageIsNotMachO = SdkResources.MetadataCondition_ImageIsNotMachO;
         public static readonly string CouldNotLoadPdb = SdkResources.MetadataCondition_CouldNotLoadPdb;
+        public static readonly string ImageIsArmBinary = SdkResources.MetadataCondition_ImageIsArmBinary;
         public static readonly string ImageIsDebugOnly = SdkResources.MetadataCondition_ImageIsDebugOnly;
         public static readonly string ImageIsNotSigned = SdkResources.MetadataCondition_ImageIsNotSigned;
         public static readonly string ImageIsWixBinary = SdkResources.MetadataCondition_ImageIsWixBinary;

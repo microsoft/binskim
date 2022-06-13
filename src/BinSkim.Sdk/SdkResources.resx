@@ -243,4 +243,7 @@
   <data name="MetadataCondition_ImageIsArm64BitBinary" xml:space="preserve">
     <value>image is an ARM64 binary</value>
   </data>
+  <data name="MetadataCondition_ImageIsArmBinary" xml:space="preserve">
+    <value>image is an ARM binary</value>
+  </data>
 </root>
