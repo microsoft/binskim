@@ -248,6 +248,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
+        private void VerifyApplicabililtyByConditionsOnly(
+            BinarySkimmer skimmer,
+            HashSet<string> applicabilityConditions,
+            string expectedReasonForNotAnalyzing,
+            AnalysisApplicability expectedApplicability = AnalysisApplicability.NotApplicableToSpecifiedTarget,
+            bool useDefaultPolicy = false)
+        {
+            string ruleName = skimmer.GetType().Name;
+
+            HashSet<string> targets = this.GetTestFilesMatchingConditions(applicabilityConditions);
+
+            VerifyApplicabilityResults(
+                skimmer,
+                targets,
+                useDefaultPolicy,
+                expectedApplicability,
+                ruleName,
+                expectedReasonForNotAnalyzing);
+        }
+
         private void VerifyApplicability(
             BinarySkimmer skimmer,
             HashSet<string> applicabilityConditions,
@@ -261,8 +281,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, "NotApplicable");
 
-            var context = new BinaryAnalyzerContext();
-
             HashSet<string> targets = this.GetTestFilesMatchingConditions(applicabilityConditions);
 
             if (Directory.Exists(testFilesDirectory))
@@ -275,6 +293,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
             }
+
+            VerifyApplicabilityResults(
+                skimmer,
+                targets,
+                useDefaultPolicy,
+                expectedApplicability,
+                ruleName,
+                expectedReasonForNotAnalyzing);
+        }
+
+        private void VerifyApplicabilityResults(
+            BinarySkimmer skimmer,
+            HashSet<string> targets,
+            bool useDefaultPolicy,
+            AnalysisApplicability expectedApplicability,
+            string ruleName,
+            string expectedReasonForNotAnalyzing)
+        {
+            var context = new BinaryAnalyzerContext();
 
             var logger = new TestMessageLogger();
             context.Logger = logger;
@@ -458,6 +495,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (metadataConditions.Contains(MetadataConditions.ImageIsDotNetCoreBootstrapExe))
             {
                 result.Add(Path.Combine(testFilesDirectory, "DotnetNative_x86_VS2019_UniversalApp.exe"));
+            }
+
+            if (metadataConditions.Contains(MetadataConditions.ImageIsArmBinary))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "ARM_CETShadowStack_NotApplicable.exe"));
+            }
+
+            if (metadataConditions.Contains(MetadataConditions.ImageIsArm64BitBinary))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "ARM64_CETShadowStack_NotApplicable.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "ARM64_dotnet_CETShadowStack_NotApplicable.exe"));
             }
 
             return result;
@@ -1166,10 +1214,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2025_EnableShadowStack_NotApplicable()
         {
-            this.VerifyApplicability(
+            HashSet<string> notApplicableArm64 = new HashSet<string>() { MetadataConditions.ImageIsArm64BitBinary };
+
+            this.VerifyApplicabililtyByConditionsOnly(
                 skimmer: new EnableShadowStack(),
-                applicabilityConditions: null,
+                applicabilityConditions: notApplicableArm64,
                 expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArm64BitBinary);
+
+            HashSet<string> notApplicableArm = new HashSet<string>() { MetadataConditions.ImageIsArmBinary };
+
+            this.VerifyApplicabililtyByConditionsOnly(
+                skimmer: new EnableShadowStack(),
+                applicabilityConditions: notApplicableArm64,
+                expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArmBinary);
         }
 
         [Fact]

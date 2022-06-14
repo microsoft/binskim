@@ -47,3 +47,40 @@ Also create two user functions `userfn_use_safebuffers_1()` and `userfn_use_safe
 A simple `Windows Kernel Mode Driver` program, created with `Visual Studio 2019` that generates a .exe and associated .pdb file. Code to reproduce:  
 Use `NTSTATUS GsDriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_STRING RegistryPath)` as entry point and do not decorated with `__declspec(safebuffers)`.
 No user functions decorated with `__declspec(safebuffers)`.
+
+## ARM64_CETShadowStack_NotApplicable.exe
+A simple C++ hellow world program, cross compiled using CMake using the `cl.exe` compiler and `Ninja` generator.
+`CMakePresets.json` should be configured with a `configurePresets` as below:
+```
+{
+    "name": "arm64-release",
+    "displayName": "ARM64 Release", 
+    "inherits": "windows-base",
+    "architecture": {
+        "value": "arm64",
+        "strategy": "external"
+    },
+    "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+    }
+},
+```
+
+## ARM_CETShadowStack_NotApplicable.exe
+
+A simple C++ hellow world program, cross compiled using CMake with the `cl.exe` compiler and `Ninja` generator.
+`CMakePresets.json` should be configured with a `configurePresets` as below:
+```
+{
+    "name": "arm-release",
+    "displayName": "ARM Release",
+    "inherits": "windows-base",
+    "architecture": {
+        "value": "arm",
+        "strategy": "external"
+    },
+    "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+    }
+},
+```
