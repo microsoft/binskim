@@ -43,9 +43,16 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             string assemblies = "Microsoft.DiaSymReader (1.3.0);Newtonsoft.Json (13.0.1)";
             CompilerDataLogger.s_chunkSize = SmallChunkSize;
-            int chunkNumber = logger.CalculateChunkedContentSize(assemblies.Length);
+            int expectedChunkCount = logger.CalculateChunkedContentSize(assemblies.Length);
             logger.Write(context, new CompilerData { CompilerName = ".NET Compiler", AssemblyReferences = assemblies });
-            telemetryEventOutput.Count.Should().Be(chunkNumber + 1);
+
+            StringBuilder sb = ValidateChunkedEvents(
+                expectedEventName: CompilerDataLogger.AssemblyReferencesEventName,
+                telemetryGeneratedEvents: telemetryEventOutput,
+                expectedChunkedContent: assemblies,
+                chunkCount: expectedChunkCount);
+
+            Assert.Equal(string.Empty, sb.ToString());
         }
 
         [Fact]
@@ -58,11 +65,13 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             string commandLine = "TestCommandLine";
             CompilerDataLogger.s_chunkSize = SmallChunkSize;
-            int chunksize = CompilerDataLogger.s_chunkSize;
             int chunkNumber = logger.CalculateChunkedContentSize(commandLine.Length);
             CompilerData compilerData = new CompilerData { CompilerName = ".NET Compiler", CommandLine = commandLine };
             logger.Write(context, compilerData);
-            telemetryEventOutput.Count.Should().Be(chunkNumber + 1);
+
+            StringBuilder sb = ValidateChunkedEvents(CompilerDataLogger.CommandLineEventName, telemetryEventOutput, commandLine, chunkNumber);
+
+            Assert.Equal(string.Empty, sb.ToString());
         }
 
         [Fact]
@@ -622,6 +631,154 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             return sb;
         }
 
+        private StringBuilder ValidateChunkedEvents(string expectedEventName,
+                                                    List<ITelemetry> telemetryGeneratedEvents,
+                                                    string expectedChunkedContent,
+                                                    int chunkCount)
+        {
+            var sb = new StringBuilder();
+            string assemblyEventsId = string.Empty;
+            string commandLineEventsId = string.Empty;
+
+            var compilerEvents = new List<EventTelemetry>();
+            var assemblyReferencesEvents = new List<EventTelemetry>();
+            var commandLineEvents = new List<EventTelemetry>();
+            var summaryEvents = new List<EventTelemetry>();
+
+            foreach (EventTelemetry telemetryEvent in telemetryGeneratedEvents)
+            {
+                IDictionary<string, string> properties = telemetryEvent.Properties;
+
+                if (string.IsNullOrWhiteSpace(commandLineEventsId)
+                    && properties.TryGetValue(CompilerDataLogger.CommandLineId, out string commandLineEventId))
+                {
+                    commandLineEventsId = commandLineEventId;
+                }
+
+                if (string.IsNullOrWhiteSpace(assemblyEventsId)
+                    && properties.TryGetValue(CompilerDataLogger.AssemblyReferencesId, out string assemblyEventId))
+                {
+                    assemblyEventsId = assemblyEventId;
+                }
+
+                switch (telemetryEvent.Name)
+                {
+                    case CompilerDataLogger.CompilerEventName:
+                    {
+                        compilerEvents.Add(telemetryEvent);
+
+                        if (expectedEventName == CompilerDataLogger.AssemblyReferencesEventName)
+                        {
+                            if (!properties.TryGetValue(CompilerDataLogger.AssemblyReferencesId, out string compilerAssemblyReferencesId))
+                            {
+                                sb.AppendLine("Compiler Event is missing the `assemblyReferencesId`");
+                            }
+                            else if (assemblyEventsId != compilerAssemblyReferencesId)
+                            {
+                                sb.AppendLine(
+                                    $"`{CompilerDataLogger.CompilerEventName}` event detected with unexpected Id. " +
+                                    $"Expected `{assemblyEventsId}` but found `{compilerAssemblyReferencesId}`.");
+                            }
+                        }
+                        else if (expectedEventName == CompilerDataLogger.CommandLineEventName)
+                        {
+                            if (!properties.TryGetValue(CompilerDataLogger.CommandLineId, out string compilerCommandLineEventId))
+                            {
+                                sb.AppendLine("Compiler Event is missing the `commandLineId`");
+                            }
+                            else if (commandLineEventsId != compilerCommandLineEventId)
+                            {
+                                sb.AppendLine(
+                                    $"`{CompilerDataLogger.CommandLineEventName}` event detected with unexpected Id. " +
+                                    $"Expected `{commandLineEventsId}` but found `{compilerCommandLineEventId}`.");
+                            }
+                        }
+                        break;
+                    }
+                    case CompilerDataLogger.AssemblyReferencesEventName:
+                    {
+                        assemblyReferencesEvents.Add(telemetryEvent);
+
+                        if (expectedEventName == CompilerDataLogger.AssemblyReferencesEventName
+                            && !expectedChunkedContent.Contains(properties[CompilerDataLogger.ChunkedAssemblyReferences]))
+                        {
+                            sb.AppendLine(
+                                $"Unexpected `{CompilerDataLogger.AssemblyReferencesEventName}` chunked content: " +
+                                $"`{properties[CompilerDataLogger.ChunkedAssemblyReferences]}` " +
+                                $"expected: `{expectedChunkedContent}`");
+                        }
+
+                        string currentAssemblyEventId = properties[CompilerDataLogger.AssemblyReferencesId];
+
+                        if (assemblyEventsId != currentAssemblyEventId)
+                        {
+                            sb.AppendLine(
+                                $"`{CompilerDataLogger.AssemblyReferencesEventName}` event detected with unexpected Id. " +
+                                $"Expected `{assemblyEventsId}` but found `{currentAssemblyEventId}`.");
+                        }
+
+                        break;
+                    }
+                    case CompilerDataLogger.CommandLineEventName:
+                    {
+                        commandLineEvents.Add(telemetryEvent);
+
+                        if (expectedEventName == CompilerDataLogger.CommandLineEventName
+                            && !expectedChunkedContent.Contains(properties["chunkedcommandLine"]))
+                        {
+                            sb.AppendLine(
+                                $"Unexpected `{CompilerDataLogger.CommandLineEventName}` chunked content: " +
+                                $"`{properties[CompilerDataLogger.ChunkedCommandLine]}` " +
+                                $"expected: `{expectedChunkedContent}`");
+                        }
+
+                        string currentCommandLineEventId = properties["commandLineId"];
+
+                        if (commandLineEventsId != currentCommandLineEventId)
+                        {
+                            sb.AppendLine(
+                                $"`{CompilerDataLogger.CommandLineEventName}` event detected with unexpected Id. " +
+                                $"Expected `{commandLineEventsId}` but found `{currentCommandLineEventId}`.");
+                        }
+                        break;
+                    }
+                    case CompilerDataLogger.SummaryEventName:
+                    {
+                        summaryEvents.Add(telemetryEvent);
+                        break;
+                    }
+                }
+            }
+
+            if ((expectedEventName == CompilerDataLogger.AssemblyReferencesEventName
+                    && assemblyReferencesEvents.Count != chunkCount) ||
+                (expectedEventName == CompilerDataLogger.CommandLineEventName
+                    && commandLineEvents.Count != chunkCount))
+            {
+                sb.AppendLine(
+                    $"Expected `{chunkCount}` `{expectedEventName}` events, " +
+                    $"but `{assemblyReferencesEvents.Count}` were found");
+            }
+
+            return sb;
+        }
+
+        private StringBuilder ValidateChunkedContent(StringBuilder sb,
+                                                     int expectedChunkSize,
+                                                     List<EventTelemetry> chunkedEvents)
+        {
+            if (chunkedEvents.Count != expectedChunkSize)
+            {
+                sb.AppendLine(
+                    string.Format(
+                        "Incorrect number of chunkedEvents de tected. Expected {0}, but found {1}",
+                        expectedChunkSize,
+                        chunkedEvents.Count));
+            }
+
+            return sb;
+        }
+
         public static string GetExampleSarifPath(Sarif.SarifVersion sarifVersion)
         {
             return sarifVersion == Sarif.SarifVersion.Current
@@ -637,6 +794,11 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             dirPath = Path.Combine(dirPath, string.Format(@"..{0}..{0}..{0}..{0}src{0}", Path.DirectorySeparatorChar));
             dirPath = Path.GetFullPath(dirPath);
             return Path.Combine(dirPath, relativeDirectory);
+        }
+
+        internal static int CalculateChunkedContentSize(int contentLength)
+        {
+            return (int)Math.Ceiling(1.0 * contentLength / CompilerDataLogger.s_chunkSize);
         }
     }
 }

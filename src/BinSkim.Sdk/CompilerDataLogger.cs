@@ -48,10 +48,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal const string ProjectId = "projectId";
         internal const string SymbolPath = "symbolPath";
         internal const string BuildRunId = "buildRunId";
+        internal const string CommandLine = "commandLine";
         internal const string ProjectName = "projectName";
         internal const string ToolVersion = "toolVersion";
         internal const string TimeConsumed = "timeConsumed";
         internal const string RepositoryId = "repositoryId";
+        internal const string CommandLineId = "commandLineId";
         internal const string RepositoryName = "repositoryName";
         internal const string OrganizationId = "organizationId";
         internal const string NormalizedPath = "normalizedPath";
@@ -59,8 +61,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal const string OrganizationName = "organizationName";
         internal const string AnalysisStartTime = "analysisStartTime";
         internal const string BuildDefinitionId = "buildDefinitionId";
+        internal const string AssemblyReferences = "assemblyReferences";
+        internal const string ChunkedCommandLine = "chunkedcommandLine";
         internal const string BuildDefinitionName = "buildDefinitionName";
+        internal const string AssemblyReferencesId = "assemblyReferencesId";
         internal const string NumberOfBinaryAnalyzed = "numberOfBinaryAnalyzed";
+        internal const string ChunkedAssemblyReferences = "chunkedassemblyReferences";
 
         // This object is required to synchronize multi-threaded writes
         // to the CSV writer only. The AppInsights client is already
@@ -260,29 +266,31 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "error", string.Empty }
             };
 
-            this.telemetryClient.TrackEvent(CompilerEventName, properties: properties);
-
             if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
             {
                 string commandLineId = Guid.NewGuid().ToString();
-                properties.Add("commandLineId", commandLineId);
+                properties.Add(CommandLineId, commandLineId);
 
                 SendChunkedContent(CommandLineEventName,
                                    commandLineId,
-                                   "commandLine",
+                                   CommandLine,
                                    compilerData.CommandLine);
             }
 
             if (!string.IsNullOrWhiteSpace(compilerData.AssemblyReferences))
             {
                 string assemblyReferencesId = Guid.NewGuid().ToString();
-                properties.Add("assemblyReferencesId", assemblyReferencesId);
+                properties.Add(AssemblyReferencesId, assemblyReferencesId);
 
                 SendChunkedContent(AssemblyReferencesEventName,
                                    assemblyReferencesId,
-                                   "assemblyReferences",
+                                   AssemblyReferences,
                                    compilerData.AssemblyReferences);
             }
+
+            // To prevent loss of relationship between compiler and assembly/commandline data
+            // this event cannot be sent before AssemblyReferences or CommandLine.
+            this.telemetryClient.TrackEvent(CompilerEventName, properties: properties);
         }
 
         public void WriteException(BinaryAnalyzerContext context, string errorMessage)
