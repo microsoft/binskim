@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 using System.Security.Cryptography;
@@ -850,10 +851,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 return ChecksumAlgorithmType.Unknown;
             }
 
-            foreach (DocumentHandle document in pdbMetadataReader.Documents)
+            foreach (Document doc in pdbMetadataReader.Documents.Select(document => pdbMetadataReader.GetDocument(document)))
             {
-                Document doc = pdbMetadataReader.GetDocument(document);
-
                 Guid hashGuid = pdbMetadataReader.GetGuid(doc.HashAlgorithm);
 
                 return hashGuid == Constant.Sha256Guid ? ChecksumAlgorithmType.Sha256 : ChecksumAlgorithmType.Sha1;
