@@ -33,6 +33,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         internal SafePointer pImage; // pointer to the beginning of the file in memory
         private readonly MetadataReader metadataReader;
 
+        // https://github.com/dotnet/runtime/blob/main/docs/design/specs/PortablePdb-Metadata.md#source-link-c-and-vb-compilers
+        private static readonly Guid SourceLinkKind = new Guid("CC110556-A091-4D38-9FEC-25AB9A351A6A");
+
         public PE(string fileName)
         {
             this.FileName = Path.GetFullPath(fileName);
@@ -814,6 +817,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 : ChecksumAlgorithmForPortablePdb();
         }
 
+        public string ManagedPdbGetSourceLinkDocument()
+        {
+            if (!TryGetPortablePdbMetadataReader(out MetadataReader metadataReader))
+            {
+                return null;
+            }
+
+            BlobReader sourceLinkReader = GetCustomDebugInformationReader(metadataReader, EntityHandle.ModuleDefinition, SourceLinkKind);
+            return sourceLinkReader.Length == 0 ? null : sourceLinkReader.ReadUTF8(sourceLinkReader.Length);
+        }
+
         public IEnumerable<string> GetAssemblyReferenceStrings()
         {
             if (this.IsManaged && this.metadataReader != null)
@@ -831,16 +845,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb()
         {
-            if (!this.peReader.TryOpenAssociatedPortablePdb(
-                this.FileName,
-                filePath => File.Exists(filePath) ? File.OpenRead(filePath) : null,
-                out MetadataReaderProvider pdbProvider,
-                out _))
-            {
+            if (!TryGetPortablePdbMetadataReader(out MetadataReader metadataReader))
+            { 
                 return ChecksumAlgorithmType.Unknown;
             }
 
-            MetadataReader metadataReader = pdbProvider.GetMetadataReader();
             foreach (DocumentHandle document in metadataReader.Documents)
             {
                 Document doc = metadataReader.GetDocument(document);
@@ -851,6 +860,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
 
             return ChecksumAlgorithmType.Unknown;
+        }
+
+        private bool TryGetPortablePdbMetadataReader(out MetadataReader metadataReader)
+        {
+            if (!this.peReader.TryOpenAssociatedPortablePdb(
+                this.FileName,
+                filePath => File.Exists(filePath) ? File.OpenRead(filePath) : null,
+                out MetadataReaderProvider pdbProvider,
+                out _))
+            {
+                metadataReader = null;
+                return false;
+            }
+
+            metadataReader = pdbProvider.GetMetadataReader();
+            return true;
         }
 
         private ChecksumAlgorithmType ChecksumAlgorithmForFullPdb(Pdb pdb)
@@ -866,6 +891,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
 
             return ChecksumAlgorithmType.Unknown;
+        }
+
+        private static BlobReader GetCustomDebugInformationReader(MetadataReader metadataReader, EntityHandle handle, Guid kind)
+        {
+            foreach (CustomDebugInformationHandle cdiHandle in metadataReader.GetCustomDebugInformation(handle))
+            {
+                CustomDebugInformation cdi = metadataReader.GetCustomDebugInformation(cdiHandle);
+                if (metadataReader.GetGuid(cdi.Kind) == kind)
+                {
+                    return metadataReader.GetBlobReader(cdi.Value);
+                }
+            }
+
+            return default;
         }
     }
 }

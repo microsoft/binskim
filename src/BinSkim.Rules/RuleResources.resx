@@ -573,4 +573,16 @@ Modules did not meet the criteria: {1}</value>
   <data name="ERR997_ExceptionLoadingPdbGeneric" xml:space="preserve">
     <value>'{0}' was not evaluated because its PDB could not be loaded ({1}).</value>
   </data>
+  <data name="BA6001_EnableSourceLink_Description" xml:space="preserve">
+    <value>SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information.</value>
+  </data>
+  <data name="BA6001_Error" xml:space="preserve">
+    <value>The PDB for '{0}' does not contain SourceLink information.</value>
+  </data>
+  <data name="BA6001_Pass" xml:space="preserve">
+    <value>The PDB for '{0}' contains SourceLink information.</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
 </root>

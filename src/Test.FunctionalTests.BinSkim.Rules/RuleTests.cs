@@ -1451,5 +1451,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             this.VerifyApplicability(new DoNotAllowExecutableStack(), new HashSet<string>());
         }
+
+        [Fact]
+        public void BA6001_EnableSourceLink_Pass()
+        {
+            this.VerifyPass(new EnableSourceLink());
+        }
+
+        [Fact]
+        public void BA6001_EnableSourceLink_Fail()
+        {
+            this.VerifyFail(new EnableSourceLink());
+        }
+
+        [Fact]
+        public void BA6001_EnableSourceLink_NotApplicable()
+        {
+            this.VerifyApplicability(new EnableSourceLink(), new HashSet<string>());
+        }
     }
 }
