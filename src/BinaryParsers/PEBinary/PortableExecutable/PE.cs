@@ -846,7 +846,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb()
         {
             if (!TryGetPortablePdbMetadataReader(out MetadataReader metadataReader))
-            { 
+            {
                 return ChecksumAlgorithmType.Unknown;
             }
 

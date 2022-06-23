@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// Enable SourceLink.
         /// </summary>
-        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA6001_EnableSourceLink_Description};
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA6001_EnableSourceLink_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[]
         {
