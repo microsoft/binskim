@@ -819,12 +819,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public string ManagedPdbGetSourceLinkDocument()
         {
-            if (!TryGetPortablePdbMetadataReader(out MetadataReader metadataReader))
+            if (!TryGetPortablePdbMetadataReader(out MetadataReader pdbMetadataReader))
             {
                 return null;
             }
 
-            BlobReader sourceLinkReader = GetCustomDebugInformationReader(metadataReader, EntityHandle.ModuleDefinition, SourceLinkKind);
+            BlobReader sourceLinkReader = GetCustomDebugInformationReader(pdbMetadataReader, EntityHandle.ModuleDefinition, SourceLinkKind);
             return sourceLinkReader.Length == 0 ? null : sourceLinkReader.ReadUTF8(sourceLinkReader.Length);
         }
 
@@ -845,16 +845,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb()
         {
-            if (!TryGetPortablePdbMetadataReader(out MetadataReader metadataReader))
+            if (!TryGetPortablePdbMetadataReader(out MetadataReader pdbMetadataReader))
             {
                 return ChecksumAlgorithmType.Unknown;
             }
 
-            foreach (DocumentHandle document in metadataReader.Documents)
+            foreach (DocumentHandle document in pdbMetadataReader.Documents)
             {
-                Document doc = metadataReader.GetDocument(document);
+                Document doc = pdbMetadataReader.GetDocument(document);
 
-                Guid hashGuid = metadataReader.GetGuid(doc.HashAlgorithm);
+                Guid hashGuid = pdbMetadataReader.GetGuid(doc.HashAlgorithm);
 
                 return hashGuid == Constant.Sha256Guid ? ChecksumAlgorithmType.Sha256 : ChecksumAlgorithmType.Sha1;
             }
@@ -862,7 +862,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             return ChecksumAlgorithmType.Unknown;
         }
 
-        private bool TryGetPortablePdbMetadataReader(out MetadataReader metadataReader)
+        private bool TryGetPortablePdbMetadataReader(out MetadataReader pdbMetadataReader)
         {
             if (!this.peReader.TryOpenAssociatedPortablePdb(
                 this.FileName,
@@ -870,11 +870,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 out MetadataReaderProvider pdbProvider,
                 out _))
             {
-                metadataReader = null;
+                pdbMetadataReader = null;
                 return false;
             }
 
-            metadataReader = pdbProvider.GetMetadataReader();
+            pdbMetadataReader = pdbProvider.GetMetadataReader();
             return true;
         }
 
