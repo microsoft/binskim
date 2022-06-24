@@ -14,6 +14,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     public class ObjectModuleDetails
     {
         private readonly CompilerCommandLine compilerCommandLine;
+        private readonly LinkerCommandLine linkerCommandLine;
 
         /// <summary>Initializes a new instance of the <see cref="ObjectModuleDetails"/> class.</summary>
         /// <param name="compilerFrontEndVersion">The front end version of the compiler producing the object module.</param>
@@ -37,7 +38,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.Library = library;
             this.CompilerFrontEndVersion = compilerFrontEndVersion ?? new Version();
             this.CompilerBackEndVersion = backEndVersion ?? new Version();
-            this.compilerCommandLine = new CompilerCommandLine(commandLine ?? string.Empty);
+
+            // The command line for link.exe should contain /OUT with the final binary name.  Use that to separate compiler and linker command lines.
+            if ((commandLine != null) && commandLine.Contains("/OUT"))
+            {
+                this.linkerCommandLine = new LinkerCommandLine(commandLine);
+                this.compilerCommandLine = new CompilerCommandLine(String.Empty);
+            }
+            else
+            {
+                this.linkerCommandLine = new LinkerCommandLine(String.Empty);
+                this.compilerCommandLine = new CompilerCommandLine(commandLine ?? string.Empty);
+            }
             this.Language = language;
             this.CompilerName = compilerName;
             this.HasSecurityChecks = hasSecurityChecks;
@@ -57,6 +69,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// Returns whether optimizations were enabled as defined by the various /O switches in the compiland command line
         /// </summary>
         public bool OptimizationsEnabled => this.compilerCommandLine.OptimizationsEnabled;
+
+        /// <summary>
+        /// Returns whether the linker had incremental linking enabled, or not
+        /// </summary>
+        public bool IncrementalLinkingEnabled => this.linkerCommandLine.IncrementalLinking;
 
         /// <summary>
         /// Returns a list of integers corresponding to the set of warnings disabled via -wdnnnn switches on the command line

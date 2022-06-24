@@ -889,5 +889,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
             return false;
         }
+
+        public bool IncrementalLinkingEnabled(Pdb pdb)
+        {
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                if (om.GetObjectModuleDetails().IncrementalLinkingEnabled)
+                {
+                    // There should be exactly one symbol in the binary containing knowledge about the linker command-line.  If that one symbol
+                    // says that incremental linking was enabled then the whole PE had it enabled too.
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

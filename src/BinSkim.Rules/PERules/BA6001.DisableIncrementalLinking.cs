@@ -99,12 +99,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            // TODO check linker flags here
+            if (pe.IncrementalLinkingEnabled(pdb))
+            {
+                context.Logger.Log(this,
+                    RuleUtilities.BuildResult(ResultKind.Fail, context, null,
+                    nameof(RuleResources.BA6001_Warning),
+                    context.TargetUri.GetFileName()));
+                return;
+            }
 
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA6001_Pass),
-                        context.TargetUri.GetFileName()));
+                    context.TargetUri.GetFileName()));
         }
     }
 }
