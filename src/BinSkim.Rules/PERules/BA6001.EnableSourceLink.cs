@@ -73,7 +73,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // not whether they can be read.
             if (pdb.FileType == PdbFileType.Portable)
             {
-                string sourceLinkDocument = target.PE.ManagedPdbGetSourceLinkDocument();
+                string sourceLinkDocument = target.PE.ManagedPdbGetSourceLinkDocument(pdb);
                 return !string.IsNullOrEmpty(sourceLinkDocument);
             }
             else

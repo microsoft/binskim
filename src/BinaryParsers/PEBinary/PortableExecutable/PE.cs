@@ -815,12 +815,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             return pdbFileType == PdbFileType.Windows
                 ? ChecksumAlgorithmForFullPdb(pdb)
-                : ChecksumAlgorithmForPortablePdb();
+                : ChecksumAlgorithmForPortablePdb(pdb);
         }
 
-        public string ManagedPdbGetSourceLinkDocument()
+        public string ManagedPdbGetSourceLinkDocument(Pdb pdb)
         {
-            if (!TryGetPortablePdbMetadataReader(out MetadataReader pdbMetadataReader))
+            if (!TryGetPortablePdbMetadataReader(pdb, out MetadataReader pdbMetadataReader))
             {
                 return null;
             }
@@ -844,9 +844,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-        private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb()
+        private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb(Pdb pdb)
         {
-            if (!TryGetPortablePdbMetadataReader(out MetadataReader pdbMetadataReader))
+            if (!TryGetPortablePdbMetadataReader(pdb, out MetadataReader pdbMetadataReader))
             {
                 return ChecksumAlgorithmType.Unknown;
             }
@@ -861,7 +861,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             return ChecksumAlgorithmType.Unknown;
         }
 
-        private bool TryGetPortablePdbMetadataReader(out MetadataReader pdbMetadataReader)
+        private bool TryGetPortablePdbMetadataReader(Pdb pdb, out MetadataReader pdbMetadataReader)
         {
             if (!this.peReader.TryOpenAssociatedPortablePdb(
                 this.FileName,
@@ -869,8 +869,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 out MetadataReaderProvider pdbProvider,
                 out _))
             {
-                pdbMetadataReader = null;
-                return false;
+                pdbProvider = MetadataReaderProvider.FromPortablePdbStream(File.OpenRead(pdb.PdbLocation));
+                if (pdbProvider == null)
+                {
+                    pdbMetadataReader = null;
+                    return false;
+                }
             }
 
             pdbMetadataReader = pdbProvider.GetMetadataReader();

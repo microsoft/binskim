@@ -514,6 +514,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             IDiaDataSource diaSource = MsdiaComWrapper.GetDiaSource();
             diaSource.loadDataFromPdb(pdbPath);
             diaSource.openSession(out this.session);
+            this.dataSource = diaSource;
         }
 
         private Symbol GetGlobalScope()
