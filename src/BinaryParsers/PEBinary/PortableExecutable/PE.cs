@@ -867,5 +867,27 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
             return ChecksumAlgorithmType.Unknown;
         }
+        public bool IsMostlyOptimized(Pdb pdb)
+        {
+            uint count = 0;
+            uint optimizedCount = 0;
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                ++count;
+                if (om.GetObjectModuleDetails().OptimizationsEnabled)
+                {
+                    ++optimizedCount;
+                }
+            }
+
+            // Arbitrary threshold of 75% optimized.
+            // Things linked into the binary also count as symbols so this can be complicated.  There is probably a better heuristic than this.
+            if (((float)optimizedCount / (float)count) > 0.75f)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -1340,6 +1340,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incremental linking support increases binary size and can reduce runtime performance. Fully optimized release builds should not specify incremental linking..
+        /// </summary>
+        internal static string BA6001_DisableIncrementalLinking_Description {
+            get {
+                return ResourceManager.GetString("BA6001_DisableIncrementalLinking_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with incremental linking disabled..
+        /// </summary>
+        internal static string BA6001_Pass {
+            get {
+                return ResourceManager.GetString("BA6001_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was not compiled as release, skipping performance checks.
+        /// </summary>
+        internal static string BA6001_Pass_NonReleaseBuild {
+            get {
+                return ResourceManager.GetString("BA6001_Pass_NonReleaseBuild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with incremental linking enabled, which inflates binary size and can reduce performance..
+        /// </summary>
+        internal static string BA6001_Warning {
+            get {
+                return ResourceManager.GetString("BA6001_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; because its PDB could not be loaded ({2})..
         /// </summary>
         internal static string ERR997_ExceptionLoadingPdb {

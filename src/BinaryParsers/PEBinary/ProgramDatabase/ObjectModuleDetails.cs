@@ -54,6 +54,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public int WarningLevel => this.compilerCommandLine.WarningLevel;
 
         /// <summary>
+        /// Returns whether optimizations were enabled as defined by the various /O switches in the compiland command line
+        /// </summary>
+        public bool OptimizationsEnabled => this.compilerCommandLine.OptimizationsEnabled;
+
+        /// <summary>
         /// Returns a list of integers corresponding to the set of warnings disabled via -wdnnnn switches on the command line
         /// </summary>
         public ImmutableArray<int> ExplicitlyDisabledWarnings => this.compilerCommandLine.WarningsExplicitlyDisabled;

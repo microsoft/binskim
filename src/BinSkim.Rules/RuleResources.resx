@@ -573,4 +573,16 @@ Modules did not meet the criteria: {1}</value>
   <data name="ERR997_ExceptionLoadingPdbGeneric" xml:space="preserve">
     <value>'{0}' was not evaluated because its PDB could not be loaded ({1}).</value>
   </data>
+  <data name="BA6001_DisableIncrementalLinking_Description" xml:space="preserve">
+    <value>Incremental linking support increases binary size and can reduce runtime performance. Fully optimized release builds should not specify incremental linking.</value>
+  </data>
+  <data name="BA6001_Pass" xml:space="preserve">
+    <value>'{0}' was compiled with incremental linking disabled.</value>
+  </data>
+  <data name="BA6001_Pass_NonReleaseBuild" xml:space="preserve">
+    <value>'{0}' was not compiled as release, skipping performance checks</value>
+  </data>
+  <data name="BA6001_Warning" xml:space="preserve">
+    <value>'{0}' was compiled with incremental linking enabled, which inflates binary size and can reduce performance.</value>
+  </data>
 </root>
