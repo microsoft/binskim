@@ -438,6 +438,26 @@
               }
             }
           ]
+        },
+        {
+          "ruleId": "BA6001",
+          "ruleIndex": 19,
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "clangcl.pe.cpp.codeview.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clangcl.pe.cpp.codeview.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
         }
       ],
       "tool": {
@@ -970,6 +990,25 @@
                 }
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2026EnableMicrosoftCompilerSdlSwitch"
+            },
+            {
+              "id": "BA6001",
+              "name": "EnableSourceLink",
+              "fullDescription": {
+                "text": "SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information."
+              },
+              "help": {
+                "text": "SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "The PDB for '{0}' contains SourceLink information."
+                },
+                "Error": {
+                  "text": "The PDB for '{0}' does not contain SourceLink information."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA6001EnableSourceLink"
             }
           ],
           "properties": {

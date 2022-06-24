@@ -870,3 +870,21 @@ This rule emits CSV data to the console for every compiler/language/version comb
 
 ---
 
+## Rule `BA6001.EnableSourceLink`
+
+### Description
+
+SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information.
+
+### Messages
+
+#### `Pass`: Pass
+
+The PDB for '{0}' contains SourceLink information.
+
+#### `Error`: Error
+
+The PDB for '{0}' does not contain SourceLink information.
+
+---
+
