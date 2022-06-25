@@ -881,9 +881,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 }
             }
 
-            // Arbitrary threshold of 75% optimized.
+            // Arbitrary threshold of 50% optimized.
             // Things linked into the binary also count as symbols so this can be complicated.  There is probably a better heuristic than this.
-            if (((float)optimizedCount / (float)count) > 0.75f)
+            // A small single-file win32 console application is just over 50% optimized.  A large project is more like 95%.
+            if (((float)optimizedCount / (float)count) > 0.50f)
             {
                 return true;
             }

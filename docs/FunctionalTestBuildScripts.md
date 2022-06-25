@@ -84,3 +84,23 @@ A simple C++ hellow world program, cross compiled using CMake with the `cl.exe` 
     }
 },
 ```
+
+## Native_x64_VS2022_Debug.exe
+
+The Visual Studio 2022 "empty console application" template with no changes, compiled as Debug|x64
+
+## Native_x64_VS2022_ImplicitEnableOverruled.exe
+
+The Visual Studio 2022 "empty console application" template with no changes, compiled as Release|x64.  The `/debug` option enables incremental linking implicitly.  The default `/opt:ref` switch turns it back off again.
+
+## Native_x64_VS2022_ImplicitEnable.exe
+
+The Visual Studio 2022 "empty console application" template, compiled as Release|x64.  The `/debug` option enables incremental linking implicitly.  `/opt:ref` and `/opt:icf` are not set.
+
+## Native_x64_VS2022_ExplicitEnable.exe
+
+The Visual Studio 2022 "empty console application" template, compiled as Release|x64.  The `/incremental` option enables incremental linking explicitly.  The `/ltcg` and `/gl` options are disabled explicitly.
+
+## Native_x64_VS2022_ExplicitDisable.exe
+
+The Visual Studio 2022 "empty console application" template, compiled as Release|x64.  The `/incremental:no` option disables incremental linking explicitly.  The `/ltcg` and `/gl` options are disabled explicitly.

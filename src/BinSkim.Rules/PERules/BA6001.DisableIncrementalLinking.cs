@@ -73,6 +73,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
             if (portableExecutable.IsResourceOnly) { return result; }
 
+            reasonForNotAnalyzing = MetadataConditions.CouldNotLoadPdb;
+            if (target.Pdb == null) { return result; }
+
             //reasonForNotAnalyzing = MetadataConditions.ImageIsUnoptimized;
             //if (portableExecutable.IsMostlyOptimized(target.Pdb)) { return result; }
 
