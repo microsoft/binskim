@@ -870,3 +870,24 @@ This rule emits CSV data to the console for every compiler/language/version comb
 
 ---
 
+## Rule `BA6001.DisableIncrementalLinking`
+
+### Description
+
+Incremental linking support increases binary size and can reduce runtime performance. Fully optimized release builds should not specify incremental linking.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with incremental linking disabled.
+
+#### `Warning`: Warning
+
+'{0}' was compiled with incremental linking enabled, which inflates binary size and can reduce performance.
+
+#### `NonReleaseBuild`: NotApplicable
+
+'{0}' was not compiled as release, skipping performance checks
+
+---
