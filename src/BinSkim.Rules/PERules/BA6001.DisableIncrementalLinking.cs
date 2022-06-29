@@ -17,17 +17,9 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    // Delete the following attribute if this rule doesn't require special
-    // configuration capabilities. Delete this code comment in all cases.
-    //
-    // You should extend this class from WindowsBinaryAndPdbSkimmerBase 
-    // instead of PEBinarySkimmerBase if you require PDB parsing in 
-    // your check. Extend ELFBinarySkimmerBase for *nix binary checks.
-    // 
-    [Export(typeof(IOptionsProvider))]
     [Export(typeof(ReportingDescriptor))]
     [Export(typeof(Skimmer<BinaryAnalyzerContext>))]
-    public class DisableIncrementalLinking : PEBinarySkimmerBase, IOptionsProvider /* Delete this if no special configuration required */
+    public class DisableIncrementalLinking : WindowsBinaryAndPdbSkimmerBase
     {
         /// <summary>
         /// BA6001
@@ -35,8 +27,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override string Id => RuleIds.DisableIncrementalLinking;
 
         /// <summary>
-        /// Recapitulate the full text of the rule description returned below
-        /// here as a summary comment.
+        /// Incremental linking support increases binary size and can reduce runtime performance. Fully optimized 
+        /// release builds should not specify incremental linking.
         /// </summary>
 
         public override MultiformatMessageString FullDescription =>
@@ -48,19 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA6001_Pass_NonReleaseBuild)
                 };
 
-        public IEnumerable<IOption> GetOptions()
-        {
-            return new List<IOption>
-            {
-                MinimumRequiredLinkerVersion
-            }.ToImmutableArray();
-        }
-
         private const string AnalyzerName = RuleIds.DisableIncrementalLinking + "." + nameof(DisableIncrementalLinking);
-
-        public static PerLanguageOption<Version> MinimumRequiredLinkerVersion { get; } =
-            new PerLanguageOption<Version>(
-                AnalyzerName, nameof(MinimumRequiredLinkerVersion), defaultValue: () => new Version("14.0"));
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -76,18 +56,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.CouldNotLoadPdb;
             if (target.Pdb == null) { return result; }
 
-            //reasonForNotAnalyzing = MetadataConditions.ImageIsUnoptimized;
-            //if (portableExecutable.IsMostlyOptimized(target.Pdb)) { return result; }
-
-            // If we get to this location, we've determined the binary is valid to analyze.
-            // We clear the 'reasonForNotAnalyzing' output variable and return 
-            // ApplicableToSpecifiedTarget.
-            //
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
-        public override void Analyze(BinaryAnalyzerContext context)
+        public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
             PE pe = target.PE;

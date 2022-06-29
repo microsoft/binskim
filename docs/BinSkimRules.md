@@ -886,8 +886,9 @@ Incremental linking support increases binary size and can reduce runtime perform
 
 '{0}' was compiled with incremental linking enabled, which inflates binary size and can reduce performance.
 
-#### `NonReleaseBuild`: NotApplicable
+#### `NonReleaseBuild`: Pass
 
 '{0}' was not compiled as release, skipping performance checks
 
 ---
+
