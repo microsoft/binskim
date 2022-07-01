@@ -91,14 +91,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
             else if (debugSet)
             {
-                if (optRef || optIcf || optLbr || order)
-                {
-                    this.IncrementalLinking = false;
-                }
-                else
-                {
-                    this.IncrementalLinking = true;
-                }
+                this.IncrementalLinking = !optRef && !optIcf && !optLbr && !order;
             }
             else
             {

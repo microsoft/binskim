@@ -106,7 +106,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                                 this.WarningLevel = wChar - '0';
                             }
                         }
-                        else if (argument.EndsWith("O1") || argument.EndsWith("02") || argument.EndsWith("Og") || argument.EndsWith("Os") || argument.EndsWith("Ot") || argument.EndsWith("Ox"))
+                        else if (argument.EndsWith("O1") || argument.EndsWith("O2") || argument.EndsWith("Og") || argument.EndsWith("Os") || argument.EndsWith("Ot") || argument.EndsWith("Ox"))
                         {
                             // https://docs.microsoft.com/cpp/build/reference/o-options-optimize-code?view=msvc-170
                             // /O1 /O2 /Og /Os /Ot /Ox are all indicative of optimizations being enabled
