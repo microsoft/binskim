@@ -1268,6 +1268,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The SafeStack instrumentation pass protects programs by implementing two separate program stacks, one for return addresses and local variables, and the other for everything else. To enable SafeStack, pass &apos;-fsanitize=safe-stack&apos; flag to both compile and link command lines..
+        /// </summary>
+        internal static string BA3031_EnableSafeStackWithClang_Description {
+            get {
+                return ResourceManager.GetString("BA3031_EnableSafeStackWithClang_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass &apos;-fsanitize=safe-stack&apos; flag to both compile and link command lines..
+        /// </summary>
+        internal static string BA3031_Error {
+            get {
+                return ResourceManager.GetString("BA3031_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled using Clang and with the SafeStack instrumentation pass, which mitigates the risk of stack-based buffer overflows..
+        /// </summary>
+        internal static string BA3031_Pass {
+            get {
+                return ResourceManager.GetString("BA3031_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This rule emits CSV data to the console for every compiler/language/version combination that&apos;s observed in any PDB-linked compiland..
         /// </summary>
         internal static string BA4001_ReportPECompilerData_Description {

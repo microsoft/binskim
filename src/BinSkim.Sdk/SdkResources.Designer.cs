@@ -97,6 +97,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to not compiled with Clang v7 or later.
+        /// </summary>
+        internal static string MetadataCondition_ElfNotBuiltWithClangV7OrLater {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ElfNotBuiltWithClangV7OrLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to not compiled with Dwarf debugging.
         /// </summary>
         internal static string MetadataCondition_ElfNotBuiltWithDwarfDebugging {

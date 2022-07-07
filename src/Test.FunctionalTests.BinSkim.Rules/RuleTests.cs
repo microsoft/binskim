@@ -1417,6 +1417,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA3031_EnableSafeStackWithClang_Pass()
+        {
+            this.VerifyPass(new EnableSafeStackWithClang(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3031_EnableSafeStackWithClang_Fail()
+        {
+            this.VerifyFail(new EnableSafeStackWithClang(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3031_EnableSafeStackWithClang_NotApplicable()
+        {
+            this.VerifyApplicability(new EnableSafeStackWithClang(), new HashSet<string>());
+        }
+        [Fact]
         public void BA5001_EnablePositionIndependentExecutableMachO_Pass()
         {
             this.VerifyPass(new EnablePositionIndependentExecutableMachO(), bypassExtensionValidation: true);

@@ -573,4 +573,13 @@ Modules did not meet the criteria: {1}</value>
   <data name="ERR997_ExceptionLoadingPdbGeneric" xml:space="preserve">
     <value>'{0}' was not evaluated because its PDB could not be loaded ({1}).</value>
   </data>
+  <data name="BA3031_EnableSafeStackWithClang_Description" xml:space="preserve">
+    <value>The SafeStack instrumentation pass protects programs by implementing two separate program stacks, one for return addresses and local variables, and the other for everything else. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines.</value>
+  </data>
+  <data name="BA3031_Error" xml:space="preserve">
+    <value>'{0}' was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines.</value>
+  </data>
+  <data name="BA3031_Pass" xml:space="preserve">
+    <value>'{0}' was compiled using Clang and with the SafeStack instrumentation pass, which mitigates the risk of stack-based buffer overflows.</value>
+  </data>
 </root>

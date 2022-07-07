@@ -246,4 +246,7 @@
   <data name="MetadataCondition_ImageIsArmBinary" xml:space="preserve">
     <value>image is an ARM binary</value>
   </data>
+  <data name="MetadataCondition_ElfNotBuiltWithClangV7OrLater" xml:space="preserve">
+    <value>not compiled with Clang v7 or later</value>
+  </data>
 </root>

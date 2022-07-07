@@ -226,6 +226,28 @@ No checked functions are present/used when compiling '{0}', and it was compiled 
 
 ---
 
+## Rule `BA3031.EnableSafeStackWithClang`
+
+### Description
+
+The SafeStack instrumentation pass protects programs by implementing two separate program stacks, one for return addresses and local variables, and the other for everything else. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled using Clang and with the SafeStack instrumentation pass, which mitigates the risk of stack-based buffer overflows.
+
+#### `Error`: Error
+
+'{0}' was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
 ## Rule `BA5001.EnablePositionIndependentExecutableMachO`
 
 ### Description
