@@ -1433,6 +1433,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             this.VerifyApplicability(new EnableSafeStackWithClang(), new HashSet<string>());
         }
+
         [Fact]
         public void BA5001_EnablePositionIndependentExecutableMachO_Pass()
         {
