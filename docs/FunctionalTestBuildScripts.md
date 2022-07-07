@@ -4,26 +4,6 @@ This file records scripts used to compile the test files, in alphabetical order.
 Base scenario is a simple hello world program built with different parameters for testing purpose.
 Test files are located in [BaselineTestData](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) and [FunctionalTestData](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestData).
 
-## ARM64_CETShadowStack_NotApplicable.exe
-
-A simple C++ hellow world program, cross compiled using CMake using the `cl.exe` compiler and `Ninja` generator.
-`CMakePresets.json` should be configured with a `configurePresets` as below:
-
-```json
-{
-    "name": "arm64-release",
-    "displayName": "ARM64 Release", 
-    "inherits": "windows-base",
-    "architecture": {
-        "value": "arm64",
-        "strategy": "external"
-    },
-    "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-    }
-},
-```
-
 ## ARM_CETShadowStack_NotApplicable.exe
 
 A simple C++ hellow world program, cross compiled using CMake with the `cl.exe` compiler and `Ninja` generator.
@@ -36,6 +16,26 @@ A simple C++ hellow world program, cross compiled using CMake with the `cl.exe` 
     "inherits": "windows-base",
     "architecture": {
         "value": "arm",
+        "strategy": "external"
+    },
+    "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+    }
+},
+```
+
+## ARM64_CETShadowStack_NotApplicable.exe
+
+A simple C++ hellow world program, cross compiled using CMake using the `cl.exe` compiler and `Ninja` generator.
+`CMakePresets.json` should be configured with a `configurePresets` as below:
+
+```json
+{
+    "name": "arm64-release",
+    "displayName": "ARM64 Release", 
+    "inherits": "windows-base",
+    "architecture": {
+        "value": "arm64",
         "strategy": "external"
     },
     "cacheVariables": {
