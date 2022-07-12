@@ -18,11 +18,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageIsBootBinary = SdkResources.MetadataCondition_ImageIsBootBinary;
         public static readonly string ImageIs64BitBinary = SdkResources.MetadataCondition_ImageIs64BitBinary;
         public static readonly string ElfNotBuiltWithGcc = SdkResources.MetadataCondition_ElfNotBuiltWithGCC;
+        public static readonly string ElfNotBuiltWithClang = SdkResources.MetadataCondition_ElfNotBuiltWithClang;
         public static readonly string ElfNotContainSegment = SdkResources.MetadataCondition_ElfNotContainSegment;
         public static readonly string ImageIsILOnlyAssembly = SdkResources.MetadataCondition_ImageIsILOnlyAssembly;
         public static readonly string ImageIsNot32BitBinary = SdkResources.MetadataCondition_ImageIsNot32BitBinary;
         public static readonly string ImageIsNot64BitBinary = SdkResources.MetadataCondition_ImageIsNot64BitBinary;
-        public static readonly string ElfIsCoreNoneOrObject = SdkResources.MetadataCondition_ElfIsCoreNoneOrObject;
+        public static readonly string ElfIsCoreNoneOrRelocatable = SdkResources.MetadataCondition_ElfIsCoreNoneOrRelocatable;
         public static readonly string ImageIsArm64BitBinary = SdkResources.MetadataCondition_ImageIsArm64BitBinary;
         public static readonly string ImageIsInteropAssembly = SdkResources.MetadataCondition_ImageIsInteropAssembly;
         public static readonly string ImageIsMixedModeBinary = SdkResources.MetadataCondition_ImageIsMixedModeBinary;
@@ -33,7 +34,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageIsResourceOnlyAssembly = SdkResources.MetadataCondition_ImageIsResourceOnlyAssembly;
         public static readonly string ElfNotBuiltWithGccV8OrLater = SdkResources.MetadataCondition_ElfNotBuiltWithGccV8OrLater;
         public static readonly string ImageIsKernelModeAndNot64Bit = SdkResources.MetadataCondition_ImageIsKernelModeAndNot64Bit;
-        public static readonly string ElfNotBuiltWithClangV7OrLater = SdkResources.MetadataCondition_ElfNotBuiltWithClangV7OrLater;
         public static readonly string ImageIsDotNetCoreBootstrapExe = SdkResources.MetadataCondition_ImageIsDotNetCoreBootstrapExe;
         public static readonly string ImageLikelyLoadsAs32BitProcess = SdkResources.MetadataCondition_ImageLikelyLoads32BitProcess;
         public static readonly string ElfNotBuiltWithDwarfDebugging = SdkResources.MetadataCondition_ElfNotBuiltWithDwarfDebugging;

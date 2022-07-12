@@ -90,18 +90,18 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         /// <summary>
         ///   Looks up a localized string similar to ELF is not a shared object or executable.
         /// </summary>
-        internal static string MetadataCondition_ElfIsCoreNoneOrObject {
+        internal static string MetadataCondition_ElfIsCoreNoneOrRelocatable {
             get {
-                return ResourceManager.GetString("MetadataCondition_ElfIsCoreNoneOrObject", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ElfIsCoreNoneOrRelocatable", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to not compiled with Clang v7 or later.
+        ///   Looks up a localized string similar to not compiled with Clang.
         /// </summary>
-        internal static string MetadataCondition_ElfNotBuiltWithClangV7OrLater {
+        internal static string MetadataCondition_ElfNotBuiltWithClang {
             get {
-                return ResourceManager.GetString("MetadataCondition_ElfNotBuiltWithClangV7OrLater", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ElfNotBuiltWithClang", resourceCulture);
             }
         }
         

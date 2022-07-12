@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* FEATURE: Add BA3031.EnableSafeStackWithClang. [#663](https://github.com/microsoft/binskim/pull/663)
+* FEATURE: Add BA3031.EnableClangSafeStack, rename BA3030.UseCheckedFunctionsWithGcc to BA3030.UseGccCheckedFunctions [#663](https://github.com/microsoft/binskim/pull/663)
 
 ## **v1.9.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.5)
 
@@ -152,7 +152,7 @@
 * Cross platform (Windows/Linux) support.
 * Possibly Breaking:** New Results: Identify and fire configuration errors when located PDBs are stripped
 * Possibly Breaking:** New Results: False negative removed for BA2015.EnableHighEntropyVA:  Correctly flags an AnyCPU binary with HighEntropyVA and Prefer32Bit disabled
-* Possibly Breaking:** New Rules: New rules for ELF Binaries (BA3001.EnablePieOnExecutables, BA3002.DoNotMarkStackAsExecutable, BA3003.EnableStackProtector, BA3010.EnableReadOnlyRelocations, and BA3030.UseCheckedFunctionsWithGcc)
+* Possibly Breaking:** New Rules: New rules for ELF Binaries (BA3001.EnablePieOnExecutables, BA3002.DoNotMarkStackAsExecutable, BA3003.EnableStackProtector, BA3010.EnableReadOnlyRelocations, and BA3030.UseGccCheckedFunctions)
 * Possibly Breaking:** New Rules: Provide preliminary BA2024.EnableSpectreMitigations analysis
 
 ## **v1.4.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.4.5)
