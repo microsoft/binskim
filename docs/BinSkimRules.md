@@ -196,7 +196,7 @@ The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' w
 
 ---
 
-## Rule `BA3030.UseCheckedFunctionsWithGcc`
+## Rule `BA3030.UseGccCheckedFunctions`
 
 ### Description
 
@@ -219,6 +219,32 @@ No unsafe functions which can be replaced with checked versions are used in '{0}
 #### `Error`: Error
 
 No checked functions are present/used when compiling '{0}', and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 ('-O2') is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA3031.EnableClangSafeStack`
+
+### Description
+
+The SafeStack instrumentation pass protects programs by implementing two separate program stacks, one for return addresses and local variables, and the other for everything else. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled using Clang and with the SafeStack instrumentation pass, which mitigates the risk of stack-based buffer overflows.
+
+#### `Error`: Error
+
+'{0}' was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines.
+
+#### `ClangVersionMayNeedUpgrade`: Error
+
+'{0}' was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines. You might need to update your version of Clang to enable it.
 
 #### `InvalidMetadata`: NotApplicable
 
