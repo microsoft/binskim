@@ -377,10 +377,10 @@
           ]
         },
         {
-          "ruleId": "BA6001",
+          "ruleId": "BA2027",
           "ruleIndex": 16,
           "message": {
-            "id": "Error",
+            "id": "Warning",
             "arguments": [
               "MixedMode_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll"
             ]
@@ -848,7 +848,7 @@
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2025EnableShadowStack"
             },
             {
-              "id": "BA6001",
+              "id": "BA2027",
               "name": "EnableSourceLink",
               "fullDescription": {
                 "text": "SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information."
@@ -860,11 +860,11 @@
                 "Pass": {
                   "text": "The PDB for '{0}' contains SourceLink information."
                 },
-                "Error": {
+                "Warning": {
                   "text": "The PDB for '{0}' does not contain SourceLink information."
                 }
               },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA6001EnableSourceLink"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2027EnableSourceLink"
             }
           ],
           "properties": {

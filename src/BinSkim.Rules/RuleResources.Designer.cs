@@ -987,6 +987,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information..
+        /// </summary>
+        internal static string BA2027_EnableSourceLink_Description {
+            get {
+                return ResourceManager.GetString("BA2027_EnableSourceLink_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other diagnostic analysis..
+        /// </summary>
+        internal static string BA2027_Pass {
+            get {
+                return ResourceManager.GetString("BA2027_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; does not contain SourceLink information. SourceLink information should be present in the PDB of all binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BA2027_Warning {
+            get {
+                return ResourceManager.GetString("BA2027_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
         internal static string BA3001_EnablePositionIndependentExecutable_Description {
@@ -1376,33 +1403,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information..
-        /// </summary>
-        internal static string BA6001_EnableSourceLink_Description {
-            get {
-                return ResourceManager.GetString("BA6001_EnableSourceLink_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; does not contain SourceLink information..
-        /// </summary>
-        internal static string BA6001_Error {
-            get {
-                return ResourceManager.GetString("BA6001_Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; contains SourceLink information..
-        /// </summary>
-        internal static string BA6001_Pass {
-            get {
-                return ResourceManager.GetString("BA6001_Pass", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; because its PDB could not be loaded ({2})..
         /// </summary>
         internal static string ERR997_ExceptionLoadingPdb {
@@ -1455,15 +1455,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string PdbLoadSucceeded {
             get {
                 return ResourceManager.GetString("PdbLoadSucceeded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
     }
