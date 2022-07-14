@@ -43,6 +43,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         // Renamed from 'EnableAdditionalSdlSecurityChecks' as of 1.9.3.
         public const string EnableMicrosoftCompilerSdlSwitch = "BA2026";
+        public const string EnableSourceLink = "BA2027";
 
         // ELF Checks
         public const string EnablePositionIndependentExecutable = "BA3001";

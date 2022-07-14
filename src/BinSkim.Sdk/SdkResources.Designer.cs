@@ -313,6 +313,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to not compiled with Microsoft C/C++ compiler.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotBuiltWithMSVC {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotBuiltWithMSVC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is not an ELF binary.
         /// </summary>
         internal static string MetadataCondition_ImageIsNotElf {

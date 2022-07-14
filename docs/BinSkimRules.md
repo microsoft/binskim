@@ -886,6 +886,24 @@ Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor f
 
 ---
 
+## Rule `BA2027.EnableSourceLink`
+
+### Description
+
+SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information.
+
+### Messages
+
+#### `Pass`: Pass
+
+The PDB for '{0}' contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other diagnostic analysis.
+
+#### `Warning`: Warning
+
+The PDB for '{0}' does not contain SourceLink information. SourceLink information should be present in the PDB of all binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information.
+
+---
+
 ## Rule `BA4001.ReportPECompilerData`
 
 ### Description
