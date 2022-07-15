@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable)
             {
-                reasonForNotAnalyzing = MetadataConditions.ElfIsCoreNoneOrObject;
+                reasonForNotAnalyzing = MetadataConditions.ElfIsCoreNoneOrRelocatable;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 

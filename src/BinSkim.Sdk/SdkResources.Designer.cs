@@ -90,9 +90,18 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         /// <summary>
         ///   Looks up a localized string similar to ELF is not a shared object or executable.
         /// </summary>
-        internal static string MetadataCondition_ElfIsCoreNoneOrObject {
+        internal static string MetadataCondition_ElfIsCoreNoneOrRelocatable {
             get {
-                return ResourceManager.GetString("MetadataCondition_ElfIsCoreNoneOrObject", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ElfIsCoreNoneOrRelocatable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to not compiled with Clang.
+        /// </summary>
+        internal static string MetadataCondition_ElfNotBuiltWithClang {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ElfNotBuiltWithClang", resourceCulture);
             }
         }
         
@@ -300,6 +309,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageIsNot64BitBinary {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsNot64BitBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to not compiled with Microsoft C/C++ compiler.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotBuiltWithMSVC {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotBuiltWithMSVC", resourceCulture);
             }
         }
         

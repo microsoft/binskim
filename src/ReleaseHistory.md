@@ -1,5 +1,9 @@
 # BinSkim Release History
 
+## Unreleased
+
+* FEATURE: Add BA3031.EnableClangSafeStack, rename BA3030.UseCheckedFunctionsWithGcc to BA3030.UseGccCheckedFunctions [#663](https://github.com/microsoft/binskim/pull/663)
+
 ## **v1.9.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.5)
 
 * Bump ELFSharp from 2.13.2 to 2.14.0. [#628](https://github.com/microsoft/binskim/pull/628)

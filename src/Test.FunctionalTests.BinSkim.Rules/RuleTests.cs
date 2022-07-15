@@ -1261,6 +1261,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2027_EnableSourceLink_Pass()
+        {
+            this.VerifyPass(new EnableSourceLink());
+        }
+
+        [Fact]
+        public void BA2027_EnableSourceLink_Fail()
+        {
+            this.VerifyFail(new EnableSourceLink());
+        }
+
+        [Fact]
+        public void BA2027_EnableSourceLink_NotApplicable()
+        {
+            this.VerifyApplicability(new EnableSourceLink(), new HashSet<string>());
+        }
+
+        [Fact]
         public void BA3001_EnablePositionIndependentExecutable_Pass()
         {
             this.VerifyPass(new EnablePositionIndependentExecutable(), bypassExtensionValidation: true);
@@ -1399,21 +1417,39 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void BA3030_UseCheckedFunctionsWithGCC_Pass()
+        public void BA3030_UseGccCheckedFunctions_Pass()
         {
-            this.VerifyPass(new UseCheckedFunctionsWithGcc(), bypassExtensionValidation: true);
+            this.VerifyPass(new UseGccCheckedFunctions(), bypassExtensionValidation: true);
         }
 
         [Fact]
-        public void BA3030_UseCheckedFunctionsWithGCC_Fail()
+        public void BA3030_UseGccCheckedFunctions_Fail()
         {
-            this.VerifyFail(new UseCheckedFunctionsWithGcc(), bypassExtensionValidation: true);
+            this.VerifyFail(new UseGccCheckedFunctions(), bypassExtensionValidation: true);
         }
 
         [Fact]
-        public void BA3030_UseCheckedFunctionsWithGCC_NotApplicable()
+        public void BA3030_UseGccCheckedFunctions_NotApplicable()
         {
-            this.VerifyApplicability(new UseCheckedFunctionsWithGcc(), new HashSet<string>());
+            this.VerifyApplicability(new UseGccCheckedFunctions(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void BA3031_EnableClangSafeStack_Pass()
+        {
+            this.VerifyPass(new EnableClangSafeStack(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3031_EnableClangSafeStack_Fail()
+        {
+            this.VerifyFail(new EnableClangSafeStack(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3031_EnableClangSafeStack_NotApplicable()
+        {
+            this.VerifyApplicability(new EnableClangSafeStack(), new HashSet<string>());
         }
 
         [Fact]

@@ -16,7 +16,7 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
-    public class UseCheckedFunctionsWithGcc : ElfBinarySkimmer
+    public class UseGccCheckedFunctions : ElfBinarySkimmer
     {
         // This list comes from listing all of the functions available in glibc (using readelf), 
         // then filtering to ones with a checked variant (_*_chk).
@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// BA3030
         /// </summary>
-        public override string Id => RuleIds.UseCheckedFunctionsWithGcc;
+        public override string Id => RuleIds.UseGccCheckedFunctions;
 
         /// <summary>
         /// The stack protector ensures that all functions that use buffers over a certain size will
@@ -110,7 +110,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // smashing is detected.Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or 
         // '--fstack-protector-all' (all functions) to enable this.
         /// </summary>
-        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3030_UseCheckedFunctionsWithGcc_Description };
+        public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3030_UseGccCheckedFunctions_Description };
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA3030_Pass_AllFunctionsChecked),
@@ -126,7 +126,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable)
             {
-                reasonForNotAnalyzing = MetadataConditions.ElfIsCoreNoneOrObject;
+                reasonForNotAnalyzing = MetadataConditions.ElfIsCoreNoneOrRelocatable;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 

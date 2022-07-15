@@ -4,7 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -20,6 +22,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     /// </summary>
     public sealed class Pdb : IDisposable, IDiaLoadCallback2
     {
+        private IDiaDataSource dataSource;
         private IDiaSession session;
         private StringBuilder loadTrace;
         private readonly string peOrPdbPath;
@@ -396,6 +399,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 Marshal.ReleaseComObject(this.session);
             }
+
+            if (this.dataSource != null)
+            {
+                Marshal.ReleaseComObject(this.dataSource);
+            }
         }
 
         /// <summary>
@@ -496,6 +504,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
 
             diaSource.openSession(out this.session);
+            this.dataSource = diaSource;
         }
 
         private void WindowsNativeLoadPdbUsingDia(string pdbPath)
@@ -505,6 +514,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             IDiaDataSource diaSource = MsdiaComWrapper.GetDiaSource();
             diaSource.loadDataFromPdb(pdbPath);
             diaSource.openSession(out this.session);
+            this.dataSource = diaSource;
         }
 
         private Symbol GetGlobalScope()
@@ -524,6 +534,57 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public void NotifyOpenPdb([MarshalAs(UnmanagedType.LPWStr)] string pdbPath, DiaHresult resultCode)
         {
             this.loadTrace.AppendLine($"  Examined PDB path: '{pdbPath}'. HResult: {resultCode}.");
+        }
+
+        public IEnumerable<string> WindowsPdbGetSourceLinkDocuments()
+        {
+            // Source Link is stored in windows pdb in *EITHER* the 'sourcelink' stream *OR* 1 or more 'sourcelink$n' streams where n starts at 1.
+            // For multi stream format, we read the streams starting at 1 until we receive a stream size of 0.
+            string sourceLink = WindowsGetUtf8Stream("sourcelink");
+            if (!string.IsNullOrEmpty(sourceLink))
+            {
+                yield return sourceLink;
+            }
+
+            for (int streamNumber = 1; streamNumber < int.MaxValue; streamNumber++)
+            {
+                string streamName = "sourcelink$" + streamNumber.ToString(CultureInfo.InvariantCulture);
+                sourceLink = this.WindowsGetUtf8Stream(streamName);
+                if (string.IsNullOrEmpty(sourceLink))
+                {
+                    break;
+                }
+
+                yield return sourceLink;
+            }
+        }
+
+        private unsafe byte[] WindowsGetRawStream(string streamName)
+        {
+            if (string.IsNullOrEmpty(streamName))
+            {
+                throw new ArgumentException($"'{nameof(streamName)}' cannot be null or empty.", nameof(streamName));
+            }
+
+            var diaDataSource = (IDiaDataSource3)this.dataSource;
+            diaDataSource.getStreamSize(streamName, out uint size);
+            if (size == 0)
+            {
+                return null;
+            }
+
+            byte[] buffer = new byte[size];
+            fixed (byte* bufferPtr = buffer)
+            {
+                diaDataSource.getStreamRawData(streamName, size, out *bufferPtr);
+                return buffer;
+            }
+        }
+
+        private unsafe string WindowsGetUtf8Stream(string streamName)
+        {
+            byte[] rawStream = WindowsGetRawStream(streamName);
+            return rawStream is null ? null : Encoding.UTF8.GetString(rawStream);
         }
 
         [return: MarshalAs(UnmanagedType.Bool)]
