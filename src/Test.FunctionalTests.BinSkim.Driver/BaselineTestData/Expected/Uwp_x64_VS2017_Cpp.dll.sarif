@@ -400,7 +400,7 @@
         },
         {
           "ruleId": "BA6001",
-          "ruleIndex": 16,
+          "ruleIndex": 17,
           "kind": "pass",
           "level": "none",
           "message": {

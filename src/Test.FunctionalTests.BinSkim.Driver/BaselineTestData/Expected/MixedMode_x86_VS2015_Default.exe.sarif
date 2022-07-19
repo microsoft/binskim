@@ -462,7 +462,7 @@
         },
         {
           "ruleId": "BA6001",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
           "message": {

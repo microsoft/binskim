@@ -1,4 +1,4 @@
-﻿464{
+﻿{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
   "version": "2.1.0",
   "runs": [
@@ -463,7 +463,7 @@
         },
         {
           "ruleId": "BA6001",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
           "message": {
