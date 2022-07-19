@@ -13,5 +13,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public const string MicrosoftCvtres = "Microsoft (R) CVTRES";              // rc.exe / cvtres.exe
         public const string MicrosoftMasm = "Microsoft (R) Macro Assembler";       // ml.exe | ml64.exe
         public const string MicrosoftARMasm = "Microsoft (R) ARM Macro Assembler"; // armasm.exe | armasm64.exe
+        public const string ClangPrefix = "clang ";
+        public const string ClangLLVMPrefix = "clang LLVM ";
+        public const string ClangLLVMRustcPrefix = "clang LLVM (rustc ";
     }
 }

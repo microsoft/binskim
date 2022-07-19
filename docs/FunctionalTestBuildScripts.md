@@ -4,6 +4,52 @@ This file records scripts used to compile the test files, in alphabetical order.
 Base scenario is a simple hello world program built with different parameters for testing purpose.
 Test files are located in [BaselineTestData](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) and [FunctionalTestData](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestData).
 
+## ARM_CETShadowStack_NotApplicable.exe
+
+A simple C++ hellow world program, cross compiled using CMake with the `cl.exe` compiler and `Ninja` generator.
+`CMakePresets.json` should be configured with a `configurePresets` as below:
+
+```json
+{
+    "name": "arm-release",
+    "displayName": "ARM Release",
+    "inherits": "windows-base",
+    "architecture": {
+        "value": "arm",
+        "strategy": "external"
+    },
+    "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+    }
+},
+```
+
+## ARM64_CETShadowStack_NotApplicable.exe
+
+A simple C++ hellow world program, cross compiled using CMake using the `cl.exe` compiler and `Ninja` generator.
+`CMakePresets.json` should be configured with a `configurePresets` as below:
+
+```json
+{
+    "name": "arm64-release",
+    "displayName": "ARM64 Release", 
+    "inherits": "windows-base",
+    "architecture": {
+        "value": "arm64",
+        "strategy": "external"
+    },
+    "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+    }
+},
+```
+
+## clang.[version].elf.[c,cpp].[no_]safe_stack
+
+A simple hello world C/C++ program, compiled with different `clang [version]` that generates a executable file. Script to reproduce:  
+`clang++-14 -Wall hellocpp.cpp -O2 -g -gdwarf-5 -o clang.14.elf.cpp.no_safe_stack`  
+`clang-7 -Wall helloc.c -O2 -g -gdwarf-5 -o clang.7.elf.c.safe_stack -fsanitize=safe-stack`
+
 ## clang.object_file.dwarf.3.o
 
 A simple hello world program, compiled with `clang 10.0.0` that generates a .o object file. Script to reproduce:  

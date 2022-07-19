@@ -987,6 +987,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information..
+        /// </summary>
+        internal static string BA2027_EnableSourceLink_Description {
+            get {
+                return ResourceManager.GetString("BA2027_EnableSourceLink_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other diagnostic analysis..
+        /// </summary>
+        internal static string BA2027_Pass {
+            get {
+                return ResourceManager.GetString("BA2027_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; does not contain SourceLink information. SourceLink information should be present in the PDB of all binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BA2027_Warning {
+            get {
+                return ResourceManager.GetString("BA2027_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
         internal static string BA3001_EnablePositionIndependentExecutable_Description {
@@ -1261,9 +1288,45 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// <summary>
         ///   Looks up a localized string similar to GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing &apos;-DFortify_Source=2&apos; when optimization level 2 is enabled (&apos;-O2&apos;)..
         /// </summary>
-        internal static string BA3030_UseCheckedFunctionsWithGcc_Description {
+        internal static string BA3030_UseGccCheckedFunctions_Description {
             get {
-                return ResourceManager.GetString("BA3030_UseCheckedFunctionsWithGcc_Description", resourceCulture);
+                return ResourceManager.GetString("BA3030_UseGccCheckedFunctions_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The SafeStack instrumentation pass protects programs by implementing two separate program stacks, one for return addresses and local variables, and the other for everything else. To enable SafeStack, pass &apos;-fsanitize=safe-stack&apos; flag to both compile and link command lines..
+        /// </summary>
+        internal static string BA3031_EnableClangSafeStack_Description {
+            get {
+                return ResourceManager.GetString("BA3031_EnableClangSafeStack_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass &apos;-fsanitize=safe-stack&apos; flag to both compile and link command lines..
+        /// </summary>
+        internal static string BA3031_Error {
+            get {
+                return ResourceManager.GetString("BA3031_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass &apos;-fsanitize=safe-stack&apos; flag to both compile and link command lines. You might need to update your version of Clang to enable it..
+        /// </summary>
+        internal static string BA3031_Error_ClangVersionMayNeedUpgrade {
+            get {
+                return ResourceManager.GetString("BA3031_Error_ClangVersionMayNeedUpgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled using Clang and with the SafeStack instrumentation pass, which mitigates the risk of stack-based buffer overflows..
+        /// </summary>
+        internal static string BA3031_Pass {
+            get {
+                return ResourceManager.GetString("BA3031_Pass", resourceCulture);
             }
         }
         

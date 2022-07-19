@@ -120,16 +120,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             this.wellKnownCompiler = WellKnownCompilers.Unknown;
 
-            if (this.Language == Language.C &&
-                this.CompilerName == CompilerNames.MicrosoftC)
+            if (this.Language == Language.C)
             {
-                this.wellKnownCompiler = WellKnownCompilers.MicrosoftC;
+                if (this.CompilerName == CompilerNames.MicrosoftC)
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.MicrosoftC;
+                }
+                else if (this.CompilerName.StartsWith(CompilerNames.ClangPrefix))
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.Clang;
+                }
             }
 
-            if (this.Language == Language.Cxx &&
-                this.CompilerName == CompilerNames.MicrosoftCxx)
+            if (this.Language == Language.Cxx)
             {
-                this.wellKnownCompiler = WellKnownCompilers.MicrosoftCxx;
+                if (this.CompilerName == CompilerNames.MicrosoftCxx)
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.MicrosoftCxx;
+                }
+                else if (this.CompilerName.StartsWith(CompilerNames.ClangPrefix))
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.Clang;
+                }
             }
 
             if (this.Language == Language.LINK &&
@@ -144,11 +156,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 this.wellKnownCompiler = WellKnownCompilers.MicrosoftCvtRes;
             }
 
-            if (this.Language == Language.MASM &&
-                (this.CompilerName == CompilerNames.MicrosoftMasm ||
-                 this.CompilerName == CompilerNames.MicrosoftARMasm))
+            if (this.Language == Language.MASM)
             {
-                this.wellKnownCompiler = WellKnownCompilers.MicrosoftMasm;
+                if (this.CompilerName == CompilerNames.MicrosoftMasm ||
+                    this.CompilerName == CompilerNames.MicrosoftARMasm)
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.MicrosoftMasm;
+                }
+                else if (this.CompilerName.StartsWith(CompilerNames.ClangLLVMRustcPrefix, StringComparison.Ordinal))
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.ClangLLVMRustc;
+                }
             }
         }
 
@@ -290,5 +308,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         MicrosoftCvtRes = 0x10,  // cvtres.exe
         MicrosoftCxx = 0x20,     // cl.exe
         MicrosoftLink = 0x40,    // cl.exe
+        Clang = 0x80,
+        ClangLLVMRustc = 0x100,  // rustc.exe
     }
 }
