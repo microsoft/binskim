@@ -895,6 +895,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
             return ChecksumAlgorithmType.Unknown;
         }
+
+        private static BlobReader GetCustomDebugInformationReader(MetadataReader metadataReader, EntityHandle handle, Guid kind)
+        {
+            foreach (CustomDebugInformationHandle cdiHandle in metadataReader.GetCustomDebugInformation(handle))
+            {
+                CustomDebugInformation cdi = metadataReader.GetCustomDebugInformation(cdiHandle);
+                if (metadataReader.GetGuid(cdi.Kind) == kind)
+                {
+                    return metadataReader.GetBlobReader(cdi.Value);
+                }
+            }
+
+            return default;
+        }
+
         public bool IsMostlyOptimized(Pdb pdb)
         {
             uint count = 0;
