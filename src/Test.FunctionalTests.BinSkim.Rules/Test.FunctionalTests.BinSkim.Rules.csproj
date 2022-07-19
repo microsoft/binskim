@@ -40,4 +40,52 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\Fail\CPlusPlus_NoSourceLink.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\Fail\CPlusPlus_NoSourceLink.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\Fail\CSharp_FullPdb_NoSourceLink.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\Fail\CSharp_FullPdb_NoSourceLink.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\Fail\CSharp_PortablePdb_NoSourceLink.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\Fail\CSharp_PortablePdb_NoSourceLink.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\NotApplicable\ManagedResourcesOnly.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\NotApplicable\Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\NotApplicable\Native_x64_RustC_Rust_debuginfo2_v1.58.1.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\Pass\CPlusPlus_SourceLink.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\Pass\CPlusPlus_SourceLink.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\Pass\CSharp_FullPdb_SourceLink.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\Pass\CSharp_FullPdb_SourceLink.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\Pass\CSharp_PortablePdb_SourceLink.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTestData\BA2027.EnableSourceLink\Pass\CSharp_PortablePdb_SourceLink.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
