@@ -11,6 +11,11 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Readers;
+using Microsoft.CodeAnalysis.Sarif.VersionOne;
+using Microsoft.CodeAnalysis.Sarif.Visitors;
+
+using Newtonsoft.Json;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
@@ -33,10 +38,35 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal static int s_chunkSize = 8192;
 
         // Constant values sent to AppInsights telemetry stream.
-        private const string SummaryEventName = "AnalysisSummary";
-        private const string CompilerEventName = "CompilerInformation";
-        private const string CommandLineEventName = "CommandLineInformation";
-        private const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
+        internal const string SummaryEventName = "AnalysisSummary";
+        internal const string CompilerEventName = "CompilerInformation";
+        internal const string CommandLineEventName = "CommandLineInformation";
+        internal const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
+
+        internal const string ToolName = "toolName";
+        internal const string SessionId = "sessionId";
+        internal const string ProjectId = "projectId";
+        internal const string SymbolPath = "symbolPath";
+        internal const string BuildRunId = "buildRunId";
+        internal const string CommandLine = "commandLine";
+        internal const string ProjectName = "projectName";
+        internal const string ToolVersion = "toolVersion";
+        internal const string TimeConsumed = "timeConsumed";
+        internal const string RepositoryId = "repositoryId";
+        internal const string CommandLineId = "commandLineId";
+        internal const string RepositoryName = "repositoryName";
+        internal const string OrganizationId = "organizationId";
+        internal const string NormalizedPath = "normalizedPath";
+        internal const string AnalysisEndTime = "analysisEndTime";
+        internal const string OrganizationName = "organizationName";
+        internal const string AnalysisStartTime = "analysisStartTime";
+        internal const string BuildDefinitionId = "buildDefinitionId";
+        internal const string AssemblyReferences = "assemblyReferences";
+        internal const string ChunkedCommandLine = "chunkedcommandLine";
+        internal const string BuildDefinitionName = "buildDefinitionName";
+        internal const string AssemblyReferencesId = "assemblyReferencesId";
+        internal const string NumberOfBinaryAnalyzed = "numberOfBinaryAnalyzed";
+        internal const string ChunkedAssemblyReferences = "chunkedassemblyReferences";
 
         // This object is required to synchronize multi-threaded writes
         // to the CSV writer only. The AppInsights client is already
@@ -53,6 +83,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         // analysis) that is extracted from the SARIF log file. We currently therefore
         // require that the scan is configured to produce a disk-based report.
         private readonly string sarifOutputFilePath;
+        private readonly Sarif.SarifVersion sarifVersion;
         private readonly IFileSystem fileSystem;
         private readonly string symbolPath;
 
@@ -77,13 +108,14 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 "CompilerTelemetry", nameof(RootPathToElide), defaultValue: () => string.Empty,
                 "A non-deterministic file path root that should be elided from paths in telemetry, e.g., 'c:\\Users\\SomeUser\\'.");
 
-        public CompilerDataLogger(string sarifOutputFilePath, BinaryAnalyzerContext context, IFileSystem fileSystem = null)
+        public CompilerDataLogger(string sarifOutputFilePath, Sarif.SarifVersion sarifVersion, BinaryAnalyzerContext context, IFileSystem fileSystem = null)
         {
             this.syncRoot = new object();
             this.sessionId = Guid.NewGuid().ToString();
             this.fileSystem = fileSystem ?? new FileSystem();
 
             this.sarifOutputFilePath = sarifOutputFilePath;
+            this.sarifVersion = sarifVersion;
             this.RootPathToElide = context.Policy.GetProperty(RootPathToElideProperty);
             this.OwningContextHashCode = context.GetHashCode();
             this.symbolPath = context.SymbolPath;
@@ -114,7 +146,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        private void CreateCsvOutputFile(string csvFilePath, bool overwriteExistingCsv)
+        internal void CreateCsvOutputFile(string csvFilePath, bool overwriteExistingCsv)
         {
             if (string.IsNullOrWhiteSpace(csvFilePath))
             {
@@ -128,6 +160,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     throw new InvalidOperationException($"Output file exists and force overwrite was not specified: {csvFilePath}");
                 }
                 fileSystem.FileDelete(csvFilePath);
+            }
+
+            string directoryName = Path.GetDirectoryName(csvFilePath);
+
+            if (!Directory.Exists(directoryName))
+            {
+                Directory.CreateDirectory(directoryName);
             }
 
             this.writer = new StreamWriter(new FileStream(csvFilePath, FileMode.OpenOrCreate));
@@ -227,35 +266,40 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "error", string.Empty }
             };
 
-            this.telemetryClient.TrackEvent(CompilerEventName, properties: properties);
-
             if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
             {
                 string commandLineId = Guid.NewGuid().ToString();
-                properties.Add("commandLineId", commandLineId);
+                properties.Add(CommandLineId, commandLineId);
 
                 SendChunkedContent(CommandLineEventName,
                                    commandLineId,
-                                   "commandLine",
+                                   CommandLine,
                                    compilerData.CommandLine);
             }
 
             if (!string.IsNullOrWhiteSpace(compilerData.AssemblyReferences))
             {
                 string assemblyReferencesId = Guid.NewGuid().ToString();
-                properties.Add("assemblyReferencesId", assemblyReferencesId);
+                properties.Add(AssemblyReferencesId, assemblyReferencesId);
 
                 SendChunkedContent(AssemblyReferencesEventName,
                                    assemblyReferencesId,
-                                   "assemblyReferences",
+                                   AssemblyReferences,
                                    compilerData.AssemblyReferences);
             }
+
+            // To prevent loss of relationship between compiler and assembly/commandline data
+            // this event cannot be sent before AssemblyReferences or CommandLine.
+            this.telemetryClient.TrackEvent(CompilerEventName, properties: properties);
         }
 
         public void WriteException(BinaryAnalyzerContext context, string errorMessage)
         {
             string fileHash = context.Hashes?.Sha256;
-            string filePath = context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty);
+
+            string filePath = RootPathToElide == null
+                ? context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty)
+                : context.TargetUri?.LocalPath;
 
             WriteToCsv($"{filePath},,,,,,,,,,,,,{fileHash},{errorMessage}");
 
@@ -300,7 +344,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        public void Summarize(AnalysisSummary summary)
+        internal void Summarize(AnalysisSummary summary)
         {
             WriteToCsv(summary.ToString());
 
@@ -332,9 +376,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             });
         }
 
-        private void SendChunkedContent(string eventName, string contentId, string contentName, string content)
+        internal void SendChunkedContent(string eventName, string contentId, string contentName, string content)
         {
-            int size = (int)Math.Ceiling(1.0 * content.Length / s_chunkSize);
+            int size = CalculateChunkedContentSize(content.Length);
             for (int i = 0; i < content.Length; i += s_chunkSize)
             {
                 string chunkedContent = content.Substring(i, Math.Min(s_chunkSize, content.Length - i));
@@ -350,11 +394,16 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
+        internal int CalculateChunkedContentSize(int contentLength)
+        {
+            return (int)Math.Ceiling(1.0 * contentLength / s_chunkSize);
+        }
+
         private void WriteSummaryData()
         {
             Debug.Assert(Enabled);
 
-            var sarifLog = SarifLog.Load(this.sarifOutputFilePath);
+            SarifLog sarifLog = LoadVersionAgnosticSarifFile();
             AnalysisSummary summary = AnalysisSummaryExtractor.ExtractAnalysisSummary(sarifLog,
                                                                                       RootPathToElide,
                                                                                       this.symbolPath);
@@ -364,6 +413,33 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 WriteException(ex, summary);
             }
+        }
+
+        private SarifLog LoadVersionAgnosticSarifFile()
+        {
+            SarifLog sarifLog;
+
+            if (this.sarifVersion == Sarif.SarifVersion.Current)
+            {
+                sarifLog = SarifLog.Load(sarifOutputFilePath);
+            }
+            else
+            {
+                SarifLogVersionOne actualLog;
+
+                var serializer = new JsonSerializer() { ContractResolver = SarifContractResolverVersionOne.Instance };
+
+                using (JsonTextReader reader = new JsonTextReader(new StreamReader(fileSystem.FileOpenRead(sarifOutputFilePath))))
+                {
+                    actualLog = serializer.Deserialize<SarifLogVersionOne>(reader);
+                }
+
+                var visitor = new SarifVersionOneToCurrentVisitor();
+                visitor.VisitSarifLogVersionOne(actualLog);
+                sarifLog = visitor.SarifLog;
+            }
+
+            return sarifLog;
         }
 
         public void Dispose()

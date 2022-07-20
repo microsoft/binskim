@@ -2,13 +2,39 @@
 UNRELEASED
 ## BUGFIX: Fix `KeyNotFoundException` raised by `BA2006.BuildWithSecureTools` when required properties are removed from the config file. [#565](https://github.com/microsoft/binskim/pull/565)
 
+## Unreleased
+
+* FEATURE: Add BA3031.EnableClangSafeStack, rename BA3030.UseCheckedFunctionsWithGcc to BA3030.UseGccCheckedFunctions [#663](https://github.com/microsoft/binskim/pull/663)
+
+## **v1.9.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.5)
+
+* Bump ELFSharp from 2.13.2 to 2.14.0. [#628](https://github.com/microsoft/binskim/pull/628)
+* Bump System.Reflection.Metadata from 5.0.0 to 6.0.1 and System.Collections.Immutable from 5.0.0 to 6.0.0. [#605](https://github.com/microsoft/binskim/pull/605)
+* Bump ELFSharp from 2.14.0 to 2.15.0. [#631](https://github.com/microsoft/binskim/pull/631)
+* FEATURE: Enable BinSkim for MacOS. [#576](https://github.com/microsoft/binskim/pull/576)
+* Bump Sarif.Sdk by updating submodule from [4e9f606 to fc9a9df](https://github.com/microsoft/sarif-sdk/compare/4e9f606bb0e88428866e253352cdc70dc68f98cb...fc9a9dfb865096b5aaa9fa3651854670940f7459). [#638](https://github.com/microsoft/binskim/pull/638)
+* FALSE POSITIVE FIX: Skip `BA2025.EnableShadowStack` rule for ARM Binaries which cannot use `/CETCOMPAT`. [#650](https://github.com/microsoft/binskim/pull/650)
+* BUGFIX: Fix missing `commandLineId` from `CommandLineInformation` event. [#652](https://github.com/microsoft/binskim/pull/652)
+
+## **v1.9.4** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.4)
+
+* FEATURE: Add new PE `CV_CFL_LANG` language code for `ALIASOBJ` and `Rust`. [530](https://github.com/microsoft/binskim/pull/530)
+* BUGFIX: Fix `BA2014.DoNotDisableStackProtectionForFunctions` to eliminate false positive reports that `GsDriverEntry` has disabled the stack protector. [551](https://github.com/microsoft/binskim/pull/551)
+* BREAKING: Rename `BA2026.EnableAdditionalSdlSecurityChecks` to `BA2026.EnableMicrosoftCompilerSdlSwitch` to clarify rule purpose. [#586](https://github.com/microsoft/binskim/pull/586)
+* BUGFIX: Fix `Newtonsoft.Json.JsonSerializationException` when reading SARIF V1 with telemetry enabled. [613](https://github.com/microsoft/binskim/pull/613)
+
+## **v1.9.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.3)
+
+* BUGFIX: Fix `KeyNotFoundException` exception raised by `BA2006.BuildWithSecureTools` when individual `MinimumToolVersions` properties are removed from XML configuration. [#565](https://github.com/microsoft/binskim/pull/565)
+* BUGFIX: Fix `BA2006.BuildWithSecureTools` is not emitting the compiler list. [Commit SHA 135946](https://github.com/microsoft/binskim/commit/13594680a6ee8beb0ca711d82a7ded2279d3ce4e)
+
 ## **v1.9.2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.2)
 
 * BUGFIX: Fix `MultithreadedAnalyzeCommandBase` artifacts generation and enforcing JSON properties ordering. [#555](https://github.com/microsoft/binskim/pull/555)
 
 ## **v1.9.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.1)
 
-* BUGFIX: Fix incorrect analysis for non-Microsoft compiler on BA2006.BuildWithSecureTools. [545](https://github.com/microsoft/binskim/pull/545)
+* BUGFIX: Fix incorrect analysis for non-Microsoft compiler on BA2006.BuildWithSecureTools. [#545](https://github.com/microsoft/binskim/pull/545)
 * BUGFIX: Fix `JsonSerializationException` that occurs when saving SARIF v1 with telemetry enabled. [#535](https://github.com/microsoft/binskim/pull/535)
 * BUGFIX: Fix `NullReferenceException` when `--Hashes` and telemetry rules are enabled. [#531](https://github.com/microsoft/binskim/pull/531)
 

@@ -40,7 +40,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public const string EnableSpectreMitigations = "BA2024";
         public const string EnableShadowStack = "BA2025";
-        public const string EnableAdditionalSdlSecurityChecks = "BA2026";
+
+        // Renamed from 'EnableAdditionalSdlSecurityChecks' as of 1.9.3.
+        public const string EnableMicrosoftCompilerSdlSwitch = "BA2026";
+        public const string EnableSourceLink = "BA2027";
 
         // ELF Checks
         public const string EnablePositionIndependentExecutable = "BA3001";
@@ -58,7 +61,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         // BA3012-3029 -- saved for future non-compiler/language specific checks.
         // Compiler/Language specific checks follow.
-        public const string UseCheckedFunctionsWithGcc = "BA3030";
+        public const string UseGccCheckedFunctions = "BA3030";
+        public const string EnableClangSafeStack = "BA3031";
 
         // Reporting checks
         public const string ReportPortableExecutableCompilerData = "BA4001";

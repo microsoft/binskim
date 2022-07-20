@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class SdkResources {
@@ -90,9 +90,18 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         /// <summary>
         ///   Looks up a localized string similar to ELF is not a shared object or executable.
         /// </summary>
-        internal static string MetadataCondition_ElfIsCoreNoneOrObject {
+        internal static string MetadataCondition_ElfIsCoreNoneOrRelocatable {
             get {
-                return ResourceManager.GetString("MetadataCondition_ElfIsCoreNoneOrObject", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ElfIsCoreNoneOrRelocatable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to not compiled with Clang.
+        /// </summary>
+        internal static string MetadataCondition_ElfNotBuiltWithClang {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ElfNotBuiltWithClang", resourceCulture);
             }
         }
         
@@ -156,6 +165,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageIsArm64BitBinary {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsArm64BitBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image is an ARM binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsArmBinary {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsArmBinary", resourceCulture);
             }
         }
         
@@ -291,6 +309,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageIsNot64BitBinary {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsNot64BitBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to not compiled with Microsoft C/C++ compiler.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotBuiltWithMSVC {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotBuiltWithMSVC", resourceCulture);
             }
         }
         

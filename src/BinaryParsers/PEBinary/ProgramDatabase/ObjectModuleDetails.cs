@@ -98,16 +98,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             this.wellKnownCompiler = WellKnownCompilers.Unknown;
 
-            if (this.Language == Language.C &&
-                this.CompilerName == CompilerNames.MicrosoftC)
+            if (this.Language == Language.C)
             {
-                this.wellKnownCompiler = WellKnownCompilers.MicrosoftC;
+                if (this.CompilerName == CompilerNames.MicrosoftC)
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.MicrosoftC;
+                }
+                else if (this.CompilerName.StartsWith(CompilerNames.ClangPrefix))
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.Clang;
+                }
             }
 
-            if (this.Language == Language.Cxx &&
-                this.CompilerName == CompilerNames.MicrosoftCxx)
+            if (this.Language == Language.Cxx)
             {
-                this.wellKnownCompiler = WellKnownCompilers.MicrosoftCxx;
+                if (this.CompilerName == CompilerNames.MicrosoftCxx)
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.MicrosoftCxx;
+                }
+                else if (this.CompilerName.StartsWith(CompilerNames.ClangPrefix))
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.Clang;
+                }
             }
 
             if (this.Language == Language.LINK &&
@@ -122,11 +134,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 this.wellKnownCompiler = WellKnownCompilers.MicrosoftCvtRes;
             }
 
-            if (this.Language == Language.MASM &&
-                (this.CompilerName == CompilerNames.MicrosoftMasm ||
-                 this.CompilerName == CompilerNames.MicrosoftARMasm))
+            if (this.Language == Language.MASM)
             {
-                this.wellKnownCompiler = WellKnownCompilers.MicrosoftMasm;
+                if (this.CompilerName == CompilerNames.MicrosoftMasm ||
+                    this.CompilerName == CompilerNames.MicrosoftARMasm)
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.MicrosoftMasm;
+                }
+                else if (this.CompilerName.StartsWith(CompilerNames.ClangLLVMRustcPrefix, StringComparison.Ordinal))
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.ClangLLVMRustc;
+                }
             }
         }
 
@@ -224,6 +242,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         }
     }
 
+    /// <summary>
+    /// The CV_CFL_LANG enumeration, 
+    /// which specifies the code language of the application or linked module in the debug interface access SDK.
+    /// https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/cv-cfl-lang
+    /// </summary>
     public enum Language : uint
     {
         C = 0x00,
@@ -242,11 +265,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         Java = 0x0D,
         JScript = 0x0E,
         MSIL = 0x0F,
-        HLSL = 0x10, // High Level Shader Language
+        HLSL = 0x10,
         ObjectiveC = 0x11,
         ObjectiveCxx = 0x12,
         Swift = 0x13,
-        NASM = 0x4E, // The Netwide Assembler
+        ALIASOBJ = 0x14,
+        Rust = 0x15,
+        NASM = 0x4E,
         Unknown
     }
 
@@ -261,5 +286,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         MicrosoftCvtRes = 0x10,  // cvtres.exe
         MicrosoftCxx = 0x20,     // cl.exe
         MicrosoftLink = 0x40,    // cl.exe
+        Clang = 0x80,
+        ClangLLVMRustc = 0x100,  // rustc.exe
     }
 }

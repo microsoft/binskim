@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 using System.Security.Cryptography;
@@ -32,6 +33,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         private PEReader peReader;
         internal SafePointer pImage; // pointer to the beginning of the file in memory
         private readonly MetadataReader metadataReader;
+
+        // https://github.com/dotnet/runtime/blob/main/docs/design/specs/PortablePdb-Metadata.md#source-link-c-and-vb-compilers
+        private static readonly Guid SourceLinkKind = new Guid("CC110556-A091-4D38-9FEC-25AB9A351A6A");
 
         public PE(string fileName)
         {
@@ -811,7 +815,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             return pdbFileType == PdbFileType.Windows
                 ? ChecksumAlgorithmForFullPdb(pdb)
-                : ChecksumAlgorithmForPortablePdb();
+                : ChecksumAlgorithmForPortablePdb(pdb);
+        }
+
+        public string ManagedPdbGetSourceLinkDocument(Pdb pdb)
+        {
+            if (!TryGetPortablePdbMetadataReader(pdb, out MetadataReader pdbMetadataReader))
+            {
+                return null;
+            }
+
+            BlobReader sourceLinkReader = GetCustomDebugInformationReader(pdbMetadataReader, EntityHandle.ModuleDefinition, SourceLinkKind);
+            return sourceLinkReader.Length == 0 ? null : sourceLinkReader.ReadUTF8(sourceLinkReader.Length);
         }
 
         public IEnumerable<string> GetAssemblyReferenceStrings()
@@ -829,7 +844,24 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-        private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb()
+        private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb(Pdb pdb)
+        {
+            if (!TryGetPortablePdbMetadataReader(pdb, out MetadataReader pdbMetadataReader))
+            {
+                return ChecksumAlgorithmType.Unknown;
+            }
+
+            foreach (Document doc in pdbMetadataReader.Documents.Select(document => pdbMetadataReader.GetDocument(document)))
+            {
+                Guid hashGuid = pdbMetadataReader.GetGuid(doc.HashAlgorithm);
+
+                return hashGuid == Constant.Sha256Guid ? ChecksumAlgorithmType.Sha256 : ChecksumAlgorithmType.Sha1;
+            }
+
+            return ChecksumAlgorithmType.Unknown;
+        }
+
+        private bool TryGetPortablePdbMetadataReader(Pdb pdb, out MetadataReader pdbMetadataReader)
         {
             if (!this.peReader.TryOpenAssociatedPortablePdb(
                 this.FileName,
@@ -837,20 +869,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 out MetadataReaderProvider pdbProvider,
                 out _))
             {
-                return ChecksumAlgorithmType.Unknown;
+                pdbProvider = MetadataReaderProvider.FromPortablePdbStream(File.OpenRead(pdb.PdbLocation));
+                if (pdbProvider == null)
+                {
+                    pdbMetadataReader = null;
+                    return false;
+                }
             }
 
-            MetadataReader metadataReader = pdbProvider.GetMetadataReader();
-            foreach (DocumentHandle document in metadataReader.Documents)
-            {
-                Document doc = metadataReader.GetDocument(document);
-
-                Guid hashGuid = metadataReader.GetGuid(doc.HashAlgorithm);
-
-                return hashGuid == Constant.Sha256Guid ? ChecksumAlgorithmType.Sha256 : ChecksumAlgorithmType.Sha1;
-            }
-
-            return ChecksumAlgorithmType.Unknown;
+            pdbMetadataReader = pdbProvider.GetMetadataReader();
+            return true;
         }
 
         private ChecksumAlgorithmType ChecksumAlgorithmForFullPdb(Pdb pdb)
@@ -866,6 +894,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
 
             return ChecksumAlgorithmType.Unknown;
+        }
+
+        private static BlobReader GetCustomDebugInformationReader(MetadataReader metadataReader, EntityHandle handle, Guid kind)
+        {
+            foreach (CustomDebugInformationHandle cdiHandle in metadataReader.GetCustomDebugInformation(handle))
+            {
+                CustomDebugInformation cdi = metadataReader.GetCustomDebugInformation(cdiHandle);
+                if (metadataReader.GetGuid(cdi.Kind) == kind)
+                {
+                    return metadataReader.GetBlobReader(cdi.Value);
+                }
+            }
+
+            return default;
         }
     }
 }

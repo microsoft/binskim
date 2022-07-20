@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var targets = new List<string>();
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = GetTestDirectoryFor(ruleName);
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", testFilesDirectory);
+            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, expectToPass ? "Pass" : "Fail");
 
             Assert.True(Directory.Exists(testFilesDirectory), $"Test directory '{testFilesDirectory}' should exist.");
@@ -201,7 +201,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string ruleName = skimmer.GetType().Name;
 
             string baseFilesDirectory = GetTestDirectoryFor(ruleName);
-            baseFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", baseFilesDirectory);
+            baseFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", baseFilesDirectory);
 
             string[] testFilesDirectories =
                 new string[]
@@ -248,6 +248,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
+        private void VerifyApplicabililtyByConditionsOnly(
+            BinarySkimmer skimmer,
+            HashSet<string> applicabilityConditions,
+            string expectedReasonForNotAnalyzing,
+            AnalysisApplicability expectedApplicability = AnalysisApplicability.NotApplicableToSpecifiedTarget,
+            bool useDefaultPolicy = false)
+        {
+            string ruleName = skimmer.GetType().Name;
+
+            HashSet<string> targets = this.GetTestFilesMatchingConditions(applicabilityConditions);
+
+            VerifyApplicabilityResults(
+                skimmer,
+                targets,
+                useDefaultPolicy,
+                expectedApplicability,
+                ruleName,
+                expectedReasonForNotAnalyzing);
+        }
+
         private void VerifyApplicability(
             BinarySkimmer skimmer,
             HashSet<string> applicabilityConditions,
@@ -258,10 +278,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = GetTestDirectoryFor(ruleName);
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestsData", testFilesDirectory);
+            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, "NotApplicable");
-
-            var context = new BinaryAnalyzerContext();
 
             HashSet<string> targets = this.GetTestFilesMatchingConditions(applicabilityConditions);
 
@@ -275,6 +293,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
             }
+
+            VerifyApplicabilityResults(
+                skimmer,
+                targets,
+                useDefaultPolicy,
+                expectedApplicability,
+                ruleName,
+                expectedReasonForNotAnalyzing);
+        }
+
+        private void VerifyApplicabilityResults(
+            BinarySkimmer skimmer,
+            HashSet<string> targets,
+            bool useDefaultPolicy,
+            AnalysisApplicability expectedApplicability,
+            string ruleName,
+            string expectedReasonForNotAnalyzing)
+        {
+            var context = new BinaryAnalyzerContext();
 
             var logger = new TestMessageLogger();
             context.Logger = logger;
@@ -341,7 +378,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
         {
-            string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestsData");
+            string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -458,6 +495,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (metadataConditions.Contains(MetadataConditions.ImageIsDotNetCoreBootstrapExe))
             {
                 result.Add(Path.Combine(testFilesDirectory, "DotnetNative_x86_VS2019_UniversalApp.exe"));
+            }
+
+            if (metadataConditions.Contains(MetadataConditions.ImageIsArmBinary))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "ARM_CETShadowStack_NotApplicable.exe"));
+            }
+
+            if (metadataConditions.Contains(MetadataConditions.ImageIsArm64BitBinary))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "ARM64_CETShadowStack_NotApplicable.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "ARM64_dotnet_CETShadowStack_NotApplicable.exe"));
             }
 
             return result;
@@ -898,6 +946,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2014_LoadAllApprovedFunctions()
+        {
+            StringSet approvedFunctions =
+                DoNotDisableStackProtectionForFunctions.ApprovedFunctionsThatDisableStackProtection.DefaultValue.Invoke();
+            Assert.Contains("_TlgWrite", approvedFunctions);
+            Assert.Contains("GsDriverEntry", approvedFunctions);
+            Assert.Contains("_GsDriverEntry", approvedFunctions);
+            Assert.Contains("GsDrvEnableDriver", approvedFunctions);
+            Assert.Contains("_GsDrvEnableDriver", approvedFunctions);
+            Assert.Contains("__security_init_cookie", approvedFunctions);
+            Assert.Contains("__vcrt_trace_logging_provider::_TlgWrite", approvedFunctions);
+        }
+
+        [Fact]
         public void BA2014_DoNotDisableStackProtectionForFunctions_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1152,32 +1214,41 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2025_EnableShadowStack_NotApplicable()
         {
-            this.VerifyApplicability(
+            HashSet<string> notApplicableArm64 = new HashSet<string>() { MetadataConditions.ImageIsArm64BitBinary };
+
+            this.VerifyApplicabililtyByConditionsOnly(
                 skimmer: new EnableShadowStack(),
-                applicabilityConditions: null,
+                applicabilityConditions: notApplicableArm64,
                 expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArm64BitBinary);
+
+            HashSet<string> notApplicableArm = new HashSet<string>() { MetadataConditions.ImageIsArmBinary };
+
+            this.VerifyApplicabililtyByConditionsOnly(
+                skimmer: new EnableShadowStack(),
+                applicabilityConditions: notApplicableArm64,
+                expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArmBinary);
         }
 
         [Fact]
-        public void BA2026_EnableAdditionalSdlSecurityChecks_Pass()
+        public void BA2026_EnableMicrosoftCompilerSdlSwitch_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyPass(new EnableAdditionalSdlSecurityChecks(), useDefaultPolicy: true);
+                this.VerifyPass(new EnableMicrosoftCompilerSdlSwitch(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
-        public void BA2026_EnableAdditionalSdlSecurityChecks_Fail()
+        public void BA2026_EnableMicrosoftCompilerSdlSwitch_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new EnableAdditionalSdlSecurityChecks(), useDefaultPolicy: true);
+                this.VerifyFail(new EnableMicrosoftCompilerSdlSwitch(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
-        public void BA2026_EnableAdditionalSdlSecurityChecks_NotApplicable()
+        public void BA2026_EnableMicrosoftCompilerSdlSwitch_NotApplicable()
         {
             var notApplicableTo = new HashSet<string>
             {
@@ -1186,7 +1257,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MetadataConditions.ImageIsILOnlyAssembly
             };
 
-            this.VerifyApplicability(new EnableAdditionalSdlSecurityChecks(), notApplicableTo);
+            this.VerifyApplicability(new EnableMicrosoftCompilerSdlSwitch(), notApplicableTo);
+        }
+
+        [Fact]
+        public void BA2027_EnableSourceLink_Pass()
+        {
+            this.VerifyPass(new EnableSourceLink());
+        }
+
+        [Fact]
+        public void BA2027_EnableSourceLink_Fail()
+        {
+            this.VerifyFail(new EnableSourceLink());
+        }
+
+        [Fact]
+        public void BA2027_EnableSourceLink_NotApplicable()
+        {
+            this.VerifyApplicability(new EnableSourceLink(), new HashSet<string>());
         }
 
         [Fact]
@@ -1328,21 +1417,39 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void BA3030_UseCheckedFunctionsWithGCC_Pass()
+        public void BA3030_UseGccCheckedFunctions_Pass()
         {
-            this.VerifyPass(new UseCheckedFunctionsWithGcc(), bypassExtensionValidation: true);
+            this.VerifyPass(new UseGccCheckedFunctions(), bypassExtensionValidation: true);
         }
 
         [Fact]
-        public void BA3030_UseCheckedFunctionsWithGCC_Fail()
+        public void BA3030_UseGccCheckedFunctions_Fail()
         {
-            this.VerifyFail(new UseCheckedFunctionsWithGcc(), bypassExtensionValidation: true);
+            this.VerifyFail(new UseGccCheckedFunctions(), bypassExtensionValidation: true);
         }
 
         [Fact]
-        public void BA3030_UseCheckedFunctionsWithGCC_NotApplicable()
+        public void BA3030_UseGccCheckedFunctions_NotApplicable()
         {
-            this.VerifyApplicability(new UseCheckedFunctionsWithGcc(), new HashSet<string>());
+            this.VerifyApplicability(new UseGccCheckedFunctions(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void BA3031_EnableClangSafeStack_Pass()
+        {
+            this.VerifyPass(new EnableClangSafeStack(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3031_EnableClangSafeStack_Fail()
+        {
+            this.VerifyFail(new EnableClangSafeStack(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3031_EnableClangSafeStack_NotApplicable()
+        {
+            this.VerifyApplicability(new EnableClangSafeStack(), new HashSet<string>());
         }
 
         [Fact]

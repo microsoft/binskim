@@ -454,7 +454,7 @@ Modules did not meet the criteria: {1}</value>
   <data name="BA3030_Pass_SomeFunctionsChecked" xml:space="preserve">
     <value>Some checked functions were found in '{0}'; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy.</value>
   </data>
-  <data name="BA3030_UseCheckedFunctionsWithGcc_Description" xml:space="preserve">
+  <data name="BA3030_UseGccCheckedFunctions_Description" xml:space="preserve">
     <value>GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2').</value>
   </data>
   <data name="NotApplicable_InvalidMetadata" xml:space="preserve">
@@ -572,5 +572,26 @@ Modules did not meet the criteria: {1}</value>
   </data>
   <data name="ERR997_ExceptionLoadingPdbGeneric" xml:space="preserve">
     <value>'{0}' was not evaluated because its PDB could not be loaded ({1}).</value>
+  </data>
+  <data name="BA3031_EnableClangSafeStack_Description" xml:space="preserve">
+    <value>The SafeStack instrumentation pass protects programs by implementing two separate program stacks, one for return addresses and local variables, and the other for everything else. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines.</value>
+  </data>
+  <data name="BA3031_Error" xml:space="preserve">
+    <value>'{0}' was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines.</value>
+  </data>
+  <data name="BA3031_Pass" xml:space="preserve">
+    <value>'{0}' was compiled using Clang and with the SafeStack instrumentation pass, which mitigates the risk of stack-based buffer overflows.</value>
+  </data>
+  <data name="BA3031_Error_ClangVersionMayNeedUpgrade" xml:space="preserve">
+    <value>'{0}' was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines. You might need to update your version of Clang to enable it.</value>
+  </data>
+  <data name="BA2027_EnableSourceLink_Description" xml:space="preserve">
+    <value>SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information.</value>
+  </data>
+  <data name="BA2027_Warning" xml:space="preserve">
+    <value>The PDB for '{0}' does not contain SourceLink information. SourceLink information should be present in the PDB of all binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information.</value>
+  </data>
+  <data name="BA2027_Pass" xml:space="preserve">
+    <value>The PDB for '{0}' contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other diagnostic analysis.</value>
   </data>
 </root>
