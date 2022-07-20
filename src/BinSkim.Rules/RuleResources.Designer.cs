@@ -1403,11 +1403,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Incremental linking support increases binary size and can reduce runtime performance. Fully optimized release builds should not specify incremental linking..
+        ///   Looks up a localized string similar to Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.  The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking..
         /// </summary>
-        internal static string BA6001_DisableIncrementalLinking_Description {
+        internal static string BA6001_DisableIncrementalLinkingInReleaseBuilds_Description {
             get {
-                return ResourceManager.GetString("BA6001_DisableIncrementalLinking_Description", resourceCulture);
+                return ResourceManager.GetString("BA6001_DisableIncrementalLinkingInReleaseBuilds_Description", resourceCulture);
             }
         }
         
@@ -1421,16 +1421,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was not compiled as release, skipping performance checks.
-        /// </summary>
-        internal static string BA6001_Pass_NonReleaseBuild {
-            get {
-                return ResourceManager.GetString("BA6001_Pass_NonReleaseBuild", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with incremental linking enabled, which inflates binary size and can reduce performance..
+        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be compiled as release but enables incremental linking, increasing binary size and further compromising runtime performance by preventing enabling maximal code optimization..
         /// </summary>
         internal static string BA6001_Warning {
             get {

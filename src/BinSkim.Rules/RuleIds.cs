@@ -73,6 +73,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string DoNotAllowExecutableStack = "BA5002";
 
         // Performance (not security) checks
-        public const string DisableIncrementalLinking = "BA6001";
+        public const string DisableIncrementalLinkingInReleaseBuilds = "BA6001";
     }
 }

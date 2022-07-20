@@ -61,22 +61,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public string Library { get; private set; }
 
         /// <summary>
-        /// Returns the warning level as defined by the /Wn switch in the compiland command line
+        /// Returns the warning level as defined by the /Wn switch in the compiland command line.
         /// </summary>
         public int WarningLevel => this.compilerCommandLine.WarningLevel;
 
         /// <summary>
-        /// Returns whether optimizations were enabled as defined by the various /O switches in the compiland command line
+        /// Returns whether optimizations were enabled as defined by the various /O switches in the compiland command line.
         /// </summary>
         public bool OptimizationsEnabled => this.compilerCommandLine.OptimizationsEnabled;
 
         /// <summary>
-        /// Returns whether the linker had incremental linking enabled, or not
+        /// Returns whether the linker had incremental linking enabled, or not.
         /// </summary>
         public bool IncrementalLinkingEnabled => this.linkerCommandLine.IncrementalLinking;
 
         /// <summary>
-        /// Returns a list of integers corresponding to the set of warnings disabled via -wdnnnn switches on the command line
+        /// Returns a list of integers corresponding to the set of warnings disabled via -wdnnnn switches on the command line.
         /// </summary>
         public ImmutableArray<int> ExplicitlyDisabledWarnings => this.compilerCommandLine.WarningsExplicitlyDisabled;
 
@@ -86,17 +86,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public string RawCommandLine => this.compilerCommandLine.Raw;
 
         /// <summary>
-        /// The name of the compiler
+        /// The name of the compiler.
         /// </summary>
         public string CompilerName { get; private set; }
 
         /// <summary>
-        /// The version of the compiler backend
+        /// The version of the compiler backend.
         /// </summary>
         public Version CompilerBackEndVersion { get; private set; }
 
         /// <summary>
-        /// The version of the compiler frontend
+        /// The version of the compiler frontend.
         /// </summary>
         public Version CompilerFrontEndVersion { get; private set; }
 
@@ -175,7 +175,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public bool HasDebugInfo { get; private set; }
 
         /// <summary>
-        /// Determine the state of a single switch
+        /// Determine the state of a single switch.
         /// </summary>
         /// <param name="switchName">Switch name to check.</param>
         /// <param name="precedence">The precedence rules for this switch.</param>
@@ -198,23 +198,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         }
 
         /// <summary>
-        /// Get the value of one of a set of compiler command-line options
+        /// Get the value of one of a set of compiler command-line options.
         /// </summary>
-        /// <param name="optionNames">Array of command line options to search for a value</param>
-        /// <param name="precedence">The precedence ruls for this set of options</param>
-        /// <param name="optionValue">string to recieve the value of the command line option</param>
-        /// <param name="optionNamesExcluded">Array of command line options to be excluded from the result</param>
-        /// <returns>true if one of the options is found, false if none are found</returns>
+        /// <param name="optionNames">Array of command line options to search for a value.</param>
+        /// <param name="precedence">The precedence ruls for this set of options.</param>
+        /// <param name="optionValue">string to recieve the value of the command line option.</param>
+        /// <param name="optionNamesExcluded">Array of command line options to be excluded from the result.</param>
+        /// <returns>true if one of the options is found, false if none are found.</returns>
         public bool GetOptionValue(string[] optionNames, OrderOfPrecedence precedence, ref string optionValue, string[] optionNamesExcluded = null)
         {
             return CommandLineHelper.GetOptionValue(this.compilerCommandLine.Raw, optionNames, precedence, ref optionValue, optionNamesExcluded);
         }
 
         /// <summary>
-        /// Get the dialect of the object module detail
-        /// <param name="versionNumber">the version number of the dialect</param>
+        /// Get the dialect of the object module detail.
+        /// <param name="versionNumber">the version number of the dialect.</param>
         /// </summary>
-        /// <returns>dialect of the object module detail if found</returns>
+        /// <returns>dialect of the object module detail if found.</returns>
         public string GetDialect(out string versionNumber)
         {
             string[] cVersion;
@@ -247,7 +247,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 if (this.WellKnownCompiler == WellKnownCompilers.MicrosoftC)
                 {
                     // MSDN:
-                    // The default C compiler (that is, the compiler when /std:c11 or /std:c17 isn't specified)
+                    // The default C compiler (that is, the compiler when /std:c11 or /std:c17 isn't specified).
                     // implements ANSI C89, but includes several Microsoft extensions, some of which are part of ISO C99.
                     versionNumber = "89";
                 }

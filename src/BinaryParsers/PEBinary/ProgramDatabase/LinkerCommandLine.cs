@@ -52,29 +52,31 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 {
                     debugSet = true;
                 }
-                else if (string.Equals(argument, "/opt:ref", System.StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(argument, "/opt:ref", System.StringComparison.OrdinalIgnoreCase) || string.Equals(argument, "-opt:ref", System.StringComparison.OrdinalIgnoreCase))
                 {
                     optRef = true;
                 }
-                else if (string.Equals(argument, "/opt:icf", System.StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(argument, "/opt:icf", System.StringComparison.OrdinalIgnoreCase) || string.Equals(argument, "-opt:icf", System.StringComparison.OrdinalIgnoreCase))
                 {
                     optIcf = true;
                 }
-                else if (string.Equals(argument, "/opt:lbr", System.StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(argument, "/opt:lbr", System.StringComparison.OrdinalIgnoreCase) || string.Equals(argument, "-opt:lbr", System.StringComparison.OrdinalIgnoreCase))
                 {
                     optLbr = true;
                 }
-                else if (string.Equals(argument, "/order", System.StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(argument, "/order", System.StringComparison.OrdinalIgnoreCase) || string.Equals(argument, "-order", System.StringComparison.OrdinalIgnoreCase))
                 {
                     order = true;
                 }
-                else if (string.Equals(argument, "/incremental", System.StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(argument, "/incremental", System.StringComparison.OrdinalIgnoreCase) || string.Equals(argument, "-incremental", System.StringComparison.OrdinalIgnoreCase))
                 {
                     explicitlyEnabled = true;
+                    explicitlyDisabled = false; // Assume that if specified multiple times the last wins
                 }
-                else if (string.Equals(argument, "/incremental:no", System.StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(argument, "/incremental:no", System.StringComparison.OrdinalIgnoreCase) || string.Equals(argument, "-incremental:no", System.StringComparison.OrdinalIgnoreCase))
                 {
                     explicitlyDisabled = true;
+                    explicitlyEnabled = false; // Assume that if specified multiple times the last wins
                 }
             }
 

@@ -1033,7 +1033,7 @@
             },
             {
               "id": "BA6001",
-              "name": "DisableIncrementalLinking",
+              "name": "DisableIncrementalLinkingInReleaseBuilds",
               "fullDescription": {
                 "text": "Incremental linking support increases binary size and can reduce runtime performance. Fully optimized release builds should not specify incremental linking."
               },
@@ -1051,7 +1051,7 @@
                   "text": "'{0}' was not compiled as release, skipping performance checks"
                 }
               },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA6001DisableIncrementalLinking"
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA6001DisableIncrementalLinkingInReleaseBuilds"
             }
           ],
           "properties": {

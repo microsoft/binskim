@@ -1489,7 +1489,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void BA6001_DisableIncrementalLinking_Fail()
+        public void BA6001_DisableIncrementalLinkingInReleaseBuilds_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
@@ -1501,56 +1501,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     MetadataConditions.CouldNotLoadPdb
                 };
                 this.VerifyFail(
-                    new DisableIncrementalLinking(),
+                    new DisableIncrementalLinkingInReleaseBuilds(),
                     //this.GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinking(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
-        public void BA6001_DisableIncrementalLinking_Pass()
+        public void BA6001_DisableIncrementalLinkingInReleaseBuilds_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyPass(new DisableIncrementalLinking(), useDefaultPolicy: true);
+                this.VerifyPass(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinking(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
             }
         }
 
         [Fact]
-        public void BA6001_DisableIncrementalLinking_NotApplicable()
+        public void BA6001_DisableIncrementalLinkingInReleaseBuilds_NotApplicable()
         {
-            // Be sure to add an exhaustive list of metadata conditions here
-            // that apply to the check (i.e., all the conditions that are
-            // referenced in the check CanAnalyze implementation).
-            var notApplicableTo = new HashSet<string>
-            {
-                MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsILOnlyAssembly
-            };
-
-            //this.VerifyNotApplicable(new DisableIncrementalLinking(), notApplicableTo);
-
-            // This conditional check (and the false branch) are only required for PDB reading rules.
-            // Delete the conditional and unnecessary branch for checks that don't crawl PDBS.
-            // Note that this code is explicitly detecting that the rule positively identifies 
-            // 64-bit binaries as scan target candidates.
-            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
-            {
-                var applicableTo = new HashSet<string> { MetadataConditions.ImageIs64BitBinary };
-                //this.VerifyNotApplicable(new DisableIncrementalLinking(), applicableTo, AnalysisApplicability.ApplicableToSpecifiedTarget);
-            }
-            else
-            {
-                this.VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinking(), useDefaultPolicy: true);
-            }
+            this.VerifyApplicability(new DisableIncrementalLinkingInReleaseBuilds(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.NotAReleaseBuild);
         }
     }
 }
