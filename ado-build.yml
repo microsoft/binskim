@@ -11,9 +11,9 @@ jobs:
 
   - task: Bash@3
     displayName: 'Build and Test'
-    failOnStderr: true
     inputs:
       filePath: 'BuildAndTest.sh'
+      failOnStderr: true
 
 - job: windows
   pool:
@@ -40,9 +40,9 @@ jobs:
 
   - task: Bash@3
     displayName: 'Build and Test'
-    failOnStderr: true
     inputs:
       filePath: 'BuildAndTest.sh'
+      failOnStderr: true
 
   - task: Bash@3
     displayName: 'Run BinSkim'
