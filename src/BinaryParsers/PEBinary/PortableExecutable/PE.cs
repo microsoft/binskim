@@ -917,8 +917,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
+                ObjectModuleDetails moduleDetails = om.GetObjectModuleDetails();
+
+                // We can early exit if -any- modules target a debug version of the C runtime.  Release binaries should never do that.  However,
+                // we cannot presume the opposite.  Many debug builds use the release C runtime.
+                if (moduleDetails.UsesDebugCRuntime)
+                {
+                    return false;
+                }
+
                 ++count;
-                if (om.GetObjectModuleDetails().OptimizationsEnabled)
+                if (moduleDetails.OptimizationsEnabled)
                 {
                     ++optimizedCount;
                 }

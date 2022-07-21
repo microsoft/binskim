@@ -71,6 +71,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public bool OptimizationsEnabled => this.compilerCommandLine.OptimizationsEnabled;
 
         /// <summary>
+        /// Returns whether the C runtime options is debug (/MTd /MDd) or release (/MT /MD).
+        /// </summary>
+        public bool UsesDebugCRuntime => this.compilerCommandLine.UsesDebugCRuntime;
+
+        /// <summary>
         /// Returns whether the linker had incremental linking enabled, or not.
         /// </summary>
         public bool IncrementalLinkingEnabled => this.linkerCommandLine.IncrementalLinking;

@@ -61,6 +61,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public readonly bool OptimizationsEnabled;
 
         /// <summary>
+        /// Whether or not this command line specifies a debug C runtime library.
+        /// </summary>
+        public readonly bool UsesDebugCRuntime;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CompilerCommandLine"/> struct from a raw PDB-supplied command line.
         /// </summary>
         /// <param name="commandLine">The raw command line from the PDB.</param>
@@ -74,6 +79,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.WarningLevel = 0;
             this.WarningsAsErrors = false;
             this.OptimizationsEnabled = false;
+            this.UsesDebugCRuntime = false;
+
             var explicitWarnings = new Dictionary<int, WarningState>();
             foreach (string argument in ArgumentSplitter.CommandLineToArgvW(commandLine))
             {
@@ -117,12 +124,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                             // /Od explicitly disables optimizations
                             this.OptimizationsEnabled = false;
                         }
+                        else if (argument.EndsWith("MT") || argument.EndsWith("MD"))
+                        {
+                            this.UsesDebugCRuntime = false;
+                        }
                         break;
                     case 4:
                         if (argument.EndsWith("WX-"))
                         {
                             // (inverse of) Treats all compiler warnings as errors.
                             this.WarningsAsErrors = false;
+                        }
+                        else if (argument.EndsWith("MTd") || argument.EndsWith("MDd"))
+                        {
+                            this.UsesDebugCRuntime = true;
                         }
                         break;
                     case 5:
