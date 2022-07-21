@@ -43,8 +43,11 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public void Driver_BuiltInRuleFunctionalTests()
         {
-            MultithreadedAnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
-            this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+            if (PlatformSpecificHelpers.RunningOnWindows())
+            {
+                MultithreadedAnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
+                this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+            }
         }
 
         [Fact]

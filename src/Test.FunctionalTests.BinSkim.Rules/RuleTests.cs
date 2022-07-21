@@ -1263,19 +1263,28 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2027_EnableSourceLink_Pass()
         {
-            this.VerifyPass(new EnableSourceLink());
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new EnableSourceLink());
+            }
         }
 
         [Fact]
         public void BA2027_EnableSourceLink_Fail()
         {
-            this.VerifyFail(new EnableSourceLink());
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyFail(new EnableSourceLink());
+            }
         }
 
         [Fact]
         public void BA2027_EnableSourceLink_NotApplicable()
         {
-            this.VerifyApplicability(new EnableSourceLink(), new HashSet<string>());
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableSourceLink(), new HashSet<string>());
+            }
         }
 
         [Fact]
