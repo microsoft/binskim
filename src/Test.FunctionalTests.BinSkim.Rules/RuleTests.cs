@@ -1263,10 +1263,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2027_EnableSourceLink_Pass()
         {
-            //if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
-            //{
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
                 this.VerifyPass(new EnableSourceLink());
-            //}
+            }
         }
 
         [Fact]
