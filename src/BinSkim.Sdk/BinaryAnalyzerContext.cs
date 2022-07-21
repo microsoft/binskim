@@ -122,5 +122,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 "CompilerTelemetry", nameof(SharedCompilerDataLoggerProperty), defaultValue: () => null,
                 "A shared CompilerDataLogger instance that will be passed to all skimmers.");
 
+
+        public int MaxFileSizeInKilobytes { get; set; }
     }
 }
