@@ -1265,7 +1265,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyPass(new EnableSourceLink(), useDefaultPolicy: true);
+                this.VerifyPass(new EnableSourceLink());
             }
         }
 
@@ -1274,21 +1274,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new EnableSourceLink(), useDefaultPolicy: true);
+                this.VerifyFail(new EnableSourceLink());
             }
         }
 
         [Fact]
         public void BA2027_EnableSourceLink_NotApplicable()
         {
-            var notApplicableTo = new HashSet<string>
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                MetadataConditions.ImageIsNotBuiltWithMSVC,
-                MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsResourceOnlyAssembly
-            };
-
-            this.VerifyApplicability(new EnableSourceLink(), notApplicableTo);
+                this.VerifyApplicability(new EnableSourceLink(), new HashSet<string>());
+            }
         }
 
         [Fact]
