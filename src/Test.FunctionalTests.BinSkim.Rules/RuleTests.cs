@@ -1263,19 +1263,32 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2027_EnableSourceLink_Pass()
         {
-            this.VerifyPass(new EnableSourceLink());
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new EnableSourceLink(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void BA2027_EnableSourceLink_Fail()
         {
-            this.VerifyFail(new EnableSourceLink());
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyFail(new EnableSourceLink(), useDefaultPolicy: true);
+            }
         }
 
         [Fact]
         public void BA2027_EnableSourceLink_NotApplicable()
         {
-            this.VerifyApplicability(new EnableSourceLink(), new HashSet<string>());
+            var notApplicableTo = new HashSet<string>
+            {
+                MetadataConditions.ImageIsNotBuiltWithMSVC,
+                MetadataConditions.ImageIsResourceOnlyBinary,
+                MetadataConditions.ImageIsResourceOnlyAssembly
+            };
+
+            this.VerifyApplicability(new EnableSourceLink(), notApplicableTo);
         }
 
         [Fact]
