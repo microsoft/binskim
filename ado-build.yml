@@ -11,6 +11,7 @@ jobs:
 
   - task: Bash@3
     displayName: 'Build and Test'
+    failOnStderr: true
     inputs:
       filePath: 'BuildAndTest.sh'
 
@@ -39,6 +40,7 @@ jobs:
 
   - task: Bash@3
     displayName: 'Build and Test'
+    failOnStderr: true
     inputs:
       filePath: 'BuildAndTest.sh'
 
