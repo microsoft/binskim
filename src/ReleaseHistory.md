@@ -3,6 +3,7 @@
 ## Unreleased
 
 * FEATURE: Add BA3031.EnableClangSafeStack, rename BA3030.UseCheckedFunctionsWithGcc to BA3030.UseGccCheckedFunctions [#663](https://github.com/microsoft/binskim/pull/663)
+* Bump Sarif.Sdk by updating submodule from [fc9a9df to 698adb6](https://github.com/microsoft/sarif-sdk/compare/fc9a9dfb865096b5aaa9fa3651854670940f7459...698adb6365a242c6bb75adde56e3bd4be39c21d7). [#674](https://github.com/microsoft/binskim/pull/674)
 
 ## **v1.9.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.5)
 
