@@ -594,4 +594,13 @@ Modules did not meet the criteria: {1}</value>
   <data name="BA2027_Pass" xml:space="preserve">
     <value>The PDB for '{0}' contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other diagnostic analysis.</value>
   </data>
+  <data name="BA6001_DisableIncrementalLinkingInReleaseBuilds_Description" xml:space="preserve">
+    <value>Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.  The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking.</value>
+  </data>
+  <data name="BA6001_Pass" xml:space="preserve">
+    <value>'{0}' was compiled with incremental linking disabled.</value>
+  </data>
+  <data name="BA6001_Warning" xml:space="preserve">
+    <value>'{0}' appears to be compiled as release but enables incremental linking, increasing binary size and further compromising runtime performance by preventing enabling maximal code optimization.</value>
+  </data>
 </root>

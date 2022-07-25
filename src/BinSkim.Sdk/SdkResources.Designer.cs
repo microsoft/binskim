@@ -430,6 +430,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image appears to not be compiled as release and is therefore not subject to performance checks.
+        /// </summary>
+        internal static string MetadataCondition_NotAReleaseBuild {
+            get {
+                return ResourceManager.GetString("MetadataCondition_NotAReleaseBuild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check &apos;{0}&apos; was disabled for this run as the analysis was not configured with required policy ({1}). To resolve this, configure and provide a policy file on the BinSkim command-line using the --policy argument (recommended), or pass --defaultPolicy to invoke built-in settings. Invoke the BinSkim.exe &apos;export&apos; command to produce an initial policy file that can be edited if required and passed back into the tool..
         /// </summary>
         internal static string RuleWasDisabledDueToMissingPolicy {

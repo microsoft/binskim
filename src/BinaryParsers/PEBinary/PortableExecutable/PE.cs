@@ -909,5 +909,53 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
             return default;
         }
+
+        public bool IsMostlyOptimized(Pdb pdb)
+        {
+            uint count = 0;
+            uint optimizedCount = 0;
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                ObjectModuleDetails moduleDetails = om.GetObjectModuleDetails();
+
+                // We can early exit if -any- modules target a debug version of the C runtime.  Release binaries should never do that.  However,
+                // we cannot presume the opposite.  Many debug builds use the release C runtime.
+                if (moduleDetails.UsesDebugCRuntime)
+                {
+                    return false;
+                }
+
+                ++count;
+                if (moduleDetails.OptimizationsEnabled)
+                {
+                    ++optimizedCount;
+                }
+            }
+
+            // Arbitrary threshold of 50% optimized.
+            // Things linked into the binary also count as symbols so this can be complicated.  There is probably a better heuristic than this.
+            // A small single-file win32 console application is just over 50% optimized.  A large project is more like 95%.
+            if (((float)optimizedCount / (float)count) > 0.50f)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool IncrementalLinkingEnabled(Pdb pdb)
+        {
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                if (om.GetObjectModuleDetails().IncrementalLinkingEnabled)
+                {
+                    // There should be exactly one symbol in the binary containing knowledge about the linker command-line.  If that one symbol
+                    // says that incremental linking was enabled then the whole PE had it enabled too.
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
