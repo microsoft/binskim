@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 }
 
                 // There are multiple /debug options so use StartsWith
-                if (argument.StartsWith("/debug", System.StringComparison.OrdinalIgnoreCase))
+                if (argument.StartsWith("/debug", System.StringComparison.OrdinalIgnoreCase) || argument.StartsWith("-debug", System.StringComparison.OrdinalIgnoreCase))
                 {
                     debugSet = true;
                 }
