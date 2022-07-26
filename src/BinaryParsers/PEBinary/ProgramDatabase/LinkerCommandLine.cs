@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -48,32 +49,32 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 }
 
                 // There are multiple /debug options so use StartsWith
-                if (argument.StartsWith("/debug", System.StringComparison.OrdinalIgnoreCase) || argument.StartsWith("-debug", System.StringComparison.OrdinalIgnoreCase))
+                if (ArgumentStartsWith(argument, "debug"))
                 {
                     debugSet = true;
                 }
-                else if (string.Equals(argument, "/opt:ref", System.StringComparison.OrdinalIgnoreCase) || string.Equals(argument, "-opt:ref", System.StringComparison.OrdinalIgnoreCase))
+                else if (ArgumentEquals(argument, "opt:ref"))
                 {
                     optRef = true;
                 }
-                else if (string.Equals(argument, "/opt:icf", System.StringComparison.OrdinalIgnoreCase) || string.Equals(argument, "-opt:icf", System.StringComparison.OrdinalIgnoreCase))
+                else if (ArgumentEquals(argument, "opt:icf"))
                 {
                     optIcf = true;
                 }
-                else if (string.Equals(argument, "/opt:lbr", System.StringComparison.OrdinalIgnoreCase) || string.Equals(argument, "-opt:lbr", System.StringComparison.OrdinalIgnoreCase))
+                else if (ArgumentEquals(argument, "opt:lbr"))
                 {
                     optLbr = true;
                 }
-                else if (string.Equals(argument, "/order", System.StringComparison.OrdinalIgnoreCase) || string.Equals(argument, "-order", System.StringComparison.OrdinalIgnoreCase))
+                else if (ArgumentEquals(argument, "order"))
                 {
                     order = true;
                 }
-                else if (string.Equals(argument, "/incremental", System.StringComparison.OrdinalIgnoreCase) || string.Equals(argument, "-incremental", System.StringComparison.OrdinalIgnoreCase))
+                else if (ArgumentEquals(argument, "incremental"))
                 {
                     explicitlyEnabled = true;
                     explicitlyDisabled = false; // Assume that if specified multiple times the last wins
                 }
-                else if (string.Equals(argument, "/incremental:no", System.StringComparison.OrdinalIgnoreCase) || string.Equals(argument, "-incremental:no", System.StringComparison.OrdinalIgnoreCase))
+                else if (ArgumentEquals(argument, "incremental:no"))
                 {
                     explicitlyDisabled = true;
                     explicitlyEnabled = false; // Assume that if specified multiple times the last wins
@@ -99,6 +100,45 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 this.IncrementalLinking = false;
             }
+        }
+
+        public static bool IsLinkerCommandLine(string commandLine)
+        {
+            // The command line for link.exe should contain /OUT with the final binary name.  Use that to separate compiler and linker command lines.
+            // We should accept both / and - as the argument prefix.  The argument is case insensitive.  We do not know where in the command-line the
+            // OUT argument will be provided so we use Contains.
+            return ((commandLine != null) &&
+                    (commandLine.Contains("/OUT", System.StringComparison.OrdinalIgnoreCase) || commandLine.Contains("-OUT", System.StringComparison.OrdinalIgnoreCase)));
+        }
+
+        private static bool ArgumentStartsWith(string target, string argument)
+        {
+            // Arguments are expected to begin with a - or a /.  Accept either.  They are not case sensitive.
+            if (target.Length == 0)
+            {
+                return false;
+            }
+            else if ((target[0] != '/') && (target[0] != '-'))
+            {
+                return false;
+            }
+
+            return target.AsSpan().Slice(1).StartsWith(argument, System.StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool ArgumentEquals(string target, string argument)
+        {
+            // Arguments are expected to begin with a - or a /.  Accept either.  They are not case sensitive.
+            if (target.Length == 0)
+            {
+                return false;
+            }
+            else if ((target[0] != '/') && (target[0] != '-'))
+            {
+                return false;
+            }
+
+            return target.AsSpan().Slice(1).Equals(argument, System.StringComparison.OrdinalIgnoreCase);
         }
     }
 }
