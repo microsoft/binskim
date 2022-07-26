@@ -39,9 +39,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.CompilerFrontEndVersion = compilerFrontEndVersion ?? new Version();
             this.CompilerBackEndVersion = backEndVersion ?? new Version();
 
-            // The command line for link.exe should contain /OUT with the final binary name.  Use that to separate compiler and linker command lines.
-            if ((commandLine != null) &&
-                (commandLine.Contains("/OUT", System.StringComparison.OrdinalIgnoreCase) || commandLine.Contains("-OUT", System.StringComparison.OrdinalIgnoreCase)))
+            if (LinkerCommandLine.IsLinkerCommandLine(commandLine))
             {
                 this.linkerCommandLine = new LinkerCommandLine(commandLine);
                 this.compilerCommandLine = new CompilerCommandLine(String.Empty);
