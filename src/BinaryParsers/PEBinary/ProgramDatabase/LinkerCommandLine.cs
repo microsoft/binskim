@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -122,7 +123,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 return false;
             }
 
-            return target.Substring(1).StartsWith(argument, System.StringComparison.OrdinalIgnoreCase);
+            return target.AsSpan().Slice(1).StartsWith(argument, System.StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool ArgumentEquals(string target, string argument)
@@ -137,7 +138,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 return false;
             }
 
-            return target.Substring(1).Equals(argument, System.StringComparison.OrdinalIgnoreCase);
+            return target.AsSpan().Slice(1).Equals(argument, System.StringComparison.OrdinalIgnoreCase);
         }
     }
 }
