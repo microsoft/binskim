@@ -438,6 +438,28 @@
               }
             }
           ]
+        },
+        {
+          "ruleId": "BA6001",
+          "ruleIndex": 19,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2015_Default.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2015_Default.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
         }
       ],
       "tool": {
@@ -961,6 +983,28 @@
                 }
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2027EnableSourceLink"
+            },
+            {
+              "id": "BA6001",
+              "name": "DisableIncrementalLinkingInReleaseBuilds",
+              "fullDescription": {
+                "text": "Incremental linking support increases binary size and can reduce runtime performance. Fully optimized release builds should not specify incremental linking."
+              },
+              "help": {
+                "text": "Incremental linking support increases binary size and can reduce runtime performance. Fully optimized release builds should not specify incremental linking."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' was compiled with incremental linking disabled."
+                },
+                "Warning": {
+                  "text": "'{0}' was compiled with incremental linking enabled, which inflates binary size and can reduce performance."
+                },
+                "Pass_NonReleaseBuild": {
+                  "text": "'{0}' was not compiled as release, skipping performance checks"
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA6001DisableIncrementalLinkingInReleaseBuilds"
             }
           ],
           "properties": {
