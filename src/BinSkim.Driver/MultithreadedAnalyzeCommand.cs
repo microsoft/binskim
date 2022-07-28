@@ -39,6 +39,7 @@ namespace Microsoft.CodeAnalysis.IL
             binaryAnalyzerContext.IgnorePdbLoadError = options.IgnorePdbLoadError;
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
             binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
+            binaryAnalyzerContext.MaxFileSizeInKilobytes = options.MaxFileSizeInKilobytes > 1024 ? options.MaxFileSizeInKilobytes : int.MaxValue;
 
 #pragma warning disable CS0618 // Type or member is obsolete
             if (options.Verbose && ShouldWarnVerbose)

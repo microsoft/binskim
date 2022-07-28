@@ -1403,6 +1403,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.  The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking..
+        /// </summary>
+        internal static string BA6001_DisableIncrementalLinkingInReleaseBuilds_Description {
+            get {
+                return ResourceManager.GetString("BA6001_DisableIncrementalLinkingInReleaseBuilds_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with incremental linking disabled..
+        /// </summary>
+        internal static string BA6001_Pass {
+            get {
+                return ResourceManager.GetString("BA6001_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be compiled as release but enables incremental linking, increasing binary size and further compromising runtime performance by preventing enabling maximal code optimization..
+        /// </summary>
+        internal static string BA6001_Warning {
+            get {
+                return ResourceManager.GetString("BA6001_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; because its PDB could not be loaded ({2})..
         /// </summary>
         internal static string ERR997_ExceptionLoadingPdb {
