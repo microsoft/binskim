@@ -71,5 +71,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         // MachO Checks
         public const string EnablePositionIndependentExecutableMachO = "BA5001";
         public const string DoNotAllowExecutableStack = "BA5002";
+
+        // Performance (not security) checks
+        public const string DisableIncrementalLinkingInReleaseBuilds = "BA6001";
     }
 }

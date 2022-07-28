@@ -914,3 +914,25 @@ This rule emits CSV data to the console for every compiler/language/version comb
 
 ---
 
+## Rule `BA6001.DisableIncrementalLinkingInReleaseBuilds`
+
+### Description
+
+Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.  The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with incremental linking disabled.
+
+#### `Warning`: Warning
+
+'{0}' appears to be compiled as release but enables incremental linking, increasing binary size and further compromising runtime performance by preventing enabling maximal code optimization.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+

@@ -1496,5 +1496,47 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             this.VerifyApplicability(new DoNotAllowExecutableStack(), new HashSet<string>());
         }
+
+        [Fact]
+        public void BA6001_DisableIncrementalLinkingInReleaseBuilds_Fail()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                // Every PDB parsing rule should return an error if a PDB can't be located.
+                // Be sure to delete this code (and remove passing the 'failureConditions`
+                // arguments to 'VerifyFail' if not implementing a PDB crawling check.
+                var failureConditions = new HashSet<string>
+                {
+                    MetadataConditions.CouldNotLoadPdb
+                };
+                this.VerifyFail(
+                    new DisableIncrementalLinkingInReleaseBuilds(),
+                    //this.GetTestFilesMatchingConditions(failureConditions),
+                    useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA6001_DisableIncrementalLinkingInReleaseBuilds_Pass()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA6001_DisableIncrementalLinkingInReleaseBuilds_NotApplicable()
+        {
+            this.VerifyApplicability(new DisableIncrementalLinkingInReleaseBuilds(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.NotAReleaseBuild);
+        }
     }
 }
