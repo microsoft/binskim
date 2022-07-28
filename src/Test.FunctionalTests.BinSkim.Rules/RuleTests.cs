@@ -1536,7 +1536,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA6001_DisableIncrementalLinkingInReleaseBuilds_NotApplicable()
         {
-            this.VerifyApplicability(new DisableIncrementalLinkingInReleaseBuilds(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.NotAReleaseBuild);
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new DisableIncrementalLinkingInReleaseBuilds(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.NotAReleaseBuild);
+            }
         }
     }
 }
