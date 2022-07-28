@@ -121,7 +121,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             foreach (var testCase in testCases)
             {
                 string commonPath = MultithreadedAnalyzeCommand.ReturnCommonPathRootFromTargetSpecifiersIfOneExists(testCase.TargetFileSpecifiers);
-                if (commonPath != testCase.ExpectedCommonPath)
+                if (!string.Equals(commonPath, testCase.ExpectedCommonPath, StringComparison.OrdinalIgnoreCase))
                 {
                     sb.AppendLine($"The test was expecting '{testCase.ExpectedCommonPath}' but found '{commonPath}'.");
                 }
@@ -129,7 +129,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 // Testing the same string array in a random order.
                 // This will guarantee that the sorting is working as expected.
                 commonPath = MultithreadedAnalyzeCommand.ReturnCommonPathRootFromTargetSpecifiersIfOneExists(Shuffle(testCase.TargetFileSpecifiers));
-                if (commonPath != testCase.ExpectedCommonPath)
+                if (!string.Equals(commonPath, testCase.ExpectedCommonPath, StringComparison.OrdinalIgnoreCase))
                 {
                     sb.AppendLine($"The test was expecting '{testCase.ExpectedCommonPath}' but found '{commonPath}' when shuffled with seed '{s_randomSeed}'.");
                 }
