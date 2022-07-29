@@ -603,4 +603,43 @@ Modules did not meet the criteria: {1}</value>
   <data name="BA6001_Warning" xml:space="preserve">
     <value>'{0}' appears to be compiled as release but enables incremental linking, increasing binary size and further compromising runtime performance by preventing enabling maximal code optimization.</value>
   </data>
+  <data name="BA6002_EliminateDuplicateStrings_Description" xml:space="preserve">
+    <value>The /GF compiler option, also known as Eliminate Duplicate Strings or String Pooling, will combine identical strings in a program to a single readonly copy. This can significantly reduce binary size for programs with many string resources.</value>
+  </data>
+  <data name="BA6002_Pass" xml:space="preserve">
+    <value>'{0}' was compiled with Eliminate Duplicate Strings (/GF) enabled.</value>
+  </data>
+  <data name="BA6002_Warning" xml:space="preserve">
+    <value>'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.</value>
+  </data>
+  <data name="BA6004_EnableCOMDATFolding_Description" xml:space="preserve">
+    <value>COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary.</value>
+  </data>
+  <data name="BA6004_Pass" xml:space="preserve">
+    <value>'{0}' was compiled with COMDAT folding (/OPT:ICF) enabled</value>
+  </data>
+  <data name="BA6004_Warning_DisabledForRelease" xml:space="preserve">
+    <value>'{0}' was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size.</value>
+  </data>
+  <data name="BA6004_Warning_EnabledForDebug" xml:space="preserve">
+    <value>'{0}' appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That may make debugging more difficult.</value>
+  </data>
+  <data name="BA6005_EnableOptimizeReferences_Description" xml:space="preserve">
+    <value>Optimize References can significantly reduce binary size because it instructs the linker to remove unreferenced functions and data from the final binary.</value>
+  </data>
+  <data name="BA6005_Pass" xml:space="preserve">
+    <value>'{0}' was compiled with Optimize References (/OPT:REF) enabled</value>
+  </data>
+  <data name="BA6005_Warning" xml:space="preserve">
+    <value>'{0}' was compiled with Optimize References (/OPT:REF) disabled, increasing binary size.</value>
+  </data>
+  <data name="BA6006_EnableLinkTimeCodeGeneration_Description" xml:space="preserve">
+    <value>Enabling Link Time Code Generation (LTCG) performs whole-program optimization, which is able to better optimize code across translation units. LTCG is also a prerequisite for Profile-Guided Optimization (PGO) which can further improve performance.</value>
+  </data>
+  <data name="BA6006_Pass" xml:space="preserve">
+    <value>'{0}' was compiled with LinkTimeCodeGeneration (/LTCG) enabled.</value>
+  </data>
+  <data name="BA6006_Warning" xml:space="preserve">
+    <value>'{0}' was compiled with without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.</value>
+  </data>
 </root>

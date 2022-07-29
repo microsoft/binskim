@@ -80,6 +80,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public bool IncrementalLinkingEnabled => this.linkerCommandLine.IncrementalLinking;
 
         /// <summary>
+        /// Returns whether the linker has COMDAT Folding (/OPT:ICF) enabled.
+        /// </summary>
+        public bool COMDATFoldingEnabled => this.linkerCommandLine.COMDATFoldingEnabled;
+
+        /// <summary>
+        /// Returns whether the linker has Optimize References (/OPT:REF) enabled.
+        /// </summary>
+        public bool OptimizeReferencesEnabled => this.linkerCommandLine.OptimizeReferencesEnabled;
+
+        /// <summary>
+        /// Returns whether the linker requested Link Time Code Generation (/LTCG)
+        /// </summary>
+        public bool LinkTimeCodeGenerationEnabled => this.linkerCommandLine.LinkTimeCodeGenerationEnabled;
+
+        /// <summary>
+        /// Returns whether the compiler has Whole Program Optimziation (/GL) enabled
+        /// </summary>
+        public bool WholeProgramOptimization => this.compilerCommandLine.WholeProgramOptimization;
+
+        /// <summary>
         /// Returns a list of integers corresponding to the set of warnings disabled via -wdnnnn switches on the command line.
         /// </summary>
         public ImmutableArray<int> ExplicitlyDisabledWarnings => this.compilerCommandLine.WarningsExplicitlyDisabled;

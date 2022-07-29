@@ -957,5 +957,59 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
             return false;
         }
+
+        public bool IsCOMDATFoldingEnabled(Pdb pdb)
+        {
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                if (om.GetObjectModuleDetails().COMDATFoldingEnabled)
+                {
+                    // There should be exactly one symbol in the binary containing knowledge about the linker command-line.  If that one symbol
+                    // says that OPT:ICF was enablelsd then the whole PE had it enabled too.
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsOptimizeReferencesEnabled(Pdb pdb)
+        {
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                if (om.GetObjectModuleDetails().OptimizeReferencesEnabled)
+                {
+                    // There should be exactly one symbol in the binary containing knowledge about the linker command-line.  If that one symbol
+                    // says that OPT:REF was enabled then the whole PE had it enabled too.
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsLinkTimeCodeGenerationEnabled(Pdb pdb)
+        {
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                ObjectModuleDetails omDetails = omView.Value.GetObjectModuleDetails();
+                if (omDetails.IncrementalLinkingEnabled)
+                {
+                    // There should be exactly one symbol in the binary containing knowledge about the linker command-line.  If that one symbol
+                    // says that LTCG was enabled then the whole PE had it enabled too.
+                    return true;
+                }
+                else if (omDetails.WholeProgramOptimization)
+                {
+                    // "If you don't explicitly specify /LTCG when you pass /GL or MSIL modules to the linker, the linker eventually detects
+                    //  this situation and restarts the link by using /LTCG."
+                    // https://docs.microsoft.com/cpp/build/reference/ltcg-link-time-code-generation?view=msvc-170#remarks
+                    //
+                    // In other words if even a single compiland has /GL enabled then LTCG was used.
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

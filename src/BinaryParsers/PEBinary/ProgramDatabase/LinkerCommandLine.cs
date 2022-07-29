@@ -25,6 +25,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public readonly bool IncrementalLinking;
 
         /// <summary>
+        /// Whether or not this command line enables Link Time Code Generation (/LTCG)
+        /// </summary>
+        public readonly bool LinkTimeCodeGenerationEnabled;
+
+        /// <summary>
+        /// Whether or not this command line enables Optimize References (/OPT:REF)
+        /// </summary>
+        public readonly bool OptimizeReferencesEnabled;
+
+        /// <summary>
+        /// Whether or not this command line enables Identical COMDAT folding (/OPT:ICF)
+        /// </summary>
+        public readonly bool COMDATFoldingEnabled;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="LinkerCommandLine"/> struct from a raw PDB-supplied command line.
         /// </summary>
         /// <param name="commandLine">The raw command line from the PDB.</param>
@@ -32,11 +47,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             this.Raw = commandLine ?? "";
             this.IncrementalLinking = false;
+            this.LinkTimeCodeGenerationEnabled = false;
+
+            // "By default, /OPT:REF is enabled by the linker unless /OPT:NOREF or /DEBUG is specified."
+            // https://docs.microsoft.com/cpp/build/reference/opt-optimizations?view=msvc-170#arguments
+            this.OptimizeReferencesEnabled = true;
+
+            // "By default, /OPT:ICF is enabled by the linker unless /OPT:NOICF or /DEBUG is specified."
+            // https://docs.microsoft.com/cpp/build/reference/opt-optimizations?view=msvc-170#arguments
+            this.COMDATFoldingEnabled = false;
 
             // https://docs.microsoft.com/cpp/build/reference/incremental-link-incrementally?view=msvc-170
             bool debugSet = false;
-            bool optRef = false;
-            bool optIcf = false;
             bool optLbr = false;
             bool order = false;
             bool explicitlyEnabled = false;
@@ -52,18 +74,48 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 if (ArgumentStartsWith(argument, "debug"))
                 {
                     debugSet = true;
+
+                    // "/DEBUG changes the defaults for the /OPT option from REF to NOREF and from ICF to NOICF, so if you
+                    //  want the original defaults, you must explicitly specify /OPT:REF or /OPT:ICF."
+                    // https://docs.microsoft.com/cpp/build/reference/debug-generate-debug-info?view=msvc-170#remarks
+                    this.OptimizeReferencesEnabled = false;
+                    this.COMDATFoldingEnabled = false;
                 }
-                else if (ArgumentEquals(argument, "opt:ref"))
+                else if (ArgumentStartsWith(argument, "opt"))
                 {
-                    optRef = true;
-                }
-                else if (ArgumentEquals(argument, "opt:icf"))
-                {
-                    optIcf = true;
-                }
-                else if (ArgumentEquals(argument, "opt:lbr"))
-                {
-                    optLbr = true;
+                    // "The /OPT arguments may be specified together, separated by commas. For example, instead of
+                    //  /OPT:REF /OPT:NOICF, you can specify /OPT:REF,NOICF."
+                    // https://docs.microsoft.com/cpp/build/reference/opt-optimizations?view=msvc-170#remarks
+                    //
+                    // Make sure to match the more-specific noX before X because we are using contains and both would
+                    // match the enabled version.
+                    if (argument.Contains("noref", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        this.OptimizeReferencesEnabled = false;
+                    }
+                    else if (argument.Contains("ref", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        this.OptimizeReferencesEnabled = true;
+
+                        // OPT:REF implicitly enables OPT:ICF.  This does not appear to be publicly documented.
+                        this.COMDATFoldingEnabled = true;
+                    }
+                    else if (argument.Contains("noicf", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        this.COMDATFoldingEnabled = false;
+                    }
+                    else if (argument.Contains("icf", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        this.COMDATFoldingEnabled = true;
+                    }
+                    else if (argument.Contains("nolbr", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        optLbr = false;
+                    }
+                    else if (argument.Contains("lbr", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        optLbr = true;
+                    }
                 }
                 else if (ArgumentEquals(argument, "order"))
                 {
@@ -78,6 +130,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 {
                     explicitlyDisabled = true;
                     explicitlyEnabled = false; // Assume that if specified multiple times the last wins
+                }
+                else if (ArgumentEquals(argument, "LTCG:OFF"))
+                {
+                    this.LinkTimeCodeGenerationEnabled = false;
+                }
+                else if (ArgumentStartsWith(argument, "LTCG"))
+                {
+                    this.LinkTimeCodeGenerationEnabled = true;
                 }
             }
 
@@ -94,7 +154,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
             else if (debugSet)
             {
-                this.IncrementalLinking = !optRef && !optIcf && !optLbr && !order;
+                this.IncrementalLinking = !this.OptimizeReferencesEnabled && !this.COMDATFoldingEnabled && !optLbr && !order;
             }
             else
             {

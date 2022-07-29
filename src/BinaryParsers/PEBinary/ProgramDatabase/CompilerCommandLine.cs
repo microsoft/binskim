@@ -66,6 +66,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public readonly bool UsesDebugCRuntime;
 
         /// <summary>
+        /// Whether or not this command line requests whole program optimization (/GL)
+        /// </summary>
+        public readonly bool WholeProgramOptimization;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CompilerCommandLine"/> struct from a raw PDB-supplied command line.
         /// </summary>
         /// <param name="commandLine">The raw command line from the PDB.</param>
@@ -80,6 +85,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.WarningsAsErrors = false;
             this.OptimizationsEnabled = false;
             this.UsesDebugCRuntime = false;
+            this.WholeProgramOptimization = false;
 
             var explicitWarnings = new Dictionary<int, WarningState>();
             foreach (string argument in ArgumentSplitter.CommandLineToArgvW(commandLine))
@@ -128,6 +134,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                         {
                             this.UsesDebugCRuntime = false;
                         }
+                        else if (argument.EndsWith("GL"))
+                        {
+                            this.WholeProgramOptimization = true;
+                        }
                         break;
                     case 4:
                         if (argument.EndsWith("WX-"))
@@ -138,6 +148,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                         else if (argument.EndsWith("MTd") || argument.EndsWith("MDd"))
                         {
                             this.UsesDebugCRuntime = true;
+                        }
+                        else if (argument.EndsWith("GL-"))
+                        {
+                            this.WholeProgramOptimization = false;
                         }
                         break;
                     case 5:
