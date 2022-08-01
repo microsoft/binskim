@@ -56,10 +56,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.CouldNotLoadPdb;
             if (target.Pdb == null) { return result; }
 
-            Pdb pdb = target.Pdb;
-            reasonForNotAnalyzing = MetadataConditions.NotAReleaseBuild;
-            if (!portableExecutable.IsMostlyOptimized(pdb)) { return result; }
-
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
@@ -67,24 +63,87 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
-            PE pe = target.PE;
             Pdb pdb = target.Pdb;
 
-            if (pe.IncrementalLinkingEnabled(pdb))
+            var compilandsBinaryWithoutStringPooling = new List<ObjectModuleDetails>();
+            var compilandsLibraryWithoutStringPooling = new List<ObjectModuleDetails>();
+
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
-                // '{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Fail, context, null,
-                    nameof(RuleResources.BA6002_Warning),
-                    context.TargetUri.GetFileName()));
+                Symbol om = omView.Value;
+                ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
+
+                if (omDetails.Language != Language.C &&
+                    omDetails.Language != Language.Cxx &&
+                    omDetails.Language != Language.MASM)
+                {
+                    continue;
+                }
+
+                if (!omDetails.HasDebugInfo)
+                {
+                    continue;
+                }
+
+                bool isMSVC = (omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftC ||
+                               omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftCxx);
+                if (isMSVC)
+                {
+                    if (!omDetails.EliminateDuplicateStringsEnabled)
+                    {
+                        CompilandRecord record = om.CreateCompilandRecord();
+                        if (!string.IsNullOrEmpty(record.Library))
+                        {
+                            compilandsLibraryWithoutStringPooling.Add(omDetails);
+                        }
+                        else
+                        {
+                            compilandsBinaryWithoutStringPooling.Add(omDetails);
+                        }
+                    }
+                    else
+                    {
+                        int i = 0;
+                        i++;
+                    }
+                }
+            }
+
+            if (compilandsLibraryWithoutStringPooling.Count > 0 || compilandsBinaryWithoutStringPooling.Count > 0)
+            {
+                if (compilandsLibraryWithoutStringPooling.Count > 0)
+                {
+                    GenerateCompilandsAndLog(context, compilandsLibraryWithoutStringPooling);
+                }
+
+                if (compilandsBinaryWithoutStringPooling.Count > 0)
+                {
+                    GenerateCompilandsAndLog(context, compilandsBinaryWithoutStringPooling);
+                }
+
                 return;
             }
 
-            // '{0}' was compiled with Eliminate Duplicate Strings (/GF) enabled.
+            //// '{0}' was compiled with Eliminate Duplicate Strings (/GF) enabled.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA6002_Pass),
                     context.TargetUri.GetFileName()));
+        }
+
+        private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes)
+        {
+            string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByCompiler();
+
+            // '{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.
+            // The following modules do not specify that policy: {1}
+            context.Logger.Log(this,
+                    RuleUtilities.BuildResult(FailureLevel.Warning,
+                                              context,
+                                              null,
+                                              nameof(RuleResources.BA6002_Warning),
+                                              context.TargetUri.GetFileName(),
+                                              compilands));
         }
     }
 }

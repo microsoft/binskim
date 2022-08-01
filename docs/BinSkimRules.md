@@ -950,7 +950,7 @@ The /GF compiler option, also known as Eliminate Duplicate Strings or String Poo
 
 #### `Warning`: Warning
 
-'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.
+'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}.
 
 ---
 

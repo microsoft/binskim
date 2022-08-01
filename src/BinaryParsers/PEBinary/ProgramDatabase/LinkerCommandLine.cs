@@ -70,8 +70,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     continue;
                 }
 
-                // There are multiple /debug options so use StartsWith
-                if (ArgumentStartsWith(argument, "debug"))
+                // There are multiple /debug options so use StartsWith.  There is also /debugtype: so we must be careful not
+                // to over-match against that.
+                if (ArgumentStartsWith(argument, "debug:") || ArgumentEquals(argument, "debug"))
                 {
                     debugSet = true;
 

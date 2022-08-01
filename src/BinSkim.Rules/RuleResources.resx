@@ -610,7 +610,7 @@ Modules did not meet the criteria: {1}</value>
     <value>'{0}' was compiled with Eliminate Duplicate Strings (/GF) enabled.</value>
   </data>
   <data name="BA6002_Warning" xml:space="preserve">
-    <value>'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.</value>
+    <value>'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}.</value>
   </data>
   <data name="BA6004_EnableCOMDATFolding_Description" xml:space="preserve">
     <value>COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary.</value>

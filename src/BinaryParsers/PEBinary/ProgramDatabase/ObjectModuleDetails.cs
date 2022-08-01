@@ -75,6 +75,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public bool UsesDebugCRuntime => this.compilerCommandLine.UsesDebugCRuntime;
 
         /// <summary>
+        /// Returns whether the compiland command line specifies Enable String Pooling (/GF).
+        /// </summary>
+        public bool EliminateDuplicateStringsEnabled => this.compilerCommandLine.EliminateDuplicateStringsEnabled;
+
+        /// <summary>
         /// Returns whether the linker had incremental linking enabled, or not.
         /// </summary>
         public bool IncrementalLinkingEnabled => this.linkerCommandLine.IncrementalLinking;

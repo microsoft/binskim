@@ -1448,7 +1448,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}..
         /// </summary>
         internal static string BA6002_Warning {
             get {
