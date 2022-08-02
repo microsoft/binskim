@@ -919,6 +919,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 Symbol om = omView.Value;
                 ObjectModuleDetails moduleDetails = om.GetObjectModuleDetails();
 
+                // Many non-code-file modules will pass through here.  Referenced libraries will show up as LINK, for example.  Exclude those
+                // from consideration to reduce skew.
+                if ((moduleDetails.Language != Language.C) &&
+                    (moduleDetails.Language != Language.Cxx))
+                {
+                    continue;
+                }
+
                 // We can early exit if -any- modules target a debug version of the C runtime.  Release binaries should never do that.  However,
                 // we cannot presume the opposite.  Many debug builds use the release C runtime.
                 if (moduleDetails.UsesDebugCRuntime)
