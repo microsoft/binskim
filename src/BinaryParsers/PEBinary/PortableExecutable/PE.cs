@@ -1019,5 +1019,43 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
             return false;
         }
+
+        /// <summary>
+        /// Examine the given PDB and determine whether it represents a
+        /// binary that was compiled with the Microsoft C/C++ compiler.
+        /// </summary>
+        /// <param name="pdb">The PDB.</param>
+        /// <returns>True if it looks like a MSVC binary.</returns>
+        /// <remarks>
+        /// This isn't as simple as looking for the well known compiler
+        /// values because both rust and clang binaries can link with
+        /// C runtime libraries compiled with MSVC.
+        /// </remarks>
+        public bool IsTargetCompiledWithMSVC(Pdb pdb)
+        {
+            uint msvcModules = 0;
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                ObjectModuleDetails omDetails = omView.Value.GetObjectModuleDetails();
+                switch (omDetails.WellKnownCompiler)
+                {
+                    case WellKnownCompilers.Clang:
+                        return false;
+
+                    case WellKnownCompilers.ClangLLVMRustc:
+                        return false;
+
+                    case WellKnownCompilers.MicrosoftC:
+                        msvcModules++;
+                        break;
+
+                    case WellKnownCompilers.MicrosoftCxx:
+                        msvcModules++;
+                        break;
+                }
+            }
+
+            return msvcModules > 0;
+        }
     }
 }

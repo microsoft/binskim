@@ -60,6 +60,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.NotAReleaseBuild;
             if (!portableExecutable.IsMostlyOptimized(pdb)) { return result; }
 
+            reasonForNotAnalyzing = MetadataConditions.ImageIsNotBuiltWithMSVC;
+            if (!portableExecutable.IsTargetCompiledWithMSVC(target.Pdb)) { return result; }
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
