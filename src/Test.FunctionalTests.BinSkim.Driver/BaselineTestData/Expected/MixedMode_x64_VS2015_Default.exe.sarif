@@ -988,20 +988,20 @@
               "id": "BA6001",
               "name": "DisableIncrementalLinkingInReleaseBuilds",
               "fullDescription": {
-                "text": "Incremental linking support increases binary size and can reduce runtime performance. Fully optimized release builds should not specify incremental linking."
+                "text": "Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.  The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking."
               },
               "help": {
-                "text": "Incremental linking support increases binary size and can reduce runtime performance. Fully optimized release builds should not specify incremental linking."
+                "text": "Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.  The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking."
               },
               "messageStrings": {
                 "Pass": {
                   "text": "'{0}' was compiled with incremental linking disabled."
                 },
                 "Warning": {
-                  "text": "'{0}' was compiled with incremental linking enabled, which inflates binary size and can reduce performance."
+                  "text": "'{0}' appears to be compiled as release but enables incremental linking, increasing binary size and further compromising runtime performance by preventing enabling maximal code optimization."
                 },
-                "Pass_NonReleaseBuild": {
-                  "text": "'{0}' was not compiled as release, skipping performance checks"
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
                 }
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA6001DisableIncrementalLinkingInReleaseBuilds"
