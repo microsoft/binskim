@@ -51,11 +51,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             // "By default, /OPT:REF is enabled by the linker unless /OPT:NOREF or /DEBUG is specified."
             // https://docs.microsoft.com/cpp/build/reference/opt-optimizations?view=msvc-170#arguments
-            this.OptimizeReferencesEnabled = true;
+            //
+            // Only default to true if the command line is non-null.  Otherwise the null-initialization
+            // of this class will return true and confuse analysis.
+            this.OptimizeReferencesEnabled = !String.IsNullOrEmpty(commandLine);
 
             // "By default, /OPT:ICF is enabled by the linker unless /OPT:NOICF or /DEBUG is specified."
             // https://docs.microsoft.com/cpp/build/reference/opt-optimizations?view=msvc-170#arguments
-            this.COMDATFoldingEnabled = true;
+            this.COMDATFoldingEnabled = !String.IsNullOrEmpty(commandLine);
 
             // https://docs.microsoft.com/cpp/build/reference/incremental-link-incrementally?view=msvc-170
             bool debugSet = false;
@@ -101,7 +104,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                         // OPT:REF implicitly enables OPT:ICF.  This does not appear to be publicly documented.
                         this.COMDATFoldingEnabled = true;
                     }
-                    else if (argument.Contains("noicf", System.StringComparison.OrdinalIgnoreCase))
+                    
+                    if (argument.Contains("noicf", System.StringComparison.OrdinalIgnoreCase))
                     {
                         this.COMDATFoldingEnabled = false;
                     }
@@ -109,7 +113,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     {
                         this.COMDATFoldingEnabled = true;
                     }
-                    else if (argument.Contains("nolbr", System.StringComparison.OrdinalIgnoreCase))
+                    
+                    if (argument.Contains("nolbr", System.StringComparison.OrdinalIgnoreCase))
                     {
                         optLbr = false;
                     }
