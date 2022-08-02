@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             // "By default, /OPT:ICF is enabled by the linker unless /OPT:NOICF or /DEBUG is specified."
             // https://docs.microsoft.com/cpp/build/reference/opt-optimizations?view=msvc-170#arguments
-            this.COMDATFoldingEnabled = false;
+            this.COMDATFoldingEnabled = true;
 
             // https://docs.microsoft.com/cpp/build/reference/incremental-link-incrementally?view=msvc-170
             bool debugSet = false;
