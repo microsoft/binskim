@@ -507,10 +507,8 @@
         {
           "ruleId": "BA6004",
           "ruleIndex": 22,
-          "kind": "pass",
-          "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "Warning_DisabledForRelease",
             "arguments": [
               "MixedMode_x86_VS2015_Default.exe"
             ]
@@ -529,10 +527,8 @@
         {
           "ruleId": "BA6005",
           "ruleIndex": 23,
-          "kind": "pass",
-          "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "Warning",
             "arguments": [
               "MixedMode_x86_VS2015_Default.exe"
             ]

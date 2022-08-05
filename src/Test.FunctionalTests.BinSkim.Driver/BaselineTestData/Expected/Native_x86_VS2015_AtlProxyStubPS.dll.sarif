@@ -508,10 +508,8 @@
         {
           "ruleId": "BA6004",
           "ruleIndex": 22,
-          "kind": "pass",
-          "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "Warning_DisabledForRelease",
             "arguments": [
               "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]
@@ -530,10 +528,8 @@
         {
           "ruleId": "BA6005",
           "ruleIndex": 23,
-          "kind": "pass",
-          "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "Warning",
             "arguments": [
               "Native_x86_VS2015_AtlProxyStubPS.dll"
             ]

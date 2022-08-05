@@ -484,26 +484,6 @@
         {
           "ruleId": "BA6004",
           "ruleIndex": 21,
-          "message": {
-            "id": "Warning_EnabledForDebug",
-            "arguments": [
-              "MixedMode_x86_VS2013_Default.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x86_VS2013_Default.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6004",
-          "ruleIndex": 21,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -526,10 +506,8 @@
         {
           "ruleId": "BA6005",
           "ruleIndex": 22,
-          "kind": "pass",
-          "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "Warning",
             "arguments": [
               "MixedMode_x86_VS2013_Default.exe"
             ]

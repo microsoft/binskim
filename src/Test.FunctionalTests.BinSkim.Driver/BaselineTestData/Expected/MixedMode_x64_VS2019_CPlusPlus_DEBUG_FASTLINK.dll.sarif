@@ -420,26 +420,6 @@
         {
           "ruleId": "BA6004",
           "ruleIndex": 18,
-          "message": {
-            "id": "Warning_EnabledForDebug",
-            "arguments": [
-              "MixedMode_x64_VS2019_CPlusPlus_DEBUG_FASTLINK.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2019_CPlusPlus_DEBUG_FASTLINK.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6004",
-          "ruleIndex": 18,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -462,10 +442,8 @@
         {
           "ruleId": "BA6005",
           "ruleIndex": 19,
-          "kind": "pass",
-          "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "Warning",
             "arguments": [
               "MixedMode_x64_VS2019_CPlusPlus_DEBUG_FASTLINK.dll"
             ]

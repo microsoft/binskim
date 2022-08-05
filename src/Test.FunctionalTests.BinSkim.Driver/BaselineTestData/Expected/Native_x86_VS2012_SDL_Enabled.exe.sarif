@@ -465,26 +465,6 @@
         {
           "ruleId": "BA6004",
           "ruleIndex": 20,
-          "message": {
-            "id": "Warning_EnabledForDebug",
-            "arguments": [
-              "Native_x86_VS2012_SDL_Enabled.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2012_SDL_Enabled.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6004",
-          "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -507,10 +487,8 @@
         {
           "ruleId": "BA6005",
           "ruleIndex": 21,
-          "kind": "pass",
-          "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "Warning",
             "arguments": [
               "Native_x86_VS2012_SDL_Enabled.exe"
             ]

@@ -36,9 +36,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             var commandLine = new LinkerCommandLine("foo");
             commandLine.COMDATFoldingEnabled.Should().BeTrue();
             commandLine.OptimizeReferencesEnabled.Should().BeTrue();
-            commandLine.IncrementalLinking.Should().BeTrue();
 
             // The rest should still be false
+            commandLine.IncrementalLinking.Should().BeFalse();
             commandLine.LinkTimeCodeGenerationEnabled.Should().BeFalse();
         }
 
@@ -212,6 +212,57 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             commandLine.LinkTimeCodeGenerationEnabled.Should().BeTrue();
             commandLine = new LinkerCommandLine("/LTCG /LTCG:OFF");
             commandLine.LinkTimeCodeGenerationEnabled.Should().BeFalse();
+        }
+
+        [Fact]
+        public void IncrementalLinkingTest()
+        {
+            // Direct enable/disable
+            LinkerCommandLine commandLine = new LinkerCommandLine("/incremental");
+            commandLine.IncrementalLinking.Should().BeTrue();
+            commandLine = new LinkerCommandLine("-incremental");
+            commandLine.IncrementalLinking.Should().BeTrue();
+            commandLine = new LinkerCommandLine("/INCREMENTAL");
+            commandLine.IncrementalLinking.Should().BeTrue();
+            commandLine = new LinkerCommandLine("-INCREMENTAL");
+            commandLine.IncrementalLinking.Should().BeTrue();
+
+            commandLine = new LinkerCommandLine("/incremental:no");
+            commandLine.IncrementalLinking.Should().BeFalse();
+            commandLine = new LinkerCommandLine("-incremental:no");
+            commandLine.IncrementalLinking.Should().BeFalse();
+            commandLine = new LinkerCommandLine("/INCREMENTAL:NO");
+            commandLine.IncrementalLinking.Should().BeFalse();
+            commandLine = new LinkerCommandLine("-INCREMENTAL:NO");
+            commandLine.IncrementalLinking.Should().BeFalse();
+
+            // Last writer wins
+            commandLine = new LinkerCommandLine("/incremental /incremental:no");
+            commandLine.IncrementalLinking.Should().BeFalse();
+            commandLine = new LinkerCommandLine("/incremental:no /incremental");
+            commandLine.IncrementalLinking.Should().BeTrue();
+
+            // Implicitly enabled by /debug
+            commandLine = new LinkerCommandLine("/debug");
+            commandLine.IncrementalLinking.Should().BeTrue();
+
+            // Implicitly disabled despite /debug with several other options
+            commandLine = new LinkerCommandLine("/debug /opt:ref");
+            commandLine.IncrementalLinking.Should().BeFalse();
+            commandLine = new LinkerCommandLine("/debug /opt:icf");
+            commandLine.IncrementalLinking.Should().BeFalse();
+            commandLine = new LinkerCommandLine("/debug /opt:lbr");
+            commandLine.IncrementalLinking.Should().BeFalse();
+            commandLine = new LinkerCommandLine("/debug /order");
+            commandLine.IncrementalLinking.Should().BeFalse();
+
+            // Implicitly enabled by /debug but not overridden by disabled optimizations
+            commandLine = new LinkerCommandLine("/debug /opt:noref");
+            commandLine.IncrementalLinking.Should().BeTrue();
+            commandLine = new LinkerCommandLine("/debug /opt:noicf");
+            commandLine.IncrementalLinking.Should().BeTrue();
+            commandLine = new LinkerCommandLine("/debug /opt:nolbr");
+            commandLine.IncrementalLinking.Should().BeTrue();
         }
     }
 }

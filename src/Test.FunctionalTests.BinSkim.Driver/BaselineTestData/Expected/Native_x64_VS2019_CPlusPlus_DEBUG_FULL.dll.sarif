@@ -463,26 +463,6 @@
         {
           "ruleId": "BA6004",
           "ruleIndex": 20,
-          "message": {
-            "id": "Warning_EnabledForDebug",
-            "arguments": [
-              "Native_x64_VS2019_CPlusPlus_DEBUG_FULL.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_FULL.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6004",
-          "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -505,10 +485,8 @@
         {
           "ruleId": "BA6005",
           "ruleIndex": 21,
-          "kind": "pass",
-          "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "Warning",
             "arguments": [
               "Native_x64_VS2019_CPlusPlus_DEBUG_FULL.dll"
             ]

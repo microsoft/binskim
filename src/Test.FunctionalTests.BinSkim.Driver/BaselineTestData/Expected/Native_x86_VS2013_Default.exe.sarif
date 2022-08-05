@@ -443,26 +443,6 @@
         {
           "ruleId": "BA6004",
           "ruleIndex": 19,
-          "message": {
-            "id": "Warning_EnabledForDebug",
-            "arguments": [
-              "Native_x86_VS2013_Default.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_Default.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6004",
-          "ruleIndex": 19,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -485,10 +465,8 @@
         {
           "ruleId": "BA6005",
           "ruleIndex": 20,
-          "kind": "pass",
-          "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "Warning",
             "arguments": [
               "Native_x86_VS2013_Default.exe"
             ]
