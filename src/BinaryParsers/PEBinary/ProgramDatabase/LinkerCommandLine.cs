@@ -46,7 +46,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public LinkerCommandLine(string commandLine)
         {
             this.Raw = commandLine ?? "";
-            this.IncrementalLinking = false;
+
+            // "By default, the linker runs in incremental mode."
+            // https://docs.microsoft.com/cpp/build/reference/incremental-link-incrementally?view=msvc-170
+            this.IncrementalLinking = !String.IsNullOrEmpty(commandLine);
+
             this.LinkTimeCodeGenerationEnabled = false;
 
             // "By default, /OPT:REF is enabled by the linker unless /OPT:NOREF or /DEBUG is specified."
