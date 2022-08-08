@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                         // OPT:REF implicitly enables OPT:ICF.  This does not appear to be publicly documented.
                         this.COMDATFoldingEnabled = true;
                     }
-                    
+
                     if (argument.Contains("noicf", System.StringComparison.OrdinalIgnoreCase))
                     {
                         this.COMDATFoldingEnabled = false;
@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     {
                         this.COMDATFoldingEnabled = true;
                     }
-                    
+
                     if (argument.Contains("nolbr", System.StringComparison.OrdinalIgnoreCase))
                     {
                         optLbr = false;

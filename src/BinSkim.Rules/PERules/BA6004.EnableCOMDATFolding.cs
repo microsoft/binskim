@@ -80,7 +80,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.TargetUri.GetFileName()));
                 return;
             }
-            
+
             if (pe.IsMostlyOptimized(pdb) && !pe.IsCOMDATFoldingEnabled(pdb))
             {
                 // '{0}' was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size.

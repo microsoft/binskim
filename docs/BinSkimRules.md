@@ -952,6 +952,10 @@ The /GF compiler option, also known as Eliminate Duplicate Strings or String Poo
 
 '{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}.
 
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
 ---
 
 ## Rule `BA6004.EnableCOMDATFolding`
@@ -966,13 +970,13 @@ COMDAT folding can significantly reduce binary size by combining functions which
 
 '{0}' was compiled with COMDAT folding (/OPT:ICF) enabled
 
-#### `Warning`: Warning
+#### `EnabledForDebug`: Warning
+
+'{0}' appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That may make debugging more difficult.
+
+#### `DisabledForRelease`: Warning
 
 '{0}' was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size.
-
-#### `Warning`: Warning
-
-'{0}' appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled.  That may make debugging more difficult.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -995,6 +999,10 @@ Optimize References can significantly reduce binary size because it instructs th
 #### `Warning`: Warning
 
 '{0}' was compiled with Optimize References (/OPT:REF) disabled, increasing binary size.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
 ---
 
@@ -1019,3 +1027,4 @@ Enabling Link Time Code Generation (LTCG) performs whole-program optimization, w
 '{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
 ---
+
