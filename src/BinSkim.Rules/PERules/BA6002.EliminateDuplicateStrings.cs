@@ -104,11 +104,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             compilandsBinaryWithoutStringPooling.Add(omDetails);
                         }
                     }
-                    else
-                    {
-                        int i = 0;
-                        i++;
-                    }
                 }
             }
 
