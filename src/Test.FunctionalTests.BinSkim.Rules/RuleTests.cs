@@ -1582,7 +1582,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyApplicability(new EliminateDuplicateStrings(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.NotAReleaseBuild);
+                this.VerifyApplicability(new EliminateDuplicateStrings(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.ImageIsNotBuiltWithMSVC);
             }
         }
 
@@ -1627,7 +1627,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyApplicability(new EnableCOMDATFolding(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.NotAReleaseBuild);
+                this.VerifyApplicability(new EnableCOMDATFolding(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.ImageIsNotBuiltWithMSVC);
             }
         }
 

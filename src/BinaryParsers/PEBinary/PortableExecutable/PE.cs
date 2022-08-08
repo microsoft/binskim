@@ -1001,7 +1001,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
                 ObjectModuleDetails omDetails = omView.Value.GetObjectModuleDetails();
-                if (omDetails.IncrementalLinkingEnabled)
+                if (omDetails.LinkTimeCodeGenerationEnabled)
                 {
                     // There should be exactly one symbol in the binary containing knowledge about the linker command-line.  If that one symbol
                     // says that LTCG was enabled then the whole PE had it enabled too.

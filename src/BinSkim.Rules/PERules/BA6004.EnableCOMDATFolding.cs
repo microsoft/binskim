@@ -78,6 +78,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     RuleUtilities.BuildResult(ResultKind.Fail, context, null,
                     nameof(RuleResources.BA6004_Warning_EnabledForDebug),
                     context.TargetUri.GetFileName()));
+                return;
             }
             
             if (pe.IsMostlyOptimized(pdb) && !pe.IsCOMDATFoldingEnabled(pdb))
