@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Diagnostics;
+using System.Reflection.PortableExecutable;
+
 using FluentAssertions;
 
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -307,15 +310,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             // Taken from a real (anonymized) project linker command-line.  Include path list considerably shortened
             // for brevity.
             var commandLine = new LinkerCommandLine(@"
-/out:v:\t\Contoso.dll /machine:amd64 /filealign:0x1000 /INCLUDE:__scrt_stdio_legacy_msvcrt_compatibility 
--ignore:4199 /MERGE:_PAGE=PAGE /MERGE:_TEXT=.text /MERGE:_RDATA=.rdata /OPT:REF /OPT:ICF /IGNORE:4078,4221,4281,4006,4198
-/INCREMENTAL:NO /release /NODEFAULTLIB /debug /debugtype:cv,fixup,pdata /version:10.0 /ltcg
-/functionpadmin:6 /MERGE:.orpc=.text /merge:.gfids=.rdata /guard:export /guard:mixed /IGNORE:4266 /guard:xfg
-/guard:longjmp /guard:exportsuppress /guard:ehcont /CETCOMPAT /pdbcompress /delayload:shell32.dll /dynamicbase
-/STACK:0x40000,0x1000 /dll /subsystem:windows,10.00 -entry:_DllMainCRTStartup");
+/ERRORREPORT:QUEUE /OUT:D:\\_w\\1\\b\\bin\\amd64\\Contoso.dll /INCREMENTAL:NO /NOLOGO /LIBPATH:D:\\_w\\1\\b\\bin\\amd64\\
+/NODEFAULTLIB:LIBC /MANIFEST:NO /DEBUG /PDB:D:\\_w\\1\\b\\bin\\amd64\\Contoso.pdb /SUBSYSTEM:WINDOWS
+/PGD:D:\\_w\\1\\b\\bin\\amd64\\python310.pgd /LTCG:PGUpdate
+/LTCGOUT:D:\\_w\\1\\s\\PCbuild\\obj\\310amd64_PGUpdate\\contoso\\contoso.iobj /TLBID:1 /DYNAMICBASE /NXCOMPAT
+/IMPLIB:D:\\_w\\1\\b\\bin\\amd64\\contoso.lib /MACHINE:X64 /OPT:REF,NOICF /DLL");
             commandLine.IncrementalLinking.Should().BeFalse();
             commandLine.OptimizeReferencesEnabled.Should().BeTrue();
-            commandLine.COMDATFoldingEnabled.Should().BeTrue();
+            commandLine.COMDATFoldingEnabled.Should().BeFalse();
             commandLine.LinkTimeCodeGenerationEnabled.Should().BeTrue();
         }
     }

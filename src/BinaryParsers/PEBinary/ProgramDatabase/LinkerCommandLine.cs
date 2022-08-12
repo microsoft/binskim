@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             // Early return if there is no command-line.  This class is created with an empty string for non-linker
             // command lines.
-            if (commandLine.Length == 0)
+            if (this.Raw.Length == 0)
             {
                 return;
             }
@@ -172,8 +172,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             // If /DEBUG is set then incremental is implied unless certain other flags convert it back to false.
             // Incremental also defaults to true so this does not seem to matter.
             // https://docs.microsoft.com/cpp/build/reference/incremental-link-incrementally?view=msvc-170
-            this.OptimizeReferencesEnabled = optimizeReferencesExplicit ?? (!(debugExplicit ?? false) && (profile || true));
-            this.COMDATFoldingEnabled = COMDATFoldingExplicit ?? (!(debugExplicit ?? false) && !profile && (this.OptimizeReferencesEnabled || true));
+            bool explicitDebugEnabled = (debugExplicit ?? false);
+            this.OptimizeReferencesEnabled = optimizeReferencesExplicit ?? (!explicitDebugEnabled);
+            this.COMDATFoldingEnabled = COMDATFoldingExplicit ?? (!explicitDebugEnabled && !profile);
 
             bool incrementalLinkingBlockedByOtherFlags = this.OptimizeReferencesEnabled || this.COMDATFoldingEnabled || optLbr || order || profile;
             this.IncrementalLinking = incrementalLinkingExplicit ?? !incrementalLinkingBlockedByOtherFlags;
