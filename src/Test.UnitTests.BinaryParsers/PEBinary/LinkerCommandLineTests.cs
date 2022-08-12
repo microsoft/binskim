@@ -37,8 +37,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             commandLine.COMDATFoldingEnabled.Should().BeTrue();
             commandLine.OptimizeReferencesEnabled.Should().BeTrue();
 
-            // The rest should still be false
+            // Incremental linking is documented as defaulting to true.  However, so do other options
+            // such as /OPT:REF that disable incremental linking.
             commandLine.IncrementalLinking.Should().BeFalse();
+
+            // The rest should still be false
             commandLine.LinkTimeCodeGenerationEnabled.Should().BeFalse();
         }
 
@@ -75,6 +78,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             commandLine = new LinkerCommandLine("-debugtype:cv,pdata,fixup");
             commandLine.COMDATFoldingEnabled.Should().BeTrue();
             commandLine.OptimizeReferencesEnabled.Should().BeTrue();
+
+            // DEBUG:NONE does not enable debug setting to disable optimizations
+            commandLine = new LinkerCommandLine("/debug:none");
+            commandLine.COMDATFoldingEnabled.Should().BeTrue();
+            commandLine.OptimizeReferencesEnabled.Should().BeTrue();
         }
 
         [Fact]
@@ -108,6 +116,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             commandLine = new LinkerCommandLine("/debug /opt:ICF");
             commandLine.COMDATFoldingEnabled.Should().BeTrue();
             commandLine.OptimizeReferencesEnabled.Should().BeFalse();
+
+            // The order of arguments should not matter.  /debug only turns off ICF if it is not explicitly
+            // specified.
+            commandLine = new LinkerCommandLine("/opt:icf /debug");
+            commandLine.COMDATFoldingEnabled.Should().BeTrue();
+            commandLine.OptimizeReferencesEnabled.Should().BeFalse();
+
+            commandLine = new LinkerCommandLine("-opt:icf /debug");
+            commandLine.COMDATFoldingEnabled.Should().BeTrue();
+            commandLine.OptimizeReferencesEnabled.Should().BeFalse();
+
+            commandLine = new LinkerCommandLine("-OPT:icf /debug");
+            commandLine.COMDATFoldingEnabled.Should().BeTrue();
+            commandLine.OptimizeReferencesEnabled.Should().BeFalse();
+
+            commandLine = new LinkerCommandLine("/opt:ICF /debug");
+            commandLine.COMDATFoldingEnabled.Should().BeTrue();
+            commandLine.OptimizeReferencesEnabled.Should().BeFalse();
+
+            // /PROFILE implies NOICF
+            commandLine = new LinkerCommandLine("/profile");
+            commandLine.COMDATFoldingEnabled.Should().BeFalse();
         }
 
         [Fact]
@@ -125,22 +155,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             commandLine = new LinkerCommandLine("/opt:NOREF");
             commandLine.OptimizeReferencesEnabled.Should().BeFalse();
 
-            // /debug turns off these optimizations by default, so that we can test re-enabling them.
+            // /debug turns off these optimizations by default
             // opt:ref implicitly enables opt:icf so both should become true
             commandLine = new LinkerCommandLine("/debug /opt:ref");
-            commandLine.COMDATFoldingEnabled.Should().BeTrue();
+            commandLine.COMDATFoldingEnabled.Should().BeFalse();
             commandLine.OptimizeReferencesEnabled.Should().BeTrue();
 
-            commandLine = new LinkerCommandLine("/debug -opt:ref");
-            commandLine.COMDATFoldingEnabled.Should().BeTrue();
+            // The order between an explicit /opt:ref and /debug should not matter.  Debug only affects
+            // implicit enable.
+            commandLine = new LinkerCommandLine("/opt:ref /debug ");
+            commandLine.COMDATFoldingEnabled.Should().BeFalse();
             commandLine.OptimizeReferencesEnabled.Should().BeTrue();
 
-            commandLine = new LinkerCommandLine("/debug -OPT:ref");
-            commandLine.COMDATFoldingEnabled.Should().BeTrue();
-            commandLine.OptimizeReferencesEnabled.Should().BeTrue();
-
-            commandLine = new LinkerCommandLine("/debug /opt:REF");
-            commandLine.COMDATFoldingEnabled.Should().BeTrue();
+            // /PROFILE implies REF
+            commandLine = new LinkerCommandLine("/profile");
             commandLine.OptimizeReferencesEnabled.Should().BeTrue();
         }
 
@@ -263,6 +291,32 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             commandLine.IncrementalLinking.Should().BeTrue();
             commandLine = new LinkerCommandLine("/debug /opt:nolbr");
             commandLine.IncrementalLinking.Should().BeTrue();
+
+            // Implied disable by /PROFILE.  Can be explicitly re-enabled.
+            commandLine = new LinkerCommandLine("/profile");
+            commandLine.IncrementalLinking.Should().BeFalse();
+            commandLine = new LinkerCommandLine("/profile /incremental");
+            commandLine.IncrementalLinking.Should().BeTrue();
+            commandLine = new LinkerCommandLine("/incremental /profile");
+            commandLine.IncrementalLinking.Should().BeTrue();
+        }
+
+        [Fact]
+        public void RealisticCommandLineTest()
+        {
+            // Taken from a real (anonymized) project linker command-line.  Include path list considerably shortened
+            // for brevity.
+            var commandLine = new LinkerCommandLine(@"
+/out:v:\t\Contoso.dll /machine:amd64 /filealign:0x1000 /INCLUDE:__scrt_stdio_legacy_msvcrt_compatibility 
+-ignore:4199 /MERGE:_PAGE=PAGE /MERGE:_TEXT=.text /MERGE:_RDATA=.rdata /OPT:REF /OPT:ICF /IGNORE:4078,4221,4281,4006,4198
+/INCREMENTAL:NO /release /NODEFAULTLIB /debug /debugtype:cv,fixup,pdata /version:10.0 /ltcg
+/functionpadmin:6 /MERGE:.orpc=.text /merge:.gfids=.rdata /guard:export /guard:mixed /IGNORE:4266 /guard:xfg
+/guard:longjmp /guard:exportsuppress /guard:ehcont /CETCOMPAT /pdbcompress /delayload:shell32.dll /dynamicbase
+/STACK:0x40000,0x1000 /dll /subsystem:windows,10.00 -entry:_DllMainCRTStartup");
+            commandLine.IncrementalLinking.Should().BeFalse();
+            commandLine.OptimizeReferencesEnabled.Should().BeTrue();
+            commandLine.COMDATFoldingEnabled.Should().BeTrue();
+            commandLine.LinkTimeCodeGenerationEnabled.Should().BeTrue();
         }
     }
 }
