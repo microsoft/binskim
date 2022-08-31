@@ -1,10 +1,11 @@
 # BinSkim Release History
 
-## Unreleased
+## **v2.0.0** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/2.0.0)
 
 * BUGFIX: Fix `error ERR997.ExceptionLoadingPdb : '[filename]' was not evaluated because its PDB could not be loaded (E_PDB_NOT_FOUND).` when reading PE file built with `PDBPageSize:8192` or greater, by upgrading msdia140.dll from `14.27.28826.96` to `14.32.31326.0`. [685](https://github.com/microsoft/binskim/pull/685)
 * FEATURE: Add BA3031.EnableClangSafeStack, rename BA3030.UseCheckedFunctionsWithGcc to BA3030.UseGccCheckedFunctions [#663](https://github.com/microsoft/binskim/pull/663)
 * Bump Sarif.Sdk by updating submodule from [fc9a9df to 698adb6](https://github.com/microsoft/sarif-sdk/compare/fc9a9dfb865096b5aaa9fa3651854670940f7459...698adb6365a242c6bb75adde56e3bd4be39c21d7). [#674](https://github.com/microsoft/binskim/pull/674)
+* Bump Sarif.Sdk by updating submodule from [698adb6 to 025f64c] (https://github.com/microsoft/sarif-sdk/compare/698adb6365a242c6bb75adde56e3bd4be39c21d7...025f64caf6603d5cc800ce1b4139641cd286ebee). [#xxx](https://github.com/microsoft/binskim/pull/xxx)
 
 ## **v1.9.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.5)
 
