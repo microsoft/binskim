@@ -1538,7 +1538,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance..
         /// </summary>
         internal static string BA6006_Warning {
             get {

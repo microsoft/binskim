@@ -66,12 +66,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public readonly bool UsesDebugCRuntime;
 
         /// <summary>
-        /// Whether or not this command line requests String Pooling aka Eliminate Duplicate Strings aka /GF
+        /// Whether or not this command line requests String Pooling aka Eliminate Duplicate Strings aka /GF.
         /// </summary>
         public readonly bool EliminateDuplicateStringsEnabled;
 
         /// <summary>
-        /// Whether or not this command line requests whole program optimization (/GL)
+        /// Whether or not this command line requests whole program optimization (/GL).
         /// </summary>
         public readonly bool WholeProgramOptimization;
 
@@ -134,7 +134,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                             if (argument.EndsWith("O1") || argument.EndsWith("O2"))
                             {
                                 // https://docs.microsoft.com/cpp/build/reference/gf-eliminate-duplicate-strings?view=msvc-170#remarks
-                                // /GF is in effect when /O1 or /O2 is used.
+                                // "/GF is in effect when /O1 or /O2 is used.".  Basically, it is not necessary to request /GF when using /O1 or /O2.
                                 this.EliminateDuplicateStringsEnabled = true;
                             }
                         }

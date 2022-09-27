@@ -1020,7 +1020,7 @@ Enabling Link Time Code Generation (LTCG) performs whole-program optimization, w
 
 #### `Warning`: Warning
 
-'{0}' was compiled with without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.
+'{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.
 
 #### `InvalidMetadata`: NotApplicable
 

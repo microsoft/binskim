@@ -640,6 +640,6 @@ Modules did not meet the criteria: {1}</value>
     <value>'{0}' was compiled with LinkTimeCodeGeneration (/LTCG) enabled.</value>
   </data>
   <data name="BA6006_Warning" xml:space="preserve">
-    <value>'{0}' was compiled with without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.</value>
+    <value>'{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.</value>
   </data>
 </root>
