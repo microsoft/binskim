@@ -82,6 +82,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             CoffHeader coffHeader = target.PE.PEHeaders.CoffHeader;
             Characteristics characteristics = coffHeader.Characteristics;
 
+            if (characteristics.ToString() == "ExecutableImage, Bit32Machine")
+            {
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // 32-bit executable programs cannot support high entropy ASLR (Address Space Layout Randomization).  When "BinSkim.exe" analyzes a 32-bit executable program    //
+                // compiled with CLR (Common Language Runtime) support, then it (the "BinSkim.exe" execution) will call this method for that executable program.  This "if"      //
+                // statement returns here, in order to prevent undesirably reporting a "BA2015.EnableHighEntropyVirtualAddresses" rule violation for such an executable program. //
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                return;
+            }
+
             bool highEntropyVA = ((int)dllCharacteristics & 0x0020 /*IMAGE_DLLCHARACTERISTICS_HIGH_ENTROPY_VA*/) == 0x0020;
 
             //  /LARGEADDRESSAWARE is necessary for HIGH_ENTROPY_VA to have effect
