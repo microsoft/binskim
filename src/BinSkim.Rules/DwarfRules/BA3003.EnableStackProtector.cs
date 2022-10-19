@@ -14,6 +14,11 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 using static Microsoft.CodeAnalysis.BinaryParsers.CommandLineHelper;
 
+using ELFSharp.ELF;
+using ELFSharp.ELF.Sections;
+using ELFSharp.ELF.Segments;
+
+
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
@@ -45,7 +50,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (target is ElfBinary elf)
             {
-                result = this.VerifyDwarfBinary(elf);
+                // Set result.Result to AnalysisApplicability.ApplicableToSpecifiedTarget for any case.
+                // we have a fallback ELF symbol check in case DWARF compile args aren't present.
+                result.Result = AnalysisApplicability.ApplicableToSpecifiedTarget;
             }
             else if (target is MachOBinary mainMacho)
             {
@@ -69,9 +76,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             IDwarfBinary binary = context.DwarfBinary();
             List<DwarfCompileCommandLineInfo> failedList;
 
-            static bool analyze(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
+            static bool analyzeDwarf(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
             {
                 failedList = new List<DwarfCompileCommandLineInfo>();
+
+                if (binary.CommandLineInfos.Count < 1)
+                {
+                    return false;
+                }
 
                 foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
                 {
@@ -114,20 +126,49 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return !failedList.Any();
             }
 
+            static bool analyzeSymbols(ElfBinary binary, out List<SymbolEntry<ulong> > failedList)
+            {
+                failedList = new List<SymbolEntry<ulong> >();
+
+                var symbols = binary.ELF.Sections.FirstOrDefault(s => s.Type == SectionType.DynamicSymbolTable) as SymbolTable<ulong>;
+                foreach (SymbolEntry<ulong> symbol in symbols.Entries)
+                {
+                    if (symbol.Name != "__stack_chk_fail" && symbol.Name != "stack_chk_guard" && symbol.Name != "__intel_security_cookie")
+                    {
+                        failedList.Add(symbol);
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                return !failedList.Any();
+            }
+
             if (binary is ElfBinary elf)
             {
-                if (!analyze(elf, out failedList))
+                if (!analyzeDwarf(elf, out failedList))
                 {
-                    // The stack protector was not found in '{0}'.
-                    // This may be because '--stack-protector-strong' was not used,
-                    // or because it was explicitly disabled by '-fno-stack-protectors'.
-                    // Modules did not meet the criteria: {1}
-                    context.Logger.Log(this,
-                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                            nameof(RuleResources.BA3003_Error),
-                            context.TargetUri.GetFileName(),
-                            DwarfUtility.GetDistinctNames(failedList, context.TargetUri.GetFileName())));
-                    return;
+                    // Analysis using DWARF info failed.
+                    // This could be because the binary simply doesn't have DWARF info.
+                    // So we'll fall back to a symbol search similar to checksec, just to be sure.
+                    List<SymbolEntry<ulong> > failedList_symbols;
+                    if (!analyzeSymbols(elf, out failedList_symbols))
+                    {
+                        // here the fallback check failed too, report an error
+
+                        // The stack protector was not found in '{0}'.
+                        // This may be because '--stack-protector-strong' was not used,
+                        // or because it was explicitly disabled by '-fno-stack-protectors'.
+                        // Modules did not meet the criteria: {1}
+                        context.Logger.Log(this,
+                            RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                                nameof(RuleResources.BA3003_Error),
+                                context.TargetUri.GetFileName(),
+                                DwarfUtility.GetDistinctNames(failedList, context.TargetUri.GetFileName())));
+
+                        return;
+                    }
                 }
 
                 // Stack protector was found on '{0}'.
@@ -142,7 +183,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 foreach (SingleMachOBinary subBinary in mainBinary.MachOs)
                 {
-                    if (!analyze(subBinary, out failedList))
+                    if (!analyzeDwarf(subBinary, out failedList))
                     {
                         // The stack protector was not found in '{0}'.
                         // This may be because '--stack-protector-strong' was not used,
