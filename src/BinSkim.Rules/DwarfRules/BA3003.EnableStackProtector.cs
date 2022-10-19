@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
+using ELFSharp.ELF;
+using ELFSharp.ELF.Sections;
+using ELFSharp.ELF.Segments;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -13,10 +17,6 @@ using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
 using static Microsoft.CodeAnalysis.BinaryParsers.CommandLineHelper;
-
-using ELFSharp.ELF;
-using ELFSharp.ELF.Sections;
-using ELFSharp.ELF.Segments;
 
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -126,9 +126,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return !failedList.Any();
             }
 
-            static bool analyzeSymbols(ElfBinary binary, out List<SymbolEntry<ulong> > failedList)
+            static bool analyzeSymbols(ElfBinary binary, out List<SymbolEntry<ulong>> failedList)
             {
-                failedList = new List<SymbolEntry<ulong> >();
+                failedList = new List<SymbolEntry<ulong>>();
 
                 var symbols = binary.ELF.Sections.FirstOrDefault(s => s.Type == SectionType.DynamicSymbolTable) as SymbolTable<ulong>;
                 foreach (SymbolEntry<ulong> symbol in symbols.Entries)
@@ -152,7 +152,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // Analysis using DWARF info failed.
                     // This could be because the binary simply doesn't have DWARF info.
                     // So we'll fall back to a symbol search similar to checksec, just to be sure.
-                    List<SymbolEntry<ulong> > failedList_symbols;
+                    List<SymbolEntry<ulong>> failedList_symbols;
                     if (!analyzeSymbols(elf, out failedList_symbols))
                     {
                         // here the fallback check failed too, report an error
