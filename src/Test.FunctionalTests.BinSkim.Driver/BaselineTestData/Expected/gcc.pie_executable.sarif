@@ -49,7 +49,7 @@
           ]
         },
         {
-          "ruleId": "BA3006",
+          "ruleId": "BA3003",
           "ruleIndex": 2,
           "kind": "pass",
           "level": "none",
@@ -71,7 +71,7 @@
           ]
         },
         {
-          "ruleId": "BA3010",
+          "ruleId": "BA3006",
           "ruleIndex": 3,
           "kind": "pass",
           "level": "none",
@@ -93,8 +93,30 @@
           ]
         },
         {
-          "ruleId": "BA3011",
+          "ruleId": "BA3010",
           "ruleIndex": 4,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.pie_executable"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pie_executable",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3011",
+          "ruleIndex": 5,
           "level": "error",
           "message": {
             "id": "Error",
@@ -115,7 +137,7 @@
         },
         {
           "ruleId": "BA3030",
-          "ruleIndex": 5,
+          "ruleIndex": 6,
           "level": "error",
           "message": {
             "id": "Error",
@@ -138,6 +160,8 @@
       "tool": {
         "driver": {
           "name": "testhost",
+          "organization": "Microsoft Corporation",
+          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -189,6 +213,28 @@
                 }
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3002DoNotMarkStackAsExecutable"
+            },
+            {
+              "id": "BA3003",
+              "name": "EnableStackProtector",
+              "fullDescription": {
+                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
+              },
+              "help": {
+                "text": "The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "Stack protector was found on '{0}'.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections."
+                },
+                "Error": {
+                  "text": "The stack protector was not found in '{0}'. This may be because '--stack-protector-strong' was not used, or because it was explicitly disabled by '-fno-stack-protectors'.\r\nModules did not meet the criteria: {1}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3003EnableStackProtector"
             },
             {
               "id": "BA3006",
@@ -284,10 +330,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseGccCheckedFunctions"
             }
-          ],
-          "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
