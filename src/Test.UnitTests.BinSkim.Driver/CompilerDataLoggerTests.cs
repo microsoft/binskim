@@ -183,30 +183,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         }
 
         [Fact]
-        public void CompilerDataLogger_Dispose_ShouldReadSarifV1()
-        {
-            string testDirectory = GetTestDirectory("Test.UnitTests.BinSkim.Driver");
-            string sarifLogPath = Path.Combine(testDirectory, "Samples", "Native_x86_VS2019_SDL_Enabled_Sarif.v1.0.0.sarif");
-            var fileSystem = new Mock<IFileSystem>();
-            string content = File.ReadAllText(sarifLogPath);
-            byte[] byteArray = Encoding.UTF8.GetBytes(content);
-            using BinaryAnalyzerContext context = CreateTestContext();
-
-            fileSystem
-                .Setup(f => f.FileOpenRead(It.IsAny<string>()))
-                .Returns(new MemoryStream(byteArray));
-
-            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
-                                                              sarifVersion: Sarif.SarifVersion.OneZeroZero,
-                                                              logger: out CompilerDataLogger compilerDataLogger,
-                                                              fileSystem: fileSystem.Object);
-            compilerDataLogger.Dispose();
-
-            fileSystem.Verify(fileSystem => fileSystem.FileOpenRead(sarifLogPath), Times.Once);
-            telemetryEventOutput.Count.Should().Be(1);
-        }
-
-        [Fact]
         public void CompilerDataLogger_Summarize_ShouldLogSummaryEvent()
         {
             string sarifLogPath = GetExampleSarifPath(Sarif.SarifVersion.Current);

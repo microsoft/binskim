@@ -397,7 +397,7 @@ namespace Microsoft.CodeAnalysis.IL
                 DataToRemove = new[] { OptionallyEmittedData.NondeterministicProperties },
                 OutputFilePath = actualFileName,
                 ConfigurationFilePath = "default",
-                SarifOutputVersion = Sarif.SarifVersion.Current,
+                SarifOutputVersion = BinSkimSarifVersion.Current,
                 TargetFileSpecifiers = new string[] { inputFileName },
                 Traces = Array.Empty<string>(),
                 Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note },

@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.IL
             // Command-line provided policy is now initialized. Update context 
             // based on any possible configuration provided in this way.
 
-            context.CompilerDataLogger = new CompilerDataLogger(options.OutputFilePath, options.SarifOutputVersion, context, this.FileSystem);
+            context.CompilerDataLogger = new CompilerDataLogger(options.OutputFilePath, (Sarif.SarifVersion)options.SarifOutputVersion, context, this.FileSystem);
 
             // If the user has hard-coded a non-deterministic file path root to elide from telemetry,
             // we will honor that. If it has not been specified, and if all file target specifiers
@@ -129,14 +129,16 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override int Run(AnalyzeOptions analyzeOptions)
         {
-            if (!Environment.GetCommandLineArgs().Any(arg => arg.Equals("--sarif-output-version")))
+            if (!Environment.GetCommandLineArgs().
+                Any(arg => arg.Equals("--sarif-output-version", StringComparison.OrdinalIgnoreCase) ||
+                arg.Equals("-v", StringComparison.OrdinalIgnoreCase)))
             {
-                analyzeOptions.SarifOutputVersion = Sarif.SarifVersion.Current;
+                analyzeOptions.SarifOutputVersion = (BinSkimSarifVersion)Sarif.SarifVersion.Current;
             }
 
             if (s_UnitTestOutputVersion != Sarif.SarifVersion.Unknown)
             {
-                analyzeOptions.SarifOutputVersion = s_UnitTestOutputVersion;
+                analyzeOptions.SarifOutputVersion = (BinSkimSarifVersion)s_UnitTestOutputVersion;
             }
 
             // Type or member is obsolete
