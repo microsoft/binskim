@@ -50,11 +50,11 @@
         {
           "ruleId": "BA3003",
           "ruleIndex": 2,
-          "level": "error",
+          "kind": "pass",
+          "level": "none",
           "message": {
-            "id": "Error",
+            "id": "Pass",
             "arguments": [
-              "gcc.no_fortification_required",
               "gcc.no_fortification_required"
             ]
           },
@@ -160,8 +160,6 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -330,7 +328,10 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseGccCheckedFunctions"
             }
-          ]
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [
