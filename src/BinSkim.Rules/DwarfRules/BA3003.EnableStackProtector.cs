@@ -71,73 +71,73 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return result.Result;
         }
 
+        bool analyzeDwarf(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
+        {
+            failedList = new List<DwarfCompileCommandLineInfo>();
+
+            if (binary.CommandLineInfos.Count < 1)
+            {
+                return false;
+            }
+
+            foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
+            {
+                if (ElfUtility.GetDwarfCommandLineType(info.CommandLine) != DwarfCommandLineType.Gcc)
+                {
+                    continue;
+                }
+
+                bool failed = false;
+                if ((!info.CommandLine.Contains("-fstack-protector-all", StringComparison.OrdinalIgnoreCase)
+                    && !info.CommandLine.Contains("-fstack-protector-strong", StringComparison.OrdinalIgnoreCase))
+                    || info.CommandLine.Contains("-fno-stack-protector", StringComparison.OrdinalIgnoreCase))
+                {
+                    failed = true;
+                }
+                else
+                {
+                    string[] paramToCheck = { "--param=ssp-buffer-size=" };
+                    string paramValue = string.Empty;
+                    bool found = GetOptionValue(info.CommandLine, paramToCheck, OrderOfPrecedence.FirstWins, ref paramValue);
+
+                    if (found && !string.IsNullOrWhiteSpace(paramValue))
+                    {
+                        if (int.TryParse(paramValue, out int bufferSize))
+                        {
+                            if (bufferSize > 4)
+                            {
+                                failed = true;
+                            }
+                        }
+                    }
+                }
+
+                if (failed)
+                {
+                    failedList.Add(info);
+                }
+            }
+
+            return !failedList.Any();
+        }
+
+        bool analyzeSymbols(ElfBinary binary)
+        {
+            var symbols = binary.ELF.Sections.FirstOrDefault(s => s.Type == SectionType.DynamicSymbolTable) as SymbolTable<ulong>;
+            foreach (SymbolEntry<ulong> symbol in symbols.Entries)
+            {
+                if (symbol.Name == "__stack_chk_fail" || symbol.Name == "stack_chk_guard" || symbol.Name == "__intel_security_cookie")
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public override void Analyze(BinaryAnalyzerContext context)
         {
             IDwarfBinary binary = context.DwarfBinary();
             List<DwarfCompileCommandLineInfo> failedList;
-
-            static bool analyzeDwarf(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
-            {
-                failedList = new List<DwarfCompileCommandLineInfo>();
-
-                if (binary.CommandLineInfos.Count < 1)
-                {
-                    return false;
-                }
-
-                foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
-                {
-                    if (ElfUtility.GetDwarfCommandLineType(info.CommandLine) != DwarfCommandLineType.Gcc)
-                    {
-                        continue;
-                    }
-
-                    bool failed = false;
-                    if ((!info.CommandLine.Contains("-fstack-protector-all", StringComparison.OrdinalIgnoreCase)
-                        && !info.CommandLine.Contains("-fstack-protector-strong", StringComparison.OrdinalIgnoreCase))
-                        || info.CommandLine.Contains("-fno-stack-protector", StringComparison.OrdinalIgnoreCase))
-                    {
-                        failed = true;
-                    }
-                    else
-                    {
-                        string[] paramToCheck = { "--param=ssp-buffer-size=" };
-                        string paramValue = string.Empty;
-                        bool found = GetOptionValue(info.CommandLine, paramToCheck, OrderOfPrecedence.FirstWins, ref paramValue);
-
-                        if (found && !string.IsNullOrWhiteSpace(paramValue))
-                        {
-                            if (int.TryParse(paramValue, out int bufferSize))
-                            {
-                                if (bufferSize > 4)
-                                {
-                                    failed = true;
-                                }
-                            }
-                        }
-                    }
-
-                    if (failed)
-                    {
-                        failedList.Add(info);
-                    }
-                }
-
-                return !failedList.Any();
-            }
-
-            static bool analyzeSymbols(ElfBinary binary)
-            {
-                var symbols = binary.ELF.Sections.FirstOrDefault(s => s.Type == SectionType.DynamicSymbolTable) as SymbolTable<ulong>;
-                foreach (SymbolEntry<ulong> symbol in symbols.Entries)
-                {
-                    if (symbol.Name == "__stack_chk_fail" || symbol.Name == "stack_chk_guard" || symbol.Name == "__intel_security_cookie")
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
 
             if (binary is ElfBinary elf)
             {
