@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     var symbols = section as SymbolTable<ulong>;
                     foreach (SymbolEntry<ulong> symbol in symbols.Entries)
                     {
-                        if (symbol.Name == "__stack_chk_fail" || symbol.Name == "stack_chk_guard" || symbol.Name == "__intel_security_cookie")
+                        if (symbol.Name == "__stack_chk_fail" || symbol.Name == "__stack_chk_guard" || symbol.Name == "__intel_security_cookie")
                         {
                             return true;
                         }
