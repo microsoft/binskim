@@ -75,11 +75,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             failedList = new List<DwarfCompileCommandLineInfo>();
 
-            if (binary.CommandLineInfos.Count < 1)
-            {
-                return false;
-            }
-
             foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
             {
                 if (ElfUtility.GetDwarfCommandLineType(info.CommandLine) != DwarfCommandLineType.Gcc)
