@@ -123,12 +123,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         bool analyzeSymbols(ElfBinary binary)
         {
-            var symbols = binary.ELF.Sections.FirstOrDefault(s => s.Type == SectionType.DynamicSymbolTable) as SymbolTable<ulong>;
-            foreach (SymbolEntry<ulong> symbol in symbols.Entries)
+            foreach (ISection section in binary.ELF.Sections)
             {
-                if (symbol.Name == "__stack_chk_fail" || symbol.Name == "stack_chk_guard" || symbol.Name == "__intel_security_cookie")
+                if (section.Type == SectionType.DynamicSymbolTable)
                 {
-                    return true;
+                    var symbols = section as SymbolTable<ulong>;
+                    foreach (SymbolEntry<ulong> symbol in symbols.Entries)
+                    {
+                        if (symbol.Name == "__stack_chk_fail" || symbol.Name == "stack_chk_guard" || symbol.Name == "__intel_security_cookie")
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
             return false;
