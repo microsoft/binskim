@@ -126,23 +126,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return !failedList.Any();
             }
 
-            static bool analyzeSymbols(ElfBinary binary, out List<SymbolEntry<ulong>> failedList)
+            static bool analyzeSymbols(ElfBinary binary)
             {
-                failedList = new List<SymbolEntry<ulong>>();
-
                 var symbols = binary.ELF.Sections.FirstOrDefault(s => s.Type == SectionType.DynamicSymbolTable) as SymbolTable<ulong>;
                 foreach (SymbolEntry<ulong> symbol in symbols.Entries)
                 {
-                    if (symbol.Name != "__stack_chk_fail" && symbol.Name != "stack_chk_guard" && symbol.Name != "__intel_security_cookie")
-                    {
-                        failedList.Add(symbol);
-                    }
-                    else
+                    if (symbol.Name == "__stack_chk_fail" || symbol.Name == "stack_chk_guard" || symbol.Name == "__intel_security_cookie")
                     {
                         return true;
                     }
                 }
-                return !failedList.Any();
+                return false;
             }
 
             if (binary is ElfBinary elf)
@@ -152,8 +146,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // Analysis using DWARF info failed.
                     // This could be because the binary simply doesn't have DWARF info.
                     // So we'll fall back to a symbol search similar to checksec, just to be sure.
-                    List<SymbolEntry<ulong>> failedList_symbols;
-                    if (!analyzeSymbols(elf, out failedList_symbols))
+                    if (!analyzeSymbols(elf))
                     {
                         // here the fallback check failed too, report an error
 
