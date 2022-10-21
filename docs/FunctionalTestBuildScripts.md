@@ -70,6 +70,36 @@ A simple hello world program, compiled with `clang 14.0.0` that generates a .exe
 `clang-cl -o clangcl.14.pe.c.codeview.pdbpagesize_default.exe -fuse-ld=lld-link helloc.c -m32 -Z7 -MTd /link /CETCOMPAT /guard:cf /PDB:clangcl.14.pe.c.codeview.pdbpagesize_default.exe.pdb`  
 `clang-cl -o clangcl.14.pe.c.codeview.pdbpagesize_8192_pdbmissing.exe -fuse-ld=lld-link helloc.c -m32 -Z7 -MTd /link /CETCOMPAT /guard:cf /PdbPageSize:8192 /PDB:clangcl.14.pe.c.codeview.pdbpagesize_8192_pdbmissing.exe.pdb (then delete the pdb)`
 
+## gcc.example2.fnostackprotector
+
+A basic C program. Any simple example could work, but the exact source used was:
+
+```c
+#include <stdio.h>
+
+char *foo(int arg1, int arg2, FILE *f)
+{
+	char x[0x1000] = {0};
+	return fgets(x, 0x1000, f);
+}
+
+int main(int argc, char **argv, char **envp)
+{
+	foo(argc, argv, envp);
+	return 0;
+}
+```
+
+Compiled with gcc 9.4.0 using:
+`gcc -g -fno-stack-protector example2.c -o gcc.example2.fnostackprotector`
+
+## gcc.example2.fstackprotectorall+fnostackprotector
+
+This uses the same source as gcc.example2.fnostackprotector.
+
+Compiled with gcc 9.4.0 using:
+`gcc -g -fstack-protector-all -fno-stack-protector binskim_test.c -o gcc.example2.fstackprotectorall+fnostackprotector`
+
 ## gcc.object_file.dwarf.3.o
 
 A simple hello world program, compiled with `gcc 9.3.0` that generates a .o object file. Script to reproduce:  
