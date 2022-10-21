@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return result.Result;
         }
 
-        bool analyzeDwarf(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
+        private static bool AnalyzeDwarf(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
         {
             failedList = new List<DwarfCompileCommandLineInfo>();
 
@@ -116,7 +116,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return !failedList.Any();
         }
 
-        bool analyzeSymbols(ElfBinary binary)
+        private static bool AnalyzeSymbols(ElfBinary binary)
         {
             foreach (ISection section in binary.ELF.Sections)
             {
@@ -142,12 +142,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (binary is ElfBinary elf)
             {
-                if (!analyzeDwarf(elf, out failedList))
+                if (!AnalyzeDwarf(elf, out failedList))
                 {
                     // Analysis using DWARF info failed.
                     // This could be because the binary simply doesn't have DWARF info.
                     // So we'll fall back to a symbol search similar to checksec, just to be sure.
-                    if (!analyzeSymbols(elf))
+                    if (!AnalyzeSymbols(elf))
                     {
                         // here the fallback check failed too, report an error
 
@@ -177,7 +177,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 foreach (SingleMachOBinary subBinary in mainBinary.MachOs)
                 {
-                    if (!analyzeDwarf(subBinary, out failedList))
+                    if (!AnalyzeDwarf(subBinary, out failedList))
                     {
                         // The stack protector was not found in '{0}'.
                         // This may be because '--stack-protector-strong' was not used,
