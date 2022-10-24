@@ -45,8 +45,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             if (PlatformSpecificHelpers.RunningOnWindows())
             {
-                MultithreadedAnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
-                this.BatchRuleRules(string.Empty, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
+                this.BatchRuleRules(string.Empty, Sarif.SarifVersion.Current, "*.dll", "*.exe", "gcc.*", "clang.*", "macho.*");
             }
         }
 
@@ -329,7 +328,7 @@ namespace Microsoft.CodeAnalysis.IL
             return records;
         }
 
-        private void BatchRuleRules(string ruleName, params string[] inputFilters)
+        private void BatchRuleRules(string ruleName, Sarif.SarifVersion version, params string[] inputFilters)
         {
             var sb = new StringBuilder();
             string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar + ruleName;
@@ -340,7 +339,7 @@ namespace Microsoft.CodeAnalysis.IL
 
                 foreach (string file in testFiles)
                 {
-                    this.RunRules(sb, file);
+                    this.RunRules(sb, file, version);
                 }
             }
 
@@ -366,7 +365,7 @@ namespace Microsoft.CodeAnalysis.IL
             Assert.Equal(0, sb.Length);
         }
 
-        private SarifLog RunRules(StringBuilder sb, string inputFileName)
+        private SarifLog RunRules(StringBuilder sb, string inputFileName, Sarif.SarifVersion version = Sarif.SarifVersion.Current)
         {
             string fileName = Path.GetFileName(inputFileName);
             string actualDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "Actual");
@@ -403,6 +402,8 @@ namespace Microsoft.CodeAnalysis.IL
                 Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note },
                 Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.Pass },
             };
+
+            command.UnitTestOutputVersion = version;
 
             int result = command.Run(options);
 
@@ -464,9 +465,6 @@ namespace Microsoft.CodeAnalysis.IL
 
         private List<ITelemetry> CompilerTelemetryTestSetup()
         {
-            // Setup mocks for CompilerDataLogger.
-            MultithreadedAnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.Current;
-
             List<ITelemetry> sendItems = null;
             sendItems = new List<ITelemetry>();
             TelemetryClient telemetryClient;

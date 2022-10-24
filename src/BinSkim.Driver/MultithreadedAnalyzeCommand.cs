@@ -136,9 +136,9 @@ namespace Microsoft.CodeAnalysis.IL
                 analyzeOptions.SarifOutputVersion = Sarif.SarifVersion.Current;
             }
 
-            if (s_UnitTestOutputVersion != Sarif.SarifVersion.Unknown)
+            if (this.UnitTestOutputVersion != Sarif.SarifVersion.Unknown)
             {
-                analyzeOptions.SarifOutputVersion = s_UnitTestOutputVersion;
+                analyzeOptions.SarifOutputVersion = this.UnitTestOutputVersion;
             }
 
             if (analyzeOptions.SarifOutputVersion == Sarif.SarifVersion.OneZeroZero)
@@ -190,6 +190,6 @@ namespace Microsoft.CodeAnalysis.IL
                 : result;
         }
 
-        internal static Sarif.SarifVersion s_UnitTestOutputVersion;
+        internal Sarif.SarifVersion UnitTestOutputVersion { get; set; }
     }
 }
