@@ -71,11 +71,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return result.Result;
         }
 
-        private static bool AnalyzeDwarf(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
+        private static bool AnalyzeDwarf(IDwarfBinary binary, List<DwarfCompileCommandLineInfo> cliInfos, out List<DwarfCompileCommandLineInfo> failedList)
         {
             failedList = new List<DwarfCompileCommandLineInfo>();
 
-            foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
+            if (cliInfos == null)
+            {
+                cliInfos = binary.CommandLineInfos;
+            }
+
+            foreach (DwarfCompileCommandLineInfo info in cliInfos)
             {
                 if (ElfUtility.GetDwarfCommandLineType(info.CommandLine) != DwarfCommandLineType.Gcc)
                 {
@@ -142,15 +147,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (binary is ElfBinary elf)
             {
-                if (!AnalyzeDwarf(elf, out failedList))
+                var validGccCommandLineInfos = new List<DwarfCompileCommandLineInfo>();
+                foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
                 {
-                    // Analysis using DWARF info failed.
-                    // This could be because the binary simply doesn't have DWARF info.
-                    // So we'll fall back to a symbol search similar to checksec, just to be sure.
-                    if (!AnalyzeSymbols(elf))
+                    if (ElfUtility.GetDwarfCommandLineType(info.CommandLine) != DwarfCommandLineType.Gcc)
                     {
-                        // here the fallback check failed too, report an error
-
+                        continue;
+                    }
+                    validGccCommandLineInfos.Add(info);
+                }
+                if (validGccCommandLineInfos.Count > 0)
+                {
+                    // Check using DWARF info
+                    if (!AnalyzeDwarf(elf, validGccCommandLineInfos, out failedList))
+                    {
                         // The stack protector was not found in '{0}'.
                         // This may be because '--stack-protector-strong' was not used,
                         // or because it was explicitly disabled by '-fno-stack-protectors'.
@@ -160,9 +170,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                 nameof(RuleResources.BA3003_Error),
                                 context.TargetUri.GetFileName(),
                                 DwarfUtility.GetDistinctNames(failedList, context.TargetUri.GetFileName())));
-
                         return;
                     }
+                }
+                else
+                {
+                    // Check using presence of stack check symbols
+                    // this method is less accurate than the DWARF check,
+                    // so it is only used as a fallback
+                    if (!AnalyzeSymbols(elf))
+                    {
+                        context.Logger.Log(this,
+                            RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                                nameof(RuleResources.BA3003_Error),
+                                context.TargetUri.GetFileName(),
+                                context.TargetUri.GetFileName()));
+                        return;
+                    }
+
                 }
 
                 // Stack protector was found on '{0}'.
@@ -177,7 +202,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 foreach (SingleMachOBinary subBinary in mainBinary.MachOs)
                 {
-                    if (!AnalyzeDwarf(subBinary, out failedList))
+                    if (!AnalyzeDwarf(subBinary, null, out failedList))
                     {
                         // The stack protector was not found in '{0}'.
                         // This may be because '--stack-protector-strong' was not used,
