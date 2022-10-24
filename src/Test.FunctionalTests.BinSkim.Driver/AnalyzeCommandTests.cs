@@ -52,6 +52,19 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
+        public void AnalyzeCommand_ShouldThrowWithVersionOne()
+        {
+            MultithreadedAnalyzeCommand.s_UnitTestOutputVersion = Sarif.SarifVersion.OneZeroZero;
+            var options = new AnalyzeOptions
+            {
+                SarifOutputVersion = Sarif.SarifVersion.OneZeroZero
+            };
+            var command = new MultithreadedAnalyzeCommand();
+
+            Assert.Throws<InvalidOperationException>(() => command.Run(options));
+        }
+
+        [Fact]
         [Obsolete]
         public void AnalyzeCommand_Hashes_ShouldUpdateDataToInsert()
         {

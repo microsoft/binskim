@@ -48,13 +48,5 @@ namespace Microsoft.CodeAnalysis.IL
             "ignorePdbLoadError",
             HelpText = "If enabled, BinSkim won't break if we have a 'PdbLoadingException'.")]
         public bool IgnorePdbLoadError { get; set; }
-
-        [Option(
-            'v',
-            "sarif-output-version",
-            HelpText =
-            "The SARIF version of the output log file. The only valid value is Current.",
-            Default = BinSkimSarifVersion.Current)]
-        public new BinSkimSarifVersion SarifOutputVersion { get; set; } = BinSkimSarifVersion.Current;
     }
 }

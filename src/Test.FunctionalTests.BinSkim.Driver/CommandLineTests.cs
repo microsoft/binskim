@@ -46,8 +46,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 new SarifVersionTestCase(" --sarif-output-version CURRENT", Sarif.SarifVersion.Current, null),
                 new SarifVersionTestCase(" -v Current", Sarif.SarifVersion.Current, null),
                 new SarifVersionTestCase(" -v current", Sarif.SarifVersion.Current, null),
-                new SarifVersionTestCase(" --sarif-output-version OneZeroZero", null, "v, sarif-output-version"),
-                new SarifVersionTestCase(" -v ThreeZeroZero", null, "v, sarif-output-version")
+                new SarifVersionTestCase(" -v ThreeZeroZero", null, "v, sarif-output-version"),
+                new SarifVersionTestCase(" -v OneZeroZero", Sarif.SarifVersion.OneZeroZero, null),
+                new SarifVersionTestCase(" --sarif-output-version OneZeroZero", Sarif.SarifVersion.OneZeroZero, null),
             };
 
             var builder = new StringBuilder();
