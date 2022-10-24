@@ -115,6 +115,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public string RawCommandLine => this.compilerCommandLine.Raw;
 
         /// <summary>
+        /// The raw command line passed to the linker when building this object module.
+        /// </summary>
+        public string RawLinkerCommandLine => this.linkerCommandLine.Raw;
+
+        /// <summary>
         /// The name of the compiler.
         /// </summary>
         public string CompilerName { get; private set; }
