@@ -51,11 +51,11 @@
         {
           "ruleId": "BA3003",
           "ruleIndex": 2,
-          "kind": "pass",
-          "level": "none",
+          "level": "error",
           "message": {
-            "id": "Pass",
+            "id": "Error",
             "arguments": [
+              "clang.pie_executable",
               "clang.pie_executable"
             ]
           },

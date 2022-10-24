@@ -7,11 +7,11 @@
         {
           "ruleId": "BA3003",
           "ruleIndex": 0,
-          "kind": "pass",
-          "level": "none",
+          "level": "error",
           "message": {
-            "id": "Pass",
+            "id": "Error",
             "arguments": [
+              "clang.object_file.dwarf.3.o",
               "clang.object_file.dwarf.3.o"
             ]
           },

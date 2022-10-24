@@ -50,11 +50,11 @@
         {
           "ruleId": "BA3003",
           "ruleIndex": 2,
-          "kind": "pass",
-          "level": "none",
+          "level": "error",
           "message": {
-            "id": "Pass",
+            "id": "Error",
             "arguments": [
+              "clang.no_immediate_binding",
               "clang.no_immediate_binding"
             ]
           },
