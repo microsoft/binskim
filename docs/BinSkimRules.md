@@ -958,7 +958,7 @@ The /GF compiler option, also known as Eliminate Duplicate Strings or String Poo
 
 ---
 
-## Rule `BA6004.EnableCOMDATFolding`
+## Rule `BA6004.EnableComdatFolding`
 
 ### Description
 
