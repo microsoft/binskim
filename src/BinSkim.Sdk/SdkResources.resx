@@ -252,7 +252,7 @@
   <data name="MetadataCondition_ElfNotBuiltWithClang" xml:space="preserve">
     <value>not compiled with Clang</value>
   </data>
-  <data name="MetadataCondition_ImageIsNotBuiltWithMSVC" xml:space="preserve">
+  <data name="MetadataCondition_ImageIsNotBuiltWithMsvc" xml:space="preserve">
     <value>not compiled with Microsoft C/C++ compiler</value>
   </data>
 </root>

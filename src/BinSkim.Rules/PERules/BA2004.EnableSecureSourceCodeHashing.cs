@@ -121,13 +121,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
-                bool isMSVC = (omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftC ||
+                bool isMsvc = (omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftC ||
                                omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftCxx);
 
                 string pchHeaderFile = string.Empty;
                 string pchFileName = string.Empty;
 
-                if (isMSVC)
+                if (isMsvc)
                 {
                     // Check to see if the object was compiled using /Yc or /Yu for precompiled headers
                     string[] pchOptionSwitches = { "/Yc", "/Yu" };
@@ -151,7 +151,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     if (sf.HashType == HashType.None)
                     {
-                        if (isMSVC)
+                        if (isMsvc)
                         {
                             // We know of 3 scenarios where this occurs today:
                             // If we encounter one of these, we should continue the loop to the next SourceFile,
