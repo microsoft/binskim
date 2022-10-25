@@ -1,6 +1,7 @@
 # BinSkim Release History
 
 ## **v2.0.0** (Unreleased)
+* BREAKING: Removed SARIF 1.0 support from BinSkim. Now option `-v | --sarif-output-version` does not accept value `OneZeroZero`. [719](https://github.com/microsoft/binskim/pull/719)
 * Update Sarif.Sdk submodule from [fc9a9df to e557b69](https://github.com/microsoft/sarif-sdk/compare/fc9a9dfb865096b5aaa9fa3651854670940f7459...e557b693000cfc2a19d50f2b6613f92222eabbff). Critically, this update resolves transient [`Collection modified`](https://github.com/microsoft/sarif-sdk/pull/2549) exception during analysis. [#722](https://github.com/microsoft/binskim/pull/722)
 * Eliminate `BA2015.EnableHighEntropyVirtualAddresses` false positives for some 32-bit exes. [#721](https://github.com/microsoft/binskim/pull/721)
 * FEATURE: Raw command line passed to the linker now exposed on `ObjectModuleDetail` instances. [#708](https://github.com/microsoft/binskim/pull/708)

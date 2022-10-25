@@ -9,7 +9,6 @@ using FluentAssertions;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL;
-using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif.Readers;
@@ -35,12 +34,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             fileSystem
                 .Setup(f => f.FileOpenRead(It.IsAny<string>()))
                 .Returns(new MemoryStream(byteArray));
-
-            SarifLog sarifLog = ReadSarifLog(fileSystem.Object, new AnalyzeOptions
-            {
-                SarifOutputVersion = Sarif.SarifVersion.OneZeroZero,
-                OutputFilePath = Guid.NewGuid().ToString(),
-            });
+            SarifLog sarifLog = ReadSarifLog(fileSystem: fileSystem.Object, Guid.NewGuid().ToString(), Sarif.SarifVersion.OneZeroZero);
             sarifLog.Version.Should().Be(Sarif.SarifVersion.Current);
             sarifLog.Runs[0].Tool.Driver.Name.Should().NotBeEmpty();
             sarifLog.Runs[0].Results.Should().BeEmpty();
@@ -51,14 +45,23 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         {
             string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Expected", "Binskim.linux-x64.dll.sarif");
 
-            SarifLog sarifLog = ReadSarifLog(fileSystem: null, new AnalyzeOptions
-            {
-                SarifOutputVersion = Sarif.SarifVersion.Current,
-                OutputFilePath = sarifLogPath,
-            });
+            SarifLog sarifLog = ReadSarifLog(fileSystem: null, sarifLogPath, Sarif.SarifVersion.Current);
             sarifLog.Version.Should().Be(Sarif.SarifVersion.Current);
             sarifLog.Runs[0].Tool.Driver.Name.Should().NotBeEmpty();
             sarifLog.Runs[0].Results.Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public void AnalyzeCommand_ShouldThrowWithVersionOne()
+        {
+            var options = new AnalyzeOptions
+            {
+                SarifOutputVersion = Sarif.SarifVersion.OneZeroZero
+            };
+            var command = new MultithreadedAnalyzeCommand();
+            command.UnitTestOutputVersion = Sarif.SarifVersion.OneZeroZero;
+
+            Assert.Throws<InvalidOperationException>(() => command.Run(options));
         }
 
         [Fact]
@@ -81,17 +84,17 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             options.DataToInsert.Should().Contain(OptionallyEmittedData.Hashes);
         }
 
-        private static SarifLog ReadSarifLog(IFileSystem fileSystem, AnalyzeOptions analyzeOptions)
+        private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)
         {
             SarifLog sarifLog;
-            if (analyzeOptions.SarifOutputVersion == Sarif.SarifVersion.Current)
+            if (readSarifVersion == Sarif.SarifVersion.Current)
             {
-                sarifLog = SarifLog.Load(analyzeOptions.OutputFilePath);
+                sarifLog = SarifLog.Load(outputFilePath);
             }
             else
             {
                 SarifLogVersionOne actualLog = CommandBase.ReadSarifFile<SarifLogVersionOne>(fileSystem,
-                                                                                             analyzeOptions.OutputFilePath,
+                                                                                             outputFilePath,
                                                                                              SarifContractResolverVersionOne.Instance);
                 var visitor = new SarifVersionOneToCurrentVisitor();
                 visitor.VisitSarifLogVersionOne(actualLog);
