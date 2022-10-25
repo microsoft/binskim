@@ -70,35 +70,15 @@ A simple hello world program, compiled with `clang 14.0.0` that generates a .exe
 `clang-cl -o clangcl.14.pe.c.codeview.pdbpagesize_default.exe -fuse-ld=lld-link helloc.c -m32 -Z7 -MTd /link /CETCOMPAT /guard:cf /PDB:clangcl.14.pe.c.codeview.pdbpagesize_default.exe.pdb`  
 `clang-cl -o clangcl.14.pe.c.codeview.pdbpagesize_8192_pdbmissing.exe -fuse-ld=lld-link helloc.c -m32 -Z7 -MTd /link /CETCOMPAT /guard:cf /PdbPageSize:8192 /PDB:clangcl.14.pe.c.codeview.pdbpagesize_8192_pdbmissing.exe.pdb (then delete the pdb)`
 
-## gcc.example2.fnostackprotector
+## gcc.example1.fnostackprotector.nodwarf
 
-A basic C program. Any simple example could work, but the exact source used was:
+A simple hello world program, compiled with `gcc 9.4.0` that generates an executable file. Script to reproduce:  
+`gcc example1.c -o gcc.example1.fnostackprotector.nodwarf -fno-stack-protector -fPIC -fstack-clash-protection`
 
-```c
-#include <stdio.h>
+## gcc.example1.fstackprotectorall.nodwarf
 
-char *foo(int arg1, int arg2, FILE *f)
-{
-	char x[0x1000] = {0};
-	return fgets(x, 0x1000, f);
-}
-
-int main(int argc, char **argv, char **envp)
-{
-	foo(argc, argv, envp);
-	return 0;
-}
-```
-
-Compiled with gcc 9.4.0 using:
-`gcc -g -fno-stack-protector example2.c -o gcc.example2.fnostackprotector`
-
-## gcc.example2.fstackprotectorall+fnostackprotector
-
-This uses the same source as gcc.example2.fnostackprotector.
-
-Compiled with gcc 9.4.0 using:
-`gcc -g -fstack-protector-all -fno-stack-protector binskim_test.c -o gcc.example2.fstackprotectorall+fnostackprotector`
+A simple hello world program, compiled with `gcc 9.4.0` that generates an executable file. Script to reproduce:  
+`gcc example1.c -o gcc.example1.fstackprotectorall.nodwarf -fstack-protector-all -fPIC -fstack-clash-protection`
 
 ## gcc.object_file.dwarf.3.o
 
