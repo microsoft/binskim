@@ -41,10 +41,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             // Source Link is supported on the C# compiler and MSVC only.
-            if (!target.PE.IsManaged && target.Pdb != null && !target.PE.IsTargetCompiledWithMSVC(target.Pdb))
+            if (!target.PE.IsManaged && target.Pdb != null && !target.PE.IsTargetCompiledWithMsvc(target.Pdb))
             {
                 // Wrong language
-                reasonForNotAnalyzing = MetadataConditions.ImageIsNotBuiltWithMSVC;
+                reasonForNotAnalyzing = MetadataConditions.ImageIsNotBuiltWithMsvc;
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 

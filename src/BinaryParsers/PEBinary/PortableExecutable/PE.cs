@@ -971,7 +971,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
-                if (om.GetObjectModuleDetails().COMDATFoldingEnabled)
+                if (om.GetObjectModuleDetails().ComdatFoldingEnabled)
                 {
                     // There should be exactly one symbol in the binary containing knowledge about the linker command-line.  If that one symbol
                     // says that OPT:ICF was enablelsd then the whole PE had it enabled too.
@@ -1007,7 +1007,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     // says that LTCG was enabled then the whole PE had it enabled too.
                     return true;
                 }
-                else if (omDetails.WholeProgramOptimization)
+                else if (omDetails.WholeProgramOptimizationEnabled)
                 {
                     // "If you don't explicitly specify /LTCG when you pass /GL or MSIL modules to the linker, the linker eventually detects
                     //  this situation and restarts the link by using /LTCG."
@@ -1031,7 +1031,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         /// values because both rust and clang binaries can link with
         /// C runtime libraries compiled with MSVC.
         /// </remarks>
-        public bool IsTargetCompiledWithMSVC(Pdb pdb)
+        public bool IsTargetCompiledWithMsvc(Pdb pdb)
         {
             uint msvcModules = 0;
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())

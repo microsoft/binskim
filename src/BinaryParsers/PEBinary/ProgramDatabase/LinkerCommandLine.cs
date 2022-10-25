@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <summary>
         /// Whether or not this command line enables Identical COMDAT folding (/OPT:ICF)
         /// </summary>
-        public readonly bool COMDATFoldingEnabled;
+        public readonly bool ComdatFoldingEnabled;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LinkerCommandLine"/> struct from a raw PDB-supplied command line.
@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.IncrementalLinking = false;
             this.LinkTimeCodeGenerationEnabled = false;
             this.OptimizeReferencesEnabled = false;
-            this.COMDATFoldingEnabled = false;
+            this.ComdatFoldingEnabled = false;
 
             // Early return if there is no command-line.  This class is created with an empty string for non-linker
             // command lines.
@@ -64,6 +64,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             bool? debugExplicit = null;
             bool? incrementalLinkingExplicit = null;
 
+            // The following options are not directly interesting to our analysis.  However, their presence changes
+            // the default behavior of options that we do care about, such as optimize refernces.
             bool optLbr = false;
             bool order = false;
             bool profile = false;
@@ -174,9 +176,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             // https://docs.microsoft.com/cpp/build/reference/incremental-link-incrementally?view=msvc-170
             bool explicitDebugEnabled = (debugExplicit ?? false);
             this.OptimizeReferencesEnabled = optimizeReferencesExplicit ?? (!explicitDebugEnabled);
-            this.COMDATFoldingEnabled = COMDATFoldingExplicit ?? (!explicitDebugEnabled && !profile);
+            this.ComdatFoldingEnabled = COMDATFoldingExplicit ?? (!explicitDebugEnabled && !profile);
 
-            bool incrementalLinkingBlockedByOtherFlags = this.OptimizeReferencesEnabled || this.COMDATFoldingEnabled || optLbr || order || profile;
+            bool incrementalLinkingBlockedByOtherFlags = this.OptimizeReferencesEnabled || this.ComdatFoldingEnabled || optLbr || order || profile;
             this.IncrementalLinking = incrementalLinkingExplicit ?? !incrementalLinkingBlockedByOtherFlags;
         }
 

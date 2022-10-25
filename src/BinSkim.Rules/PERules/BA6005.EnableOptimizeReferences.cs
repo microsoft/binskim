@@ -56,8 +56,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.CouldNotLoadPdb;
             if (target.Pdb == null) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsNotBuiltWithMSVC;
-            if (!portableExecutable.IsTargetCompiledWithMSVC(target.Pdb)) { return result; }
+            reasonForNotAnalyzing = MetadataConditions.ImageIsNotBuiltWithMsvc;
+            if (!portableExecutable.IsTargetCompiledWithMsvc(target.Pdb)) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -73,7 +73,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // '{0}' was compiled with Optimize References (/OPT:REF) disabled, increasing binary size.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Fail, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                     nameof(RuleResources.BA6005_Warning),
                     context.TargetUri.GetFileName()));
                 return;

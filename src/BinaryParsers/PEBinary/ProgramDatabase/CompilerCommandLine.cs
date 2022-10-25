@@ -73,7 +73,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <summary>
         /// Whether or not this command line requests whole program optimization (/GL).
         /// </summary>
-        public readonly bool WholeProgramOptimization;
+        public readonly bool WholeProgramOptimizationEnabled;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompilerCommandLine"/> struct from a raw PDB-supplied command line.
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.OptimizationsEnabled = false;
             this.UsesDebugCRuntime = false;
             this.EliminateDuplicateStringsEnabled = false;
-            this.WholeProgramOptimization = false;
+            this.WholeProgramOptimizationEnabled = false;
 
             var explicitWarnings = new Dictionary<int, WarningState>();
             foreach (string argument in ArgumentSplitter.CommandLineToArgvW(commandLine))
@@ -149,7 +149,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                         }
                         else if (argument.EndsWith("GL"))
                         {
-                            this.WholeProgramOptimization = true;
+                            this.WholeProgramOptimizationEnabled = true;
                         }
                         else if (argument.EndsWith("GF"))
                         {
@@ -168,7 +168,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                         }
                         else if (argument.EndsWith("GL-"))
                         {
-                            this.WholeProgramOptimization = false;
+                            this.WholeProgramOptimizationEnabled = false;
                         }
                         break;
                     case 5:

@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string DisableIncrementalLinkingInReleaseBuilds = "BA6001";
         public const string EliminateDuplicateStrings = "BA6002";
         // public const string RuntimeTypeInformation = "BA6003"; // reserved rule id
-        public const string EnableCOMDATFolding = "BA6004";
+        public const string EnableComdatFolding = "BA6004";
         public const string EnableOptimizeReferences = "BA6005";
         public const string EnableLinkTimeCodeGeneration = "BA6006";
     }

@@ -19,12 +19,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(ReportingDescriptor))]
     [Export(typeof(Skimmer<BinaryAnalyzerContext>))]
-    public class EnableCOMDATFolding : WindowsBinaryAndPdbSkimmerBase
+    public class EnableComdatFolding : WindowsBinaryAndPdbSkimmerBase
     {
         /// <summary>
         /// BA6004
         /// </summary>
-        public override string Id => RuleIds.EnableCOMDATFolding;
+        public override string Id => RuleIds.EnableComdatFolding;
 
         /// <summary>
         /// COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a
@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
 
-        private const string AnalyzerName = RuleIds.EnableCOMDATFolding + "." + nameof(EnableCOMDATFolding);
+        private const string AnalyzerName = RuleIds.EnableComdatFolding + "." + nameof(EnableComdatFolding);
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
@@ -57,8 +57,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.CouldNotLoadPdb;
             if (target.Pdb == null) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsNotBuiltWithMSVC;
-            if (!portableExecutable.IsTargetCompiledWithMSVC(target.Pdb)) { return result; }
+            reasonForNotAnalyzing = MetadataConditions.ImageIsNotBuiltWithMsvc;
+            if (!portableExecutable.IsTargetCompiledWithMsvc(target.Pdb)) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That
                 // may make debugging more difficult.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Fail, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                     nameof(RuleResources.BA6004_Warning_EnabledForDebug),
                     context.TargetUri.GetFileName()));
                 return;
@@ -85,7 +85,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 // '{0}' was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Fail, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                     nameof(RuleResources.BA6004_Warning_DisabledForRelease),
                     context.TargetUri.GetFileName()));
                 return;

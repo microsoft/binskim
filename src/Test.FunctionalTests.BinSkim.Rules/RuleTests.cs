@@ -1582,7 +1582,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyApplicability(new EliminateDuplicateStrings(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.ImageIsNotBuiltWithMSVC);
+                this.VerifyApplicability(new EliminateDuplicateStrings(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.ImageIsNotBuiltWithMsvc);
             }
         }
 
@@ -1600,12 +1600,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     MetadataConditions.CouldNotLoadPdb
                 };
                 this.VerifyFail(
-                    new EnableCOMDATFolding(),
+                    new EnableComdatFolding(),
                     useDefaultPolicy: true);
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new EnableCOMDATFolding(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new EnableComdatFolding(), useDefaultPolicy: true);
             }
         }
 
@@ -1614,11 +1614,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyPass(new EnableCOMDATFolding(), useDefaultPolicy: true);
+                this.VerifyPass(new EnableComdatFolding(), useDefaultPolicy: true);
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new EnableCOMDATFolding(), useDefaultPolicy: true);
+                this.VerifyThrows<PlatformNotSupportedException>(new EnableComdatFolding(), useDefaultPolicy: true);
             }
         }
 
@@ -1627,7 +1627,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyApplicability(new EnableCOMDATFolding(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.ImageIsNotBuiltWithMSVC);
+                this.VerifyApplicability(new EnableComdatFolding(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.ImageIsNotBuiltWithMsvc);
             }
         }
 

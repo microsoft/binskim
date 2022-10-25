@@ -18,13 +18,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             commandLine.EliminateDuplicateStringsEnabled.Should().BeFalse();
             commandLine.OptimizationsEnabled.Should().BeFalse();
             commandLine.UsesDebugCRuntime.Should().BeFalse();
-            commandLine.WholeProgramOptimization.Should().BeFalse();
+            commandLine.WholeProgramOptimizationEnabled.Should().BeFalse();
 
             commandLine = new CompilerCommandLine(string.Empty);
             commandLine.EliminateDuplicateStringsEnabled.Should().BeFalse();
             commandLine.OptimizationsEnabled.Should().BeFalse();
             commandLine.UsesDebugCRuntime.Should().BeFalse();
-            commandLine.WholeProgramOptimization.Should().BeFalse();
+            commandLine.WholeProgramOptimizationEnabled.Should().BeFalse();
         }
 
         [Fact]
@@ -151,23 +151,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public void WholeProgramOptimizationTest()
         {
             var commandLine = new CompilerCommandLine("/GL");
-            commandLine.WholeProgramOptimization.Should().BeTrue();
+            commandLine.WholeProgramOptimizationEnabled.Should().BeTrue();
             commandLine = new CompilerCommandLine("/GL-");
-            commandLine.WholeProgramOptimization.Should().BeFalse();
+            commandLine.WholeProgramOptimizationEnabled.Should().BeFalse();
             commandLine = new CompilerCommandLine("-GL");
-            commandLine.WholeProgramOptimization.Should().BeTrue();
+            commandLine.WholeProgramOptimizationEnabled.Should().BeTrue();
             commandLine = new CompilerCommandLine("-GL-");
-            commandLine.WholeProgramOptimization.Should().BeFalse();
+            commandLine.WholeProgramOptimizationEnabled.Should().BeFalse();
 
             // Last writer wins
             commandLine = new CompilerCommandLine("/GL- /GL");
-            commandLine.WholeProgramOptimization.Should().BeTrue();
+            commandLine.WholeProgramOptimizationEnabled.Should().BeTrue();
             commandLine = new CompilerCommandLine("/GL /GL-");
-            commandLine.WholeProgramOptimization.Should().BeFalse();
+            commandLine.WholeProgramOptimizationEnabled.Should().BeFalse();
             commandLine = new CompilerCommandLine("-GL- -GL");
-            commandLine.WholeProgramOptimization.Should().BeTrue();
+            commandLine.WholeProgramOptimizationEnabled.Should().BeTrue();
             commandLine = new CompilerCommandLine("-GL -GL-");
-            commandLine.WholeProgramOptimization.Should().BeFalse();
+            commandLine.WholeProgramOptimizationEnabled.Should().BeFalse();
         }
 
         [Fact]
@@ -190,7 +190,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             commandLine.EliminateDuplicateStringsEnabled.Should().BeTrue();
             commandLine.OptimizationsEnabled.Should().BeTrue();
             commandLine.UsesDebugCRuntime.Should().BeFalse();
-            commandLine.WholeProgramOptimization.Should().BeTrue();
+            commandLine.WholeProgramOptimizationEnabled.Should().BeTrue();
         }
     }
 }

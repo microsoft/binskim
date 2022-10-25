@@ -87,7 +87,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <summary>
         /// Returns whether the linker has COMDAT Folding (/OPT:ICF) enabled.
         /// </summary>
-        public bool COMDATFoldingEnabled => this.linkerCommandLine.COMDATFoldingEnabled;
+        public bool ComdatFoldingEnabled => this.linkerCommandLine.ComdatFoldingEnabled;
 
         /// <summary>
         /// Returns whether the linker has Optimize References (/OPT:REF) enabled.
@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// <summary>
         /// Returns whether the compiler has Whole Program Optimziation (/GL) enabled
         /// </summary>
-        public bool WholeProgramOptimization => this.compilerCommandLine.WholeProgramOptimization;
+        public bool WholeProgramOptimizationEnabled => this.compilerCommandLine.WholeProgramOptimizationEnabled;
 
         /// <summary>
         /// Returns a list of integers corresponding to the set of warnings disabled via -wdnnnn switches on the command line.

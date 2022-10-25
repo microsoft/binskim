@@ -56,8 +56,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.CouldNotLoadPdb;
             if (target.Pdb == null) { return result; }
 
-            reasonForNotAnalyzing = MetadataConditions.ImageIsNotBuiltWithMSVC;
-            if (!portableExecutable.IsTargetCompiledWithMSVC(target.Pdb)) { return result; }
+            reasonForNotAnalyzing = MetadataConditions.ImageIsNotBuiltWithMsvc;
+            if (!portableExecutable.IsTargetCompiledWithMsvc(target.Pdb)) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -88,9 +88,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
-                bool isMSVC = (omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftC ||
+                bool isMsvc = (omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftC ||
                                omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftCxx);
-                if (isMSVC)
+                if (isMsvc)
                 {
                     if (!omDetails.EliminateDuplicateStringsEnabled)
                     {
