@@ -128,11 +128,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (section.Type == SectionType.DynamicSymbolTable)
                 {
                     var symbols = section as SymbolTable<ulong>;
-                    foreach (SymbolEntry<ulong> symbol in symbols.Entries)
+                    if (symbols != null)
                     {
-                        if (symbol.Name == "__stack_chk_fail" || symbol.Name == "__stack_chk_guard" || symbol.Name == "__intel_security_cookie")
+                        foreach (SymbolEntry<ulong> symbol in symbols.Entries)
                         {
-                            return true;
+                            if (symbol.Name == "__stack_chk_fail" || symbol.Name == "__stack_chk_guard" || symbol.Name == "__intel_security_cookie")
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
