@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             CanAnalyzeDwarfResult result = default;
 
-            if (target is ElfBinary elf)
+            if (target is ElfBinary)
             {
                 // Set result.Result to AnalysisApplicability.ApplicableToSpecifiedTarget for any case.
                 // we have a fallback ELF symbol check in case DWARF compile args aren't present.
