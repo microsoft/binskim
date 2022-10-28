@@ -129,14 +129,23 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override int Run(AnalyzeOptions analyzeOptions)
         {
-            if (!Environment.GetCommandLineArgs().Any(arg => arg.Equals("--sarif-output-version")))
+            if (!Environment.GetCommandLineArgs().
+                Any(arg => arg.Equals("--sarif-output-version", StringComparison.OrdinalIgnoreCase) ||
+                arg.Equals("-v", StringComparison.OrdinalIgnoreCase)))
             {
                 analyzeOptions.SarifOutputVersion = Sarif.SarifVersion.Current;
             }
 
-            if (s_UnitTestOutputVersion != Sarif.SarifVersion.Unknown)
+            if (this.UnitTestOutputVersion != Sarif.SarifVersion.Unknown)
             {
-                analyzeOptions.SarifOutputVersion = s_UnitTestOutputVersion;
+                analyzeOptions.SarifOutputVersion = this.UnitTestOutputVersion;
+            }
+
+            if (analyzeOptions.SarifOutputVersion == Sarif.SarifVersion.OneZeroZero)
+            {
+                throw new InvalidOperationException(
+                    "BinSkim no longer supports emitting SARIF 1.0 (an obsolete format). " +
+                    "Pass 'Current' on the command-line or omit the '-v|--sarif-output-version' argument entirely.");
             }
 
             // Type or member is obsolete
@@ -181,6 +190,6 @@ namespace Microsoft.CodeAnalysis.IL
                 : result;
         }
 
-        internal static Sarif.SarifVersion s_UnitTestOutputVersion;
+        internal Sarif.SarifVersion UnitTestOutputVersion { get; set; }
     }
 }
