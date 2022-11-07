@@ -315,9 +315,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         /// <summary>
         ///   Looks up a localized string similar to not compiled with Microsoft C/C++ compiler.
         /// </summary>
-        internal static string MetadataCondition_ImageIsNotBuiltWithMSVC {
+        internal static string MetadataCondition_ImageIsNotBuiltWithMsvc {
             get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsNotBuiltWithMSVC", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotBuiltWithMsvc", resourceCulture);
             }
         }
         

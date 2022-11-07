@@ -37,12 +37,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
-            string fileName = Path.Combine(BaselineTestDataDirectory, "Native_x64_VS2013_Default.dll");
-            using (var peBinary = new PEBinary(new Uri(fileName)))
+            (string fileName, bool fromBaselineFolder)[] testCases = new[]
             {
-                peBinary.Pdb.Should().NotBeNull();
-                peBinary.StrippedPdb.Should().BeNull();
-                peBinary.PdbParseException.Should().BeNull();
+                ("clangcl.14.pe.c.codeview.pdbpagesize_default.exe", false),
+                ("clangcl.14.pe.c.codeview.pdbpagesize_4096.exe", false),
+                ("clangcl.14.pe.c.codeview.pdbpagesize_8192.exe", false),
+                ("clangcl.14.pe.c.codeview.pdbpagesize_16384.exe", false),
+                ("clangcl.14.pe.c.codeview.pdbpagesize_32768.exe", false),
+                ("Native_x64_VS2022_PDBPageSize_8192.exe", false),
+                ("Native_x64_VS2013_Default.dll", true)
+            };
+
+            foreach ((string fileName, bool fromBaselineFolder) testCase in testCases)
+            {
+                string fileFullPath = testCase.fromBaselineFolder
+                ? Path.Combine(BaselineTestDataDirectory, testCase.fileName)
+                : Path.Combine(TestData, "PE", testCase.fileName);
+                using (var peBinary = new PEBinary(new Uri(fileFullPath)))
+                {
+                    peBinary.Pdb.Should().NotBeNull();
+                    peBinary.StrippedPdb.Should().BeNull();
+                    peBinary.PdbParseException.Should().BeNull();
+                }
             }
         }
 
@@ -51,12 +67,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
-            string fileName = Path.Combine(BaselineTestDataDirectory, "Native_x86_VS2013_PdbMissing.exe");
-            using (var peBinary = new PEBinary(new Uri(fileName)))
+            (string fileName, bool fromBaselineFolder)[] testCases = new[]
             {
-                peBinary.Pdb.Should().BeNull();
-                peBinary.StrippedPdb.Should().BeNull();
-                peBinary.PdbParseException.Should().NotBeNull();
+                ("clangcl.14.pe.c.codeview.pdbpagesize_8192_pdbmissing.exe", false),
+                ("Native_x86_VS2013_PdbMissing.exe", true)
+            };
+
+            foreach ((string fileName, bool fromBaselineFolder) testCase in testCases)
+            {
+                string fileFullPath = testCase.fromBaselineFolder
+                ? Path.Combine(BaselineTestDataDirectory, testCase.fileName)
+                : Path.Combine(TestData, "PE", testCase.fileName);
+                using (var peBinary = new PEBinary(new Uri(fileFullPath)))
+                {
+                    peBinary.Pdb.Should().BeNull();
+                    peBinary.StrippedPdb.Should().BeNull();
+                    peBinary.PdbParseException.Should().NotBeNull();
+                }
             }
         }
 

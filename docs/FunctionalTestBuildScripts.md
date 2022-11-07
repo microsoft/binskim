@@ -60,6 +60,16 @@ A simple hello world program, compiled with `clang 10.0.0` that generates a .o o
 A simple hello world program, compiled with `clang 13.0.0` that generates a .exe and associated .pdb file. Script to reproduce:  
 `clang-cl -o clangcl.pe.c.codeview.exe -fuse-ld=lld-link hello.c -m32 -Z7 -MTd`
 
+## clangcl.14.pe.c.codeview.pdbpagesize_[size].exe
+
+A simple hello world program, compiled with `clang 14.0.0` that generates a .exe and associated .pdb file. Script to reproduce:  
+`clang-cl -o clangcl.14.pe.c.codeview.pdbpagesize_4096.exe -fuse-ld=lld-link helloc.c -m32 -Z7 -MTd /link /CETCOMPAT /guard:cf /PdbPageSize:4096 /PDB:clangcl.14.pe.c.codeview.pdbpagesize_4096.exe.pdb`  
+`clang-cl -o clangcl.14.pe.c.codeview.pdbpagesize_8192.exe -fuse-ld=lld-link helloc.c -m32 -Z7 -MTd /link /CETCOMPAT /guard:cf /PdbPageSize:8192 /PDB:clangcl.14.pe.c.codeview.pdbpagesize_8192.exe.pdb`  
+`clang-cl -o clangcl.14.pe.c.codeview.pdbpagesize_16384.exe -fuse-ld=lld-link helloc.c -m32 -Z7 -MTd /link /CETCOMPAT /guard:cf /PdbPageSize:16384 /PDB:clangcl.14.pe.c.codeview.pdbpagesize_16384.exe.pdb`  
+`clang-cl -o clangcl.14.pe.c.codeview.pdbpagesize_32768.exe -fuse-ld=lld-link helloc.c -m32 -Z7 -MTd /link /CETCOMPAT /guard:cf /PdbPageSize:32768 /PDB:clangcl.14.pe.c.codeview.pdbpagesize_32768.exe.pdb`  
+`clang-cl -o clangcl.14.pe.c.codeview.pdbpagesize_default.exe -fuse-ld=lld-link helloc.c -m32 -Z7 -MTd /link /CETCOMPAT /guard:cf /PDB:clangcl.14.pe.c.codeview.pdbpagesize_default.exe.pdb`  
+`clang-cl -o clangcl.14.pe.c.codeview.pdbpagesize_8192_pdbmissing.exe -fuse-ld=lld-link helloc.c -m32 -Z7 -MTd /link /CETCOMPAT /guard:cf /PdbPageSize:8192 /PDB:clangcl.14.pe.c.codeview.pdbpagesize_8192_pdbmissing.exe.pdb (then delete the pdb)`
+
 ## gcc.object_file.dwarf.3.o
 
 A simple hello world program, compiled with `gcc 9.3.0` that generates a .o object file. Script to reproduce:  
@@ -113,3 +123,7 @@ The Visual Studio 2022 "empty console application" template, compiled as Release
 ## Native_x64_VS2022_ExplicitDisable.exe
 
 The Visual Studio 2022 "empty console application" template, compiled as Release|x64.  The `/incremental:no` option disables incremental linking explicitly.  The `/ltcg` and `/gl` options are disabled explicitly.
+
+## Native_x64_VS2022_PDBPageSize_8192.exe
+
+The Visual Studio 2022 "empty console application" template, compiled as Debug|x64.  The `/PDBPageSize:8192` linker option set page size to 8192.
