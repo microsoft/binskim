@@ -4,7 +4,7 @@ pr:
 jobs:
 - job: linux
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'ubuntu-20.04'
   steps:
   - checkout: self
     submodules: true

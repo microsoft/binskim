@@ -936,3 +936,95 @@ Incremental linking support increases binary size and can reduce runtime perform
 
 ---
 
+## Rule `BA6002.EliminateDuplicateStrings`
+
+### Description
+
+The /GF compiler option, also known as Eliminate Duplicate Strings or String Pooling, will combine identical strings in a program to a single readonly copy. This can significantly reduce binary size for programs with many string resources.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with Eliminate Duplicate Strings (/GF) enabled.
+
+#### `Warning`: Warning
+
+'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6004.EnableComdatFolding`
+
+### Description
+
+COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with COMDAT folding (/OPT:ICF) enabled
+
+#### `EnabledForDebug`: Warning
+
+'{0}' appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That may make debugging more difficult.
+
+#### `DisabledForRelease`: Warning
+
+'{0}' was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6005.EnableOptimizeReferences`
+
+### Description
+
+Optimize References can significantly reduce binary size because it instructs the linker to remove unreferenced functions and data from the final binary.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with Optimize References (/OPT:REF) enabled
+
+#### `Warning`: Warning
+
+'{0}' was compiled with Optimize References (/OPT:REF) disabled, increasing binary size.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6006.EnableLinkTimeCodeGeneration`
+
+### Description
+
+Enabling Link Time Code Generation (LTCG) performs whole-program optimization, which is able to better optimize code across translation units. LTCG is also a prerequisite for Profile-Guided Optimization (PGO) which can further improve performance.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with LinkTimeCodeGeneration (/LTCG) enabled.
+
+#### `Warning`: Warning
+
+'{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+

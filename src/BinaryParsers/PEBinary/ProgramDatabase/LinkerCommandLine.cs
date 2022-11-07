@@ -25,22 +25,51 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public readonly bool IncrementalLinking;
 
         /// <summary>
+        /// Whether or not this command line enables Link Time Code Generation (/LTCG)
+        /// </summary>
+        public readonly bool LinkTimeCodeGenerationEnabled;
+
+        /// <summary>
+        /// Whether or not this command line enables Optimize References (/OPT:REF)
+        /// </summary>
+        public readonly bool OptimizeReferencesEnabled;
+
+        /// <summary>
+        /// Whether or not this command line enables Identical COMDAT folding (/OPT:ICF)
+        /// </summary>
+        public readonly bool ComdatFoldingEnabled;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="LinkerCommandLine"/> struct from a raw PDB-supplied command line.
         /// </summary>
         /// <param name="commandLine">The raw command line from the PDB.</param>
         public LinkerCommandLine(string commandLine)
         {
             this.Raw = commandLine ?? "";
-            this.IncrementalLinking = false;
 
-            // https://docs.microsoft.com/cpp/build/reference/incremental-link-incrementally?view=msvc-170
-            bool debugSet = false;
-            bool optRef = false;
-            bool optIcf = false;
+            this.IncrementalLinking = false;
+            this.LinkTimeCodeGenerationEnabled = false;
+            this.OptimizeReferencesEnabled = false;
+            this.ComdatFoldingEnabled = false;
+
+            // Early return if there is no command-line.  This class is created with an empty string for non-linker
+            // command lines.
+            if (this.Raw.Length == 0)
+            {
+                return;
+            }
+
+            bool? optimizeReferencesExplicit = null;
+            bool? COMDATFoldingExplicit = null;
+            bool? debugExplicit = null;
+            bool? incrementalLinkingExplicit = null;
+
+            // The following options are not directly interesting to our analysis.  However, their presence changes
+            // the default behavior of options that we do care about, such as optimize refernces.
             bool optLbr = false;
             bool order = false;
-            bool explicitlyEnabled = false;
-            bool explicitlyDisabled = false;
+            bool profile = false;
+
             foreach (string argument in ArgumentSplitter.CommandLineToArgvW(commandLine))
             {
                 if (!CommandLineHelper.IsCommandLineOption(argument))
@@ -48,58 +77,109 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     continue;
                 }
 
-                // There are multiple /debug options so use StartsWith
-                if (ArgumentStartsWith(argument, "debug"))
+                // There are multiple /debug options so use StartsWith.  There is also /debugtype: so we must be careful not
+                // to over-match against that.  /debug:none must go first.
+                if (ArgumentEquals(argument, "debug:none"))
                 {
-                    debugSet = true;
+                    debugExplicit = false;
                 }
-                else if (ArgumentEquals(argument, "opt:ref"))
+                else if (ArgumentStartsWith(argument, "debug:") || ArgumentEquals(argument, "debug"))
                 {
-                    optRef = true;
+                    debugExplicit = true;
                 }
-                else if (ArgumentEquals(argument, "opt:icf"))
+                else if (ArgumentStartsWith(argument, "opt"))
                 {
-                    optIcf = true;
-                }
-                else if (ArgumentEquals(argument, "opt:lbr"))
-                {
-                    optLbr = true;
+                    // "The /OPT arguments may be specified together, separated by commas. For example, instead of
+                    //  /OPT:REF /OPT:NOICF, you can specify /OPT:REF,NOICF."
+                    // https://docs.microsoft.com/cpp/build/reference/opt-optimizations?view=msvc-170#remarks
+                    //
+                    // Make sure to match the more-specific noX before X because we are using contains and both would
+                    // match the enabled version.
+                    if (argument.Contains("noref", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        optimizeReferencesExplicit = false;
+                    }
+                    else if (argument.Contains("ref", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        optimizeReferencesExplicit = true;
+                    }
+
+                    if (argument.Contains("noicf", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        COMDATFoldingExplicit = false;
+                    }
+                    else if (argument.Contains("icf", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        COMDATFoldingExplicit = true;
+                    }
+
+                    if (argument.Contains("nolbr", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        optLbr = false;
+                    }
+                    else if (argument.Contains("lbr", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        optLbr = true;
+                    }
                 }
                 else if (ArgumentEquals(argument, "order"))
                 {
                     order = true;
                 }
+                else if (ArgumentEquals(argument, "profile"))
+                {
+                    profile = true;
+                }
                 else if (ArgumentEquals(argument, "incremental"))
                 {
-                    explicitlyEnabled = true;
-                    explicitlyDisabled = false; // Assume that if specified multiple times the last wins
+                    incrementalLinkingExplicit = true;
                 }
                 else if (ArgumentEquals(argument, "incremental:no"))
                 {
-                    explicitlyDisabled = true;
-                    explicitlyEnabled = false; // Assume that if specified multiple times the last wins
+                    incrementalLinkingExplicit = false;
+                }
+                else if (ArgumentEquals(argument, "LTCG:OFF"))
+                {
+                    this.LinkTimeCodeGenerationEnabled = false;
+                }
+                else if (ArgumentStartsWith(argument, "LTCG"))
+                {
+                    this.LinkTimeCodeGenerationEnabled = true;
                 }
             }
 
-            // Explicit enable or disable wins.
-            // If /debug is set then incremental is implied unless certain other flags convert it back to false
-            // If nothing is specified then it is disabled.
-            if (explicitlyEnabled)
-            {
-                this.IncrementalLinking = true;
-            }
-            else if (explicitlyDisabled)
-            {
-                this.IncrementalLinking = false;
-            }
-            else if (debugSet)
-            {
-                this.IncrementalLinking = !optRef && !optIcf && !optLbr && !order;
-            }
-            else
-            {
-                this.IncrementalLinking = false;
-            }
+            // The argument parsing is a complicated two-phase approach.  When an option is explicitly specified
+            // one way or the other that will be respected (if specified multiple times explicitly the last writer
+            // wins).  If not explicitly specified then the complicated implicit rules kick in.
+            //
+            // This code attempts to accurately reflect the publicly documented implicit rules.  However, they are
+            // very complicated so this is best-effort and not guaranteed to be correct in all circumstances.
+            //
+            // The following comments and links document some of the rules that are being encoded.
+            //
+            // "/DEBUG changes the defaults for the /OPT option from REF to NOREF and from ICF to NOICF, so if you
+            //  want the original defaults, you must explicitly specify /OPT:REF or /OPT:ICF."
+            // https://docs.microsoft.com/cpp/build/reference/debug-generate-debug-info?view=msvc-170#remarks
+            //
+            // /PROFILE implies the following linker options: /DEBUG:FULL, /OPT:REF, /OPT:NOICF, /INCREMENTAL:NO
+            // https://docs.microsoft.com/cpp/build/reference/profile-performance-tools-profiler?view=msvc-170
+            //
+            // "By default, /OPT:REF is enabled by the linker unless /OPT:NOREF or /DEBUG is specified."
+            // https://docs.microsoft.com/cpp/build/reference/opt-optimizations?view=msvc-170#arguments
+            //
+            // "By default, /OPT:ICF is enabled by the linker unless /OPT:NOICF or /DEBUG is specified."
+            // /OPT:REF implicitly enables /OPT:ICF.  This does not appear to be publicly documented.
+            // https://docs.microsoft.com/cpp/build/reference/opt-optimizations?view=msvc-170#arguments
+            //
+            // If /DEBUG is set then incremental is implied unless certain other flags convert it back to false.
+            // Incremental also defaults to true so this does not seem to matter.
+            // https://docs.microsoft.com/cpp/build/reference/incremental-link-incrementally?view=msvc-170
+            bool explicitDebugEnabled = (debugExplicit ?? false);
+            this.OptimizeReferencesEnabled = optimizeReferencesExplicit ?? (!explicitDebugEnabled);
+            this.ComdatFoldingEnabled = COMDATFoldingExplicit ?? (!explicitDebugEnabled && !profile);
+
+            bool incrementalLinkingBlockedByOtherFlags = this.OptimizeReferencesEnabled || this.ComdatFoldingEnabled || optLbr || order || profile;
+            this.IncrementalLinking = incrementalLinkingExplicit ?? !incrementalLinkingBlockedByOtherFlags;
         }
 
         public static bool IsLinkerCommandLine(string commandLine)

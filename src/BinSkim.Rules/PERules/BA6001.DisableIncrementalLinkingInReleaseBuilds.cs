@@ -60,6 +60,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.NotAReleaseBuild;
             if (!portableExecutable.IsMostlyOptimized(pdb)) { return result; }
 
+            reasonForNotAnalyzing = MetadataConditions.ImageIsNotBuiltWithMsvc;
+            if (!portableExecutable.IsTargetCompiledWithMsvc(target.Pdb)) { return result; }
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
@@ -75,7 +78,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' appears to be compiled as release but enables incremental linking, increasing binary size and
                 // further compromising runtime performance by preventing enabling maximal code optimization.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Fail, context, null,
+                    RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                     nameof(RuleResources.BA6001_Warning),
                     context.TargetUri.GetFileName()));
                 return;
