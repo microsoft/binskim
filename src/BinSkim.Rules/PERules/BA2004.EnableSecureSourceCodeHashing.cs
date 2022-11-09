@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.IO;
+using System.Reflection.Metadata.Ecma335;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -162,6 +163,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             // 1. Some compiler injected code that is listed as being in "predefined C++ types (compiler internal)"
                             if (sfName == MSVCPredefinedTypesFileName)
                             {
+                                continue;
+                            }
+                            else if (sf.FileName.EndsWith(".winmd"))
+                            {
+                                // This is a Windows application reference
+                                // assembly, a Win RT API 'metadata' file.
                                 continue;
                             }
                             else if (pchFileName != string.Empty)
