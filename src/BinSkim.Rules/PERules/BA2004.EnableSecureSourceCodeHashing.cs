@@ -226,11 +226,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // source code hashing algorithm.
             context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass,
-                                             context,
-                                             region: null,
-                                             nameof(RuleResources.BA2004_Pass),
-                                             context.TargetUri.GetFileName(),
-                                             "native"));
+                                              context,
+                                              region: null,
+                                              nameof(RuleResources.BA2004_Pass),
+                                              context.TargetUri.GetFileName(),
+                                              "native"));
         }
 
         private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
