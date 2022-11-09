@@ -225,10 +225,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // '{0}' is a {1} binary which was compiled with a secure (SHA-256)
             // source code hashing algorithm.
             context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                    nameof(RuleResources.BA2004_Pass),
-                        context.TargetUri.GetFileName(),
-                        "native"));
+                    RuleUtilities.BuildResult(ResultKind.Pass,
+                                             context,
+                                             region: null,
+                                             nameof(RuleResources.BA2004_Pass),
+                                             context.TargetUri.GetFileName(),
+                                             "native"));
         }
 
         private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
@@ -245,7 +247,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(failureLevel,
                                               context,
-                                              null,
+                                              region: null,
                                               nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
                                               context.TargetUri.GetFileName(),
                                               compilands));
@@ -255,7 +257,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(failureLevel,
                                           context,
-                                          null,
+                                          region: null,
                                           nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
                                           context.TargetUri.GetFileName(),
                                           compilands));

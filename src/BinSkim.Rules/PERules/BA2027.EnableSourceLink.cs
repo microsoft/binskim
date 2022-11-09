@@ -74,9 +74,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // and adding a package reference for your source control provider. See
                 // https://aka.ms/sourcelink for more information.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
-                    nameof(RuleResources.BA2027_Warning),
-                    context.TargetUri.GetFileName()));
+                    RuleUtilities.BuildResult(FailureLevel.Warning,
+                                              context,
+                                              region: null,
+                                              nameof(RuleResources.BA2027_Warning),
+                                              context.TargetUri.GetFileName()));
+
+                return;
 
             }
 
@@ -84,9 +88,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // and security response efficiency when source code is required for
             // debugging and other critical analysis.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                nameof(RuleResources.BA2027_Pass),
-                context.TargetUri.GetFileName()));
+                RuleUtilities.BuildResult(ResultKind.Pass,
+                                          context,
+                                          region: null,
+                                          nameof(RuleResources.BA2027_Pass),
+                                          context.TargetUri.GetFileName()));
             return;
 
         }

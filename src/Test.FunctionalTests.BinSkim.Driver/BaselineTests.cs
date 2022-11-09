@@ -429,6 +429,10 @@ namespace Microsoft.CodeAnalysis.IL
 
             actualText = actualText.Replace(@"""Sarif""", @"""BinSkim""");
             actualText = actualText.Replace(@"        ""fileVersion"": ""15.0.0""," + Environment.NewLine, string.Empty);
+            actualText = actualText.Replace(@"        ""fileVersion"": ""15.0.0""," + Environment.NewLine, string.Empty);
+
+            actualText = Regex.Replace(actualText, @"\s*""product""[^\n]+?\n", Environment.NewLine);
+            actualText = Regex.Replace(actualText, @"\s*""organization""[^\n]+?\n", Environment.NewLine);
 
             actualText = Regex.Replace(actualText, @"\s*""fullName""[^\n]+?\n", Environment.NewLine);
             actualText = Regex.Replace(actualText, @"\s*""semanticVersion""[^\n]+?\n", Environment.NewLine);
