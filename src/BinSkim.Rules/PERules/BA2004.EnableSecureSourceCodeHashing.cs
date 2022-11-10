@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.IO;
+using System.Reflection.Metadata.Ecma335;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -164,6 +165,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             {
                                 continue;
                             }
+                            else if (sf.FileName.EndsWith(".winmd"))
+                            {
+                                // This is a Windows application reference
+                                // assembly, a Win RT API 'metadata' file.
+                                continue;
+                            }
                             else if (pchFileName != string.Empty)
                             {
                                 // 2. The file used to create a precompiled header using the /Yc switch
@@ -218,10 +225,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // '{0}' is a {1} binary which was compiled with a secure (SHA-256)
             // source code hashing algorithm.
             context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                    nameof(RuleResources.BA2004_Pass),
-                        context.TargetUri.GetFileName(),
-                        "native"));
+                    RuleUtilities.BuildResult(ResultKind.Pass,
+                                              context,
+                                              region: null,
+                                              nameof(RuleResources.BA2004_Pass),
+                                              context.TargetUri.GetFileName(),
+                                              "native"));
         }
 
         private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
@@ -238,7 +247,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(failureLevel,
                                               context,
-                                              null,
+                                              region: null,
                                               nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
                                               context.TargetUri.GetFileName(),
                                               compilands));
@@ -248,7 +257,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(failureLevel,
                                           context,
-                                          null,
+                                          region: null,
                                           nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
                                           context.TargetUri.GetFileName(),
                                           compilands));
