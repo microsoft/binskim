@@ -66,20 +66,35 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
-            if (HasSourceLink(context))
+            if (!HasSourceLink(context))
             {
+                // The PDB for '{0}' does not contain SourceLink information, compromising
+                // frictionless source-driven debugging and increasing latency of security
+                // response. Enable SourceLink by configuring necessary project properties
+                // and adding a package reference for your source control provider. See
+                // https://aka.ms/sourcelink for more information.
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                    nameof(RuleResources.BA2027_Pass),
-                    context.TargetUri.GetFileName()));
+                    RuleUtilities.BuildResult(FailureLevel.Warning,
+                                              context,
+                                              region: null,
+                                              nameof(RuleResources.BA2027_Warning),
+                                              context.TargetUri.GetFileName()));
+
+                return;
+
             }
-            else
-            {
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
-                    nameof(RuleResources.BA2027_Warning),
-                    context.TargetUri.GetFileName()));
-            }
+
+            // The PDB for '{0}' contains SourceLink information, maximizing engineering
+            // and security response efficiency when source code is required for
+            // debugging and other critical analysis.
+            context.Logger.Log(this,
+                RuleUtilities.BuildResult(ResultKind.Pass,
+                                          context,
+                                          region: null,
+                                          nameof(RuleResources.BA2027_Pass),
+                                          context.TargetUri.GetFileName()));
+            return;
+
         }
 
         private static bool HasSourceLink(BinaryAnalyzerContext context)
