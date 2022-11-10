@@ -75,9 +75,34 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public bool UsesDebugCRuntime => this.compilerCommandLine.UsesDebugCRuntime;
 
         /// <summary>
+        /// Returns whether the compiland command line specifies Enable String Pooling (/GF).
+        /// </summary>
+        public bool EliminateDuplicateStringsEnabled => this.compilerCommandLine.EliminateDuplicateStringsEnabled;
+
+        /// <summary>
         /// Returns whether the linker had incremental linking enabled, or not.
         /// </summary>
         public bool IncrementalLinkingEnabled => this.linkerCommandLine.IncrementalLinking;
+
+        /// <summary>
+        /// Returns whether the linker has COMDAT Folding (/OPT:ICF) enabled.
+        /// </summary>
+        public bool ComdatFoldingEnabled => this.linkerCommandLine.ComdatFoldingEnabled;
+
+        /// <summary>
+        /// Returns whether the linker has Optimize References (/OPT:REF) enabled.
+        /// </summary>
+        public bool OptimizeReferencesEnabled => this.linkerCommandLine.OptimizeReferencesEnabled;
+
+        /// <summary>
+        /// Returns whether the linker requested Link Time Code Generation (/LTCG)
+        /// </summary>
+        public bool LinkTimeCodeGenerationEnabled => this.linkerCommandLine.LinkTimeCodeGenerationEnabled;
+
+        /// <summary>
+        /// Returns whether the compiler has Whole Program Optimziation (/GL) enabled
+        /// </summary>
+        public bool WholeProgramOptimizationEnabled => this.compilerCommandLine.WholeProgramOptimizationEnabled;
 
         /// <summary>
         /// Returns a list of integers corresponding to the set of warnings disabled via -wdnnnn switches on the command line.
@@ -88,6 +113,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         /// The raw command line passed to the compiler when building this object module.
         /// </summary>
         public string RawCommandLine => this.compilerCommandLine.Raw;
+
+        /// <summary>
+        /// The raw command line passed to the linker when building this object module.
+        /// </summary>
+        public string RawLinkerCommandLine => this.linkerCommandLine.Raw;
 
         /// <summary>
         /// The name of the compiler.

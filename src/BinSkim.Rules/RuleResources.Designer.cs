@@ -987,7 +987,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information..
+        ///   Looks up a localized string similar to SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user expe [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2027_EnableSourceLink_Description {
             get {
@@ -996,7 +996,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other diagnostic analysis..
+        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other critical analysis..
         /// </summary>
         internal static string BA2027_Pass {
             get {
@@ -1005,7 +1005,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; does not contain SourceLink information. SourceLink information should be present in the PDB of all binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response. Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider. See https://aka.ms/sourcelink for more information..
         /// </summary>
         internal static string BA2027_Warning {
             get {
@@ -1426,6 +1426,123 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA6001_Warning {
             get {
                 return ResourceManager.GetString("BA6001_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The /GF compiler option, also known as Eliminate Duplicate Strings or String Pooling, will combine identical strings in a program to a single readonly copy. This can significantly reduce binary size for programs with many string resources..
+        /// </summary>
+        internal static string BA6002_EliminateDuplicateStrings_Description {
+            get {
+                return ResourceManager.GetString("BA6002_EliminateDuplicateStrings_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with Eliminate Duplicate Strings (/GF) enabled..
+        /// </summary>
+        internal static string BA6002_Pass {
+            get {
+                return ResourceManager.GetString("BA6002_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}..
+        /// </summary>
+        internal static string BA6002_Warning {
+            get {
+                return ResourceManager.GetString("BA6002_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary..
+        /// </summary>
+        internal static string BA6004_EnableCOMDATFolding_Description {
+            get {
+                return ResourceManager.GetString("BA6004_EnableCOMDATFolding_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with COMDAT folding (/OPT:ICF) enabled.
+        /// </summary>
+        internal static string BA6004_Pass {
+            get {
+                return ResourceManager.GetString("BA6004_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size..
+        /// </summary>
+        internal static string BA6004_Warning_DisabledForRelease {
+            get {
+                return ResourceManager.GetString("BA6004_Warning_DisabledForRelease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That may make debugging more difficult..
+        /// </summary>
+        internal static string BA6004_Warning_EnabledForDebug {
+            get {
+                return ResourceManager.GetString("BA6004_Warning_EnabledForDebug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optimize References can significantly reduce binary size because it instructs the linker to remove unreferenced functions and data from the final binary..
+        /// </summary>
+        internal static string BA6005_EnableOptimizeReferences_Description {
+            get {
+                return ResourceManager.GetString("BA6005_EnableOptimizeReferences_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with Optimize References (/OPT:REF) enabled.
+        /// </summary>
+        internal static string BA6005_Pass {
+            get {
+                return ResourceManager.GetString("BA6005_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with Optimize References (/OPT:REF) disabled, increasing binary size..
+        /// </summary>
+        internal static string BA6005_Warning {
+            get {
+                return ResourceManager.GetString("BA6005_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabling Link Time Code Generation (LTCG) performs whole-program optimization, which is able to better optimize code across translation units. LTCG is also a prerequisite for Profile-Guided Optimization (PGO) which can further improve performance..
+        /// </summary>
+        internal static string BA6006_EnableLinkTimeCodeGeneration_Description {
+            get {
+                return ResourceManager.GetString("BA6006_EnableLinkTimeCodeGeneration_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with LinkTimeCodeGeneration (/LTCG) enabled..
+        /// </summary>
+        internal static string BA6006_Pass {
+            get {
+                return ResourceManager.GetString("BA6006_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance..
+        /// </summary>
+        internal static string BA6006_Warning {
+            get {
+                return ResourceManager.GetString("BA6006_Warning", resourceCulture);
             }
         }
         

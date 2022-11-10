@@ -890,17 +890,17 @@ Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor f
 
 ### Description
 
-SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information.
+SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information.
 
 ### Messages
 
 #### `Pass`: Pass
 
-The PDB for '{0}' contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other diagnostic analysis.
+The PDB for '{0}' contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other critical analysis.
 
 #### `Warning`: Warning
 
-The PDB for '{0}' does not contain SourceLink information. SourceLink information should be present in the PDB of all binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information.
+The PDB for '{0}' does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response. Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider. See https://aka.ms/sourcelink for more information.
 
 ---
 
@@ -929,6 +929,98 @@ Incremental linking support increases binary size and can reduce runtime perform
 #### `Warning`: Warning
 
 '{0}' appears to be compiled as release but enables incremental linking, increasing binary size and further compromising runtime performance by preventing enabling maximal code optimization.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6002.EliminateDuplicateStrings`
+
+### Description
+
+The /GF compiler option, also known as Eliminate Duplicate Strings or String Pooling, will combine identical strings in a program to a single readonly copy. This can significantly reduce binary size for programs with many string resources.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with Eliminate Duplicate Strings (/GF) enabled.
+
+#### `Warning`: Warning
+
+'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6004.EnableComdatFolding`
+
+### Description
+
+COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with COMDAT folding (/OPT:ICF) enabled
+
+#### `EnabledForDebug`: Warning
+
+'{0}' appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That may make debugging more difficult.
+
+#### `DisabledForRelease`: Warning
+
+'{0}' was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6005.EnableOptimizeReferences`
+
+### Description
+
+Optimize References can significantly reduce binary size because it instructs the linker to remove unreferenced functions and data from the final binary.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with Optimize References (/OPT:REF) enabled
+
+#### `Warning`: Warning
+
+'{0}' was compiled with Optimize References (/OPT:REF) disabled, increasing binary size.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6006.EnableLinkTimeCodeGeneration`
+
+### Description
+
+Enabling Link Time Code Generation (LTCG) performs whole-program optimization, which is able to better optimize code across translation units. LTCG is also a prerequisite for Profile-Guided Optimization (PGO) which can further improve performance.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with LinkTimeCodeGeneration (/LTCG) enabled.
+
+#### `Warning`: Warning
+
+'{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.
 
 #### `InvalidMetadata`: NotApplicable
 

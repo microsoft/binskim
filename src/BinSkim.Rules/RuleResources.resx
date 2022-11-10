@@ -586,13 +586,13 @@ Modules did not meet the criteria: {1}</value>
     <value>'{0}' was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines. You might need to update your version of Clang to enable it.</value>
   </data>
   <data name="BA2027_EnableSourceLink_Description" xml:space="preserve">
-    <value>SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information.</value>
+    <value>SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information.</value>
   </data>
   <data name="BA2027_Warning" xml:space="preserve">
-    <value>The PDB for '{0}' does not contain SourceLink information. SourceLink information should be present in the PDB of all binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information.</value>
+    <value>The PDB for '{0}' does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response. Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider. See https://aka.ms/sourcelink for more information.</value>
   </data>
   <data name="BA2027_Pass" xml:space="preserve">
-    <value>The PDB for '{0}' contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other diagnostic analysis.</value>
+    <value>The PDB for '{0}' contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other critical analysis.</value>
   </data>
   <data name="BA6001_DisableIncrementalLinkingInReleaseBuilds_Description" xml:space="preserve">
     <value>Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.  The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking.</value>
@@ -602,5 +602,44 @@ Modules did not meet the criteria: {1}</value>
   </data>
   <data name="BA6001_Warning" xml:space="preserve">
     <value>'{0}' appears to be compiled as release but enables incremental linking, increasing binary size and further compromising runtime performance by preventing enabling maximal code optimization.</value>
+  </data>
+  <data name="BA6002_EliminateDuplicateStrings_Description" xml:space="preserve">
+    <value>The /GF compiler option, also known as Eliminate Duplicate Strings or String Pooling, will combine identical strings in a program to a single readonly copy. This can significantly reduce binary size for programs with many string resources.</value>
+  </data>
+  <data name="BA6002_Pass" xml:space="preserve">
+    <value>'{0}' was compiled with Eliminate Duplicate Strings (/GF) enabled.</value>
+  </data>
+  <data name="BA6002_Warning" xml:space="preserve">
+    <value>'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}.</value>
+  </data>
+  <data name="BA6004_EnableCOMDATFolding_Description" xml:space="preserve">
+    <value>COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary.</value>
+  </data>
+  <data name="BA6004_Pass" xml:space="preserve">
+    <value>'{0}' was compiled with COMDAT folding (/OPT:ICF) enabled</value>
+  </data>
+  <data name="BA6004_Warning_DisabledForRelease" xml:space="preserve">
+    <value>'{0}' was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size.</value>
+  </data>
+  <data name="BA6004_Warning_EnabledForDebug" xml:space="preserve">
+    <value>'{0}' appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That may make debugging more difficult.</value>
+  </data>
+  <data name="BA6005_EnableOptimizeReferences_Description" xml:space="preserve">
+    <value>Optimize References can significantly reduce binary size because it instructs the linker to remove unreferenced functions and data from the final binary.</value>
+  </data>
+  <data name="BA6005_Pass" xml:space="preserve">
+    <value>'{0}' was compiled with Optimize References (/OPT:REF) enabled</value>
+  </data>
+  <data name="BA6005_Warning" xml:space="preserve">
+    <value>'{0}' was compiled with Optimize References (/OPT:REF) disabled, increasing binary size.</value>
+  </data>
+  <data name="BA6006_EnableLinkTimeCodeGeneration_Description" xml:space="preserve">
+    <value>Enabling Link Time Code Generation (LTCG) performs whole-program optimization, which is able to better optimize code across translation units. LTCG is also a prerequisite for Profile-Guided Optimization (PGO) which can further improve performance.</value>
+  </data>
+  <data name="BA6006_Pass" xml:space="preserve">
+    <value>'{0}' was compiled with LinkTimeCodeGeneration (/LTCG) enabled.</value>
+  </data>
+  <data name="BA6006_Warning" xml:space="preserve">
+    <value>'{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.</value>
   </data>
 </root>
