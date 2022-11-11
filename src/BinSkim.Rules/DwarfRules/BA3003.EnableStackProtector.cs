@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
+using ELFSharp.ELF;
+using ELFSharp.ELF.Sections;
+using ELFSharp.ELF.Segments;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -13,6 +17,7 @@ using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
 using static Microsoft.CodeAnalysis.BinaryParsers.CommandLineHelper;
+
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -43,9 +48,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             CanAnalyzeDwarfResult result = default;
 
-            if (target is ElfBinary elf)
+            if (target is ElfBinary)
             {
-                result = this.VerifyDwarfBinary(elf);
+                // Set result.Result to AnalysisApplicability.ApplicableToSpecifiedTarget for any case.
+                // we have a fallback ELF symbol check in case DWARF compile args aren't present.
+                result.Result = AnalysisApplicability.ApplicableToSpecifiedTarget;
             }
             else if (target is MachOBinary mainMacho)
             {
@@ -64,70 +71,126 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return result.Result;
         }
 
+        private static bool AnalyzeDwarf(IDwarfBinary binary, List<DwarfCompileCommandLineInfo> cliInfos, out List<DwarfCompileCommandLineInfo> failedList)
+        {
+            failedList = new List<DwarfCompileCommandLineInfo>();
+
+            if (cliInfos == null)
+            {
+                cliInfos = binary.CommandLineInfos;
+            }
+
+            foreach (DwarfCompileCommandLineInfo info in cliInfos)
+            {
+                if (ElfUtility.GetDwarfCommandLineType(info.CommandLine) != DwarfCommandLineType.Gcc)
+                {
+                    continue;
+                }
+
+                bool failed = false;
+                if ((!info.CommandLine.Contains("-fstack-protector-all", StringComparison.OrdinalIgnoreCase)
+                    && !info.CommandLine.Contains("-fstack-protector-strong", StringComparison.OrdinalIgnoreCase))
+                    || info.CommandLine.Contains("-fno-stack-protector", StringComparison.OrdinalIgnoreCase))
+                {
+                    failed = true;
+                }
+                else
+                {
+                    string[] paramToCheck = { "--param=ssp-buffer-size=" };
+                    string paramValue = string.Empty;
+                    bool found = GetOptionValue(info.CommandLine, paramToCheck, OrderOfPrecedence.FirstWins, ref paramValue);
+
+                    if (found && !string.IsNullOrWhiteSpace(paramValue))
+                    {
+                        if (int.TryParse(paramValue, out int bufferSize))
+                        {
+                            if (bufferSize > 4)
+                            {
+                                failed = true;
+                            }
+                        }
+                    }
+                }
+
+                if (failed)
+                {
+                    failedList.Add(info);
+                }
+            }
+
+            return !failedList.Any();
+        }
+
+        private static bool AnalyzeSymbols(ElfBinary binary)
+        {
+            foreach (ISection section in binary.ELF.Sections)
+            {
+                if (section.Type == SectionType.DynamicSymbolTable)
+                {
+                    var symbols = section as SymbolTable<ulong>;
+                    if (symbols != null)
+                    {
+                        foreach (SymbolEntry<ulong> symbol in symbols.Entries)
+                        {
+                            if (symbol.Name == "__stack_chk_fail" || symbol.Name == "__stack_chk_guard" || symbol.Name == "__intel_security_cookie")
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         public override void Analyze(BinaryAnalyzerContext context)
         {
             IDwarfBinary binary = context.DwarfBinary();
             List<DwarfCompileCommandLineInfo> failedList;
 
-            static bool analyze(IDwarfBinary binary, out List<DwarfCompileCommandLineInfo> failedList)
+            if (binary is ElfBinary elf)
             {
-                failedList = new List<DwarfCompileCommandLineInfo>();
-
+                var validGccCommandLineInfos = new List<DwarfCompileCommandLineInfo>();
                 foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
                 {
                     if (ElfUtility.GetDwarfCommandLineType(info.CommandLine) != DwarfCommandLineType.Gcc)
                     {
                         continue;
                     }
-
-                    bool failed = false;
-                    if ((!info.CommandLine.Contains("-fstack-protector-all", StringComparison.OrdinalIgnoreCase)
-                        && !info.CommandLine.Contains("-fstack-protector-strong", StringComparison.OrdinalIgnoreCase))
-                        || info.CommandLine.Contains("-fno-stack-protector", StringComparison.OrdinalIgnoreCase))
+                    validGccCommandLineInfos.Add(info);
+                }
+                if (validGccCommandLineInfos.Count > 0)
+                {
+                    // Check using DWARF info
+                    if (!AnalyzeDwarf(elf, validGccCommandLineInfos, out failedList))
                     {
-                        failed = true;
-                    }
-                    else
-                    {
-                        string[] paramToCheck = { "--param=ssp-buffer-size=" };
-                        string paramValue = string.Empty;
-                        bool found = GetOptionValue(info.CommandLine, paramToCheck, OrderOfPrecedence.FirstWins, ref paramValue);
-
-                        if (found && !string.IsNullOrWhiteSpace(paramValue))
-                        {
-                            if (int.TryParse(paramValue, out int bufferSize))
-                            {
-                                if (bufferSize > 4)
-                                {
-                                    failed = true;
-                                }
-                            }
-                        }
-                    }
-
-                    if (failed)
-                    {
-                        failedList.Add(info);
+                        // The stack protector was not found in '{0}'.
+                        // This may be because '--stack-protector-strong' was not used,
+                        // or because it was explicitly disabled by '-fno-stack-protectors'.
+                        // Modules did not meet the criteria: {1}
+                        context.Logger.Log(this,
+                            RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                                nameof(RuleResources.BA3003_Error),
+                                context.TargetUri.GetFileName(),
+                                DwarfUtility.GetDistinctNames(failedList, context.TargetUri.GetFileName())));
+                        return;
                     }
                 }
-
-                return !failedList.Any();
-            }
-
-            if (binary is ElfBinary elf)
-            {
-                if (!analyze(elf, out failedList))
+                else
                 {
-                    // The stack protector was not found in '{0}'.
-                    // This may be because '--stack-protector-strong' was not used,
-                    // or because it was explicitly disabled by '-fno-stack-protectors'.
-                    // Modules did not meet the criteria: {1}
-                    context.Logger.Log(this,
-                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                            nameof(RuleResources.BA3003_Error),
-                            context.TargetUri.GetFileName(),
-                            DwarfUtility.GetDistinctNames(failedList, context.TargetUri.GetFileName())));
-                    return;
+                    // Check using presence of stack check symbols
+                    // this method is less accurate than the DWARF check,
+                    // so it is only used as a fallback
+                    if (!AnalyzeSymbols(elf))
+                    {
+                        context.Logger.Log(this,
+                            RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                                nameof(RuleResources.BA3003_Error),
+                                context.TargetUri.GetFileName(),
+                                context.TargetUri.GetFileName()));
+                        return;
+                    }
+
                 }
 
                 // Stack protector was found on '{0}'.
@@ -142,7 +205,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 foreach (SingleMachOBinary subBinary in mainBinary.MachOs)
                 {
-                    if (!analyze(subBinary, out failedList))
+                    if (!AnalyzeDwarf(subBinary, null, out failedList))
                     {
                         // The stack protector was not found in '{0}'.
                         // This may be because '--stack-protector-strong' was not used,
