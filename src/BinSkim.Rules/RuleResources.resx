@@ -403,13 +403,13 @@ Modules triggering this check were:
     <value>'{0}' is a shared object library rather than an executable, and is automatically position independent.</value>
   </data>
   <data name="BA3002_DoNotMarkStackAsExecutable_Description" xml:space="preserve">
-    <value>This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable.</value>
+    <value>This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable. To resolve this problem, ensure you are using a current compiler and pass '-z noexecstack' (or '-Wl,-z,-noexecstack' if using Clang) when building.</value>
   </data>
   <data name="BA3002_Error_NoStackSeg" xml:space="preserve">
-    <value>GNU_STACK segment on '{0}' is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing '-z noexecstack' to the compiler.</value>
+    <value>GNU_STACK segment on '{0}' is missing, which means the stack will likely be loaded as executable.  Ensure you are using a current compiler and passing '-z noexecstack' (or '-Wl,-z,-noexecstack' if using Clang) when building.</value>
   </data>
   <data name="BA3002_Error_StackExec" xml:space="preserve">
-    <value>Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are compiling with '-z noexecstack' to mark the stack as non-executable.</value>
+    <value>Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are using a current compiler and pass  '-z noexecstack' (or '-Wl,-z,-noexecstack' if using Clang) when building.</value>
   </data>
   <data name="BA3002_Pass" xml:space="preserve">
     <value>GNU_STACK segment marked as non-executable on '{0}'.</value>
@@ -419,25 +419,25 @@ Modules triggering this check were:
   </data>
   <data name="BA3003_Error" xml:space="preserve">
     <value>The stack protector was not found in '{0}'. This may be because '--stack-protector-strong' was not used, or because it was explicitly disabled by '-fno-stack-protectors'.
-Modules did not meet the criteria: {1}</value>
+Modules that failed policy: {1}</value>
   </data>
   <data name="BA3003_Pass" xml:space="preserve">
     <value>Stack protector was found on '{0}'.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections.</value>
   </data>
   <data name="BA3010_EnableReadOnlyRelocations_Description" xml:space="preserve">
-    <value>This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this.</value>
+    <value>This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-z relro' (or '-Wl,-z,relro' if using Clang) to enable this.</value>
   </data>
   <data name="BA3010_Error" xml:space="preserve">
-    <value>The GNU_RELRO segment is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,relro' to address this.</value>
+    <value>The GNU_RELRO segment is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-z relro' (or '-Wl,-z,relro' if using Clang).</value>
   </data>
   <data name="BA3010_Pass" xml:space="preserve">
     <value>The GNU_RELRO segment was present, so '{0}' is protected.</value>
   </data>
   <data name="BA3011_EnableBindNow_Description" xml:space="preserve">
-    <value>This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this.</value>
+    <value>This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-z now' (or '-Wl,z,now' if using Clang) to enable this.</value>
   </data>
   <data name="BA3011_Error" xml:space="preserve">
-    <value>The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,now' to address this.</value>
+    <value>The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-z now' (or '-Wl,z,now' if using Clang) to address this.</value>
   </data>
   <data name="BA3011_Pass" xml:space="preserve">
     <value>The BIND_NOW flag was present, so '{0}' is protected.</value>
@@ -532,7 +532,7 @@ Modules did not meet the criteria: {1}</value>
     <value>This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this.</value>
   </data>
   <data name="BA3006_Error" xml:space="preserve">
-    <value>The non-executable stack is not enabled for this binary, so '{0}' can have a vulnerability of execution of the data written on the stack. Ensure you are compiling with the flag '-z noexecstack' to address this.</value>
+    <value>The non-executable stack is not enabled for this binary, so '{0}' may be vulnerable  to execution of malicious data written to the stack. Ensure you are compiling with the flag '-z,noexecstack' to address this.</value>
   </data>
   <data name="BA3006_Pass" xml:space="preserve">
     <value>The non-executable stack flag was present, so '{0}' is protected.</value>
@@ -562,10 +562,10 @@ Modules did not meet the criteria: {1}</value>
     <value>PIE enabled on executable '{0}'.</value>
   </data>
   <data name="BA5002_DoNotAllowExecutableStack_Description" xml:space="preserve">
-    <value>This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag "--allow_stack_execute".</value>
+    <value>This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure your compilation does enable flag '--allow_stack_execute'.</value>
   </data>
   <data name="BA5002_Error" xml:space="preserve">
-    <value>Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag "--allow_stack_execute" to mark the stack as non-executable.</value>
+    <value>Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag '--allow_stack_execute' to mark the stack as non-executable.</value>
   </data>
   <data name="BA5002_Pass" xml:space="preserve">
     <value>Executable stack is not allowed on executable '{0}'.</value>
@@ -612,8 +612,8 @@ Modules did not meet the criteria: {1}</value>
   <data name="BA6002_Warning" xml:space="preserve">
     <value>'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}.</value>
   </data>
-  <data name="BA6004_EnableCOMDATFolding_Description" xml:space="preserve">
-    <value>COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary.</value>
+  <data name="BA6004_EnableComdatFolding_Description" xml:space="preserve">
+    <value>COMDAT (common data) folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary.</value>
   </data>
   <data name="BA6004_Pass" xml:space="preserve">
     <value>'{0}' was compiled with COMDAT folding (/OPT:ICF) enabled</value>
@@ -640,6 +640,6 @@ Modules did not meet the criteria: {1}</value>
     <value>'{0}' was compiled with LinkTimeCodeGeneration (/LTCG) enabled.</value>
   </data>
   <data name="BA6006_Warning" xml:space="preserve">
-    <value>'{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.</value>
+    <value>'{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve code optimization and performance.</value>
   </data>
 </root>

@@ -1050,7 +1050,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with &apos;-z noexecstack&apos; to mark the stack as non-executable..
+        ///   Looks up a localized string similar to This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure you are compiling with &apos;-z noexecstack&apos; to mark the stack as non-executable. To resolve this problem, ensure you are using a current compiler and pass &apos;-z noexecstack&apos; (or &apos;-Wl,-z,-noexecstack&apos; if using Clang) when building..
         /// </summary>
         internal static string BA3002_DoNotMarkStackAsExecutable_Description {
             get {
@@ -1059,7 +1059,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to GNU_STACK segment on &apos;{0}&apos; is missing, which means the stack will likely be loaded as executable.  Ensure you are using an up to date compiler and passing &apos;-z noexecstack&apos; to the compiler..
+        ///   Looks up a localized string similar to GNU_STACK segment on &apos;{0}&apos; is missing, which means the stack will likely be loaded as executable.  Ensure you are using a current compiler and passing &apos;-z noexecstack&apos; (or &apos;-Wl,-z,-noexecstack&apos; if using Clang) when building..
         /// </summary>
         internal static string BA3002_Error_NoStackSeg {
             get {
@@ -1068,7 +1068,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stack on &apos;{0}&apos; is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are compiling with &apos;-z noexecstack&apos; to mark the stack as non-executable..
+        ///   Looks up a localized string similar to Stack on &apos;{0}&apos; is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure you are using a current compiler and pass  &apos;-z noexecstack&apos; (or &apos;-Wl,-z,-noexecstack&apos; if using Clang) when building..
         /// </summary>
         internal static string BA3002_Error_StackExec {
             get {
@@ -1096,7 +1096,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         
         /// <summary>
         ///   Looks up a localized string similar to The stack protector was not found in &apos;{0}&apos;. This may be because &apos;--stack-protector-strong&apos; was not used, or because it was explicitly disabled by &apos;-fno-stack-protectors&apos;.
-        ///Modules did not meet the criteria: {1}.
+        ///Modules that failed policy: {1}.
         /// </summary>
         internal static string BA3003_Error {
             get {
@@ -1178,7 +1178,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The non-executable stack is not enabled for this binary, so &apos;{0}&apos; can have a vulnerability of execution of the data written on the stack. Ensure you are compiling with the flag &apos;-z noexecstack&apos; to address this..
+        ///   Looks up a localized string similar to The non-executable stack is not enabled for this binary, so &apos;{0}&apos; may be vulnerable  to execution of malicious data written to the stack. Ensure you are compiling with the flag &apos;-z,noexecstack&apos; to address this..
         /// </summary>
         internal static string BA3006_Error {
             get {
@@ -1196,7 +1196,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
+        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-z relro&apos; (or &apos;-Wl,-z,relro&apos; if using Clang) to enable this..
         /// </summary>
         internal static string BA3010_EnableReadOnlyRelocations_Description {
             get {
@@ -1205,7 +1205,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The GNU_RELRO segment is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,relro&apos; to address this..
+        ///   Looks up a localized string similar to The GNU_RELRO segment is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-z relro&apos; (or &apos;-Wl,-z,relro&apos; if using Clang)..
         /// </summary>
         internal static string BA3010_Error {
             get {
@@ -1223,7 +1223,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,now&apos; to enable this..
+        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-z now&apos; (or &apos;-Wl,z,now&apos; if using Clang) to enable this..
         /// </summary>
         internal static string BA3011_EnableBindNow_Description {
             get {
@@ -1232,7 +1232,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The BIND_NOW flag is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,now&apos; to address this..
+        ///   Looks up a localized string similar to The BIND_NOW flag is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-z now&apos; (or &apos;-Wl,z,now&apos; if using Clang) to address this..
         /// </summary>
         internal static string BA3011_Error {
             get {
@@ -1376,7 +1376,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag &quot;--allow_stack_execute&quot;..
+        ///   Looks up a localized string similar to This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure your compilation does enable flag &apos;--allow_stack_execute&apos;..
         /// </summary>
         internal static string BA5002_DoNotAllowExecutableStack_Description {
             get {
@@ -1385,7 +1385,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stack on &apos;{0}&apos; is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag &quot;--allow_stack_execute&quot; to mark the stack as non-executable..
+        ///   Looks up a localized string similar to Stack on &apos;{0}&apos; is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag &apos;--allow_stack_execute&apos; to mark the stack as non-executable..
         /// </summary>
         internal static string BA5002_Error {
             get {
@@ -1457,11 +1457,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary..
+        ///   Looks up a localized string similar to COMDAT (common data) folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary..
         /// </summary>
-        internal static string BA6004_EnableCOMDATFolding_Description {
+        internal static string BA6004_EnableComdatFolding_Description {
             get {
-                return ResourceManager.GetString("BA6004_EnableCOMDATFolding_Description", resourceCulture);
+                return ResourceManager.GetString("BA6004_EnableComdatFolding_Description", resourceCulture);
             }
         }
         
@@ -1538,7 +1538,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve code optimization and performance..
         /// </summary>
         internal static string BA6006_Warning {
             get {

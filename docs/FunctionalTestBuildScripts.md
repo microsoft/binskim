@@ -6,7 +6,7 @@ Test files are located in [BaselineTestData](https://github.com/microsoft/binski
 
 ## ARM_CETShadowStack_NotApplicable.exe
 
-A simple C++ hellow world program, cross compiled using CMake with the `cl.exe` compiler and `Ninja` generator.
+A simple C++ hello world program, cross compiled using CMake with the `cl.exe` compiler and `Ninja` generator.
 `CMakePresets.json` should be configured with a `configurePresets` as below:
 
 ```json
@@ -43,6 +43,9 @@ A simple C++ hellow world program, cross compiled using CMake using the `cl.exe`
     }
 },
 ```
+
+## WindowsRuntimeComponentTest-VS2022.dll
+An empty Windows Universal (WinRT) C++ component created in VS2022. Used to validate `BA2004.EnableSecureSourceHashing`.
 
 ## clang.[version].elf.[c,cpp].[no_]safe_stack
 
