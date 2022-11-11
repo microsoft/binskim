@@ -70,6 +70,16 @@ A simple hello world program, compiled with `clang 14.0.0` that generates a .exe
 `clang-cl -o clangcl.14.pe.c.codeview.pdbpagesize_default.exe -fuse-ld=lld-link helloc.c -m32 -Z7 -MTd /link /CETCOMPAT /guard:cf /PDB:clangcl.14.pe.c.codeview.pdbpagesize_default.exe.pdb`  
 `clang-cl -o clangcl.14.pe.c.codeview.pdbpagesize_8192_pdbmissing.exe -fuse-ld=lld-link helloc.c -m32 -Z7 -MTd /link /CETCOMPAT /guard:cf /PdbPageSize:8192 /PDB:clangcl.14.pe.c.codeview.pdbpagesize_8192_pdbmissing.exe.pdb (then delete the pdb)`
 
+## gcc.example1.fnostackprotector.nodwarf
+
+A simple hello world program, compiled with `gcc 9.4.0` that generates an executable file. Script to reproduce:  
+`gcc example1.c -o gcc.example1.fnostackprotector.nodwarf -fno-stack-protector -fPIC -fstack-clash-protection`
+
+## gcc.example1.fstackprotectorall.nodwarf
+
+A simple hello world program, compiled with `gcc 9.4.0` that generates an executable file. Script to reproduce:  
+`gcc example1.c -o gcc.example1.fstackprotectorall.nodwarf -fstack-protector-all -fPIC -fstack-clash-protection`
+
 ## gcc.object_file.dwarf.3.o
 
 A simple hello world program, compiled with `gcc 9.3.0` that generates a .o object file. Script to reproduce:  

@@ -1338,7 +1338,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA3003_EnableStackProtector_NotApplicable()
         {
-            this.VerifyApplicability(new EnablePositionIndependentExecutable(), new HashSet<string>());
+            this.VerifyApplicability(new EnableStackProtector(), new HashSet<string>(), bypassExtensionValidation: true);
         }
 
         [Fact]

@@ -987,7 +987,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information..
+        ///   Looks up a localized string similar to SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user expe [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2027_EnableSourceLink_Description {
             get {
@@ -996,7 +996,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other diagnostic analysis..
+        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other critical analysis..
         /// </summary>
         internal static string BA2027_Pass {
             get {
@@ -1005,7 +1005,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; does not contain SourceLink information. SourceLink information should be present in the PDB of all binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response. Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider. See https://aka.ms/sourcelink for more information..
         /// </summary>
         internal static string BA2027_Warning {
             get {
