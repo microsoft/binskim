@@ -11,6 +11,7 @@
 * Upgrade Sarif.Sdk by updating submodule from [fc9a9df to 698adb6](https://github.com/microsoft/sarif-sdk/compare/fc9a9dfb865096b5aaa9fa3651854670940f7459...698adb6365a242c6bb75adde56e3bd4be39c21d7). [#674](https://github.com/microsoft/binskim/pull/674)
 * Introduce first performance rule `BA6001.DisableIncrementalLinkingInReleaseBuilds` [#667](https://github.com/microsoft/binskim/pull/667)
 * Introduce more performance rules `BA6002.EliminateDuplicateStrings`, `BA6004.EnableCOMDATFolding`, `BA6005.EnableOptimizeReferences`, `BA6006.EnableLinkTimeCodeGeneration` [#691](https://github.com/microsoft/binskim/pull/691)
+* BUGFIX: Fix command line parameter in documents: `-Wl,z,relro` with `-Wl,-z,relro`, and `-Wl,z,now` with `-Wl,-z,now`. [736](https://github.com/microsoft/binskim/pull/736)
 
 ## **v1.9.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.5)
 

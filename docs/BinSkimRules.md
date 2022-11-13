@@ -156,7 +156,7 @@ The non-executable stack is not enabled for this binary, so '{0}' can have a vul
 
 ### Description
 
-This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this.
+This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,-z,relro' to enable this.
 
 ### Messages
 
@@ -166,7 +166,7 @@ The GNU_RELRO segment was present, so '{0}' is protected.
 
 #### `Error`: Error
 
-The GNU_RELRO segment is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,relro' to address this.
+The GNU_RELRO segment is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,-z,relro' to address this.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -178,7 +178,7 @@ The GNU_RELRO segment is missing from this binary, so relocation sections in '{0
 
 ### Description
 
-This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this.
+This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,-z,now' to enable this.
 
 ### Messages
 
@@ -188,7 +188,7 @@ The BIND_NOW flag was present, so '{0}' is protected.
 
 #### `Error`: Error
 
-The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,now' to address this.
+The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,-z,now' to address this.
 
 #### `InvalidMetadata`: NotApplicable
 
