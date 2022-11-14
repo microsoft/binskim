@@ -1,5 +1,5 @@
 ﻿{
-  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
     {
@@ -441,7 +441,7 @@
         },
         {
           "ruleId": "BA6002",
-          "ruleIndex": 20,
+          "ruleIndex": 19,
           "message": {
             "id": "Warning",
             "arguments": [
@@ -462,7 +462,7 @@
         },
         {
           "ruleId": "BA6004",
-          "ruleIndex": 21,
+          "ruleIndex": 20,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -484,7 +484,7 @@
         },
         {
           "ruleId": "BA6005",
-          "ruleIndex": 22,
+          "ruleIndex": 21,
           "message": {
             "id": "Warning",
             "arguments": [
@@ -506,8 +506,6 @@
       "tool": {
         "driver": {
           "name": "testhost",
-          "organization": "Microsoft Corporation",
-          "product": "Microsoft.TestHost",
           "version": "15.0.0.0",
           "rules": [
             {
@@ -1093,7 +1091,10 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA6005EnableOptimizeReferences"
             }
-          ]
+          ],
+          "properties": {
+            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+          }
         }
       },
       "invocations": [
