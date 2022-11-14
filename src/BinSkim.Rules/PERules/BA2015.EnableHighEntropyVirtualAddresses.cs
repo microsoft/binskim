@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Composition;
+using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
@@ -51,18 +52,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageLikelyLoadsAs32BitProcess;
             if (portableExecutable.PEHeaders.PEHeader.Magic != PEMagic.PE32Plus)
             {
-                CorHeader corHeader = portableExecutable.PEHeaders.CorHeader;
                 CoffHeader coffHeader = portableExecutable.PEHeaders.CoffHeader;
 
-                // If the image's magic bytes are 'PE32', it is either a 32 bit binary (rule does not apply)
-                // or it is a managed binary compiled strictly as as x86 OR AnyCpu. If it's an AnyCPU
-                // binary, if it has 'Prefers32Bit'/'Requires32Bit' flagged, it will probably load as a 32-bit
-                // process across all archtiectures.  If it doesn't, we're likely to load in a 64-bit process
-                // space on a 64-bit machine and we therefore want to ensure HighEntropyVA is enabled.
-                if (!portableExecutable.IsManaged ||
-                    coffHeader.Characteristics.HasFlag(Characteristics.Bit32Machine) ||
-                    corHeader.Flags.HasFlag(CorFlags.Prefers32Bit) ||
-                    corHeader.Flags.HasFlag(CorFlags.Requires32Bit))
+                if (coffHeader.Characteristics.HasFlag(Characteristics.Bit32Machine))
+                {
+                    return result;
+                }
+
+                if (!coffHeader.Characteristics.HasFlag(Characteristics.LargeAddressAware))
                 {
                     return result;
                 }
