@@ -54,7 +54,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 CoffHeader coffHeader = portableExecutable.PEHeaders.CoffHeader;
 
-                if (coffHeader.Characteristics.HasFlag(Characteristics.Bit32Machine))
+                if (!portableExecutable.IsManaged ||
+                    coffHeader.Characteristics.HasFlag(Characteristics.Bit32Machine))
                 {
                     return result;
                 }
