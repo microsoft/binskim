@@ -8,7 +8,7 @@ fi
 
 dotnet build src/BinSkimUnix.sln --configuration Release /p:Platform="x64"
 
-dotnet test /home/vsts/work/1/s/bld/bin/x64_Release/netcoreapp3.1/Test.FunctionalTests.BinSkim.Driver.dll
-dotnet test /home/vsts/work/1/s/bld/bin/x64_Release/netcoreapp3.1/Test.FunctionalTests.BinSkim.Rules.dll
-dotnet test /home/vsts/work/1/s/bld/bin/x64_Release/netcoreapp3.1/Test.UnitTests.BinaryParsers.dll
-dotnet test /home/vsts/work/1/s/bld/bin/x64_Release/netcoreapp3.1/Test.UnitTests.BinSkim.Rules.dll
+dotnet test bld/bin/x64_Release/netcoreapp3.1/Test.FunctionalTests.BinSkim.Driver.dll
+dotnet test bld/bin/x64_Release/netcoreapp3.1/Test.FunctionalTests.BinSkim.Rules.dll
+dotnet test bld/bin/x64_Release/netcoreapp3.1/Test.UnitTests.BinaryParsers.dll
+dotnet test bld/bin/x64_Release/netcoreapp3.1/Test.UnitTests.BinSkim.Rules.dll
