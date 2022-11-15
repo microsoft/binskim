@@ -85,6 +85,34 @@ A simple hello world program, compiled with `gcc 9.4.0` that generates an execut
 A simple hello world program, compiled with `gcc 9.3.0` that generates a .o object file. Script to reproduce:  
 `gcc-9 -Wall -c helloc.c -O2 -g -gdwarf-3 -o gcc.object_file.dwarf.3.o`
 
+## Managed_x64_VS2022_NetCore6_CSharp_HighEntropyVA_[True,False].dll
+
+A default .NET Core 6 C# program created with VS 2022, in csproj file add `<HighEntropyVA>True/False</HighEntropyVA>` and built with default AnyCPU. Code used:
+
+```CSharp
+internal class Program
+{
+    [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool IsWow64Process([In] IntPtr hProcess, [Out] out bool wow64Process);
+
+    private static void Main(string[] args)
+    {
+        Console.WriteLine("Environment.Is64BitProcess: " + Environment.Is64BitProcess);
+        IsWow64Process(Process.GetCurrentProcess().Handle, out bool ret_val);
+        Console.WriteLine("IsWow64Process: " + ret_val);
+        if (IntPtr.Size == 8)
+        {
+            Console.WriteLine("IntPtr.Size: 64 bit machine");
+        }
+        else if (IntPtr.Size == 4)
+        {
+            Console.WriteLine("IntPtr.Size: 32 bit machine");
+        }
+    }
+}
+```
+
 ## Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe
 
 A simple hello world program, compiled with `rustc 1.58.1` that generates a .exe and associated .pdb file. Script to reproduce:  
