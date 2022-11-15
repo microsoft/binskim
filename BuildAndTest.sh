@@ -6,9 +6,9 @@ if [[  "$(uname)" == "Linux" || "$(uname)" == "Darwin" ]]; then
   sed 's#\\#/#g' src/BinSkim.sln > src/BinSkimUnix.sln
 fi
 
-dotnet build src/BinSkimUnix.sln --configuration Release /p:Platform="x64"
+# dotnet build src/BinSkimUnix.sln --configuration Release /p:Platform="x64"
 
-dotnet test --no-build
+dotnet test src/BinSkimUnix.sln Release /p:Platform="x64"
 
 # dotnet test src/Test.FunctionalTests.BinSkim.Driver/Test.FunctionalTests.BinSkim.Driver.csproj --no-build --configuration Release /p:Platform="x64"
 # dotnet test src/Test.FunctionalTests.BinSkim.Rules/Test.FunctionalTests.BinSkim.Rules.csproj --no-build --configuration Release /p:Platform="x64"
