@@ -6,11 +6,9 @@ if [[  "$(uname)" == "Linux" || "$(uname)" == "Darwin" ]]; then
   sed 's#\\#/#g' src/BinSkim.sln > src/BinSkimUnix.sln
 fi
 
-# dotnet build src/BinSkimUnix.sln --configuration Release /p:Platform="x64"
+dotnet build src/BinSkimUnix.sln --configuration Release /p:Platform="x64"
 
-dotnet test src/BinSkimUnix.sln Release /p:Platform="x64"
-
-# dotnet test src/Test.FunctionalTests.BinSkim.Driver/Test.FunctionalTests.BinSkim.Driver.csproj --no-build --configuration Release /p:Platform="x64"
-# dotnet test src/Test.FunctionalTests.BinSkim.Rules/Test.FunctionalTests.BinSkim.Rules.csproj --no-build --configuration Release /p:Platform="x64"
-# dotnet test src/Test.UnitTests.BinaryParsers/Test.UnitTests.BinaryParsers.csproj --no-build --configuration Release /p:Platform="x64"
-# dotnet test src/Test.UnitTests.BinSkim.Rules/Test.UnitTests.BinSkim.Rules.csproj --no-build --configuration Release /p:Platform="x64"
+dotnet test /home/vsts/work/1/s/bld/bin/x64_Release/netcoreapp3.1/Test.FunctionalTests.BinSkim.Driver.dll --configuration Release /p:Platform="x64"
+dotnet test /home/vsts/work/1/s/bld/bin/x64_Release/netcoreapp3.1/Test.FunctionalTests.BinSkim.Rules.dll --no-build --configuration Release /p:Platform="x64"
+dotnet test /home/vsts/work/1/s/bld/bin/x64_Release/netcoreapp3.1/Test.UnitTests.BinaryParsers.dll --no-build --configuration Release /p:Platform="x64"
+dotnet test /home/vsts/work/1/s/bld/bin/x64_Release/netcoreapp3.1/Test.UnitTests.BinSkim.Rules.dll --no-build --configuration Release /p:Platform="x64"
