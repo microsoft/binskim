@@ -58,11 +58,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     return result;
                 }
-
-                if (!coffHeader.Characteristics.HasFlag(Characteristics.LargeAddressAware))
-                {
-                    return result;
-                }
             }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsNotExe;
