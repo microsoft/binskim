@@ -1,6 +1,6 @@
 # BinSkim Release History
 
-## **v2.0.0** (Unreleased)
+## **v2.0.0-rc1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/2.0.0-rc1)
 * BUGFIX: Eliminate `BA2004.EnableSecureSourceCodeHashing` false positives to Windows Runtime components (resulting from references to Win RT API metadata files).
 * BREAKING: Removed SARIF 1.0 support from BinSkim. Now option `-v | --sarif-output-version` does not accept value `OneZeroZero`. [719](https://github.com/microsoft/binskim/pull/719)
 * Update Sarif.Sdk submodule from [fc9a9df to e557b69](https://github.com/microsoft/sarif-sdk/compare/fc9a9dfb865096b5aaa9fa3651854670940f7459...e557b693000cfc2a19d50f2b6613f92222eabbff). Critically, this update resolves transient [`Collection modified`](https://github.com/microsoft/sarif-sdk/pull/2549) exception during analysis. [#722](https://github.com/microsoft/binskim/pull/722)
