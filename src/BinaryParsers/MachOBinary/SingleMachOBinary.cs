@@ -211,7 +211,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 Section section = segment.Sections.FirstOrDefault(sec => sec.Name == sectionName);
                 if (section != null)
                 {
-                    ulong CodeSegmentOffset = segment.Address - (ulong)segment.FileOffset;
+                    ulong CodeSegmentOffset = segment.Address - segment.FileOffset;
                     return section.Offset + CodeSegmentOffset;
                 }
             }

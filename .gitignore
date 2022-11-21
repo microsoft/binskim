@@ -9,9 +9,9 @@
 bld/
 bin/
 obj/
-src/packages/
+**/packages/*
 src/TestResults/
-src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Actual/
+src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Actual/
 .local/
 *.user
 *.log
@@ -19,6 +19,9 @@ src/Test.FunctionalTests.BinSkim.Driver/BaselineTestsData/Actual/
 *.db
 *.opendb
 launchsettings.json
+[Dd]ebug/
+[Rr]elease/
+x64/
 
 # Workaround for an msbuild/dotnet bug on Linux
 src/BinSkimLinux.sln

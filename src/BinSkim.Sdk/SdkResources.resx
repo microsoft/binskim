@@ -186,7 +186,7 @@
   <data name="IllegalBinaryCast" xml:space="preserve">
     <value>An attempt to cast a binary target to a '{0}' failed.  This indicates a programming error in rules evaluating that sort of target.</value>
   </data>
-  <data name="MetadataCondition_ElfIsCoreNoneOrObject" xml:space="preserve">
+  <data name="MetadataCondition_ElfIsCoreNoneOrRelocatable" xml:space="preserve">
     <value>ELF is not a shared object or executable</value>
   </data>
   <data name="MetadataCondition_ImageIsNotElf" xml:space="preserve">
@@ -216,6 +216,9 @@
   <data name="MetadataCondition_ImageIsNativeUniversalWindowsPlatformBinary" xml:space="preserve">
     <value>image is a native UWP (Universal Windows Platform) binary</value>
   </data>
+  <data name="MetadataCondition_NotAReleaseBuild" xml:space="preserve">
+    <value>image appears to not be compiled as release and is therefore not subject to performance checks</value>
+  </data>
   <data name="MetadataCondition_ImageIsDotNetNativeBootstrapExe" xml:space="preserve">
     <value>image is a .NET native bootstrap exe</value>
   </data>
@@ -242,5 +245,14 @@
   </data>
   <data name="MetadataCondition_ImageIsArm64BitBinary" xml:space="preserve">
     <value>image is an ARM64 binary</value>
+  </data>
+  <data name="MetadataCondition_ImageIsArmBinary" xml:space="preserve">
+    <value>image is an ARM binary</value>
+  </data>
+  <data name="MetadataCondition_ElfNotBuiltWithClang" xml:space="preserve">
+    <value>not compiled with Clang</value>
+  </data>
+  <data name="MetadataCondition_ImageIsNotBuiltWithMsvc" xml:space="preserve">
+    <value>not compiled with Microsoft C/C++ compiler</value>
   </data>
 </root>

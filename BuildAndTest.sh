@@ -1,13 +1,14 @@
 #!/bin/bash
 
-if [[  "$(uname)" == "Linux" ]]; then
+echo $(uname)
+if [[  "$(uname)" == "Linux" || "$(uname)" == "Darwin" ]]; then
   echo "Changing paths in BinSkim SLN to non-Windows paths due to msbuild issue #1957 (https://github.com/microsoft/msbuild/issues/1957)"
-  sed 's#\\#/#g' src/BinSkim.sln > src/BinSkimLinux.sln
+  sed 's#\\#/#g' src/BinSkim.sln > src/BinSkimUnix.sln
 fi
 
-dotnet build src/BinSkimLinux.sln --configuration Release
+dotnet build src/BinSkimUnix.sln --configuration Release /p:Platform="x64"
 
-dotnet test src/Test.FunctionalTests.BinSkim.Driver/Test.FunctionalTests.BinSkim.Driver.csproj --no-build --configuration Release
-dotnet test src/Test.FunctionalTests.BinSkim.Rules/Test.FunctionalTests.BinSkim.Rules.csproj --no-build --configuration Release
-dotnet test src/Test.UnitTests.BinaryParsers/Test.UnitTests.BinaryParsers.csproj --no-build --configuration Release
-dotnet test src/Test.UnitTests.BinSkim.Rules/Test.UnitTests.BinSkim.Rules.csproj --no-build --configuration Release
+dotnet test bld/bin/x64_Release/netcoreapp3.1/Test.FunctionalTests.BinSkim.Driver.dll
+dotnet test bld/bin/x64_Release/netcoreapp3.1/Test.FunctionalTests.BinSkim.Rules.dll
+dotnet test bld/bin/x64_Release/netcoreapp3.1/Test.UnitTests.BinaryParsers.dll
+dotnet test bld/bin/x64_Release/netcoreapp3.1/Test.UnitTests.BinSkim.Rules.dll

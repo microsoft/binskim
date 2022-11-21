@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.IO;
+using System.Reflection.Metadata.Ecma335;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -26,6 +27,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string MSVCPredefinedTypesFileName = "predefined C++ types (compiler internal)";
 
         public override string Id => RuleIds.EnableSecureSourceCodeHashing;
+
+        public override bool LogPdbLoadException => false;
 
         public override MultiformatMessageString FullDescription => new MultiformatMessageString
         { Text = RuleResources.BA2004_EnableSecureSourceCodeHashing_Description };
@@ -60,9 +63,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private void AnalyzeManagedAssemblyAndPdb(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
-            Pdb di = target.Pdb;
+            Pdb pdb = target.Pdb;
 
-            if (target.PE.ManagedPdbSourceFileChecksumAlgorithm(di.FileType, di) != ChecksumAlgorithmType.Sha256)
+            if (pdb == null)
+            {
+                return;
+            }
+
+            if (target.PE.ManagedPdbSourceFileChecksumAlgorithm(pdb.FileType, pdb) != ChecksumAlgorithmType.Sha256)
             {
                 // '{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm.
                 // SHA-1 is subject to collision attacks and its use can compromise supply chain integrity.
@@ -87,12 +95,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public void AnalyzeNativeBinaryAndPdb(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
-            Pdb di = target.Pdb;
+            Pdb pdb = target.Pdb;
+
+            if (pdb == null)
+            {
+                return;
+            }
 
             var compilandsBinaryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
             var compilandsLibraryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
 
-            foreach (DisposableEnumerableView<Symbol> omView in di.CreateObjectModuleIterator())
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
@@ -109,13 +122,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
-                bool isMSVC = (omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftC ||
+                bool isMsvc = (omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftC ||
                                omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftCxx);
 
                 string pchHeaderFile = string.Empty;
                 string pchFileName = string.Empty;
 
-                if (isMSVC)
+                if (isMsvc)
                 {
                     // Check to see if the object was compiled using /Yc or /Yu for precompiled headers
                     string[] pchOptionSwitches = { "/Yc", "/Yu" };
@@ -133,13 +146,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 CompilandRecord record = om.CreateCompilandRecord();
 
-                foreach (DisposableEnumerableView<SourceFile> sfView in di.CreateSourceFileIterator(om))
+                foreach (DisposableEnumerableView<SourceFile> sfView in pdb.CreateSourceFileIterator(om))
                 {
                     SourceFile sf = sfView.Value;
 
                     if (sf.HashType == HashType.None)
                     {
-                        if (isMSVC)
+                        if (isMsvc)
                         {
                             // We know of 3 scenarios where this occurs today:
                             // If we encounter one of these, we should continue the loop to the next SourceFile,
@@ -150,6 +163,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             // 1. Some compiler injected code that is listed as being in "predefined C++ types (compiler internal)"
                             if (sfName == MSVCPredefinedTypesFileName)
                             {
+                                continue;
+                            }
+                            else if (sf.FileName.EndsWith(".winmd"))
+                            {
+                                // This is a Windows application reference
+                                // assembly, a Win RT API 'metadata' file.
                                 continue;
                             }
                             else if (pchFileName != string.Empty)
@@ -206,10 +225,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // '{0}' is a {1} binary which was compiled with a secure (SHA-256)
             // source code hashing algorithm.
             context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                    nameof(RuleResources.BA2004_Pass),
-                        context.TargetUri.GetFileName(),
-                        "native"));
+                    RuleUtilities.BuildResult(ResultKind.Pass,
+                                              context,
+                                              region: null,
+                                              nameof(RuleResources.BA2004_Pass),
+                                              context.TargetUri.GetFileName(),
+                                              "native"));
         }
 
         private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
@@ -226,7 +247,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(failureLevel,
                                               context,
-                                              null,
+                                              region: null,
                                               nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
                                               context.TargetUri.GetFileName(),
                                               compilands));
@@ -236,7 +257,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(failureLevel,
                                           context,
-                                          null,
+                                          region: null,
                                           nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
                                           context.TargetUri.GetFileName(),
                                           compilands));

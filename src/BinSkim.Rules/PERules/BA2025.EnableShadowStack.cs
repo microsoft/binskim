@@ -66,6 +66,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return notApplicable;
             }
 
+            if (portableExecutable.Machine == Machine.Arm || portableExecutable.Machine == Machine.ArmThumb2)
+            {
+                reasonForNotAnalyzing = MetadataConditions.ImageIsArmBinary;
+                return notApplicable;
+            }
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }

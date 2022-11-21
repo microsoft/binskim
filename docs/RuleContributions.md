@@ -30,8 +30,8 @@
 
 - Every rule should be tested against binaries that explicitly fail the check as well as binaries designed to pass.
 - Both passing and failing binaries should be updated with other security mitigations. I.e., the goal is for test binaries to be entirely clean in the `pass` case and to only fire results for the new check in the `rule` case.
-- Create a directory in the rules functional test directory that matches the rule id and friendly name, separated with a dot character, e.g. [BA2025.EnableControlEnforcementTechnologyShadowStack](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestsData/BA2025.EnableControlEnforcementTechnologyShadowStack).
-- Create directories named [Pass](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestsData/BA2025.EnableControlEnforcementTechnologyShadowStack/Pass) and [Fail](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestsData/BA2025.EnableControlEnforcementTechnologyShadowStack/Fail) in this directory and copy relevant secure and vulnerable test binaries to their respective location.
+- Create a directory in the rules functional test directory that matches the rule id and friendly name, separated with a dot character, e.g. [BA2025.EnableControlEnforcementTechnologyShadowStack](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestData/BA2025.EnableControlEnforcementTechnologyShadowStack).
+- Create directories named [Pass](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestData/BA2025.EnableControlEnforcementTechnologyShadowStack/Pass) and [Fail](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestData/BA2025.EnableControlEnforcementTechnologyShadowStack/Fail) in this directory and copy relevant secure and vulnerable test binaries to their respective location.
 By convention, test binary names indicate their language, bittedness/processor, toolchain, and kind, with each attribute separated by an underscore. `Native_x64_VS2019_Console.exe`, for example, indicates a C++ Intel 64-bit console application compiled by the Microsoft Visual Studio 2019 toolchain.
 - In some cases, it may be useful to create a specific binary to test proper return of the BinSkim `notApplicable` result (which indicates that the binary itself is not a relevant candidate for analysis). For many checks, the standard BinSkim "zoo" of test binaries can be used to verify proper enforcement of applicability.
 
@@ -41,3 +41,21 @@ By convention, test binary names indicate their language, bittedness/processor, 
 2. Replace `BAXXX` and `RULEFRIENDLYNAME` in the test methods with the actual rule id and friendly name, leaving method names such as `BA2025_EnableControlEnforcementTechnologyShadowStack_Pass`.
 3. Update the test methods, as per the code comments, to properly configure analysis. This mostly entails configuring checks to understand the applicability of a check to various binary conditions (e.g., whether the binary is 32-bit, an MSIL image, etc.).
 4. Open the test explorer window and type your rule id and name prefix in the search field, e.g. `BA2025_EnableControlEnforcementTechnologyShadowStack`. You should be able to see your three tests. If you run them, they should fail. :)
+
+## Author baseline tests
+
+How does BinSkim baseline test work?
+
+The binaries to be tested are added in [BaselineTestData](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) folder,
+when the baseline test run it will dynamically generate .SARIF files in the `Actual` folder under it, and compare to [Expected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Expected) folder when the test is running in Windows, or [NonWindowsExpected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/NonWindowsExpected) folder otherwise.
+`Actual` folder is not checked in.
+
+1. Prepare test binary with the same naming convention provided in above section [## Prepare test assets](#prepare-test-assets).
+2. Add test binary to [BaselineTestData](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) folder.
+3. In Windows, use PowerShell and `cd` to folder `\src\Test.FunctionalTests.BinSkim.Driver`, run `.\UpdateBaselines.ps1`. 
+This will create the corresponding .SARIF file in [Expected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Expected) folder.
+Verify all new or updated .SARIF files if the results are correct.
+4. In Linux (or Windows Subsystem for Linux), `cd` to folder `/src/Test.FunctionalTests.BinSkim.Driver`, run `./UpdateBaselines.sh`. 
+This will create the corresponding .SARIF file in [NonWindowsExpected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/NonWindowsExpected) folder.
+Verify all new or updated .SARIF files if the results are correct.
+5. Include all new and updated files in your PR. This includes the new binary file itself, the expected .SARIF file for Windows, and the expected .SARIF file for non-Windows. If there are also any updates to the existing .SARIF files for existing binaries, verify the changes are correct and include them in the PR as well.

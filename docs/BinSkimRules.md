@@ -1,10 +1,66 @@
 # Rules
 
+## Rule `BA3003.EnableStackProtector`
+
+### Description
+
+The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this.
+
+### Messages
+
+#### `Pass`: Pass
+
+Stack protector was found on '{0}'.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections.
+
+#### `Error`: Error
+
+The stack protector was not found in '{0}'. This may be because '--stack-protector-strong' was not used, or because it was explicitly disabled by '-fno-stack-protectors'.
+Modules did not meet the criteria: {1}
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA3005.EnableStackClashProtection`
+
+### Description
+
+This check ensures that stack clash protection is enabled. Each program running on a computer uses a special memory region called the stack. This memory region is special because it grows automatically when the program needs more stack memory. But if it grows too much and gets too close to another memory region, the program may confuse the stack with the other memory region. An attacker can exploit this confusion to overwrite the stack with the other memory region, or the other way around. Use the compiler flags '-fstack-clash-protection' to enable this.
+
+### Messages
+
+#### `Pass`: Pass
+
+The Stack Clash Protection was present, so '{0}' is protected.
+
+#### `Error`: Error
+
+The Stack Clash Protection is missing from this binary, so the stack from '{0}' can clash/colide with another memory region. Ensure you are compiling with the compiler flags '-fstack-clash-protection' to address this.
+Modules did not meet the criteria: {1}
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA4002.ReportElfOrMachoCompilerData`
+
+### Description
+
+This rule emits CSV data to the console for every compiler/language/version combination that's observed.
+
+### Messages
+
+---
+
 ## Rule `BA3001.EnablePositionIndependentExecutable`
 
 ### Description
 
-A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap).  This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.
+A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.
 
 ### Messages
 
@@ -52,21 +108,43 @@ GNU_STACK segment on '{0}' is missing, which means the stack will likely be load
 
 ---
 
-## Rule `BA3003.EnableStackProtector`
+## Rule `BA3004.GenerateRequiredSymbolFormat`
 
 ### Description
 
-The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use '--fstack-protector-strong' (all buffers of 4 bytes or more) or '--fstack-protector-all' (all functions) to enable this.
+This check ensures that debugging dwarf version used is 5. The dwarf version 5 contains more information and should be used. Use the compiler flags '-gdwarf-5' to enable this.
 
 ### Messages
 
 #### `Pass`: Pass
 
-Stack protector was found on '{0}'.  However, if you are not compiling with '--stack-protector-strong', it may provide additional protections.
+The version of the debugging dwarf format is '{0}' for the file '{1}'
 
 #### `Error`: Error
 
-The stack protector was not found in '{0}'.  This may be because the binary has no stack-based arrays, or because '--stack-protector-strong' was not used.
+'{0}' is using debugging dwarf version '{1}'. The dwarf version 5 contains more information and should be used. To enable the debugging version 5 use '-gdwarf-5'.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA3006.EnableNonExecutableStack`
+
+### Description
+
+This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use the compiler flags '-z noexecstack' to enable this.
+
+### Messages
+
+#### `Pass`: Pass
+
+The non-executable stack flag was present, so '{0}' is protected.
+
+#### `Error`: Error
+
+The non-executable stack is not enabled for this binary, so '{0}' can have a vulnerability of execution of the data written on the stack. Ensure you are compiling with the flag '-z noexecstack' to address this.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -78,7 +156,7 @@ The stack protector was not found in '{0}'.  This may be because the binary has 
 
 ### Description
 
-This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this.
+This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,-z,relro' to enable this.
 
 ### Messages
 
@@ -88,7 +166,7 @@ The GNU_RELRO segment was present, so '{0}' is protected.
 
 #### `Error`: Error
 
-The GNU_RELRO segment is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,relro' to address this.
+The GNU_RELRO segment is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,-z,relro' to address this.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -100,7 +178,7 @@ The GNU_RELRO segment is missing from this binary, so relocation sections in '{0
 
 ### Description
 
-This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this.
+This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,-z,now' to enable this.
 
 ### Messages
 
@@ -110,7 +188,7 @@ The BIND_NOW flag was present, so '{0}' is protected.
 
 #### `Error`: Error
 
-The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,now' to address this.
+The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,-z,now' to address this.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -118,7 +196,7 @@ The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' w
 
 ---
 
-## Rule `BA3030.UseCheckedFunctionsWithGcc`
+## Rule `BA3030.UseGccCheckedFunctions`
 
 ### Description
 
@@ -141,6 +219,76 @@ No unsafe functions which can be replaced with checked versions are used in '{0}
 #### `Error`: Error
 
 No checked functions are present/used when compiling '{0}', and it was compiled with GCC--and it uses functions that can be checked. The Fortify Source flag replaces some unsafe functions with checked versions when a static length can be determined, and can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 ('-O2') is enabled.  It is possible that the flag was passed, but that the compiler could not statically determine the length of any buffers/strings.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA3031.EnableClangSafeStack`
+
+### Description
+
+The SafeStack instrumentation pass protects programs by implementing two separate program stacks, one for return addresses and local variables, and the other for everything else. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled using Clang and with the SafeStack instrumentation pass, which mitigates the risk of stack-based buffer overflows.
+
+#### `Error`: Error
+
+'{0}' was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines.
+
+#### `ClangVersionMayNeedUpgrade`: Error
+
+'{0}' was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass '-fsanitize=safe-stack' flag to both compile and link command lines. You might need to update your version of Clang to enable it.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA5001.EnablePositionIndependentExecutableMachO`
+
+### Description
+
+A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing '-f pie' to clang/gcc.
+
+### Messages
+
+#### `Pass`: Pass
+
+PIE enabled on executable '{0}'.
+
+#### `Error`: Error
+
+PIE disabled on executable '{0}'.  This means the code section will always be loaded to the same address, even if ASLR is enabled in the Linux kernel.  To address this, ensure you are compiling with '-fpie' when using clang/gcc.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA5002.DoNotAllowExecutableStack`
+
+### Description
+
+This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag "--allow_stack_execute".
+
+### Messages
+
+#### `Pass`: Pass
+
+Executable stack is not allowed on executable '{0}'.
+
+#### `Error`: Error
+
+Stack on '{0}' is executable, which means that an attacker could use it as a place to store attack shellcode.  Ensure do not compile with flag "--allow_stack_execute" to mark the stack as non-executable.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -694,6 +842,68 @@ All linked modules '{0}' were compiled with mitigations enabled that help preven
 
 ---
 
+## Rule `BA2025.EnableShadowStack`
+
+### Description
+
+Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation.
+
+#### `Warning`: Warning
+
+'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA2026.EnableMicrosoftCompilerSdlSwitch`
+
+### Description
+
+/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' is a Windows PE that was compiled with recommended Security Development Lifecycle (SDL) checks. These checks change security-relevant warnings into errors, and set additional secure code-generation features.
+
+#### `Warning`: Warning
+
+'{0}' is a Windows PE that wasn't compiled with recommended Security Development Lifecycle (SDL) checks. As a result some critical compile-time and runtime checks may be disabled, increasing the possibility of an exploitable runtime issue. To resolve this problem, pass '/sdl' on the cl.exe command-line, set the 'SDL checks' property in the 'C/C++ -> General' Configuration property page, or explicitly set the 'SDLCheck' property in the project file (nested within a 'CLCompile' element) to 'true'.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA2027.EnableSourceLink`
+
+### Description
+
+SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information.
+
+### Messages
+
+#### `Pass`: Pass
+
+The PDB for '{0}' contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other critical analysis.
+
+#### `Warning`: Warning
+
+The PDB for '{0}' does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response. Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider. See https://aka.ms/sourcelink for more information.
+
+---
+
 ## Rule `BA4001.ReportPECompilerData`
 
 ### Description
@@ -701,6 +911,120 @@ All linked modules '{0}' were compiled with mitigations enabled that help preven
 This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland.
 
 ### Messages
+
+---
+
+## Rule `BA6001.DisableIncrementalLinkingInReleaseBuilds`
+
+### Description
+
+Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.  The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with incremental linking disabled.
+
+#### `Warning`: Warning
+
+'{0}' appears to be compiled as release but enables incremental linking, increasing binary size and further compromising runtime performance by preventing enabling maximal code optimization.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6002.EliminateDuplicateStrings`
+
+### Description
+
+The /GF compiler option, also known as Eliminate Duplicate Strings or String Pooling, will combine identical strings in a program to a single readonly copy. This can significantly reduce binary size for programs with many string resources.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with Eliminate Duplicate Strings (/GF) enabled.
+
+#### `Warning`: Warning
+
+'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6004.EnableComdatFolding`
+
+### Description
+
+COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with COMDAT folding (/OPT:ICF) enabled
+
+#### `EnabledForDebug`: Warning
+
+'{0}' appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That may make debugging more difficult.
+
+#### `DisabledForRelease`: Warning
+
+'{0}' was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6005.EnableOptimizeReferences`
+
+### Description
+
+Optimize References can significantly reduce binary size because it instructs the linker to remove unreferenced functions and data from the final binary.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with Optimize References (/OPT:REF) enabled
+
+#### `Warning`: Warning
+
+'{0}' was compiled with Optimize References (/OPT:REF) disabled, increasing binary size.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6006.EnableLinkTimeCodeGeneration`
+
+### Description
+
+Enabling Link Time Code Generation (LTCG) performs whole-program optimization, which is able to better optimize code across translation units. LTCG is also a prerequisite for Profile-Guided Optimization (PGO) which can further improve performance.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with LinkTimeCodeGeneration (/LTCG) enabled.
+
+#### `Warning`: Warning
+
+'{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
 ---
 

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- Copy the output assembly and its PDB to the appropriate Pass/Fail folder. -->
+  <PropertyGroup>
+    <!-- EnableSourceLink is set in Microsoft.SourceLink.Common.props -->
+    <PassFailDir Condition="'$(EnableSourceLink)' == 'true'">$(FunctionalTestData)\Pass</PassFailDir>
+    <PassFailDir Condition="'$(EnableSourceLink)' != 'true'">$(FunctionalTestData)\Fail</PassFailDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <PassFailFiles Include="$(TargetPath)" />
+    <PassFailFiles Include="$(TargetDir)$(TargetName).pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Clean Include="@(PassFailFiles->'$(PassFailDir)\%(Filename)%(Extension)')" />
+  </ItemGroup>
+
+  <Target Name="CopyToFunctionalTestData" AfterTargets="Build">
+    <Copy SourceFiles="@(PassFailFiles)" DestinationFolder="$(PassFailDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

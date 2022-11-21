@@ -170,7 +170,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Data8:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            attributeValue.Value = (ulong)debugData.ReadUlong();
+                            attributeValue.Value = debugData.ReadUlong();
                             break;
 
                         case DwarfFormat.SData:
@@ -206,27 +206,27 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Ref1:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
-                            attributeValue.Value = (ulong)debugData.ReadByte() + (ulong)beginPosition;
+                            attributeValue.Value = debugData.ReadByte() + (ulong)beginPosition;
                             break;
 
                         case DwarfFormat.Ref2:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
-                            attributeValue.Value = (ulong)debugData.ReadUshort() + (ulong)beginPosition;
+                            attributeValue.Value = debugData.ReadUshort() + (ulong)beginPosition;
                             break;
 
                         case DwarfFormat.Ref4:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
-                            attributeValue.Value = (ulong)debugData.ReadUint() + (ulong)beginPosition;
+                            attributeValue.Value = debugData.ReadUint() + (ulong)beginPosition;
                             break;
 
                         case DwarfFormat.Ref8:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
-                            attributeValue.Value = (ulong)debugData.ReadUlong() + (ulong)beginPosition;
+                            attributeValue.Value = debugData.ReadUlong() + (ulong)beginPosition;
                             break;
 
                         case DwarfFormat.RefUData:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
-                            attributeValue.Value = (ulong)debugData.LEB128() + (ulong)beginPosition;
+                            attributeValue.Value = debugData.LEB128() + (ulong)beginPosition;
                             break;
 
                         case DwarfFormat.RefAddr:
@@ -255,12 +255,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         case DwarfFormat.Strx:
                         case DwarfFormat.GNUStrIndex:
                             attributeValue.Type = DwarfAttributeValueType.String;
-                            attributeValue.Value = (ulong)debugData.LEB128() + (ulong)beginPosition;
+                            attributeValue.Value = debugData.LEB128() + (ulong)beginPosition;
                             break;
 
                         case DwarfFormat.Addrx:
                             attributeValue.Type = DwarfAttributeValueType.String;
-                            attributeValue.Value = (ulong)debugData.LEB128() + (ulong)beginPosition;
+                            attributeValue.Value = debugData.LEB128() + (ulong)beginPosition;
                             break;
 
                         case DwarfFormat.Indirect:

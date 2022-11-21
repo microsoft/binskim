@@ -987,6 +987,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user expe [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BA2027_EnableSourceLink_Description {
+            get {
+                return ResourceManager.GetString("BA2027_EnableSourceLink_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other critical analysis..
+        /// </summary>
+        internal static string BA2027_Pass {
+            get {
+                return ResourceManager.GetString("BA2027_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response. Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider. See https://aka.ms/sourcelink for more information..
+        /// </summary>
+        internal static string BA2027_Warning {
+            get {
+                return ResourceManager.GetString("BA2027_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
         internal static string BA3001_EnablePositionIndependentExecutable_Description {
@@ -1169,7 +1196,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,relro&apos; to enable this..
+        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,-z,relro&apos; to enable this..
         /// </summary>
         internal static string BA3010_EnableReadOnlyRelocations_Description {
             get {
@@ -1178,7 +1205,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The GNU_RELRO segment is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,relro&apos; to address this..
+        ///   Looks up a localized string similar to The GNU_RELRO segment is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,-z,relro&apos; to address this..
         /// </summary>
         internal static string BA3010_Error {
             get {
@@ -1196,7 +1223,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,z,now&apos; to enable this..
+        ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,-z,now&apos; to enable this..
         /// </summary>
         internal static string BA3011_EnableBindNow_Description {
             get {
@@ -1205,7 +1232,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The BIND_NOW flag is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,z,now&apos; to address this..
+        ///   Looks up a localized string similar to The BIND_NOW flag is missing from this binary, so relocation sections in &apos;{0}&apos; will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags &apos;-Wl,-z,now&apos; to address this..
         /// </summary>
         internal static string BA3011_Error {
             get {
@@ -1261,9 +1288,45 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// <summary>
         ///   Looks up a localized string similar to GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing &apos;-DFortify_Source=2&apos; when optimization level 2 is enabled (&apos;-O2&apos;)..
         /// </summary>
-        internal static string BA3030_UseCheckedFunctionsWithGcc_Description {
+        internal static string BA3030_UseGccCheckedFunctions_Description {
             get {
-                return ResourceManager.GetString("BA3030_UseCheckedFunctionsWithGcc_Description", resourceCulture);
+                return ResourceManager.GetString("BA3030_UseGccCheckedFunctions_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The SafeStack instrumentation pass protects programs by implementing two separate program stacks, one for return addresses and local variables, and the other for everything else. To enable SafeStack, pass &apos;-fsanitize=safe-stack&apos; flag to both compile and link command lines..
+        /// </summary>
+        internal static string BA3031_EnableClangSafeStack_Description {
+            get {
+                return ResourceManager.GetString("BA3031_EnableClangSafeStack_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass &apos;-fsanitize=safe-stack&apos; flag to both compile and link command lines..
+        /// </summary>
+        internal static string BA3031_Error {
+            get {
+                return ResourceManager.GetString("BA3031_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled using Clang but without the SafeStack instrumentation pass, which should be used to mitigate the risk of stack-based buffer overflows. To enable SafeStack, pass &apos;-fsanitize=safe-stack&apos; flag to both compile and link command lines. You might need to update your version of Clang to enable it..
+        /// </summary>
+        internal static string BA3031_Error_ClangVersionMayNeedUpgrade {
+            get {
+                return ResourceManager.GetString("BA3031_Error_ClangVersionMayNeedUpgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled using Clang and with the SafeStack instrumentation pass, which mitigates the risk of stack-based buffer overflows..
+        /// </summary>
+        internal static string BA3031_Pass {
+            get {
+                return ResourceManager.GetString("BA3031_Pass", resourceCulture);
             }
         }
         
@@ -1336,6 +1399,150 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA5002_Pass {
             get {
                 return ResourceManager.GetString("BA5002_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.  The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking..
+        /// </summary>
+        internal static string BA6001_DisableIncrementalLinkingInReleaseBuilds_Description {
+            get {
+                return ResourceManager.GetString("BA6001_DisableIncrementalLinkingInReleaseBuilds_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with incremental linking disabled..
+        /// </summary>
+        internal static string BA6001_Pass {
+            get {
+                return ResourceManager.GetString("BA6001_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be compiled as release but enables incremental linking, increasing binary size and further compromising runtime performance by preventing enabling maximal code optimization..
+        /// </summary>
+        internal static string BA6001_Warning {
+            get {
+                return ResourceManager.GetString("BA6001_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The /GF compiler option, also known as Eliminate Duplicate Strings or String Pooling, will combine identical strings in a program to a single readonly copy. This can significantly reduce binary size for programs with many string resources..
+        /// </summary>
+        internal static string BA6002_EliminateDuplicateStrings_Description {
+            get {
+                return ResourceManager.GetString("BA6002_EliminateDuplicateStrings_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with Eliminate Duplicate Strings (/GF) enabled..
+        /// </summary>
+        internal static string BA6002_Pass {
+            get {
+                return ResourceManager.GetString("BA6002_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}..
+        /// </summary>
+        internal static string BA6002_Warning {
+            get {
+                return ResourceManager.GetString("BA6002_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary..
+        /// </summary>
+        internal static string BA6004_EnableCOMDATFolding_Description {
+            get {
+                return ResourceManager.GetString("BA6004_EnableCOMDATFolding_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with COMDAT folding (/OPT:ICF) enabled.
+        /// </summary>
+        internal static string BA6004_Pass {
+            get {
+                return ResourceManager.GetString("BA6004_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size..
+        /// </summary>
+        internal static string BA6004_Warning_DisabledForRelease {
+            get {
+                return ResourceManager.GetString("BA6004_Warning_DisabledForRelease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That may make debugging more difficult..
+        /// </summary>
+        internal static string BA6004_Warning_EnabledForDebug {
+            get {
+                return ResourceManager.GetString("BA6004_Warning_EnabledForDebug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optimize References can significantly reduce binary size because it instructs the linker to remove unreferenced functions and data from the final binary..
+        /// </summary>
+        internal static string BA6005_EnableOptimizeReferences_Description {
+            get {
+                return ResourceManager.GetString("BA6005_EnableOptimizeReferences_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with Optimize References (/OPT:REF) enabled.
+        /// </summary>
+        internal static string BA6005_Pass {
+            get {
+                return ResourceManager.GetString("BA6005_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with Optimize References (/OPT:REF) disabled, increasing binary size..
+        /// </summary>
+        internal static string BA6005_Warning {
+            get {
+                return ResourceManager.GetString("BA6005_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabling Link Time Code Generation (LTCG) performs whole-program optimization, which is able to better optimize code across translation units. LTCG is also a prerequisite for Profile-Guided Optimization (PGO) which can further improve performance..
+        /// </summary>
+        internal static string BA6006_EnableLinkTimeCodeGeneration_Description {
+            get {
+                return ResourceManager.GetString("BA6006_EnableLinkTimeCodeGeneration_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with LinkTimeCodeGeneration (/LTCG) enabled..
+        /// </summary>
+        internal static string BA6006_Pass {
+            get {
+                return ResourceManager.GetString("BA6006_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance..
+        /// </summary>
+        internal static string BA6006_Warning {
+            get {
+                return ResourceManager.GetString("BA6006_Warning", resourceCulture);
             }
         }
         

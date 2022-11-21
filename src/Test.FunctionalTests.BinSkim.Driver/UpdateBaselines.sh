@@ -17,22 +17,22 @@ BuildTool ()
 RunBaseline () 
 {
     TOOLPATH="$BuildOutputPath/$TOOL"
-    expectedDirectory="$ScriptDir/BaselineTestsData/NonWindowsExpected"
+    expectedDirectory="$ScriptDir/BaselineTestData/NonWindowsExpected"
     mkdir -p $expectedDirectory
 
-    for targetFile in $ScriptDir/BaselineTestsData/$1; do
+    for targetFile in $ScriptDir/BaselineTestData/$1; do
         echo "Analyzing $targetFile"
         input=$targetFile
         outputFile=`basename $targetFile`
         output="$expectedDirectory/$outputFile.sarif"
         outputTemp="$output.temp"
 
-        echo "$TOOLPATH analyze $targetFile -o $outputTemp --pretty-print --verbose --config default --sarif-output-version Current"
-        $TOOLPATH analyze $targetFile -o $outputTemp --pretty-print --verbose --config default --sarif-output-version Current
+        echo "$TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet --sarif-output-version Current"
+        $TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet --sarif-output-version Current
 
-        # Normalize paths--replace the repository root with '/'
+        # Normalize paths--replace the repository root with '/home/user'
         echo "Normalizing file output"
-        sed s#$repoRoot/#Z:/#g $outputTemp -i
+        sed s#$repoRoot/#\/home\/user/#g $outputTemp -i
 
         # Potential future work--remove stack traces/etc., similar to the powershell script.
         # At the moment, BinSkim doesn't include stack traces, and the comparison shouldn't 
@@ -47,3 +47,4 @@ RunBaseline *.dll
 RunBaseline *.exe
 RunBaseline gcc.*
 RunBaseline clang.*
+RunBaseline macho.*

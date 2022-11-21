@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+using System.Diagnostics;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
@@ -66,6 +67,29 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<AdvancedMitigations>(
                 AnalyzerName, nameof(AdvancedMitigationsEnforced), defaultValue: () => AdvancedMitigations.None);
 
+        public override void Initialize(BinaryAnalyzerContext context)
+        {
+            if (context.Policy == null) { return; }
+
+            StringToVersionMap currentMinimumToolVersions = context.Policy.GetProperty(MinimumToolVersions, cacheDefault: false);
+            StringToVersionMap defaultMinimumToolVersions = BuildMinimumToolVersionsMap();
+
+            // If user only overwrite part of the settings, currentMinimumToolVersions will only have those settings.
+            // This is to make sure other default settings are applied as well.
+            foreach (KeyValuePair<string, Version> defaultMinimumToolVersion in defaultMinimumToolVersions)
+            {
+                currentMinimumToolVersions.TryAdd(defaultMinimumToolVersion.Key, defaultMinimumToolVersion.Value);
+            }
+
+            context.Policy.SetProperty(
+                MinimumToolVersions,
+                currentMinimumToolVersions,
+                cacheDescription: false,
+                persistToSettingsContainer: true);
+
+            return;
+        }
+
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
@@ -104,12 +128,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             Version minCompilerVersion;
 
-            var goodCompilers = new HashSet<string>();
+            var inPolicyCompilers = new HashSet<string>();
 
-            var badModules = new List<ObjectModuleDetails>();
             StringToVersionMap allowedLibraries = context.Policy.GetProperty(AllowedLibraries);
 
-            var languageToBadModules = new Dictionary<Language, List<ObjectModuleDetails>>();
+            var languageToOutOfPolicyModules = new SortedDictionary<Language, List<ObjectModuleDetails>>();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -258,18 +281,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (foundIssue)
                 {
-                    badModules.Add(omDetails);
+                    if (!languageToOutOfPolicyModules.TryGetValue(omDetails.Language, out List<ObjectModuleDetails> outOfPolicyModules))
+                    {
+                        outOfPolicyModules = new List<ObjectModuleDetails>();
+                        languageToOutOfPolicyModules.Add(omDetails.Language, outOfPolicyModules);
+                    }
+
+                    outOfPolicyModules.Add(omDetails);
                 }
                 else
                 {
-                    goodCompilers.Add(BuildCompilerIdentifier(omDetails));
+                    inPolicyCompilers.Add(BuildCompilerIdentifier(omDetails));
                 }
             }
 
-            if (badModules.Count != 0)
+            if (languageToOutOfPolicyModules.Count != 0)
             {
-                string badModulesText = badModules.CreateOutputCoalescedByCompiler();
-                string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToBadModules);
+                string outOfPolicyModulesText = BuildOutOfPolicyModulesList(languageToOutOfPolicyModules);
+                string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToOutOfPolicyModules);
+
+                Debug.Assert(!string.IsNullOrWhiteSpace(outOfPolicyModulesText) ||
+                             !string.IsNullOrWhiteSpace(minimumRequiredCompilers));
 
                 // '{0}' was compiled with one or more modules which were not built using
                 // minimum required tool versions ({1}). More recent toolchains
@@ -284,11 +316,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2006_Error),
                         context.TargetUri.GetFileName(),
                         minimumRequiredCompilers,
-                        badModulesText));
+                        outOfPolicyModulesText));
                 return;
             }
 
-            string[] sorted = goodCompilers.ToArray();
+            string[] sorted = inPolicyCompilers.ToArray();
             Array.Sort(sorted);
 
             // All linked modules of '{0}' satisfy configured policy (observed compilers: {1}).
@@ -304,11 +336,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return omDetails.CompilerName + ":" + omDetails.Language + ":" + omDetails.CompilerBackEndVersion;
         }
 
-        private string BuildMinimumCompilersList(BinaryAnalyzerContext context, Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
+        private string BuildMinimumCompilersList(BinaryAnalyzerContext context, SortedDictionary<Language, List<ObjectModuleDetails>> languageToOutOfPolicyModules)
         {
             var languages = new List<string>();
 
-            foreach (Language language in languageToBadModules.Keys)
+            foreach (Language language in languageToOutOfPolicyModules.Keys)
             {
                 Version version = context.Policy.GetProperty(MinimumToolVersions)[language.ToString()];
                 languages.Add($"{language} ({version})");
@@ -316,13 +348,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return string.Join(", ", languages);
         }
 
-        private string BuildBadModulesList(Dictionary<Language, List<ObjectModuleDetails>> languageToBadModules)
+        private string BuildOutOfPolicyModulesList(SortedDictionary<Language, List<ObjectModuleDetails>> languageToOutOfPolicyModules)
         {
             var coalescedModules = new List<string>();
 
-            foreach (Language language in languageToBadModules.Keys)
+            foreach (Language language in languageToOutOfPolicyModules.Keys)
             {
-                string modulesText = languageToBadModules[language].CreateOutputCoalescedByCompiler();
+                string modulesText = languageToOutOfPolicyModules[language].CreateOutputCoalescedByCompiler();
                 coalescedModules.Add(modulesText);
             }
             return string.Join(string.Empty, coalescedModules);
