@@ -148,11 +148,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             attributeValue.Value = debugData.ReadBlock(debugData.ReadUshort());
                             break;
 
-                        case DwarfFormat.Block4:
-                            attributeValue.Type = DwarfAttributeValueType.Block;
-                            attributeValue.Value = debugData.ReadBlock(debugData.ReadUint());
-                            break;
-
                         case DwarfFormat.Data1:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
                             attributeValue.Value = (ulong)debugData.ReadByte();
@@ -263,12 +258,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             attributeValue.Value = debugData.LEB128() + (ulong)beginPosition;
                             break;
 
+
+                        case DwarfFormat.Block4:
                         case DwarfFormat.Indirect:
-                            break;
-
                         case DwarfFormat.GNUAddrIndex:
-                            break;
-
                         default:
                             break;
                     }
