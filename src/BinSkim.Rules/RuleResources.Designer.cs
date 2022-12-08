@@ -839,7 +839,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application code should be compiled with the Spectre mitigations switch (/Qspectre cl.exe command-line argument or &lt;SpectreMitigation&gt;Spectre&lt;/SpectreMitigation&gt; build property)..
+        ///   Looks up a localized string similar to Application code should be compiled with the Spectre mitigations switch (/Qspectre cl.exe command-line argument or &lt;SpectreMitigation&gt;Spectre&lt;/SpectreMitigation&gt; build property). Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve this issue, provide the /Qspectre switch on the compiler command-line (or specify &lt;SpectreMitigation&gt;Spectre&lt;/SpectreMitigation&gt; in build properties), or pass /d2guardspecload  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2024_EnableSpectreMitigations_Description {
             get {
