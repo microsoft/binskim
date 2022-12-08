@@ -142,6 +142,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to error parsing Compilation Units.
+        /// </summary>
+        internal static string MetadataCondition_ErrorParsingCompilationUnits {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ErrorParsingCompilationUnits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image was compiled with a toolset version ({0}) that is not sufficiently recent ({1} or newer) to provide relevant settings.
         /// </summary>
         internal static string MetadataCondition_ImageCompiledWithOutdatedTools {

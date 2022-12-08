@@ -255,4 +255,7 @@
   <data name="MetadataCondition_ImageIsNotBuiltWithMsvc" xml:space="preserve">
     <value>not compiled with Microsoft C/C++ compiler</value>
   </data>
+  <data name="MetadataCondition_ErrorParsingCompilationUnits" xml:space="preserve">
+    <value>error parsing Compilation Units</value>
+  </data>
 </root>

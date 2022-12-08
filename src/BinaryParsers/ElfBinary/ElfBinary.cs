@@ -56,7 +56,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 PublicSymbols = publicSymbols;
                 SectionRegions = ELF.Sections.Where(s => s.LoadAddress > 0).OrderBy(s => s.LoadAddress).ToArray();
 
-                CompilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
+                try
+                {
+                    CompilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
+                }
+                catch (ArgumentException)
+                {
+                    ErrorParsingCompilationUnits = true;
+                }
+
                 commandLineInfos = new Lazy<List<DwarfCompileCommandLineInfo>>(()
                     => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits));
                 LineNumberPrograms = DwarfSymbolProvider.ParseLineNumberPrograms(DebugLine, NormalizeAddress);
@@ -238,6 +246,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// Gets or sets the CompilationUnits.
         /// </summary>
         public List<DwarfCompilationUnit> CompilationUnits { get; set; } = new List<DwarfCompilationUnit>();
+
+        /// <summary>
+        /// If there is error parsing Compilation Units.
+        /// </summary>
+        public bool ErrorParsingCompilationUnits { get; set; } = false;
 
         /// <summary>
         /// Gets or sets the CommandLineInfos.

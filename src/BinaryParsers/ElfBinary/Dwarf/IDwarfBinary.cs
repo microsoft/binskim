@@ -98,6 +98,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public List<DwarfCompileCommandLineInfo> CommandLineInfos { get; }
 
         /// <summary>
+        /// If there is error parsing Compilation Units.
+        /// </summary>
+        public bool ErrorParsingCompilationUnits { get; set; }
+
+        /// <summary>
         /// Gets language from dwarf CompilationUnits.
         /// </summary>
         /// <returns>Dwarf language.</returns>

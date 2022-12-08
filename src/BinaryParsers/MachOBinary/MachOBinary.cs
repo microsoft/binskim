@@ -116,6 +116,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             set => throw new NotImplementedException();
         }
 
+        public bool ErrorParsingCompilationUnits { get => MachOs?.Any(m => m.ErrorParsingCompilationUnits) == true; set => throw new NotImplementedException(); }
+
         #endregion IDwarfBinary interface
     }
 }

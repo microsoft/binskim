@@ -48,6 +48,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             CanAnalyzeDwarfResult result = default;
 
+            if (target.ErrorParsingCompilationUnits)
+            {
+                reasonForNotAnalyzing = MetadataConditions.ErrorParsingCompilationUnits;
+                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
+            }
+
             if (target is ElfBinary)
             {
                 // Set result.Result to AnalysisApplicability.ApplicableToSpecifiedTarget for any case.
