@@ -25,6 +25,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             try
             {
+                LocalSymbolDirectories = localSymbolDirectories;
                 string path = Path.GetFullPath(uri.LocalPath);
                 ELF = ELFReader.Load<ulong>(path);
 
@@ -56,12 +57,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 PublicSymbols = publicSymbols;
                 SectionRegions = ELF.Sections.Where(s => s.LoadAddress > 0).OrderBy(s => s.LoadAddress).ToArray();
 
-                CompilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
-                commandLineInfos = new Lazy<List<DwarfCompileCommandLineInfo>>(()
-                    => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits));
-                LineNumberPrograms = DwarfSymbolProvider.ParseLineNumberPrograms(DebugLine, NormalizeAddress);
-                CommonInformationEntries = DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this));
-                LoadDebug(localSymbolDirectories);
                 this.Valid = true;
             }
             // At some point, we may want to better enumerate expected vs. unexpected exceptions.
@@ -164,7 +159,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// Gets the type of the file related to debug information
         /// </summary>
-        public DebugFileType DebugFileType { get; private set; }
+        public DebugFileType DebugFileType
+        {
+            get
+            {
+                if (debugFileType == DebugFileType.TBD)
+                {
+                    LoadCompilationUnitsAndCommandLineInfos();
+                }
+                return debugFileType;
+            }
+            set => debugFileType = value;
+        }
 
         /// <summary>
         /// Gets if the debug information loaded successfully
@@ -237,12 +243,36 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// Gets or sets the CompilationUnits.
         /// </summary>
-        public List<DwarfCompilationUnit> CompilationUnits { get; set; } = new List<DwarfCompilationUnit>();
+        public List<DwarfCompilationUnit> CompilationUnits
+        {
+            get
+            {
+                if (compilationUnits == null)
+                {
+                    LoadCompilationUnitsAndCommandLineInfos();
+                }
+                return compilationUnits;
+            }
+            set => compilationUnits = value;
+        }
+
+        public string LocalSymbolDirectories { get; set; }
 
         /// <summary>
         /// Gets or sets the CommandLineInfos.
         /// </summary>
-        public List<DwarfCompileCommandLineInfo> CommandLineInfos => this.commandLineInfos.Value;
+        public List<DwarfCompileCommandLineInfo> CommandLineInfos
+        {
+            get
+            {
+                if (commandLineInfos == null)
+                {
+                    LoadCompilationUnitsAndCommandLineInfos();
+                }
+                return commandLineInfos;
+            }
+            set => commandLineInfos = value;
+        }
 
         /// <summary>
         /// Gets or sets the LineNumberPrograms.
@@ -267,7 +297,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// The version of Dwarf used.
         /// </summary>
-        public int DwarfVersion { get; set; } = -1;
+        public int DwarfVersion
+        {
+            get
+            {
+                if (dwarfVersion == -1)
+                {
+                    LoadCompilationUnitsAndCommandLineInfos();
+                }
+                return dwarfVersion;
+            }
+            set => dwarfVersion = value;
+        }
 
         /// <summary>
         /// The unit type of Dwarf.
@@ -484,7 +525,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
         }
 
-        private readonly Lazy<List<DwarfCompileCommandLineInfo>> commandLineInfos;
+        private void LoadCompilationUnitsAndCommandLineInfos()
+        {
+            compilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
+            commandLineInfos = DwarfSymbolProvider.ParseAllCommandLineInfos(compilationUnits);
+            LineNumberPrograms = DwarfSymbolProvider.ParseLineNumberPrograms(DebugLine, NormalizeAddress);
+            CommonInformationEntries = DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this));
+            LoadDebug(LocalSymbolDirectories);
+
+            compilationUnits ??= new List<DwarfCompilationUnit>();
+            commandLineInfos ??= new List<DwarfCompileCommandLineInfo>();
+        }
+
+        private int dwarfVersion = -1;
+        private DebugFileType debugFileType = DebugFileType.TBD;
+        private List<DwarfCompilationUnit> compilationUnits = null;
+        private List<DwarfCompileCommandLineInfo> commandLineInfos = null;
 
         private static Uri GetFirstExistFile(string dwoName, string sameDirectory, string localSymbolDirectories = null)
         {
