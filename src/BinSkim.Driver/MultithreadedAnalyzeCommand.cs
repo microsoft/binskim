@@ -129,6 +129,13 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override int Run(AnalyzeOptions analyzeOptions)
         {
+            // Check whether target file is specified for BinSkim Analyze. If not, exit with code 1 (failure).
+            if (!analyzeOptions.TargetFileSpecifiers.Any())
+            {
+                Console.WriteLine("Please specify a targe file for BinSkim Analyze.");
+                return FAILURE;
+            }
+
             if (!Environment.GetCommandLineArgs().
                 Any(arg => arg.Equals("--sarif-output-version", StringComparison.OrdinalIgnoreCase) ||
                 arg.Equals("-v", StringComparison.OrdinalIgnoreCase)))
