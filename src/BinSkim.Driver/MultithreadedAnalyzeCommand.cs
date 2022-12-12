@@ -128,7 +128,7 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public override int Run(AnalyzeOptions analyzeOptions)
-        {            
+        {
             if (analyzeOptions.TargetFileSpecifiers == null || !analyzeOptions.TargetFileSpecifiers.Any())
             {
                 throw new ArgumentNullException("Please specify one or more files, directories, or filter patterns for BinSkim analyze.", (Exception)null);
