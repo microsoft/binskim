@@ -128,11 +128,10 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         public override int Run(AnalyzeOptions analyzeOptions)
-        {
-            // Check whether target file is specified for BinSkim Analyze. If not, exit with code 1 (failure).
+        {            
             if (analyzeOptions.TargetFileSpecifiers == null || !analyzeOptions.TargetFileSpecifiers.Any())
             {
-                throw new ArgumentNullException("Please specify a targe file after BinSkim analyze", (Exception)null);
+                throw new ArgumentNullException("Please specify one or more files, directories, or filter patterns for BinSkim analyze.", (Exception)null);
             }
 
             if (!Environment.GetCommandLineArgs().
