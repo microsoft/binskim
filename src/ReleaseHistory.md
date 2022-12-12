@@ -1,7 +1,7 @@
 # BinSkim Release History
 
 ## **v2.0.0-rc2** (Unreleased)
-* BUGFIX: Errors in export-config command for BA2006. [763](https://github.com/microsoft/binskim/pull/763)
+* BUGFIX: Fix assertion failed with no clue when TargetFileSpecifiers is null or empty for BinSkim analyze.[763](https://github.com/microsoft/binskim/pull/763)
 
 ## **v2.0.0-rc1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/2.0.0-rc1)
 * BUGFIX: Eliminate `BA2004.EnableSecureSourceCodeHashing` false positives to Windows Runtime components (resulting from references to Win RT API metadata files).
