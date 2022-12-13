@@ -2,6 +2,7 @@
 
 ## **v2.0.0-rc2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/2.0.0-rc2)
 * BUGFIX: fix `ERR997.ExceptionLoadingAnalysisTarget : Could not load analysis target` errors analyzing *nix binary resulting from failure to properly parse DWARF debug information.
+* Upgrade `Newtonsoft.JSON` package to 13.0.2 to resolve security alert.
 
 ## **v2.0.0-rc1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/2.0.0-rc1)
 * BUGFIX: Eliminate `BA2004.EnableSecureSourceCodeHashing` false positives to Windows Runtime components (resulting from references to Win RT API metadata files).
