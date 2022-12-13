@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
@@ -117,7 +118,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                 if (description.Attributes.Any(a => a.Attribute == DwarfAttribute.LinkageName && a.Format == DwarfFormat.Strp))
                 {
-                    description.Attributes.RemoveAll(a => a.Attribute == DwarfAttribute.Name);
+                    description.Attributes.RemoveAll(a => a.Attribute == DwarfAttribute.Name);                    
                 }
 
                 foreach (DataDescriptionAttribute descriptionAttribute in description.Attributes)
@@ -194,6 +195,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             attributeValue.Value = debugStrings.ReadString(offsetStrp);
                             break;
 
+                        case DwarfFormat.StrpSup:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            offsetStrp = debugData.ReadOffset(is64bit);
+                            attributeValue.Value = debugStrings.ReadString(offsetStrp);
+                            break;
+
                         case DwarfFormat.Flag:
                             attributeValue.Type = DwarfAttributeValueType.Flag;
                             attributeValue.Value = debugData.ReadByte() != 0;
@@ -250,6 +257,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         case DwarfFormat.ImplicitConst:
+                            attributeValue.Value = descriptionAttribute.Value;
                             break;
 
                         case DwarfFormat.Strx:
@@ -270,6 +278,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         default:
+                            Console.WriteLine($"No case for format {format}");
                             break;
                     }
 
@@ -438,6 +447,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// Gets or sets the format.
             /// </summary>
             public DwarfFormat Format { get; set; }
+
+            /// <summary>
+            /// Gets or sets the attribute value, if specified in the abbreviations table.
+            /// </summary>
+            public object Value { get; set; }
         }
 
         /// <summary>
