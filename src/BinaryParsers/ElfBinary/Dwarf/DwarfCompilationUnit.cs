@@ -293,7 +293,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         default:
-                            // throw new InvalidOperationException($"Unrecognized format argument: {format}");
+                            break;
                     }
 
                     if (attributes.ContainsKey(attribute))
