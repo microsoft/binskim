@@ -190,14 +190,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         case DwarfFormat.Strp:
-                            attributeValue.Type = DwarfAttributeValueType.String;
-                            int offsetStrp = debugData.ReadOffset(is64bit);
-                            attributeValue.Value = debugStrings.ReadString(offsetStrp);
-                            break;
-
                         case DwarfFormat.StrpSup:
                             attributeValue.Type = DwarfAttributeValueType.String;
-                            offsetStrp = debugData.ReadOffset(is64bit);
+                            int offsetStrp = debugData.ReadOffset(is64bit);
                             attributeValue.Value = debugStrings.ReadString(offsetStrp);
                             break;
 
@@ -266,6 +261,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             attributeValue.Value = debugData.LEB128() + (ulong)beginPosition;
                             break;
 
+                        case DwarfFormat.Strx1:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            attributeValue.Value = debugData.ReadByte() + (ulong)beginPosition;
+                            break;
+
+                        case DwarfFormat.Strx2:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            attributeValue.Value = debugData.ReadUshort() + (ulong)beginPosition;
+                            break;
+
+                        case DwarfFormat.Strx3:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            attributeValue.Value = debugStrings.ReadThreeBytes() + (ulong)beginPosition;
+                            break;
+
+                        case DwarfFormat.Strx4:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            attributeValue.Value = debugData.ReadUint() + (ulong)beginPosition;
+                            break;
+
                         case DwarfFormat.Addrx:
                             attributeValue.Type = DwarfAttributeValueType.String;
                             attributeValue.Value = debugData.LEB128() + (ulong)beginPosition;
@@ -278,7 +293,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         default:
-                            throw new InvalidOperationException($"Unrecognized format argument: {format}");
+                            // throw new InvalidOperationException($"Unrecognized format argument: {format}");
                     }
 
                     if (attributes.ContainsKey(attribute))
