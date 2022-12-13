@@ -129,6 +129,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override int Run(AnalyzeOptions analyzeOptions)
         {
+            if (analyzeOptions.TargetFileSpecifiers?.Any() != true)
+            {
+                throw new ArgumentNullException(nameof(analyzeOptions.TargetFileSpecifiers), "Please specify one or more files, directories, or filter patterns for BinSkim analyze.");
+            }
+
             if (!Environment.GetCommandLineArgs().
                 Any(arg => arg.Equals("--sarif-output-version", StringComparison.OrdinalIgnoreCase) ||
                 arg.Equals("-v", StringComparison.OrdinalIgnoreCase)))
