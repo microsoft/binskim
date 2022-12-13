@@ -1,5 +1,8 @@
 # BinSkim Release History
 
+## **v2.0.0-rc2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/2.0.0-rc2)
+* BUGFIX: fix `ERR997.ExceptionLoadingAnalysisTarget : Could not load analysis target` errors analyzing *nix binary resulting from failure to properly parse DWARF debug information.
+
 ## **v2.0.0-rc1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/2.0.0-rc1)
 * BUGFIX: Eliminate `BA2004.EnableSecureSourceCodeHashing` false positives to Windows Runtime components (resulting from references to Win RT API metadata files).
 * BREAKING: Removed SARIF 1.0 support from BinSkim. Now option `-v | --sarif-output-version` does not accept value `OneZeroZero`. [719](https://github.com/microsoft/binskim/pull/719)
