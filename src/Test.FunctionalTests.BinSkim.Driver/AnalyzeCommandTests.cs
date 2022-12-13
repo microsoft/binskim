@@ -52,10 +52,19 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
+        public void AnalyzeCommand_ShouldThrowWithNoTargetFile()
+        {
+            var options = new AnalyzeOptions();
+            var command = new MultithreadedAnalyzeCommand();
+            Assert.Throws<ArgumentNullException>(() => command.Run(options));
+        }
+
+        [Fact]
         public void AnalyzeCommand_ShouldThrowWithVersionOne()
         {
             var options = new AnalyzeOptions
             {
+                TargetFileSpecifiers = new string[] { "dummy.dll" },
                 SarifOutputVersion = Sarif.SarifVersion.OneZeroZero
             };
             var command = new MultithreadedAnalyzeCommand();
@@ -70,6 +79,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         {
             var options = new AnalyzeOptions
             {
+                TargetFileSpecifiers = new string[] { "dummy.dll" },
                 Level = new[] { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
                 Kind = new[] { ResultKind.Fail }
             };
