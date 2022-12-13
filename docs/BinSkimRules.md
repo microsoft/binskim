@@ -808,13 +808,13 @@ Images should be correctly signed by trusted publishers using cryptographically 
 
 ### Description
 
-Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it.
+Application code should be compiled with the Spectre mitigations switch (/Qspectre cl.exe command-line argument or <SpectreMitigation>Spectre</SpectreMitigation> build property). Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve this issue, provide the /Qspectre switch on the compiler command-line (or specify <SpectreMitigation>Spectre</SpectreMitigation> in build properties), or pass /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre. This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request. You may need to install the 'C++ spectre-mitigated libs' component from the Visual Studio installer if you observe violations against C runtime libraries such as libcmt.lib, libvcruntime.lib, etc.
 
 ### Messages
 
 #### `Warning`: Warning
 
-'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.
+'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or specify <SpectreMitigation>Spectre</SpectreMitigation> in build properties), or pass /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre. This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.
 {1}
 
 #### `OptimizationsDisabled`: Warning
