@@ -131,7 +131,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             if (analyzeOptions.TargetFileSpecifiers?.Any() != true)
             {
-                throw new ArgumentNullException("Please specify one or more files, directories, or filter patterns for BinSkim analyze.", (Exception)null);
+                throw new ArgumentNullException(nameof(analyzeOptions.TargetFileSpecifiers), "Please specify one or more files, directories, or filter patterns for BinSkim analyze.");
             }
 
             if (!Environment.GetCommandLineArgs().
