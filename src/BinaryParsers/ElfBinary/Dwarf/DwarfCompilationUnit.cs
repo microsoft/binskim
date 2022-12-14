@@ -299,7 +299,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         default:
-                            Console.WriteLine($"No case for format {format}");
                             break;
                     }
 
