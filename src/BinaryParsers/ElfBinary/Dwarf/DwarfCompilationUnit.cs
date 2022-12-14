@@ -258,27 +258,27 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         case DwarfFormat.Strx:
                         case DwarfFormat.GNUStrIndex:
                             attributeValue.Type = DwarfAttributeValueType.String;
-                            attributeValue.Value = debugData.LEB128() + (ulong)beginPosition;
+                            debugData.LEB128();
                             break;
 
                         case DwarfFormat.Strx1:
                             attributeValue.Type = DwarfAttributeValueType.String;
-                            attributeValue.Value = debugData.ReadByte() + (ulong)beginPosition;
+                            debugData.ReadByte();
                             break;
 
                         case DwarfFormat.Strx2:
                             attributeValue.Type = DwarfAttributeValueType.String;
-                            attributeValue.Value = debugData.ReadUshort() + (ulong)beginPosition;
+                            debugData.ReadUshort();
                             break;
 
                         case DwarfFormat.Strx3:
                             attributeValue.Type = DwarfAttributeValueType.String;
-                            attributeValue.Value = debugStrings.ReadThreeBytes() + (ulong)beginPosition;
+                            debugStrings.ReadThreeBytes();
                             break;
 
                         case DwarfFormat.Strx4:
                             attributeValue.Type = DwarfAttributeValueType.String;
-                            attributeValue.Value = debugData.ReadUint() + (ulong)beginPosition;
+                            debugData.ReadUint();
                             break;
 
                         case DwarfFormat.Addrx:
