@@ -196,12 +196,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             attributeValue.Value = debugStrings.ReadString(offsetStrp);
                             break;
 
-                        case DwarfFormat.StrpSup:
-                            attributeValue.Type = DwarfAttributeValueType.String;
-                            offsetStrp = debugData.ReadOffset(is64bit);
-                            attributeValue.Value = debugStrings.ReadString(offsetStrp);
-                            break;
-
                         case DwarfFormat.Flag:
                             attributeValue.Type = DwarfAttributeValueType.Flag;
                             attributeValue.Value = debugData.ReadByte() != 0;
