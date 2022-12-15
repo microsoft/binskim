@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ELFSharp" Version="2.15.2" />
+    <PackageReference Include="ELFSharp" Version="2.16.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
     <PackageReference Include="System.Reflection.Metadata" Version="7.0.0" />
