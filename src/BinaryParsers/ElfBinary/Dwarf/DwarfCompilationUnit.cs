@@ -118,7 +118,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                 if (description.Attributes.Any(a => a.Attribute == DwarfAttribute.LinkageName && a.Format == DwarfFormat.Strp))
                 {
-                    description.Attributes.RemoveAll(a => a.Attribute == DwarfAttribute.Name);                    
+                    description.Attributes.RemoveAll(a => a.Attribute == DwarfAttribute.Name);
                 }
 
                 foreach (DataDescriptionAttribute descriptionAttribute in description.Attributes)
