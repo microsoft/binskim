@@ -149,6 +149,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             return result;
         }
 
+        public uint ReadThreeBytes()
+        {
+            uint firstTwo = (uint)Marshal.ReadInt16(pointer, Position);
+            Position += 2;
+
+            return (firstTwo << 16) + ReadByte();
+        }
+
         /// <summary>
         /// Reads the unsigned int from the current position in the stream.
         /// </summary>

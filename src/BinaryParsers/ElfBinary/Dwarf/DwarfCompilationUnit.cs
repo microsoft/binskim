@@ -118,7 +118,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                 if (description.Attributes.Any(a => a.Attribute == DwarfAttribute.LinkageName && a.Format == DwarfFormat.Strp))
                 {
-                    description.Attributes.RemoveAll(a => a.Attribute == DwarfAttribute.Name);                    
+                    description.Attributes.RemoveAll(a => a.Attribute == DwarfAttribute.Name);
                 }
 
                 foreach (DataDescriptionAttribute descriptionAttribute in description.Attributes)
@@ -190,14 +190,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         case DwarfFormat.Strp:
-                            attributeValue.Type = DwarfAttributeValueType.String;
-                            int offsetStrp = debugData.ReadOffset(is64bit);
-                            attributeValue.Value = debugStrings.ReadString(offsetStrp);
-                            break;
-
                         case DwarfFormat.StrpSup:
                             attributeValue.Type = DwarfAttributeValueType.String;
-                            offsetStrp = debugData.ReadOffset(is64bit);
+                            int offsetStrp = debugData.ReadOffset(is64bit);
                             attributeValue.Value = debugStrings.ReadString(offsetStrp);
                             break;
 
@@ -263,7 +258,27 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         case DwarfFormat.Strx:
                         case DwarfFormat.GNUStrIndex:
                             attributeValue.Type = DwarfAttributeValueType.String;
-                            attributeValue.Value = debugData.LEB128() + (ulong)beginPosition;
+                            debugData.LEB128();
+                            break;
+
+                        case DwarfFormat.Strx1:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            debugData.ReadByte();
+                            break;
+
+                        case DwarfFormat.Strx2:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            debugData.ReadUshort();
+                            break;
+
+                        case DwarfFormat.Strx3:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            debugStrings.ReadThreeBytes();
+                            break;
+
+                        case DwarfFormat.Strx4:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            debugData.ReadUint();
                             break;
 
                         case DwarfFormat.Addrx:
@@ -278,7 +293,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         default:
-                            Console.WriteLine($"No case for format {format}");
                             break;
                     }
 
@@ -492,6 +506,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// <param name="findCode">The code to be found.</param>
             public DataDescription GetDebugDataDescription(uint findCode)
             {
+                // See section 7.5.3 Abbreviations Tables of DWARF5
+                // spec for information on this parsing implementation.
+
                 if (readDescriptions.TryGetValue(findCode, out DataDescription result))
                 {
                     return result;
@@ -515,6 +532,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     {
                         DwarfAttribute attribute = (DwarfAttribute)debugDataDescription.LEB128();
                         DwarfFormat format = (DwarfFormat)debugDataDescription.LEB128();
+                        object value = null;
 
                         while (format == DwarfFormat.Indirect)
                         {
@@ -526,10 +544,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
                         }
 
+                        if (format == DwarfFormat.ImplicitConst)
+                        {
+                            value = debugDataDescription.LEB128();
+                        }
+
                         attributes.Add(new DataDescriptionAttribute()
                         {
                             Attribute = attribute,
                             Format = format,
+                            Value = value
                         });
                     }
 
