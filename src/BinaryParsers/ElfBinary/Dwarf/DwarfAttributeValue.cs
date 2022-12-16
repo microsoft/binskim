@@ -77,6 +77,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public object Value { get; set; }
 
+        // Gets or sets a property that temporarily stores an offset that 
+        // will beused to retrieve the actual attribute value.
+        public ulong? Offset { get; set; }
+
         /// <summary>
         /// Gets the address if type is <see cref="DwarfAttributeValueType.Address"/>.
         /// </summary>

@@ -56,7 +56,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 PublicSymbols = publicSymbols;
                 SectionRegions = ELF.Sections.Where(s => s.LoadAddress > 0).OrderBy(s => s.LoadAddress).ToArray();
 
-                CompilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
+                CompilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this,
+                                                                                DebugData,
+                                                                                DebugDataDescription,
+                                                                                DebugDataStrings,
+                                                                                DebugLineString,
+                                                                                DebugStringOffsets,
+                                                                                NormalizeAddress);
+
                 commandLineInfos = new Lazy<List<DwarfCompileCommandLineInfo>>(()
                     => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits));
                 LineNumberPrograms = DwarfSymbolProvider.ParseLineNumberPrograms(DebugLine, NormalizeAddress);
@@ -145,6 +152,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// Gets the debug data strings.
         /// </summary>
         public byte[] DebugDataStrings => LoadSection(SectionName.DebugStr);
+
+        /// <summary>
+        /// Gets the debug line strings.
+        /// </summary>
+        public byte[] DebugLineString => LoadSection(SectionName.DebugLineStr);
+
+        /// <summary>
+        /// Gets the debug string offsets.
+        /// </summary>
+        public byte[] DebugStringOffsets => LoadSection(SectionName.DebugStrOffsets);
 
         /// <summary>
         /// Gets the debug frame.

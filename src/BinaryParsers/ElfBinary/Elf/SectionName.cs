@@ -16,7 +16,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
         public const string DebugLine = ".debug_line";
         public const string DebugFrame = ".debug_frame";
         public const string DebugAbbrev = ".debug_abbrev";
-        public const string DebugInfoDwo = ".debug_info.dwo";
         public const string GnuDebugLink = ".gnu_debuglink";
+        public const string DebugLineStr = ".debug_line_str";
+        public const string DebugInfoDwo = ".debug_info.dwo";
+        public const string DebugStrOffsets = ".debug_str_offsets";
     }
 }
