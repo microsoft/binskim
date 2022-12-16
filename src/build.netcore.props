@@ -3,7 +3,8 @@
   <Import Project="$(MSBuildThisFileDirectory)build.common.props" />
 
   <PropertyGroup>
-    <NetCoreVersion>netcoreapp3.1</NetCoreVersion>
+    <NetSixVersion>net6.0</NetSixVersion>
+    <NetCoreVersion>netcoreapp3.1</NetCoreVersion> 
     <NetStandardVersion>netstandard2.1</NetStandardVersion>
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
     </PropertyGroup>
