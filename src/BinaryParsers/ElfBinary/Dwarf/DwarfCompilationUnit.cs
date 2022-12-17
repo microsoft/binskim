@@ -225,7 +225,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Strp:
                             attributeValue.Type = DwarfAttributeValueType.String;
-                            offsetStrp = debugData.ReadOffset(is64bit);
+                            int offsetStrp = debugData.ReadOffset(is64bit);
                             attributeValue.Value = debugStrings.ReadString(offsetStrp);
                             break;
 
@@ -314,6 +314,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         case DwarfFormat.GNUStrIndex:
                             attributeValue.Type = DwarfAttributeValueType.String;
                             attributeValue.Offset = debugData.LEB128();
+                            break;
+
+                        case DwarfFormat.Strx1:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            debugData.ReadByte();
+                            break;
+
+                        case DwarfFormat.Strx2:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            debugData.ReadUshort();
+                            break;
+
+                        case DwarfFormat.Strx3:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            debugStrings.ReadThreeBytes();
+                            break;
+
+                        case DwarfFormat.Strx4:
+                            attributeValue.Type = DwarfAttributeValueType.String;
+                            debugData.ReadUint();
                             break;
 
                         case DwarfFormat.Strx1:
