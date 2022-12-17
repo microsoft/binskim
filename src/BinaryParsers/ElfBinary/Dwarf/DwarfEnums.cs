@@ -151,12 +151,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         StrpSup = 0x1d,
         Data16 = 0x1e,
         LineStrp = 0x1f,
-
         RefSig8 = 0x20,
-
         ImplicitConst = 0x21,
         Loclistx = 0x22,
-
         Rnglistx = 0x23,
         RefSup8 = 0x24,
         Strx1 = 0x25,
