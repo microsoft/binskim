@@ -343,17 +343,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (sb.Length > 0)
             {
-                // '{0}' was compiled with one or more modules that do not properly enable code
-                // generation mitigations for speculative execution side-channel attack (Spectre)
-                // vulnerabilities. Spectre attacks can compromise hardware-based isolation,
-                // allowing non-privileged users to retrieve potentially sensitive data from the
-                // CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler
-                // command-line (or /d2guardspecload in cases where your compiler supports this
-                // switch and it is not possible to update to a toolset that supports /Qspectre).
+                // '{0}' was compiled with one or more modules that do not enable code generation
+                // mitigations for speculative execution side - channel attack(Spectre)
+                // vulnerabilities.Spectre attacks can compromise hardware - based isolation,
+                // allowing non - privileged users to retrieve potentially sensitive data from
+                // the CPU cache.To resolve the issue, provide the /Qspectre switch on the
+                // compiler command-line(or specify <SpectreMitigation>Spectre</SpectreMitigation>
+                // in build properties), or pass / d2guardspecload in cases where your compiler
+                // supports this switch and it is not possible to update to a toolset that supports
+                // /Qspectre. This warning should be addressed for code that operates on data that
+                // crosses a trust boundary and that can affect execution, such as parsing
+                // untrusted file inputs or processing query strings of a web request.
                 // The following modules are out of policy: {1}
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
-                    nameof(RuleResources.BA2024_Warning),
+                        nameof(RuleResources.BA2024_Warning),
                         context.TargetUri.GetFileName(),
                         sb.ToString()));
                 return;
@@ -361,9 +365,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // All linked modules ‘{0}’ were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.
             context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                    nameof(RuleResources.BA2024_Pass),
-                        context.TargetUri.GetFileName()));
+                RuleUtilities.BuildResult(ResultKind.Pass, context, null,
+                nameof(RuleResources.BA2024_Pass),
+                    context.TargetUri.GetFileName()));
         }
 
         internal static Version GetClosestCompilerVersionWithSpectreMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)

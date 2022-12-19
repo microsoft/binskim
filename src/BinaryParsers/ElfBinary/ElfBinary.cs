@@ -142,6 +142,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public byte[] DebugDataStrings => LoadSection(SectionName.DebugStr);
 
         /// <summary>
+        /// Gets the debug line strings.
+        /// </summary>
+        public byte[] DebugLineString => LoadSection(SectionName.DebugLineStr);
+
+        /// <summary>
+        /// Gets the debug string offsets.
+        /// </summary>
+        public byte[] DebugStringOffsets => LoadSection(SectionName.DebugStrOffsets);
+
+        /// <summary>
         /// Gets the debug frame.
         /// </summary>
         public byte[] DebugFrame => LoadSection(SectionName.DebugFrame);
