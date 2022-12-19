@@ -537,7 +537,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         private void LoadCompilationUnitsAndCommandLineInfos()
         {
-            compilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this, DebugData, DebugDataDescription, DebugDataStrings, NormalizeAddress);
+            CompilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this,
+                                                                                DebugData,
+                                                                                DebugDataDescription,
+                                                                                DebugDataStrings,
+                                                                                DebugLineString,
+                                                                                DebugStringOffsets,
+                                                                                NormalizeAddress);
+
             commandLineInfos = DwarfSymbolProvider.ParseAllCommandLineInfos(compilationUnits);
             LineNumberPrograms = DwarfSymbolProvider.ParseLineNumberPrograms(DebugLine, NormalizeAddress);
             CommonInformationEntries = DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this));
