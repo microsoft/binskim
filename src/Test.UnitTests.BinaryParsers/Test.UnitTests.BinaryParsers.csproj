@@ -5,7 +5,7 @@
 
   <PropertyGroup>
     <RootNamespace>Microsoft.CodeAnalysis.BinaryParsers</RootNamespace>
-    <TargetFrameworks>$(NetSixVersion)</TargetFrameworks>
+	<TargetFrameworks>$(NetCoreVersion);$(NetSixVersion)</TargetFrameworks>
     <OutputType>Library</OutputType>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <Platforms>x64</Platforms>
