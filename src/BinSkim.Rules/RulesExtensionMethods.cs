@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (!libraries.TryGetValue(modulesKey, out SortedSet<string> modules))
                 {
-                    modules = libraries[modulesKey] = new SortedSet<string>();
+                    modules = libraries[modulesKey] = new SortedSet<string>(Comparer<string>.Create((a, b) => Path.GetFileNameWithoutExtension(a).CompareTo(Path.GetFileNameWithoutExtension(b))));
                 }
                 modules.Add(name);
             }
@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 sb.Append(key);
 
                 List<string> objectModules = librariesToObjectModulesMap[key];
-                objectModules.Sort();
+                objectModules.Sort((a, b) => Path.GetFileNameWithoutExtension(a).CompareTo(Path.GetFileNameWithoutExtension(b)));
                 string[] oms = objectModules.ToArray();
 
                 if (oms.Length != 1 || !key.StartsWith(oms[0]))
