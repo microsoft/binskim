@@ -56,19 +56,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 PublicSymbols = publicSymbols;
                 SectionRegions = ELF.Sections.Where(s => s.LoadAddress > 0).OrderBy(s => s.LoadAddress).ToArray();
 
-                CompilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(this,
+                compilationUnits = new Lazy<List<DwarfCompilationUnit>>(()
+                    => LoadDebug(DwarfSymbolProvider.ParseAllCompilationUnits(this,
                                                                                 DebugData,
                                                                                 DebugDataDescription,
                                                                                 DebugDataStrings,
                                                                                 DebugLineString,
                                                                                 DebugStringOffsets,
-                                                                                NormalizeAddress);
+                                                                                NormalizeAddress), localSymbolDirectories));
 
                 commandLineInfos = new Lazy<List<DwarfCompileCommandLineInfo>>(()
                     => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits));
                 LineNumberPrograms = DwarfSymbolProvider.ParseLineNumberPrograms(DebugLine, NormalizeAddress);
                 CommonInformationEntries = DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this));
-                LoadDebug(localSymbolDirectories);
                 this.Valid = true;
             }
             // At some point, we may want to better enumerate expected vs. unexpected exceptions.
@@ -181,7 +181,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// Gets the type of the file related to debug information
         /// </summary>
-        public DebugFileType DebugFileType { get; private set; }
+        public DebugFileType DebugFileType
+        {
+            get
+            {
+                if (debugFileType == DebugFileType.TBD && CompilationUnits == null)
+                {
+                    debugFileType = DebugFileType.Unknown;
+                }
+                return debugFileType;
+            }
+            set => debugFileType = value;
+        }
 
         /// <summary>
         /// Gets if the debug information loaded successfully
@@ -254,7 +265,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// Gets or sets the CompilationUnits.
         /// </summary>
-        public List<DwarfCompilationUnit> CompilationUnits { get; set; } = new List<DwarfCompilationUnit>();
+        public List<DwarfCompilationUnit> CompilationUnits => this.compilationUnits.Value;
 
         /// <summary>
         /// Gets or sets the CommandLineInfos.
@@ -284,7 +295,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// The version of Dwarf used.
         /// </summary>
-        public int DwarfVersion { get; set; } = -1;
+        public int DwarfVersion
+        {
+            get => dwarfVersion == -1 && CompilationUnits == null ? -1 : dwarfVersion;
+            set => dwarfVersion = value;
+        }
 
         /// <summary>
         /// The unit type of Dwarf.
@@ -381,7 +396,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             return ulong.MaxValue;
         }
 
-        private void LoadDebug(string localSymbolDirectories = null)
+        private List<DwarfCompilationUnit> LoadDebug(List<DwarfCompilationUnit> compilationUnits, string localSymbolDirectories = null)
         {
             DebugFileType = DebugFileType.Unknown;
             DebugFileLoaded = false;
@@ -389,15 +404,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             if (SectionExistsAndHasBits(SectionName.DebugInfoDwo))
             {
                 DebugFileType = DebugFileType.DebugOnlyFileDwo;
-                return;
+                return compilationUnits;
             }
 
             string debugFileName = null;
 
-            if (CompilationUnits.Count > 0)
+            if (compilationUnits.Count > 0)
             {
                 // Load from Dwo
-                DwarfSymbol skeletonOrCompileSymbol = CompilationUnits
+                DwarfSymbol skeletonOrCompileSymbol = compilationUnits
                 .SelectMany(c => c.Symbols)
                 .FirstOrDefault(s => s.Tag == DwarfTag.SkeletonUnit || s.Tag == DwarfTag.CompileUnit);
                 KeyValuePair<DwarfAttribute, DwarfAttributeValue>? dwo = skeletonOrCompileSymbol?.Attributes?
@@ -445,15 +460,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                         if (dwoBinary != null && dwoBinary.CompilationUnits.Count > 0)
                         {
-                            this.CompilationUnits.AddRange(dwoBinary.CompilationUnits);
-
-                            if (dwoBinary.CommandLineInfos.Count > 0)
-                            {
-                                this.CommandLineInfos.AddRange(dwoBinary.CommandLineInfos);
-                            }
+                            compilationUnits.AddRange(dwoBinary.CompilationUnits);
 
                             DebugFileLoaded = true;
-                            return;
+                            return compilationUnits;
                         }
                     }
                 }
@@ -499,9 +509,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     DebugFileType = DebugFileType.NoDebug;
                 }
             }
+
+            return compilationUnits;
         }
 
         private readonly Lazy<List<DwarfCompileCommandLineInfo>> commandLineInfos;
+
+        private readonly Lazy<List<DwarfCompilationUnit>> compilationUnits;
+
+        private int dwarfVersion = -1;
+
+        private DebugFileType debugFileType = DebugFileType.TBD;
 
         private static Uri GetFirstExistFile(string dwoName, string sameDirectory, string localSymbolDirectories = null)
         {

@@ -4,6 +4,7 @@
 * BUGFIX: Fix assertion failed with no clue when TargetFileSpecifiers is null or empty for BinSkim analyze.[763](https://github.com/microsoft/binskim/pull/763)
 * BUGFIX: fix `ERR997.ExceptionLoadingAnalysisTarget : Could not load analysis target` errors analyzing *nix binary resulting from failure to properly parse DWARF debug information.
 * Upgrade `Newtonsoft.JSON` package to 13.0.2 to resolve security alert.
+* BUGFIX: Fix over-aggressive parsing of DWARF compilation units even when all related rules are disabled. [769](https://github.com/microsoft/binskim/pull/769)
 
 ## **v2.0.0-rc1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/2.0.0-rc1)
 * BUGFIX: Eliminate `BA2004.EnableSecureSourceCodeHashing` false positives to Windows Runtime components (resulting from references to Win RT API metadata files).
