@@ -396,7 +396,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             return ulong.MaxValue;
         }
 
-        private List<DwarfCompilationUnit> LoadDebug(List<DwarfCompilationUnit> compilationUnits, string localSymbolDirectories = null)
+        private List<DwarfCompilationUnit> LoadDebug(List<DwarfCompilationUnit> currentCompilationUnits, string localSymbolDirectories = null)
         {
             DebugFileType = DebugFileType.Unknown;
             DebugFileLoaded = false;
@@ -404,15 +404,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             if (SectionExistsAndHasBits(SectionName.DebugInfoDwo))
             {
                 DebugFileType = DebugFileType.DebugOnlyFileDwo;
-                return compilationUnits;
+                return currentCompilationUnits;
             }
 
             string debugFileName = null;
 
-            if (compilationUnits.Count > 0)
+            if (currentCompilationUnits.Count > 0)
             {
                 // Load from Dwo
-                DwarfSymbol skeletonOrCompileSymbol = compilationUnits
+                DwarfSymbol skeletonOrCompileSymbol = currentCompilationUnits
                 .SelectMany(c => c.Symbols)
                 .FirstOrDefault(s => s.Tag == DwarfTag.SkeletonUnit || s.Tag == DwarfTag.CompileUnit);
                 KeyValuePair<DwarfAttribute, DwarfAttributeValue>? dwo = skeletonOrCompileSymbol?.Attributes?
@@ -460,10 +460,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                         if (dwoBinary != null && dwoBinary.CompilationUnits.Count > 0)
                         {
-                            compilationUnits.AddRange(dwoBinary.CompilationUnits);
+                            currentCompilationUnits.AddRange(dwoBinary.CompilationUnits);
 
                             DebugFileLoaded = true;
-                            return compilationUnits;
+                            return currentCompilationUnits;
                         }
                     }
                 }
@@ -510,7 +510,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 }
             }
 
-            return compilationUnits;
+            return currentCompilationUnits;
         }
 
         private readonly Lazy<List<DwarfCompileCommandLineInfo>> commandLineInfos;
