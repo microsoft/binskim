@@ -80,10 +80,40 @@ A simple hello world program, compiled with `gcc 9.4.0` that generates an execut
 A simple hello world program, compiled with `gcc 9.4.0` that generates an executable file. Script to reproduce:  
 `gcc example1.c -o gcc.example1.fstackprotectorall.nodwarf -fstack-protector-all -fPIC -fstack-clash-protection`
 
+## gcc11.example1.fnostackprotector.dynamic
+
+A simple hello world program, compiled with `gcc 11.1.0` that generates an executable file. Script to reproduce:  
+`gcc-11 -Wall -O2 -g -gdwarf-5 -fPIE -pie -Wl,-z,now -D_FORTIFY_SOURCE=2 helloworld.c -o gcc11.example1.fnostackprotector.dynamic -fno-stack-protector`
+
+## gcc11.example1.fnostackprotector.static
+
+A simple hello world program, compiled with `gcc 11.1.0` that generates an executable file. Script to reproduce:  
+`gcc-11 -Wall -O2 -g -gdwarf-5 -fPIE -pie -Wl,-z,now -D_FORTIFY_SOURCE=2 helloworld.c -o gcc11.example1.fnostackprotector.static -fno-stack-protector -static-pie`
+
+## gcc11.example1.fstackprotectorall.dynamic
+
+A simple hello world program, compiled with `gcc 11.1.0` that generates an executable file. Script to reproduce:  
+`gcc-11 -Wall -O2 -g -gdwarf-5 -fPIE -pie -Wl,-z,now -D_FORTIFY_SOURCE=2 helloworld.c -o gcc11.example1.fstackprotectorall.dynamic -fstack-protector-all`
+
+## gcc11.example1.fstackprotectorall.static
+
+A simple hello world program, compiled with `gcc 11.1.0` that generates an executable file. Script to reproduce:  
+`gcc-11 -Wall -O2 -g -gdwarf-5 -fPIE -pie -Wl,-z,now -D_FORTIFY_SOURCE=2 helloworld.c -o gcc11.example1.fstackprotectorall.static -fstack-protector-all -static-pie`
+
 ## gcc.object_file.dwarf.3.o
 
 A simple hello world program, compiled with `gcc 9.3.0` that generates a .o object file. Script to reproduce:  
 `gcc-9 -Wall -c helloc.c -O2 -g -gdwarf-3 -o gcc.object_file.dwarf.3.o`
+
+## go1.13.8.elf.helloworld.dynamic
+
+A simple hello world program, compiled with `go 1.13.8` that generates a dynamically linked object file. Script to reproduce:  
+`go build -buildmode=pie -ldflags "-linkmode=external -extldflags '-Wl,-z,now,-z,relro,-z,defs'" -o go1.13.8.elf.helloworld.dynamic -v hellogo.go`
+
+## go1.13.8.elf.helloworld.static
+
+A simple hello world program, compiled with `go 1.13.8` that generates a statically linked object file. Script to reproduce:  
+`go build -buildmode=pie -tags "cgo netgo osusergo static_build" -ldflags "-linkmode=external -extldflags '-static-pie -Wl,-z,now,-z,relro,-z,defs'" -o go1.13.8.elf.helloworld.static -v hellogo.go`
 
 ## Managed_x64_VS2022_NetCore6_CSharp_HighEntropyVA_[True,False].dll
 
