@@ -2,17 +2,31 @@
 UNRELEASED
 ## BUGFIX: Fix `KeyNotFoundException` raised by `BA2006.BuildWithSecureTools` when required properties are removed from the config file. [#565](https://github.com/microsoft/binskim/pull/565)
 
-## Unreleased
+## **v2.0.0-rc2** (Unreleased)
+* BUGFIX: Fix assertion failed with no clue when TargetFileSpecifiers is null or empty for BinSkim analyze.[763](https://github.com/microsoft/binskim/pull/763)
+* BUGFIX: fix `ERR997.ExceptionLoadingAnalysisTarget : Could not load analysis target` errors analyzing *nix binary resulting from failure to properly parse DWARF debug information.
+* Upgrade `Newtonsoft.JSON` package to 13.0.2 to resolve security alert.
 
+## **v2.0.0-rc1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/2.0.0-rc1)
+* BUGFIX: Eliminate `BA2004.EnableSecureSourceCodeHashing` false positives to Windows Runtime components (resulting from references to Win RT API metadata files).
+* BREAKING: Removed SARIF 1.0 support from BinSkim. Now option `-v | --sarif-output-version` does not accept value `OneZeroZero`. [719](https://github.com/microsoft/binskim/pull/719)
+* Update Sarif.Sdk submodule from [fc9a9df to e557b69](https://github.com/microsoft/sarif-sdk/compare/fc9a9dfb865096b5aaa9fa3651854670940f7459...e557b693000cfc2a19d50f2b6613f92222eabbff). Critically, this update resolves transient [`Collection modified`](https://github.com/microsoft/sarif-sdk/pull/2549) exception during analysis. [#722](https://github.com/microsoft/binskim/pull/722)
+* Eliminate `BA2015.EnableHighEntropyVirtualAddresses` false positives for some 32-bit exes. [#721](https://github.com/microsoft/binskim/pull/721)
+* FEATURE: Raw command line passed to the linker now exposed on `ObjectModuleDetail` instances. [#708](https://github.com/microsoft/binskim/pull/708)
+* BUGFIX: Fix `error ERR997.ExceptionLoadingPdb : '[filename]' was not evaluated because its PDB could not be loaded (E_PDB_NOT_FOUND).` when reading PE file built with `PDBPageSize:8192` or greater, by upgrading msdia140.dll from `14.27.28826.96` to `14.32.31326.0`. [685](https://github.com/microsoft/binskim/pull/685)
 * FEATURE: Add BA3031.EnableClangSafeStack, rename BA3030.UseCheckedFunctionsWithGcc to BA3030.UseGccCheckedFunctions [#663](https://github.com/microsoft/binskim/pull/663)
+* Upgrade Sarif.Sdk by updating submodule from [fc9a9df to 698adb6](https://github.com/microsoft/sarif-sdk/compare/fc9a9dfb865096b5aaa9fa3651854670940f7459...698adb6365a242c6bb75adde56e3bd4be39c21d7). [#674](https://github.com/microsoft/binskim/pull/674)
+* Introduce first performance rule `BA6001.DisableIncrementalLinkingInReleaseBuilds` [#667](https://github.com/microsoft/binskim/pull/667)
+* Introduce more performance rules `BA6002.EliminateDuplicateStrings`, `BA6004.EnableCOMDATFolding`, `BA6005.EnableOptimizeReferences`, `BA6006.EnableLinkTimeCodeGeneration` [#691](https://github.com/microsoft/binskim/pull/691)
+* BUGFIX: Fix command line parameter in documents: `-Wl,z,relro` with `-Wl,-z,relro`, and `-Wl,z,now` with `-Wl,-z,now`. [736](https://github.com/microsoft/binskim/pull/736)
 
 ## **v1.9.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.5)
 
-* Bump ELFSharp from 2.13.2 to 2.14.0. [#628](https://github.com/microsoft/binskim/pull/628)
-* Bump System.Reflection.Metadata from 5.0.0 to 6.0.1 and System.Collections.Immutable from 5.0.0 to 6.0.0. [#605](https://github.com/microsoft/binskim/pull/605)
-* Bump ELFSharp from 2.14.0 to 2.15.0. [#631](https://github.com/microsoft/binskim/pull/631)
+* Upgrade ELFSharp from 2.13.2 to 2.14.0. [#628](https://github.com/microsoft/binskim/pull/628)
+* Upgrade System.Reflection.Metadata from 5.0.0 to 6.0.1 and System.Collections.Immutable from 5.0.0 to 6.0.0. [#605](https://github.com/microsoft/binskim/pull/605)
+* Upgrade ELFSharp from 2.14.0 to 2.15.0. [#631](https://github.com/microsoft/binskim/pull/631)
 * FEATURE: Enable BinSkim for MacOS. [#576](https://github.com/microsoft/binskim/pull/576)
-* Bump Sarif.Sdk by updating submodule from [4e9f606 to fc9a9df](https://github.com/microsoft/sarif-sdk/compare/4e9f606bb0e88428866e253352cdc70dc68f98cb...fc9a9dfb865096b5aaa9fa3651854670940f7459). [#638](https://github.com/microsoft/binskim/pull/638)
+* Upgrade Sarif.Sdk by updating submodule from [4e9f606 to fc9a9df](https://github.com/microsoft/sarif-sdk/compare/4e9f606bb0e88428866e253352cdc70dc68f98cb...fc9a9dfb865096b5aaa9fa3651854670940f7459). [#638](https://github.com/microsoft/binskim/pull/638)
 * FALSE POSITIVE FIX: Skip `BA2025.EnableShadowStack` rule for ARM Binaries which cannot use `/CETCOMPAT`. [#650](https://github.com/microsoft/binskim/pull/650)
 * BUGFIX: Fix missing `commandLineId` from `CommandLineInformation` event. [#652](https://github.com/microsoft/binskim/pull/652)
 

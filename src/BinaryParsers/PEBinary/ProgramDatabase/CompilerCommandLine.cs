@@ -56,6 +56,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         public readonly bool WarningsAsErrors;
 
         /// <summary>
+        /// Whether or not this command line enables optimizations.
+        /// </summary>
+        public readonly bool OptimizationsEnabled;
+
+        /// <summary>
+        /// Whether or not this command line specifies a debug C runtime library.
+        /// </summary>
+        public readonly bool UsesDebugCRuntime;
+
+        /// <summary>
+        /// Whether or not this command line requests String Pooling aka Eliminate Duplicate Strings aka /GF.
+        /// </summary>
+        public readonly bool EliminateDuplicateStringsEnabled;
+
+        /// <summary>
+        /// Whether or not this command line requests whole program optimization (/GL).
+        /// </summary>
+        public readonly bool WholeProgramOptimizationEnabled;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CompilerCommandLine"/> struct from a raw PDB-supplied command line.
         /// </summary>
         /// <param name="commandLine">The raw command line from the PDB.</param>
@@ -68,6 +88,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.Raw = commandLine ?? "";
             this.WarningLevel = 0;
             this.WarningsAsErrors = false;
+            this.OptimizationsEnabled = false;
+            this.UsesDebugCRuntime = false;
+            this.EliminateDuplicateStringsEnabled = false;
+            this.WholeProgramOptimizationEnabled = false;
+
             var explicitWarnings = new Dictionary<int, WarningState>();
             foreach (string argument in ArgumentSplitter.CommandLineToArgvW(commandLine))
             {
@@ -100,12 +125,50 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                                 this.WarningLevel = wChar - '0';
                             }
                         }
+                        else if (argument.EndsWith("O1") || argument.EndsWith("O2") || argument.EndsWith("Og") || argument.EndsWith("Os") || argument.EndsWith("Ot") || argument.EndsWith("Ox"))
+                        {
+                            // https://docs.microsoft.com/cpp/build/reference/o-options-optimize-code?view=msvc-170
+                            // /O1 /O2 /Og /Os /Ot /Ox are all indicative of optimizations being enabled
+                            this.OptimizationsEnabled = true;
+
+                            if (argument.EndsWith("O1") || argument.EndsWith("O2"))
+                            {
+                                // https://docs.microsoft.com/cpp/build/reference/gf-eliminate-duplicate-strings?view=msvc-170#remarks
+                                // "/GF is in effect when /O1 or /O2 is used.".  Basically, it is not necessary to request /GF when using /O1 or /O2.
+                                this.EliminateDuplicateStringsEnabled = true;
+                            }
+                        }
+                        else if (argument.EndsWith("Od"))
+                        {
+                            // /Od explicitly disables optimizations
+                            this.OptimizationsEnabled = false;
+                        }
+                        else if (argument.EndsWith("MT") || argument.EndsWith("MD"))
+                        {
+                            this.UsesDebugCRuntime = false;
+                        }
+                        else if (argument.EndsWith("GL"))
+                        {
+                            this.WholeProgramOptimizationEnabled = true;
+                        }
+                        else if (argument.EndsWith("GF"))
+                        {
+                            this.EliminateDuplicateStringsEnabled = true;
+                        }
                         break;
                     case 4:
                         if (argument.EndsWith("WX-"))
                         {
                             // (inverse of) Treats all compiler warnings as errors.
                             this.WarningsAsErrors = false;
+                        }
+                        else if (argument.EndsWith("MTd") || argument.EndsWith("MDd"))
+                        {
+                            this.UsesDebugCRuntime = true;
+                        }
+                        else if (argument.EndsWith("GL-"))
+                        {
+                            this.WholeProgramOptimizationEnabled = false;
                         }
                         break;
                     case 5:

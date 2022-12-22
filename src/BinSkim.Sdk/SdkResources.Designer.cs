@@ -315,9 +315,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         /// <summary>
         ///   Looks up a localized string similar to not compiled with Microsoft C/C++ compiler.
         /// </summary>
-        internal static string MetadataCondition_ImageIsNotBuiltWithMSVC {
+        internal static string MetadataCondition_ImageIsNotBuiltWithMsvc {
             get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsNotBuiltWithMSVC", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotBuiltWithMsvc", resourceCulture);
             }
         }
         
@@ -426,6 +426,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_MachOIsNotExecutableDynamicLibraryOrObject {
             get {
                 return ResourceManager.GetString("MetadataCondition_MachOIsNotExecutableDynamicLibraryOrObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image appears to not be compiled as release and is therefore not subject to performance checks.
+        /// </summary>
+        internal static string MetadataCondition_NotAReleaseBuild {
+            get {
+                return ResourceManager.GetString("MetadataCondition_NotAReleaseBuild", resourceCulture);
             }
         }
         

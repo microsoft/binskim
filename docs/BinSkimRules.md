@@ -156,7 +156,7 @@ The non-executable stack is not enabled for this binary, so '{0}' can have a vul
 
 ### Description
 
-This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,relro' to enable this.
+This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,-z,relro' to enable this.
 
 ### Messages
 
@@ -166,7 +166,7 @@ The GNU_RELRO segment was present, so '{0}' is protected.
 
 #### `Error`: Error
 
-The GNU_RELRO segment is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,relro' to address this.
+The GNU_RELRO segment is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,-z,relro' to address this.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -178,7 +178,7 @@ The GNU_RELRO segment is missing from this binary, so relocation sections in '{0
 
 ### Description
 
-This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,z,now' to enable this.
+This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the '.data' section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags '-Wl,-z,now' to enable this.
 
 ### Messages
 
@@ -188,7 +188,7 @@ The BIND_NOW flag was present, so '{0}' is protected.
 
 #### `Error`: Error
 
-The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,z,now' to address this.
+The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' will not be marked as read only after the binary is loaded.  An attacker can overwrite these to redirect control flow.  Ensure you are compiling with the compiler flags '-Wl,-z,now' to address this.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -808,13 +808,13 @@ Images should be correctly signed by trusted publishers using cryptographically 
 
 ### Description
 
-Application code should be compiled with the Spectre mitigations switch (/Qspectre) and toolsets that support it.
+Application code should be compiled with the Spectre mitigations switch (/Qspectre cl.exe command-line argument or <SpectreMitigation>Spectre</SpectreMitigation> build property). Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve this issue, provide the /Qspectre switch on the compiler command-line (or specify <SpectreMitigation>Spectre</SpectreMitigation> in build properties), or pass /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre. This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request. You may need to install the 'C++ spectre-mitigated libs' component from the Visual Studio installer if you observe violations against C runtime libraries such as libcmt.lib, libvcruntime.lib, etc.
 
 ### Messages
 
 #### `Warning`: Warning
 
-'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre). This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.
+'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or specify <SpectreMitigation>Spectre</SpectreMitigation> in build properties), or pass /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre. This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.
 {1}
 
 #### `OptimizationsDisabled`: Warning
@@ -890,17 +890,17 @@ Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor f
 
 ### Description
 
-SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information.
+SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information.
 
 ### Messages
 
 #### `Pass`: Pass
 
-The PDB for '{0}' contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other diagnostic analysis.
+The PDB for '{0}' contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other critical analysis.
 
 #### `Warning`: Warning
 
-The PDB for '{0}' does not contain SourceLink information. SourceLink information should be present in the PDB of all binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information.
+The PDB for '{0}' does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response. Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider. See https://aka.ms/sourcelink for more information.
 
 ---
 
@@ -911,6 +911,120 @@ The PDB for '{0}' does not contain SourceLink information. SourceLink informatio
 This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland.
 
 ### Messages
+
+---
+
+## Rule `BA6001.DisableIncrementalLinkingInReleaseBuilds`
+
+### Description
+
+Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.  The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with incremental linking disabled.
+
+#### `Warning`: Warning
+
+'{0}' appears to be compiled as release but enables incremental linking, increasing binary size and further compromising runtime performance by preventing enabling maximal code optimization.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6002.EliminateDuplicateStrings`
+
+### Description
+
+The /GF compiler option, also known as Eliminate Duplicate Strings or String Pooling, will combine identical strings in a program to a single readonly copy. This can significantly reduce binary size for programs with many string resources.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with Eliminate Duplicate Strings (/GF) enabled.
+
+#### `Warning`: Warning
+
+'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6004.EnableComdatFolding`
+
+### Description
+
+COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with COMDAT folding (/OPT:ICF) enabled
+
+#### `EnabledForDebug`: Warning
+
+'{0}' appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That may make debugging more difficult.
+
+#### `DisabledForRelease`: Warning
+
+'{0}' was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6005.EnableOptimizeReferences`
+
+### Description
+
+Optimize References can significantly reduce binary size because it instructs the linker to remove unreferenced functions and data from the final binary.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with Optimize References (/OPT:REF) enabled
+
+#### `Warning`: Warning
+
+'{0}' was compiled with Optimize References (/OPT:REF) disabled, increasing binary size.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
+
+---
+
+## Rule `BA6006.EnableLinkTimeCodeGeneration`
+
+### Description
+
+Enabling Link Time Code Generation (LTCG) performs whole-program optimization, which is able to better optimize code across translation units. LTCG is also a prerequisite for Profile-Guided Optimization (PGO) which can further improve performance.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with LinkTimeCodeGeneration (/LTCG) enabled.
+
+#### `Warning`: Warning
+
+'{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
 ---
 

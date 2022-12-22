@@ -1263,19 +1263,28 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2027_EnableSourceLink_Pass()
         {
-            this.VerifyPass(new EnableSourceLink());
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new EnableSourceLink());
+            }
         }
 
         [Fact]
         public void BA2027_EnableSourceLink_Fail()
         {
-            this.VerifyFail(new EnableSourceLink());
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyFail(new EnableSourceLink());
+            }
         }
 
         [Fact]
         public void BA2027_EnableSourceLink_NotApplicable()
         {
-            this.VerifyApplicability(new EnableSourceLink(), new HashSet<string>());
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableSourceLink(), new HashSet<string>());
+            }
         }
 
         [Fact]
@@ -1329,7 +1338,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA3003_EnableStackProtector_NotApplicable()
         {
-            this.VerifyApplicability(new EnablePositionIndependentExecutable(), new HashSet<string>());
+            this.VerifyApplicability(new EnableStackProtector(), new HashSet<string>(), bypassExtensionValidation: true);
         }
 
         [Fact]
@@ -1486,6 +1495,230 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public void BA5002_DoNotAllowExecutableStack_NotApplicable()
         {
             this.VerifyApplicability(new DoNotAllowExecutableStack(), new HashSet<string>());
+        }
+
+        [Fact]
+        public void BA6001_DisableIncrementalLinkingInReleaseBuilds_Fail()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                // Every PDB parsing rule should return an error if a PDB can't be located.
+                // Be sure to delete this code (and remove passing the 'failureConditions`
+                // arguments to 'VerifyFail' if not implementing a PDB crawling check.
+                var failureConditions = new HashSet<string>
+                {
+                    MetadataConditions.CouldNotLoadPdb
+                };
+                this.VerifyFail(
+                    new DisableIncrementalLinkingInReleaseBuilds(),
+                    useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA6001_DisableIncrementalLinkingInReleaseBuilds_Pass()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA6001_DisableIncrementalLinkingInReleaseBuilds_NotApplicable()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new DisableIncrementalLinkingInReleaseBuilds(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.NotAReleaseBuild);
+            }
+        }
+
+
+        [Fact]
+        public void BA6002_EliminateDuplicateStrings_Fail()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                // Every PDB parsing rule should return an error if a PDB can't be located.
+                // Be sure to delete this code (and remove passing the 'failureConditions`
+                // arguments to 'VerifyFail' if not implementing a PDB crawling check.
+                var failureConditions = new HashSet<string>
+                {
+                    MetadataConditions.CouldNotLoadPdb
+                };
+                this.VerifyFail(
+                    new EliminateDuplicateStrings(),
+                    useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new EliminateDuplicateStrings(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA6002_EliminateDuplicateStrings_Pass()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new EliminateDuplicateStrings(), useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new EliminateDuplicateStrings(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA6002_EliminateDuplicateStrings_NotApplicable()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EliminateDuplicateStrings(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.ImageIsNotBuiltWithMsvc);
+            }
+        }
+
+
+        [Fact]
+        public void BA6004_EnableCOMDATFolding_Fail()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                // Every PDB parsing rule should return an error if a PDB can't be located.
+                // Be sure to delete this code (and remove passing the 'failureConditions`
+                // arguments to 'VerifyFail' if not implementing a PDB crawling check.
+                var failureConditions = new HashSet<string>
+                {
+                    MetadataConditions.CouldNotLoadPdb
+                };
+                this.VerifyFail(
+                    new EnableComdatFolding(),
+                    useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new EnableComdatFolding(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA6004_EnableCOMDATFolding_Pass()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new EnableComdatFolding(), useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new EnableComdatFolding(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA6004_EnableCOMDATFolding_NotApplicable()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableComdatFolding(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.ImageIsNotBuiltWithMsvc);
+            }
+        }
+
+
+        [Fact]
+        public void BA6005_EnableOptimizeReferences_Fail()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                // Every PDB parsing rule should return an error if a PDB can't be located.
+                // Be sure to delete this code (and remove passing the 'failureConditions`
+                // arguments to 'VerifyFail' if not implementing a PDB crawling check.
+                var failureConditions = new HashSet<string>
+                {
+                    MetadataConditions.CouldNotLoadPdb
+                };
+                this.VerifyFail(
+                    new EnableOptimizeReferences(),
+                    useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new EnableOptimizeReferences(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA6005_EnableOptimizeReferences_Pass()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new EnableOptimizeReferences(), useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new EnableOptimizeReferences(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA6005_EnableOptimizeReferences_NotApplicable()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableOptimizeReferences(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.NotAReleaseBuild);
+            }
+        }
+
+
+        [Fact]
+        public void BA6006_EnableLinkTimeCodeGeneration_Fail()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                // Every PDB parsing rule should return an error if a PDB can't be located.
+                // Be sure to delete this code (and remove passing the 'failureConditions`
+                // arguments to 'VerifyFail' if not implementing a PDB crawling check.
+                var failureConditions = new HashSet<string>
+                {
+                    MetadataConditions.CouldNotLoadPdb
+                };
+                this.VerifyFail(
+                    new EnableLinkTimeCodeGeneration(),
+                    useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new EnableLinkTimeCodeGeneration(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA6006_EnableLinkTimeCodeGeneration_Pass()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyPass(new EnableLinkTimeCodeGeneration(), useDefaultPolicy: true);
+            }
+            else
+            {
+                this.VerifyThrows<PlatformNotSupportedException>(new EnableLinkTimeCodeGeneration(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA6006_EnableLinkTimeCodeGeneration_NotApplicable()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableLinkTimeCodeGeneration(), new HashSet<string>(), expectedReasonForNotAnalyzing: MetadataConditions.NotAReleaseBuild);
+            }
         }
     }
 }

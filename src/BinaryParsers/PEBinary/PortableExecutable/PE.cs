@@ -909,5 +909,153 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
             return default;
         }
+
+        public bool IsMostlyOptimized(Pdb pdb)
+        {
+            uint count = 0;
+            uint optimizedCount = 0;
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                ObjectModuleDetails moduleDetails = om.GetObjectModuleDetails();
+
+                // Many non-code-file modules will pass through here.  Referenced libraries will show up as LINK, for example.  Exclude those
+                // from consideration to reduce skew.
+                if ((moduleDetails.Language != Language.C) &&
+                    (moduleDetails.Language != Language.Cxx))
+                {
+                    continue;
+                }
+
+                // We can early exit if -any- modules target a debug version of the C runtime.  Release binaries should never do that.  However,
+                // we cannot presume the opposite.  Many debug builds use the release C runtime.
+                if (moduleDetails.UsesDebugCRuntime)
+                {
+                    return false;
+                }
+
+                ++count;
+                if (moduleDetails.OptimizationsEnabled)
+                {
+                    ++optimizedCount;
+                }
+            }
+
+            // Arbitrary threshold of 50% optimized.
+            // Things linked into the binary also count as symbols so this can be complicated.  There is probably a better heuristic than this.
+            // A small single-file win32 console application is just over 50% optimized.  A large project is more like 95%.
+            if (((float)optimizedCount / (float)count) > 0.50f)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool IncrementalLinkingEnabled(Pdb pdb)
+        {
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                if (om.GetObjectModuleDetails().IncrementalLinkingEnabled)
+                {
+                    // There should be exactly one symbol in the binary containing knowledge about the linker command-line.  If that one symbol
+                    // says that incremental linking was enabled then the whole PE had it enabled too.
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsCOMDATFoldingEnabled(Pdb pdb)
+        {
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                if (om.GetObjectModuleDetails().ComdatFoldingEnabled)
+                {
+                    // There should be exactly one symbol in the binary containing knowledge about the linker command-line.  If that one symbol
+                    // says that OPT:ICF was enablelsd then the whole PE had it enabled too.
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsOptimizeReferencesEnabled(Pdb pdb)
+        {
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                if (om.GetObjectModuleDetails().OptimizeReferencesEnabled)
+                {
+                    // There should be exactly one symbol in the binary containing knowledge about the linker command-line.  If that one symbol
+                    // says that OPT:REF was enabled then the whole PE had it enabled too.
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsLinkTimeCodeGenerationEnabled(Pdb pdb)
+        {
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                ObjectModuleDetails omDetails = omView.Value.GetObjectModuleDetails();
+                if (omDetails.LinkTimeCodeGenerationEnabled)
+                {
+                    // There should be exactly one symbol in the binary containing knowledge about the linker command-line.  If that one symbol
+                    // says that LTCG was enabled then the whole PE had it enabled too.
+                    return true;
+                }
+                else if (omDetails.WholeProgramOptimizationEnabled)
+                {
+                    // "If you don't explicitly specify /LTCG when you pass /GL or MSIL modules to the linker, the linker eventually detects
+                    //  this situation and restarts the link by using /LTCG."
+                    // https://docs.microsoft.com/cpp/build/reference/ltcg-link-time-code-generation?view=msvc-170#remarks
+                    //
+                    // In other words if even a single compiland has /GL enabled then LTCG was used.
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Examine the given PDB and determine whether it represents a
+        /// binary that was compiled with the Microsoft C/C++ compiler.
+        /// </summary>
+        /// <param name="pdb">The PDB.</param>
+        /// <returns>True if it looks like a MSVC binary.</returns>
+        /// <remarks>
+        /// This isn't as simple as looking for the well known compiler
+        /// values because both rust and clang binaries can link with
+        /// C runtime libraries compiled with MSVC.
+        /// </remarks>
+        public bool IsTargetCompiledWithMsvc(Pdb pdb)
+        {
+            uint msvcModules = 0;
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                ObjectModuleDetails omDetails = omView.Value.GetObjectModuleDetails();
+                switch (omDetails.WellKnownCompiler)
+                {
+                    case WellKnownCompilers.Clang:
+                        return false;
+
+                    case WellKnownCompilers.ClangLLVMRustc:
+                        return false;
+
+                    case WellKnownCompilers.MicrosoftC:
+                        msvcModules++;
+                        break;
+
+                    case WellKnownCompilers.MicrosoftCxx:
+                        msvcModules++;
+                        break;
+                }
+            }
+
+            return msvcModules > 0;
+        }
     }
 }

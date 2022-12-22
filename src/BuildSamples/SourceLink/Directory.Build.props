@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <FunctionalTestData>..\..\..\Test.FunctionalTests.BinSkim.Rules\FunctionalTestData\BA6001.EnableSourceLink</FunctionalTestData>
+    <FunctionalTestData>..\..\..\Test.FunctionalTests.BinSkim.Rules\FunctionalTestData\BA2027.EnableSourceLink</FunctionalTestData>
   </PropertyGroup>
 
 </Project>

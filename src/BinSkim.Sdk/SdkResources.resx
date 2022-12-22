@@ -216,6 +216,9 @@
   <data name="MetadataCondition_ImageIsNativeUniversalWindowsPlatformBinary" xml:space="preserve">
     <value>image is a native UWP (Universal Windows Platform) binary</value>
   </data>
+  <data name="MetadataCondition_NotAReleaseBuild" xml:space="preserve">
+    <value>image appears to not be compiled as release and is therefore not subject to performance checks</value>
+  </data>
   <data name="MetadataCondition_ImageIsDotNetNativeBootstrapExe" xml:space="preserve">
     <value>image is a .NET native bootstrap exe</value>
   </data>
@@ -249,7 +252,7 @@
   <data name="MetadataCondition_ElfNotBuiltWithClang" xml:space="preserve">
     <value>not compiled with Clang</value>
   </data>
-  <data name="MetadataCondition_ImageIsNotBuiltWithMSVC" xml:space="preserve">
+  <data name="MetadataCondition_ImageIsNotBuiltWithMsvc" xml:space="preserve">
     <value>not compiled with Microsoft C/C++ compiler</value>
   </data>
 </root>

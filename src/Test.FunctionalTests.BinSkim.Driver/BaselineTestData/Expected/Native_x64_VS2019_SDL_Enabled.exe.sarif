@@ -1,5 +1,5 @@
 ﻿{
-  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
     {
@@ -445,6 +445,69 @@
         {
           "ruleId": "BA2027",
           "ruleIndex": 19,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Native_x64_VS2019_SDL_Enabled.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_SDL_Enabled.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6002",
+          "ruleIndex": 20,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Native_x64_VS2019_SDL_Enabled.exe",
+              "Microsoft (R) Optimizing Compiler : cxx : 19.29.30038.1 : [directly linked] (Native_x64_VS2019.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_SDL_Enabled.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6004",
+          "ruleIndex": 21,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VS2019_SDL_Enabled.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_SDL_Enabled.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6005",
+          "ruleIndex": 22,
           "message": {
             "id": "Warning",
             "arguments": [
@@ -998,20 +1061,89 @@
               "id": "BA2027",
               "name": "EnableSourceLink",
               "fullDescription": {
-                "text": "SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information."
+                "text": "SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information."
               },
               "help": {
-                "text": "SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. See https://aka.ms/sourcelink for more information."
+                "text": "SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information."
               },
               "messageStrings": {
                 "Pass": {
-                  "text": "The PDB for '{0}' contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other diagnostic analysis."
+                  "text": "The PDB for '{0}' contains SourceLink information, maximizing engineering and security response efficiency when source code is required for debugging and other critical analysis."
                 },
                 "Warning": {
-                  "text": "The PDB for '{0}' does not contain SourceLink information. SourceLink information should be present in the PDB of all binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information."
+                  "text": "The PDB for '{0}' does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response. Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider. See https://aka.ms/sourcelink for more information."
                 }
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2027EnableSourceLink"
+            },
+            {
+              "id": "BA6002",
+              "name": "EliminateDuplicateStrings",
+              "fullDescription": {
+                "text": "The /GF compiler option, also known as Eliminate Duplicate Strings or String Pooling, will combine identical strings in a program to a single readonly copy. This can significantly reduce binary size for programs with many string resources."
+              },
+              "help": {
+                "text": "The /GF compiler option, also known as Eliminate Duplicate Strings or String Pooling, will combine identical strings in a program to a single readonly copy. This can significantly reduce binary size for programs with many string resources."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' was compiled with Eliminate Duplicate Strings (/GF) enabled."
+                },
+                "Warning": {
+                  "text": "'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA6002EliminateDuplicateStrings"
+            },
+            {
+              "id": "BA6004",
+              "name": "EnableComdatFolding",
+              "fullDescription": {
+                "text": "COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary."
+              },
+              "help": {
+                "text": "COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a single copy in the final binary."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' was compiled with COMDAT folding (/OPT:ICF) enabled"
+                },
+                "Warning_EnabledForDebug": {
+                  "text": "'{0}' appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That may make debugging more difficult."
+                },
+                "Warning_DisabledForRelease": {
+                  "text": "'{0}' was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA6004EnableComdatFolding"
+            },
+            {
+              "id": "BA6005",
+              "name": "EnableOptimizeReferences",
+              "fullDescription": {
+                "text": "Optimize References can significantly reduce binary size because it instructs the linker to remove unreferenced functions and data from the final binary."
+              },
+              "help": {
+                "text": "Optimize References can significantly reduce binary size because it instructs the linker to remove unreferenced functions and data from the final binary."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' was compiled with Optimize References (/OPT:REF) enabled"
+                },
+                "Warning": {
+                  "text": "'{0}' was compiled with Optimize References (/OPT:REF) disabled, increasing binary size."
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA6005EnableOptimizeReferences"
             }
           ],
           "properties": {

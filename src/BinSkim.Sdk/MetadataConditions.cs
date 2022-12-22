@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageIsInteropAssembly = SdkResources.MetadataCondition_ImageIsInteropAssembly;
         public static readonly string ImageIsMixedModeBinary = SdkResources.MetadataCondition_ImageIsMixedModeBinary;
         public static readonly string ImageIsKernelModeBinary = SdkResources.MetadataCondition_ImageIsKernelModeBinary;
-        public static readonly string ImageIsNotBuiltWithMSVC = SdkResources.MetadataCondition_ImageIsNotBuiltWithMSVC;
+        public static readonly string ImageIsNotBuiltWithMsvc = SdkResources.MetadataCondition_ImageIsNotBuiltWithMsvc;
         public static readonly string ImageIsILLibraryAssembly = SdkResources.MetadataCondition_ImageIsILLibraryAssembly;
         public static readonly string ImageIsResourceOnlyBinary = SdkResources.MetadataCondition_ImageIsResourceOnlyBinary;
         public static readonly string ImageIsDotNetNativeBinary = SdkResources.MetadataCondition_ImageIsDotNetNativeBinary;
@@ -44,5 +44,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public static readonly string ImageIsPreVersion7WindowsCEBinary = SdkResources.MetadataCondition_ImageIsPreVersion7WindowsCEBinary;
         public static readonly string MachOIsNotExecutableDynamicLibraryOrObject = SdkResources.MetadataCondition_MachOIsNotExecutableDynamicLibraryOrObject;
         public static readonly string ImageIsNativeUniversalWindowsPlatformBinary = SdkResources.MetadataCondition_ImageIsNativeUniversalWindowsPlatformBinary;
+        public static readonly string NotAReleaseBuild = SdkResources.MetadataCondition_NotAReleaseBuild;
     }
 }

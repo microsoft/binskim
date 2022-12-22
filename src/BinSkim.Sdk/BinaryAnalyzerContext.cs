@@ -86,7 +86,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public CompilerDataLogger CompilerDataLogger
         {
-            get { return this.Policy.GetProperty(SharedCompilerDataLoggerProperty); }
+            get
+            {
+                return this.Policy != null
+                    ? this.Policy.GetProperty(SharedCompilerDataLoggerProperty)
+                    : null;
+            }
             set { this.Policy.SetProperty(SharedCompilerDataLoggerProperty, value); }
         }
 
@@ -122,5 +127,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 "CompilerTelemetry", nameof(SharedCompilerDataLoggerProperty), defaultValue: () => null,
                 "A shared CompilerDataLogger instance that will be passed to all skimmers.");
 
+
+        public int MaxFileSizeInKilobytes { get; set; }
     }
 }

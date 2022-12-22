@@ -39,6 +39,7 @@ namespace Microsoft.CodeAnalysis.IL
             binaryAnalyzerContext.IgnorePdbLoadError = options.IgnorePdbLoadError;
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
             binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
+            binaryAnalyzerContext.MaxFileSizeInKilobytes = options.MaxFileSizeInKilobytes > 1024 ? options.MaxFileSizeInKilobytes : int.MaxValue;
 
 #pragma warning disable CS0618 // Type or member is obsolete
             if (options.Verbose && ShouldWarnVerbose)
@@ -128,14 +129,28 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override int Run(AnalyzeOptions analyzeOptions)
         {
-            if (!Environment.GetCommandLineArgs().Any(arg => arg.Equals("--sarif-output-version")))
+            if (analyzeOptions.TargetFileSpecifiers?.Any() != true)
+            {
+                throw new ArgumentNullException(nameof(analyzeOptions.TargetFileSpecifiers), "Please specify one or more files, directories, or filter patterns for BinSkim analyze.");
+            }
+
+            if (!Environment.GetCommandLineArgs().
+                Any(arg => arg.Equals("--sarif-output-version", StringComparison.OrdinalIgnoreCase) ||
+                arg.Equals("-v", StringComparison.OrdinalIgnoreCase)))
             {
                 analyzeOptions.SarifOutputVersion = Sarif.SarifVersion.Current;
             }
 
-            if (s_UnitTestOutputVersion != Sarif.SarifVersion.Unknown)
+            if (this.UnitTestOutputVersion != Sarif.SarifVersion.Unknown)
             {
-                analyzeOptions.SarifOutputVersion = s_UnitTestOutputVersion;
+                analyzeOptions.SarifOutputVersion = this.UnitTestOutputVersion;
+            }
+
+            if (analyzeOptions.SarifOutputVersion == Sarif.SarifVersion.OneZeroZero)
+            {
+                throw new InvalidOperationException(
+                    "BinSkim no longer supports emitting SARIF 1.0 (an obsolete format). " +
+                    "Pass 'Current' on the command-line or omit the '-v|--sarif-output-version' argument entirely.");
             }
 
             // Type or member is obsolete
@@ -180,6 +195,6 @@ namespace Microsoft.CodeAnalysis.IL
                 : result;
         }
 
-        internal static Sarif.SarifVersion s_UnitTestOutputVersion;
+        internal Sarif.SarifVersion UnitTestOutputVersion { get; set; }
     }
 }
