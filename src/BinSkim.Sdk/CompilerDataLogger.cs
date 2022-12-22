@@ -179,7 +179,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
             {
                 this.telemetryConfiguration = new TelemetryConfiguration();
-                string connectionString = $"InstrumentationKey={appInsightsKey};";
+                string connectionString = $"InstrumentationKey={appInsightsKey}";
+                this.telemetryConfiguration.ConnectionString = connectionString;
                 this.telemetryClient = new TelemetryClient(this.telemetryConfiguration);
             }
         }
