@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.20.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
   </ItemGroup>
@@ -33,5 +33,12 @@
       <LastGenOutput>SdkResources.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Microsoft.CodeAnalysis.IL.Sdk</CustomToolNamespace>
     </EmbeddedResource>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Update="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>
