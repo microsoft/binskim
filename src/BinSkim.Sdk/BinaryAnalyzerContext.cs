@@ -48,9 +48,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public string LocalSymbolDirectories { get; set; }
 
-        public bool ComprehensiveBinaryParsing 
-        { 
-            get { return this.Policy.GetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing); }
+        public bool ComprehensiveBinaryParsing
+        {
+            get { return this.Policy?.GetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing) == true; }
             set { this.Policy.SetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing, value); }
         }
 
