@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
   <PropertyGroup>
-	<TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
+    <TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
     <OutputType>Library</OutputType>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <Platforms>x64</Platforms>
