@@ -473,7 +473,8 @@ namespace Microsoft.CodeAnalysis.IL
             TelemetryClient telemetryClient;
             TelemetryConfiguration telemetryConfiguration;
             telemetryConfiguration = new TelemetryConfiguration();
-            telemetryConfiguration.InstrumentationKey = Guid.NewGuid().ToString();
+            string connectionString = $"InstrumentationKey={Guid.NewGuid()}";
+            telemetryConfiguration.ConnectionString = connectionString;
             telemetryConfiguration.TelemetryChannel = new StubTelemetryChannel { OnSend = item => sendItems.Add(item) };
             telemetryConfiguration.TelemetryInitializers.Add(new OperationCorrelationTelemetryInitializer());
             telemetryClient = new TelemetryClient(telemetryConfiguration);
