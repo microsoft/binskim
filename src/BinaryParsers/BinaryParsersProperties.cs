@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         public static PerLanguageOption<bool> ComprehensiveBinaryParsing { get; } =
-            new PerLanguageOption<bool>(                
+            new PerLanguageOption<bool>(
                 "BinaryParsers", nameof(ComprehensiveBinaryParsing), defaultValue: () => false,
                 "Set this value to 'true' to aggressively fault in all binary data on scan target load. " +
                 "This is useful to flush out exceptions and other issues in various binary parsers.");
