@@ -22,11 +22,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             get
             {
-                this.iBinary ??= BinaryTargetManager.GetBinaryFromFile(
-                        this.uri,
-                        this.SymbolPath,
-                        this.LocalSymbolDirectories,
-                        this.TracePdbLoads);
+                this.iBinary ??=
+                    BinaryTargetManager.GetBinaryFromFile(this.uri,
+                                                          this.SymbolPath,
+                                                          this.LocalSymbolDirectories,
+                                                          this.TracePdbLoads,
+                                                          this.ComprehensiveBinaryParsing);
 
                 return this.iBinary;
             }
@@ -46,6 +47,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         }
 
         public string LocalSymbolDirectories { get; set; }
+
+        public bool ComprehensiveBinaryParsing
+        {
+            get { return this.Policy?.GetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing) == true; }
+            set { this.Policy.SetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing, value); }
+        }
 
         public Uri TargetUri
         {
@@ -86,7 +93,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public CompilerDataLogger CompilerDataLogger
         {
-            get { return this.Policy.GetProperty(SharedCompilerDataLoggerProperty); }
+            get
+            {
+                return this.Policy != null
+                    ? this.Policy.GetProperty(SharedCompilerDataLoggerProperty)
+                    : null;
+            }
             set { this.Policy.SetProperty(SharedCompilerDataLoggerProperty, value); }
         }
 
@@ -122,5 +134,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 "CompilerTelemetry", nameof(SharedCompilerDataLoggerProperty), defaultValue: () => null,
                 "A shared CompilerDataLogger instance that will be passed to all skimmers.");
 
+
+        public int MaxFileSizeInKilobytes { get; set; }
     }
 }

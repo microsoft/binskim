@@ -1,5 +1,5 @@
 ﻿{
-  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
     {
@@ -218,7 +218,28 @@
       },
       "invocations": [
         {
-          "executionSuccessful": true
+          "toolConfigurationNotifications": [
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.linux-x64.dll",
+                      "index": 0
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'Binskim.linux-x64.dll' was not evaluated because its PDB could not be loaded (E_PDB_FORMAT)."
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              }
+            }
+          ],
+          "executionSuccessful": false
         }
       ],
       "artifacts": [
