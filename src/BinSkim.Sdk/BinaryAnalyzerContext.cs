@@ -22,11 +22,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             get
             {
-                this.iBinary ??= BinaryTargetManager.GetBinaryFromFile(
-                        this.uri,
-                        this.SymbolPath,
-                        this.LocalSymbolDirectories,
-                        this.TracePdbLoads);
+                this.iBinary ??=
+                    BinaryTargetManager.GetBinaryFromFile(this.uri,
+                                                          this.SymbolPath,
+                                                          this.LocalSymbolDirectories,
+                                                          this.TracePdbLoads,
+                                                          this.ComprehensiveBinaryParsing);
 
                 return this.iBinary;
             }
@@ -46,6 +47,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         }
 
         public string LocalSymbolDirectories { get; set; }
+
+        public bool ComprehensiveBinaryParsing 
+        { 
+            get { return this.Policy.GetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing); }
+            set { this.Policy.SetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing, value); }
+        }
 
         public Uri TargetUri
         {

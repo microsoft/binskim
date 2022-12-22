@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     /// </summary>
     public class ElfBinary : BinaryBase, IDwarfBinary
     {
-        public ElfBinary(Uri uri, string localSymbolDirectories = null) : base(uri)
+        public ElfBinary(Uri uri, string localSymbolDirectories = null, bool forceComprehensiveParsing = false) : base(uri)
         {
             try
             {
@@ -73,6 +73,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                 CommonInformationEntries = new Lazy<IReadOnlyList<DwarfCommonInformationEntry>>(()
                     => DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this)));
+
+                // This conditional exists simply to conditionally provoke lazily loaded
+                // data. If forceComprehensiveParsing == false, the clause will short-circuit.
+                if (forceComprehensiveParsing &&
+                    CompilationUnits.Value != null &&
+                    commandLineInfos.Value != null &&
+                    LineNumberPrograms.Value != null &&
+                    CommonInformationEntries.Value != null)
+                {
+                    // No actual work required here.
+                }
 
                 LoadDebug(localSymbolDirectories);
                 this.Valid = true;

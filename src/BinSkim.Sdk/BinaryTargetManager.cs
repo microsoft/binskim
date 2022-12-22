@@ -11,11 +11,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
     {
         // We may want to consider changing this to an extension/plugin model rather than a hardcoded list of supported binary parsers.
         // However, for now this will do.
-        public static IBinary GetBinaryFromFile(
-            Uri uri,
-            string symbolPath = null,
-            string localSymbolDirectories = null,
-            bool tracePdbLoad = false)
+        public static IBinary GetBinaryFromFile(Uri uri,
+                                                string symbolPath = null,
+                                                string localSymbolDirectories = null,
+                                                bool tracePdbLoad = false,
+                                                bool forceComprehensiveParsing = false)
         {
             if (PEBinary.CanLoadBinary(uri))
             {
@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
             else if (ElfBinary.CanLoadBinary(uri))
             {
-                return new ElfBinary(uri, localSymbolDirectories);
+                return new ElfBinary(uri, localSymbolDirectories, forceComprehensiveParsing);
             }
             else if (MachOBinary.CanLoadBinary(uri))
             {
