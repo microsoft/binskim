@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             foreach (ISection section in binary.ELF.Sections)
             {
-                if (section.Type == SectionType.DynamicSymbolTable)
+                if (section.Type == SectionType.DynamicSymbolTable || section.Type == SectionType.SymbolTable)
                 {
                     var symbols = section as SymbolTable<ulong>;
                     if (symbols != null)
