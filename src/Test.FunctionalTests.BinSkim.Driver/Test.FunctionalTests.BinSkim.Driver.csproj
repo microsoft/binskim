@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
   <PropertyGroup>
-	<TargetFrameworks>$(NetCoreVersion);$(NetSixVersion)</TargetFrameworks>
+	<TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
     <OutputType>Library</OutputType>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <Platforms>x64</Platforms>
@@ -10,6 +10,10 @@
   <PropertyGroup>
     <RunSettingsFilePath>$(MSBuildProjectDirectory)\BaselineTests.runsettings</RunSettingsFilePath>
   </PropertyGroup>
+
+  <ItemGroup>
+	<RuntimeHostConfigurationOption Include="System.Globalization.UseNls" Value="true" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.8.0" />
