@@ -190,6 +190,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             // dwotest.cpp compiled using: gcc -Wall -O2 -g -gdwarf-4 dwotest.cpp -gsplit-dwarf -o dwotest.gcc.4.o
             string fileName = Path.Combine(TestData, "Dwarf/DwarfSplitV4/dwotest.gcc.4.o");
             using var binary = new ElfBinary(new Uri(fileName));
+            binary.DebugFileType.Should().Be(DebugFileType.FromDwo);
             binary.DwarfVersion.Should().Be(4);
             binary.GetLanguage().Should().Be(DwarfLanguage.CPlusPlus);
         }
