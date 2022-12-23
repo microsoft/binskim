@@ -387,7 +387,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 TelemetryClient telemetryClient;
                 TelemetryConfiguration telemetryConfiguration;
                 telemetryConfiguration = new TelemetryConfiguration();
-                telemetryConfiguration.InstrumentationKey = Guid.NewGuid().ToString();
+                string connectionString = $"InstrumentationKey={Guid.NewGuid()}";
+                telemetryConfiguration.ConnectionString = connectionString;
                 telemetryConfiguration.TelemetryChannel =
                     new StubTelemetryChannel { OnSend = item => telemetryEventOutput.Add(item) };
 

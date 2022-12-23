@@ -16,11 +16,33 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         private const string SECTIONNAME_TEXT = "__text";
         private const string SECTIONNAME_DATA = "__data";
         private const string SECTIONNAME_EH_FRAME = "__eh_frame";
+        private const string SECTIONNAME_DEBUG_LOC = "__debug_loc";
         private const string SECTIONNAME_DEBUG_STR = "__debug_str";
+        private const string SECTIONNAME_SWIFT_AST = "__swift_ast";
+        private const string SECTIONNAME_DEBUG_ADDR = "__debug_addr";
         private const string SECTIONNAME_DEBUG_LINE = "__debug_line";
         private const string SECTIONNAME_DEBUG_INFO = "__debug_info";
+        private const string SECTIONNAME_GNU_PUBT = "__debug_gnu_pubt";
+        private const string SECTIONNAME_APPLE_TYPES = "__apple_types";
+        private const string SECTIONNAME_DEBUG_NAMES = "__debug_names";
         private const string SECTIONNAME_DEBUG_FRAME = "__debug_frame";
+        private const string SECTIONNAME_DEBUG_RANGES = "__debug_ranges";
+        private const string SECTIONNAME_DEBUG_PUBN = "__debug_gnu_pubn";
         private const string SECTIONNAME_DEBUG_ABBREV = "__debug_abbrev";
+        private const string SECTIONNAME_DEBUG_MACINFO = "__debug_macinfo";
+        private const string SECTIONNAME_DEBUG_INLINED = "__debug_inlined";
+        private const string SECTIONNAME_DEBUG_ARANGES = "__debug_aranges";
+        private const string SECTIONNAME_DEBUG_APPLE_OBJC = "__apple_objc";
+        private const string SECTIONNAME_DEBUG_APPLE_NAMES = "__apple_names";
+        private const string SECTIONNAME_DEBUG_RNGLISTS = "__debug_rnglists";
+        private const string SECTIONNAME_DEBUG_CU_INDEX = "__debug_cu_index";
+        private const string SECTIONNAME_DEBUG_TU_INDEX = "__debug_tu_index";
+        private const string SECTIONNAME_DEBUG_STR_OFFS = "__debug_str_offs";
+        private const string SECTIONNAME_DEBUG_LINE_STR = "__debug_line_str";
+        private const string SECTIONNAME_DEBUG_PUBNAMES = "__debug_pubnames";
+        private const string SECTIONNAME_DEBUG_PUBTYPES = "__debug_pubtypes";
+        private const string SECTIONNAME_DEBUG_LOCLISTS = "__debug_loclists";
+        private const string SECTIONNAME_DEBUG_APPLE_NAMESPACE = "__apple_namespac"; // 16-char name limit
 
         public SingleMachOBinary(MachO singleMachO, Uri uri) : base(uri)
         {
@@ -190,10 +212,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         private List<DwarfCompilationUnit> LoadCompilationUnits()
         {
+            byte[] debugStr = this.LoadSection(SECTIONNAME_DEBUG_STR);
             byte[] debugData = this.LoadSection(SECTIONNAME_DEBUG_INFO);
             byte[] debugAbbrev = this.LoadSection(SECTIONNAME_DEBUG_ABBREV);
-            byte[] debugStr = this.LoadSection(SECTIONNAME_DEBUG_STR);
-            return DwarfSymbolProvider.ParseAllCompilationUnits(this, debugData, debugAbbrev, debugStr, NormalizeAddress);
+            byte[] debugLineStr = this.LoadSection(SECTIONNAME_DEBUG_LINE_STR);
+            byte[] debugStrOffsets = this.LoadSection(SECTIONNAME_DEBUG_STR_OFFS);
+
+            return DwarfSymbolProvider.ParseAllCompilationUnits(this,
+                                                                debugData,
+                                                                debugAbbrev,
+                                                                debugStr,
+                                                                debugLineStr,
+                                                                debugStrOffsets,
+                                                                NormalizeAddress);
         }
 
         private byte[] LoadSection(string sectionName)
