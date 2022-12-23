@@ -201,6 +201,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             // dwotest.cpp compiled using: gcc -Wall -O2 -g -gdwarf-5 dwotest.cpp -gsplit-dwarf -o dwotest.gcc.5.o
             string fileName = Path.Combine(TestData, "Dwarf/DwarfSplitV5/dwotest.gcc.5.o");
             using var binary = new ElfBinary(new Uri(fileName));
+            binary.DebugFileType.Should().Be(DebugFileType.FromDwo);
             binary.DwarfVersion.Should().Be(5);
             binary.GetLanguage().Should().Be(DwarfLanguage.CPlusPlus14);
         }
@@ -239,6 +240,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
                 "WithoutDwoFiles");
             var pathList = new List<string>() { localSymbolDirectory1, localSymbolDirectory2 };
             using var binary = new ElfBinary(new Uri(fileName), string.Join(';', pathList));
+            binary.DebugFileType.Should().Be(DebugFileType.FromDwo);
             binary.DwarfVersion.Should().Be(4);
             binary.GetLanguage().Should().Be(DwarfLanguage.CPlusPlus);
         }
@@ -263,12 +265,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
                 "Dwarf/DwarfSplitV4DebugFileInAnotherDirectory/AnotherLocalSymbolDirectory");
             var pathListFound = new List<string>() { localSymbolDirectory1, localSymbolDirectory2, localSymbolDirectory3 };
             using var binaryFound = new ElfBinary(new Uri(fileName), string.Join(';', pathListFound));
+            binaryFound.DebugFileType.Should().Be(DebugFileType.FromDwo);
             binaryFound.DwarfVersion.Should().Be(4);
             binaryFound.GetLanguage().Should().Be(DwarfLanguage.CPlusPlus);
 
             // test for: when not able to find in any of the pass in directories, also not able to find in same directory
             var pathListNotFound = new List<string>() { localSymbolDirectory1, localSymbolDirectory2 };
             using var binaryNotFound = new ElfBinary(new Uri(fileName), string.Join(';', pathListNotFound));
+            binaryNotFound.DebugFileType.Should().Be(DebugFileType.FromDwo);
             binaryNotFound.GetLanguage().Should().Be(DwarfLanguage.Unknown);
         }
     }
