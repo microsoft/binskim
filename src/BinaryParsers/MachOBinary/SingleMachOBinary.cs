@@ -87,7 +87,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                     lineNumberPrograms =
                         DwarfSymbolProvider.ParseLineNumberPrograms(this.DwarfVersion,
-                                                                    debugData, 
+                                                                    debugData,
                                                                     debugStrings,
                                                                     debugLineStrings,
                                                                     NormalizeAddress);
