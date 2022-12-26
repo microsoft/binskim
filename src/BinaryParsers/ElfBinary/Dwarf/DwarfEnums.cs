@@ -490,7 +490,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     {
         Unknown = 0x00,
         EndSequence = 0x01,
-        SetAddress = 0x02, 
+        SetAddress = 0x02,
         DefineFile = 0x03, // Reserved
         SetDiscriminator = 0x04,
         HpNegateIsUvUpdate = 0x11,

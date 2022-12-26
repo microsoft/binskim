@@ -335,17 +335,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         }
                     }
 
+                    string path = string.IsNullOrEmpty(directory) || Path.IsPathRooted(name) ? name : Path.Combine(directory, name);
+
                     files.Add(new DwarfFileInformation()
                     {
                         Name = name,
                         Directory = directory,
+                        Path = path,
                     });
-
-                    Console.WriteLine(files[files.Count - 1]);
                 }
-
-
-
             }
             // Parse lines
             ParsingState state = new ParsingState(files.FirstOrDefault(), defaultIsStatement, minimumInstructionLength);
