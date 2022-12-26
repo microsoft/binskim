@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </returns>
         public override string ToString()
         {
-            return Name;
+            return $"{Directory}{Name}";
         }
     }
 }

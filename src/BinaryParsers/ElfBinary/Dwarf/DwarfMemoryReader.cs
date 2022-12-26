@@ -198,7 +198,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Reads unsigned LEB 128 value from the current position in the stream.
         /// </summary>
-        public uint LEB128()
+        public uint ULEB128()
         {
             uint x = 0;
             int shift = 0;

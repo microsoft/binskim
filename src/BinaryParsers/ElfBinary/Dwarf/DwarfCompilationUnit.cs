@@ -122,7 +122,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             while (debugData.Position < endPosition)
             {
                 int dataPosition = debugData.Position;
-                uint code = debugData.LEB128();
+                uint code = debugData.ULEB128();
 
                 if (code == 0)
                 {
@@ -159,7 +159,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Block:
                             attributeValue.Type = DwarfAttributeValueType.Block;
-                            attributeValue.Value = debugData.ReadBlock(debugData.LEB128());
+                            attributeValue.Value = debugData.ReadBlock(debugData.ULEB128());
                             break;
 
                         case DwarfFormat.Block1:
@@ -209,7 +209,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.UData:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            attributeValue.Value = (ulong)debugData.LEB128();
+                            attributeValue.Value = (ulong)debugData.ULEB128();
                             break;
 
                         case DwarfFormat.String:
@@ -267,7 +267,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.RefUData:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
-                            attributeValue.Value = debugData.LEB128() + (ulong)beginPosition;
+                            attributeValue.Value = debugData.ULEB128() + (ulong)beginPosition;
                             break;
 
                         case DwarfFormat.RefAddr:
@@ -294,7 +294,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.ExpressionLocation:
                             attributeValue.Type = DwarfAttributeValueType.ExpressionLocation;
-                            attributeValue.Value = debugData.ReadBlock(debugData.LEB128());
+                            attributeValue.Value = debugData.ReadBlock(debugData.ULEB128());
                             break;
 
                         case DwarfFormat.SecOffset:
@@ -313,7 +313,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         case DwarfFormat.Strx:
                         case DwarfFormat.GNUStrIndex:
                             attributeValue.Type = DwarfAttributeValueType.String;
-                            attributeValue.Offset = debugData.LEB128();
+                            attributeValue.Offset = debugData.ULEB128();
                             break;
 
                         case DwarfFormat.Strx1:
@@ -338,7 +338,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Addrx:
                             attributeValue.Type = DwarfAttributeValueType.Address;
-                            attributeValue.Value = debugData.LEB128() + (ulong)beginPosition;
+                            attributeValue.Value = debugData.ULEB128() + (ulong)beginPosition;
                             break;
 
                         // NOTE: we don't resolve any of these new DWARF5 address values yet.
@@ -364,7 +364,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Rnglistx:
                             attributeValue.Type = DwarfAttributeValueType.SecOffset;
-                            attributeValue.Value = debugData.LEB128();
+                            attributeValue.Value = debugData.ULEB128();
                             break;
 
                         case DwarfFormat.GNUAddrIndex:
@@ -625,26 +625,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 debugDataDescription.Position = lastReadPosition;
                 while (!debugDataDescription.IsEnd)
                 {
-                    uint code = debugDataDescription.LEB128();
+                    uint code = debugDataDescription.ULEB128();
 
                     if (debugDataDescription.IsEnd)
                     {
                         return result;
                     }
 
-                    DwarfTag tag = (DwarfTag)debugDataDescription.LEB128();
+                    DwarfTag tag = (DwarfTag)debugDataDescription.ULEB128();
                     bool hasChildren = debugDataDescription.ReadByte() != 0;
                     List<DataDescriptionAttribute> attributes = new List<DataDescriptionAttribute>();
 
                     while (!debugDataDescription.IsEnd)
                     {
-                        DwarfAttribute attribute = (DwarfAttribute)debugDataDescription.LEB128();
-                        DwarfFormat format = (DwarfFormat)debugDataDescription.LEB128();
+                        DwarfAttribute attribute = (DwarfAttribute)debugDataDescription.ULEB128();
+                        DwarfFormat format = (DwarfFormat)debugDataDescription.ULEB128();
                         object value = null;
 
                         while (format == DwarfFormat.Indirect)
                         {
-                            format = (DwarfFormat)debugDataDescription.LEB128();
+                            format = (DwarfFormat)debugDataDescription.ULEB128();
                         }
 
                         if (attribute == DwarfAttribute.None && format == DwarfFormat.None)
@@ -654,7 +654,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         if (format == DwarfFormat.ImplicitConst)
                         {
-                            value = debugDataDescription.LEB128();
+                            value = debugDataDescription.ULEB128();
                         }
 
                         attributes.Add(new DataDescriptionAttribute()

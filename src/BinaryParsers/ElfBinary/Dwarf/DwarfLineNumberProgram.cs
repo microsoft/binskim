@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,9 +23,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         /// <param name="debugLine">The debug line data stream.</param>
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
-        internal DwarfLineNumberProgram(DwarfMemoryReader debugLine, NormalizeAddressDelegate addressNormalizer)
+        internal DwarfLineNumberProgram(int dwarfVersion,
+                                        DwarfMemoryReader debugLine,
+                                        DwarfMemoryReader debugStrings,
+                                        DwarfMemoryReader debugLineStrings,
+                                        NormalizeAddressDelegate addressNormalizer)
         {
-            Files = ReadData(debugLine, addressNormalizer);
+            Files = ReadData(dwarfVersion, debugLine, debugStrings, debugLineStrings, addressNormalizer);
         }
 
         /// <summary>
@@ -173,21 +178,34 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="debugLine">The debug line data stream.</param>
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
         /// <returns>List of file information.</returns>
-        private static List<DwarfFileInformation> ReadData(DwarfMemoryReader debugLine, NormalizeAddressDelegate addressNormalizer)
+        private static List<DwarfFileInformation> ReadData(int dwarfVersion,
+                                                  DwarfMemoryReader debugLine,
+                                                  DwarfMemoryReader debugStrings,
+                                                  DwarfMemoryReader debugLineStrings,
+                                                  NormalizeAddressDelegate addressNormalizer)
         {
             // Read header
-            ulong length = debugLine.ReadLength(out bool is64bit);
-            int endPosition = debugLine.Position + (int)length;
+            ulong unitLength = debugLine.ReadLength(out bool is64bit);
+            int endPosition = debugLine.Position + (int)unitLength;
 
             if (endPosition > debugLine.Data.Length - 1)
             {
                 endPosition = debugLine.Data.Length - 1;
             }
 
-            debugLine.ReadUshort(); // version
-            debugLine.ReadOffset(is64bit); // headerLength
+            ushort version = debugLine.ReadUshort();
+
+            if (dwarfVersion == 5)
+            {
+                byte addressSize = debugLine.ReadByte();
+                byte segmentSelectorSize = debugLine.ReadByte();
+            }
+
+            int headerLength = debugLine.ReadOffset(is64bit);
             byte minimumInstructionLength = debugLine.ReadByte();
-            bool defaultIsStatement = debugLine.ReadByte() != 0;
+            byte maximumOperationsPerInstruction = debugLine.ReadByte();
+
+            bool defaultIsStatement = debugLine.ReadByte() == 1;
             sbyte lineBase = (sbyte)debugLine.ReadByte();
             byte lineRange = debugLine.ReadByte();
             byte operationCodeBase = debugLine.ReadByte();
@@ -203,30 +221,132 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             operationCodeLengths[0] = 0;
             for (int i = 1; i < operationCodeLengths.Length && debugLine.Position < endPosition; i++)
             {
-                operationCodeLengths[i] = debugLine.LEB128();
+                operationCodeLengths[i] = debugLine.ULEB128();
             }
 
-            // Read directories
-            List<string> directories = new List<string>();
+            var directories = new List<string>();
+            var files = new List<DwarfFileInformation>();
 
-            while (debugLine.Position < endPosition && debugLine.Peek() != 0)
+            if (dwarfVersion != 5)
             {
-                string directory = debugLine.ReadString();
+                // Read directories
+                while (debugLine.Position < endPosition && debugLine.Peek() != 0)
+                {
+                    string directory = debugLine.ReadString();
 
-                directory = directory.Replace('/', Path.DirectorySeparatorChar);
-                directories.Add(directory);
+                    directory = directory.Replace('/', Path.DirectorySeparatorChar);
+                    directories.Add(directory);
+                }
+                debugLine.ReadByte(); // Skip zero termination byte
+
+                // Read files
+                while (debugLine.Position < endPosition && debugLine.Peek() != 0)
+                {
+                    files.Add(ReadFile(debugLine, directories));
+                }
+                debugLine.ReadByte(); // Skip zero termination byte
             }
-            debugLine.ReadByte(); // Skip zero termination byte
-
-            // Read files
-            List<DwarfFileInformation> files = new List<DwarfFileInformation>();
-
-            while (debugLine.Position < endPosition && debugLine.Peek() != 0)
+            else
             {
-                files.Add(ReadFile(debugLine, directories));
-            }
-            debugLine.ReadByte(); // Skip zero termination byte
+                // DWARF5
+                int directoryEntryFormatCount = debugLine.ReadByte();
+                var defDescriptors = new DwarfLineNumberHeaderEntryDescriptor[directoryEntryFormatCount];
 
+                // These are the directory entry format descriptions.
+                for (int i = 0; i < directoryEntryFormatCount; i++)
+                {
+                    var contentTypeCode = (DwarfLineNumberHeaderEntryFormat)debugLine.ULEB128();
+                    var attributeFormCode = (DwarfFormat)debugLine.ULEB128();
+                    defDescriptors[i] =
+                        new DwarfLineNumberHeaderEntryDescriptor()
+                        {
+                            AttributeFormat = attributeFormCode,
+                            EntryFormat = contentTypeCode
+                        };
+                }
+
+                uint directoriesCount = debugLine.ULEB128();
+
+                for (int i = 0; i < directoriesCount; i++)
+                {
+                    string path = null;
+
+                    for (int j = 0; j < defDescriptors.Length; j++)
+                    {
+                        switch (defDescriptors[0].EntryFormat)
+                        {
+                            case DwarfLineNumberHeaderEntryFormat.Path:
+                            {
+                                DwarfFormat format = defDescriptors[0].AttributeFormat;
+                                path = ParsePathValue(format, is64bit, debugLine, debugStrings, debugLineStrings);
+                                break;
+                            }
+                            default:
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    directories.Add(path);
+                }
+
+                int fileEntryFormatCount = debugLine.ReadByte();
+                var fefDescriptors = new DwarfLineNumberHeaderEntryDescriptor[fileEntryFormatCount];
+
+                // These are the file entry format descriptions.
+                for (int i = 0; i < fileEntryFormatCount; i++)
+                {
+                    var contentTypeCode = (DwarfLineNumberHeaderEntryFormat)debugLine.ULEB128();
+                    var attributeFormCode = (DwarfFormat)debugLine.ULEB128();
+                    fefDescriptors[i] =
+                        new DwarfLineNumberHeaderEntryDescriptor()
+                        {
+                            AttributeFormat = attributeFormCode,
+                            EntryFormat = contentTypeCode
+                        };
+                }
+
+
+                uint filesCount = debugLine.ULEB128();
+
+                for (int i = 0; i < filesCount; i++)
+                {
+                    string name = null, directory = null;
+                    for (int j = 0; j < fefDescriptors.Length; j++)
+                    {
+                        DwarfFormat format = fefDescriptors[j].AttributeFormat;
+                        switch (fefDescriptors[j].EntryFormat)
+                        {
+                            case DwarfLineNumberHeaderEntryFormat.Path:
+                            {
+                                name = ParsePathValue(format, is64bit, debugLine, debugStrings, debugLineStrings);
+                                break;
+                            }
+                            case DwarfLineNumberHeaderEntryFormat.DirectoryIndex:
+                            {
+                                int index = ParseIndex(format, debugLine);
+                                directory = directories[index];
+                                break;
+                            }
+                            default:
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    files.Add(new DwarfFileInformation()
+                    {
+                        Name = name,
+                        Directory = directory,
+                    });
+
+                    Console.WriteLine(files[files.Count - 1]);
+                }
+
+
+
+            }
             // Parse lines
             ParsingState state = new ParsingState(files.FirstOrDefault(), defaultIsStatement, minimumInstructionLength);
             uint lastAddress = 0;
@@ -255,7 +375,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     {
                         case DwarfLineNumberStandardOpcode.Extended:
                         {
-                            uint extendedLength = debugLine.LEB128();
+                            uint extendedLength = debugLine.ULEB128();
                             int newPosition = debugLine.Position + (int)extendedLength;
                             DwarfLineNumberExtendedOpcode extendedCode = DwarfLineNumberExtendedOpcode.Unknown;
                             if (debugLine.Position + 1 <= debugLine.Data.Length)
@@ -289,7 +409,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                     break;
 
                                 case DwarfLineNumberExtendedOpcode.SetDiscriminator:
-                                    state.Discriminator = debugLine.LEB128();
+                                    state.Discriminator = debugLine.ULEB128();
                                     break;
 
                                 default:
@@ -308,7 +428,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         case DwarfLineNumberStandardOpcode.AdvancePc:
-                            state.AdvanceAddress((int)debugLine.LEB128());
+                            state.AdvanceAddress((int)debugLine.ULEB128());
                             break;
 
                         case DwarfLineNumberStandardOpcode.AdvanceLine:
@@ -316,7 +436,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         case DwarfLineNumberStandardOpcode.SetFile:
-                            int index = (int)debugLine.LEB128() - 1;
+                            int index = (int)debugLine.ULEB128() - 1;
                             if (index >= 0 && index < files.Count)
                             {
                                 state.File = files[index];
@@ -324,7 +444,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         case DwarfLineNumberStandardOpcode.SetColumn:
-                            state.Column = debugLine.LEB128();
+                            state.Column = debugLine.ULEB128();
                             break;
 
                         case DwarfLineNumberStandardOpcode.NegateStmt:
@@ -353,7 +473,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         case DwarfLineNumberStandardOpcode.SetIsa:
-                            state.Isa = debugLine.LEB128();
+                            state.Isa = debugLine.ULEB128();
                             break;
 
                         default:
@@ -374,6 +494,44 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             return files;
         }
 
+        private static int ParseIndex(DwarfFormat format, DwarfMemoryReader debugLine)
+        {
+            switch (format)
+            {
+                case DwarfFormat.Data1:
+                {
+                    return (int)debugLine.ReadByte();
+                }
+                case DwarfFormat.Data2:
+                {
+                    return (int)debugLine.ReadUshort();
+                }
+                case DwarfFormat.UData:
+                {
+                    return (int)debugLine.ULEB128();
+                }
+            }
+            throw new ArgumentException($"Unhandled format: {format}");
+        }
+
+        private static string ParsePathValue(DwarfFormat format, bool is64bit, DwarfMemoryReader debugLine, DwarfMemoryReader debugStrings, DwarfMemoryReader debugLineStrings)
+        {
+            switch (format)
+            {
+                case DwarfFormat.Strp:
+                {
+                    int offsetStrp = debugLine.ReadOffset(is64bit);
+                    return debugStrings.ReadString(offsetStrp);
+                }
+                case DwarfFormat.LineStrp:
+                {
+                    int offsetStrp = debugLine.ReadOffset(is64bit);
+                    return debugLineStrings.ReadString(offsetStrp);
+                }
+            }
+            throw new ArgumentException($"Unhandled format: {format}");
+        }
+
         /// <summary>
         /// Reads the file information from the specified stream.
         /// </summary>
@@ -382,20 +540,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         private static DwarfFileInformation ReadFile(DwarfMemoryReader debugLine, List<string> directories)
         {
             string name = debugLine.ReadString();
-            int directoryIndex = (int)debugLine.LEB128();
-            uint lastModification = debugLine.LEB128();
-            uint length = debugLine.LEB128();
+            int directoryIndex = (int)debugLine.ULEB128();
+            uint lastModification = debugLine.ULEB128();
+            uint length = debugLine.ULEB128();
             string directory = (directoryIndex > 0 && directoryIndex <= directories.Count - 1) ? directories[directoryIndex - 1] : null;
             string path;
 
-            try
-            {
-                path = string.IsNullOrEmpty(directory) || Path.IsPathRooted(name) ? name : Path.Combine(directory, name);
-            }
-            catch
-            {
-                path = name;
-            }
+            path = string.IsNullOrEmpty(directory) || Path.IsPathRooted(name) ? name : Path.Combine(directory, name);
 
             return new DwarfFileInformation()
             {

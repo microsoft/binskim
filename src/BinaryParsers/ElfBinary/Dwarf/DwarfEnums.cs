@@ -471,6 +471,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         SetIsa = 0x0c,
     }
 
+    public enum DwarfLineNumberHeaderEntryFormat
+    {
+        // New to DWARF5
+        Path = 0x01,
+        DirectoryIndex = 0x02,
+        Timestamp = 0x03,
+        Size = 0x04,
+        Md5 = 0x05,
+        LoUser = 0x2000,
+        HiUser = 0x3fff,
+    }
+
     /// <summary>
     /// DWARF line number extended operation codes.
     /// </summary>
@@ -478,8 +490,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     {
         Unknown = 0x00,
         EndSequence = 0x01,
-        SetAddress = 0x02,
-        DefineFile = 0x03,
+        SetAddress = 0x02, 
+        DefineFile = 0x03, // Reserved
         SetDiscriminator = 0x04,
         HpNegateIsUvUpdate = 0x11,
         HpPushContext = 0x12,

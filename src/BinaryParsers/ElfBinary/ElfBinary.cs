@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                                                                     DebugData,
                                                                     DebugDataDescription,
                                                                     DebugDataStrings,
-                                                                    DebugLineString,
+                                                                    DebugLineStrings,
                                                                     DebugStringOffsets,
                                                                     NormalizeAddress));
 
@@ -69,7 +69,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits.Value));
 
                 LineNumberPrograms = new Lazy<IReadOnlyList<DwarfLineNumberProgram>>(()
-                    => DwarfSymbolProvider.ParseLineNumberPrograms(DebugLine, NormalizeAddress));
+                    => DwarfSymbolProvider.ParseLineNumberPrograms(this.DwarfVersion,
+                                                                   DebugLine,
+                                                                   DebugDataStrings,
+                                                                   DebugLineStrings,
+                                                                   NormalizeAddress));
 
                 CommonInformationEntries = new Lazy<IReadOnlyList<DwarfCommonInformationEntry>>(()
                     => DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this)));
@@ -174,7 +178,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// Gets the debug line strings.
         /// </summary>
-        public byte[] DebugLineString => LoadSection(SectionName.DebugLineStr);
+        public byte[] DebugLineStrings => LoadSection(SectionName.DebugLineStr);
 
         /// <summary>
         /// Gets the debug string offsets.
