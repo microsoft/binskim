@@ -789,7 +789,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
         internal static string GetTestDirectory(string relativeDirectory)
         {
-            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().Location);
             string codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
             string dirPath = Path.GetDirectoryName(codeBasePath);
             dirPath = Path.Combine(dirPath, string.Format(@"..{0}..{0}..{0}..{0}src{0}", Path.DirectorySeparatorChar));

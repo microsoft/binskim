@@ -82,8 +82,8 @@ echo "Building GCC Only flags"
 objdump -T /lib/x86_64-linux-gnu/libc.so.6 | grep -o "__[a-z]*_chk" | sort > $OUTPUT_DIR/glibc_chk_functions.txt
 # Build FORTIFY_SOURCE checks:
 gcc empty.c -o $OUTPUT_DIR/gcc.unfortified
-gcc empty.c -o $OUTPUT_DIR/gcc.fortified -DFORTIFY_SOURCE=2 -O2
-gcc no_fortify_func.c -o $OUTPUT_DIR/gcc.no_fortification_required -DFORTIFY_SOURCE=2 -O2
+gcc empty.c -o $OUTPUT_DIR/gcc.fortified -D_FORTIFY_SOURCE=2 -O2
+gcc no_fortify_func.c -o $OUTPUT_DIR/gcc.no_fortification_required -D_FORTIFY_SOURCE=2 -O2
 
 echo "Building invalid ELF file"
 # Invalid ELF file from haskell compiler

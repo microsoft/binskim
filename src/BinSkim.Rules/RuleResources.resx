@@ -455,7 +455,7 @@ Modules did not meet the criteria: {1}</value>
     <value>Some checked functions were found in '{0}'; however, there were also some unchecked functions, which can occur when the compiler cannot statically determine the length of a buffer/string.  We recommend reviewing your usage of functions like memcpy or strcpy.</value>
   </data>
   <data name="BA3030_UseGccCheckedFunctions_Description" xml:space="preserve">
-    <value>GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2').</value>
+    <value>GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 is enabled ('-O2').</value>
   </data>
   <data name="NotApplicable_InvalidMetadata" xml:space="preserve">
     <value>'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.</value>

@@ -3,6 +3,7 @@
 ## **v2.0.0-rc3** (Unreleased)
 * BUGFIX: Eliminate `BA3003.EnableStackProtector` false positives when the target is statically linked. [744](https://github.com/microsoft/binskim/pull/744)
 * BUGFIX: Fix over-aggressive parsing of DWARF compilation units even when all related rules are disabled. [774](https://github.com/microsoft/binskim/pull/774)
+* Upgrade BinSkim to .net6.0 as .net core 3.1 reached end of support on 12/13/2022.
 
 ## **v2.0.0-rc2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/2.0.0-rc2)
 * BUGFIX: Fix assertion failed with no clue when TargetFileSpecifiers is null or empty for BinSkim analyze.[763](https://github.com/microsoft/binskim/pull/763)

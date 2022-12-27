@@ -47,7 +47,7 @@ dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --packages 
 echo Building solution...
 dotnet build --no-restore /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
-::Run unit tests
+::Run unit tests 
 echo Run all multitargeting xunit tests
 call :RunTestProject BinaryParsers Unit || goto :ExitFailed
 call :RunTestProject BinSkim.Rules Unit || goto :ExitFailed
@@ -59,6 +59,9 @@ echo Creating Platform Specific BinSkim 'Publish' Packages
 call :CreatePublishPackage netcoreapp3.1 win-x64 || goto :ExitFailed
 call :CreatePublishPackage netcoreapp3.1 linux-x64 || goto :ExitFailed
 call :CreatePublishPackage netcoreapp3.1 osx-x64 || goto :ExitFailed
+call :CreatePublishPackage net6.0 win-x64 || goto :ExitFailed
+call :CreatePublishPackage net6.0 linux-x64 || goto :ExitFailed
+call :CreatePublishPackage net6.0 osx-x64 || goto :ExitFailed
 
 ::Build NuGet package
 echo BuildPackages.cmd
