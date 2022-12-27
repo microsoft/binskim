@@ -69,7 +69,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits.Value));
 
                 LineNumberPrograms = new Lazy<IReadOnlyList<DwarfLineNumberProgram>>(()
-                    => DwarfSymbolProvider.ParseLineNumberPrograms(this.DwarfVersion,
+                    => DwarfSymbolProvider.ParseLineNumberPrograms(this,
                                                                    DebugLine,
                                                                    DebugDataStrings,
                                                                    DebugLineStrings,

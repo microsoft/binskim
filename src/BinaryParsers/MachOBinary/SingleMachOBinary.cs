@@ -86,7 +86,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     byte[] debugLineStrings = this.LoadSection(SECTIONNAME_DEBUG_LINE_STR);
 
                     lineNumberPrograms =
-                        DwarfSymbolProvider.ParseLineNumberPrograms(this.DwarfVersion,
+                        DwarfSymbolProvider.ParseLineNumberPrograms(this,
                                                                     debugData,
                                                                     debugStrings,
                                                                     debugLineStrings,

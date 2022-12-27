@@ -124,12 +124,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         /// <param name="debugLine">The debug line.</param>
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
-        internal static List<DwarfLineNumberProgram> ParseLineNumberPrograms(int dwarfVersion,
+        internal static List<DwarfLineNumberProgram> ParseLineNumberPrograms(IDwarfBinary dwarfBinary,
                                                                              byte[] debugLine,
                                                                              byte[] debugStrings,
                                                                              byte[] debugLineStrings,
                                                                              NormalizeAddressDelegate addressNormalizer)
         {
+            if (dwarfBinary.GetLanguage() == DwarfLanguage.MipsAssembler)
+            {
+                return new List<DwarfLineNumberProgram>();
+            }
+
+            int dwarfVersion = dwarfBinary.DwarfVersion;
             using var debugLineReader = new DwarfMemoryReader(debugLine);
             using var debugStringsReader = new DwarfMemoryReader(debugStrings);
             using var debugLineStringsReader = new DwarfMemoryReader(debugLineStrings);

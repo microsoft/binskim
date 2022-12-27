@@ -186,14 +186,25 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         {
             // Read header
             ulong unitLength = debugLine.ReadLength(out bool is64bit);
+            if (unitLength <= 1)
+            {
+                return new List<DwarfFileInformation>();
+            }
+
             int endPosition = debugLine.Position + (int)unitLength;
 
             if (endPosition > debugLine.Data.Length - 1)
             {
-                endPosition = debugLine.Data.Length - 1;
+                return new List<DwarfFileInformation>();
             }
 
             ushort version = debugLine.ReadUshort();
+
+            // DWARF versions prior to v2 did not have a .debug_line section.
+            if (version < 2) 
+            {
+                return new List<DwarfFileInformation>();
+            }
 
             if (dwarfVersion == 5)
             {
@@ -346,7 +357,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 }
             }
             // Parse lines
-            ParsingState state = new ParsingState(files.FirstOrDefault(), defaultIsStatement, minimumInstructionLength);
+            var state = new ParsingState(files.FirstOrDefault(), defaultIsStatement, minimumInstructionLength);
             uint lastAddress = 0;
 
             while (debugLine.Position < endPosition)
