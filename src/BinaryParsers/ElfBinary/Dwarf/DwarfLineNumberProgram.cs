@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// <summary>
             /// Gets or sets the column.
             /// </summary>
-            public uint Column { get; set; }
+            public ulong Column { get; set; }
 
             /// <summary>
             /// Gets or sets a value indicating whether we are at statement.
@@ -108,12 +108,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// <summary>
             /// Gets or sets the ISA.
             /// </summary>
-            public uint Isa { get; set; }
+            public ulong Isa { get; set; }
 
             /// <summary>
             /// Gets or sets the discriminator.
             /// </summary>
-            public uint Discriminator { get; set; }
+            public ulong Discriminator { get; set; }
 
             /// <summary>
             /// Gets or sets a value indicating whether reset is defaulting to statement.
@@ -232,7 +232,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             }
 
             // Read operation code lengths
-            uint[] operationCodeLengths = new uint[operationCodeBase];
+            ulong[] operationCodeLengths = new ulong[operationCodeBase];
 
             operationCodeLengths[0] = 0;
             for (int i = 1; i < operationCodeLengths.Length && debugLine.Position < endPosition; i++)
@@ -281,9 +281,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         };
                 }
 
-                uint directoriesCount = debugLine.ULEB128();
+                ulong directoriesCount = debugLine.ULEB128();
 
-                for (int i = 0; i < directoriesCount; i++)
+                for (ulong i = 0; i < directoriesCount; i++)
                 {
                     string path = null;
 
@@ -322,10 +322,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         };
                 }
 
+                byte[] timestamp = Array.Empty<byte>(), md5 = Array.Empty<byte>();
+                ulong size = 0;
 
-                uint filesCount = debugLine.ULEB128();
-
-                for (int i = 0; i < filesCount; i++)
+                ulong filesCount = debugLine.ULEB128();
+                for (ulong i = 0; i < filesCount; i++)
                 {
                     string name = null, directory = null;
                     for (int j = 0; j < fefDescriptors.Length; j++)
@@ -344,6 +345,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                 directory = directories[index];
                                 break;
                             }
+                            case DwarfLineNumberHeaderEntryFormat.Timestamp:
+                            {
+                                timestamp = ParseTimestamp(format, debugLine);
+                                break;
+                            }
+                            case DwarfLineNumberHeaderEntryFormat.Size:
+                            {
+                                size = ParseSize(format, debugLine);
+                                break;
+                            }
+                            case DwarfLineNumberHeaderEntryFormat.Md5:
+                            {
+                                md5 = debugLine.ReadBlock(16);
+                                break;
+                            }
+
                             default:
                             {
                                 break;
@@ -358,9 +375,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         Name = name,
                         Directory = directory,
                         Path = path,
+                        Size = size,
+                        Timestamp = timestamp,
+                        MD5 = md5,
                     });
                 }
             }
+
             // Parse lines
             var state = new ParsingState(files.FirstOrDefault(), defaultIsStatement, minimumInstructionLength);
             uint lastAddress = 0;
@@ -389,7 +410,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     {
                         case DwarfLineNumberStandardOpcode.Extended:
                         {
-                            uint extendedLength = debugLine.ULEB128();
+                            ulong extendedLength = debugLine.ULEB128();
                             int newPosition = debugLine.Position + (int)extendedLength;
                             DwarfLineNumberExtendedOpcode extendedCode = DwarfLineNumberExtendedOpcode.Unknown;
                             if (debugLine.Position + 1 <= debugLine.Data.Length)
@@ -505,7 +526,101 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     file.Lines[i].Address = (uint)addressNormalizer(file.Lines[i].Address);
                 }
             }
+
             return files;
+        }
+
+        private static string ParsePathValue(DwarfFormat format, bool is64bit, DwarfMemoryReader debugLine, DwarfMemoryReader debugStrings, DwarfMemoryReader debugLineStrings)
+        {
+            switch (format)
+            {
+                case DwarfFormat.Strp:
+                {
+                    int offsetStrp = debugLine.ReadOffset(is64bit);
+                    return debugStrings.ReadString(offsetStrp);
+                }
+                case DwarfFormat.LineStrp:
+                {
+                    int offsetStrp = debugLine.ReadOffset(is64bit);
+                    return debugLineStrings.ReadString(offsetStrp);
+                }
+                case DwarfFormat.StrpSup:
+                {
+                    int offsetStrp = debugLine.ReadOffset(is64bit);
+                    // NOTE: we don't support locating this value currently.
+                    break;
+                }
+
+                // We aren't handling the DWO case yet.
+                // See 6.2.4.1 of the DWARF5 spec.
+            }
+            throw new ArgumentException($"Unhandled format: {format}");
+        }
+
+        private static byte[] ParseTimestamp(DwarfFormat format, DwarfMemoryReader reader)
+        {
+            byte[] timestamp = null;
+            switch (format)
+            {
+                case DwarfFormat.Data4:
+                {
+                    timestamp = BitConverter.GetBytes(reader.ReadUint());
+                    break;
+                }
+                case DwarfFormat.Data8:
+                {
+                    timestamp = BitConverter.GetBytes(reader.ReadUlong());
+                    break;
+                }
+                case DwarfFormat.UData:
+                {
+                    timestamp = BitConverter.GetBytes((ulong)reader.ULEB128());
+                    break;
+                }
+                case DwarfFormat.Block:
+                {
+                    timestamp = reader.ReadBlock(reader.ULEB128());
+                    break;
+                }
+            }
+
+            return timestamp ?? BitConverter.GetBytes(0);
+        }
+
+        private static ulong ParseSize(DwarfFormat format, DwarfMemoryReader reader)
+        {
+            ulong size = 0;
+
+            switch (format)
+            {
+                case DwarfFormat.Data1:
+                {
+                    size = reader.ReadByte();
+                    break;
+                }
+                case DwarfFormat.Data2:
+                {
+                    size = reader.ReadUshort();
+                    break;
+                }
+                case DwarfFormat.Data4:
+                {
+                    size = reader.ReadUint();
+                    break;
+                }
+                case DwarfFormat.Data8:
+                {
+                    size = reader.ReadUlong();
+                    break;
+                }
+                case DwarfFormat.UData:
+                {
+                    size = (ulong)reader.ULEB128();
+                    break;
+                }
+            }
+
+            return size;
         }
 
         private static int ParseIndex(DwarfFormat format, DwarfMemoryReader debugLine)
@@ -525,24 +640,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     return (int)debugLine.ULEB128();
                 }
             }
-            throw new ArgumentException($"Unhandled format: {format}");
-        }
 
-        private static string ParsePathValue(DwarfFormat format, bool is64bit, DwarfMemoryReader debugLine, DwarfMemoryReader debugStrings, DwarfMemoryReader debugLineStrings)
-        {
-            switch (format)
-            {
-                case DwarfFormat.Strp:
-                {
-                    int offsetStrp = debugLine.ReadOffset(is64bit);
-                    return debugStrings.ReadString(offsetStrp);
-                }
-                case DwarfFormat.LineStrp:
-                {
-                    int offsetStrp = debugLine.ReadOffset(is64bit);
-                    return debugLineStrings.ReadString(offsetStrp);
-                }
-            }
             throw new ArgumentException($"Unhandled format: {format}");
         }
 
@@ -555,8 +653,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         {
             string name = debugLine.ReadString();
             int directoryIndex = (int)debugLine.ULEB128();
-            uint lastModification = debugLine.ULEB128();
-            uint length = debugLine.ULEB128();
+            ulong lastModified = debugLine.ULEB128();
+            ulong length = debugLine.ULEB128();
             string directory = (directoryIndex > 0 && directoryIndex <= directories.Count - 1) ? directories[directoryIndex - 1] : null;
             string path;
 
@@ -567,8 +665,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 Name = name,
                 Directory = directory,
                 Path = path,
-                LastModification = lastModification,
-                Length = length,
+                Timestamp = BitConverter.GetBytes(lastModified),
+                Size = length,
             };
         }
     }

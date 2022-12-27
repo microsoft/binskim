@@ -337,7 +337,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             int instructionsStart = -1;
             if (entry.Augmentation.Length >= 1 && entry.Augmentation[0] == 'z')
             {
-                uint length = data.ULEB128();
+                ulong length = data.ULEB128();
 
                 instructionsStart = data.Position + (int)length;
                 if (entry.LanguageSpecificDataAreaEncoding != DwarfExceptionHandlingEncoding.Omit)
@@ -518,8 +518,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             {
                 if (Augmentation[i] == 'z')
                 {
-                    uint length = data.ULEB128();
-
+                    ulong length = data.ULEB128();
                     instructionsStart = data.Position + (int)length;
                 }
                 else if (Augmentation[i] == 'L')

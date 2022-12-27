@@ -122,7 +122,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             while (debugData.Position < endPosition)
             {
                 int dataPosition = debugData.Position;
-                uint code = debugData.ULEB128();
+                ulong code = debugData.ULEB128();
 
                 if (code == 0)
                 {
@@ -589,7 +589,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// <summary>
             /// The dictionary of already read symbol data descriptions located by code.
             /// </summary>
-            private readonly Dictionary<uint, DataDescription> readDescriptions;
+            private readonly Dictionary<ulong, DataDescription> readDescriptions;
 
             /// <summary>
             /// The last read position.
@@ -603,7 +603,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// <param name="startingPosition">The starting position.</param>
             public DataDescriptionReader(DwarfMemoryReader debugDataDescription, int startingPosition)
             {
-                readDescriptions = new Dictionary<uint, DataDescription>();
+                readDescriptions = new Dictionary<ulong, DataDescription>();
                 lastReadPosition = startingPosition;
                 this.debugDataDescription = debugDataDescription;
             }
@@ -612,7 +612,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// Gets the debug data description for the specified code.
             /// </summary>
             /// <param name="findCode">The code to be found.</param>
-            public DataDescription GetDebugDataDescription(uint findCode)
+            public DataDescription GetDebugDataDescription(ulong findCode)
             {
                 // See section 7.5.3 Abbreviations Tables of DWARF5
                 // spec for information on this parsing implementation.
@@ -625,7 +625,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 debugDataDescription.Position = lastReadPosition;
                 while (!debugDataDescription.IsEnd)
                 {
-                    uint code = debugDataDescription.ULEB128();
+                    ulong code = debugDataDescription.ULEB128();
 
                     if (debugDataDescription.IsEnd)
                     {
