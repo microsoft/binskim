@@ -5,7 +5,7 @@
   <PropertyGroup>
     <AssemblyName>BinSkim</AssemblyName>
     <!--  Condition="'$(OS)'=='Windows_NT'" -->
-    <TargetFramework>$(NetCoreVersion)</TargetFramework>
+    <TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <OutputType>Exe</OutputType>
     <Platforms>x64</Platforms>
@@ -65,10 +65,9 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <!-- May need to be changed to x86 on a 32 bit machine. -->
-    <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(TargetFramework)'=='$(NetCoreVersion)' And '$(RuntimeIdentifier)'==''" />
-    <!-- Note: Official Release builds on Windows should specify a RID. Build using the BuildAndTest.cmd script. -->
+  <ItemGroup>   
+    <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(RuntimeIdentifier)'==''" />
+	<!-- Note: Official Release builds on Windows should specify a RID. Build using the BuildAndTest.cmd script. -->
     <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(RuntimeIdentifier)'=='win-x64'" />
     <MsDiaLibs Include="..\..\refs\msdia140.dll.manifest" />
 
