@@ -394,10 +394,10 @@
               "id": "BA3030",
               "name": "UseGccCheckedFunctions",
               "fullDescription": {
-                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2')."
+                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 is enabled ('-O2')."
               },
               "help": {
-                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2')."
+                "text": "GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 is enabled ('-O2')."
               },
               "messageStrings": {
                 "Pass_AllFunctionsChecked": {
