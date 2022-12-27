@@ -200,7 +200,7 @@ The BIND_NOW flag is missing from this binary, so relocation sections in '{0}' w
 
 ### Description
 
-GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-DFortify_Source=2' when optimization level 2 is enabled ('-O2').
+GCC can automatically replace unsafe functions with checked variants when it can statically determine the length of a buffer or string. In the case of an overflow, the checked version will safely exit the program (rather than potentially allowing an exploit). This feature can be enabled by passing '-D_FORTIFY_SOURCE=2' when optimization level 2 is enabled ('-O2').
 
 ### Messages
 

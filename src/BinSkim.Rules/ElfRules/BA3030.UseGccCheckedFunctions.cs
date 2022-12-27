@@ -144,7 +144,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         /// <summary>
-        /// Checks if Fortified functions are used--the -DFORTIFY_SOURCE=2 flag enables these when -O2 is enabled.
+        /// Checks if Fortified functions are used--the -D_FORTIFY_SOURCE=2 flag enables these when -O2 is enabled.
         ///
         /// Check implementation:
         /// -Get all function symbols in the ELF binary
