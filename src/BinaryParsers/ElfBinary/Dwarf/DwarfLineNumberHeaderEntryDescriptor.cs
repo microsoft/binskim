@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
-    // A bundle of DWARF v5 directory information.
+    // A bundle of DWARF v5 line number header entry data.
     internal class DwarfLineNumberHeaderEntryDescriptor
     {
         public DwarfFormat AttributeFormat { get; set; }

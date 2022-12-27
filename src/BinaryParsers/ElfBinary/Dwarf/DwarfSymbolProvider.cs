@@ -130,11 +130,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                                                              byte[] debugLineStrings,
                                                                              NormalizeAddressDelegate addressNormalizer)
         {
-            if (dwarfBinary.GetLanguage() == DwarfLanguage.MipsAssembler)
-            {
-                return new List<DwarfLineNumberProgram>();
-            }
-
             int dwarfVersion = dwarfBinary.DwarfVersion;
             using var debugLineReader = new DwarfMemoryReader(debugLine);
             using var debugStringsReader = new DwarfMemoryReader(debugStrings);
@@ -150,6 +145,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                                debugStringsReader,
                                                debugLineStringsReader,
                                                addressNormalizer);
+
+                if (program.Files == null) 
+                { 
+                    // Null files indicates a catastrophic condition parsing the
+                    // line number conditions. There's no point parsing further
+                    // as the current debug line reader position isn't guaranteed
+                    // to be set of a valid location.
+                    break;
+                }
 
                 programs.Add(program);
             }

@@ -179,31 +179,36 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
         /// <returns>List of file information.</returns>
         private static List<DwarfFileInformation> ReadData(int dwarfVersion,
-                                                  DwarfMemoryReader debugLine,
-                                                  DwarfMemoryReader debugStrings,
-                                                  DwarfMemoryReader debugLineStrings,
-                                                  NormalizeAddressDelegate addressNormalizer)
+                                                           DwarfMemoryReader debugLine,
+                                                           DwarfMemoryReader debugStrings,
+                                                           DwarfMemoryReader debugLineStrings,
+                                                           NormalizeAddressDelegate addressNormalizer)
         {
             // Read header
             ulong unitLength = debugLine.ReadLength(out bool is64bit);
             if (unitLength <= 1)
             {
-                return new List<DwarfFileInformation>();
+                // A null condition is a clue to the upstream parser that it shouldn't
+                // continue, as we're in an invalid condition. We hit this particular 
+                // code path parsing binaries in the wild with language MipsAssembler.
+                return null;
             }
 
             int endPosition = debugLine.Position + (int)unitLength;
 
             if (endPosition > debugLine.Data.Length - 1)
             {
-                return new List<DwarfFileInformation>();
+                return null;
             }
 
             ushort version = debugLine.ReadUshort();
 
-            // DWARF versions prior to v2 did not have a .debug_line section.
-            if (version < 2) 
+            // DWARF versions prior to v2 did not have a .debug_line section, so
+            // this is a condition that indicates a parsing issue or invalid
+            // or corrupt binary.
+            if (version < 2)
             {
-                return new List<DwarfFileInformation>();
+                return null;
             }
 
             if (dwarfVersion == 5)
@@ -223,7 +228,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             if (operationCodeBase <= 0)
             {
-                return new List<DwarfFileInformation>();
+                return null;
             }
 
             // Read operation code lengths
