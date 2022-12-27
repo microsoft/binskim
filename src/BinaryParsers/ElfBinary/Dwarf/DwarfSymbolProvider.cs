@@ -146,8 +146,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                                debugLineStringsReader,
                                                addressNormalizer);
 
-                if (program.Files == null) 
-                { 
+                if (program.Files == null)
+                {
                     // Null files indicates a catastrophic condition parsing the
                     // line number conditions. There's no point parsing further
                     // as the current debug line reader position isn't guaranteed
