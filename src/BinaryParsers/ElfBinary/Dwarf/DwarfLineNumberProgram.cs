@@ -211,7 +211,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 return null;
             }
 
-            if (dwarfVersion == 5)
+            if (dwarfVersion > 4)
             {
                 byte addressSize = debugLine.ReadByte();
                 byte segmentSelectorSize = debugLine.ReadByte();
@@ -219,7 +219,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             int headerLength = debugLine.ReadOffset(is64bit);
             byte minimumInstructionLength = debugLine.ReadByte();
-            byte maximumOperationsPerInstruction = debugLine.ReadByte();
+
+            if (version > 3)
+            {
+                byte maximumOperationsPerInstruction = debugLine.ReadByte();
+            }
 
             bool defaultIsStatement = debugLine.ReadByte() == 1;
             sbyte lineBase = (sbyte)debugLine.ReadByte();
