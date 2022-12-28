@@ -26,6 +26,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Gets or sets the column.
         /// </summary>
-        public uint Column { get; set; }
+        public ulong Column { get; set; }
     }
 }

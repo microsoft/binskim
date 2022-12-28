@@ -198,9 +198,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Reads unsigned LEB 128 value from the current position in the stream.
         /// </summary>
-        public uint LEB128()
+        public ulong ULEB128()
         {
-            uint x = 0;
+            ulong x = 0;
             int shift = 0;
 
             while ((Data[Position] & 0x80) != 0)
@@ -241,7 +241,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// Reads the byte block of the specified size from the current position in the stream.
         /// </summary>
         /// <param name="size">The size of block.</param>
-        public byte[] ReadBlock(uint size)
+        public byte[] ReadBlock(ulong size)
         {
             byte[] block = new byte[size];
 

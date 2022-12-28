@@ -173,9 +173,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     AddressSize = defaultAddressSize;
                     SegmentSelectorSize = 0;
                 }
-                CodeAlignmentFactor = data.LEB128();
-                DataAlignmentFactor = data.LEB128();
-                ReturnAddressRegister = data.LEB128();
+                CodeAlignmentFactor = data.ULEB128();
+                DataAlignmentFactor = data.ULEB128();
+                ReturnAddressRegister = data.ULEB128();
             }
             InitialInstructions = data.ReadBlock((uint)(endPosition - data.Position));
         }
@@ -337,7 +337,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             int instructionsStart = -1;
             if (entry.Augmentation.Length >= 1 && entry.Augmentation[0] == 'z')
             {
-                uint length = data.LEB128();
+                ulong length = data.ULEB128();
 
                 instructionsStart = data.Position + (int)length;
                 if (entry.LanguageSpecificDataAreaEncoding != DwarfExceptionHandlingEncoding.Omit)
@@ -431,7 +431,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     break;
 
                 case DwarfExceptionHandlingEncoding.Uleb128:
-                    address = data.LEB128();
+                    address = data.ULEB128();
                     break;
 
                 case DwarfExceptionHandlingEncoding.Sleb128:
@@ -500,7 +500,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         {
             Version = data.ReadByte();
             Augmentation = data.ReadString();
-            CodeAlignmentFactor = data.LEB128();
+            CodeAlignmentFactor = data.ULEB128();
             DataAlignmentFactor = data.SLEB128();
             if (Version == 1)
             {
@@ -508,7 +508,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             }
             else
             {
-                ReturnAddressRegister = data.LEB128();
+                ReturnAddressRegister = data.ULEB128();
             }
             AddressSize = input.DefaultAddressSize;
             SegmentSelectorSize = 0;
@@ -518,8 +518,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             {
                 if (Augmentation[i] == 'z')
                 {
-                    uint length = data.LEB128();
-
+                    ulong length = data.ULEB128();
                     instructionsStart = data.Position + (int)length;
                 }
                 else if (Augmentation[i] == 'L')

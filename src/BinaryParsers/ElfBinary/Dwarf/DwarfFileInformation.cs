@@ -26,14 +26,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public string Path { get; set; }
 
         /// <summary>
-        /// Gets or sets the last modification.
+        /// Gets or sets the last modification timestamp or 0 if not available.
         /// </summary>
-        public uint LastModification { get; set; }
+        public byte[] Timestamp { get; set; }
 
         /// <summary>
-        /// Gets or sets the length.
+        /// Gets or sets the size of the file in bytes.
         /// </summary>
-        public uint Length { get; set; }
+        public ulong Size { get; set; }
+
+        // Gets or sets a 16-byte MD5 digest of the file contents.
+        public byte[] MD5 { get; set; }
 
         /// <summary>
         /// Gets or sets the lines information.
@@ -48,7 +51,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </returns>
         public override string ToString()
         {
-            return Name;
+            return $"{Path}";
         }
     }
 }

@@ -82,7 +82,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 if (lineNumberPrograms == null)
                 {
                     byte[] debugData = this.LoadSection(SECTIONNAME_DEBUG_LINE);
-                    lineNumberPrograms = DwarfSymbolProvider.ParseLineNumberPrograms(debugData, NormalizeAddress);
+                    byte[] debugStrings = this.LoadSection(SECTIONNAME_DEBUG_STR);
+                    byte[] debugLineStrings = this.LoadSection(SECTIONNAME_DEBUG_LINE_STR);
+
+                    lineNumberPrograms =
+                        DwarfSymbolProvider.ParseLineNumberPrograms(this,
+                                                                    debugData,
+                                                                    debugStrings,
+                                                                    debugLineStrings,
+                                                                    NormalizeAddress);
                 }
                 return lineNumberPrograms;
             }
