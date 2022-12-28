@@ -8,10 +8,15 @@ using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
-    public class BinaryAnalyzerContext : AnalyzerContextBase
+    public class BinaryAnalyzerContext : AnalyzeContextBase
     {
         private Uri uri;
         private IBinary iBinary;
+
+        static BinaryAnalyzerContext()
+        {
+            MaxFileSizeInKilobytesDefaultValue = long.MaxValue;
+        }
 
         public IBinary Binary
         {
