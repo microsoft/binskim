@@ -29,6 +29,8 @@ namespace Microsoft.CodeAnalysis.IL
             set => throw new InvalidOperationException();
         }
 
+        protected virtual long DefaultMaxFileSizeInKB => 1024;
+
         protected override BinaryAnalyzerContext CreateContext(AnalyzeOptions options, IAnalysisLogger logger, RuntimeConditions runtimeErrors, PropertiesDictionary policy = null, string filePath = null)
         {
             BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, policy, filePath);
@@ -39,7 +41,11 @@ namespace Microsoft.CodeAnalysis.IL
             binaryAnalyzerContext.IgnorePdbLoadError = options.IgnorePdbLoadError;
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
             binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
-            binaryAnalyzerContext.MaxFileSizeInKilobytes = options.MaxFileSizeInKilobytes > 1024 ? options.MaxFileSizeInKilobytes : int.MaxValue;
+
+            binaryAnalyzerContext.MaxFileSizeInKilobytes =
+                options.MaxFileSizeInKilobytes >= 0
+                ? options.MaxFileSizeInKilobytes
+                : DefaultMaxFileSizeInKB;
 
 #pragma warning disable CS0618 // Type or member is obsolete
             if (options.Verbose && ShouldWarnVerbose)

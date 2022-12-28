@@ -6,6 +6,8 @@ using System.Reflection;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL.Rules;
+using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL
@@ -16,5 +18,7 @@ namespace Microsoft.CodeAnalysis.IL
             typeof(MarkImageAsNXCompatible).Assembly,
             typeof(ElfBinary).Assembly // Faults in BinaryParsers configuration.
         };
+
+        public override IOptionsProvider AdditionalOptionsProvider => new BinaryAnalyzerContext();
     }
 }
