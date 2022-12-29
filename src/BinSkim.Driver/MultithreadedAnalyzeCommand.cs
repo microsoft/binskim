@@ -213,7 +213,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
             finally
             {
-                if (stopwatch != null) 
+                if (stopwatch != null)
                 {
                     Console.WriteLine($"Scan time: {stopwatch.Elapsed}");
                 }

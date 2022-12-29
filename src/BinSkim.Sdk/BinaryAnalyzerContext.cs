@@ -88,7 +88,16 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public override DefaultTraces Traces { get; set; }
 
-        public CompilerDataLogger CompilerDataLogger { get; set; }
+        public CompilerDataLogger CompilerDataLogger
+        {
+            get
+            {
+                return this.Policy != null
+                    ? this.Policy.GetProperty(SharedCompilerDataLoggerProperty)
+                    : null;
+            }
+            set { this.Policy.SetProperty(SharedCompilerDataLoggerProperty, value); }
+        }
 
         public bool IgnorePdbLoadError { get; set; }
 
@@ -111,6 +120,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 this.disposed = true;
             }
         }
+
+        public static PerLanguageOption<CompilerDataLogger> SharedCompilerDataLoggerProperty { get; } =
+            new PerLanguageOption<CompilerDataLogger>(
+                "CompilerTelemetry", nameof(SharedCompilerDataLoggerProperty), defaultValue: () => null,
+                "A shared CompilerDataLogger instance that will be passed to all skimmers.");
 
         public override void Dispose()
         {

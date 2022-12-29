@@ -1,6 +1,8 @@
 # BinSkim Release History
 
-## **v2.0.0-rc3** (Unreleased)
+## **v4.0.0-rc2** (Unreleased)
+* Update Sarif.Sdk submodule from [fc9a9df to 6e658bb](https://github.com/microsoft/sarif-sdk/compare/fc9a9dfb865096b5aaa9fa3651854670940f7459...6e658bb3023a66d4dc7a0bee8bd5e25627c6c0da). Resolves performance issues (due to hashing invalid scan targets) and hangs resulting from unhandled exceptions during file enumeration.
+* Updgrade SARIF-SDK to resolve performance issues (related to hashing invalid scan targets) and hangs (from unhandled exceptions during file enumeration).
 * BUGFIX: Eliminate `BA3003.EnableStackProtector` false positives when the target is statically linked. [744](https://github.com/microsoft/binskim/pull/744)
 * BUGFIX: Fix over-aggressive parsing of DWARF compilation units even when all related rules are disabled. [774](https://github.com/microsoft/binskim/pull/774)
 * Upgrade BinSkim to .net6.0 as .net core 3.1 reached end of support on 12/13/2022.
