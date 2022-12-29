@@ -48,15 +48,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sarif-sdk", "sarif-sdk", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sarif", "sarif-sdk\src\Sarif\Sarif.csproj", "{C0DA9150-1651-457E-A700-A5CC389571A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTests.Sarif", "..\..\binskim\src\sarif-sdk\src\Test.UnitTests.Sarif\Test.UnitTests.Sarif.csproj", "{D976E333-3E50-41DD-B324-603B92237FC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTests.Sarif", "sarif-sdk\src\Test.UnitTests.Sarif\Test.UnitTests.Sarif.csproj", "{D976E333-3E50-41DD-B324-603B92237FC6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTests.Sarif.Driver", "..\..\binskim\src\sarif-sdk\src\Test.UnitTests.Sarif.Driver\Test.UnitTests.Sarif.Driver.csproj", "{F8B27B8D-9DEE-4950-9257-83B8CD3714FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTests.Sarif.Driver", "sarif-sdk\src\Test.UnitTests.Sarif.Driver\Test.UnitTests.Sarif.Driver.csproj", "{F8B27B8D-9DEE-4950-9257-83B8CD3714FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Utilities.Sarif", "..\..\binskim\src\sarif-sdk\src\Test.Utilities.Sarif\Test.Utilities.Sarif.csproj", "{33EE1C90-2A26-428C-8006-B585E07AB620}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Utilities.Sarif", "sarif-sdk\src\Test.Utilities.Sarif\Test.Utilities.Sarif.csproj", "{33EE1C90-2A26-428C-8006-B585E07AB620}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sarif.Converters", "..\..\binskim\src\sarif-sdk\src\Sarif.Converters\Sarif.Converters.csproj", "{0C7A9CC9-991F-4971-8C82-9C8DDE66C3EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sarif.Converters", "sarif-sdk\src\Sarif.Converters\Sarif.Converters.csproj", "{0C7A9CC9-991F-4971-8C82-9C8DDE66C3EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTests.Sarif.Converters", "..\..\binskim\src\sarif-sdk\src\Test.UnitTests.Sarif.Converters\Test.UnitTests.Sarif.Converters.csproj", "{E29D948B-BF8D-41D3-9924-01E994602D8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTests.Sarif.Converters", "sarif-sdk\src\Test.UnitTests.Sarif.Converters\Test.UnitTests.Sarif.Converters.csproj", "{E29D948B-BF8D-41D3-9924-01E994602D8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
