@@ -135,6 +135,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 "A shared CompilerDataLogger instance that will be passed to all skimmers.");
 
 
-        public int MaxFileSizeInKilobytes { get; set; }
+        public long MaxFileSizeInKilobytes { get; set; }
     }
 }
