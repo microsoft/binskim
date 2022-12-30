@@ -30,9 +30,9 @@ namespace Microsoft.CodeAnalysis.IL
             set => throw new InvalidOperationException();
         }
 
-        protected override bool ShouldEnqueue(string file, BinaryAnalyzerContext context)
+        protected override bool ShouldComputeHashes(string file, BinaryAnalyzerContext context)
         {
-            return base.ShouldEnqueue(file, context)
+            return base.ShouldComputeHashes(file, context)
                 && IsValidScanTarget(file);
         }
 
