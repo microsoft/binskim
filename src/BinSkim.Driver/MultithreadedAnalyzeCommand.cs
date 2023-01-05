@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
@@ -29,6 +30,21 @@ namespace Microsoft.CodeAnalysis.IL
             set => throw new InvalidOperationException();
         }
 
+        protected override bool ShouldComputeHashes(string file, BinaryAnalyzerContext context)
+        {
+            return base.ShouldComputeHashes(file, context)
+                && IsValidScanTarget(file);
+        }
+
+        private bool IsValidScanTarget(string file)
+        {
+            Uri uri = new Uri(file);
+
+            return PEBinary.CanLoadBinary(uri) ||
+                   ElfBinary.CanLoadBinary(uri) ||
+                   MachOBinary.CanLoadBinary(uri);
+        }
+
         protected override BinaryAnalyzerContext CreateContext(AnalyzeOptions options, IAnalysisLogger logger, RuntimeConditions runtimeErrors, PropertiesDictionary policy = null, string filePath = null)
         {
             BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, policy, filePath);
@@ -39,7 +55,11 @@ namespace Microsoft.CodeAnalysis.IL
             binaryAnalyzerContext.IgnorePdbLoadError = options.IgnorePdbLoadError;
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
             binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
-            binaryAnalyzerContext.MaxFileSizeInKilobytes = options.MaxFileSizeInKilobytes > 1024 ? options.MaxFileSizeInKilobytes : int.MaxValue;
+
+            binaryAnalyzerContext.MaxFileSizeInKilobytes =
+                options.MaxFileSizeInKilobytes >= 0
+                ? options.MaxFileSizeInKilobytes
+                : BinaryAnalyzerContext.MaxFileSizeInKilobytesDefaultValue;
 
 #pragma warning disable CS0618 // Type or member is obsolete
             if (options.Verbose && ShouldWarnVerbose)
@@ -129,6 +149,13 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override int Run(AnalyzeOptions analyzeOptions)
         {
+            Stopwatch stopwatch = null;
+
+            if (analyzeOptions.Traces.Where(s => s == "ScanTime").Any())
+            {
+                stopwatch = Stopwatch.StartNew();
+            }
+
             if (analyzeOptions.TargetFileSpecifiers?.Any() != true)
             {
                 throw new ArgumentNullException(nameof(analyzeOptions.TargetFileSpecifiers), "Please specify one or more files, directories, or filter patterns for BinSkim analyze.");
@@ -183,6 +210,13 @@ namespace Microsoft.CodeAnalysis.IL
             catch (Exception e)
             {
                 Console.WriteLine(e);
+            }
+            finally
+            {
+                if (stopwatch != null)
+                {
+                    Console.WriteLine($"Scan time: {stopwatch.Elapsed}");
+                }
             }
 
             // In BinSkim, no rule is ever applicable to every target type. For example,
