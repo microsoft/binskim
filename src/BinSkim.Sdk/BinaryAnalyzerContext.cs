@@ -8,14 +8,14 @@ using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
-    public class BinaryAnalyzerContext : IAnalysisContext
+    public class BinaryAnalyzerContext : AnalyzeContextBase
     {
         private Uri uri;
         private IBinary iBinary;
 
-        public BinaryAnalyzerContext()
+        static BinaryAnalyzerContext()
         {
-            this.Policy = new PropertiesDictionary();
+            MaxFileSizeInKilobytesDefaultValue = long.MaxValue;
         }
 
         public IBinary Binary
@@ -34,16 +34,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             set => this.iBinary = value;
         }
 
-        public Exception TargetLoadException
+        public override Exception TargetLoadException
         {
             get => this.Binary?.LoadException;
             set => throw new InvalidOperationException();
         }
 
-        public bool IsValidAnalysisTarget
+        public override bool IsValidAnalysisTarget
         {
             get => this.Binary?.Valid == true;
-            set => throw new InvalidOperationException();
         }
 
         public string LocalSymbolDirectories { get; set; }
@@ -54,7 +53,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             set { this.Policy.SetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing, value); }
         }
 
-        public Uri TargetUri
+        public override Uri TargetUri
         {
             get => this.uri;
             set
@@ -71,25 +70,23 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public string SymbolPath { get; set; }
 
-        public IAnalysisLogger Logger { get; set; }
+        public override IAnalysisLogger Logger { get; set; }
 
-        public ReportingDescriptor Rule { get; set; }
+        public override ReportingDescriptor Rule { get; set; }
 
-        public PropertiesDictionary Policy { get; set; }
+        public override HashData Hashes { get; set; }
 
-        public HashData Hashes { get; set; }
-
-        public string MimeType
+        public override string MimeType
         {
             get => Sarif.Writers.MimeType.Binary;
             set => throw new InvalidOperationException();
         }
 
-        public RuntimeConditions RuntimeErrors { get; set; }
+        public override RuntimeConditions RuntimeErrors { get; set; }
 
-        public bool AnalysisComplete { get; set; }
+        public override bool AnalysisComplete { get; set; }
 
-        public DefaultTraces Traces { get; set; }
+        public override DefaultTraces Traces { get; set; }
 
         public CompilerDataLogger CompilerDataLogger
         {
@@ -103,6 +100,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         }
 
         public bool IgnorePdbLoadError { get; set; }
+
         public bool ForceOverwrite { get; set; }
 
         internal bool disposed = false;
@@ -123,7 +121,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             this.Dispose(true);
@@ -133,7 +131,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             new PerLanguageOption<CompilerDataLogger>(
                 "CompilerTelemetry", nameof(SharedCompilerDataLoggerProperty), defaultValue: () => null,
                 "A shared CompilerDataLogger instance that will be passed to all skimmers.");
-
 
         public long MaxFileSizeInKilobytes { get; set; }
     }
