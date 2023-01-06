@@ -6,10 +6,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Security;
-using System.Threading.Tasks;
 
 using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Readers;
 using Microsoft.CodeAnalysis.Sarif.VersionOne;
@@ -29,12 +27,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
     /// </summary>
     public class CompilerDataLogger : IDisposable
     {
-        [ThreadStatic]
-        internal static TelemetryClient s_injectedTelemetryClient;
-
-        [ThreadStatic]
-        internal static TelemetryConfiguration s_injectedTelemetryConfiguration;
-
         internal static int s_chunkSize = 8192;
 
         // Constant values sent to AppInsights telemetry stream.
@@ -44,7 +36,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal const string AssemblyReferencesEventName = "AssemblyReferencesInformation";
 
         internal const string ToolName = "toolName";
-        internal const string SessionId = "sessionId";
         internal const string ProjectId = "projectId";
         internal const string SymbolPath = "symbolPath";
         internal const string BuildRunId = "buildRunId";
@@ -75,9 +66,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         // Data for persisting telemetry to AppInsights and/or a CSV file.
         internal StreamWriter writer;
-        private readonly string sessionId;
-        private TelemetryClient telemetryClient;
-        private TelemetryConfiguration telemetryConfiguration;
+        private readonly TelemetryClient telemetryClient;
 
         // We currently generate telemetry (such as exceptions that occurred during
         // analysis) that is extracted from the SARIF log file. We currently therefore
@@ -108,10 +97,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 "CompilerTelemetry", nameof(RootPathToElide), defaultValue: () => string.Empty,
                 "A non-deterministic file path root that should be elided from paths in telemetry, e.g., 'c:\\Users\\SomeUser\\'.");
 
-        public CompilerDataLogger(string sarifOutputFilePath, Sarif.SarifVersion sarifVersion, BinaryAnalyzerContext context, IFileSystem fileSystem = null)
+        public CompilerDataLogger(string sarifOutputFilePath, Sarif.SarifVersion sarifVersion, BinaryAnalyzerContext context, IFileSystem fileSystem = null, Telemetry telemetry = null)
         {
             this.syncRoot = new object();
-            this.sessionId = Guid.NewGuid().ToString();
             this.fileSystem = fileSystem ?? new FileSystem();
 
             this.sarifOutputFilePath = sarifOutputFilePath;
@@ -119,14 +107,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             this.RootPathToElide = context.Policy.GetProperty(RootPathToElideProperty);
             this.OwningContextHashCode = context.GetHashCode();
             this.symbolPath = context.SymbolPath;
-
-            this.telemetryClient = s_injectedTelemetryClient ?? telemetryClient;
-            this.telemetryConfiguration = s_injectedTelemetryConfiguration ?? telemetryConfiguration;
-
-            if (this.telemetryClient == null)
-            {
-                InitializeTelemetryClientFromEnvironmentData();
-            }
+            this.telemetryClient = telemetry?.TelemetryClient;
 
             bool forceOverwrite = context.ForceOverwrite;
             string csvFilePath = context.Policy.GetProperty(CsvOutputPath);
@@ -159,6 +140,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 {
                     throw new InvalidOperationException($"Output file exists and force overwrite was not specified: {csvFilePath}");
                 }
+
                 fileSystem.FileDelete(csvFilePath);
             }
 
@@ -171,23 +153,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
             this.writer = new StreamWriter(new FileStream(csvFilePath, FileMode.OpenOrCreate));
             PrintHeader();
-        }
-
-        private void InitializeTelemetryClientFromEnvironmentData()
-        {
-            string appInsightsKey = RetrieveAppInsightsKeyFromEnvironment();
-            if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
-            {
-                this.telemetryConfiguration = new TelemetryConfiguration();
-                string connectionString = $"InstrumentationKey={appInsightsKey}";
-                this.telemetryConfiguration.ConnectionString = connectionString;
-                this.telemetryClient = new TelemetryClient(this.telemetryConfiguration);
-            }
-        }
-
-        public static string RetrieveAppInsightsKeyFromEnvironment()
-        {
-            return RetrieveEnvironmentVariable("BinskimCompilerDataAppInsightsKey");
         }
 
         public static string RetrieveEnvironmentVariable(string name)
@@ -263,8 +228,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "dialect", compilerData.Dialect },
                 { "moduleName", compilerData.ModuleName ?? string.Empty },
                 { "moduleLibrary", (compilerData.ModuleName == compilerData.ModuleLibrary ? string.Empty : compilerData.ModuleLibrary ?? string.Empty) },
-                { "sessionId", this.sessionId },
-                { "hash", context.Hashes?.Sha256 },
+                { "hash", fileHash },
                 { "error", string.Empty }
             };
 
@@ -310,7 +274,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 return;
             }
 
-            this.telemetryClient?.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
+            this.telemetryClient.TrackEvent(CompilerEventName, properties: new Dictionary<string, string>
             {
                 { "target", filePath },
                 { "compilerName", string.Empty },
@@ -325,7 +289,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "dialect", string.Empty },
                 { "moduleName", string.Empty },
                 { "moduleLibrary", string.Empty },
-                { "sessionId", this.sessionId },
                 { "hash", fileHash },
                 { "error", errorMessage },
             });
@@ -341,7 +304,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 {
                     { "toolName", summary.ToolName },
                     { "toolVersion", summary.ToolVersion },
-                    { "sessionId", this.sessionId },
                 });
             }
         }
@@ -359,7 +321,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 { "toolName", summary.ToolName },
                 { "toolVersion", summary.ToolVersion },
-                { "sessionId", this.sessionId },
                 { "normalizedPath", summary.NormalizedPath },
                 { "symbolPath", summary.SymbolPath },
                 { "numberOfBinaryAnalyzed", summary.FileAnalyzed.ToString() },
@@ -387,7 +348,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
                 this.telemetryClient.TrackEvent(eventName, properties: new Dictionary<string, string>
                 {
-                    { "sessionId", this.sessionId },
                     { $"{contentName}Id", contentId },
                     { "orderNumber", (i + 1).ToString() },
                     { "totalNumber", size.ToString() },
@@ -457,20 +417,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             // Flush and close output to our csv file, if present.
             this.writer?.Dispose();
             this.writer = null;
-
-            // Flush and close AppInsights client.
-            if (telemetryClient != null)
-            {
-                this.telemetryClient.Flush();
-
-                // Flush is not blocking when not using InMemoryChannel so wait a bit.
-                // There is an active issue regarding the need for `Sleep`/`Delay`
-                // which is tracked here:
-                // https://github.com/microsoft/ApplicationInsights-dotnet/issues/407
-                Task.Delay(5000).Wait();
-            }
-            this.telemetryConfiguration?.Dispose();
-            this.telemetryConfiguration = null;
         }
     }
 }
