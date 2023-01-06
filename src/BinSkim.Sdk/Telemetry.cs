@@ -97,7 +97,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 Task.Delay(5000).Wait();
             }
-    
+
             this.TelemetryConfiguration!.Dispose();
         }
 

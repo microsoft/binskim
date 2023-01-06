@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL
         // Application Insights event names
         internal const string RuleSummaryEventName = "RuleSummary";
         internal const string AnalysisStoppedEventName = "AnalysisStopped";
-        
+
         // Application Insights property names
         internal const string RuleIdPropertyName = "RuleId";
         internal const string RuntimeConditionsPropertyName = "Flags";
