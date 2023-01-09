@@ -9,6 +9,7 @@
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <OutputType>Exe</OutputType>
     <Platforms>x64</Platforms>
+    <PackAsTool>true</PackAsTool>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -66,9 +67,7 @@
   </ItemGroup>
 
   <ItemGroup>   
-    <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(RuntimeIdentifier)'==''" />
-	<!-- Note: Official Release builds on Windows should specify a RID. Build using the BuildAndTest.cmd script. -->
-    <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(RuntimeIdentifier)'=='win-x64'" />
+    <MsDiaLibs Include="..\..\refs\x64\*" />
     <MsDiaLibs Include="..\..\refs\msdia140.dll.manifest" />
 
     <!-- Required DLLs for Microsoft Visual C++ runtime. -->
@@ -89,5 +88,7 @@
   <Target Name="PublishMsDiaLibs" AfterTargets="publish">
     <Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(PublishDir)\" />
     <Copy SourceFiles="@(MsRuntime)" DestinationFolder="$(PublishDir)\" />
+    <Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(PublishDirNoRID)\" />
+    <Copy SourceFiles="@(MsRuntime)" DestinationFolder="$(PublishDirNoRID)\" />
   </Target>
 </Project>

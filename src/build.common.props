@@ -8,6 +8,7 @@
     <IntermediateOutputPath>$(MsBuildThisFileDirectory)..\bld\obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <OutputPath>$(MsBuildThisFileDirectory)..\bld\bin\$(Platform)_$(Configuration)\</OutputPath>
     <PublishDir>$(MsBuildThisFileDirectory)..\bld\bin\$(Platform)_$(Configuration)\Publish\$(TargetFramework)\$(RuntimeIdentifier)\</PublishDir>
+	<PublishDirNoRID>$(MsBuildThisFileDirectory)..\bld\bin\$(Platform)_$(Configuration)\Publish\$(TargetFramework)\</PublishDirNoRID>    
     <FileAlignment>512</FileAlignment>
     <RestorePackages>true</RestorePackages>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
