@@ -58,12 +58,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                 CompilationUnits = new Lazy<List<DwarfCompilationUnit>>(()
                     => LoadDebug(DwarfSymbolProvider.ParseAllCompilationUnits(this,
-                                                                    DebugData,
-                                                                    DebugDataDescription,
-                                                                    DebugDataStrings,
-                                                                    DebugLineStrings,
-                                                                    DebugStringOffsets,
-                                                                    NormalizeAddress), localSymbolDirectories));
+                                                                              DebugData,
+                                                                              DebugDataDescription,
+                                                                              DebugDataStrings,
+                                                                              DebugLineStrings,
+                                                                              DebugStringOffsets,
+                                                                              NormalizeAddress),
+                                                                              localSymbolDirectories));
 
                 commandLineInfos = new Lazy<List<DwarfCompileCommandLineInfo>>(()
                     => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits.Value));
