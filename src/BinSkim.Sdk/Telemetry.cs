@@ -6,10 +6,9 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
+using System.Threading;
 
 using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 
@@ -80,25 +79,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         /// <inheritdoc/>
         public void Dispose()
         {
-            TelemetryClient? telemetryClient = TelemetryClient;
-            if (telemetryClient is null)
-            {
-                return;
-            }
-
             // Flush and close AppInsights client.
-            telemetryClient.Flush();
-
-            // Flush is not always synchronous. See:
-            // https://github.com/microsoft/ApplicationInsights-dotnet/issues/407
-            // However, the default InMemoryChannel _does_ have a synchronous
-            // Flush and we can avoid an inconvenient delay on shutdown.
-            if (!(this.TelemetryConfiguration!.TelemetryChannel is InMemoryChannel))
-            {
-                Task.Delay(5000).Wait();
-            }
-
-            this.TelemetryConfiguration!.Dispose();
+            this.TelemetryClient?.FlushAsync(CancellationToken.None).GetAwaiter().GetResult();
+            this.TelemetryConfiguration?.Dispose();
         }
 
         private static void ConfigureTelemetryContext(TelemetryContext context)
