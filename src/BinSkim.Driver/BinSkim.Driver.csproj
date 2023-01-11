@@ -20,7 +20,7 @@
     <RepositoryUrl>https://github.com/Microsoft/binskim</RepositoryUrl>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup>    
     <Content Include="README.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -74,7 +74,7 @@
     <!-- Required DLLs for Microsoft Visual C++ runtime. -->
     <MsRuntime Include="..\..\refs\runtime\*" />
   </ItemGroup>
-
+	
   <ItemGroup>
     <PackageReference Update="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -89,5 +89,6 @@
   <Target Name="PublishMsDiaLibs" AfterTargets="publish">
     <Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(PublishDir)\" />
     <Copy SourceFiles="@(MsRuntime)" DestinationFolder="$(PublishDir)\" />
+    <Copy SourceFiles="..\..\src\Nuget\DotnetToolSettings.xml" DestinationFolder="$(PublishDir)\" />
   </Target>
 </Project>
