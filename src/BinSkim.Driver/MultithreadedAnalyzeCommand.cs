@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private bool IsValidScanTarget(string file)
         {
-            Uri uri = new Uri(file);
+            var uri = new Uri(file);
 
             return PEBinary.CanLoadBinary(uri) ||
                    ElfBinary.CanLoadBinary(uri) ||

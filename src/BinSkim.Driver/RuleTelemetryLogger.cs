@@ -57,13 +57,13 @@ namespace Microsoft.CodeAnalysis.IL
 
         public void AnalysisStopped(RuntimeConditions runtimeConditions)
         {
-            EventTelemetry stopEvent = new EventTelemetry(AnalysisStoppedEventName);
+            var stopEvent = new EventTelemetry(AnalysisStoppedEventName);
             stopEvent.Properties[RuntimeConditionsPropertyName] = runtimeConditions.ToString();
             this.telemetryClient.TrackEvent(stopEvent);
 
             foreach (KeyValuePair<string, ResultKindCounts> kv in this.metricsMap)
             {
-                EventTelemetry eventTelemetry = new EventTelemetry(RuleSummaryEventName);
+                var eventTelemetry = new EventTelemetry(RuleSummaryEventName);
                 eventTelemetry.Properties[RuleIdPropertyName] = kv.Key;
 
                 // To reduce telemetry volume, record only non-zero values
