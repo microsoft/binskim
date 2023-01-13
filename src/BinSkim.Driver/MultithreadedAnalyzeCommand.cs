@@ -58,7 +58,12 @@ namespace Microsoft.CodeAnalysis.IL
         {
             if (logger is AggregatingLogger aggregatingLogger && this.Telemetry?.TelemetryClient != null)
             {
-                aggregatingLogger.Loggers.Add(new RuleTelemetryLogger(this.Telemetry.TelemetryClient));
+                var ruleTelemetryLogger = new RuleTelemetryLogger(this.Telemetry.TelemetryClient);
+
+                // Analysis has already started, so let the new logger know.
+                ruleTelemetryLogger.AnalysisStarted();
+
+                aggregatingLogger.Loggers.Add(ruleTelemetryLogger);
             }
 
             BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, policy, filePath);

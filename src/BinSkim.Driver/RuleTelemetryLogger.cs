@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL
@@ -17,17 +18,17 @@ namespace Microsoft.CodeAnalysis.IL
     internal sealed class RuleTelemetryLogger : IAnalysisLogger
     {
         // Application Insights event names
+        internal const string AnalysisRequestName = "Analysis";
         internal const string RuleSummaryEventName = "RuleSummary";
-        internal const string AnalysisStoppedEventName = "AnalysisStopped";
 
         // Application Insights property names
         internal const string RuleIdPropertyName = "RuleId";
-        internal const string RuntimeConditionsPropertyName = "Flags";
 
         // Application Insights metric names
         internal const string PassCountMetricName = "Pass";
         internal const string FailCountMetricName = "Fail";
         internal const string OpenCountMetricName = "Open";
+        internal const string RuleCountMetricName = "RuleCount";
         internal const string ReviewCountMetricName = "Review";
         internal const string NotApplicableCountMetricName = "NA";
         internal const string InformationalCountMetricName = "Info";
@@ -43,6 +44,11 @@ namespace Microsoft.CodeAnalysis.IL
         private readonly Dictionary<string, ResultKindCounts> metricsMap = new Dictionary<string, ResultKindCounts>(StringComparer.Ordinal);
 
         /// <summary>
+        /// Tracks the analysis operation. Will be non-null if analysis is in progress.
+        /// </summary>
+        private IOperationHolder<RequestTelemetry>? analysisOperationHolder;
+
+        /// <summary>
         /// Construct a new <see cref="RuleTelemetryLogger"/>.
         /// </summary>
         /// <param name="telemetryClient">The Application Insights telemetry client.</param>
@@ -53,14 +59,11 @@ namespace Microsoft.CodeAnalysis.IL
 
         public void AnalysisStarted()
         {
+            this.analysisOperationHolder ??= this.telemetryClient.StartOperation<RequestTelemetry>(AnalysisRequestName);
         }
 
         public void AnalysisStopped(RuntimeConditions runtimeConditions)
         {
-            var stopEvent = new EventTelemetry(AnalysisStoppedEventName);
-            stopEvent.Properties[RuntimeConditionsPropertyName] = runtimeConditions.ToString();
-            this.telemetryClient.TrackEvent(stopEvent);
-
             foreach (KeyValuePair<string, ResultKindCounts> kv in this.metricsMap)
             {
                 var eventTelemetry = new EventTelemetry(RuleSummaryEventName);
@@ -77,6 +80,16 @@ namespace Microsoft.CodeAnalysis.IL
                 AddMetricIfNonZero(metrics, counts.InformationalCount, InformationalCountMetricName);
 
                 this.telemetryClient.TrackEvent(eventTelemetry);
+            }
+
+            if (this.analysisOperationHolder != null)
+            {
+                RequestTelemetry request = this.analysisOperationHolder.Telemetry;
+                request.ResponseCode = runtimeConditions.ToString();
+                request.Success = runtimeConditions == RuntimeConditions.None;
+                request.Metrics[RuleCountMetricName] = metricsMap.Count;
+                this.analysisOperationHolder.Dispose();
+                this.analysisOperationHolder = null;
             }
 
             this.metricsMap.Clear();

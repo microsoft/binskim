@@ -93,22 +93,35 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         private static TelemetryConfiguration? CreateTelemetryConfigurationFromEnvironment()
         {
+            string? connectionString = GetConnectionStringFromEnvironment();
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                return null;
+            }
+
+            var telemetryConfiguration = new TelemetryConfiguration
+            {
+                ConnectionString = connectionString
+            };
+
+            telemetryConfiguration.TelemetryInitializers.Add(new OperationCorrelationTelemetryInitializer());
+            return telemetryConfiguration;
+        }
+
+        private static string? GetConnectionStringFromEnvironment()
+        {
+            // Try connection string first.
             string? appInsightsConnectionString = CompilerDataLogger.RetrieveEnvironmentVariable(AppInsightsConnectionStringEnvVar);
             if (!string.IsNullOrEmpty(appInsightsConnectionString))
             {
-                return new TelemetryConfiguration
-                {
-                    ConnectionString = appInsightsConnectionString
-                };
+                return appInsightsConnectionString;
             }
 
+            // Fall back to instrumentation key.
             string? appInsightsKey = CompilerDataLogger.RetrieveEnvironmentVariable(AppInsightsInstrumentationKeyEnvVar);
             if (!string.IsNullOrEmpty(appInsightsKey) && Guid.TryParse(appInsightsKey, out _))
             {
-                return new TelemetryConfiguration
-                {
-                    ConnectionString = $"InstrumentationKey={appInsightsKey}"
-                };
+                return "InstrumentationKey=" + appInsightsKey;
             }
 
             return null;
@@ -140,7 +153,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         /// Log the command line arguments as a custom event.
         /// </summary>
         /// <param name="args">The command line arguments.</param>
-        public void LogCommandLine(string[] args)
+        public void LogCommandLine(string[]? args)
         {
             if (args == null || args.Length == 0)
             {

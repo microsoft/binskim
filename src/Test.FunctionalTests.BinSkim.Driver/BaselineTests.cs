@@ -75,19 +75,35 @@ namespace Microsoft.CodeAnalysis.IL
             var assemblyReferencesEvents = new List<EventTelemetry>();
             var commandLineEvents = new List<EventTelemetry>();
             var summaryEvents = new List<EventTelemetry>();
-            var analysisStoppedEvents = new List<EventTelemetry>();
             var ruleSummaryEvents = new List<EventTelemetry>();
+            var analysisRequests = new List<RequestTelemetry>();
 
-            foreach (EventTelemetry telemetryEvent in sendItems)
+            foreach (ITelemetry telemetryItem in sendItems)
             {
-                switch (telemetryEvent.Name)
+                switch (telemetryItem)
                 {
-                    case CompilerDataLogger.CompilerEventName: compilerEvents.Add(telemetryEvent); break;
-                    case CompilerDataLogger.AssemblyReferencesEventName: assemblyReferencesEvents.Add(telemetryEvent); break;
-                    case CompilerDataLogger.CommandLineEventName: commandLineEvents.Add(telemetryEvent); break;
-                    case CompilerDataLogger.SummaryEventName: summaryEvents.Add(telemetryEvent); break;
-                    case RuleTelemetryLogger.AnalysisStoppedEventName: analysisStoppedEvents.Add(telemetryEvent); break;
-                    case RuleTelemetryLogger.RuleSummaryEventName: ruleSummaryEvents.Add(telemetryEvent); break;
+                    case EventTelemetry telemetryEvent:
+                        switch (telemetryEvent.Name)
+                        {
+                            case CompilerDataLogger.CompilerEventName: compilerEvents.Add(telemetryEvent); break;
+                            case CompilerDataLogger.AssemblyReferencesEventName: assemblyReferencesEvents.Add(telemetryEvent); break;
+                            case CompilerDataLogger.CommandLineEventName: commandLineEvents.Add(telemetryEvent); break;
+                            case CompilerDataLogger.SummaryEventName: summaryEvents.Add(telemetryEvent); break;
+                            case RuleTelemetryLogger.RuleSummaryEventName: ruleSummaryEvents.Add(telemetryEvent); break;
+                        }
+
+                        break;
+
+                    case RequestTelemetry request:
+                        switch (request.Name)
+                        {
+                            case RuleTelemetryLogger.AnalysisRequestName: analysisRequests.Add(request); break;
+                        }
+
+                        break;
+
+                    default:
+                        break;
                 }
             }
 
@@ -144,9 +160,9 @@ namespace Microsoft.CodeAnalysis.IL
                     compilerEventSessionId);
             }
 
-            analysisStoppedEvents.Count.Should().Be(1);
+            analysisRequests.Count.Should().Be(1);
             string expectedRuntimeConditions = (RuntimeConditions.RuleNotApplicableToTarget | RuntimeConditions.OneOrMoreWarningsFired).ToString();
-            string actualRuntimeConditions = analysisStoppedEvents.Single().Properties[RuleTelemetryLogger.RuntimeConditionsPropertyName];
+            string actualRuntimeConditions = analysisRequests.Single().ResponseCode;
             if (actualRuntimeConditions != expectedRuntimeConditions)
             {
                 sb.AppendFormat(
@@ -188,19 +204,35 @@ namespace Microsoft.CodeAnalysis.IL
             var assemblyReferencesEvents = new List<EventTelemetry>();
             var commandLineEvents = new List<EventTelemetry>();
             var summaryEvents = new List<EventTelemetry>();
-            var analysisStoppedEvents = new List<EventTelemetry>();
             var ruleSummaryEvents = new List<EventTelemetry>();
+            var analysisRequests = new List<RequestTelemetry>();
 
-            foreach (EventTelemetry telemetryEvent in sendItems)
+            foreach (ITelemetry telemetryItem in sendItems)
             {
-                switch (telemetryEvent.Name)
+                switch (telemetryItem)
                 {
-                    case CompilerDataLogger.CompilerEventName: compilerEvents.Add(telemetryEvent); break;
-                    case CompilerDataLogger.AssemblyReferencesEventName: assemblyReferencesEvents.Add(telemetryEvent); break;
-                    case CompilerDataLogger.CommandLineEventName: commandLineEvents.Add(telemetryEvent); break;
-                    case CompilerDataLogger.SummaryEventName: summaryEvents.Add(telemetryEvent); break;
-                    case RuleTelemetryLogger.AnalysisStoppedEventName: analysisStoppedEvents.Add(telemetryEvent); break;
-                    case RuleTelemetryLogger.RuleSummaryEventName: ruleSummaryEvents.Add(telemetryEvent); break;
+                    case EventTelemetry telemetryEvent:
+                        switch (telemetryEvent.Name)
+                        {
+                            case CompilerDataLogger.CompilerEventName: compilerEvents.Add(telemetryEvent); break;
+                            case CompilerDataLogger.AssemblyReferencesEventName: assemblyReferencesEvents.Add(telemetryEvent); break;
+                            case CompilerDataLogger.CommandLineEventName: commandLineEvents.Add(telemetryEvent); break;
+                            case CompilerDataLogger.SummaryEventName: summaryEvents.Add(telemetryEvent); break;
+                            case RuleTelemetryLogger.RuleSummaryEventName: ruleSummaryEvents.Add(telemetryEvent); break;
+                        }
+
+                        break;
+
+                    case RequestTelemetry request:
+                        switch (request.Name)
+                        {
+                            case RuleTelemetryLogger.AnalysisRequestName: analysisRequests.Add(request); break;
+                        }
+
+                        break;
+
+                    default:
+                        break;
                 }
             }
 
@@ -248,13 +280,13 @@ namespace Microsoft.CodeAnalysis.IL
             summaryEvents.First().Context.Session.Id
                 .Should().Be(compilerEvents.First().Context.Session.Id);
 
-            analysisStoppedEvents.Count.Should().Be(1);
+            analysisRequests.Count.Should().Be(1);
             RuntimeConditions expectedRuntimeConditions =
                 RuntimeConditions.RuleNotApplicableToTarget |
                 RuntimeConditions.OneOrMoreWarningsFired |
                 RuntimeConditions.OneOrMoreErrorsFired;
 
-            analysisStoppedEvents.First().Properties[RuleTelemetryLogger.RuntimeConditionsPropertyName].Should().Be(expectedRuntimeConditions.ToString());
+            analysisRequests.First().ResponseCode.Should().Be(expectedRuntimeConditions.ToString());
 
             ValidateRuleSummaryEvents(sarifResult, ruleSummaryEvents);
 
