@@ -391,7 +391,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
                 var serializer = new JsonSerializer() { ContractResolver = SarifContractResolverVersionOne.Instance };
 
-                using (JsonTextReader reader = new JsonTextReader(new StreamReader(fileSystem.FileOpenRead(sarifOutputFilePath))))
+                using (var reader = new JsonTextReader(new StreamReader(fileSystem.FileOpenRead(sarifOutputFilePath))))
                 {
                     actualLog = serializer.Deserialize<SarifLogVersionOne>(reader);
                 }

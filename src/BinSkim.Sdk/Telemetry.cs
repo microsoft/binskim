@@ -166,7 +166,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 return;
             }
 
-            EventTelemetry item = new EventTelemetry("CommandLine");
+            var item = new EventTelemetry("CommandLine");
             item.Metrics.Add("argc", args.Length);
             for (int i = 0; i < args.Length; i++)
             {
