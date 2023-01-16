@@ -1,6 +1,5 @@
 # BinSkim Release History
 ## Definitions
-
 - NR => new rule
 - PRF => performance work
 - FCR => fingerprint change or refactor
@@ -15,6 +14,7 @@
 - UEE => eliminate unhandled exceptions in engine
 
 ## **v4.0.0-rc3** UNRELEASED
+* DEP: Update Sarif.Sdk submodule from [fc9a9df to 235394a](https://github.com/microsoft/sarif-sdk/compare/fc9a9df...235394a). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/235394a/src/ReleaseHistory.md).
 * DEP: Upgrade `Elfsharp.2.16.0` to `Elfsharp.2.16.1`[#791](https://github.com/microsoft/binskim/pull/791)
 
 ## **v4.0.0-rc2**
