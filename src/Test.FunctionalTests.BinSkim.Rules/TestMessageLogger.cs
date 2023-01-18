@@ -42,10 +42,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
         }
 
-        public void LogMessage(bool verbose, string message)
-        {
-        }
-
         public void Log(ReportingDescriptor rule, Result result)
         {
             this.NoteTestResult(result.Kind, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
@@ -103,9 +99,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        public void LogToolNotification(Sarif.Notification notification)
+        public void LogToolNotification(Sarif.Notification notification, ReportingDescriptor associatedRule)
         {
-            throw new NotImplementedException();
         }
 
         public void LogConfigurationNotification(Sarif.Notification notification)
