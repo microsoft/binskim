@@ -141,7 +141,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
         }
 
-        public void LogToolNotification(Sarif.Notification notification)
+        public void LogToolNotification(Sarif.Notification notification, ReportingDescriptor? associatedRule)
         {
         }
 
