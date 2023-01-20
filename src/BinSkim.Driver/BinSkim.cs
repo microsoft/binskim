@@ -22,13 +22,16 @@ namespace Microsoft.CodeAnalysis.IL
 
             bool richResultCode = rewrittenArgs.RemoveAll(arg => arg.Equals("--rich-return-code")) == 0;
 
+            using var telemetry = new Sdk.Telemetry();
+            telemetry.LogCommandLine(args);
+
             return Parser.Default.ParseArguments<
                 AnalyzeOptions,
                 ExportRulesMetadataOptions,
                 ExportConfigurationOptions,
                 DumpOptions>(args)
               .MapResult(
-                (AnalyzeOptions analyzeOptions) => new MultithreadedAnalyzeCommand().Run(analyzeOptions),
+                (AnalyzeOptions analyzeOptions) => new MultithreadedAnalyzeCommand(telemetry).Run(analyzeOptions),
                 (ExportRulesMetadataOptions exportRulesMetadataOptions) => new ExportRulesMetadataCommand().Run(exportRulesMetadataOptions),
                 (ExportConfigurationOptions exportConfigurationOptions) => new ExportConfigurationCommand().Run(exportConfigurationOptions),
                 (DumpOptions dumpOptions) => new DumpCommand().Run(dumpOptions),

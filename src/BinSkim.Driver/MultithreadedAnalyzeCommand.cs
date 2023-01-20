@@ -24,6 +24,15 @@ namespace Microsoft.CodeAnalysis.IL
             new string[] { ".dll", ".exe", ".sys" }
             );
 
+        /// <summary>
+        /// Construct a new <see cref="MultithreadedAnalyzeCommand"/> instance.
+        /// </summary>
+        /// <param name="telemetry">The Application Insights telemetry instance. May be null.</param>
+        public MultithreadedAnalyzeCommand(Sdk.Telemetry telemetry = null)
+        {
+            this.Telemetry = telemetry;
+        }
+
         public override IEnumerable<Assembly> DefaultPluginAssemblies
         {
             get => new Assembly[] { typeof(MarkImageAsNXCompatible).Assembly };
@@ -38,7 +47,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         private bool IsValidScanTarget(string file)
         {
-            Uri uri = new Uri(file);
+            var uri = new Uri(file);
 
             return PEBinary.CanLoadBinary(uri) ||
                    ElfBinary.CanLoadBinary(uri) ||
@@ -47,6 +56,16 @@ namespace Microsoft.CodeAnalysis.IL
 
         protected override BinaryAnalyzerContext CreateContext(AnalyzeOptions options, IAnalysisLogger logger, RuntimeConditions runtimeErrors, PropertiesDictionary policy = null, string filePath = null)
         {
+            if (logger is AggregatingLogger aggregatingLogger && this.Telemetry?.TelemetryClient != null)
+            {
+                var ruleTelemetryLogger = new RuleTelemetryLogger(this.Telemetry.TelemetryClient);
+
+                // Analysis has already started, so let the new logger know.
+                ruleTelemetryLogger.AnalysisStarted();
+
+                aggregatingLogger.Loggers.Add(ruleTelemetryLogger);
+            }
+
             BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, policy, filePath);
 
             // Update context object based on command-line parameters.
@@ -79,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL
             // Command-line provided policy is now initialized. Update context 
             // based on any possible configuration provided in this way.
 
-            context.CompilerDataLogger = new CompilerDataLogger(options.OutputFilePath, options.SarifOutputVersion, context, this.FileSystem);
+            context.CompilerDataLogger = new CompilerDataLogger(options.OutputFilePath, options.SarifOutputVersion, context, this.FileSystem, this.Telemetry);
 
             // If the user has hard-coded a non-deterministic file path root to elide from telemetry,
             // we will honor that. If it has not been specified, and if all file target specifiers
@@ -130,13 +149,13 @@ namespace Microsoft.CodeAnalysis.IL
                 }
             }
 
-            int smallestPathLegth = smallestPath.Length;
-            if (smallestPathLegth == 0)
+            int smallestPathLength = smallestPath.Length;
+            if (smallestPathLength == 0)
             {
                 return string.Empty;
             }
 
-            if (smallestPath[smallestPathLegth - 1] != '\\')
+            if (smallestPath[smallestPathLength - 1] != '\\')
             {
                 // In this case, 'smallestPath' is equal to 'c:\path1\partial-path' (this is an incomplete path).
                 // Once we execute, our 'smallestPath' will be transformed into 'c:\path1\'.
@@ -230,5 +249,7 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         internal Sarif.SarifVersion UnitTestOutputVersion { get; set; }
+
+        private Sdk.Telemetry Telemetry { get; }
     }
 }

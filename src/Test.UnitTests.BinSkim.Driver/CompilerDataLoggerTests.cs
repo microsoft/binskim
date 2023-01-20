@@ -10,7 +10,6 @@ using System.Text;
 
 using FluentAssertions;
 
-using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -240,41 +239,13 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                                                               isTelemetryOutputEnabled: false,
                                                               isCsvOutputEnabled: false);
 
-            // Intentionally disable the logger by removing the TelemetryClient and Writer.
-            CompilerDataLogger.s_injectedTelemetryClient = null;
+            // Intentionally disable the logger by removing the Writer.
             compilerDataLogger.writer?.Dispose();
             compilerDataLogger.writer = null;
             compilerDataLogger.Dispose();
 
             fileSystem.Verify(fileSystem => fileSystem.FileOpenRead(sarifLogPath), Times.Never);
             telemetryEventOutput.Count.Should().Be(0);
-        }
-
-        [Fact]
-        public void CompilerDataLogger_ShouldInitializeFromEnvironmentVariable()
-        {
-            try
-            {
-                CompilerDataLogger.s_injectedTelemetryClient = null;
-                CompilerDataLogger.s_injectedTelemetryConfiguration = null;
-                using BinaryAnalyzerContext context = CreateTestContext();
-                var fileSystem = new Mock<IFileSystem>();
-                string randomString = Guid.NewGuid().ToString();
-                Environment.SetEnvironmentVariable("BinskimCompilerDataAppInsightsKey", randomString);
-                var telemetryEventOutput = new List<ITelemetry>();
-                context.Policy = new Sarif.PropertiesDictionary();
-                var logger = new CompilerDataLogger(sarifOutputFilePath: GetExampleSarifPath(Sarif.SarifVersion.Current),
-                                                    sarifVersion: Sarif.SarifVersion.Current,
-                                                    context: context,
-                                                    fileSystem: fileSystem.Object);
-
-                logger.Should().NotBeNull();
-            }
-            finally
-            {
-                // Clear environment variable set for this test.
-                Environment.SetEnvironmentVariable("BinskimCompilerDataAppInsightsKey", null);
-            }
         }
 
         [Fact]
@@ -375,36 +346,27 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             string sarifLogFilePath = GetExampleSarifPath(sarifVersion);
             fileSystem = fileSystem ?? new Mock<IFileSystem>().Object;
 
-            if (!isTelemetryOutputEnabled && !isCsvOutputEnabled)
+            IL.Sdk.Telemetry telemetry = null;
+
+            if (isTelemetryOutputEnabled || isCsvOutputEnabled)
             {
-                logger = new CompilerDataLogger(sarifOutputFilePath: sarifLogFilePath,
-                                                sarifVersion: sarifVersion,
-                                                context: context ?? new BinaryAnalyzerContext(),
-                                                fileSystem: fileSystem);
-            }
-            else
-            {
-                TelemetryClient telemetryClient;
-                TelemetryConfiguration telemetryConfiguration;
-                telemetryConfiguration = new TelemetryConfiguration();
-                string connectionString = $"InstrumentationKey={Guid.NewGuid()}";
-                telemetryConfiguration.ConnectionString = connectionString;
-                telemetryConfiguration.TelemetryChannel =
-                    new StubTelemetryChannel { OnSend = item => telemetryEventOutput.Add(item) };
+                TelemetryConfiguration telemetryConfiguration = new TelemetryConfiguration
+                {
+                    ConnectionString = $"InstrumentationKey={Guid.NewGuid()}",
+                    TelemetryChannel = new StubTelemetryChannel { OnSend = item => telemetryEventOutput.Add(item) }
+                };
 
                 telemetryConfiguration.TelemetryInitializers.Add(new OperationCorrelationTelemetryInitializer());
-
-                telemetryClient = new TelemetryClient(telemetryConfiguration);
-
-                CompilerDataLogger.s_injectedTelemetryClient = telemetryClient;
-                CompilerDataLogger.s_injectedTelemetryConfiguration = telemetryConfiguration;
+                telemetry = new IL.Sdk.Telemetry(telemetryConfiguration);
 
                 context.Policy = new Sarif.PropertiesDictionary();
-                logger = new CompilerDataLogger(sarifOutputFilePath: sarifLogFilePath,
-                                                sarifVersion: sarifVersion,
-                                                context: context ?? new BinaryAnalyzerContext(),
-                                                fileSystem: fileSystem);
             }
+
+            logger = new CompilerDataLogger(sarifOutputFilePath: sarifLogFilePath,
+                                            sarifVersion: sarifVersion,
+                                            context: context ?? new BinaryAnalyzerContext(),
+                                            fileSystem: fileSystem,
+                                            telemetry: telemetry);
 
             return telemetryEventOutput;
         }
