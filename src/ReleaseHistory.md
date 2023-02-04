@@ -13,7 +13,9 @@
 - UER => eliminate unhandled exceptions in rules
 - UEE => eliminate unhandled exceptions in engine
 
-## **v4.0.0-rc3** UNRELEASED
+## **v4.0.0-rc4** UNRELEASED
+
+## **v4.0.0-rc3**
 * DEP: Update Sarif.Sdk submodule from [fc9a9df to 235394a](https://github.com/microsoft/sarif-sdk/compare/fc9a9df...235394a). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/235394a/src/ReleaseHistory.md).
 * DEP: Upgrade `Elfsharp.2.16.0` to `Elfsharp.2.16.1`[#791](https://github.com/microsoft/binskim/pull/791)
 
