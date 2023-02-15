@@ -15,6 +15,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             this.FailTargets = new HashSet<string>();
             this.PassTargets = new HashSet<string>();
+            this.FailWithNoteTargets = new HashSet<string>();
             this.NotApplicableTargets = new HashSet<string>();
             this.ConfigurationErrorTargets = new HashSet<string>();
         }
@@ -24,6 +25,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public HashSet<string> PassTargets { get; set; }
 
         public HashSet<string> FailTargets { get; set; }
+
+        public HashSet<string> FailWithNoteTargets { get; set; }
 
         public HashSet<string> ConfigurationErrorTargets { get; set; }
 
@@ -89,7 +92,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 case FailureLevel.Note:
                 {
-                    throw new NotImplementedException();
+                    this.FailWithNoteTargets.Add(targetPath);
+                    break;
                 }
 
                 default:
