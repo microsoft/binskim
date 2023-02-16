@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
         }
 
-        public void Log(ReportingDescriptor rule, Result result)
+        public void Log(ReportingDescriptor rule, Result result, int? extensionIndex = null)
         {
             this.NoteTestResult(result.Kind, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
             this.NoteTestResult(result.Level, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);

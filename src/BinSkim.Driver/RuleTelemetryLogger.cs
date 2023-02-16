@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
         }
 
-        public void Log(ReportingDescriptor rule, Result result)
+        public void Log(ReportingDescriptor rule, Result result, int? extensionIndex = null)
         {
             if (!this.metricsMap.TryGetValue(rule.Id, out ResultKindCounts? counts))
             {
