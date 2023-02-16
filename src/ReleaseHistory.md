@@ -16,7 +16,7 @@
 ## **v4.0.0-rc5** UNRELEASED
 
 ## **v4.0.0-rc4**
-* DEP: Update Sarif.Sdk submodule from [8e22e9a to d4ceca6](https://github.com/microsoft/sarif-sdk/compare/8e22e9a...235394a). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/235394a/src/ReleaseHistory.md).
+* DEP: Update Sarif.Sdk submodule from [235394a to ec93dccd](https://github.com/microsoft/sarif-sdk/compare/235394a...ec93dccd). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/ec93dccd/src/ReleaseHistory.md).
 
 ## **v4.0.0-rc3**
 * DEP: Update Sarif.Sdk submodule from [fc9a9df to 235394a](https://github.com/microsoft/sarif-sdk/compare/fc9a9df...235394a). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/235394a/src/ReleaseHistory.md).
