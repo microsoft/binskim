@@ -73,7 +73,7 @@ namespace Microsoft.CodeAnalysis.IL
             binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
             binaryAnalyzerContext.IgnorePdbLoadError = options.IgnorePdbLoadError;
             binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
-            binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
+            binaryAnalyzerContext.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
 
             binaryAnalyzerContext.MaxFileSizeInKilobytes =
                 options.MaxFileSizeInKilobytes >= 0
@@ -170,7 +170,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             Stopwatch stopwatch = null;
 
-            if (analyzeOptions.Traces.Where(s => s == "ScanTime").Any())
+            if (analyzeOptions.Trace.Where(s => s == "ScanTime").Any())
             {
                 stopwatch = Stopwatch.StartNew();
             }
