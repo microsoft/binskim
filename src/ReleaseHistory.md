@@ -13,7 +13,8 @@
 - UER => eliminate unhandled exceptions in rules
 - UEE => eliminate unhandled exceptions in engine
 
-## **v4.0.0-rc5** UNRELEASED
+## **v4.0.0** UNRELEASED
+* BUG: Fix `PdbLoad` not working for `--trace`. [821](https://github.com/microsoft/binskim/pull/821)
 
 ## **v4.0.0-rc4**
 * DEP: Update Sarif.Sdk submodule from [235394a to 120fae35](https://github.com/microsoft/sarif-sdk/compare/235394a...120fae35). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/120fae35/src/ReleaseHistory.md).

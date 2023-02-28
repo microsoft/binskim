@@ -16,11 +16,11 @@ namespace Microsoft.CodeAnalysis.IL
         [Option(
             "trace",
             Separator = ';',
-            Default = null,
+            Default = new string[] { },
             HelpText = "Execution traces, expressed as a semicolon-delimited list, that " +
                        "should be emitted to the console and log file (if appropriate). " +
                        "Valid values: PdbLoad.")]
-        public override IEnumerable<string> Traces { get; set; }
+        public new IEnumerable<string> Traces { get; set; } = Array.Empty<string>();
 
         [Option(
             "sympath",
