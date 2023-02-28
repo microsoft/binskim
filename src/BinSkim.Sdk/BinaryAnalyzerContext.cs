@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.Sarif;
@@ -86,7 +87,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public override bool AnalysisComplete { get; set; }
 
-        public override DefaultTraces Traces { get; set; }
+        public override IEnumerable<string> Traces { get; set; }
 
         public CompilerDataLogger CompilerDataLogger
         {
