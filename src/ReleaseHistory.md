@@ -14,7 +14,7 @@
 - UEE => eliminate unhandled exceptions in engine
 
 ## **v4.0.0** UNRELEASED
-* DEP: Update Sarif.Sdk submodule from [120fae35 to ef63e9e](https://github.com/microsoft/sarif-sdk/compare/120fae35...ef63e9e). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/ef63e9e/src/ReleaseHistory.md).
+* DEP: Update Sarif.Sdk submodule from [120fae35 to f6c3bd8](https://github.com/microsoft/sarif-sdk/compare/120fae35...f6c3bd8). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/f6c3bd8/src/ReleaseHistory.md).
 * BUG: Fix `PdbLoad` not working for `--trace`. [819](https://github.com/microsoft/binskim/pull/819)
 
 ## **v4.0.0-rc4**
