@@ -13,11 +13,13 @@
 - UER => eliminate unhandled exceptions in rules
 - UEE => eliminate unhandled exceptions in engine
 
-## **v4.0.0** UNRELEASED
+## **v4.1.0** UNRELEASED
+
+## **v4.0.0**
 * BUG: Fix unhandled `ArgumentException` in `Enum.TryParse` on passing `PdbLoad` value to `--trace` command-line argument. [821](https://github.com/microsoft/binskim/pull/821)
 
 ## **v4.0.0-rc4**
-* DEP: Update Sarif.Sdk submodule from [235394a to 120fae35](https://github.com/microsoft/sarif-sdk/compare/235394a...120fae35). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/120fae35/src/ReleaseHistory.md).
+* DEP: Update Sarif.Sdk submodule from [235394a to 120fae3](https://github.com/microsoft/sarif-sdk/compare/235394a...120fae3). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/120fae3/src/ReleaseHistory.md).
 
 ## **v4.0.0-rc3**
 * DEP: Update Sarif.Sdk submodule from [fc9a9df to 235394a](https://github.com/microsoft/sarif-sdk/compare/fc9a9df...235394a). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/235394a/src/ReleaseHistory.md).
