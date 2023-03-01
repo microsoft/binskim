@@ -74,6 +74,25 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
+        public void AnalyzeCommand_ShouldNotThrowWithPdbLoadTrace()
+        {
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new string[] { GetThisTestAssemblyFilePath() },
+                Traces = new[] { "PdbLoad" },
+            };
+
+            var command = new MultithreadedAnalyzeCommand
+            {
+                UnitTestOutputVersion = Sarif.SarifVersion.Current
+            };
+
+            int result = command.Run(options);
+            result.Should().Be(0);
+            command.ExecutionException.Should().Be(null);
+        }
+
+        [Fact]
         [Obsolete]
         public void AnalyzeCommand_Hashes_ShouldUpdateDataToInsert()
         {
@@ -114,5 +133,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             return sarifLog;
         }
 
+        private static string GetThisTestAssemblyFilePath()
+        {
+            string filePath = typeof(AnalyzeCommandTests).Assembly.Location;
+            return filePath;
+        }
     }
 }
