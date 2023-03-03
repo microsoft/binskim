@@ -452,14 +452,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
             catch (PlatformNotSupportedException ex)
             {
+                this.loadTrace?.AppendLine($"  Examined PDB path: '{pdbPath}'. Failed, platform is not Windows.");
                 throw new PdbException(message: BinaryParsersResources.PdbPlatformUnsupported, ex);
-            }
-            catch (COMException ce)
-            {
-                throw new PdbException(ce)
-                {
-                    LoadTrace = this.loadTrace?.ToString()
-                };
             }
         }
 
@@ -512,9 +506,40 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.restrictReferenceAndOriginalPathAccess = false;
 
             IDiaDataSource diaSource = MsdiaComWrapper.GetDiaSource();
-            diaSource.loadDataFromPdb(pdbPath);
+            try
+            {
+                diaSource.loadDataFromPdb(pdbPath);
+            }
+            catch (OutOfMemoryException ex)
+            {
+                this.loadTrace?.AppendLine($"  Examined PDB path: '{pdbPath}'. HResult: {DiaHresult.E_OUTOFMEMORY}.");
+
+                throw new PdbException(DiaHresult.E_OUTOFMEMORY, ex)
+                {
+                    LoadTrace = this.loadTrace?.ToString()
+                };
+            }
+            catch (COMException ce)
+            {
+                this.loadTrace?.AppendLine($"  Examined PDB path: '{pdbPath}'. HResult: {ce.HResult}.");
+                if (!string.IsNullOrEmpty(ce.Message) && ce.Message.StartsWith("Error HRESULT E_FAIL"))
+                {
+                    throw new PdbException(DiaHresult.E_FAIL, ce)
+                    {
+                        LoadTrace = this.loadTrace?.ToString()
+                    };
+                }
+
+                throw new PdbException(ce)
+                {
+                    LoadTrace = this.loadTrace?.ToString()
+                };
+            }
+
             diaSource.openSession(out this.session);
             this.dataSource = diaSource;
+
+            this.loadTrace?.AppendLine($"  Examined PDB path: '{pdbPath}'. HResult: {DiaHresult.S_OK}.");
         }
 
         private Symbol GetGlobalScope()

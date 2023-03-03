@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -45,6 +46,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             this.symbolPath = symbolPath;
             this.Valid = this.PE.IsPEFile;
             this.tracePdbLoad = tracePdbLoad;
+
+            if (this.tracePdbLoad)
+            {
+                this.PdbLoadTrace = new StringBuilder();
+            }
+
             this.LoadException = this.PE.LoadException;
             this.localSymbolDirectories = localSymbolDirectories;
 
@@ -63,6 +70,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public PE PE { get; private set; }
 
         public Pdb Pdb => this.pdb?.Value;
+
+        public StringBuilder PdbLoadTrace { get; set; }
 
         public PdbException PdbParseException { get; internal set; }
 
@@ -121,14 +130,33 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 && !extension.Equals(pdbExtension, StringComparison.OrdinalIgnoreCase)
                 && this.PdbParseException?.ExceptionCode == DiaHresult.E_PDB_NOT_FOUND)
             {
+                if (pdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
+                {
+                    this.PdbLoadTrace.Append(this.PdbParseException.LoadTrace);
+                }
+
                 peOrPdbPath = peOrPdbPath.Replace(extension, pdbExtension, StringComparison.OrdinalIgnoreCase);
 
                 // If Pdb exists side-by-side with exe, let's try to read
                 if (File.Exists(peOrPdbPath))
                 {
                     TryLoadPdb(peOrPdbPath, pdbExtension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
+
+                    if (pdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
+                    {
+                        this.PdbLoadTrace.Append(this.PdbParseException.LoadTrace);
+                    }
+                    else if (!string.IsNullOrWhiteSpace(pdb?.LoadTrace))
+                    {
+                        this.PdbLoadTrace.Append(pdb.LoadTrace);
+                    }
                 }
                 else
+                {
+                    this.PdbLoadTrace.AppendLine($"  Examined PDB path: '{peOrPdbPath}'. HResult: {DiaHresult.E_PDB_NOT_FOUND}.");
+                }
+
+                if (pdb == null)
                 {
                     string fileName = Path.GetFileName(peOrPdbPath);
 
@@ -136,9 +164,29 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     peOrPdbPath = RetrievePdbPath(fileName);
                     if (!string.IsNullOrEmpty(peOrPdbPath))
                     {
-                        TryLoadPdb(peOrPdbPath, pdbExtension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
+                        if (File.Exists(peOrPdbPath))
+                        {
+                            TryLoadPdb(peOrPdbPath, pdbExtension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
+
+                            if (pdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
+                            {
+                                this.PdbLoadTrace.Append(this.PdbParseException.LoadTrace);
+                            }
+                            else if (!string.IsNullOrWhiteSpace(pdb?.LoadTrace))
+                            {
+                                this.PdbLoadTrace.Append(pdb.LoadTrace);
+                            }
+                        }
+                        else
+                        {
+                            this.PdbLoadTrace.AppendLine($"  Examined PDB path: '{peOrPdbPath}'. HResult: {DiaHresult.E_PDB_NOT_FOUND}.");
+                        }
                     }
                 }
+            }
+            else if (!string.IsNullOrWhiteSpace(pdb?.LoadTrace))
+            {
+                this.PdbLoadTrace.Append(pdb.LoadTrace);
             }
 
             if (pdb != null && pdb.IsStripped)
@@ -149,6 +197,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 {
                     LoadTrace = this.StrippedPdb.LoadTrace
                 };
+                this.PdbLoadTrace.Append(this.PdbParseException.LoadTrace);
             }
 
             return pdb;
