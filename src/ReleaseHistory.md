@@ -14,6 +14,7 @@
 - UEE => eliminate unhandled exceptions in engine
 
 ## **v4.1.0** UNRELEASED
+* BUG: Fix PDB probing details incompleteness on passing `PdbLoad` value to `--trace` command-line argument. [828](https://github.com/microsoft/binskim/pull/828)
 
 ## **v4.0.0**
 * BUG: Fix unhandled `ArgumentException` in `Enum.TryParse` on passing `PdbLoad` value to `--trace` command-line argument. [821](https://github.com/microsoft/binskim/pull/821)
