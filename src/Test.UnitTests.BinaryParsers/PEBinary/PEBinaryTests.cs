@@ -165,6 +165,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 PdbLoadTraceTest_Helper("Case_BadOriginalPdbSideBySide+GoodSameNamePdbSideBySide", "Case_BadPdb_Symbol_symbols_dll+BadPdb_Symbol_dll+BadPdb_Symbol", tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 6);
                 // Case that all load failed.
                 PdbLoadTraceTest_Helper("Case_BadOriginalPdbSideBySide+BadSameNamePdbSideBySide", "Case_BadPdb_Symbol_symbols_dll+BadPdb_Symbol_dll+BadPdb_Symbol", tracePdbLoad: true, expectPdbLoadSuccess: false, expectPdbLoadTraceLineCount: 6);
+                //Case that load from symbol folder with same name pdb file.
+                PdbLoadTraceTest_Helper("Case_BadOriginalPdbSideBySide+BadSameNamePdbSideBySide", "Case_BadPdb_Symbol_symbols_dll+BadPdb_Symbol_dll+BadPdb_Symbol+GoodPdb_SameName", tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 7);
                 // Case that trace is not enabled.
                 PdbLoadTraceTest_Helper("Case_BadOriginalPdbSideBySide+BadSameNamePdbSideBySide", "Case_BadPdb_Symbol_symbols_dll+BadPdb_Symbol_dll+BadPdb_Symbol", tracePdbLoad: false, expectPdbLoadSuccess: false, expectPdbLoadTraceLineCount: 0);
                 // Case that the second symbol file loaded successfully.
@@ -180,6 +182,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             int expectPdbLoadTraceLineCount
             )
         {
+            PEBinary.ClearLocalSymbolDirectoriesCache();
             string caseName = "input is [" + string.Join("|", new object[] { folderForPE, folderForSymbol, tracePdbLoad, expectPdbLoadSuccess, expectPdbLoadTraceLineCount }) + "]";
             string pePath = Path.Combine(TestData, "PE/Trace", folderForPE, "PdbLoadTest.dll");
             string localSymbolDirectories = folderForSymbol == null ? null : Path.Combine(TestData, "SymbolsFolder/Trace/", folderForSymbol);
