@@ -69,14 +69,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public static void ClearLocalSymbolDirectoriesCache()
         {
-            if (s_cachedPdbLocation != null)
+            lock (sync)
             {
-                lock (sync)
+                if (s_cachedPdbLocation != null)
                 {
-                    if (s_cachedPdbLocation != null)
-                    {
-                        s_cachedPdbLocation = null;
-                    }
+                    s_cachedPdbLocation = null;
                 }
             }
         }
