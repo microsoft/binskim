@@ -132,7 +132,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 if (pdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
                 {
-                    this.PdbLoadTrace.Append(this.PdbParseException.LoadTrace);
+                    this.PdbLoadTrace?.Append(this.PdbParseException.LoadTrace);
                 }
 
                 peOrPdbPath = peOrPdbPath.Replace(extension, pdbExtension, StringComparison.OrdinalIgnoreCase);
@@ -144,16 +144,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                     if (pdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
                     {
-                        this.PdbLoadTrace.Append(this.PdbParseException.LoadTrace);
+                        this.PdbLoadTrace?.Append(this.PdbParseException.LoadTrace);
                     }
                     else if (!string.IsNullOrWhiteSpace(pdb?.LoadTrace))
                     {
-                        this.PdbLoadTrace.Append(pdb.LoadTrace);
+                        this.PdbLoadTrace?.Append(pdb.LoadTrace);
                     }
                 }
                 else
                 {
-                    this.PdbLoadTrace.AppendLine($"  Examined PDB path: '{peOrPdbPath}'. HResult: {DiaHresult.E_PDB_NOT_FOUND}.");
+                    this.PdbLoadTrace?.AppendLine($"  Examined PDB path: '{peOrPdbPath}'. HResult: {DiaHresult.E_PDB_NOT_FOUND}.");
                 }
 
                 if (pdb == null)
@@ -170,23 +170,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                             if (pdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
                             {
-                                this.PdbLoadTrace.Append(this.PdbParseException.LoadTrace);
+                                this.PdbLoadTrace?.Append(this.PdbParseException.LoadTrace);
                             }
                             else if (!string.IsNullOrWhiteSpace(pdb?.LoadTrace))
                             {
-                                this.PdbLoadTrace.Append(pdb.LoadTrace);
+                                this.PdbLoadTrace?.Append(pdb.LoadTrace);
                             }
                         }
                         else
                         {
-                            this.PdbLoadTrace.AppendLine($"  Examined PDB path: '{peOrPdbPath}'. HResult: {DiaHresult.E_PDB_NOT_FOUND}.");
+                            this.PdbLoadTrace?.AppendLine($"  Examined PDB path: '{peOrPdbPath}'. HResult: {DiaHresult.E_PDB_NOT_FOUND}.");
                         }
                     }
                 }
             }
             else if (!string.IsNullOrWhiteSpace(pdb?.LoadTrace))
             {
-                this.PdbLoadTrace.Append(pdb.LoadTrace);
+                this.PdbLoadTrace?.Append(pdb.LoadTrace);
             }
 
             if (pdb != null && pdb.IsStripped)
@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 {
                     LoadTrace = this.StrippedPdb.LoadTrace
                 };
-                this.PdbLoadTrace.Append(this.PdbParseException.LoadTrace);
+                this.PdbLoadTrace?.Append(this.PdbParseException.LoadTrace);
             }
 
             return pdb;
