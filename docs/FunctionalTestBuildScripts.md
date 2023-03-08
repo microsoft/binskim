@@ -143,10 +143,11 @@ internal class Program
 }
 ```
 
-## Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe
+## Native_x64_RustC_Rust_debuginfo2_[version].exe
 
-A simple hello world program, compiled with `rustc 1.58.1` that generates a .exe and associated .pdb file. Script to reproduce:  
-`rustc -g -Clink-arg=/DEBUG:FULL src\main.rs -o Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe`
+A simple hello world program, compiled with `rustc` that generates a .exe and associated .pdb file. Script to reproduce:  
+Install the specific version of Rust,
+`rustc -g -Clink-arg=/DEBUG:FULL src\main.rs -o Native_x64_RustC_Rust_debuginfo2_[version].exe`
 
 ## Native_x64_VS2019_CPlusPlus_GsDriverEntry_And_UserFnUseSafeBuffers.exe
 
