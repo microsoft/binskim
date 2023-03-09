@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
-        public void PEBinary_ContainsExpectedLanguageCode()
+        public void PEBinary_NativeBinaryContainsExpectedLanguageCode()
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
@@ -113,6 +113,34 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             // As of v1.67.1 Rust official compiler RustC already use the new CV_CFL_LANG code for Rust.
             ContainsLanguageCode("Native_x64_RustC_Rust_debuginfo2_v1.67.1.exe", Language.Rust).Should().BeTrue();
             ContainsLanguageCode("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll", Language.Cxx).Should().BeTrue();
+        }
+
+        [Fact]
+        public void PEBinary_IsManaged()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            IsManaged("clangcl.pe.c.codeview.exe").Should().BeFalse();
+            IsManaged("clangcl.pe.cpp.codeview.exe").Should().BeFalse();
+            IsManaged("Native_x64_RustC_Rust_debuginfo2_v1.67.1.exe").Should().BeFalse();
+            IsManaged("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll").Should().BeFalse();
+            IsManaged("Managed_x64_VS2022_CSharp_Net48_Default.exe").Should().BeTrue();
+            IsManaged("Managed_x64_VS2022_CSharp_Net70_Default.exe").Should().BeFalse();
+            IsManaged("Managed_x64_VS2022_CSharp_NetCore31_Default.exe").Should().BeFalse();
+        }
+
+        [Fact]
+        public void PEBinary_IsDotNetCore()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            IsDotNetCore("clangcl.pe.c.codeview.exe").Should().BeFalse();
+            IsDotNetCore("clangcl.pe.cpp.codeview.exe").Should().BeFalse();
+            IsDotNetCore("Native_x64_RustC_Rust_debuginfo2_v1.67.1.exe").Should().BeFalse();
+            IsDotNetCore("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll").Should().BeFalse();
+            IsDotNetCore("Managed_x64_VS2022_CSharp_Net48_Default.exe").Should().BeFalse();
+            IsDotNetCore("Managed_x64_VS2022_CSharp_Net70_Default.exe").Should().BeFalse();
+            IsDotNetCore("Managed_x64_VS2022_CSharp_NetCore31_Default.exe").Should().BeFalse();
         }
 
         [Fact]
@@ -157,6 +185,24 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     }
                 }
                 return languages.Contains(language);
+            }
+        }
+
+        private static bool IsManaged(string fileName)
+        {
+            string fileFullPath = Path.Combine(TestData, "PE", fileName);
+            using (var peBinary = new PEBinary(new Uri(fileFullPath)))
+            {
+                return peBinary.PE.IsManaged;
+            }
+        }
+
+        private static bool IsDotNetCore(string fileName)
+        {
+            string fileFullPath = Path.Combine(TestData, "PE", fileName);
+            using (var peBinary = new PEBinary(new Uri(fileFullPath)))
+            {
+                return peBinary.PE.IsDotNetCore;
             }
         }
     }
