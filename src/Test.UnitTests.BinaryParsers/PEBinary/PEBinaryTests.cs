@@ -134,7 +134,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 IsManaged("Managed_x64_VS2022_CSharp_Net70_Default.exe").Should().BeFalse();
                 IsManaged("Managed_x64_VS2022_CSharp_Net70_Default.dll").Should().BeTrue();
                 IsManaged("Native_x64_VS2022_CSharp_Net70_Default_AOT.exe").Should().BeFalse();
-                // Native AOT is not the same as .NET Native
                 IsManaged("Native_x64_VS2022_CSharp_Net70_Default_AOT.dll").Should().BeFalse();
                 IsManaged("Uwp_x64_VS2022_CSharp_22H2_Default.exe").Should().BeTrue();
                 IsManaged("Uwp_x64_VS2022_CSharp_22H2_Default_Native.exe").Should().BeFalse();
@@ -192,6 +191,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 IsDotNetNative("Uwp_x64_VS2022_CSharp_22H2_Default.exe").Should().BeFalse();
                 IsDotNetNative("Uwp_x64_VS2022_CSharp_22H2_Default_Native.exe").Should().BeTrue();
                 IsDotNetNative("Uwp_x64_VS2022_CSharp_22H2_Default_Native.dll").Should().BeTrue();
+                // Native AOT is not the same as .NET Native
+                IsDotNetNative("Native_x64_VS2022_CSharp_Net70_Default_AOT.exe").Should().BeFalse();
             }
         }
 
@@ -205,6 +206,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 IsDotNetNativeBootstrapExe("Uwp_x64_VS2022_CSharp_22H2_Default.exe").Should().BeFalse();
                 IsDotNetNativeBootstrapExe("Uwp_x64_VS2022_CSharp_22H2_Default_Native.exe").Should().BeTrue();
                 IsDotNetNativeBootstrapExe("Uwp_x64_VS2022_CSharp_22H2_Default_Native.dll").Should().BeFalse();
+                // Native AOT is not the same as .NET Native
+                IsDotNetNativeBootstrapExe("Native_x64_VS2022_CSharp_Net70_Default_AOT.exe").Should().BeFalse();
             }
         }
 
