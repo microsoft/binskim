@@ -115,9 +115,13 @@ A simple hello world program, compiled with `go 1.13.8` that generates a dynamic
 A simple hello world program, compiled with `go 1.13.8` that generates a statically linked object file. Script to reproduce:  
 `go build -buildmode=pie -tags "cgo netgo osusergo static_build" -ldflags "-linkmode=external -extldflags '-static-pie -Wl,-z,now,-z,relro,-z,defs'" -o go1.13.8.elf.helloworld.static -v hellogo.go`
 
-## Managed_x64_VS2022_CSharp_[NetVersion]_Default.exe
+## Managed_x64_VS[Version]_CSharp_[NetVersion]_Default_[variant].exe
 
-A default .NET C# console program created with VS 2022 with the specific .NET version, without changing anything and built with default settings.
+A default .NET C# console program created with VS with the specific .NET version, without changing anything and built with default settings.
+_ReadyToRun: Change publish setting and enable ReadyToRun compilation.  
+_SelfContained_SingleFile: Change publish setting and enable both Self Contained and Single File compilation.  
+_AOT: In project setting add `<PublishAot>true</PublishAot>`  
+_Native: In project setting, build tab, enable compile with .Net native toolchain.  
 
 ## Managed_x64_VS2022_NetCore6_CSharp_HighEntropyVA_[True,False].dll
 
