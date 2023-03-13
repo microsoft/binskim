@@ -127,7 +127,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 IsManaged("clangcl.pe.c.codeview.exe").Should().BeFalse();
                 IsManaged("clangcl.pe.cpp.codeview.exe").Should().BeFalse();
-                IsManaged("Native_x64_RustC_Rust_debuginfo2_v1.67.1.exe").Should().BeFalse();
+                IsManaged("Native_x64_RustC_Rust_debuginfo2_v1.59.0.exe").Should().BeFalse();
                 IsManaged("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll").Should().BeFalse();
                 IsManaged("Managed_x64_VS2022_CSharp_Net48_Default.exe").Should().BeTrue();
                 IsManaged("Managed_x64_VS2022_CSharp_Net70_Default.exe").Should().BeFalse();
@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 IsDotNetCore("clangcl.pe.c.codeview.exe").Should().BeFalse();
                 IsDotNetCore("clangcl.pe.cpp.codeview.exe").Should().BeFalse();
-                IsDotNetCore("Native_x64_RustC_Rust_debuginfo2_v1.67.1.exe").Should().BeFalse();
+                IsDotNetCore("Native_x64_RustC_Rust_debuginfo2_v1.59.0.exe").Should().BeFalse();
                 IsDotNetCore("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll").Should().BeFalse();
                 IsDotNetCore("Managed_x64_VS2022_CSharp_Net48_Default.exe").Should().BeFalse();
                 IsDotNetCore("Managed_x64_VS2022_CSharp_Net70_Default.exe").Should().BeFalse();
