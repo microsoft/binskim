@@ -13,7 +13,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         public TestMessageLogger()
         {
-            this.FailTargets = new HashSet<string>();
+            this.ErrorTargets = new HashSet<string>();
+            this.WarningTargets = new HashSet<string>();
+            this.NoteTargets = new HashSet<string>();
             this.PassTargets = new HashSet<string>();
             this.NotApplicableTargets = new HashSet<string>();
             this.ConfigurationErrorTargets = new HashSet<string>();
@@ -23,7 +25,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public HashSet<string> PassTargets { get; set; }
 
-        public HashSet<string> FailTargets { get; set; }
+        public HashSet<string> ErrorTargets { get; set; }
+
+        public HashSet<string> WarningTargets { get; set; }
+
+        public HashSet<string> NoteTargets { get; set; }
 
         public HashSet<string> ConfigurationErrorTargets { get; set; }
 
@@ -44,11 +50,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void Log(ReportingDescriptor rule, Result result, int? extensionIndex = null)
         {
-            this.NoteTestResult(result.Kind, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
-            this.NoteTestResult(result.Level, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
+            this.RecordTestResult(result.Kind, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
+            this.RecordTestResult(result.Level, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
         }
 
-        public void NoteTestResult(ResultKind messageKind, string targetPath)
+        public void RecordTestResult(ResultKind messageKind, string targetPath)
         {
             switch (messageKind)
             {
@@ -71,25 +77,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        public void NoteTestResult(FailureLevel messageKind, string targetPath)
+        public void RecordTestResult(FailureLevel messageKind, string targetPath)
         {
             switch (messageKind)
             {
                 case FailureLevel.Error:
                 {
-                    this.FailTargets.Add(targetPath);
+                    this.ErrorTargets.Add(targetPath);
                     break;
                 }
 
                 case FailureLevel.Warning:
                 {
-                    this.FailTargets.Add(targetPath);
+                    this.WarningTargets.Add(targetPath);
                     break;
                 }
 
                 case FailureLevel.Note:
                 {
-                    throw new NotImplementedException();
+                    this.NoteTargets.Add(targetPath);
+                    break;
                 }
 
                 default:
