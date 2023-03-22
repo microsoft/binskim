@@ -74,7 +74,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             get
             {
-                return this.loadTrace?.ToString();
+                return $"{this.loadTrace}";
             }
             set
             {
@@ -428,13 +428,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 {
                     throw new PdbException(DiaHresult.E_FAIL, ce)
                     {
-                        LoadTrace = this.loadTrace?.ToString()
+                        LoadTrace = $"{this.loadTrace}"
                     };
                 }
 
                 throw new PdbException(ce)
                 {
-                    LoadTrace = this.loadTrace?.ToString()
+                    LoadTrace = $"{this.loadTrace}"
                 };
             }
         }
@@ -512,11 +512,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
             catch (OutOfMemoryException ex)
             {
-                this.loadTrace?.AppendLine($"  Examined PDB path: '{pdbPath}'. HResult: {DiaHresult.E_OUTOFMEMORY}.");
+                this.loadTrace?.AppendLine($"  Examined PDB path: '{pdbPath}'. HResult: {DiaHresult.E_OUTOFMEMORY}. This may indicate the PDB is corrupt.");
 
                 throw new PdbException(DiaHresult.E_OUTOFMEMORY, ex)
                 {
-                    LoadTrace = this.loadTrace?.ToString()
+                    LoadTrace = $"{this.loadTrace}"
                 };
             }
             catch (COMException ce)
@@ -526,13 +526,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 {
                     throw new PdbException(DiaHresult.E_FAIL, ce)
                     {
-                        LoadTrace = this.loadTrace?.ToString()
+                        LoadTrace = $"{this.loadTrace}"
                     };
                 }
 
                 throw new PdbException(ce)
                 {
-                    LoadTrace = this.loadTrace?.ToString()
+                    LoadTrace = $"{this.loadTrace}"
                 };
             }
 

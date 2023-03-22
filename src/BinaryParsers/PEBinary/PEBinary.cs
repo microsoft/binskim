@@ -141,10 +141,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 && !extension.Equals(pdbExtension, StringComparison.OrdinalIgnoreCase)
                 && this.PdbParseException?.ExceptionCode == DiaHresult.E_PDB_NOT_FOUND)
             {
-                if (pdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
-                {
-                    this.PdbLoadTrace?.Append(this.PdbParseException.LoadTrace);
-                }
+                AddToPdbLoadTraceForFailedAttempt(pdb);
 
                 peOrPdbPath = peOrPdbPath.Replace(extension, pdbExtension, StringComparison.OrdinalIgnoreCase);
 
@@ -152,15 +149,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 if (File.Exists(peOrPdbPath))
                 {
                     TryLoadPdb(peOrPdbPath, pdbExtension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
-
-                    if (pdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
-                    {
-                        this.PdbLoadTrace?.Append(this.PdbParseException.LoadTrace);
-                    }
-                    else if (!string.IsNullOrWhiteSpace(pdb?.LoadTrace))
-                    {
-                        this.PdbLoadTrace?.Append(pdb.LoadTrace);
-                    }
+                    AddToPdbLoadTrace(pdb);
                 }
                 else
                 {
@@ -178,15 +167,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                         if (File.Exists(peOrPdbPath))
                         {
                             TryLoadPdb(peOrPdbPath, pdbExtension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
-
-                            if (pdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
-                            {
-                                this.PdbLoadTrace?.Append(this.PdbParseException.LoadTrace);
-                            }
-                            else if (!string.IsNullOrWhiteSpace(pdb?.LoadTrace))
-                            {
-                                this.PdbLoadTrace?.Append(pdb.LoadTrace);
-                            }
+                            AddToPdbLoadTrace(pdb);
                         }
                         else
                         {
@@ -195,9 +176,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     }
                 }
             }
-            else if (!string.IsNullOrWhiteSpace(pdb?.LoadTrace))
+            else
             {
-                this.PdbLoadTrace?.Append(pdb.LoadTrace);
+                AddToPdbLoadTraceForSuccessfulAttempt(pdb);
             }
 
             if (pdb != null && pdb.IsStripped)
@@ -208,10 +189,38 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 {
                     LoadTrace = this.StrippedPdb.LoadTrace
                 };
-                this.PdbLoadTrace?.Append(this.PdbParseException.LoadTrace);
+                AddToPdbLoadTraceForFailedAttempt(pdb);
             }
 
             return pdb;
+        }
+
+        private void AddToPdbLoadTraceForSuccessfulAttempt(Pdb pdb)
+        {
+            if (!string.IsNullOrWhiteSpace(pdb?.LoadTrace))
+            {
+                this.PdbLoadTrace?.Append(pdb.LoadTrace);
+            }
+        }
+
+        private void AddToPdbLoadTraceForFailedAttempt(Pdb pdb)
+        {
+            if (pdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
+            {
+                this.PdbLoadTrace?.Append(this.PdbParseException.LoadTrace);
+            }
+        }
+
+        private void AddToPdbLoadTrace(Pdb pdb)
+        {
+            if (pdb != null)
+            {
+                AddToPdbLoadTraceForSuccessfulAttempt(pdb);
+            }
+            else
+            {
+                AddToPdbLoadTraceForFailedAttempt(pdb);
+            }
         }
 
         private bool TryLoadPdb(string peOrPdbPath, string extension, string symbolPath, string localSymbolDirectories, bool tracePdbLoad, out Pdb pdb)
