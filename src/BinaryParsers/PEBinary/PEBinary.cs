@@ -195,31 +195,31 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             return pdb;
         }
 
-        private void AddToPdbLoadTraceForSuccessfulAttempt(Pdb pdb)
+        private void AddToPdbLoadTraceForSuccessfulAttempt(Pdb currentPdb)
         {
-            if (!string.IsNullOrWhiteSpace(pdb?.LoadTrace))
+            if (!string.IsNullOrWhiteSpace(currentPdb?.LoadTrace))
             {
-                this.PdbLoadTrace?.Append(pdb.LoadTrace);
+                this.PdbLoadTrace?.Append(currentPdb.LoadTrace);
             }
         }
 
-        private void AddToPdbLoadTraceForFailedAttempt(Pdb pdb)
+        private void AddToPdbLoadTraceForFailedAttempt(Pdb currentPdb)
         {
-            if (pdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
+            if (currentPdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
             {
                 this.PdbLoadTrace?.Append(this.PdbParseException.LoadTrace);
             }
         }
 
-        private void AddToPdbLoadTrace(Pdb pdb)
+        private void AddToPdbLoadTrace(Pdb currentPdb)
         {
-            if (pdb != null)
+            if (currentPdb != null)
             {
-                AddToPdbLoadTraceForSuccessfulAttempt(pdb);
+                AddToPdbLoadTraceForSuccessfulAttempt(currentPdb);
             }
             else
             {
-                AddToPdbLoadTraceForFailedAttempt(pdb);
+                AddToPdbLoadTraceForFailedAttempt(currentPdb);
             }
         }
 
