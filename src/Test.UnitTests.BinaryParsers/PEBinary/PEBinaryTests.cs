@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 using Dia2Lib;
@@ -230,6 +231,88 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 peBinary.Pdb.Should().NotBeNull();
                 peBinary.StrippedPdb.Should().BeNull();
                 peBinary.PdbParseException.Should().BeNull();
+            }
+        }
+
+        [Fact]
+        public void PEBinary_PdbLoadTraceTests()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            using (new AssertionScope())
+            {
+                PdbLoadTraceTest_Helper("Case_NoPdbSideBySide", "Case_GoodPdb_Symbol_symbols_dll", tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 1);
+                PdbLoadTraceTest_Helper("Case_NoPdbSideBySide", "Case_GoodPdb_Symbol_dll", tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 2);
+                PdbLoadTraceTest_Helper("Case_NoPdbSideBySide", "Case_GoodPdb_Symbol", tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 3);
+                PdbLoadTraceTest_Helper("Case_NoPdbSideBySide", null, tracePdbLoad: true, expectPdbLoadSuccess: false, expectPdbLoadTraceLineCount: 3);
+                PdbLoadTraceTest_Helper("Case_NoPdbSideBySide", "Case_GoodPdb_Symbol_symbols_dll2", tracePdbLoad: true, expectPdbLoadSuccess: false, expectPdbLoadTraceLineCount: 6);
+
+                PdbLoadTraceTest_Helper("Case_GoodSameNamePdbSideBySide", null, tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 3);
+                PdbLoadTraceTest_Helper("Case_GoodSameNamePdbSideBySide", "Case_GoodPdb_Symbol_symbols_dll", tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 1);
+
+                // Most simple case.
+                PdbLoadTraceTest_Helper("Case_GoodOriginalPdbSideBySide", null, tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 1);
+                // Local one is not used at all since symbol folder is higher priority.
+                PdbLoadTraceTest_Helper("Case_GoodOriginalPdbSideBySide", "Case_GoodPdb_Symbol", tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 3);
+                // Can not load from symbol folder for some reason, then local one is used.
+                PdbLoadTraceTest_Helper("Case_GoodOriginalPdbSideBySide", "Case_BadPdb_Symbol_symbols_dll+BadPdb_Symbol_dll+BadPdb_Symbol", tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 4);
+                // Original Pdb is higher priority than same name pdb file.
+                PdbLoadTraceTest_Helper("Case_BadOriginalPdbSideBySide+GoodSameNamePdbSideBySide", "Case_BadPdb_Symbol_symbols_dll+BadPdb_Symbol_dll+BadPdb_Symbol", tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 6);
+                // Case that all load failed.
+                PdbLoadTraceTest_Helper("Case_BadOriginalPdbSideBySide+BadSameNamePdbSideBySide", "Case_BadPdb_Symbol_symbols_dll+BadPdb_Symbol_dll+BadPdb_Symbol", tracePdbLoad: true, expectPdbLoadSuccess: false, expectPdbLoadTraceLineCount: 6);
+                //Case that load from symbol folder with same name pdb file.
+                PdbLoadTraceTest_Helper("Case_BadOriginalPdbSideBySide+BadSameNamePdbSideBySide", "Case_BadPdb_Symbol_symbols_dll+BadPdb_Symbol_dll+BadPdb_Symbol+GoodPdb_SameName", tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 7);
+                // Case that trace is not enabled.
+                PdbLoadTraceTest_Helper("Case_BadOriginalPdbSideBySide+BadSameNamePdbSideBySide", "Case_BadPdb_Symbol_symbols_dll+BadPdb_Symbol_dll+BadPdb_Symbol", tracePdbLoad: false, expectPdbLoadSuccess: false, expectPdbLoadTraceLineCount: 0);
+                // Case that the second symbol file loaded successfully.
+                PdbLoadTraceTest_Helper("Case_BadOriginalPdbSideBySide+GoodSameNamePdbSideBySide", "Case_BadPdb_Symbol_symbols_dll+GoodPdb_Symbol_dll+BadPdb_Symbol", tracePdbLoad: true, expectPdbLoadSuccess: true, expectPdbLoadTraceLineCount: 2);
+            }
+        }
+
+        private static void PdbLoadTraceTest_Helper(
+            string folderForPE,
+            string folderForSymbol,
+            bool tracePdbLoad,
+            bool expectPdbLoadSuccess,
+            int expectPdbLoadTraceLineCount
+            )
+        {
+            PEBinary.ClearLocalSymbolDirectoriesCache();
+            string caseName = "input is [" + string.Join("|", new object[] { folderForPE, folderForSymbol, tracePdbLoad, expectPdbLoadSuccess, expectPdbLoadTraceLineCount }) + "]";
+            string pePath = Path.Combine(TestData, "PE/Trace", folderForPE, "PdbLoadTest.dll");
+            string localSymbolDirectories = folderForSymbol == null ? null : Path.Combine(TestData, "SymbolsFolder/Trace/", folderForSymbol);
+            using (var peBinary = new PEBinary(new Uri(pePath), localSymbolDirectories: localSymbolDirectories, tracePdbLoad: tracePdbLoad))
+            {
+                if (expectPdbLoadSuccess)
+                {
+                    peBinary.Pdb.Should().NotBeNull(caseName);
+                    peBinary.PdbParseException.Should().BeNull(caseName);
+                }
+                else
+                {
+                    peBinary.Pdb.Should().BeNull(caseName);
+                    peBinary.PdbParseException.Should().NotBeNull(caseName);
+                }
+
+                if (tracePdbLoad)
+                {
+                    peBinary.PdbLoadTrace.Should().NotBeNull(caseName);
+                    string[] lines = peBinary.PdbLoadTrace.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+                    lines.Length.Should().Be(expectPdbLoadTraceLineCount, caseName);
+
+                    if (expectPdbLoadSuccess)
+                    {
+                        lines.Last().Should().Contain(nameof(DiaHresult.S_OK), caseName);
+                    }
+                    else
+                    {
+                        lines.Last().Should().NotContain(nameof(DiaHresult.S_OK), caseName);
+                    }
+                }
+                else
+                {
+                    peBinary.PdbLoadTrace.Should().BeNull(caseName);
+                }
             }
         }
 

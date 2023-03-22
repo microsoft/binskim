@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -45,6 +46,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             this.symbolPath = symbolPath;
             this.Valid = this.PE.IsPEFile;
             this.tracePdbLoad = tracePdbLoad;
+
+            if (this.tracePdbLoad)
+            {
+                this.PdbLoadTrace = new StringBuilder();
+            }
+
             this.LoadException = this.PE.LoadException;
             this.localSymbolDirectories = localSymbolDirectories;
 
@@ -60,9 +67,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
         }
 
+        public static void ClearLocalSymbolDirectoriesCache()
+        {
+            lock (sync)
+            {
+                if (s_cachedPdbLocation != null)
+                {
+                    s_cachedPdbLocation = null;
+                }
+            }
+        }
+
         public PE PE { get; private set; }
 
         public Pdb Pdb => this.pdb?.Value;
+
+        public StringBuilder PdbLoadTrace { get; set; }
 
         public PdbException PdbParseException { get; internal set; }
 
@@ -121,14 +141,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 && !extension.Equals(pdbExtension, StringComparison.OrdinalIgnoreCase)
                 && this.PdbParseException?.ExceptionCode == DiaHresult.E_PDB_NOT_FOUND)
             {
+                AddToPdbLoadTraceForFailedAttempt(pdb);
+
                 peOrPdbPath = peOrPdbPath.Replace(extension, pdbExtension, StringComparison.OrdinalIgnoreCase);
 
                 // If Pdb exists side-by-side with exe, let's try to read
                 if (File.Exists(peOrPdbPath))
                 {
                     TryLoadPdb(peOrPdbPath, pdbExtension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
+                    AddToPdbLoadTrace(pdb);
                 }
                 else
+                {
+                    this.PdbLoadTrace?.AppendLine($"  Examined PDB path: '{peOrPdbPath}'. HResult: {DiaHresult.E_PDB_NOT_FOUND}.");
+                }
+
+                if (pdb == null)
                 {
                     string fileName = Path.GetFileName(peOrPdbPath);
 
@@ -136,9 +164,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     peOrPdbPath = RetrievePdbPath(fileName);
                     if (!string.IsNullOrEmpty(peOrPdbPath))
                     {
-                        TryLoadPdb(peOrPdbPath, pdbExtension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
+                        if (File.Exists(peOrPdbPath))
+                        {
+                            TryLoadPdb(peOrPdbPath, pdbExtension, this.symbolPath, this.localSymbolDirectories, this.tracePdbLoad, out pdb);
+                            AddToPdbLoadTrace(pdb);
+                        }
+                        else
+                        {
+                            this.PdbLoadTrace?.AppendLine($"  Examined PDB path: '{peOrPdbPath}'. HResult: {DiaHresult.E_PDB_NOT_FOUND}.");
+                        }
                     }
                 }
+            }
+            else
+            {
+                AddToPdbLoadTraceForSuccessfulAttempt(pdb);
             }
 
             if (pdb != null && pdb.IsStripped)
@@ -149,9 +189,38 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 {
                     LoadTrace = this.StrippedPdb.LoadTrace
                 };
+                AddToPdbLoadTraceForFailedAttempt(pdb);
             }
 
             return pdb;
+        }
+
+        private void AddToPdbLoadTraceForSuccessfulAttempt(Pdb currentPdb)
+        {
+            if (!string.IsNullOrWhiteSpace(currentPdb?.LoadTrace))
+            {
+                this.PdbLoadTrace?.Append(currentPdb.LoadTrace);
+            }
+        }
+
+        private void AddToPdbLoadTraceForFailedAttempt(Pdb currentPdb)
+        {
+            if (currentPdb == null && !string.IsNullOrWhiteSpace(this.PdbParseException?.LoadTrace))
+            {
+                this.PdbLoadTrace?.Append(this.PdbParseException.LoadTrace);
+            }
+        }
+
+        private void AddToPdbLoadTrace(Pdb currentPdb)
+        {
+            if (currentPdb != null)
+            {
+                AddToPdbLoadTraceForSuccessfulAttempt(currentPdb);
+            }
+            else
+            {
+                AddToPdbLoadTraceForFailedAttempt(currentPdb);
+            }
         }
 
         private bool TryLoadPdb(string peOrPdbPath, string extension, string symbolPath, string localSymbolDirectories, bool tracePdbLoad, out Pdb pdb)

@@ -36,15 +36,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             BinaryParsers.PlatformSpecificHelpers.ThrowIfNotOnWindows();
             PEBinary target = context.PEBinary();
 
-            if (!string.IsNullOrEmpty(target.Pdb?.LoadTrace))
+            if (target.Pdb != null && !string.IsNullOrEmpty(target.PdbLoadTrace?.ToString()))
             {
                 LogPdbLoadTrace(
                     context,
                     pdbLoadSucceeded: true,
-                    target.Pdb.LoadTrace);
+                    target.PdbLoadTrace.ToString());
 
                 // Set the trace to null so that we only emit it once.
-                target.Pdb.LoadTrace = null;
+                target.PdbLoadTrace = null;
             }
 
             if (LogPdbLoadException)
@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                       target.PE.IsMixedMode ||
                       EnforcePdbLoadForManagedAssemblies))
                 {
-                    LogExceptionLoadingPdb(context, target.PdbParseException);
+                    LogExceptionLoadingPdb(context, target.PdbParseException, target.PdbLoadTrace?.ToString());
                     return;
                 }
             }
@@ -127,7 +127,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     pdbLoadTrace));
         }
 
-        public static void LogExceptionLoadingPdb(IAnalysisContext context, PdbException pdbException)
+        public static void LogExceptionLoadingPdb(IAnalysisContext context, PdbException pdbException, string pdbLoadTrace)
         {
             if (context == null)
             {
@@ -162,12 +162,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.RuntimeErrors |= RuntimeConditions.ExceptionLoadingPdb;
             }
 
-            if (!string.IsNullOrEmpty(pdbException.LoadTrace))
+            if (!string.IsNullOrEmpty(pdbLoadTrace))
             {
                 LogPdbLoadTrace(
                     context,
                     pdbLoadSucceeded: false,
-                    pdbException.LoadTrace);
+                    pdbLoadTrace);
             }
 
             // Clear the trace data to ensure we never emit it more than once in output.

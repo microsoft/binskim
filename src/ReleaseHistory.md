@@ -14,6 +14,8 @@
 - UEE => eliminate unhandled exceptions in engine
 
 ## **v4.1.0** UNRELEASED
+* BUG: Probe local symbols directory for PDBs in all code paths. [828](https://github.com/microsoft/binskim/pull/828)
+* BUG: Add missing output in PDB load tracing (enabled by `--trace PdbLoad`. [828](https://github.com/microsoft/binskim/pull/828)
 
 ## **v4.0.0**
 * BUG: Fix unhandled `ArgumentException` in `Enum.TryParse` on passing `PdbLoad` value to `--trace` command-line argument. [821](https://github.com/microsoft/binskim/pull/821)
