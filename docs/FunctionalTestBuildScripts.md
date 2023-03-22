@@ -115,6 +115,14 @@ A simple hello world program, compiled with `go 1.13.8` that generates a dynamic
 A simple hello world program, compiled with `go 1.13.8` that generates a statically linked object file. Script to reproduce:  
 `go build -buildmode=pie -tags "cgo netgo osusergo static_build" -ldflags "-linkmode=external -extldflags '-static-pie -Wl,-z,now,-z,relro,-z,defs'" -o go1.13.8.elf.helloworld.static -v hellogo.go`
 
+## Managed_x64_VS[Version]_CSharp_[NetVersion]_Default_[variant].exe
+
+A default .NET C# console program created with VS with the specific .NET version, without changing anything and built with default settings.
+_ReadyToRun: Change publish setting and enable ReadyToRun compilation.  
+_SelfContained_SingleFile: Change publish setting and enable both Self Contained and Single File compilation.  
+_AOT: In project setting add `<PublishAot>true</PublishAot>`  
+_Native: In project setting, build tab, enable compile with .Net native toolchain.  
+
 ## Managed_x64_VS2022_NetCore6_CSharp_HighEntropyVA_[True,False].dll
 
 A default .NET Core 6 C# program created with VS 2022, in csproj file add `<HighEntropyVA>True/False</HighEntropyVA>` and built with default AnyCPU. Code used:
@@ -143,10 +151,11 @@ internal class Program
 }
 ```
 
-## Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe
+## Native_x64_RustC_Rust_debuginfo2_[version].exe
 
-A simple hello world program, compiled with `rustc 1.58.1` that generates a .exe and associated .pdb file. Script to reproduce:  
-`rustc -g -Clink-arg=/DEBUG:FULL src\main.rs -o Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe`
+A simple hello world program, compiled with `rustc` that generates a .exe and associated .pdb file. Script to reproduce:  
+Install the specific version of Rust,
+`rustc -g -Clink-arg=/DEBUG:FULL src\main.rs -o Native_x64_RustC_Rust_debuginfo2_[version].exe`
 
 ## Native_x64_VS2019_CPlusPlus_GsDriverEntry_And_UserFnUseSafeBuffers.exe
 
