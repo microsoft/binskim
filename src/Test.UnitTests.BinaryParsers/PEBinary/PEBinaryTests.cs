@@ -104,16 +104,111 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
-        public void PEBinary_ContainsExpectedLanguageCode()
+        public void PEBinary_NativeBinaryContainsExpectedLanguageCode()
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
-            ContainsLanguageCode("clangcl.pe.c.codeview.exe", Language.C).Should().BeTrue();
-            ContainsLanguageCode("clangcl.pe.cpp.codeview.exe", Language.Cxx).Should().BeTrue();
-            // As of v1.58.1 Rust official compiler RustC does not yet use the new CV_CFL_LANG code for Rust.
-            // We will have another test file when new version use it.
-            ContainsLanguageCode("Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe", Language.Rust).Should().BeFalse();
-            ContainsLanguageCode("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll", Language.Cxx).Should().BeTrue();
+            using (new AssertionScope())
+            {
+                ContainsLanguageCode("clangcl.pe.c.codeview.exe", Language.C).Should().BeTrue();
+                ContainsLanguageCode("clangcl.pe.cpp.codeview.exe", Language.Cxx).Should().BeTrue();
+                // Rust official compiler RustC supports this new CV_CFL_LANG value starting from version v1.59.0.
+                ContainsLanguageCode("Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe", Language.Rust).Should().BeFalse();
+                ContainsLanguageCode("Native_x64_RustC_Rust_debuginfo2_v1.59.0.exe", Language.Rust).Should().BeTrue();
+                ContainsLanguageCode("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll", Language.Cxx).Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public void PEBinary_IsManaged()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            using (new AssertionScope())
+            {
+                IsManaged("clangcl.pe.c.codeview.exe").Should().BeFalse();
+                IsManaged("clangcl.pe.cpp.codeview.exe").Should().BeFalse();
+                IsManaged("Native_x64_RustC_Rust_debuginfo2_v1.59.0.exe").Should().BeFalse();
+                IsManaged("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll").Should().BeFalse();
+                IsManaged("Managed_x64_VS2022_CSharp_Net48_Default.exe").Should().BeTrue();
+                IsManaged("Managed_x64_VS2022_CSharp_Net70_Default.exe").Should().BeFalse();
+                IsManaged("Managed_x64_VS2022_CSharp_Net70_Default.dll").Should().BeTrue();
+                IsManaged("Native_x64_VS2022_CSharp_Net70_Default_AOT.exe").Should().BeFalse();
+                IsManaged("Native_x64_VS2022_CSharp_Net70_Default_AOT.dll").Should().BeFalse();
+                IsManaged("Uwp_x64_VS2022_CSharp_22H2_Default.exe").Should().BeTrue();
+                IsManaged("Uwp_x64_VS2022_CSharp_22H2_Default_Native.exe").Should().BeFalse();
+                IsManaged("Uwp_x64_VS2022_CSharp_22H2_Default_Native.dll").Should().BeFalse();
+                IsManaged("Managed_x64_VS2022_CSharp_NetCore31_Default.exe").Should().BeFalse();
+                IsManaged("Managed_x64_VS2022_CSharp_NetCore31_Default.dll").Should().BeTrue();
+                // Currently does not support single file app. The file inside should be managed.
+                IsManaged("Managed_x64_VS2022_CSharp_Net70_Default_SelfContained_SingleFile.exe").Should().BeFalse();
+            }
+        }
+
+        [Fact]
+        public void PEBinary_IsDotNetCore()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            using (new AssertionScope())
+            {
+                IsDotNetCore("clangcl.pe.c.codeview.exe").Should().BeFalse();
+                IsDotNetCore("clangcl.pe.cpp.codeview.exe").Should().BeFalse();
+                IsDotNetCore("Native_x64_RustC_Rust_debuginfo2_v1.59.0.exe").Should().BeFalse();
+                IsDotNetCore("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll").Should().BeFalse();
+                IsDotNetCore("Managed_x64_VS2022_CSharp_Net48_Default.exe").Should().BeFalse();
+                IsDotNetCore("Managed_x64_VS2022_CSharp_Net70_Default.exe").Should().BeFalse();
+                IsDotNetCore("Managed_x64_VS2022_CSharp_Net70_Default.dll").Should().BeTrue();
+                IsDotNetCore("Native_x64_VS2022_CSharp_Net70_Default_AOT.exe").Should().BeFalse();
+                IsDotNetCore("Native_x64_VS2022_CSharp_Net70_Default_AOT.dll").Should().BeFalse();
+                IsDotNetCore("Uwp_x64_VS2022_CSharp_22H2_Default.exe").Should().BeTrue();
+                IsDotNetCore("Uwp_x64_VS2022_CSharp_22H2_Default_Native.exe").Should().BeFalse();
+                IsDotNetCore("Uwp_x64_VS2022_CSharp_22H2_Default_Native.dll").Should().BeFalse();
+                IsDotNetCore("Managed_x64_VS2022_CSharp_NetCore31_Default.exe").Should().BeFalse();
+                IsDotNetCore("Managed_x64_VS2022_CSharp_NetCore31_Default.dll").Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public void PEBinary_IsILLibrary()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            using (new AssertionScope())
+            {
+                IsILLibrary("Native_x64_VS2022_CSharp_Net70_Default_AOT.dll").Should().BeFalse();
+                IsILLibrary("Managed_x64_VS2022_CSharp_Net70_Default_ReadyToRun.dll").Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public void PEBinary_IsDotNetNative()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            using (new AssertionScope())
+            {
+                IsDotNetNative("Uwp_x64_VS2022_CSharp_22H2_Default.exe").Should().BeFalse();
+                IsDotNetNative("Uwp_x64_VS2022_CSharp_22H2_Default_Native.exe").Should().BeTrue();
+                IsDotNetNative("Uwp_x64_VS2022_CSharp_22H2_Default_Native.dll").Should().BeTrue();
+                // Native AOT is not the same as .NET Native
+                IsDotNetNative("Native_x64_VS2022_CSharp_Net70_Default_AOT.exe").Should().BeFalse();
+            }
+        }
+
+        [Fact]
+        public void PEBinary_IsDotNetNativeBootstrapExe()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            using (new AssertionScope())
+            {
+                IsDotNetNativeBootstrapExe("Uwp_x64_VS2022_CSharp_22H2_Default.exe").Should().BeFalse();
+                IsDotNetNativeBootstrapExe("Uwp_x64_VS2022_CSharp_22H2_Default_Native.exe").Should().BeTrue();
+                IsDotNetNativeBootstrapExe("Uwp_x64_VS2022_CSharp_22H2_Default_Native.dll").Should().BeFalse();
+                // Native AOT is not the same as .NET Native
+                IsDotNetNativeBootstrapExe("Native_x64_VS2022_CSharp_Net70_Default_AOT.exe").Should().BeFalse();
+            }
         }
 
         [Fact]
@@ -240,6 +335,51 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     }
                 }
                 return languages.Contains(language);
+            }
+        }
+
+        private static bool IsManaged(string fileName)
+        {
+            string fileFullPath = Path.Combine(TestData, "PE", fileName);
+            using (var peBinary = new PEBinary(new Uri(fileFullPath)))
+            {
+                return peBinary.PE.IsManaged;
+            }
+        }
+
+        private static bool IsDotNetCore(string fileName)
+        {
+            string fileFullPath = Path.Combine(TestData, "PE", fileName);
+            using (var peBinary = new PEBinary(new Uri(fileFullPath)))
+            {
+                return peBinary.PE.IsDotNetCore;
+            }
+        }
+
+        private static bool IsILLibrary(string fileName)
+        {
+            string fileFullPath = Path.Combine(TestData, "PE", fileName);
+            using (var peBinary = new PEBinary(new Uri(fileFullPath)))
+            {
+                return peBinary.PE.IsILLibrary;
+            }
+        }
+
+        private static bool IsDotNetNative(string fileName)
+        {
+            string fileFullPath = Path.Combine(TestData, "PE", fileName);
+            using (var peBinary = new PEBinary(new Uri(fileFullPath)))
+            {
+                return peBinary.PE.IsDotNetNative;
+            }
+        }
+
+        private static bool IsDotNetNativeBootstrapExe(string fileName)
+        {
+            string fileFullPath = Path.Combine(TestData, "PE", fileName);
+            using (var peBinary = new PEBinary(new Uri(fileFullPath)))
+            {
+                return peBinary.PE.IsDotNetNativeBootstrapExe;
             }
         }
     }

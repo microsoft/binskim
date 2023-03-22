@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -28,18 +29,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             BinarySkimmer skimmer,
             IEnumerable<string> additionalTestFiles = null,
             bool useDefaultPolicy = false,
-            bool bypassExtensionValidation = false)
+            bool bypassExtensionValidation = false,
+            bool ignoreNoteTargets = false)
         {
-            this.Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: true, bypassExtensionValidation: bypassExtensionValidation);
+            this.Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: true, bypassExtensionValidation: bypassExtensionValidation, ignoreNoteTargets: ignoreNoteTargets);
         }
 
         private void VerifyFail(
             BinarySkimmer skimmer,
             IEnumerable<string> additionalTestFiles = null,
             bool useDefaultPolicy = false,
-            bool bypassExtensionValidation = false)
+            bool bypassExtensionValidation = false,
+            bool ignoreNoteTargets = false)
         {
-            this.Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: false, bypassExtensionValidation: bypassExtensionValidation);
+            this.Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: false, bypassExtensionValidation: bypassExtensionValidation, ignoreNoteTargets: ignoreNoteTargets);
         }
 
         private void Verify(
@@ -47,7 +50,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             IEnumerable<string> additionalTestFiles,
             bool useDefaultPolicy,
             bool expectToPass,
-            bool bypassExtensionValidation = false)
+            bool bypassExtensionValidation = false,
+            bool ignoreNoteTargets = false)
         {
             var targets = new List<string>();
             string ruleName = skimmer.GetType().Name;
@@ -102,8 +106,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 skimmer.Analyze(context);
             }
 
-            HashSet<string> expected = expectToPass ? logger.PassTargets : logger.FailTargets;
-            HashSet<string> other = expectToPass ? logger.FailTargets : logger.PassTargets;
+            var failTargets = new HashSet<string>(logger.ErrorTargets.Union(logger.WarningTargets));
+            var passTargets = new HashSet<string>(logger.PassTargets);
+
+            if (logger.NoteTargets.Count > 0)
+            {
+                if (ignoreNoteTargets)
+                {
+                    // If a same target has both warning/error and note result.
+                    passTargets.UnionWith(logger.NoteTargets.Except(failTargets));
+                }
+                else
+                {
+                    failTargets.UnionWith(logger.NoteTargets);
+                }
+            }
+
+            HashSet<string> expected = expectToPass ? passTargets : failTargets;
+            HashSet<string> other = expectToPass ? failTargets : passTargets;
             HashSet<string> configErrors = logger.ConfigurationErrorTargets;
 
             string expectedText = expectToPass ? "success" : "failure";
