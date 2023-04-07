@@ -14,6 +14,7 @@
 - UEE => eliminate unhandled exceptions in engine
 
 ## **v4.1.0** UNRELEASED
+* BUG: Fix `BA2022.SignSecurely` unhandled `InvalidOperationException`: `Unrecognized crypto HRESULT: 0x80096011`, which is `TRUST_E_MALFORMED_SIGNATURE`, by refreshing `CryptoError` enum with latest data from Windows SDK for Windows 11 (10.0.22621.0). [850](https://github.com/microsoft/binskim/pull/850)
 * BUG: Probe local symbols directory for PDBs in all code paths. [828](https://github.com/microsoft/binskim/pull/828)
 * BUG: Add missing output in PDB load tracing (enabled by `--trace PdbLoad`. [828](https://github.com/microsoft/binskim/pull/828)
 
