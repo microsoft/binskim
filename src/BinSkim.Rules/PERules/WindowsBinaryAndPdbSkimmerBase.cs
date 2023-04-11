@@ -116,14 +116,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             context.Logger.LogConfigurationNotification(
                 Errors.CreateNotification(
-                    context.TargetUri,
+                    context.CurrentTarget.Uri,
                     "TRC001.PdbLoad",
                     context.Rule.Id,
                     failureLevel,
                     exception: null,
                     persistExceptionStack: false,
                     formatString,
-                    context.TargetUri.GetFileName(),
+                    context.CurrentTarget.Uri.GetFileName(),
                     pdbLoadTrace));
         }
 
@@ -134,7 +134,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 throw new ArgumentNullException(nameof(context));
             }
 
-            string path = context.TargetUri.OriginalString;
+            string path = context.CurrentTarget.Uri.OriginalString;
             string key = $"{path}@{pdbException.ExceptionDisplayMessage}";
             if (s_PdbExceptions.ContainsKey(key))
             {
@@ -144,14 +144,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // '{0}' was not evaluated because its PDB could not be loaded ({1}).
             context.Logger.LogConfigurationNotification(
                 Errors.CreateNotification(
-                    context.TargetUri,
+                    context.CurrentTarget.Uri,
                     "ERR997.ExceptionLoadingPdb",
                     string.Empty,
                     FailureLevel.Error,
                     pdbException,
                     persistExceptionStack: false,
                     RuleResources.ERR997_ExceptionLoadingPdbGeneric,
-                    context.TargetUri.GetFileName(),
+                    context.CurrentTarget.Uri.GetFileName(),
                     pdbException.ExceptionDisplayMessage));
 
             s_PdbExceptions.TryAdd(key, true);

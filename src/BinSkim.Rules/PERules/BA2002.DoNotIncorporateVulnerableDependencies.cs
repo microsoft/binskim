@@ -149,7 +149,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA2002_Error),
-                            context.TargetUri.GetFileName(),
+                            context.CurrentTarget.Uri.GetFileName(),
                             descriptor.Name,
                             descriptor.VulnerabilityDescription,
                             descriptor.Resolution,
@@ -162,7 +162,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2002_Pass),
-                    context.TargetUri.GetFileName()));
+                    context.CurrentTarget.Uri.GetFileName()));
         }
 
         private static PropertiesDictionary BuildDefaultVulnerableDependenciesMap()

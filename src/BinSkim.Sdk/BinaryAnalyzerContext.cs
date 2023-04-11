@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.Sarif;
@@ -10,12 +11,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public class BinaryAnalyzerContext : AnalyzeContextBase
     {
-        private Uri uri;
         private IBinary iBinary;
 
         static BinaryAnalyzerContext()
         {
-            MaxFileSizeInKilobytesDefaultValue = long.MaxValue;
         }
 
         public IBinary Binary
@@ -23,7 +22,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             get
             {
                 this.iBinary ??=
-                    BinaryTargetManager.GetBinaryFromFile(this.uri,
+                    BinaryTargetManager.GetBinaryFromFile(this.CurrentTarget.Uri,
                                                           this.SymbolPath,
                                                           this.LocalSymbolDirectories,
                                                           this.TracePdbLoads,
@@ -32,12 +31,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 return this.iBinary;
             }
             set => this.iBinary = value;
-        }
-
-        public override Exception TargetLoadException
-        {
-            get => this.Binary?.LoadException;
-            set => throw new InvalidOperationException();
         }
 
         public override bool IsValidAnalysisTarget
@@ -51,19 +44,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             get { return this.Policy?.GetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing) == true; }
             set { this.Policy.SetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing, value); }
-        }
-
-        public override Uri TargetUri
-        {
-            get => this.uri;
-            set
-            {
-                if (this.uri != null)
-                {
-                    throw new InvalidOperationException(SdkResources.IllegalContextReuse);
-                }
-                this.uri = value;
-            }
         }
 
         public bool TracePdbLoads { get; set; }
@@ -86,8 +66,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public override bool AnalysisComplete { get; set; }
 
-        public override DefaultTraces Traces { get; set; }
-
         public CompilerDataLogger CompilerDataLogger
         {
             get
@@ -101,8 +79,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public bool IgnorePdbLoadError { get; set; }
 
-        public bool ForceOverwrite { get; set; }
-
         internal bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
@@ -111,6 +87,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             {
                 this.iBinary?.Dispose();
                 this.iBinary = null;
+
+                (this.Logger as IDisposable)?.Dispose();
 
                 if (this.CompilerDataLogger?.OwningContextHashCode == this.GetHashCode())
                 {
