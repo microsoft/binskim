@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override BinaryAnalyzerContext InitializeContextFromOptions(AnalyzeOptions options, ref BinaryAnalyzerContext context)
         {
-            if (this.Telemetry != null)
+            if (this.Telemetry?.TelemetryClient != null)
             {
                 var aggregatingLogger = new AggregatingLogger();
 
@@ -194,15 +194,6 @@ namespace Microsoft.CodeAnalysis.IL
                     "Pass 'Current' on the command-line or omit the '-v|--sarif-output-version' argument entirely.");
             }
 
-            // Type or member is obsolete
-#pragma warning disable CS0618
-            if (analyzeOptions.Verbose)
-#pragma warning restore CS0618
-            {
-                analyzeOptions.Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.NotApplicable, ResultKind.Pass };
-                analyzeOptions.Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note };
-            }
-
             int result = 0;
 
             try
@@ -226,7 +217,7 @@ namespace Microsoft.CodeAnalysis.IL
             // Because of this, the return code bit for RuleNotApplicableToTarget is not
             // interesting (it will always be set).
 
-            return analyzeOptions.RichReturnCode != null && analyzeOptions.RichReturnCode.Value
+            return analyzeOptions.RichReturnCode == true
                 ? (int)((uint)result & ~(uint)RuntimeConditions.RuleNotApplicableToTarget)
                 : result;
         }
