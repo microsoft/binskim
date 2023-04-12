@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
-        public void CorrectlyParseGenerateJsonIntegerAs()
+        public void MostlyFunctionlessCommandlineTest()
         {
             var testCases = new List<SarifVersionTestCase>()
             {
