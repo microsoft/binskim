@@ -89,6 +89,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 this.iBinary = null;
 
                 (this.Logger as IDisposable)?.Dispose();
+                this.Logger = null;
 
                 if (this.CompilerDataLogger?.OwningContextHashCode == this.GetHashCode())
                 {

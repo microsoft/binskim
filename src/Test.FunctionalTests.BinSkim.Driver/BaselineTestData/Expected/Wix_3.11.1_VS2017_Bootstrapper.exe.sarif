@@ -412,7 +412,7 @@
             }
           ],
           "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
           }
         }
       },
@@ -424,7 +424,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Wix_3.11.1_VS2017_Bootstrapper.exe"
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Wix_3.11.1_VS2017_Bootstrapper.exe",
+            "index": 0
           },
           "hashes": {
             "md5": "71486A8ADDB83AA436E75F34EBA62761",
