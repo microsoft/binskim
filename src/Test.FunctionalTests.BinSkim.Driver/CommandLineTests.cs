@@ -18,37 +18,26 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
 {
     public class CommandLineTests
     {
-        private const string argsStringBase = @"analyze C:\Native_x64_VS2019_No_CastGuard.exe -o C:\result.sarif -f";
+        private const string argsStringBase = @"analyze C:\Native_x64_VS2019_No_CastGuard.exe -o C:\result.sarif --log ForceOverwrite";
 
         private class SarifVersionTestCase
         {
-            internal string InputBinSkimSarifVersion { get; }
             internal string ArgsString { get; }
-            internal Sarif.SarifVersion? ExpectedSarifVersion { get; }
             internal string ExpectedErrorParameter { get; }
 
-            internal SarifVersionTestCase(string inputBinSkimSarifVersion, Sarif.SarifVersion? expectedSarifVersion, string expectedErrorParameter)
+            internal SarifVersionTestCase(string expectedErrorParameter)
             {
-                this.InputBinSkimSarifVersion = inputBinSkimSarifVersion;
-                this.ArgsString = inputBinSkimSarifVersion == null ? argsStringBase : argsStringBase + inputBinSkimSarifVersion;
-                this.ExpectedSarifVersion = expectedSarifVersion;
+                this.ArgsString = argsStringBase;
                 this.ExpectedErrorParameter = expectedErrorParameter;
             }
         }
 
         [Fact]
-        public void CorrectlyParseGenerateJsonIntegerAs()
+        public void MostlyFunctionlessCommandlineTest()
         {
             var testCases = new List<SarifVersionTestCase>()
             {
-                new SarifVersionTestCase(null, Sarif.SarifVersion.Current, null),
-                new SarifVersionTestCase(" --sarif-output-version Current", Sarif.SarifVersion.Current, null),
-                new SarifVersionTestCase(" --sarif-output-version CURRENT", Sarif.SarifVersion.Current, null),
-                new SarifVersionTestCase(" -v Current", Sarif.SarifVersion.Current, null),
-                new SarifVersionTestCase(" -v current", Sarif.SarifVersion.Current, null),
-                new SarifVersionTestCase(" -v ThreeZeroZero", null, "v, sarif-output-version"),
-                new SarifVersionTestCase(" -v OneZeroZero", Sarif.SarifVersion.OneZeroZero, null),
-                new SarifVersionTestCase(" --sarif-output-version OneZeroZero", Sarif.SarifVersion.OneZeroZero, null),
+                new SarifVersionTestCase(expectedErrorParameter: null),
             };
 
             var builder = new StringBuilder();
@@ -60,9 +49,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                     .MapResult(
                     options =>
                     {
-                        if (testCase.ExpectedSarifVersion == null
-                        || testCase.ExpectedErrorParameter != null
-                        || ((AnalyzeOptionsBase)options).SarifOutputVersion != testCase.ExpectedSarifVersion)
+                        if (testCase.ExpectedErrorParameter != null)
                         {
                             builder.AppendLine($"\u2022 {testCase.ArgsString}");
                         }
@@ -71,11 +58,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                     err =>
                     {
                         var allErrors = err.ToList();
-                        if (testCase.ExpectedSarifVersion != null
-                        || testCase.ExpectedErrorParameter == null
-                        || allErrors.Count != 1
-                        || !(allErrors[0] is BadFormatConversionError)
-                        || ((NamedError)allErrors[0]).NameInfo.NameText != testCase.ExpectedErrorParameter)
+                        if (allErrors.Count != 1 ||
+                            !(allErrors[0] is BadFormatConversionError) ||
+                            ((NamedError)allErrors[0]).NameInfo.NameText != testCase.ExpectedErrorParameter)
                         {
                             builder.AppendLine($"\u2022 {testCase.ArgsString}");
                         }

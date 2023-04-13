@@ -9,6 +9,7 @@ using FluentAssertions;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL;
+using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif.Readers;
@@ -87,30 +88,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 UnitTestOutputVersion = Sarif.SarifVersion.Current
             };
 
-            int result = command.Run(options);
+            BinaryAnalyzerContext context = null;
+            int result = command.Run(options, ref context);
+            context.RuntimeExceptions.Should().BeNull();
             result.Should().Be(0);
-            command.ExecutionException.Should().Be(null);
-        }
-
-        [Fact]
-        [Obsolete]
-        public void AnalyzeCommand_Hashes_ShouldUpdateDataToInsert()
-        {
-            var options = new AnalyzeOptions
-            {
-                TargetFileSpecifiers = new string[] { "dummy.dll" },
-                Level = new[] { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
-                Kind = new[] { ResultKind.Fail }
-            };
-            var command = new MultithreadedAnalyzeCommand();
-
-            options.ComputeFileHashes = false;
-            command.Run(options);
-            options.DataToInsert.Should().BeNull();
-
-            options.ComputeFileHashes = true;
-            command.Run(options);
-            options.DataToInsert.Should().Contain(OptionallyEmittedData.Hashes);
         }
 
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)

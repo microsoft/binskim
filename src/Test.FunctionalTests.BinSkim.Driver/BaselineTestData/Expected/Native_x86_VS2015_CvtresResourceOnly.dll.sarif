@@ -259,7 +259,7 @@
             }
           ],
           "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
           }
         }
       },
@@ -271,7 +271,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_CvtresResourceOnly.dll"
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_CvtresResourceOnly.dll",
+            "index": 0
           },
           "hashes": {
             "md5": "DE13B6B9414EC784CB29C5BA95C1FE65",

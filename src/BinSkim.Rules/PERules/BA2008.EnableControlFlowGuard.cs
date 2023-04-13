@@ -119,7 +119,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.NotApplicable, context, null,
                         nameof(RuleResources.BA2008_NotApplicable_UnsupportedKernelModeVersion),
-                            context.TargetUri.GetFileName()));
+                            context.CurrentTarget.Uri.GetFileName()));
             }
 
             if (!this.EnablesControlFlowGuard(target))
@@ -131,7 +131,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2008_Error),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -139,7 +139,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2008_Pass),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
         }
 
         private bool EnablesControlFlowGuard(PEBinary target)

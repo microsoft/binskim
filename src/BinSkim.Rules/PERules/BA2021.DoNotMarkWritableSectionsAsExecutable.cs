@@ -67,7 +67,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2021_Error_UnexpectedSectionAligment),
-                        context.TargetUri.GetFileName(),
+                        context.CurrentTarget.Uri.GetFileName(),
                         "0x" + peHeader.SectionAlignment.ToString("x"),
                         "0x" + PAGE_SIZE.ToString("x")));
                 return;
@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2021_Pass),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2021_Error),
-                    context.TargetUri.GetFileName(),
+                    context.CurrentTarget.Uri.GetFileName(),
                     badSectionsText));
         }
     }

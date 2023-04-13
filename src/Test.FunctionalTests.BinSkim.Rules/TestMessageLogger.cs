@@ -34,6 +34,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public HashSet<string> ConfigurationErrorTargets { get; set; }
 
         public HashSet<string> NotApplicableTargets { get; set; }
+        public FileRegionsCache FileRegionsCache { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public void AnalysisStarted()
         {
@@ -113,6 +114,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public void LogConfigurationNotification(Sarif.Notification notification)
         {
             this.ConfigurationErrorTargets.Add(notification.Locations[0].PhysicalLocation.ArtifactLocation.Uri.LocalPath);
+        }
+
+        public void TargetAnalyzed(IAnalysisContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }

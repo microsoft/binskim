@@ -183,14 +183,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.Logger.Log(this,
                        RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                            nameof(RuleResources.BA3030_Pass_SomeFunctionsChecked),
-                           context.TargetUri.GetFileName()));
+                           context.CurrentTarget.Uri.GetFileName()));
                 }
                 else
                 {
                     context.Logger.Log(this,
                        RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                            nameof(RuleResources.BA3030_Pass_AllFunctionsChecked),
-                           context.TargetUri.GetFileName()));
+                           context.CurrentTarget.Uri.GetFileName()));
                 }
             }
             else if (unprotectedFunctions.Any())
@@ -198,14 +198,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                            nameof(RuleResources.BA3030_Error),
-                           context.TargetUri.GetFileName()));
+                           context.CurrentTarget.Uri.GetFileName()));
             }
             else
             {
                 context.Logger.Log(this,
                        RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                            nameof(RuleResources.BA3030_Pass_NoCheckableFunctions),
-                           context.TargetUri.GetFileName()));
+                           context.CurrentTarget.Uri.GetFileName()));
             }
         }
     }

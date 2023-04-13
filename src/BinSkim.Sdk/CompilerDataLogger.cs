@@ -204,8 +204,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             string fileHash = context.Hashes?.Sha256;
             string filePath = string.IsNullOrWhiteSpace(RootPathToElide)
-                ? context.TargetUri?.LocalPath
-                : context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty);
+                ? context.CurrentTarget.Uri?.LocalPath
+                : context.CurrentTarget.Uri?.LocalPath.Replace(RootPathToElide, string.Empty);
 
             WriteToCsv($"{filePath},{compilerData},{fileHash},");
 
@@ -264,8 +264,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             string fileHash = context.Hashes?.Sha256;
 
             string filePath = RootPathToElide == null
-                ? context.TargetUri?.LocalPath.Replace(RootPathToElide, string.Empty)
-                : context.TargetUri?.LocalPath;
+                ? context.CurrentTarget.Uri?.LocalPath.Replace(RootPathToElide, string.Empty)
+                : context.CurrentTarget.Uri?.LocalPath;
 
             WriteToCsv($"{filePath},,,,,,,,,,,,,{fileHash},{errorMessage}");
 

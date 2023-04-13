@@ -399,7 +399,7 @@
             }
           ],
           "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
           }
         }
       },
@@ -411,7 +411,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_RTR_win-x86_VS2019_Default.dll"
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_RTR_win-x86_VS2019_Default.dll",
+            "index": 0
           },
           "hashes": {
             "md5": "69C0FA9C2B40D328C1D306CA1F9AEB85",
