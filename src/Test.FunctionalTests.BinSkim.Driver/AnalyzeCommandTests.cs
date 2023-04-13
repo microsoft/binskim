@@ -113,6 +113,32 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             options.DataToInsert.Should().Contain(OptionallyEmittedData.Hashes);
         }
 
+        [Theory()]
+        [Repeat(5)]
+        public void AnalyzeCommand_DeterminismTest(int iterationNumber)
+        {
+            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_DeterminismTest.sarif");
+            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "Determinism", "*.dll");
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new string[] {
+                    pathDeterminismTest
+                },
+                Level = new[] { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
+                Kind = new[] { ResultKind.Fail, ResultKind.Pass },
+                OutputFilePath = fileName,
+                Force = true,
+                Recurse = true,
+                Threads = 10,
+                IgnorePdbLoadError = false,
+                DataToInsert = new[] { OptionallyEmittedData.Hashes },
+            };
+            var command = new MultithreadedAnalyzeCommand();
+            command.Run(options);
+            var log = SarifLog.Load(fileName);
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().BeNull($"iteration {iterationNumber}");
+        }
+
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)
         {
             SarifLog sarifLog;
