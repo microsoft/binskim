@@ -330,7 +330,7 @@
             }
           ],
           "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
           }
         }
       },
@@ -342,7 +342,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.no_fortification_required"
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.no_fortification_required",
+            "index": 0
           },
           "hashes": {
             "md5": "536E3E89337343ECF91915781691129B",

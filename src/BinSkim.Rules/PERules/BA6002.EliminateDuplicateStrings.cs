@@ -126,7 +126,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA6002_Pass),
-                    context.TargetUri.GetFileName()));
+                    context.CurrentTarget.Uri.GetFileName()));
         }
 
         private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes)
@@ -140,7 +140,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                               context,
                                               null,
                                               nameof(RuleResources.BA6002_Warning),
-                                              context.TargetUri.GetFileName(),
+                                              context.CurrentTarget.Uri.GetFileName(),
                                               compilands));
         }
     }

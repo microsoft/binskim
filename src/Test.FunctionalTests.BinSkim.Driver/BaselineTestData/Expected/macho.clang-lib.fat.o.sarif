@@ -9,7 +9,7 @@
           "name": "testhost",
           "version": "15.0.0.0",
           "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
           }
         }
       },

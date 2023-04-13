@@ -18,8 +18,6 @@ namespace Microsoft.CodeAnalysis.IL
 {
     public class MultithreadedAnalyzeCommand : MultithreadedAnalyzeCommandBase<BinaryAnalyzerContext, AnalyzeOptions>
     {
-        private static bool ShouldWarnVerbose = true;
-
         public static HashSet<string> ValidAnalysisFileExtensions = new HashSet<string>(
             new string[] { ".dll", ".exe", ".sys" }
             );
@@ -39,12 +37,6 @@ namespace Microsoft.CodeAnalysis.IL
             set => throw new InvalidOperationException();
         }
 
-        protected override bool ShouldComputeHashes(string file, BinaryAnalyzerContext context)
-        {
-            return base.ShouldComputeHashes(file, context)
-                && IsValidScanTarget(file);
-        }
-
         private bool IsValidScanTarget(string file)
         {
             var uri = new Uri(file);
@@ -54,51 +46,39 @@ namespace Microsoft.CodeAnalysis.IL
                    MachOBinary.CanLoadBinary(uri);
         }
 
-        protected override BinaryAnalyzerContext CreateContext(AnalyzeOptions options, IAnalysisLogger logger, RuntimeConditions runtimeErrors, PropertiesDictionary policy = null, string filePath = null)
+        public override BinaryAnalyzerContext InitializeContextFromOptions(AnalyzeOptions options, ref BinaryAnalyzerContext context)
         {
-            if (logger is AggregatingLogger aggregatingLogger && this.Telemetry?.TelemetryClient != null)
+            if (this.Telemetry?.TelemetryClient != null)
             {
-                var ruleTelemetryLogger = new RuleTelemetryLogger(this.Telemetry.TelemetryClient);
+                var aggregatingLogger = new AggregatingLogger();
 
-                // Analysis has already started, so let the new logger know.
+                var ruleTelemetryLogger = new RuleTelemetryLogger(this.Telemetry.TelemetryClient);
                 ruleTelemetryLogger.AnalysisStarted();
 
                 aggregatingLogger.Loggers.Add(ruleTelemetryLogger);
+                context.Logger = aggregatingLogger;
             }
 
-            BinaryAnalyzerContext binaryAnalyzerContext = base.CreateContext(options, logger, runtimeErrors, policy, filePath);
+            base.InitializeContextFromOptions(options, ref context);
+
+            // We override the driver framework size default to be as large as
+            // possible Binaries and (in particular) their PDBs can be large.
+            context.MaxFileSizeInKilobytes = options.MaxFileSizeInKilobytes != null
+                ? options.MaxFileSizeInKilobytes.Value
+                : long.MaxValue;
 
             // Update context object based on command-line parameters.
-            binaryAnalyzerContext.ForceOverwrite = options.Force;
-            binaryAnalyzerContext.SymbolPath = options.SymbolsPath;
-            binaryAnalyzerContext.IgnorePdbLoadError = options.IgnorePdbLoadError;
-            binaryAnalyzerContext.LocalSymbolDirectories = options.LocalSymbolDirectories;
-            binaryAnalyzerContext.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
+            context.SymbolPath = options.SymbolsPath;
+            context.IgnorePdbLoadError = options.IgnorePdbLoadError;
+            context.LocalSymbolDirectories = options.LocalSymbolDirectories;
+            context.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
 
-            binaryAnalyzerContext.MaxFileSizeInKilobytes =
-                options.MaxFileSizeInKilobytes >= 0
-                ? options.MaxFileSizeInKilobytes
-                : BinaryAnalyzerContext.MaxFileSizeInKilobytesDefaultValue;
-
-#pragma warning disable CS0618 // Type or member is obsolete
-            if (options.Verbose && ShouldWarnVerbose)
-#pragma warning restore CS0618 // Type or member is obsolete
-            {
-                Warnings.LogObsoleteOption(binaryAnalyzerContext, "--verbose", Sdk.SdkResources.Verbose_ReplaceWithLevelAndKind);
-                ShouldWarnVerbose = false;
-            }
-
-            return binaryAnalyzerContext;
-        }
-
-        protected override void InitializeConfiguration(AnalyzeOptions options, BinaryAnalyzerContext context)
-        {
-            base.InitializeConfiguration(options, context);
-
-            // Command-line provided policy is now initialized. Update context 
-            // based on any possible configuration provided in this way.
-
-            context.CompilerDataLogger = new CompilerDataLogger(options.OutputFilePath, options.SarifOutputVersion, context, this.FileSystem, this.Telemetry);
+            context.CompilerDataLogger =
+                new CompilerDataLogger(context.OutputFilePath,
+                                       Sarif.SarifVersion.Current,
+                                       context,
+                                       this.FileSystem,
+                                       this.Telemetry);
 
             // If the user has hard-coded a non-deterministic file path root to elide from telemetry,
             // we will honor that. If it has not been specified, and if all file target specifiers
@@ -106,8 +86,29 @@ namespace Microsoft.CodeAnalysis.IL
             if (string.IsNullOrEmpty(context.CompilerDataLogger.RootPathToElide))
             {
                 context.CompilerDataLogger.RootPathToElide =
-                    ReturnCommonPathRootFromTargetSpecifiersIfOneExists(options.TargetFileSpecifiers);
+                    ReturnCommonPathRootFromTargetSpecifiersIfOneExists(context.TargetFileSpecifiers);
             }
+
+            this.globalContext = context;
+            return context;
+        }
+
+        private BinaryAnalyzerContext globalContext;
+
+        protected override BinaryAnalyzerContext CreateContext(AnalyzeOptions options, IAnalysisLogger logger, RuntimeConditions runtimeErrors, IFileSystem fileSystem = null, PropertiesDictionary policy = null)
+        {
+            BinaryAnalyzerContext context = base.CreateContext(options, logger, runtimeErrors, fileSystem, policy);
+
+            context.CompilerDataLogger = this.globalContext.CompilerDataLogger;
+            context.SymbolPath = this.globalContext.SymbolPath;
+            context.IgnorePdbLoadError = this.globalContext.IgnorePdbLoadError;
+            context.LocalSymbolDirectories = this.globalContext.LocalSymbolDirectories;
+            context.TracePdbLoads = this.globalContext.TracePdbLoads;
+
+            // Command-line provided policy is now initialized. Update context 
+            // based on any possible configuration provided in this way.
+
+            return context;
         }
 
         internal static string ReturnCommonPathRootFromTargetSpecifiersIfOneExists(IEnumerable<string> targetFileSpecifiers)
@@ -199,27 +200,6 @@ namespace Microsoft.CodeAnalysis.IL
                     "Pass 'Current' on the command-line or omit the '-v|--sarif-output-version' argument entirely.");
             }
 
-            // Type or member is obsolete
-#pragma warning disable CS0618
-            if (analyzeOptions.Verbose)
-#pragma warning restore CS0618
-            {
-                analyzeOptions.Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.NotApplicable, ResultKind.Pass };
-                analyzeOptions.Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note };
-            }
-
-            // Type or member is obsolete
-#pragma warning disable CS0618
-            if (analyzeOptions.ComputeFileHashes)
-#pragma warning restore CS0618
-            {
-                OptionallyEmittedData dataToInsert = analyzeOptions.DataToInsert.ToFlags();
-                dataToInsert |= OptionallyEmittedData.Hashes;
-
-                analyzeOptions.DataToInsert = Enum.GetValues(typeof(OptionallyEmittedData)).Cast<OptionallyEmittedData>()
-                    .Where(oed => dataToInsert.HasFlag(oed)).ToList();
-            }
-
             int result = 0;
 
             try
@@ -243,7 +223,7 @@ namespace Microsoft.CodeAnalysis.IL
             // Because of this, the return code bit for RuleNotApplicableToTarget is not
             // interesting (it will always be set).
 
-            return analyzeOptions.RichReturnCode
+            return analyzeOptions.RichReturnCode == true
                 ? (int)((uint)result & ~(uint)RuntimeConditions.RuleNotApplicableToTarget)
                 : result;
         }

@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Fail, context, null,
                     nameof(RuleResources.BA2004_Error_Managed),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2004_Pass),
-                        context.TargetUri.GetFileName(),
+                        context.CurrentTarget.Uri.GetFileName(),
                         "managed"));
         }
 
@@ -229,7 +229,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                               context,
                                               region: null,
                                               nameof(RuleResources.BA2004_Pass),
-                                              context.TargetUri.GetFileName(),
+                                              context.CurrentTarget.Uri.GetFileName(),
                                               "native"));
         }
 
@@ -249,7 +249,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                               context,
                                               region: null,
                                               nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
-                                              context.TargetUri.GetFileName(),
+                                              context.CurrentTarget.Uri.GetFileName(),
                                               compilands));
                 return;
             }
@@ -259,7 +259,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                           context,
                                           region: null,
                                           nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
-                                          context.TargetUri.GetFileName(),
+                                          context.CurrentTarget.Uri.GetFileName(),
                                           compilands));
         }
 

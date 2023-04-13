@@ -314,7 +314,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2006_Error),
-                        context.TargetUri.GetFileName(),
+                        context.CurrentTarget.Uri.GetFileName(),
                         minimumRequiredCompilers,
                         outOfPolicyModulesText));
                 return;
@@ -327,7 +327,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2006_Pass),
-                        context.TargetUri.GetFileName(),
+                        context.CurrentTarget.Uri.GetFileName(),
                         string.Join(", ", sorted)));
         }
 
@@ -376,7 +376,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2006_Error_OutdatedCsc),
-                        context.TargetUri.GetFileName(),
+                        context.CurrentTarget.Uri.GetFileName(),
                         pe.LinkerVersion.ToString(),
                         minCscVersion.ToString()));
 
@@ -387,7 +387,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                 nameof(RuleResources.BA2006_Pass_Csc),
-                    context.TargetUri.GetFileName(),
+                    context.CurrentTarget.Uri.GetFileName(),
                     pe.LinkerVersion.ToString()));
         }
 

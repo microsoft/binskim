@@ -352,7 +352,7 @@
             }
           ],
           "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
           }
         }
       },
@@ -364,7 +364,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2015_FSharp.exe"
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2015_FSharp.exe",
+            "index": 0
           },
           "hashes": {
             "md5": "5CB55D3A4BCAA89BD51C648AA3C9B0F0",

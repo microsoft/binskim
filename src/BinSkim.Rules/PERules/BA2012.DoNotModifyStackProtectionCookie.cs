@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2012_Pass_NoLoadConfig),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2012_Pass),
-                    context.TargetUri.GetFileName()));
+                    context.CurrentTarget.Uri.GetFileName()));
         }
 
         private bool Validate64BitImage(BinaryAnalyzerContext context)
@@ -246,7 +246,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                     nameof(RuleResources.BA2012_Warning_InvalidSecurityCookieOffset),
-                    context.TargetUri.GetFileName(),
+                    context.CurrentTarget.Uri.GetFileName(),
                     context.PEBinary().PE.Packer.ToString()));
         }
 
@@ -258,7 +258,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                     nameof(RuleResources.BA2012_Warning_InvalidSecurityCookieOffset),
-                    context.TargetUri.GetFileName(),
+                    context.CurrentTarget.Uri.GetFileName(),
                     context.PEBinary().PE.Packer.ToString()));
         }
 
@@ -269,7 +269,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2012_Error_CouldNotLocateCookie),
-                    context.TargetUri.GetFileName()));
+                    context.CurrentTarget.Uri.GetFileName()));
         }
 
         private void LogFailure(BinaryAnalyzerContext context, string cookie)
@@ -293,7 +293,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2012_Error),
-                    context.TargetUri.GetFileName(),
+                    context.CurrentTarget.Uri.GetFileName(),
                     cookie));
         }
     }

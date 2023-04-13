@@ -1099,7 +1099,7 @@
             }
           ],
           "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
           }
         }
       },
@@ -1111,7 +1111,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+            "index": 0
           },
           "hashes": {
             "md5": "26C697E66F1E229159D90D7EE8A00B77",

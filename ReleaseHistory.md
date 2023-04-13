@@ -14,57 +14,48 @@
 - UEE => eliminate unhandled exceptions in engine
 
 ## **v4.1.0** UNRELEASED
+* DEP: Update Sarif.Sdk submodule from [120fae3 to 2d52c53](https://github.com/microsoft/sarif-sdk/compare/120fae3...2d52c53). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/2d52c53/src/ReleaseHistory.md).
+* BRK: Remove `--verbose` command-line option (in favor of `--level` and `--kind`). [#853](https://github.com/microsoft/binskim/pull/853)
+* BRK: Remove `--hashes` command-line option (in favor of `--insert Hashes`). [#853](https://github.com/microsoft/binskim/pull/853)
 * BUG: Fix `BA2022.SignSecurely` unhandled `InvalidOperationException`: `Unrecognized crypto HRESULT: 0x80096011`, which is `TRUST_E_MALFORMED_SIGNATURE`, by refreshing `CryptoError` enum with latest data from Windows SDK for Windows 11 (10.0.22621.0). [850](https://github.com/microsoft/binskim/pull/850)
 * BUG: Probe local symbols directory for PDBs in all code paths. [828](https://github.com/microsoft/binskim/pull/828)
 * BUG: Add missing output in PDB load tracing (enabled by `--trace PdbLoad`. [828](https://github.com/microsoft/binskim/pull/828)
 
 ## **v4.0.0**
-* BUG: Fix unhandled `ArgumentException` in `Enum.TryParse` on passing `PdbLoad` value to `--trace` command-line argument. [821](https://github.com/microsoft/binskim/pull/821)
-
-## **v4.0.0-rc4**
-* DEP: Update Sarif.Sdk submodule from [235394a to 120fae3](https://github.com/microsoft/sarif-sdk/compare/235394a...120fae3). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/120fae3/src/ReleaseHistory.md).
-
-## **v4.0.0-rc3**
-* DEP: Update Sarif.Sdk submodule from [fc9a9df to 235394a](https://github.com/microsoft/sarif-sdk/compare/fc9a9df...235394a). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/235394a/src/ReleaseHistory.md).
+* DEP: Update Sarif.Sdk submodule from [fc9a9df to 2d52c53](https://github.com/microsoft/sarif-sdk/compare/fc9a9df...2d52c53). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/2d52c53/src/ReleaseHistory.md).
 * DEP: Upgrade `Elfsharp.2.16.0` to `Elfsharp.2.16.1`[#791](https://github.com/microsoft/binskim/pull/791)
-
-## **v4.0.0-rc2**
-* DEP: Update Sarif.Sdk submodule from [fc9a9df to 90f6a6d](https://github.com/microsoft/sarif-sdk/compare/fc9a9dfb865096b5aaa9fa3651854670940f7459...90f6a6d51dcd3f7df946868360cceb7d7f2f59a0). Resolves performance issues (due to hashing invalid scan targets) and hangs resulting from unhandled exceptions during file enumeration and hashing.
-* DEP: Upgrade SARIF-SDK to resolve performance issues (related to hashing invalid scan targets) and hangs (from unhandled exceptions during file enumeration).
 * DEP: Upgrade BinSkim to .net6.0 as .net core 3.1 reached end of support on 12/13/2022.
-* FPR: Eliminate `BA3003.EnableStackProtector` false positives when the target is statically linked. [744](https://github.com/microsoft/binskim/pull/744)
-* PRF: Fix over-aggressive parsing of DWARF compilation units even when all related rules are disabled. [774](https://github.com/microsoft/binskim/pull/774)
-
-## **v2.0.0-rc2** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/2.0.0-rc2)
-* BUG: Fix assertion failed with no clue when TargetFileSpecifiers is null or empty for BinSkim analyze.[763](https://github.com/microsoft/binskim/pull/763)
-* UER: fix `ERR997.ExceptionLoadingAnalysisTarget : Could not load analysis target` errors analyzing *nix binary resulting from failure to properly parse DWARF debug information.
 * DEP: Upgrade `Newtonsoft.JSON` package to 13.0.2 to resolve security alert.
-
-## **v2.0.0-rc1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/2.0.0-rc1)
-* BUG: Eliminate `BA2004.EnableSecureSourceCodeHashing` false positives to Windows Runtime components (resulting from references to Win RT API metadata files).
 * BRK: Removed SARIF 1.0 support from BinSkim. Now option `-v | --sarif-output-version` does not accept value `OneZeroZero`. [719](https://github.com/microsoft/binskim/pull/719)
-* DEP: Update Sarif.Sdk submodule from [fc9a9df to e557b69](https://github.com/microsoft/sarif-sdk/compare/fc9a9dfb865096b5aaa9fa3651854670940f7459...e557b693000cfc2a19d50f2b6613f92222eabbff). Critically, this update resolves transient [`Collection modified`](https://github.com/microsoft/sarif-sdk/pull/2549) exception during analysis. [#722](https://github.com/microsoft/binskim/pull/722)
-* FPR: Eliminate `BA2015.EnableHighEntropyVirtualAddresses` false positives for some 32-bit exes. [#721](https://github.com/microsoft/binskim/pull/721)
-* NEW: Raw command line passed to the linker now exposed on `ObjectModuleDetail` instances. [#708](https://github.com/microsoft/binskim/pull/708)
-* BUG: Fix `error ERR997.ExceptionLoadingPdb : '[filename]' was not evaluated because its PDB could not be loaded (E_PDB_NOT_FOUND).` when reading PE file built with `PDBPageSize:8192` or greater, by upgrading msdia140.dll from `14.27.28826.96` to `14.32.31326.0`. [685](https://github.com/microsoft/binskim/pull/685)
-* NEW: Add BA3031.EnableClangSafeStack, rename BA3030.UseCheckedFunctionsWithGcc to BA3030.UseGccCheckedFunctions [#663](https://github.com/microsoft/binskim/pull/663)
-* DEP: Upgrade Sarif.Sdk by updating submodule from [fc9a9df to 698adb6](https://github.com/microsoft/sarif-sdk/compare/fc9a9dfb865096b5aaa9fa3651854670940f7459...698adb6365a242c6bb75adde56e3bd4be39c21d7). [#674](https://github.com/microsoft/binskim/pull/674)
+* FPR: Eliminate `BA3003.EnableStackProtector` false positives when the target is statically linked. [744](https://github.com/microsoft/binskim/pull/744)
+* UER: fix `ERR997.ExceptionLoadingAnalysisTarget : Could not load analysis target` errors analyzing *nix binary resulting from failure to properly parse DWARF debug information.
 * NR : Introduce first performance rule `BA6001.DisableIncrementalLinkingInReleaseBuilds` [#667](https://github.com/microsoft/binskim/pull/667)
 * NR : Introduce more performance rules `BA6002.EliminateDuplicateStrings`, `BA6004.EnableCOMDATFolding`, `BA6005.EnableOptimizeReferences`, `BA6006.EnableLinkTimeCodeGeneration` [#691](https://github.com/microsoft/binskim/pull/691)
+* FPR: Eliminate `BA2015.EnableHighEntropyVirtualAddresses` false positives for some 32-bit exes. [#721](https://github.com/microsoft/binskim/pull/721)
+* PRF: Fix over-aggressive parsing of DWARF compilation units even when all related rules are disabled. [774](https://github.com/microsoft/binskim/pull/774)
+* BUG: Fix unhandled `ArgumentException` in `Enum.TryParse` on passing `PdbLoad` value to `--trace` command-line argument. [821](https://github.com/microsoft/binskim/pull/821)
+* BUG: Fix `error ERR997.ExceptionLoadingPdb : '[filename]' was not evaluated because its PDB could not be loaded (E_PDB_NOT_FOUND).` when reading PE file built with `PDBPageSize:8192` or greater, by upgrading msdia140.dll from `14.27.28826.96` to `14.32.31326.0`. [685](https://github.com/microsoft/binskim/pull/685)
+* BUG: Eliminate `BA2004.EnableSecureSourceCodeHashing` false positives to Windows Runtime components (resulting from references to Win RT API metadata files).
+* BUG: Probe local symbols directory for PDBs in all code paths. [828](https://github.com/microsoft/binskim/pull/828)
+* BUG: Add missing output in PDB load tracing (enabled by `--trace PdbLoad`. [828](https://github.com/microsoft/binskim/pull/828)
+* BUG: Fix unhandled `ArgumentException` in `Enum.TryParse` on passing `PdbLoad` value to `--trace` command-line argument. [821](https://github.com/microsoft/binskim/pull/821)
+* BUG: Fix assertion failed with no clue when TargetFileSpecifiers is null or empty for BinSkim analyze.[763](https://github.com/microsoft/binskim/pull/763)
 * BUG: Fix command line parameter in documents: `-Wl,z,relro` with `-Wl,-z,relro`, and `-Wl,z,now` with `-Wl,-z,now`. [736](https://github.com/microsoft/binskim/pull/736)
+* NEW: Raw command line passed to the linker now exposed on `ObjectModuleDetail` instances. [#708](https://github.com/microsoft/binskim/pull/708)
+* NEW: Add BA3031.EnableClangSafeStack, rename BA3030.UseCheckedFunctionsWithGcc to BA3030.UseGccCheckedFunctions [#663](https://github.com/microsoft/binskim/pull/663)
 
 ## **v1.9.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.5)
 * DEP: Upgrade ELFSharp from 2.14.0 to 2.15.0. [#631](https://github.com/microsoft/binskim/pull/631)
 * DEP: Upgrade System.Reflection.Metadata from 5.0.0 to 6.0.1 and System.Collections.Immutable from 5.0.0 to 6.0.0. [#605](https://github.com/microsoft/binskim/pull/605)
-* NEW: Enable BinSkim for MacOS. [#576](https://github.com/microsoft/binskim/pull/576)
 * DEP: Upgrade Sarif.Sdk by updating submodule from [4e9f606 to fc9a9df](https://github.com/microsoft/sarif-sdk/compare/4e9f606bb0e88428866e253352cdc70dc68f98cb...fc9a9dfb865096b5aaa9fa3651854670940f7459). [#638](https://github.com/microsoft/binskim/pull/638)
+* NEW: Enable BinSkim for MacOS. [#576](https://github.com/microsoft/binskim/pull/576)
 * FPR: Skip `BA2025.EnableShadowStack` rule for ARM Binaries which cannot use `/CETCOMPAT`. [#650](https://github.com/microsoft/binskim/pull/650)
 * BUG: Fix missing `commandLineId` from `CommandLineInformation` event. [#652](https://github.com/microsoft/binskim/pull/652)
 
 ## **v1.9.4** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.4)
 * NEW: Add new PE `CV_CFL_LANG` language code for `ALIASOBJ` and `Rust`. [530](https://github.com/microsoft/binskim/pull/530)
-* BUG: Fix `BA2014.DoNotDisableStackProtectionForFunctions` to eliminate false positive reports that `GsDriverEntry` has disabled the stack protector. [551](https://github.com/microsoft/binskim/pull/551)
 * BRK: Rename `BA2026.EnableAdditionalSdlSecurityChecks` to `BA2026.EnableMicrosoftCompilerSdlSwitch` to clarify rule purpose. [#586](https://github.com/microsoft/binskim/pull/586)
+* BUG: Fix `BA2014.DoNotDisableStackProtectionForFunctions` to eliminate false positive reports that `GsDriverEntry` has disabled the stack protector. [551](https://github.com/microsoft/binskim/pull/551)
 * BUG: Fix `Newtonsoft.Json.JsonSerializationException` when reading SARIF V1 with telemetry enabled. [613](https://github.com/microsoft/binskim/pull/613)
 
 ## **v1.9.3** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.3)

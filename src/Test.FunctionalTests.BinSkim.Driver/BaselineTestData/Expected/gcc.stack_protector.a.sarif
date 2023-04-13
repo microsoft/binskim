@@ -9,7 +9,7 @@
           "name": "testhost",
           "version": "15.0.0.0",
           "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
           }
         }
       },
@@ -42,12 +42,13 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.stack_protector.a"
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.stack_protector.a",
+            "index": 0
           },
           "hashes": {
-            "md5": "764B913022B393EAF22F96014401576F",
-            "sha-1": "4B49DA507C9212490EE09280A5A7AD1F1A389188",
-            "sha-256": "8548292CA34C14D090A1DE7327874010E3A7ACE5846B2E28D743CC0F35C069CB"
+            "md5": "B3AA4DD82C145C4B6E589953A2A2FAC4",
+            "sha-1": "25A5DE5A4E982C31CD2426FE002EF1ED8A6D7567",
+            "sha-256": "B878350B9B4D3021DA3216CEA33F6D4DAF11D73BF525C53E1F17399CB3869E5F"
           }
         }
       ],
