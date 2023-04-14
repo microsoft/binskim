@@ -108,7 +108,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 TargetFileSpecifiers = new string[] {
                     pathDeterminismTest
                 },
-                Level = new[] { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
+                Level = new[] { FailureLevel.Error },
                 Kind = new[] { ResultKind.Fail, ResultKind.Pass },
                 OutputFilePath = fileName,
                 OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
@@ -121,8 +121,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             var command = new MultithreadedAnalyzeCommand();
             command.Run(options);
             var log = SarifLog.Load(fileName);
-            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().BeNull($"iteration {iterationNumber}");
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count.Should().Be(3, $"iteration {iterationNumber}");
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().BeNull($"iteration {iterationNumber}");
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_PDB_FORMAT")).Should().Be(1, $"iteration {iterationNumber}");
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_OUTOFMEMORY")).Should().Be(1, $"iteration {iterationNumber}");
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_PDB_NOT_FOUND")).Should().Be(1, $"iteration {iterationNumber}");
