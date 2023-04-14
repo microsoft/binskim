@@ -100,6 +100,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         [Repeat(5)]
         public void AnalyzeCommand_DeterminismTest(int iterationNumber)
         {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
             WindowsBinaryAndPdbSkimmerBase.s_PdbExceptions.Clear();
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_DeterminismTest.sarif");
             string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "Determinism", "*.dll");
@@ -115,12 +117,12 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 Recurse = true,
                 Threads = 10,
                 IgnorePdbLoadError = false,
-                DataToInsert = new[] { OptionallyEmittedData.Hashes },
-
+                DataToInsert = new[] { OptionallyEmittedData.Hashes }
             };
             var command = new MultithreadedAnalyzeCommand();
             command.Run(options);
             var log = SarifLog.Load(fileName);
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count.Should().Be(3, $"iteration {iterationNumber}");
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_PDB_FORMAT")).Should().Be(1, $"iteration {iterationNumber}");
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_OUTOFMEMORY")).Should().Be(1, $"iteration {iterationNumber}");
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_PDB_NOT_FOUND")).Should().Be(1, $"iteration {iterationNumber}");
