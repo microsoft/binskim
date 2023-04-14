@@ -973,7 +973,7 @@
             }
           ],
           "properties": {
-            "Comments": "A security and correctness analyzer for portable executable and MSIL formats."
+            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
           }
         }
       },
@@ -985,7 +985,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+            "index": 0
           },
           "hashes": {
             "md5": "FEB1D498B349A8F6901718FBE5BD4C8B",

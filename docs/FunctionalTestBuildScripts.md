@@ -204,3 +204,7 @@ The Visual Studio 2022 "empty console application" template, compiled as Release
 ## Native_x64_VS2022_PDBPageSize_8192.exe
 
 The Visual Studio 2022 "empty console application" template, compiled as Debug|x64.  The `/PDBPageSize:8192` linker option set page size to 8192.
+
+## Sha256SignedUntrustedRoot.exe
+
+The Visual Studio 2022 default executable template, in project property signing tab enable sign the assembly with a test certificate with sha256RSA.

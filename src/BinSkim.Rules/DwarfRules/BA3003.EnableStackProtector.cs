@@ -171,8 +171,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                                 nameof(RuleResources.BA3003_Error),
-                                context.TargetUri.GetFileName(),
-                                DwarfUtility.GetDistinctNames(failedList, context.TargetUri.GetFileName())));
+                                context.CurrentTarget.Uri.GetFileName(),
+                                DwarfUtility.GetDistinctNames(failedList, context.CurrentTarget.Uri.GetFileName())));
                         return;
                     }
                 }
@@ -186,8 +186,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                                 nameof(RuleResources.BA3003_Error),
-                                context.TargetUri.GetFileName(),
-                                context.TargetUri.GetFileName()));
+                                context.CurrentTarget.Uri.GetFileName(),
+                                context.CurrentTarget.Uri.GetFileName()));
                         return;
                     }
 
@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA3003_Pass),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -214,8 +214,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                                 nameof(RuleResources.BA3003_Error),
-                                context.TargetUri.GetFileName(),
-                                DwarfUtility.GetDistinctNames(failedList, context.TargetUri.GetFileName())));
+                                context.CurrentTarget.Uri.GetFileName(),
+                                DwarfUtility.GetDistinctNames(failedList, context.CurrentTarget.Uri.GetFileName())));
                         return;
                     }
                 }
@@ -224,7 +224,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA3003_Pass),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
             }
         }
 

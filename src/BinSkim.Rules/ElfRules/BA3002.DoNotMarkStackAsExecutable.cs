@@ -69,7 +69,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                                 nameof(RuleResources.BA3002_Error_StackExec),
-                                context.TargetUri.GetFileName()));
+                                context.CurrentTarget.Uri.GetFileName()));
                         return;
                     }
                     else
@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                                 nameof(RuleResources.BA3002_Pass),
-                                context.TargetUri.GetFileName()));
+                                context.CurrentTarget.Uri.GetFileName()));
                         return;
                     }
                 }
@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA3002_Error_NoStackSeg),
-                    context.TargetUri.GetFileName()));
+                    context.CurrentTarget.Uri.GetFileName()));
         }
     }
 }

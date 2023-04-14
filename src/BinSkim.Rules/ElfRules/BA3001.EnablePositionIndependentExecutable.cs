@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA3001_Error),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
             else if (elf.Type == FileType.SharedObject)
@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                             nameof(RuleResources.BA3001_Pass_Executable),
-                            context.TargetUri.GetFileName()));
+                            context.CurrentTarget.Uri.GetFileName()));
                     return;
                 }
                 else
@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                             nameof(RuleResources.BA3001_Pass_Library),
-                            context.TargetUri.GetFileName()));
+                            context.CurrentTarget.Uri.GetFileName()));
                     return;
                 }
             }
