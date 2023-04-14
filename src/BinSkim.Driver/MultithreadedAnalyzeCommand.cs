@@ -95,15 +95,15 @@ namespace Microsoft.CodeAnalysis.IL
 
         private BinaryAnalyzerContext globalContext;
 
-        protected override BinaryAnalyzerContext CreateScanTargetContext(BinaryAnalyzerContext globalContext)
+        protected override BinaryAnalyzerContext CreateScanTargetContext(BinaryAnalyzerContext context)
         {
-            BinaryAnalyzerContext scanTargetContext = base.CreateScanTargetContext(globalContext);
+            BinaryAnalyzerContext scanTargetContext = base.CreateScanTargetContext(context);
 
-            scanTargetContext.CompilerDataLogger = globalContext.CompilerDataLogger;
-            scanTargetContext.SymbolPath = globalContext.SymbolPath;
-            scanTargetContext.IgnorePdbLoadError = globalContext.IgnorePdbLoadError;
-            scanTargetContext.LocalSymbolDirectories = globalContext.LocalSymbolDirectories;
-            scanTargetContext.TracePdbLoads = globalContext.TracePdbLoads;
+            scanTargetContext.CompilerDataLogger = context.CompilerDataLogger;
+            scanTargetContext.SymbolPath = context.SymbolPath;
+            scanTargetContext.IgnorePdbLoadError = context.IgnorePdbLoadError;
+            scanTargetContext.LocalSymbolDirectories = context.LocalSymbolDirectories;
+            scanTargetContext.TracePdbLoads = context.TracePdbLoads;
 
             // Command-line provided policy is now initialized. Update context 
             // based on any possible configuration provided in this way.
