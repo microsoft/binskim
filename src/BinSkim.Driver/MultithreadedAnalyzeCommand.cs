@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.IL
                    MachOBinary.CanLoadBinary(uri);
         }
 
-        public override BinaryAnalyzerContext InitializeContextFromOptions(AnalyzeOptions options, ref BinaryAnalyzerContext context)
+        public override BinaryAnalyzerContext InitializeGlobalContextFromOptions(AnalyzeOptions options, ref BinaryAnalyzerContext context)
         {
             if (this.Telemetry?.TelemetryClient != null)
             {
@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.IL
                 context.Logger = aggregatingLogger;
             }
 
-            base.InitializeContextFromOptions(options, ref context);
+            base.InitializeGlobalContextFromOptions(options, ref context);
 
             // We override the driver framework size default to be as large as
             // possible Binaries and (in particular) their PDBs can be large.
@@ -95,20 +95,20 @@ namespace Microsoft.CodeAnalysis.IL
 
         private BinaryAnalyzerContext globalContext;
 
-        protected override BinaryAnalyzerContext CreateContext(AnalyzeOptions options, IAnalysisLogger logger, RuntimeConditions runtimeErrors, IFileSystem fileSystem = null, PropertiesDictionary policy = null)
+        protected override BinaryAnalyzerContext CreateScanTargetContext(BinaryAnalyzerContext context)
         {
-            BinaryAnalyzerContext context = base.CreateContext(options, logger, runtimeErrors, fileSystem, policy);
+            BinaryAnalyzerContext scanTargetContext = base.CreateScanTargetContext(context);
 
-            context.CompilerDataLogger = this.globalContext.CompilerDataLogger;
-            context.SymbolPath = this.globalContext.SymbolPath;
-            context.IgnorePdbLoadError = this.globalContext.IgnorePdbLoadError;
-            context.LocalSymbolDirectories = this.globalContext.LocalSymbolDirectories;
-            context.TracePdbLoads = this.globalContext.TracePdbLoads;
+            scanTargetContext.CompilerDataLogger = context.CompilerDataLogger;
+            scanTargetContext.SymbolPath = context.SymbolPath;
+            scanTargetContext.IgnorePdbLoadError = context.IgnorePdbLoadError;
+            scanTargetContext.LocalSymbolDirectories = context.LocalSymbolDirectories;
+            scanTargetContext.TracePdbLoads = context.TracePdbLoads;
 
             // Command-line provided policy is now initialized. Update context 
             // based on any possible configuration provided in this way.
 
-            return context;
+            return scanTargetContext;
         }
 
         internal static string ReturnCommonPathRootFromTargetSpecifiersIfOneExists(IEnumerable<string> targetFileSpecifiers)

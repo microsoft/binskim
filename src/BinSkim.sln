@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		..\.github\workflows\codeql-analysis.yml = ..\.github\workflows\codeql-analysis.yml
 		..\.github\dependabot.yml = ..\.github\dependabot.yml
 		..\.github\workflows\dotnet-format.yml = ..\.github\workflows\dotnet-format.yml
-		ReleaseHistory.md = ReleaseHistory.md
+		..\ReleaseHistory.md = ..\ReleaseHistory.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Sdk", "BinSkim.Sdk\BinSkim.Sdk.csproj", "{81687384-6DA2-4AD5-A889-0727F2EB8C8C}"
