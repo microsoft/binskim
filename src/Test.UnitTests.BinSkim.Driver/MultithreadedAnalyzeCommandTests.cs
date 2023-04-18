@@ -11,9 +11,6 @@ using FluentAssertions;
 
 using Microsoft.CodeAnalysis.IL;
 
-using Microsoft.Coyote;
-using Microsoft.Coyote.SystematicTesting;
-
 using Xunit;
 
 namespace Microsoft.CodeAnalysis.BinSkim.Rules
@@ -27,27 +24,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             s_randomSeed = DateTime.UtcNow.TimeOfDay.TotalMilliseconds;
             s_random = new Random((int)s_randomSeed);
-        }
-
-        [Fact]
-        public async Task TestTask()
-        {
-            int value = 0;
-            Task task = Task.Run(() =>
-            {
-                value = 1;
-            });
-
-            Xunit.Assert.Equal(0, value);
-            await task;
-        }
-
-        [Fact]
-        public void CoyoteTestTask()
-        {
-            Configuration configuration = Configuration.Create().WithTestingIterations(100000);
-            var engine = TestingEngine.Create(configuration, TestTask);
-            engine.Run();
         }
 
         [Fact]

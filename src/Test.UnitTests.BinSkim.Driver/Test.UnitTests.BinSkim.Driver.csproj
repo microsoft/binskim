@@ -8,27 +8,12 @@
     <OutputType>Library</OutputType>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <Platforms>x64</Platforms>
-	<CoyoteVersion>1.7.8</CoyoteVersion>
-	<CoyoteTargetFrameworks>netcoreapp3.1</CoyoteTargetFrameworks>
-	<PowershellExecutable Condition="'$(OS)'=='Windows_NT'">powershell</PowershellExecutable>
-	<PowershellExecutable Condition="'$(PowershellExecutable)'==''">pwsh</PowershellExecutable>
-	<PathSeparator Condition="'$(OS)'=='Windows_NT'">\</PathSeparator>
-	<PathSeparator Condition="'$(OS)'!='Windows_NT'">/</PathSeparator>
   </PropertyGroup>
-
-	<PropertyGroup>
-		<ExecCommand>$(PowershellExecutable) -executionpolicy bypass -command ".$(PathSeparator)rewriteUnitTests.ps1 -Configuration $(Configuration) -CoyoteVersion $(CoyoteVersion) -TargetFramework $(CoyoteTargetFrameworks)"</ExecCommand>
-	</PropertyGroup>
 	
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.9.0" />
-    <PackageReference Include="Microsoft.Coyote" Version="$(CoyoteVersion)" />
-    <PackageReference Include="Microsoft.Coyote.Test" Version="$(CoyoteVersion)" />
-    <PackageReference Include="Microsoft.Coyote.Tool" Version="$(CoyoteVersion)" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
     <PackageReference Include="Moq" Version="4.18.4" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
     <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
@@ -47,25 +32,10 @@
     <Folder Include="Samples\" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="rewrite.coyote.Windows.Debug.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="rewrite.coyote.Windows.Release.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="rewriteUnitTests.ps1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Update="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
-	<Target Name="CoyoteRewriting" AfterTargets="AfterBuild">
-		<Exec Command="$(ExecCommand)" />
-	</Target>
 
 </Project>

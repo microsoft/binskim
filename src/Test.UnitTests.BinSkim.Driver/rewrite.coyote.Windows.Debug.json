@@ -1,4 +1,0 @@
-{
-  "AssembliesPath": "..\\..\\bld\\bin\\x64_Debug\\netcoreapp3.1",
-  "Assemblies": [ "Test.UnitTests.BinSkim.Driver.dll", "BinaryParsers.dll", "BinSkim.dll", "BinSkim.Sdk.dll" ]
-}
