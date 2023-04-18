@@ -12,10 +12,7 @@ using FluentAssertions;
 using Microsoft.CodeAnalysis.IL;
 
 using Microsoft.Coyote;
-using Microsoft.Coyote.Specifications;
 using Microsoft.Coyote.SystematicTesting;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 
 using Xunit;
 
@@ -48,7 +45,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         [Fact]
         public void CoyoteTestTask()
         {
-            Configuration configuration = Configuration.Create().WithTestingIterations(100);
+            Configuration configuration = Configuration.Create().WithTestingIterations(100000);
             var engine = TestingEngine.Create(configuration, TestTask);
             engine.Run();
         }
