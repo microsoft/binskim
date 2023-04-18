@@ -103,7 +103,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             for (uint i = 0; i < signatureCount; i++)
             {
                 string hashAlgorithm, hashEncryptionAlgorithm;
-                winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.EnforcePolicy, i);
+                winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.Normal, i);
 
                 cryptoError = (CryptoError)Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
 
