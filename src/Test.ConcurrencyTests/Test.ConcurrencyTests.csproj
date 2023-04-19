@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	 <OutputPath>$(MsBuildThisFileDirectory)..\bld\bin\$(Platform)_$(Configuration)\</OutputPath>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 	 <CoyoteVersion>1.7.8</CoyoteVersion>
 	 <PowershellExecutable Condition="'$(OS)'=='Windows_NT'">powershell</PowershellExecutable>
