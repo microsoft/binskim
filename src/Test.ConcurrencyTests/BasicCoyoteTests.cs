@@ -79,6 +79,7 @@ namespace Test.CoyoteTests
             finally
             {
                 testingEngine.Stop();
+                testingEngine.Dispose();
             }
         }
 
