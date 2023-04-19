@@ -103,7 +103,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             for (uint i = 0; i < signatureCount; i++)
             {
                 string hashAlgorithm, hashEncryptionAlgorithm;
-                winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.Normal, i);
+                winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.EnforcePolicy, i);
 
                 cryptoError = (CryptoError)Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
 
@@ -157,17 +157,29 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         return false;
                     }
 
+                    case CryptoError.TRUST_E_CERT_SIGNATURE:
+                    {
+                        winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.EnforcePolicy, pszOID: Native.szOID_CERT_STRONG_KEY_OS_1);
+                        Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
+                        cryptoError = (CryptoError)Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
+
+                        if (cryptoError != CryptoError.ERROR_SUCCESS)
+                        {
+                            return LogErrorAndReturnFalse(context, winTrustData, cryptoError);
+                        }
+
+                        if (this.GetSignerHashAlgorithms(context, winTrustData, out hashAlgorithm, out hashEncryptionAlgorithm))
+                        {
+                            goodAlgorithms.Add(new Tuple<string, string>(hashAlgorithm, hashEncryptionAlgorithm));
+                        }
+
+                        this.InvokeCloseAction(winTrustData);
+                        break;
+                    }
+
                     default:
                     {
-                        string cryptoErrorDescription = cryptoError.GetErrorDescription();
-                        // '{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}' ({2})
-                        context.Logger.Log(this, RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                            nameof(RuleResources.BA2022_Error_DidNotVerify),
-                            context.CurrentTarget.Uri.GetFileName(),
-                            cryptoError.ToString(),
-                            cryptoErrorDescription));
-                        this.InvokeCloseAction(winTrustData);
-                        return false;
+                        return LogErrorAndReturnFalse(context, winTrustData, cryptoError);
                     }
                 }
             }
@@ -184,6 +196,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             return goodAlgorithms.Count > 0;
+        }
+
+        private bool LogErrorAndReturnFalse(BinaryAnalyzerContext context, Native.WINTRUST_DATA winTrustData, CryptoError cryptoError)
+        {
+            string cryptoErrorDescription = cryptoError.GetErrorDescription();
+            // '{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}' ({2})
+            context.Logger.Log(this, RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                nameof(RuleResources.BA2022_Error_DidNotVerify),
+                context.CurrentTarget.Uri.GetFileName(),
+                cryptoError.ToString(),
+                cryptoErrorDescription));
+            this.InvokeCloseAction(winTrustData);
+            return false;
         }
 
         private string BuildAlgorithmsText(List<Tuple<string, string>> badAlgorithms, List<Tuple<string, string>> goodAlgorithms)
@@ -368,7 +393,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return cryptoError;
         }
 
-        private Native.WINTRUST_DATA InitializeWinTrustDataStruct(string filePath, WinTrustDataKind kind, uint signatureIndex = 0)
+        private Native.WINTRUST_DATA InitializeWinTrustDataStruct(string filePath, WinTrustDataKind kind, uint signatureIndex = 0, string pszOID = Native.szOID_CERT_STRONG_SIGN_OS_1)
         {
             // See https://msdn.microsoft.com/en-us/library/windows/desktop/aa382384(v=vs.85).aspx
             // which was used to drive data initialization, API use and comments in this code.
@@ -424,7 +449,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     cbStruct = (uint)Marshal.SizeOf(typeof(Native.CERT_STRONG_SIGN_PARA)),
                     dwInfoChoice = Native.InfoChoice.CERT_STRONG_SIGN_OID_INFO_CHOICE,
-                    pszOID = Native.szOID_CERT_STRONG_SIGN_OS_1
+                    pszOID = pszOID
                 };
 
                 signatureSettings.pCryptoPolicy = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Native.CERT_STRONG_SIGN_PARA)));
