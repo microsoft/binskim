@@ -1,0 +1,4 @@
+{
+  "AssembliesPath": "..\\bld\\bin\\x64_Release\\netcoreapp3.1",
+  "Assemblies": [ "Test.ConcurrencyTests.dll" ]
+}
