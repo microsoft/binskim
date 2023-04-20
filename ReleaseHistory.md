@@ -14,6 +14,7 @@
 - UEE => eliminate unhandled exceptions in engine
 
 ## **v4.1.0** UNRELEASED
+* BUG: Fix `BA2004.EnableSecureSourceCodeHashing` In case where binary is not SHA256 - Remove hardcoded SHA-1's from message and put the actual HASH that was found in the binary
 * DEP: Update Sarif.Sdk submodule from [120fae3 to 2d52c53](https://github.com/microsoft/sarif-sdk/compare/120fae3...2d52c53). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/2d52c53/src/ReleaseHistory.md).
 * BRK: Remove `--verbose` command-line option (in favor of `--level` and `--kind`). [#853](https://github.com/microsoft/binskim/pull/853)
 * BRK: Remove `--hashes` command-line option (in favor of `--insert Hashes`). [#853](https://github.com/microsoft/binskim/pull/853)
