@@ -74,7 +74,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (algorithmType != ChecksumAlgorithmType.Sha256)
             {
                 // '{0}' is a managed binary compiled with an insecure ({1}) source code hashing algorithm.
-                // SHA-1 is subject to collision attacks and its use can compromise supply chain integrity.
+                // {1} is subject to collision attacks and its use can compromise supply chain integrity.
                 // Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project
                 // <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing.
                 context.Logger.Log(this,
