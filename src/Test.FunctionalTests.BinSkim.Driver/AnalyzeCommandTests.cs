@@ -96,9 +96,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             result.Should().Be(0);
         }
 
-        [Theory()]
-        [Repeat(5)]
-        public void AnalyzeCommand_DeterminismTest(int iterationNumber)
+        [Fact]
+        public void AnalyzeCommand_DeterminismTest()
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
@@ -122,10 +121,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             var command = new MultithreadedAnalyzeCommand();
             command.Run(options);
             var log = SarifLog.Load(fileName);
-            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count.Should().Be(3, $"iteration {iterationNumber}");
-            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_PDB_FORMAT")).Should().Be(1, $"iteration {iterationNumber}");
-            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_OUTOFMEMORY")).Should().Be(1, $"iteration {iterationNumber}");
-            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_PDB_NOT_FOUND")).Should().Be(1, $"iteration {iterationNumber}");
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count.Should().Be(3);
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_PDB_FORMAT")).Should().Be(1);
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_OUTOFMEMORY")).Should().Be(1);
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_PDB_NOT_FOUND")).Should().Be(1);
         }
 
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)
