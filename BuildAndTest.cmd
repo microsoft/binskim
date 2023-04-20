@@ -63,6 +63,11 @@ call :CreatePublishPackage net6.0 win-x64 || goto :ExitFailed
 call :CreatePublishPackage net6.0 linux-x64 || goto :ExitFailed
 call :CreatePublishPackage net6.0 osx-x64 || goto :ExitFailed
 
+::Create the BinSkim dotnet tool publish packages
+echo Creating BinSkim dotnet tool publish packages
+dotnet publish %~dp0src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f net6.0 -p:PublishDir=%~dp0bld\bin\%Platform%_%Configuration%\DotNetToolPublish\net6.0\any
+dotnet publish %~dp0src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f netcoreapp3.1 -p:PublishDir=%~dp0bld\bin\%Platform%_%Configuration%\DotNetToolPublish\netcoreapp3.1\any
+
 ::Build NuGet package
 echo BuildPackages.cmd
 call BuildPackages.cmd || goto :ExitFailed
