@@ -897,27 +897,27 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         private ChecksumAlgorithmType GetChecksumAlgorithmType(HashType hashType)
         {
-            if (hashType == HashType.SHA256)
+            ChecksumAlgorithmType checksumAlgorithmType;
+
+            switch (hashType)
             {
-                return ChecksumAlgorithmType.Sha256;
+                case HashType.SHA256:
+                    checksumAlgorithmType = ChecksumAlgorithmType.Sha256;
+                    break;
+                case HashType.MD5:
+                    checksumAlgorithmType = ChecksumAlgorithmType.Md5;
+                    break;
+                case HashType.SHA1:
+                    checksumAlgorithmType = ChecksumAlgorithmType.Sha1;
+                    break;
+                case HashType.None:
+                    checksumAlgorithmType = ChecksumAlgorithmType.Unknown;
+                    break;
+                default:
+                    throw new InvalidOperationException($"Invalid hash type '{hashType}'");
             }
 
-            if (hashType == HashType.MD5)
-            {
-                return ChecksumAlgorithmType.Md5;
-            }
-
-            if (hashType == HashType.SHA1)
-            {
-                return ChecksumAlgorithmType.Sha1;
-            }
-
-            if (hashType == HashType.None)
-            {
-                return ChecksumAlgorithmType.Unknown;
-            }
-
-            throw new InvalidOperationException($"Invalid hash type '{hashType}'");
+            return checksumAlgorithmType;
         }
 
         private ChecksumAlgorithmType GetChecksumAlgorithmType(Guid hashGuid)
