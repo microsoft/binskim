@@ -240,7 +240,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByCompiler();
 
             //'{0}' is a native binary that links one or more object files which were hashed
-            // using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks
+            // using an insecure checksum algorithm. Insecure algorithms are subject to collision attacks
             // and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the
             // cl.exe command-line to enable secure source code hashing. The following modules
             // are out of policy: {1}

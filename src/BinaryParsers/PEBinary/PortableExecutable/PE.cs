@@ -854,8 +854,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             foreach (Document doc in pdbMetadataReader.Documents.Select(document => pdbMetadataReader.GetDocument(document)))
             {
                 Guid hashGuid = pdbMetadataReader.GetGuid(doc.HashAlgorithm);
-
-                return hashGuid == Constant.Sha256Guid ? ChecksumAlgorithmType.Sha256 : ChecksumAlgorithmType.Sha1;
+                return GetChecksumAlgorithmType(hashGuid);
             }
 
             return ChecksumAlgorithmType.Unknown;
@@ -889,8 +888,53 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 foreach (DisposableEnumerableView<SourceFile> sfView in pdb.CreateSourceFileIterator(om))
                 {
                     SourceFile sf = sfView.Value;
-                    return sf.HashType == HashType.SHA256 ? ChecksumAlgorithmType.Sha256 : ChecksumAlgorithmType.Sha1;
+                    return GetChecksumAlgorithmType(sf.HashType);
                 }
+            }
+
+            return ChecksumAlgorithmType.Unknown;
+        }
+
+        private ChecksumAlgorithmType GetChecksumAlgorithmType(HashType hashType)
+        {
+            if (hashType == HashType.SHA256)
+            {
+                return ChecksumAlgorithmType.Sha256;
+            }
+
+            if (hashType == HashType.MD5)
+            {
+                return ChecksumAlgorithmType.Md5;
+            }
+
+            if (hashType == HashType.SHA1)
+            {
+                return ChecksumAlgorithmType.Sha1;
+            }
+
+            if (hashType == HashType.None)
+            {
+                return ChecksumAlgorithmType.Unknown;
+            }
+
+            throw new InvalidOperationException($"Invalid hash type '{hashType}'");
+        }
+
+        private ChecksumAlgorithmType GetChecksumAlgorithmType(Guid hashGuid)
+        {
+            if (hashGuid == Constant.Sha256Guid)
+            {
+                return ChecksumAlgorithmType.Sha256;
+            }
+
+            if (hashGuid == Constant.MD5Guid)
+            {
+                return ChecksumAlgorithmType.Md5;
+            }
+
+            if (hashGuid == Constant.Sha1Guid)
+            {
+                return ChecksumAlgorithmType.Sha1;
             }
 
             return ChecksumAlgorithmType.Unknown;
