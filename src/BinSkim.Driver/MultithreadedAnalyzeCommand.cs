@@ -59,13 +59,13 @@ namespace Microsoft.CodeAnalysis.IL
                 context.Logger = aggregatingLogger;
             }
 
-            base.InitializeGlobalContextFromOptions(options, ref context);
-
             // We override the driver framework size default to be as large as
             // possible Binaries and (in particular) their PDBs can be large.
             context.MaxFileSizeInKilobytes = options.MaxFileSizeInKilobytes != null
                 ? options.MaxFileSizeInKilobytes.Value
                 : long.MaxValue;
+
+            base.InitializeGlobalContextFromOptions(options, ref context);
 
             // Update context object based on command-line parameters.
             context.SymbolPath = options.SymbolsPath;
