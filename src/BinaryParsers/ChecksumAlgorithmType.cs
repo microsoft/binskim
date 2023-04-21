@@ -14,6 +14,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         Unknown,
 
         /// <summary>
+        /// MD5 algorithm.
+        /// </summary>
+        Md5,
+
+        /// <summary>
         /// SHA1 algorithm.
         /// </summary>
         Sha1,
