@@ -70,16 +70,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            if (target.PE.ManagedPdbSourceFileChecksumAlgorithm(pdb.FileType, pdb) != ChecksumAlgorithmType.Sha256)
+            ChecksumAlgorithmType algorithmType = target.PE.ManagedPdbSourceFileChecksumAlgorithm(pdb.FileType, pdb);
+            if (algorithmType != ChecksumAlgorithmType.Sha256)
             {
-                // '{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm.
-                // SHA-1 is subject to collision attacks and its use can compromise supply chain integrity.
+                // '{0}' is a managed binary compiled with an insecure ({1}) source code hashing algorithm.
+                // {1} is subject to collision attacks and its use can compromise supply chain integrity.
                 // Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project
                 // <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Fail, context, null,
                     nameof(RuleResources.BA2004_Error_Managed),
-                        context.CurrentTarget.Uri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName(),
+                        algorithmType.ToString()));
                 return;
             }
 
@@ -238,7 +240,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByCompiler();
 
             //'{0}' is a native binary that links one or more object files which were hashed
-            // using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks
+            // using an insecure checksum algorithm. Insecure algorithms are subject to collision attacks
             // and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the
             // cl.exe command-line to enable secure source code hashing. The following modules
             // are out of policy: {1}

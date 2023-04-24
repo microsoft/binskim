@@ -354,16 +354,16 @@ Compilers can generate and store checksums of source files in order to provide l
 
 #### `NativeWithInsecureStaticLibraryCompilands`: Warning
 
-'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
 {1}
 
 #### `Managed`: Error
 
-'{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing.
+'{0}' is a managed binary compiled with an insecure ({1}) source code hashing algorithm. {1} is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing.
 
 #### `NativeWithInsecureDirectCompilands`: Error
 
-'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
 {1}
 
 #### `InvalidMetadata`: NotApplicable
