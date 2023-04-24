@@ -142,6 +142,7 @@ namespace Test.CoyoteTests
         public void SystematicTestScenario()
         {
             RunSystematicTest(AnalyzeCommand_TypicalPEFilesTest);
+            RunSystematicTest(AnalyzeCommand_TypicalNonPEFilesTest);
         }
 
 
