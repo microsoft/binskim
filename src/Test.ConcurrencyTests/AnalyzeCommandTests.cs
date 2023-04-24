@@ -13,22 +13,8 @@ using Microsoft.CodeAnalysis.IL;
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.Coyote;
-using Microsoft.Coyote.Specifications;
 using Microsoft.Coyote.SystematicTesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-
-using System.Text;
-
-
-using Microsoft.CodeAnalysis.IL.Sdk;
-
-using Microsoft.CodeAnalysis.Sarif.Driver;
-using Microsoft.CodeAnalysis.Sarif.Readers;
-using Microsoft.CodeAnalysis.Sarif.VersionOne;
-using Microsoft.CodeAnalysis.Sarif.Visitors;
-
-using Moq;
 
 //using Xunit;
 
@@ -44,9 +30,9 @@ namespace Test.CoyoteTests
             {
                 if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
-            WindowsBinaryAndPdbSkimmerBase.s_PdbExceptions.Clear();
-            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_TypicalPEFilesTest.sarif");
-            string[] TypicalPEBaselineTestFiles = new string[] {
+                WindowsBinaryAndPdbSkimmerBase.s_PdbExceptions.Clear();
+                string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_TypicalPEFilesTest.sarif");
+                string[] TypicalPEBaselineTestFiles = new string[] {
                 Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "clangcl.pe.cpp.codeview.exe"),
                 Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Corrupted_Native_x86_VS2013_Default.exe"),
                 Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "gcc.pe.objectivec.dwarf.exe"),
@@ -80,23 +66,23 @@ namespace Test.CoyoteTests
                 Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Wix_3.11.1_VS2017_Msi.msi")
             };
 
-            var options = new AnalyzeOptions
-            {
-                TargetFileSpecifiers = TypicalPEBaselineTestFiles,
-                Level = new[] { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
-                Kind = new[] { ResultKind.Fail, ResultKind.Pass },
-                OutputFilePath = fileName,
-                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
-                Recurse = true,
-                Threads = 10,
-                IgnorePdbLoadError = false,
-                DataToInsert = new[] { OptionallyEmittedData.Hashes }
-            };
-            var command = new MultithreadedAnalyzeCommand();
-            command.Run(options);
-            var log = SarifLog.Load(fileName);
-            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count.Should().Be(8);
-            log.Runs[0].Results.Count.Should().Be(372);
+                var options = new AnalyzeOptions
+                {
+                    TargetFileSpecifiers = TypicalPEBaselineTestFiles,
+                    Level = new[] { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
+                    Kind = new[] { ResultKind.Fail, ResultKind.Pass },
+                    OutputFilePath = fileName,
+                    OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                    Recurse = true,
+                    Threads = 10,
+                    IgnorePdbLoadError = false,
+                    DataToInsert = new[] { OptionallyEmittedData.Hashes }
+                };
+                var command = new MultithreadedAnalyzeCommand();
+                command.Run(options);
+                var log = SarifLog.Load(fileName);
+                log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count.Should().Be(8);
+                log.Runs[0].Results.Count.Should().Be(372);
             });
             await task;
         }
