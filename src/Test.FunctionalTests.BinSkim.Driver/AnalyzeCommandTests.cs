@@ -3,12 +3,14 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 using FluentAssertions;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL;
+using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -92,6 +94,37 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             int result = command.Run(options, ref context);
             context.RuntimeExceptions.Should().BeNull();
             result.Should().Be(0);
+        }
+
+        [Fact]
+        public void AnalyzeCommand_DeterminismTest()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            WindowsBinaryAndPdbSkimmerBase.s_PdbExceptions.Clear();
+            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_DeterminismTest.sarif");
+            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "Determinism", "*.dll");
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new string[] {
+                    pathDeterminismTest
+                },
+                Level = new[] { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
+                Kind = new[] { ResultKind.Fail, ResultKind.Pass },
+                OutputFilePath = fileName,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                Recurse = true,
+                Threads = 10,
+                IgnorePdbLoadError = false,
+                DataToInsert = new[] { OptionallyEmittedData.Hashes }
+            };
+            var command = new MultithreadedAnalyzeCommand();
+            command.Run(options);
+            var log = SarifLog.Load(fileName);
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count.Should().Be(3);
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_PDB_FORMAT")).Should().Be(1);
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_OUTOFMEMORY")).Should().Be(1);
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_PDB_NOT_FOUND")).Should().Be(1);
         }
 
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)
