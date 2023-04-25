@@ -31,6 +31,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         private PdbFileType pdbFileType;
         private const string s_windowsPdbSignature = "Microsoft C/C++ MSF 7.00\r\n\x001ADS\x0000\x0000\x0000";
         private const string s_portablePdbSignature = "BSJB";
+        public DateTime LastModifiedDateUTC;
         public static readonly ImmutableArray<byte> WindowsPdbSignature = ImmutableArray.Create(Encoding.ASCII.GetBytes(s_windowsPdbSignature));
         public static readonly ImmutableArray<byte> PortablePdbSignature = ImmutableArray.Create(Encoding.ASCII.GetBytes(s_portablePdbSignature));
 
@@ -67,6 +68,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.globalScope = new Lazy<Symbol>(this.GetGlobalScope, LazyThreadSafetyMode.ExecutionAndPublication);
             this.writableSegmentIds = new Lazy<HashSet<uint>>(this.GenerateWritableSegmentSet);
             this.executableSectionContribCompilandIds = new Lazy<HashSet<uint>>(this.GenerateExecutableSectionContribIds);
+            try
+            {
+                this.LastModifiedDateUTC = File.GetLastWriteTimeUtc(pdbPath);
+            }
+            catch (Exception)
+            {
+                this.LastModifiedDateUTC = DateTime.MaxValue;
+            }
             this.Init(pdbPath);
         }
 

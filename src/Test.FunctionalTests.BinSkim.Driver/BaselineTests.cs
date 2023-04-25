@@ -319,6 +319,7 @@ namespace Microsoft.CodeAnalysis.IL
                     Language = nameof(Language.MSIL),
                     DebuggingFileName = pdb.GlobalScope?.Name,
                     DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
+                    DebuggingFileLastModifiedDateUTC = pdb.LastModifiedDateUTC,
                     FileVersion = peBinary.PE.FileVersion?.FileVersion,
                     CompilerBackEndVersion = peBinary.PE.LinkerVersion.ToString(),
                     CompilerFrontEndVersion = peBinary.PE.LinkerVersion.ToString(),
@@ -344,6 +345,7 @@ namespace Microsoft.CodeAnalysis.IL
                         DebuggingFileName = pdb.GlobalScope?.Name,
                         FileVersion = peBinary.PE.FileVersion?.FileVersion,
                         DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
+                        DebuggingFileLastModifiedDateUTC = pdb.LastModifiedDateUTC,
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
                     });
