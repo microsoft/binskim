@@ -1,6 +1,6 @@
 # BinSkim Release History
 ## Definitions
-- NR => new rule
+- NR  => new rule
 - PRF => performance work
 - FCR => fingerprint change or refactor
 - RRR => rule rename or refactor
@@ -12,8 +12,10 @@
 - FND => False negative reduction in dynamic phase
 - UER => eliminate unhandled exceptions in rules
 - UEE => eliminate unhandled exceptions in engine
+- NEW => new feature 
 
 ## **v4.1.0** UNRELEASED
+* NEW: `CompilerInformation` telemetry now emits the last modified date of the PDB associated with the analyzed binary.
 * DEP: Update Sarif.Sdk submodule from [120fae3 to 2d52c53](https://github.com/microsoft/sarif-sdk/compare/120fae3...2d52c53). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/2d52c53/src/ReleaseHistory.md).
 * BRK: Remove `--verbose` command-line option (in favor of `--level` and `--kind`). [#853](https://github.com/microsoft/binskim/pull/853)
 * BRK: Remove `--hashes` command-line option (in favor of `--insert Hashes`). [#853](https://github.com/microsoft/binskim/pull/853)
