@@ -67,6 +67,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             var records = new Dictionary<CompilerData, ObjectModuleDetails>();
 
+            string pdbLastAccessDateUtc;
+            try
+            {
+                pdbLastAccessDateUtc = File.GetLastAccessTimeUtc(pdb.PdbLocation).ToString();
+            }
+            catch (Exception)
+            {
+                pdbLastAccessDateUtc = string.Empty;
+            }
+
             if (target.PE.IsManaged)
             {
                 var record = new CompilerData
@@ -76,7 +86,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Language = nameof(Language.MSIL),
                     DebuggingFileName = pdb.GlobalScope?.Name,
                     DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
-                    DebuggingFileLastModifiedDateUtc = File.GetLastWriteTimeUtc(pdb.PdbLocation),
+                    DebuggingFileLastModifiedDateUtc = pdbLastAccessDateUtc,
                     FileVersion = target.PE.FileVersion?.FileVersion,
                     CompilerBackEndVersion = target.PE.LinkerVersion.ToString(),
                     CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
@@ -107,7 +117,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         DebuggingFileName = pdb.GlobalScope?.Name,
                         FileVersion = target.PE.FileVersion?.FileVersion,
                         DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
-                        DebuggingFileLastModifiedDateUtc = File.GetLastWriteTimeUtc(pdb.PdbLocation),
+                        DebuggingFileLastModifiedDateUtc = pdbLastAccessDateUtc,
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
                     };

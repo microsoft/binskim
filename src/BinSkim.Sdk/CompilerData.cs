@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public string ModuleLibrary { get; set; }
         public string DebuggingFileName { get; set; }
         public string DebuggingFileGuid { get; set; }
-        public DateTime DebuggingFileLastModifiedDateUtc { get; set; }
+        public string DebuggingFileLastModifiedDateUtc { get; set; }
         public string AssemblyReferences { get; set; }
         public string CompilerBackEndVersion { get; set; }
         public string CompilerFrontEndVersion { get; set; }
