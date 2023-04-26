@@ -159,4 +159,4 @@ The `-p` or `--plugin` argument is used to provide a path to a BinSkim plugin th
 
 ## BinSkim Release History
 
-The latest version is always available on **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**. History is available on **[NuGet Release History](../src/ReleaseHistory.md)**.
+The latest version is always available on **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**. History is available on **[NuGet Release History](../ReleaseHistory.md)**.

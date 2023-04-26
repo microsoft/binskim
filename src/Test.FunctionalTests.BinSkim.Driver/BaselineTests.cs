@@ -430,9 +430,8 @@ namespace Microsoft.CodeAnalysis.IL
             var command = new MultithreadedAnalyzeCommand(telemetry);
             var options = new AnalyzeOptions
             {
-                Force = true,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite, FilePersistenceOptions.PrettyPrint },
                 Recurse = false,
-                PrettyPrint = true,
                 DataToInsert = new[] { OptionallyEmittedData.Hashes },
                 DataToRemove = new[] { OptionallyEmittedData.NondeterministicProperties },
                 OutputFilePath = actualFileName,

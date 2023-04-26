@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.None, context, null,
                         nameof(RuleResources.NotApplicable_InvalidMetadata),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA3004_Error),
-                        context.TargetUri.GetFileName(), dwarfVersion.ToString()));
+                        context.CurrentTarget.Uri.GetFileName(), dwarfVersion.ToString()));
                 return;
             }
 
@@ -67,7 +67,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA3004_Pass),
-                    dwarfVersion.ToString(), context.TargetUri.GetFileName()));
+                    dwarfVersion.ToString(), context.CurrentTarget.Uri.GetFileName()));
         }
     }
 }

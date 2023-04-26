@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.Logger.Log(this,
                        RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                            nameof(RuleResources.BA3031_Pass),
-                           context.TargetUri.GetFileName()));
+                           context.CurrentTarget.Uri.GetFileName()));
                     return;
                 }
             }
@@ -91,14 +91,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                            nameof(RuleResources.BA3031_Error_ClangVersionMayNeedUpgrade),
-                           context.TargetUri.GetFileName()));
+                           context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
             context.Logger.Log(this,
                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                            nameof(RuleResources.BA3031_Error),
-                           context.TargetUri.GetFileName()));
+                           context.CurrentTarget.Uri.GetFileName()));
         }
     }
 }

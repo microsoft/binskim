@@ -48,6 +48,11 @@ namespace Microsoft.CodeAnalysis.IL
         /// </summary>
         private IOperationHolder<RequestTelemetry>? analysisOperationHolder;
 
+        public FileRegionsCache FileRegionsCache
+        {
+            get; set;
+        }
+
         /// <summary>
         /// Construct a new <see cref="RuleTelemetryLogger"/>.
         /// </summary>
@@ -55,6 +60,7 @@ namespace Microsoft.CodeAnalysis.IL
         public RuleTelemetryLogger(TelemetryClient telemetryClient)
         {
             this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
+            this.FileRegionsCache = new FileRegionsCache();
         }
 
         public void AnalysisStarted()
@@ -151,6 +157,10 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 metrics[name] = count;
             }
+        }
+
+        public void TargetAnalyzed(IAnalysisContext context)
+        {
         }
 
         /// <summary>

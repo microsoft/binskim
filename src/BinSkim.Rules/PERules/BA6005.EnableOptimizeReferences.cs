@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                     nameof(RuleResources.BA6005_Warning),
-                    context.TargetUri.GetFileName()));
+                    context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA6005_Pass),
-                    context.TargetUri.GetFileName()));
+                    context.CurrentTarget.Uri.GetFileName()));
         }
     }
 }

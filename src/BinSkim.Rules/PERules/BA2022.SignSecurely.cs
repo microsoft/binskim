@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2022_Pass),
-                        context.TargetUri.GetFileName(),
+                        context.CurrentTarget.Uri.GetFileName(),
                         algorithmName));
             }
         }
@@ -163,7 +163,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         // '{0}' signing was flagged as insecure by WinTrustVerify with error code: '{1}' ({2})
                         context.Logger.Log(this, RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA2022_Error_DidNotVerify),
-                            context.TargetUri.GetFileName(),
+                            context.CurrentTarget.Uri.GetFileName(),
                             cryptoError.ToString(),
                             cryptoErrorDescription));
                         this.InvokeCloseAction(winTrustData);
@@ -179,7 +179,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' was signed exclusively with algorithms that WinTrustVerify has flagged as insecure. {1}
                 context.Logger.Log(this, RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2022_Error_BadSigningAlgorithm),
-                    context.TargetUri.GetFileName(),
+                    context.CurrentTarget.Uri.GetFileName(),
                     algorithmsText));
             }
 
@@ -237,7 +237,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{1}' failed with error code: '{2}'.
                 context.Logger.Log(this, RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA2022_Error_WinTrustVerifyApiError),
-                    context.TargetUri.GetFileName(),
+                    context.CurrentTarget.Uri.GetFileName(),
                     failedApiName,
                     cryptoError.ToString()));
                 return false;

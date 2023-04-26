@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA2005_Error_CouldNotParseVersion),
-                            context.TargetUri.GetFileName()));
+                            context.CurrentTarget.Uri.GetFileName()));
                     return;
                 }
 
@@ -112,7 +112,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                             nameof(RuleResources.BA2005_Error),
-                            context.TargetUri.GetFileName(),
+                            context.CurrentTarget.Uri.GetFileName(),
                             sanitizedVersion.Value,
                             minimumVersion.ToString()));
                     return;
@@ -124,7 +124,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA2005_Pass),
-                    context.TargetUri.GetFileName()));
+                    context.CurrentTarget.Uri.GetFileName()));
         }
     }
 }

@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                               context,
                                               region: null,
                                               nameof(RuleResources.BA2027_Warning),
-                                              context.TargetUri.GetFileName()));
+                                              context.CurrentTarget.Uri.GetFileName()));
 
                 return;
 
@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                           context,
                                           region: null,
                                           nameof(RuleResources.BA2027_Pass),
-                                          context.TargetUri.GetFileName()));
+                                          context.CurrentTarget.Uri.GetFileName()));
             return;
 
         }

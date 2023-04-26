@@ -173,7 +173,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2007_Pass),
-                        context.TargetUri.GetFileName(),
+                        context.CurrentTarget.Uri.GetFileName(),
                         overallMinimumWarningLevel.ToString()));
                 return;
             }
@@ -186,7 +186,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_UnknownModuleLanguage),
-                        context.TargetUri.GetFileName(),
+                        context.CurrentTarget.Uri.GetFileName(),
                         unknownLanguageModules.CreateSortedObjectList()));
             }
 
@@ -203,7 +203,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_InsufficientWarningLevel),
-                        context.TargetUri.GetFileName(),
+                        context.CurrentTarget.Uri.GetFileName(),
                         overallMinimumWarningLevel.ToString(),
                         exampleTooLowWarningCommandLine,
                         warningTooLowModules.CreateTruncatedObjectList()));
@@ -223,7 +223,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2007_Error_WarningsDisabled),
-                        context.TargetUri.GetFileName(),
+                        context.CurrentTarget.Uri.GetFileName(),
                         exampleDisabledWarningCommandLine,
                         disabledWarningModules.CreateTruncatedObjectList()));
             }
