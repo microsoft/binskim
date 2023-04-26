@@ -18,13 +18,14 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public string DebuggingFileName { get; set; }
         public string DebuggingFileGuid { get; set; }
         public string DebuggingFileLastModifiedDateUtc { get; set; }
+        public string TargetLastModifiedDateUtc { get; set; }
         public string AssemblyReferences { get; set; }
         public string CompilerBackEndVersion { get; set; }
         public string CompilerFrontEndVersion { get; set; }
 
         public override string ToString()
         {
-            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{FileVersion},{BinaryType},{Language},{DebuggingFileName},{DebuggingFileGuid},{DebuggingFileLastModifiedDateUtc},{CommandLine},{Dialect},{ModuleName},{(ModuleLibrary == ModuleName ? string.Empty : ModuleLibrary)},{AssemblyReferences}";
+            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{FileVersion},{BinaryType},{Language},{DebuggingFileName},{DebuggingFileGuid},{DebuggingFileLastModifiedDateUtc},{TargetLastModifiedDateUtc},{CommandLine},{Dialect},{ModuleName},{(ModuleLibrary == ModuleName ? string.Empty : ModuleLibrary)},{AssemblyReferences}";
         }
     }
 }
