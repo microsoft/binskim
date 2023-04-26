@@ -185,7 +185,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             string header = "" +
                 "Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version," +
                 "File Version,Binary Type,Language,Debugging FileName,Debugging FileGuid," +
-                "Debugging FileLastModifiedDateUTC, Command Line,Dialect,Module Name,Module Library,Hash,Error";
+                "Debugging FileLastModifiedDateUTC, Target LastModifiedDateUTC, Command Line," +
+                "Dialect,Module Name,Module Library,Hash,Error";
 
             WriteToCsv(header);
         }
@@ -226,6 +227,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "debuggingFileName", compilerData.DebuggingFileName ?? string.Empty },
                 { "debuggingGuid", compilerData.DebuggingFileGuid ?? string.Empty },
                 { "debuggingFileLastModifiedDateUTC", compilerData.DebuggingFileLastModifiedDateUtc ?? string.Empty },
+                { "targetLastModifiedDateUTC", compilerData.TargetLastModifiedDateUtc ?? string.Empty },
                 { "dialect", compilerData.Dialect },
                 { "moduleName", compilerData.ModuleName ?? string.Empty },
                 { "moduleLibrary", (compilerData.ModuleName == compilerData.ModuleLibrary ? string.Empty : compilerData.ModuleLibrary ?? string.Empty) },
@@ -288,6 +290,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "debuggingFileName", string.Empty },
                 { "debuggingGuid", string.Empty },
                 { "debuggingFileLastModifiedDateUTC", string.Empty },
+                { "targetLastModifiedDateUTC", string.Empty },
                 { "dialect", string.Empty },
                 { "moduleName", string.Empty },
                 { "moduleLibrary", string.Empty },
