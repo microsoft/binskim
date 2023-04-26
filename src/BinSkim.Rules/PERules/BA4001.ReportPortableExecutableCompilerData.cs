@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+using System.IO;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -75,6 +76,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Language = nameof(Language.MSIL),
                     DebuggingFileName = pdb.GlobalScope?.Name,
                     DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
+                    DebuggingFileLastModifiedDateUtc = File.GetLastWriteTimeUtc(pdb.PdbLocation),
                     FileVersion = target.PE.FileVersion?.FileVersion,
                     CompilerBackEndVersion = target.PE.LinkerVersion.ToString(),
                     CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
@@ -105,6 +107,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         DebuggingFileName = pdb.GlobalScope?.Name,
                         FileVersion = target.PE.FileVersion?.FileVersion,
                         DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
+                        DebuggingFileLastModifiedDateUtc = File.GetLastWriteTimeUtc(pdb.PdbLocation),
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
                     };
