@@ -77,7 +77,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             catch (Exception)
             {
                 pdbLastAccessDateUtc = string.Empty;
-                targetLastAccessDateUtc= string.Empty;
+                targetLastAccessDateUtc = string.Empty;
             }
 
             if (target.PE.IsManaged)

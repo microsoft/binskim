@@ -185,7 +185,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             string header = "" +
                 "Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version," +
                 "File Version,Binary Type,Language,Debugging FileName,Debugging FileGuid," +
-                "Debugging FileLastModifiedDateUTC, Target LastModifiedDateUTC, Command Line," + 
+                "Debugging FileLastModifiedDateUTC, Target LastModifiedDateUTC, Command Line," +
                 "Dialect,Module Name,Module,Library,Hash,Error";
 
             WriteToCsv(header);
