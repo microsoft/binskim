@@ -5,8 +5,9 @@ This repository contains the source code for BinSkim, a Portable Executable (PE)
 ## For Developers
 
 1. Fork the repository -- **[Need Help?](https://help.github.com/articles/fork-a-repo/)**
-2. Load and compile `src\BinSkim.sln` to develop changes for contribution.
-3. Execute BuildAndTest.cmd at the root of the enlistment to validate before submitting a PR.
+2. Read the **[Rule Contributions Guide](./docs/RuleContributions.md)**
+3. Load and compile `src\BinSkim.sln` to develop changes for contribution.
+4. Execute BuildAndTest.cmd at the root of the enlistment to validate before submitting a PR.
 
 ### Submit Pull Requests
 
@@ -20,7 +21,9 @@ This repository contains the source code for BinSkim, a Portable Executable (PE)
 3. Find out more about the Static Analysis Results Interchange Format **([SARIF](https://github.com/sarif-standard/sarif-spec/))** used to output Binskim results
 
 ### How to extract the exe file from the nuget package
-If you only want to run the Binskim tool without installing anything, then you can 
+
+If you only want to run the Binskim tool without installing anything, then you can
+
 1. Download BinSkim from **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**
 2. Rename the file extension from .nupkg to .zip (ie. via commandline: `rename microsoft.codeanalysis.binskim.x.y.z.nupkg microsoft.codeanalysis.binskim.x.y.z.zip`)
 3. Unzip
