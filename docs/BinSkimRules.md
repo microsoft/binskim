@@ -856,7 +856,7 @@ Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor f
 
 #### `Warning`: Warning
 
-'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines.
+'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash.
 
 #### `InvalidMetadata`: NotApplicable
 
