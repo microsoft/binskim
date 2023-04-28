@@ -1,6 +1,6 @@
 # BinSkim Release History
 ## Definitions
-- NR => new rule
+- NR  => new rule
 - PRF => performance work
 - FCR => fingerprint change or refactor
 - RRR => rule rename or refactor
@@ -12,15 +12,20 @@
 - FND => False negative reduction in dynamic phase
 - UER => eliminate unhandled exceptions in rules
 - UEE => eliminate unhandled exceptions in engine
+- NEW => new feature 
 
 ## **v4.1.0** UNRELEASED
+* NEW: `CompilerInformation` telemetry now emits the last modified date of the scan target. [#873](https://github.com/microsoft/binskim/pull/873)
+* NEW: `CompilerInformation` telemetry now emits the last modified date of the PDB associated with the analyzed binary. [#871](https://github.com/microsoft/binskim/pull/871)
 * DEP: Update Sarif.Sdk submodule from [120fae3 to 2d52c53](https://github.com/microsoft/sarif-sdk/compare/120fae3...2d52c53). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/2d52c53/src/ReleaseHistory.md).
+* DEP: Upgrade ELFSharp from 2.16.1 to 2.17.1. [#872](https://github.com/microsoft/binskim/pull/872)
 * BRK: Remove `--verbose` command-line option (in favor of `--level` and `--kind`). [#853](https://github.com/microsoft/binskim/pull/853)
 * BRK: Remove `--hashes` command-line option (in favor of `--insert Hashes`). [#853](https://github.com/microsoft/binskim/pull/853)
 * BUG: Fix `BA2004.EnableSecureSourceCodeHashing` to report the actual broken hash algorithm (rather than always reporting SHA-1). [#868](https://github.com/microsoft/binskim/pull/868)
 * BUG: Fix `BA2022.SignSecurely` unhandled `InvalidOperationException`: `Unrecognized crypto HRESULT: 0x80096011`, which is `TRUST_E_MALFORMED_SIGNATURE`, by refreshing `CryptoError` enum with latest data from Windows SDK for Windows 11 (10.0.22621.0). [850](https://github.com/microsoft/binskim/pull/850)
 * BUG: Probe local symbols directory for PDBs in all code paths. [828](https://github.com/microsoft/binskim/pull/828)
 * BUG: Add missing output in PDB load tracing (enabled by `--trace PdbLoad`. [828](https://github.com/microsoft/binskim/pull/828)
+* BUG: Provide additional note for `BA2025.EnableShadowStack` that enabling it with older versions of .NET (.NET 6 or earlier) may cause the process to crash. [874](https://github.com/microsoft/binskim/pull/874)
 
 ## **v4.0.0**
 * DEP: Update Sarif.Sdk submodule from [fc9a9df to 2d52c53](https://github.com/microsoft/sarif-sdk/compare/fc9a9df...2d52c53). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/2d52c53/src/ReleaseHistory.md).

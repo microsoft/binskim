@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+using System.IO;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -66,6 +67,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             var records = new Dictionary<CompilerData, ObjectModuleDetails>();
 
+            // Add the last modified date for the target and the associated pdb
+            string pdbLastAccessDateUtc, targetLastAccessDateUtc;
+            try
+            {
+                pdbLastAccessDateUtc = File.GetLastAccessTimeUtc(pdb.PdbLocation).ToString();
+                targetLastAccessDateUtc = File.GetLastAccessTimeUtc(target.TargetUri.AbsolutePath).ToString();
+            }
+            catch (Exception)
+            {
+                pdbLastAccessDateUtc = string.Empty;
+                targetLastAccessDateUtc = string.Empty;
+            }
+
             if (target.PE.IsManaged)
             {
                 var record = new CompilerData
@@ -75,6 +89,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     Language = nameof(Language.MSIL),
                     DebuggingFileName = pdb.GlobalScope?.Name,
                     DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
+                    DebuggingFileLastModifiedDateUtc = pdbLastAccessDateUtc,
+                    TargetLastModifiedDateUtc = targetLastAccessDateUtc,
                     FileVersion = target.PE.FileVersion?.FileVersion,
                     CompilerBackEndVersion = target.PE.LinkerVersion.ToString(),
                     CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
@@ -105,6 +121,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         DebuggingFileName = pdb.GlobalScope?.Name,
                         FileVersion = target.PE.FileVersion?.FileVersion,
                         DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),
+                        DebuggingFileLastModifiedDateUtc = pdbLastAccessDateUtc,
+                        TargetLastModifiedDateUtc = targetLastAccessDateUtc,
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
                     };
