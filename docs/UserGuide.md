@@ -22,7 +22,7 @@ binskim.exe analyze c:\temp\MyProjectFile.dll
 
 // Analyze all files with the .dll or .exe extension starting in the
 // current working directory and recursing through all child directories
-binskim analyze *.exe *.dll --recurse
+binskim analyze *.exe *.dll --recurse true
 
 // Analyze all files with the .dll extension starting in the current
 // current directory and write results to a SARIF log file
@@ -45,14 +45,14 @@ The **`analyze`** command supports the following additional arguments:
 | **`--sympath`** | Symbols path value (e.g. `SRV http://msdl.microsoft.com/download/symbols or Cache d:\symbols;Srv http://symweb`) |
 | **`--local-symbol-directories`** | A set of semicolon-delimited local directory paths that will be examined when attempting to locate PDBs. |
 | **`-o, --output`** | File path used to write and output analysis using [SARIF](https://github.com/Microsoft/sarif-sdk) |
-| **`-r, --recurse`** | Recurse into subdirectories when evaluating file specifier arguments |
+| **`-r, --recurse [true\|false]`** | If true, recurse into subdirectories when evaluating file specifier arguments |
 | **`-c, --config`** | (Default: ‘default’) Path to policy file to be used to configure analysis. Passing value of 'default' (or omitting the argument) invokes built-in settings |
-| **`-q, --quiet`** | Do not log results to the console |
+| **`-q, --quiet [true\|false]`** | If true, do not log results to the console |
 | **`-s, --statistics`** | Generate timing and other statistics for analysis session |
 | **`-h, --hashes`** | Output hashes of analysis targets when emitting SARIF reports |
-| **`-e, --environment`** | <p>Log machine environment details of run to output file.</p><p>**WARNING:** This option records potentially sensitive information (such as all environment variable values) to the log file.</p> |
+| **`-e, --environment [true\|false]`** | <p>If true, log machine environment details of run to output file.</p><p>**WARNING:** This option records potentially sensitive information (such as all environment variable values) to the log file.</p> |
 | **`-p, --plugin`** | Path to plugin that will be invoked against all targets in the analysis set. |
-| **`--rich-return-code`** | Output a more detailed exit code consisting of a series of flags about execution, rather than outputting '0' for success/'1' for failure (see codes below) |
+| **`--rich-return-code [true\|false]`** | If true, output a more detailed exit code consisting of a series of flags about execution, rather than outputting '0' for success/'1' for failure (see codes below) |
 | **`--level`** | Filter output of scan results to one or more failure levels. Valid values: Error, Warning and Note. |
 | **`--kind`** | Filter output one or more result kinds. Valid values: Fail (for literal scan results), Pass, Review, Open, NotApplicable and Informational. |
 | **`--baseline`** | A Sarif file to be used as baseline. |
@@ -90,17 +90,17 @@ The `--local-symbol-directories` argument configures a set of semicolon-delimite
 
 The `-o` or `--output` argument specifies a file path to which BinSkim’s SARIF-formatted results will be written. The Microsoft SARIF SDK ships with a Microsoft Visual Studio Add-In that can be compiled and used to load SARIF log files into the Microsoft Visual Studio IDE.
 
-#### -r, --recurse
+#### -r, --recurse [true\|false]
 
-The `-r` or `--recurse` argument will recurse into child directories for each file specifier passed on the command-line. If the argument does not appear on the command-line, each file specifier will be resolved against the provided directory, if there is one, or the current working directory, if there is not.
+The `-r` or `--recurse` argument, if provided with true, will recurse into child directories for each file specifier passed on the command-line. If the argument does not appear on the command-line or provided with false, each file specifier will be resolved against the provided directory, if there is one, or the current working directory, if there is not.
 
 #### -c, --config
 
 The `-c` or `--config` argument can be used to pass settings, rendered as XML, that can be used to reconfigure analysis.  Accepts a single argument that specifies the path of the configuration file. See the `exportConfig` command for information on generating a preliminary configuration file that can be modified and passed back into BinSkim to reconfigure analysis.
 
-#### -q, --quiet
+#### -q, --quiet [true\|false]
 
-The `-q` or `--quiet` argument suppresses BinSkim console output. BinSkim will raise an error when the -q is specified without providing a log file location to persist result via the `-o` argument.
+The `-q` or `--quiet` argument, if provided with true, suppresses BinSkim console output. BinSkim will raise an error when the -q with true is specified without providing a log file location to persist result via the `-o` argument.
 
 #### -s, --statistics
 
@@ -110,13 +110,13 @@ The `-s` or `--statistics` argument configures BinSkim to record and report on v
 
 The `-h` or `--hashes` argument configures BinSkim to emit MD5, SHA1 and SHA256 hashes of analysis targets to the SARIF output log specified via the `-o` argument. BinSkim will raise an exception in cases when -h is specified but no SARIF results file is configured via the `--output` argument. File hashes are emitted to log files to assist in results caching as well as scenarios where it is helpful to verify for auditing, compliance or other purposes that a specific version of a file was analyzed.
 
-#### -e, --environment
+#### -e, --environment [true\|false]
 
-The `-e` or `--environment` argument configures BinSkim to emit machine environment details to the SARIF log file specified via the -o argument. This information includes the user account, machine name, working directory and complete set of environment variables and definitions that were present during the analysis run. This information may be useful in some tool troubleshooting scenarios. WARNING: the information emitted by the -e argument may represent unwanted information disclosure.
+The `-e` or `--environment` argument, if provided with true, configures BinSkim to emit machine environment details to the SARIF log file specified via the -o argument. This information includes the user account, machine name, working directory and complete set of environment variables and definitions that were present during the analysis run. This information may be useful in some tool troubleshooting scenarios. WARNING: the information emitted by the -e argument may represent unwanted information disclosure.
 
-#### --rich-return-code
+#### --rich-return-code [true\|false]
 
-The `--rich-return-code` argument configures BinSkim to exit with a detailed exit code consisting of a series of flags about possible exit states, rather than exiting with a simple `0` for success/`1` for failure.  Note that multiple errors may occur in a single run--for instance, if one or more errors fired (`0x80000000`) one or more warnings fired (`0x4000000`), and we encountered an exception in then Analyze() function for a skimmer (`0x8`), the exit code would be `0xC0000008`.
+The `--rich-return-code` argument, if provided with true, configures BinSkim to exit with a detailed exit code consisting of a series of flags about possible exit states, rather than exiting with a simple `0` for success/`1` for failure.  Note that multiple errors may occur in a single run--for instance, if one or more errors fired (`0x80000000`) one or more warnings fired (`0x4000000`), and we encountered an exception in then Analyze() function for a skimmer (`0x8`), the exit code would be `0xC0000008`.
 
 Non-fatal warnings correspond to behaviors that should be expected during normal successful operation of the tool--for instance, the tool can execute successfully and still find errors.
 
