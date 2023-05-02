@@ -14,15 +14,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Test.CoyoteTests
 {
     [TestClass]
-    public class BasicCoyoteTests
-    {                                   
+    public class CoyoteTestsDriver
+    {
         public static void RunSystematicTest(Func<Task> test)
         {
             // Configuration for how to run a concurrency unit test with Coyote.
             Configuration config = Configuration
                 .Create()
-                .WithMaxSchedulingSteps(5000)
-                .WithTestingIterations(1000);
+                .WithMaxSchedulingSteps(10000)
+                .WithTestingIterations(10000)
+                .WithPartiallyControlledConcurrencyAllowed(true)
+                .WithPartiallyControlledDataNondeterminismAllowed(true)
+                .WithMemoryAccessRaceCheckingEnabled(true)
+                .WithPotentialDeadlocksReportedAsBugs(false)
+            ;
 
             async Task TestActionAsync()
             {

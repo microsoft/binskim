@@ -1,4 +1,4 @@
 {
   "AssembliesPath": "..\\..\\bld\\bin\\AnyCPU_Release\\netcoreapp3.1",
-  "Assemblies": [ "BinaryParsers.dll", "BinSkim.Driver.dll", "BinSkim.Rules.dll", "BinSkim.Sdk.dll", "Test.UnitTests.BinaryParsers.dll", "Test.UnitTests.BinSkim.Driver.dll", "Test.UnitTests.BinSkim.Rules.dll", "Test.ConcurrencyTests.dll" ]
+  "Assemblies": [ "BinSkim.dll", "BinSkim.Rules.dll", "Test.UnitTests.BinaryParsers.dll", "Test.UnitTests.BinSkim.Driver.dll", "Test.UnitTests.BinSkim.Rules.dll", "Test.ConcurrencyTests.dll" ]
 }

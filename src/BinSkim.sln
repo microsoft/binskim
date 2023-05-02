@@ -58,7 +58,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sarif.Converters", "sarif-s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTests.Sarif.Converters", "sarif-sdk\src\Test.UnitTests.Sarif.Converters\Test.UnitTests.Sarif.Converters.csproj", "{E29D948B-BF8D-41D3-9924-01E994602D8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ConcurrencyTests", "Test.ConcurrencyTests\Test.ConcurrencyTests.csproj", "{27A04162-2037-41FB-AD76-E179451BB627}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.ConcurrencyTests", "Test.ConcurrencyTests\Test.ConcurrencyTests.csproj", "{27A04162-2037-41FB-AD76-E179451BB627}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -198,8 +198,8 @@ Global
 		{E29D948B-BF8D-41D3-9924-01E994602D8A}.Release|x64.Build.0 = Release|Any CPU
 		{27A04162-2037-41FB-AD76-E179451BB627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{27A04162-2037-41FB-AD76-E179451BB627}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27A04162-2037-41FB-AD76-E179451BB627}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{27A04162-2037-41FB-AD76-E179451BB627}.Debug|x64.Build.0 = Debug|Any CPU
+		{27A04162-2037-41FB-AD76-E179451BB627}.Debug|x64.ActiveCfg = Debug|x64
+		{27A04162-2037-41FB-AD76-E179451BB627}.Debug|x64.Build.0 = Debug|x64
 		{27A04162-2037-41FB-AD76-E179451BB627}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27A04162-2037-41FB-AD76-E179451BB627}.Release|Any CPU.Build.0 = Release|Any CPU
 		{27A04162-2037-41FB-AD76-E179451BB627}.Release|x64.ActiveCfg = Release|Any CPU

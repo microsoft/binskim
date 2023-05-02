@@ -58,8 +58,7 @@
 	  </None>
 	</ItemGroup>
 
-	<Target Name="CoyoteRewriting" AfterTargets="AfterBuild" Condition=" '$(TargetFramework)'=='netcoreapp3.1' ">
-		<Message Text="This custom target will only be executed when configuration is debug $(TargetFramework)" Importance="high"></Message>
+	<Target Name="CoyoteRewriting" AfterTargets="AfterBuild" Condition=" '$(TargetFramework)'=='netcoreapp3.1' And '$(OS)' == 'Windows_NT' ">
 		<Exec Command="$(ExecCommand)" />
 	</Target>		
 

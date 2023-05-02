@@ -148,8 +148,8 @@ namespace Test.CoyoteTests
         [TestMethod, TestCategory("NightlyTest")]
         public void SystematicTestScenario()
         {
-            BasicCoyoteTests.RunSystematicTest(AnalyzeCommand_TypicalPEFilesTest);
-            BasicCoyoteTests.RunSystematicTest(AnalyzeCommand_TypicalNonPEFilesTest);
+            CoyoteTestsDriver.RunSystematicTest(AnalyzeCommand_TypicalPEFilesTest);
+            CoyoteTestsDriver.RunSystematicTest(AnalyzeCommand_TypicalNonPEFilesTest);
         }
 
     }
