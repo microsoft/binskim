@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.IL;
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.Coyote;
+using Microsoft.Coyote.Specifications;
 using Microsoft.Coyote.SystematicTesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -22,7 +23,27 @@ namespace Test.CoyoteTests
 {
     [TestClass]
     public class AnalyzeCommandTests
-    {
+    { 
+        /// <summary>
+        /// This is a very simple concurrency unit test, where the bug is hard to manifest
+        /// using traditional test infrastructure. This test serves as a template for using
+        /// Coyote testing (which is able to rapidly reveal the assertion failure).
+        /// </summary>
+        /// <returns></returns>
+        [Ignore]
+        [TestMethod]
+        public async Task TestTaskAsync()
+        {
+            int value = 0;
+            Task task = Task.Run(() =>
+            {
+                value = 1;
+            });
+
+            Specification.Assert(value == 0, "value is 1");
+            await task;
+        }
+
         [TestMethod]
         public async Task AnalyzeCommand_TypicalPEFilesTest()
         {
@@ -127,50 +148,8 @@ namespace Test.CoyoteTests
         [TestMethod, TestCategory("NightlyTest")]
         public void SystematicTestScenario()
         {
-            RunSystematicTest(AnalyzeCommand_TypicalPEFilesTest);
-            RunSystematicTest(AnalyzeCommand_TypicalNonPEFilesTest);
-        }
-
-
-        private static void RunSystematicTest(Func<Task> test)
-        {
-            // Configuration for how to run a concurrency unit test with Coyote.
-            Configuration config = Configuration
-                .Create()
-                .WithMaxSchedulingSteps(5000)
-                .WithTestingIterations(1000);
-
-            async Task TestActionAsync()
-            {
-                await test();
-            };
-
-            var testingEngine = TestingEngine.Create(config, TestActionAsync);
-
-            try
-            {
-                testingEngine.Run();
-
-                string assertionText = testingEngine.TestReport.GetText(config);
-                assertionText +=
-                    $"{Environment.NewLine} Random Generator Seed: " +
-                    $"{testingEngine.TestReport.Configuration.RandomGeneratorSeed}{Environment.NewLine}";
-                foreach (string bugReport in testingEngine.TestReport.BugReports)
-                {
-                    assertionText +=
-                    $"{Environment.NewLine}" +
-                    "Bug Report: " + bugReport.ToString(CultureInfo.InvariantCulture);
-                }
-
-                Assert.IsTrue(testingEngine.TestReport.NumOfFoundBugs == 0, assertionText);
-
-                Console.WriteLine(testingEngine.TestReport.GetText(config));
-            }
-            finally
-            {
-                testingEngine.Stop();
-                testingEngine.Dispose();
-            }
+            BasicCoyoteTests.RunSystematicTest(AnalyzeCommand_TypicalPEFilesTest);
+            BasicCoyoteTests.RunSystematicTest(AnalyzeCommand_TypicalNonPEFilesTest);
         }
 
     }

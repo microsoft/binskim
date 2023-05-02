@@ -1,4 +1,4 @@
 {
-  "AssembliesPath": ".\\bin\\Debug\\netcoreapp3.1",
-  "Assemblies": [ "Test.ConcurrencyTests.dll" ]
+  "AssembliesPath": "..\\..\\bld\\bin\\AnyCPU_Debug\\netcoreapp3.1",
+  "Assemblies": [ "BinSkim.Rules.dll", "Test.UnitTests.BinaryParsers.dll", "Test.UnitTests.BinSkim.Driver.dll", "Test.UnitTests.BinSkim.Rules.dll", "Test.ConcurrencyTests.dll" ]
 }

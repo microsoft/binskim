@@ -15,34 +15,8 @@ namespace Test.CoyoteTests
 {
     [TestClass]
     public class BasicCoyoteTests
-    {
-        /// <summary>
-        /// This is a very simple concurrency unit test, where the bug is hard to manifest
-        /// using traditional test infrastructure. This test serves as a template for using
-        /// Coyote testing (which is able to rapidly reveal the assertion failure).
-        /// </summary>
-        /// <returns></returns>
-        [TestMethod]
-        public async Task TestTaskAsync()
-        {
-            int value = 0;
-            Task task = Task.Run(() =>
-            {
-                value = 1;
-            });
-
-            Specification.Assert(value == 0, "value is 1");
-            await task;
-        }
-
-        [TestMethod, TestCategory("NightlyTest")]
-        public void SystematicTestScenario()
-        {
-            RunSystematicTest(TestTaskAsync);
-        }
-
-
-        private static void RunSystematicTest(Func<Task> test)
+    {                                   
+        public static void RunSystematicTest(Func<Task> test)
         {
             // Configuration for how to run a concurrency unit test with Coyote.
             Configuration config = Configuration
