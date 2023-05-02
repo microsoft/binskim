@@ -49,7 +49,7 @@ The **`analyze`** command supports the following additional arguments:
 | **`-c, --config`** | (Default: ‘default’) Path to policy file to be used to configure analysis. Passing value of 'default' (or omitting the argument) invokes built-in settings |
 | **`-q, --quiet [true\|false]`** | If true, do not log results to the console |
 | **`-s, --statistics`** | Generate timing and other statistics for analysis session |
-| **`-h, --hashes`** | Output hashes of analysis targets when emitting SARIF reports |
+| **`--insert`** | Optionally present data, expressed as a semicolon-delimited list, that should be inserted into the log file. Valid values include Hashes, TextFiles, BinaryFiles, EnvironmentVariables, RegionSnippets, ContextRegionSnippets, ContextRegionSnippetPartialFingerprints, Guids, VersionControlDetails, and NondeterministicProperties. |
 | **`-e, --environment [true\|false]`** | <p>If true, log machine environment details of run to output file.</p><p>**WARNING:** This option records potentially sensitive information (such as all environment variable values) to the log file.</p> |
 | **`-p, --plugin`** | Path to plugin that will be invoked against all targets in the analysis set. |
 | **`--rich-return-code [true\|false]`** | If true, output a more detailed exit code consisting of a series of flags about execution, rather than outputting '0' for success/'1' for failure (see codes below) |
@@ -106,9 +106,9 @@ The `-q` or `--quiet` argument, if provided with true, suppresses BinSkim consol
 
 The `-s` or `--statistics` argument configures BinSkim to record and report on various statistics related to the analysis, including total time-of-execution, the number of valid analysis targets the command-line run resolved to, and the number of invalid targets (i.e., non-portable executable files) specified for analysis.
 
-#### -h, --hashes
+#### --insert
 
-The `-h` or `--hashes` argument configures BinSkim to emit MD5, SHA1 and SHA256 hashes of analysis targets to the SARIF output log specified via the `-o` argument. BinSkim will raise an exception in cases when -h is specified but no SARIF results file is configured via the `--output` argument. File hashes are emitted to log files to assist in results caching as well as scenarios where it is helpful to verify for auditing, compliance or other purposes that a specific version of a file was analyzed.
+The `--insert` argument optionally present data, expressed as a semicolon-delimited list, that should be inserted into the log file. Valid values include Hashes, TextFiles, BinaryFiles, EnvironmentVariables, RegionSnippets, ContextRegionSnippets, ContextRegionSnippetPartialFingerprints, Guids, VersionControlDetails, and NondeterministicProperties.
 
 #### -e, --environment [true\|false]
 

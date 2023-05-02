@@ -44,7 +44,7 @@ If you only want to run the Binskim tool without installing anything, then you c
 | **`-c, --config`** | (Default: ‘default’) Path to policy file to be used to configure analysis. Passing value of 'default' (or omitting the argument) invokes built-in settings |
 | **`-q, --quiet [true\|false]`** | If true, do not log results to the console |
 | **`-s, --statistics`** | Generate timing and other statistics for analysis session |
-| **`-h, --hashes`** | Output hashes of analysis targets when emitting SARIF reports |
+| **`--insert`** | Optionally present data, expressed as a semicolon-delimited list, that should be inserted into the log file. Valid values include Hashes, TextFiles, BinaryFiles, EnvironmentVariables, RegionSnippets, ContextRegionSnippets, ContextRegionSnippetPartialFingerprints, Guids, VersionControlDetails, and NondeterministicProperties. |
 | **`-e, --environment [true\|false]`** | <p>If true, log machine environment details of run to output file.</p><p>**WARNING:** This option records potentially sensitive information (such as all environment variable values) to the log file.</p> |
 | **`-p, --plugin`** | Path to plugin that will be invoked against all targets in the analysis set. |
 | **`--level`** | Filter output of scan results to one or more failure levels. Valid values: Error, Warning and Note. |
