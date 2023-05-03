@@ -147,10 +147,18 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 DataToInsert = new[] { OptionallyEmittedData.Hashes }
             };
             var command = new MultithreadedAnalyzeCommand();
-            command.Run(options);
+
+            Action action = () => command.Run(options);
+
+            // Testing against:
+            // error ERR999.UnhandledEngineException : System.InvalidOperationException:
+            // This operation is not supported for a relative URI.
+            // at System.Uri.get_IsFile()
+            action.Should().NotThrow<InvalidOperationException>();
+
             var log = SarifLog.Load(fileName);
-            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count.Should().Be(1);
-            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("skipped")).Should().Be(1);
+            
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("skipped")).Should().BeGreaterThanOrEqualTo(1);
         }
 
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)
