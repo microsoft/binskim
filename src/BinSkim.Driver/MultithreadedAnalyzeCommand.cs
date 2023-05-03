@@ -224,7 +224,7 @@ namespace Microsoft.CodeAnalysis.IL
             // interesting (it will always be set).
 
             return analyzeOptions.RichReturnCode == true
-                ? (int)((uint)result & ~(uint)RuntimeConditions.RuleNotApplicableToTarget)
+                ? (int)((uint)result & ~(long)RuntimeConditions.RuleNotApplicableToTarget)
                 : result;
         }
 
