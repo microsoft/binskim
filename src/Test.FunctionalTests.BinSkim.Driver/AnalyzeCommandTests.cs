@@ -148,16 +148,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             };
             var command = new MultithreadedAnalyzeCommand();
 
-            Action action = () => command.Run(options);
-
-            // Testing against:
-            // error ERR999.UnhandledEngineException : System.InvalidOperationException:
-            // This operation is not supported for a relative URI.
-            // at System.Uri.get_IsFile()
-            action.Should().NotThrow<InvalidOperationException>();
-
+            command.Run(options);
             var log = SarifLog.Load(fileName);
-            
+
+            log.Runs[0].Invocations[0].ToolExecutionNotifications.Should().BeNull();
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("skipped")).Should().BeGreaterThanOrEqualTo(1);
         }
 
