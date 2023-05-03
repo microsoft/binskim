@@ -127,6 +127,32 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("E_PDB_NOT_FOUND")).Should().Be(1);
         }
 
+        [Fact]
+        public void AnalyzeCommand_ZeroByteTest()
+        {
+            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_ZeroByteTest.sarif");
+            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "Invalid", "ZeroByte", "*");
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new string[] {
+                    pathDeterminismTest
+                },
+                Level = new[] { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
+                Kind = new[] { ResultKind.Fail, ResultKind.Pass },
+                OutputFilePath = fileName,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                Recurse = true,
+                Threads = 10,
+                IgnorePdbLoadError = true,
+                DataToInsert = new[] { OptionallyEmittedData.Hashes }
+            };
+            var command = new MultithreadedAnalyzeCommand();
+            command.Run(options);
+            var log = SarifLog.Load(fileName);
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count.Should().Be(1);
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("skipped")).Should().Be(1);
+        }
+
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)
         {
             SarifLog sarifLog;
