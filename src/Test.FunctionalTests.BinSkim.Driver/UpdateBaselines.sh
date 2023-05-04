@@ -27,8 +27,8 @@ RunBaseline ()
         output="$expectedDirectory/$outputFile.sarif"
         outputTemp="$output.temp"
 
-        echo "$TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet --sarif-output-version Current"
-        $TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet --sarif-output-version Current
+        echo "$TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet true --sarif-output-version Current"
+        $TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet true --sarif-output-version Current
 
         # Normalize paths--replace the repository root with '/home/user'
         echo "Normalizing file output"
