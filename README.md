@@ -29,7 +29,7 @@ If you only want to run the Binskim tool without installing anything, then you c
 3. Unzip
 4. Executable files are now available in the OS specific folder within _tools\netcoreapp3.1_ (ie. linux-x64, win-x64, and osx-x64).
 5. Navigate to this location to invoke the executable:
-    - Windows: `binskim.exe analyze c:\bld\*.dll --recurse --output MyRun.sarif`
+    - Windows: `binskim.exe analyze c:\bld\*.dll --recurse true --output MyRun.sarif`
     - Linux/Unix: `./BinSkim analyze /someDirectory/testBinary -o MyRun.sarif`
     - Mac: `./BinSkim analyze /someDirectory/testBinary -o MyRun.sarif`
     - Using dotnet sdk: `dotnet binskim.dll analyze /directoryPath/testBinary -o MyRun.sarif`
@@ -40,12 +40,12 @@ If you only want to run the Binskim tool without installing anything, then you c
 | -------------------------------- | ------- |
 | **`--sympath`** | Symbols path value (e.g. `SRV http://msdl.microsoft.com/download/symbols or Cache d:\symbols;Srv http://symweb`) |
 | **`-o, --output`** | File path used to write and output analysis using [SARIF](https://github.com/Microsoft/sarif-sdk) |
-| **`-r, --recurse`** | Recurse into subdirectories when evaluating file specifier arguments |
+| **`-r, --recurse [true\|false]`** | If true, recurse into subdirectories when evaluating file specifier arguments |
 | **`-c, --config`** | (Default: ‘default’) Path to policy file to be used to configure analysis. Passing value of 'default' (or omitting the argument) invokes built-in settings |
-| **`-q, --quiet`** | Do not log results to the console |
+| **`-q, --quiet [true\|false]`** | If true, do not log results to the console |
 | **`-s, --statistics`** | Generate timing and other statistics for analysis session |
-| **`-h, --hashes`** | Output hashes of analysis targets when emitting SARIF reports |
-| **`-e, --environment`** | <p>Log machine environment details of run to output file.</p><p>**WARNING:** This option records potentially sensitive information (such as all environment variable values) to the log file.</p> |
+| **`--insert`** | Optionally present data, expressed as a semicolon-delimited list, that should be inserted into the log file. Valid values include Hashes, TextFiles, BinaryFiles, EnvironmentVariables, RegionSnippets, ContextRegionSnippets, ContextRegionSnippetPartialFingerprints, Guids, VersionControlDetails, and NondeterministicProperties. |
+| **`-e, --environment [true\|false]`** | <p>If true, log machine environment details of run to output file.</p><p>**WARNING:** This option records potentially sensitive information (such as all environment variable values) to the log file.</p> |
 | **`-p, --plugin`** | Path to plugin that will be invoked against all targets in the analysis set. |
 | **`--level`** | Filter output of scan results to one or more failure levels. Valid values: Error, Warning and Note. |
 | **`--kind`** | Filter output one or more result kinds. Valid values: Fail (for literal scan results), Pass, Review, Open, NotApplicable and Informational. |
@@ -54,4 +54,4 @@ If you only want to run the Binskim tool without installing anything, then you c
 | **`--version`** | BinSkim version details. |
 | **`value pos. 0`** | One or more specifiers to a file, directory, or filter pattern that resolves to one or more binaries to analyze. |
 
-**Example:** `binskim.exe analyze c:\bld\*.dll --recurse --output MyRun.sarif`
+**Example:** `binskim.exe analyze c:\bld\*.dll --recurse true --output MyRun.sarif`
