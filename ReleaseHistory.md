@@ -17,7 +17,7 @@
 ## **v4.1.0** UNRELEASED
 * NEW: `CompilerInformation` telemetry now emits the last modified date of the scan target. [#873](https://github.com/microsoft/binskim/pull/873)
 * NEW: `CompilerInformation` telemetry now emits the last modified date of the PDB associated with the analyzed binary. [#871](https://github.com/microsoft/binskim/pull/871)
-* DEP: Update Sarif.Sdk submodule from [120fae3 to ca948a9](https://github.com/microsoft/sarif-sdk/compare/120fae3...ca948a9). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/ca948a9/ReleaseHistory.md).
+* DEP: Update Sarif.Sdk submodule from [120fae3 to bc8cb57](https://github.com/microsoft/sarif-sdk/compare/120fae3...bc8cb57). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/bc8cb57/ReleaseHistory.md).
 * DEP: Upgrade ELFSharp from 2.16.1 to 2.17.1. [#872](https://github.com/microsoft/binskim/pull/872)
 * BRK: Remove `--verbose` command-line option (in favor of `--level` and `--kind`). [#853](https://github.com/microsoft/binskim/pull/853)
 * BRK: Remove `--hashes` command-line option (in favor of `--insert Hashes`). [#853](https://github.com/microsoft/binskim/pull/853)
