@@ -41,20 +41,20 @@ The **`analyze`** command supports the following additional arguments:
 
 | Argument (short form, long form) | Meaning |
 | -------------------------------- | ------- |
-| **`--trace`** | Execution traces, expressed as a semicolon-delimited list, that should be emitted to the console and log file (if appropriate). Valid values: PdbLoad. |
-| **`--sympath`** | Symbols path value (e.g. `SRV http://msdl.microsoft.com/download/symbols or Cache d:\symbols;Srv http://symweb`) |
-| **`--local-symbol-directories`** | A set of semicolon-delimited local directory paths that will be examined when attempting to locate PDBs. |
+| **`--trace`** | Execution traces, expressed as a semicolon-delimited list (escape semicolon with backslash in Unix-like OS), that should be emitted to the console and log file (if appropriate). Valid values: PdbLoad. |
+| **`--sympath`** | Symbol paths, expressed as a semicolon-delimited list (escape semicolon with backslash in Unix-like OS). (e.g. `SRV http://msdl.microsoft.com/download/symbols or Cache d:\symbols;Srv http://symweb`) |
+| **`--local-symbol-directories`** | Local directory paths, expressed as a semicolon-delimited list (escape semicolon with backslash in Unix-like OS), that will be examined when attempting to locate PDBs. |
 | **`-o, --output`** | File path used to write and output analysis using [SARIF](https://github.com/Microsoft/sarif-sdk) |
 | **`-r, --recurse [true\|false]`** | If true, recurse into subdirectories when evaluating file specifier arguments |
 | **`-c, --config`** | (Default: ‘default’) Path to policy file to be used to configure analysis. Passing value of 'default' (or omitting the argument) invokes built-in settings |
 | **`-q, --quiet [true\|false]`** | If true, do not log results to the console |
 | **`-s, --statistics`** | Generate timing and other statistics for analysis session |
-| **`--insert`** | Optionally present data, expressed as a semicolon-delimited list, that should be inserted into the log file. Valid values include Hashes, TextFiles, BinaryFiles, EnvironmentVariables, RegionSnippets, ContextRegionSnippets, ContextRegionSnippetPartialFingerprints, Guids, VersionControlDetails, and NondeterministicProperties. |
+| **`--insert`** | Optionally present data, expressed as a semicolon-delimited list (escape semicolon with backslash in Unix-like OS), that should be inserted into the log file. Valid values include Hashes, TextFiles, BinaryFiles, EnvironmentVariables, RegionSnippets, ContextRegionSnippets, ContextRegionSnippetPartialFingerprints, Guids, VersionControlDetails, and NondeterministicProperties. |
 | **`-e, --environment [true\|false]`** | <p>If true, log machine environment details of run to output file.</p><p>**WARNING:** This option records potentially sensitive information (such as all environment variable values) to the log file.</p> |
-| **`-p, --plugin`** | Path to plugin that will be invoked against all targets in the analysis set. |
+| **`-p, --plugin`** | Paths to plugin, expressed as a semicolon-delimited list (escape semicolon with backslash in Unix-like OS), that will be invoked against all targets in the analysis set. |
 | **`--rich-return-code [true\|false]`** | If true, output a more detailed exit code consisting of a series of flags about execution, rather than outputting '0' for success/'1' for failure (see codes below) |
-| **`--level`** | Filter output of scan results to one or more failure levels. Valid values: Error, Warning and Note. |
-| **`--kind`** | Filter output one or more result kinds. Valid values: Fail (for literal scan results), Pass, Review, Open, NotApplicable and Informational. |
+| **`--level`** | Failure levels, expressed as a semicolon-delimited list (escape semicolon with backslash in Unix-like OS), that is used to filter the scan results. Valid values: Error, Warning and Note. |
+| **`--kind`** | Result kinds, expressed as a semicolon-delimited list (escape semicolon with backslash in Unix-like OS), that is used to filter the scan results. Valid values: Fail (for literal scan results), Pass, Review, Open, NotApplicable and Informational. |
 | **`--baseline`** | A Sarif file to be used as baseline. |
 | **`-v, --sarif-output-version`** | (Default: Current) The SARIF version of the output log file. Valid values are OneZeroZero and Current |
 
