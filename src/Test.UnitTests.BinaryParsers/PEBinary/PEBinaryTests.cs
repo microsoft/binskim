@@ -21,8 +21,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 {
     public class PEBinaryTests
     {
-        internal static string TestData = GetTestDirectory("Test.UnitTests.BinaryParsers" + Path.DirectorySeparatorChar + "TestData");
-        internal static string BaselineTestDataDirectory = GetTestDirectory(@"Test.FunctionalTests.BinSkim.Driver" + Path.DirectorySeparatorChar + "BaselineTestData");
+        public static string TestData = GetTestDirectory("Test.UnitTests.BinaryParsers" + Path.DirectorySeparatorChar + "TestData");
+        public static string BaselineTestDataDirectory = GetTestDirectory(@"Test.FunctionalTests.BinSkim.Driver" + Path.DirectorySeparatorChar + "BaselineTestData");
 
         internal static string GetTestDirectory(string relativeDirectory)
         {
