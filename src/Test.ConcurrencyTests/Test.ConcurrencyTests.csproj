@@ -33,7 +33,7 @@
 	  </None>
 	</ItemGroup>
 
-	<Target Name="CoyoteRewriting" AfterTargets="AfterBuild" Condition=" '$(TargetFramework)'=='netcoreapp3.1' ">
+	<Target Name="CoyoteRewriting" AfterTargets="AfterBuild" Condition=" '$(TargetFramework)'=='netcoreapp3.1' And '$(OS)'=='Windows_NT' ">
 		<Exec Command="$(ExecCommand)" />
 	</Target>		
 
