@@ -145,6 +145,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
+                // Debug libraries are not Spectre-mitigated by design.
+                if (omDetails.UsesDebugCRuntime)
+                {
+                    continue;
+                }
+
                 // See if the item is in our skip list.
                 if (!string.IsNullOrEmpty(om.Lib))
                 {

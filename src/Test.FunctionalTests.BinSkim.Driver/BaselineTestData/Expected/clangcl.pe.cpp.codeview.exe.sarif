@@ -381,11 +381,12 @@
         {
           "ruleId": "BA2024",
           "ruleIndex": 16,
+          "kind": "pass",
+          "level": "none",
           "message": {
-            "id": "Warning",
+            "id": "Pass",
             "arguments": [
-              "clangcl.pe.cpp.codeview.exe",
-              "The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:\r\nlibcmtd.lib,cxx,19.29.30034.2 (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,delete_scalar.obj,delete_scalar_size.obj,denormal_control.obj,env_mode.obj,exe_main.obj,file_mode.obj,fltused.obj,gshandler.obj,gshandlereh.obj,gshandlerseh.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,std_type_info_static.obj,thread_locale.obj,tncleanup.obj,utility.obj,utility_desktop.obj)\r\nlibcmtd.lib,c,19.29.30034.2 (cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,pesect.obj,ucrt_detection.obj)\r\nlibvcruntimed.lib,cxx,19.29.30034.2 (chandler_noexcept.obj,ehhelpers.obj,ehstate.obj,frame.obj,initialization.obj,locks.obj,per_thread_data.obj,purevirt.obj,purevirt_data.obj,riscchandler.obj,risctrnsctrl.obj,std_exception.obj,std_type_info.obj,throw.obj,undname.obj,winapi_downlevel.obj)\r\nlibvcruntimed.lib,c,19.29.30034.2 (jbcxrval.obj,jmpuwind.obj,strchr.obj,strrchr.obj,wcschr.obj)\r\n\r\n"
+              "clangcl.pe.cpp.codeview.exe"
             ]
           },
           "locations": [
@@ -931,17 +932,17 @@
               "id": "BA2025",
               "name": "EnableShadowStack",
               "fullDescription": {
-                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
+                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash."
               },
               "help": {
-                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks."
+                "text": "Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash."
               },
               "messageStrings": {
                 "Pass": {
                   "text": "'{0}' enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation."
                 },
                 "Warning": {
-                  "text": "'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines."
+                  "text": "'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash."
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."

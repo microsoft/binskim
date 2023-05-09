@@ -26,6 +26,7 @@
 * BUG: Probe local symbols directory for PDBs in all code paths. [828](https://github.com/microsoft/binskim/pull/828)
 * BUG: Add missing output in PDB load tracing (enabled by `--trace PdbLoad`. [828](https://github.com/microsoft/binskim/pull/828)
 * BUG: Provide additional note for `BA2025.EnableShadowStack` that enabling it with older versions of .NET (.NET 6 or earlier) may cause the process to crash. [874](https://github.com/microsoft/binskim/pull/874)
+* FPS: Fix false positive for rule `BA2024.EnableSpectreMitigations` incorrectly flags compilation units using debug runtime (which are not Spectre-mitigated by design). [887](https://github.com/microsoft/binskim/pull/887)
 
 ## **v4.0.0**
 * DEP: Update Sarif.Sdk submodule from [fc9a9df to 2d52c53](https://github.com/microsoft/sarif-sdk/compare/fc9a9df...2d52c53). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/2d52c53/ReleaseHistory.md).
