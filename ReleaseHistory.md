@@ -14,7 +14,9 @@
 - UEE => eliminate unhandled exceptions in engine
 - NEW => new feature 
 
-## **v4.1.0** UNRELEASED
+## UNRELEASED
+
+## **v4.1.0**
 * NEW: `CompilerInformation` telemetry now emits the last modified date of the scan target. [#873](https://github.com/microsoft/binskim/pull/873)
 * NEW: `CompilerInformation` telemetry now emits the last modified date of the PDB associated with the analyzed binary. [#871](https://github.com/microsoft/binskim/pull/871)
 * DEP: Update Sarif.Sdk submodule from [120fae3 to bc8cb57](https://github.com/microsoft/sarif-sdk/compare/120fae3...bc8cb57). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/bc8cb57/ReleaseHistory.md).
