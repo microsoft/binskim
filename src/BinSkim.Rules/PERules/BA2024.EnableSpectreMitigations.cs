@@ -145,6 +145,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
+                // Debug libraries are not Spectre-mitigated by design.
+                if (omDetails.UsesDebugCRuntime)
+                {
+                    continue;
+                }
+
                 // See if the item is in our skip list.
                 if (!string.IsNullOrEmpty(om.Lib))
                 {
@@ -358,7 +364,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                         nameof(RuleResources.BA2024_Warning),
-                        context.TargetUri.GetFileName(),
+                        context.CurrentTarget.Uri.GetFileName(),
                         sb.ToString()));
                 return;
             }
@@ -367,7 +373,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                 nameof(RuleResources.BA2024_Pass),
-                    context.TargetUri.GetFileName()));
+                    context.CurrentTarget.Uri.GetFileName()));
         }
 
         internal static Version GetClosestCompilerVersionWithSpectreMitigations(BinaryAnalyzerContext context, ExtendedMachine machine, Version omVersion)

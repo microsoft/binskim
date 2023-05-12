@@ -12,6 +12,8 @@ if "%Configuration%" EQU "" (
 set Configuration=Release
 )
 
+set NightlyTest=%2
+
 @REM Remove existing build data
 if exist bld (rd /s /q bld)
 
@@ -46,6 +48,13 @@ dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --packages 
 :: Build the solution 
 echo Building solution...
 dotnet build --no-restore /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
+
+:nightly
+if "%NightlyTest%" EQU "nightly" (
+    echo Running nightly Tests
+    dotnet test %~dp0src\BinSkim.sln --no-build --filter TestCategory=NightlyTest
+    goto :Exit
+)
 
 ::Run unit tests 
 echo Run all multitargeting xunit tests

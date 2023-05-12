@@ -35,7 +35,7 @@ while (1)
 {
     $CurrentOutputFilePath = "$OutputFolder\$OutputFileName-$i.sarif"
     
-    $command = $BinSkimFolder + "\BinSkim.exe analyze --recurse --hashes --force --quiet --output $CurrentOutputFilePath $InputPaths"
+    $command = $BinSkimFolder + "\BinSkim.exe analyze --recurse true --insert Hashes --force --quiet true --output $CurrentOutputFilePath $InputPaths"
 
     Write-Host "Analyzing... (Iteration $i)"
     Invoke-Expression $command

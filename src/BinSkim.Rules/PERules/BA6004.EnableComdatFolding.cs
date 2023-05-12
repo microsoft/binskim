@@ -77,7 +77,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                     nameof(RuleResources.BA6004_Warning_EnabledForDebug),
-                    context.TargetUri.GetFileName()));
+                    context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -87,7 +87,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                     nameof(RuleResources.BA6004_Warning_DisabledForRelease),
-                    context.TargetUri.GetFileName()));
+                    context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BA6004_Pass),
-                    context.TargetUri.GetFileName()));
+                    context.CurrentTarget.Uri.GetFileName()));
         }
     }
 }

@@ -113,7 +113,13 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             var fileSystem = new Mock<IFileSystem>();
             fileSystem.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
-            var context = new BinaryAnalyzerContext() { TargetUri = new Uri(TargetUriPath) };
+            var context = new BinaryAnalyzerContext()
+            {
+                CurrentTarget = new EnumeratedArtifact(fileSystem.Object)
+                {
+                    Uri = new Uri(TargetUriPath)
+                }
+            };
             var compilerOptions = new PropertiesDictionary
             {
                 { "CsvOutputPath", @"C:\temp\" }
@@ -376,7 +382,14 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             string csvOutputPath = outputPath ?? @$"C:\temp\{Guid.NewGuid()}.csv";
             targetUriPath = targetUriPath ?? TargetUriPath;
 
-            var context = new BinaryAnalyzerContext() { TargetUri = new Uri(targetUriPath), ForceOverwrite = forceOverwrite };
+            var context = new BinaryAnalyzerContext()
+            {
+                CurrentTarget = new EnumeratedArtifact(FileSystem.Instance)
+                {
+                    Uri = new Uri(TargetUriPath)
+                },
+                OutputFileOptions = forceOverwrite ? FilePersistenceOptions.ForceOverwrite : 0,
+            };
 
             context.Policy.SetProperty(CompilerDataLogger.CsvOutputPath, csvOutputPath);
             return context;

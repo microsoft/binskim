@@ -63,7 +63,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                         nameof(RuleResources.BA2013_Pass_NoCode),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -81,7 +81,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.NotApplicable, context, null,
                         nameof(RuleResources.BA2013_NotApplicable_FeatureNotEnabled),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -101,7 +101,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BA2013_Error),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -112,7 +112,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                    nameof(RuleResources.BA2013_Pass),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
         }
     }
 }

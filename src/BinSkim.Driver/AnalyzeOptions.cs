@@ -17,7 +17,8 @@ namespace Microsoft.CodeAnalysis.IL
             "trace",
             Separator = ';',
             Default = new string[] { },
-            HelpText = "Execution traces, expressed as a semicolon-delimited list, that " +
+            HelpText = "Execution traces, expressed as a semicolon-delimited list " +
+                       "(escape semicolon with backslash in Unix-like OS), that " +
                        "should be emitted to the console and log file (if appropriate). " +
                        "Valid values: PdbLoad.")]
         public new IEnumerable<string> Traces { get; set; } = Array.Empty<string>();
@@ -37,12 +38,6 @@ namespace Microsoft.CodeAnalysis.IL
             "local-symbol-directories",
             HelpText = "A set of semicolon-delimited local directory paths that will be examined when attempting to locate PDBs.")]
         public string LocalSymbolDirectories { get; internal set; }
-
-        [Option(
-            "verbose",
-            HelpText = "Emit verbose output. The resulting comprehensive report is designed to provide appropriate evidence for compliance scenarios.")]
-        [Obsolete("Use --level and --kind instead.")]
-        public bool Verbose { get; set; }
 
         [Option(
             "ignorePdbLoadError",

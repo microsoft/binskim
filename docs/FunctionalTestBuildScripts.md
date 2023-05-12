@@ -55,10 +55,12 @@ A simple hello world C/C++ program, compiled with different `clang [version]` th
 A simple hello world program, compiled with `clang 10.0.0` that generates a .o object file. Script to reproduce:  
 `clang-10 -Wall -c helloc.c -O2 -g -gdwarf-3 -o clang.object_file.dwarf.3.o`
 
-## clangcl.pe.c.codeview.exe
+## clangcl.pe.[c/cpp].codeview.*.exe
 
 A simple hello world program, compiled with `clang 13.0.0` that generates a .exe and associated .pdb file. Script to reproduce:  
-`clang-cl -o clangcl.pe.c.codeview.exe -fuse-ld=lld-link hello.c -m32 -Z7 -MTd`
+`clang-cl -o clangcl.pe.[c/cpp].codeview.*.exe -fuse-ld=lld-link hello.c -m32 -Z7`
+_release: `-MT`
+_debug: `-MTd`
 
 ## clangcl.14.pe.c.codeview.pdbpagesize_[size].exe
 
@@ -181,9 +183,10 @@ A simple `Windows Kernel Mode Driver` program, created with `Visual Studio 2019`
 Use `NTSTATUS GsDriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_STRING RegistryPath)` as entry point and do not decorated with `__declspec(safebuffers)`.
 No user functions decorated with `__declspec(safebuffers)`.
 
-## Native_x64_VS2022_Debug.exe
+## Native_x64_VS2022_[Debug/Release]_Qspectre_With_Lib_[Debug/Release]_Qspectre.exe
 
-The Visual Studio 2022 "empty console application" template with no changes, compiled as Debug|x64
+The Visual Studio 2022 "empty console application" template with no changes, compiled as Debug/Release, built with or without Qspectre.
+With_Lib_[Debug/Release]_Qspectre: Include static Libary built with Debug/Release and with or without Qspectre.
 
 ## Native_x64_VS2022_ImplicitEnableOverruled.exe
 
@@ -204,3 +207,7 @@ The Visual Studio 2022 "empty console application" template, compiled as Release
 ## Native_x64_VS2022_PDBPageSize_8192.exe
 
 The Visual Studio 2022 "empty console application" template, compiled as Debug|x64.  The `/PDBPageSize:8192` linker option set page size to 8192.
+
+## Sha256SignedUntrustedRoot.exe
+
+The Visual Studio 2022 default executable template, in project property signing tab enable sign the assembly with a test certificate with sha256RSA.

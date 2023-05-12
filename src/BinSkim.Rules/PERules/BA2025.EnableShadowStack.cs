@@ -25,6 +25,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature
         /// that provides capabilities to defend against return-oriented programming (ROP) based
         /// malware attacks.
+        /// Note: older versions of .NET are not compatible with CET/shadow stack technology. 
+        /// If your native process loads older managed assemblies (.NET 6 or earlier), 
+        /// unhandled exceptions in those components may not be handled properly 
+        /// and may cause your process to crash.
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString
         {
@@ -98,7 +102,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         context.Logger.Log(this,
                             RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                             nameof(RuleResources.BA2025_Pass),
-                            context.TargetUri.GetFileName()));
+                            context.CurrentTarget.Uri.GetFileName()));
                         return;
                     }
                 }
@@ -106,10 +110,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             // '{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation.
             // To resolve this issue, pass /CETCOMPAT on the linker command lines.
+            // Note: older versions of .NET are not compatible with CET/shadow stack technology.
+            // If your native process loads older managed assemblies (.NET 6 or earlier),
+            // unhandled exceptions in those components may not be handled properly
+            // and may cause your process to crash.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                 nameof(RuleResources.BA2025_Warning),
-                context.TargetUri.GetFileName()));
+                context.CurrentTarget.Uri.GetFileName()));
         }
     }
 }

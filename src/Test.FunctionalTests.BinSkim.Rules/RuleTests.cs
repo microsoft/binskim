@@ -207,7 +207,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (target != null)
             {
-                context.TargetUri = new Uri(target);
+                context.CurrentTarget = new EnumeratedArtifact(FileSystem.Instance)
+                {
+                    Uri = new Uri(target)
+                };
             }
 
             return context;

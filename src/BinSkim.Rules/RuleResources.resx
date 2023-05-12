@@ -475,20 +475,20 @@ Modules did not meet the criteria: {1}</value>
 {1}</value>
   </data>
   <data name="BA2004_Error_Managed" xml:space="preserve">
-    <value>'{0}' is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project &lt;ChecksumAlgorithm&gt; property with 'SHA256' to enable secure source code hashing.</value>
+    <value>'{0}' is a managed binary compiled with an insecure ({1}) source code hashing algorithm. {1} is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project &lt;ChecksumAlgorithm&gt; property with 'SHA256' to enable secure source code hashing.</value>
   </data>
   <data name="BA2004_Pass" xml:space="preserve">
     <value>'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm.</value>
   </data>
   <data name="BA2004_Warning_NativeWithInsecureStaticLibraryCompilands" xml:space="preserve">
-    <value>'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+    <value>'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
 {1}</value>
   </data>
   <data name="BA2004_EnableSecureSourceCodeHashing_Description" xml:space="preserve">
     <value>Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '&lt;ChecksumAlgorithm&gt;' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing.</value>
   </data>
   <data name="BA2004_Error_NativeWithInsecureDirectCompilands" xml:space="preserve">
-    <value>'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+    <value>'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
 {1}</value>
   </data>
   <data name="BA2006_Error_OutdatedCsc" xml:space="preserve">
@@ -501,10 +501,10 @@ Modules did not meet the criteria: {1}</value>
     <value>This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland.</value>
   </data>
   <data name="BA2025_EnableShadowStack_Description" xml:space="preserve">
-    <value>Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks.</value>
+    <value>Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash.</value>
   </data>
   <data name="BA2025_Warning" xml:space="preserve">
-    <value>'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines.</value>
+    <value>'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash.</value>
   </data>
   <data name="BA2025_Pass" xml:space="preserve">
     <value>'{0}' enables the Control-flow Enforcement Technology (CET) Shadow Stack mitigation.</value>

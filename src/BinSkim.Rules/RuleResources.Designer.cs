@@ -124,7 +124,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a managed binary compiled with an insecure (SHA-1) source code hashing algorithm. SHA-1 is subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;-checksumalgorithm:SHA256&apos; on the csc.exe command-line or populate the project &lt;ChecksumAlgorithm&gt; property with &apos;SHA256&apos; to enable secure source code hashing..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a managed binary compiled with an insecure ({1}) source code hashing algorithm. {1} is subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;-checksumalgorithm:SHA256&apos; on the csc.exe command-line or populate the project &lt;ChecksumAlgorithm&gt; property with &apos;SHA256&apos; to enable secure source code hashing..
         /// </summary>
         internal static string BA2004_Error_Managed {
             get {
@@ -133,7 +133,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
         ///{1}.
         /// </summary>
         internal static string BA2004_Error_NativeWithInsecureDirectCompilands {
@@ -152,7 +152,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm (MD5). MD5 is subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
         ///{1}.
         /// </summary>
         internal static string BA2004_Warning_NativeWithInsecureStaticLibraryCompilands {
@@ -924,7 +924,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks..
+        ///   Looks up a localized string similar to Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash..
         /// </summary>
         internal static string BA2025_EnableShadowStack_Description {
             get {
@@ -942,7 +942,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines..
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash..
         /// </summary>
         internal static string BA2025_Warning {
             get {
