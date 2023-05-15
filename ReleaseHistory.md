@@ -14,7 +14,8 @@
 - UEE => eliminate unhandled exceptions in engine
 - NEW => new feature 
 
-## UNRELEASED
+## **v4.1.1** UNRELEASED
+* DEP: Update Sarif.Sdk submodule from [bc8cb57 to 37fa749](https://github.com/microsoft/sarif-sdk/compare/bc8cb57...37fa749). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/37fa749/ReleaseHistory.md).
 
 ## **v4.1.0**
 * NEW: `CompilerInformation` telemetry now emits the last modified date of the scan target. [#873](https://github.com/microsoft/binskim/pull/873)
