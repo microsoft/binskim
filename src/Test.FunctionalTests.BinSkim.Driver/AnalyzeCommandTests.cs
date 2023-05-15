@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             var options = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[] { GetThisTestAssemblyFilePath() },
-                Traces = new[] { "PdbLoad" },
+                Trace = new[] { "PdbLoad" },
             };
 
             var command = new MultithreadedAnalyzeCommand
@@ -92,6 +92,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
 
             BinaryAnalyzerContext context = null;
             int result = command.Run(options, ref context);
+            context.TracePdbLoads.Should().BeTrue();
             context.RuntimeExceptions.Should().BeNull();
             result.Should().Be(0);
         }

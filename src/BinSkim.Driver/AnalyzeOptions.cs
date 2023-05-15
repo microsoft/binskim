@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.IL
                        "(escape semicolon with backslash in Unix-like OS), that " +
                        "should be emitted to the console and log file (if appropriate). " +
                        "Valid values: PdbLoad.")]
-        public new IEnumerable<string> Traces { get; set; } = Array.Empty<string>();
+        public new IEnumerable<string> Trace { get; set; } = Array.Empty<string>();
 
         [Option(
             "sympath",

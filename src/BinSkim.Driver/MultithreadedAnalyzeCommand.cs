@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis.IL
             context.SymbolPath = options.SymbolsPath;
             context.IgnorePdbLoadError = options.IgnorePdbLoadError;
             context.LocalSymbolDirectories = options.LocalSymbolDirectories;
-            context.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));
+            context.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
 
             context.CompilerDataLogger =
                 new CompilerDataLogger(context.OutputFilePath,
@@ -171,7 +171,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             Stopwatch stopwatch = null;
 
-            if (analyzeOptions.Traces.Where(s => s == "ScanTime").Any())
+            if (analyzeOptions.Trace.Where(s => s == "ScanTime").Any())
             {
                 stopwatch = Stopwatch.StartNew();
             }
