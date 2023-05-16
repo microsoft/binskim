@@ -17,9 +17,8 @@ namespace Microsoft.CodeAnalysis.IL
             "trace",
             Separator = ';',
             Default = new string[] { },
-            HelpText = "Execution traces, expressed as a semicolon-delimited list " +
-                       "(escape semicolon with backslash in Unix-like OS), that " +
-                       "should be emitted to the console and log file (if appropriate). " +
+            HelpText = "Execution traces, expressed as a semicolon-delimited list enclosed in double quotes, " +
+                       "that should be emitted to the console and log file (if appropriate). " +
                        "Valid values: PdbLoad.")]
         public new IEnumerable<string> Traces { get; set; } = Array.Empty<string>();
 
