@@ -14,7 +14,8 @@
 - UEE => eliminate unhandled exceptions in engine
 - NEW => new feature 
 
-## UNRELEASED
+## **v4.1.1** UNRELEASED
+* BUG: Fix `System.InvalidOperationException`: `Sequence contains more than one matching element` when `--trace` is provided. [896](https://github.com/microsoft/binskim/pull/896)
 
 ## **v4.1.0**
 * NEW: `CompilerInformation` telemetry now emits the last modified date of the scan target. [#873](https://github.com/microsoft/binskim/pull/873)
