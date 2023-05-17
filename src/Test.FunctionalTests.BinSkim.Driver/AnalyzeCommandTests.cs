@@ -155,6 +155,36 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("skipped")).Should().BeGreaterThanOrEqualTo(1);
         }
 
+        [Fact]
+        public void AnalyzeCommand_BinaryFileHashTest()
+        {
+            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_BinaryFileHash.sarif");
+            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "Dwarf", "gcc.stack_protector.a");
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new string[] {
+                    pathDeterminismTest
+                },
+                Level = new[] { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
+                Kind = new[] { ResultKind.Fail, ResultKind.Pass },
+                OutputFilePath = fileName,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                Recurse = true,
+                Threads = 10,
+                IgnorePdbLoadError = true,
+                DataToInsert = new[] { OptionallyEmittedData.Hashes }
+            };
+            var command = new MultithreadedAnalyzeCommand();
+
+            command.Run(options);
+            var log = SarifLog.Load(fileName);
+
+            // Test against PowerShell Get-FileHash result.
+            log.Runs[0].Artifacts[0].Hashes["md5"].Should().Be("764B913022B393EAF22F96014401576F");
+            log.Runs[0].Artifacts[0].Hashes["sha-1"].Should().Be("4B49DA507C9212490EE09280A5A7AD1F1A389188");
+            log.Runs[0].Artifacts[0].Hashes["sha-256"].Should().Be("8548292CA34C14D090A1DE7327874010E3A7ACE5846B2E28D743CC0F35C069CB");
+        }
+
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)
         {
             SarifLog sarifLog;
