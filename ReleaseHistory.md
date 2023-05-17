@@ -12,9 +12,11 @@
 - FND => False negative reduction in dynamic phase
 - UER => eliminate unhandled exceptions in rules
 - UEE => eliminate unhandled exceptions in engine
+- DEP => upgrade dependency versions
 - NEW => new feature 
 
 ## UNRELEASED
+* DEP: Update `Microsoft.CodeAnalysis.NetAnalyzers` package from 7.0.0 to 7.0.1 to resolve build warnings. [#903](https://github.com/microsoft/binskim/pull/903)
 
 ## **v4.1.0**
 * NEW: `CompilerInformation` telemetry now emits the last modified date of the scan target. [#873](https://github.com/microsoft/binskim/pull/873)
