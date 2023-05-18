@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using CommandLine;
 
@@ -13,14 +13,23 @@ namespace Microsoft.CodeAnalysis.IL
     [Verb("analyze", HelpText = "Analyze one or more binary files for security and correctness issues.")]
     public class AnalyzeOptions : AnalyzeOptionsBase
     {
+        private IEnumerable<string> trace;
         [Option(
             "trace",
             Separator = ';',
             Default = new string[] { },
             HelpText = "Execution traces, expressed as a semicolon-delimited list enclosed in double quotes, " +
                        "that should be emitted to the console and log file (if appropriate). " +
-                       "Valid values: PdbLoad.")]
-        public new IEnumerable<string> Trace { get; set; } = Array.Empty<string>();
+                       "Valid values: PdbLoad, ScanTime, RuleScanTime, PeakWorkingSet, TargetsScanned, ResultsSummary.")]
+        public new IEnumerable<string> Trace
+        {
+            get => this.trace;
+            set
+            {
+                this.trace = value;
+                base.Trace = value?.Where(s => s != nameof(IL.Traces.PdbLoad));
+            }
+        }
 
         [Option(
             "sympath",

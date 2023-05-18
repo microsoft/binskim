@@ -438,7 +438,6 @@ namespace Microsoft.CodeAnalysis.IL
                 ConfigurationFilePath = "default",
                 SarifOutputVersion = Sarif.SarifVersion.Current,
                 TargetFileSpecifiers = new string[] { inputFileName },
-                Trace = Array.Empty<string>(),
                 Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note },
                 Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.Pass },
             };
