@@ -12,10 +12,12 @@
 - FND => False negative reduction in dynamic phase
 - UER => eliminate unhandled exceptions in rules
 - UEE => eliminate unhandled exceptions in engine
+- DEP => upgrade dependency versions
 - NEW => new feature 
 
-## **v4.1.1** UNRELEASED
+## UNRELEASED
 * BUG: Fix `System.InvalidOperationException`: `Sequence contains more than one matching element` when `--trace` is provided. [896](https://github.com/microsoft/binskim/pull/896)
+* DEP: Update `Microsoft.CodeAnalysis.NetAnalyzers` package from 7.0.0 to 7.0.1 to resolve build warnings. [#903](https://github.com/microsoft/binskim/pull/903)
 
 ## **v4.1.0**
 * NEW: `CompilerInformation` telemetry now emits the last modified date of the scan target. [#873](https://github.com/microsoft/binskim/pull/873)
