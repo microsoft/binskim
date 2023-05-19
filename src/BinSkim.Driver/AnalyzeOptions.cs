@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,7 +14,7 @@ namespace Microsoft.CodeAnalysis.IL
     [Verb("analyze", HelpText = "Analyze one or more binary files for security and correctness issues.")]
     public class AnalyzeOptions : AnalyzeOptionsBase
     {
-        private IEnumerable<string> trace;
+        private IEnumerable<string> trace = Array.Empty<string>();
         [Option(
             "trace",
             Separator = ';',
