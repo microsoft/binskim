@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -77,12 +78,15 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
-        public void AnalyzeCommand_ShouldNotThrowWithPdbLoadTrace()
+        public void AnalyzeCommand_ShouldNotThrowWithSupportedTrace()
         {
+            IEnumerable<string> allSupportedDefaultTraces = Enum.GetValues(typeof(DefaultTraces)).Cast<DefaultTraces>()
+                                                            .Where(e => e != DefaultTraces.None)
+                                                            .Select(e => e.ToString());
             var options = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[] { GetThisTestAssemblyFilePath() },
-                Trace = new[] { "PdbLoad" },
+                Trace = allSupportedDefaultTraces.Append(nameof(Traces.PdbLoad))
             };
 
             var command = new MultithreadedAnalyzeCommand
@@ -92,6 +96,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
 
             BinaryAnalyzerContext context = null;
             int result = command.Run(options, ref context);
+            context.Traces.Should().HaveCount(allSupportedDefaultTraces.Count());
             context.TracePdbLoads.Should().BeTrue();
             context.RuntimeExceptions.Should().BeNull();
             result.Should().Be(0);
