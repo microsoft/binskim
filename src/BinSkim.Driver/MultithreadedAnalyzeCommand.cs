@@ -171,7 +171,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             Stopwatch stopwatch = null;
 
-            if (analyzeOptions.Trace.Where(s => s == "ScanTime").Any())
+            if (analyzeOptions.Trace.Where(s => s == nameof(DefaultTraces.ScanTime)).Any())
             {
                 stopwatch = Stopwatch.StartNew();
             }
