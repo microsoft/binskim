@@ -98,12 +98,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             try
             {
-                this.sourceFile.get_checksum(0, out uint hashLength, IntPtr.Zero);
+                this.sourceFile.get_checksum(0, out uint hashLength, out _);
 
                 int allocSize = checked((int)hashLength);
                 nativeBuffer = Marshal.AllocHGlobal(allocSize);
 
-                this.sourceFile.get_checksum(hashLength, out uint actualHashLength, nativeBuffer);
+                this.sourceFile.get_checksum(hashLength, out uint actualHashLength, out _);
                 if (actualHashLength != hashLength)
                 {
                     throw new InvalidOperationException("Inconsistent hash lengths returned from IDiaSourceFile::get_checksum.");

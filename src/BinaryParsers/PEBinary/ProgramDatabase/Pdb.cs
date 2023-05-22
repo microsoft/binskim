@@ -10,7 +10,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-
 using Dia2Lib;
 
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -49,7 +48,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.peOrPdbPath = pePath;
             this.loadTrace = traceLoads ? new StringBuilder() : null;
             this.globalScope = new Lazy<Symbol>(this.GetGlobalScope, LazyThreadSafetyMode.ExecutionAndPublication);
-            this.writableSegmentIds = new Lazy<HashSet<uint>>(this.GenerateWritableSegmentSet);
             this.executableSectionContribCompilandIds = new Lazy<HashSet<uint>>(this.GenerateExecutableSectionContribIds);
             this.Init(pePath, symbolPath, localSymbolDirectories);
         }
@@ -65,7 +63,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             this.peOrPdbPath = pdbPath;
             this.loadTrace = traceLoads ? new StringBuilder() : null;
             this.globalScope = new Lazy<Symbol>(this.GetGlobalScope, LazyThreadSafetyMode.ExecutionAndPublication);
-            this.writableSegmentIds = new Lazy<HashSet<uint>>(this.GenerateWritableSegmentSet);
             this.executableSectionContribCompilandIds = new Lazy<HashSet<uint>>(this.GenerateExecutableSectionContribIds);
             this.Init(pdbPath);
         }
@@ -236,7 +233,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 }
 
                 // GetEnumerator() fails in netcoreapp2.0--need to iterate without foreach.
-                for (int i = 0; i < enumTables.Count; i++)
+                for (int i = 0; i < enumTables.count; i++)
                 {
                     IDiaTable table = enumTables.Item(i);
                     if (!(table is T result))
@@ -260,54 +257,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             return null;
         }
 
-        private readonly Lazy<HashSet<uint>> writableSegmentIds;
-
-        private HashSet<uint> GenerateWritableSegmentSet()
-        {
-            var result = new HashSet<uint>();
-            IDiaEnumSegments enumSegments = null;
-
-            try
-            {
-                enumSegments = this.CreateDiaTable<IDiaEnumSegments>();
-            }
-            catch (NotImplementedException) { }
-
-            try
-            {
-                // GetEnumerator() fails in netcoreapp2.0--need to iterate without foreach.
-                for (uint i = 0; i < (uint)enumSegments.Count; i++)
-                {
-                    IDiaSegment segment = enumSegments.Item(i);
-                    try
-                    {
-                        if (segment.write != 0)
-                        {
-                            result.Add(segment.addressSection);
-                        }
-                    }
-                    finally
-                    {
-                        Marshal.ReleaseComObject(segment);
-                    }
-                }
-            }
-            finally
-            {
-                if (enumSegments != null)
-                {
-                    Marshal.ReleaseComObject(enumSegments);
-                }
-            }
-
-            return result;
-        }
-
-        public bool IsSegmentWithIdWritable(uint addressSection)
-        {
-            return this.writableSegmentIds.Value.Contains(addressSection);
-        }
-
         private readonly Lazy<HashSet<uint>> executableSectionContribCompilandIds;
 
         private HashSet<uint> GenerateExecutableSectionContribIds()
@@ -329,7 +278,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             try
             {
                 // GetEnumerator() fails in netcoreapp2.0--need to iterate without foreach.
-                for (uint i = 0; i < (uint)enumSectionContribs.Count; i++)
+                for (uint i = 0; i < (uint)enumSectionContribs.count; i++)
                 {
                     IDiaSectionContrib sectionContrib = enumSectionContribs.Item(i);
                     try
@@ -372,19 +321,25 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             get
             {
-                string path = this.session.globalScope.symbolsFileName;
-                if (File.Exists(path) && !Directory.Exists(path))
-                {
-                    return path;
-                }
+                return "\\\\USB\\8tssd\\SYM\\Managed_x64_VS2022_CSharp_Net70_Default.pdb";
+                //string path = this.session.globalScope.symbolsFileName;
+                //string path2 = this.session.globalScope.objectFileName;
+                //string path4 = this.session.globalScope.sourceFileName;
+                //string path5 = this.session.globalScope.name;
+                //string path6 = this.session.globalScope.libraryName;
+                //string path7 = this.session.globalScope.compilerName;
+                //if (File.Exists(path) && !Directory.Exists(path))
+                //{
+                //    return path;
+                //}
 
-                string extension = Path.GetExtension(this.peOrPdbPath);
-                if (File.Exists(this.peOrPdbPath.Replace(extension, ".pdb")))
-                {
-                    return this.peOrPdbPath.Replace(extension, ".pdb");
-                }
+                //string extension = Path.GetExtension(this.peOrPdbPath);
+                //if (File.Exists(this.peOrPdbPath.Replace(extension, ".pdb")))
+                //{
+                //    return this.peOrPdbPath.Replace(extension, ".pdb");
+                //}
 
-                return path;
+                //return path;
             }
         }
 
@@ -492,9 +447,33 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
                 diaSource = MsdiaComWrapper.GetDiaSource();
 
-                diaSource.loadDataForExe(peOrPdbPath,
-                                         symbolPath,
-                                         pCallback);
+                try
+                {
+                    diaSource.loadDataForExe(peOrPdbPath,
+                                             symbolPath,
+                                             pCallback);
+                }
+                catch (COMException ex)
+                {
+                    string ssss = diaSource.lastError;
+                    // Handle the exception
+                    int errorCode = ex.ErrorCode;
+
+                    // Handle specific error codes or provide a generic error message
+                    switch (errorCode)
+                    {
+                        case unchecked((int)0x806D0005):
+                            Console.WriteLine("Error: Authentication or permission issue occurred.");
+                            break;
+
+                        // Handle other error codes as necessary
+
+                        default:
+                            Console.WriteLine("An error occurred while loading symbols: " + ex.Message);
+                            break;
+                    }
+                    throw ex;
+                }
             }
 
             diaSource.openSession(out this.session);
