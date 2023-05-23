@@ -16,6 +16,7 @@
 - NEW => new feature 
 
 ## UNRELEASED
+* NEW: BinSkim will now log warning `OneOrMoreSymbolServersProvidedInaccessible` if can not connect to the http symbol servers provided by `--sympath`. [#907](https://github.com/microsoft/binskim/pull/907)
 * DEP: Update `Microsoft.CodeAnalysis.NetAnalyzers` package from 7.0.0 to 7.0.1 to resolve build warnings. [#903](https://github.com/microsoft/binskim/pull/903)
 
 ## **v4.1.0**
