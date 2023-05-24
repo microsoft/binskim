@@ -1583,6 +1583,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to These symbol servers provided are inaccessible: {0}..
+        /// </summary>
+        internal static string OneOrMoreSymbolServersProvidedInaccessible {
+            get {
+                return ResourceManager.GetString("OneOrMoreSymbolServersProvidedInaccessible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not locate the PDB for &apos;{0}&apos;. Probing details:
         ///{1}.
         /// </summary>

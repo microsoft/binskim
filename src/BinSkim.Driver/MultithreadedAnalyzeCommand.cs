@@ -69,6 +69,24 @@ namespace Microsoft.CodeAnalysis.IL
 
             // Update context object based on command-line parameters.
             context.SymbolPath = options.SymbolsPath;
+
+            IList<string> inaccessibleSymbolPaths = DriverUtilities.GetInaccessibleSymbolPaths(context.SymbolPath);
+
+            if (inaccessibleSymbolPaths.Count > 0)
+            {
+                // These symbol servers provided are inaccessible: {0}.
+                context.Logger.LogConfigurationNotification(
+                    Errors.CreateNotification(
+                        context.CurrentTarget?.Uri,
+                        "OneOrMoreSymbolServersProvidedInaccessible",
+                        ruleId: null,
+                        FailureLevel.Warning,
+                        exception: null,
+                        persistExceptionStack: false,
+                        messageFormat: RuleResources.OneOrMoreSymbolServersProvidedInaccessible,
+                        string.Join(";", inaccessibleSymbolPaths)));
+            }
+
             context.IgnorePdbLoadError = options.IgnorePdbLoadError;
             context.LocalSymbolDirectories = options.LocalSymbolDirectories;
             context.TracePdbLoads = options.Traces.Contains(nameof(Traces.PdbLoad));

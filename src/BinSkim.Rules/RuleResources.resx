@@ -642,4 +642,7 @@ Modules did not meet the criteria: {1}</value>
   <data name="BA6006_Warning" xml:space="preserve">
     <value>'{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.</value>
   </data>
+  <data name="OneOrMoreSymbolServersProvidedInaccessible" xml:space="preserve">
+    <value>These symbol servers provided are inaccessible: {0}.</value>
+  </data>
 </root>
