@@ -43,4 +43,10 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Dia2lib Include="..\..\refs\dia2lib.dll" />
+  </ItemGroup>
+  <Target Name="CopyDia2lib" BeforeTargets="build">
+    <Copy SourceFiles="@(Dia2lib)" DestinationFolder="..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\" OverwriteReadOnlyFiles="true" />
+  </Target>
 </Project>
