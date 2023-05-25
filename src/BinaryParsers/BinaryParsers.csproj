@@ -44,10 +44,21 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <!--<ItemGroup>
+  <Message Text="$(Dia2lib)" />
+  </ItemGroup>-->
+
+  <Target Name="PrintFileList" BeforeTargets="Build">
+    <ItemGroup>
+      <FilesToPrint Include="..\..\src\packages\**\*" />
+    </ItemGroup>
+    <Message Text="%(FilesToPrint.FullPath)" />
+  </Target>
+
   <ItemGroup>
     <Dia2lib Include="..\..\refs\dia2lib.dll" />
   </ItemGroup>
-  <Target Name="CopyDia2lib" BeforeTargets="build">
+  <Target Name="CopyDia2lib" BeforeTargets="Build">
     <Copy SourceFiles="@(Dia2lib)" DestinationFolder="..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\" OverwriteReadOnlyFiles="true" />
   </Target>
 </Project>
