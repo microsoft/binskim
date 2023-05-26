@@ -43,6 +43,13 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <!--<Target Name="DownloadNugetPackages" BeforeTargets="PrepareForBuild">
+    <Message Text="SSSSSSSS" />
+    --><!--<Exec Command="notepad.exe Foo.txt"/>--><!--
+    <Copy SourceFiles="@(Dia2lib)" DestinationFolder="$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\" OverwriteReadOnlyFiles="true" />
+  </Target>-->
+
+
   <PropertyGroup>
     <PreBuildEvent Condition="$(OS) == 'Windows_NT'">
       echo Copying file from "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" to "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
@@ -50,8 +57,9 @@
     </PreBuildEvent>
     <PreBuildEvent Condition="$(OS) != 'Windows_NT'">
       echo Copying file from "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" to "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
-      mkdir -p "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
+      
       cp "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
     </PreBuildEvent>
   </PropertyGroup>
 </Project>
+<!---->
