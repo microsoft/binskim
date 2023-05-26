@@ -26,7 +26,7 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
-
+  
   <ItemGroup>
     <Compile Update="BinaryParsersResources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -43,4 +43,10 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <PropertyGroup>
+    <PreBuildEvent>
+      echo Copying file from "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" to "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
+      copy "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>
