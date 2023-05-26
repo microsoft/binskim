@@ -20,6 +20,30 @@
     <ProjectReference Include="..\sarif-sdk\src\Sarif.Driver\Sarif.Driver.csproj" />
   </ItemGroup>
 
+  <!--<ItemGroup>
+    <Dia2lib Include="..\..\refs\dia2lib.dll" />
+  </ItemGroup>
+  <Target Name="CopyDia2lib" BeforeTargets="Build">
+    <Copy SourceFiles="@(Dia2lib)" DestinationFolder="..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\" OverwriteReadOnlyFiles="true" />
+  </Target>-->
+  
+  <PropertyGroup>
+  <PreBuildEvent>
+    dir
+    echo Copying file from "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" to "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
+
+    copy "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
+  </PreBuildEvent>
+    </PropertyGroup>
+
+  <Target Name="PrintReferences" AfterTargets="Build">
+    <Message Text="References:" Importance="High" />
+    <ItemGroup>
+      <ReferenceItems Include="@(Reference)" />
+    </ItemGroup>
+    <Message Text="%(ReferenceItems.FileName) - %(ReferenceItems.HintPath)" Importance="High" />
+  </Target>
+
   <ItemGroup>
     <Reference Include="dia2lib">
       <HintPath>..\..\refs\dia2lib.dll</HintPath>
@@ -43,11 +67,4 @@
       <CustomToolNamespace>Microsoft.CodeAnalysis.BinaryParsers</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
-
-    <ItemGroup>
-    <Dia2lib Include="..\..\refs\dia2lib.dll" />
-  </ItemGroup>
-  <Target Name="CopyDia2lib" BeforeTargets="build">
-    <Copy SourceFiles="@(Dia2lib)" DestinationFolder="..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\" OverwriteReadOnlyFiles="true" />
-  </Target>
 </Project>
