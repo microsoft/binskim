@@ -14,7 +14,6 @@ namespace Microsoft.CodeAnalysis.IL
     [Verb("analyze", HelpText = "Analyze one or more binary files for security and correctness issues.")]
     public class AnalyzeOptions : AnalyzeOptionsBase
     {
-        private IEnumerable<string> trace = Array.Empty<string>();
         [Option(
             "trace",
             Separator = ';',
@@ -22,15 +21,7 @@ namespace Microsoft.CodeAnalysis.IL
             HelpText = "Execution traces, expressed as a semicolon-delimited list enclosed in double quotes, " +
                        "that should be emitted to the console and log file (if appropriate). " +
                        "Valid values: PdbLoad, ScanTime, RuleScanTime, PeakWorkingSet, TargetsScanned, ResultsSummary.")]
-        public new IEnumerable<string> Trace
-        {
-            get => this.trace;
-            set
-            {
-                this.trace = value;
-                base.Trace = value?.Where(s => s != nameof(IL.Traces.PdbLoad));
-            }
-        }
+        public new IEnumerable<string> Trace { get; set; } = Array.Empty<string>();
 
         [Option(
             "sympath",

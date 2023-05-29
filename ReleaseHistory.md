@@ -16,8 +16,8 @@
 - NEW => new feature 
 
 ## UNRELEASED
-* BUG: Fix `System.InvalidOperationException`: `Sequence contains more than one matching element` when `--trace` is provided. [896](https://github.com/microsoft/binskim/pull/896)
-* BUG: Fix `--trace` missing supported values from SARIF SDK (`ScanTime`, `RuleScanTime`, `PeakWorkingSet`, `TargetsScanned`, `ResultsSummary`). [896](https://github.com/microsoft/binskim/pull/896)
+* BUG: Fix `System.InvalidOperationException`: `Sequence contains more than one matching element` when `--trace` is provided. [914](https://github.com/microsoft/binskim/pull/914)
+* BUG: Fix `--trace` missing supported values from SARIF SDK (`ScanTime`, `RuleScanTime`, `PeakWorkingSet`, `TargetsScanned`, `ResultsSummary`). [914](https://github.com/microsoft/binskim/pull/914)
 * DEP: Update `Microsoft.CodeAnalysis.NetAnalyzers` package from 7.0.0 to 7.0.1 to resolve build warnings. [#903](https://github.com/microsoft/binskim/pull/903)
 
 ## **v4.1.0**
