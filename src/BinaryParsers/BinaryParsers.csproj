@@ -57,6 +57,9 @@
     </PreBuildEvent>
     <PreBuildEvent Condition="$(OS) != 'Windows_NT'">
       echo Copying file from "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" to "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
+      ls -R "$(MSBuildProjectDirectory)"
+      ls -R $(MSBuildProjectDirectory)
+      ls -R $(MSBuildThisFileDirectory)
       rm "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\dia2lib.dll"
       cp -f "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
     </PreBuildEvent>
