@@ -86,6 +86,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 policy = new PropertiesDictionary();
             }
+
             context.Policy = policy;
 
             skimmer.Initialize(context);
@@ -137,6 +138,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     expected.Remove(target);
                     continue;
                 }
+
                 bool missingEntirely = !other.Contains(target);
 
                 if (missingEntirely &&
@@ -244,6 +246,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
             }
+
             var context = new BinaryAnalyzerContext();
             var logger = new TestMessageLogger();
             context.Logger = logger;
@@ -253,6 +256,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 policy = new PropertiesDictionary();
             }
+
             context.Policy = policy;
 
             skimmer.Initialize(context);
@@ -267,6 +271,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     continue;
                 }
+
                 Assert.Throws<ExceptionType>(() => skimmer.Analyze(context));
             }
         }
@@ -1303,6 +1308,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         [Fact]
         public void BA2027_EnableSourceLink_NotApplicable()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableSourceLink(), new HashSet<string>());
+            }
+        }
+
+        [Fact]
+        public void BA2101_EnableIntegrityCheck_Pass()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableSourceLink(), new HashSet<string>());
+            }
+        }
+
+        [Fact]
+        public void BA2101_EnableIntegrityCheck_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {

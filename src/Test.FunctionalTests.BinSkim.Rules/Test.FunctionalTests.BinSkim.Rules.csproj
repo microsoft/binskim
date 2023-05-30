@@ -41,4 +41,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FunctionalTestData\BA2101.EnableIntegrityCheck\Fail\" />
+    <Folder Include="FunctionalTestData\BA2101.EnableIntegrityCheck\Pass\" />
+  </ItemGroup>
+
 </Project>

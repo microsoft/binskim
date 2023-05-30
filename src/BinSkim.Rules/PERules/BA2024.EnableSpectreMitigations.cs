@@ -176,6 +176,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             // TODO: https://github.com/Microsoft/binskim/issues/114
                             continue;
                         }
+
                         break;
                     }
 
@@ -226,6 +227,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         // TODO: https://github.com/Microsoft/binskim/issues/117
                         // Review unknown languages for this and all checks
                     }
+
                     continue;
                 }
 
@@ -241,6 +243,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // mitigations. We do not report here. BA2006 will fire instead.
                     continue;
                 }
+
                 string[] mitigationSwitches = new string[] { "/Qspectre", "/Qspectre-load", "/Qspectre-load-cf", "/guardspecload" };
 
                 SwitchState effectiveState;
@@ -438,6 +441,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                 }
             }
+
             return CompilerMitigations.None;
         }
 
@@ -568,6 +572,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     compilerData.TryAdd(machine, CreateSortedVersionDictionary((PropertiesDictionary)configData[key]));
                 }
             }
+
             return compilerData;
         }
 
@@ -585,6 +590,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 };
                 mitigatedCompilerList.Add(mitigationData);
             }
+
             mitigatedCompilerList.Sort((a, b) => a.MinimalSupportedVersion.CompareTo(b.MinimalSupportedVersion));
 
             ThrowIfMitigationDataIsInvalid(mitigatedCompilerList);

@@ -45,6 +45,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const string EnableMicrosoftCompilerSdlSwitch = "BA2026";
         public const string EnableSourceLink = "BA2027";
 
+        public const string EnableIntegrityCheck = "BA2100";
+
         // ELF Checks
         public const string EnablePositionIndependentExecutable = "BA3001";
 
