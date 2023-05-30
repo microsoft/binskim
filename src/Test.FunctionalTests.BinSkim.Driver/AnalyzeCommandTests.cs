@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             var options = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[] { GetThisTestAssemblyFilePath() },
-                Traces = new[] { "PdbLoad" },
+                Trace = new[] { "PdbLoad" },
             };
 
             var command = new MultithreadedAnalyzeCommand
