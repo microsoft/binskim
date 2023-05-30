@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <Reference Include="dia2lib">
-      <HintPath>..\..\refs\dia2lib.dll</HintPath>
+      <HintPath>..\..\refs\Dia2Lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
@@ -52,13 +52,13 @@
 
   <PropertyGroup>
     <PreBuildEvent Condition="$(OS) == 'Windows_NT'">
-      echo Copying file from "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" to "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
-      copy "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
+      echo Copying file from "$(MSBuildProjectDirectory)\..\..\refs\Dia2Lib.dll" to "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
+      copy "$(MSBuildProjectDirectory)\..\..\refs\Dia2Lib.dll" "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
     </PreBuildEvent>
     <PreBuildEvent Condition="$(OS) != 'Windows_NT'">
-      echo Copying file from "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" to "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
+      echo Copying file from "$(MSBuildProjectDirectory)\..\..\refs\Dia2Lib.dll" to "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
       rm "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\Dia2Lib.dll"
-      cp -f "$(MSBuildProjectDirectory)\..\..\refs\dia2lib.dll" "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
+      cp -f "$(MSBuildProjectDirectory)\..\..\refs\Dia2Lib.dll" "$(MSBuildProjectDirectory)\..\..\src\packages\microsoft.diagnostics.tracing.traceevent\3.1.2\lib\netstandard2.0\"
     </PreBuildEvent>
   </PropertyGroup>
 </Project>
