@@ -24,7 +24,6 @@
          completely tested with netcoreapp3.1. We should remove this property
          when we drop support for this framework version (soon).-->
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
-    <NuGetDisableGlobalCache>true</NuGetDisableGlobalCache>
   </PropertyGroup>
   
   <!-- Configuration specific properties -->
