@@ -11,9 +11,7 @@ if [ ! -f src/sarif-sdk/src/Sarif.Sdk.sln ]; then
   git submodule update --init --recursive
 fi
 
-dotnet nuget locals all --clear
-nuget locals all -clear
-dotnet build src/BinSkimUnix.sln --configuration Release /p:Platform="x64" --packages src/packages
+dotnet build src/BinSkimUnix.sln --configuration Release /p:Platform="x64"
 
 dotnet test bld/bin/x64_Release/netcoreapp3.1/Test.FunctionalTests.BinSkim.Driver.dll
 dotnet test bld/bin/x64_Release/netcoreapp3.1/Test.FunctionalTests.BinSkim.Rules.dll
