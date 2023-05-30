@@ -236,7 +236,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 }
 
                 // GetEnumerator() fails in netcoreapp2.0--need to iterate without foreach.
-                for (int i = 0; i < enumTables.Count; i++)
+                for (int i = 0; i < enumTables.count; i++)
                 {
                     IDiaTable table = enumTables.Item(i);
                     if (!(table is T result))

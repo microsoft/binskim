@@ -94,29 +94,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         private byte[] GetHash()
         {
-            IntPtr nativeBuffer = IntPtr.Zero;
+            uint maxHashLength = 256; // With buffer for future. MD5: 16 bytes, SHA-1: 20 bytes, SHA-256: 32 bytes, SHA-512: 64 bytes.
+            byte[] checksum = new byte[maxHashLength];
+            this.sourceFile.get_checksum(maxHashLength, out uint hashLength, out checksum[0]);
+            this.sourceFile.get_checksum(hashLength, out uint actualHashLength, out checksum[0]);
 
-            try
+            if (actualHashLength != hashLength)
             {
-                this.sourceFile.get_checksum(0, out uint hashLength, IntPtr.Zero);
-
-                int allocSize = checked((int)hashLength);
-                nativeBuffer = Marshal.AllocHGlobal(allocSize);
-
-                this.sourceFile.get_checksum(hashLength, out uint actualHashLength, nativeBuffer);
-                if (actualHashLength != hashLength)
-                {
-                    throw new InvalidOperationException("Inconsistent hash lengths returned from IDiaSourceFile::get_checksum.");
-                }
-
-                byte[] hashResult = new byte[allocSize];
-                Marshal.Copy(nativeBuffer, hashResult, 0, allocSize);
-                return hashResult;
+                throw new InvalidOperationException("Inconsistent hash lengths returned from IDiaSourceFile::get_checksum.");
             }
-            finally
-            {
-                Marshal.FreeHGlobal(nativeBuffer);
-            }
+
+            return checksum.Take((int)actualHashLength).ToArray();
         }
 
         private void AssertNotDisposed()
