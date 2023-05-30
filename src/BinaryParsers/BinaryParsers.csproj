@@ -21,13 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="dia2lib">
-      <HintPath>..\..\refs\dia2lib.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="BinaryParsersResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

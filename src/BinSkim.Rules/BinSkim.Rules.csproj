@@ -7,13 +7,6 @@
     <TargetFramework>$(NetStandardVersion)</TargetFramework>
     <Platforms>x64</Platforms>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Reference Include="dia2lib">
-      <HintPath>..\..\refs\dia2lib.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
