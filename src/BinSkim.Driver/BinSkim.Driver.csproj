@@ -37,7 +37,7 @@
 
   <ItemGroup>
     <Reference Include="dia2lib">
-      <HintPath>..\..\refs\dia2lib.dll</HintPath>
+      <HintPath>..\..\refs\Dia2Lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
   </ItemGroup>

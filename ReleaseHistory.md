@@ -17,6 +17,7 @@
 
 ## UNRELEASED
 * DEP: Update `Microsoft.CodeAnalysis.NetAnalyzers` package from 7.0.0 to 7.0.1 to resolve build warnings. [#903](https://github.com/microsoft/binskim/pull/903)
+* DEP: Update Sarif.Sdk submodule from [bc8cb57 to dd8b7b8](https://github.com/microsoft/sarif-sdk/compare/bc8cb57...dd8b7b8). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/dd8b7b8/ReleaseHistory.md).
 
 ## **v4.1.0**
 * NEW: `CompilerInformation` telemetry now emits the last modified date of the scan target. [#873](https://github.com/microsoft/binskim/pull/873)
