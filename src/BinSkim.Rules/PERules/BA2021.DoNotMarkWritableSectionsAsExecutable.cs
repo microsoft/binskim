@@ -60,7 +60,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             PEHeader peHeader = target.PE.PEHeaders.PEHeader;
 
-            // TODO: do we really require this check? What is the proposed fix to this issue? 
+            // SectionAlignment < PAGE_SIZE will cause the memory manager to union
+            //  page protections across sections which can result in RWX pages.
+            // This is undesirable from a code integrity point of view and is
+            //  incompatible with features that prevent dynamic code generation
+            //  (e.g. Arbitrary Code Guard and Hypervisor-enforced Code Integrity).
             if (peHeader.SectionAlignment < PAGE_SIZE)
             {
                 // '{0}' has a section alignment ({1}) that is less than its page size ({2}).
