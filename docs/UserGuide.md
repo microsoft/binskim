@@ -41,7 +41,7 @@ The **`analyze`** command supports the following additional arguments:
 
 | Argument (short form, long form) | Meaning |
 | -------------------------------- | ------- |
-| **`--trace`** | Execution traces, expressed as a semicolon-delimited list enclosed in double quotes, that should be emitted to the console and log file (if appropriate). Valid values: PdbLoad. |
+| **`--trace`** | Execution traces, expressed as a semicolon-delimited list enclosed in double quotes, that should be emitted to the console and log file (if appropriate). Valid values: PdbLoad, ScanTime, RuleScanTime, PeakWorkingSet, TargetsScanned, ResultsSummary. |
 | **`--sympath`** | Symbol paths, expressed as a semicolon-delimited list enclosed in double quotes. (e.g. `SRV*http://msdl.microsoft.com/download/symbols` or `Cache*d:\symbols;Srv*http://symweb`) |
 | **`--local-symbol-directories`** | Local directory paths, expressed as a semicolon-delimited list enclosed in double quotes, that will be examined when attempting to locate PDBs. |
 | **`-o, --output`** | File path used to write and output analysis using [SARIF](https://github.com/Microsoft/sarif-sdk) |
