@@ -206,7 +206,7 @@ The Visual Studio 2022 "empty console application" template, compiled as Release
 
 ## Native_x64_VS2022_[Console/KernelModeDriver/UserModeDriver]_IntegrityCheck_[variant].[exe/sys/dll]
 
-The Visual Studio 2022 "C++ console application" template, compiled as Release|x64. In linker command line,  
+The Visual Studio 2022 default C++ Console/KernelModeDriver/UserModeDriver template, compiled as Release|x64. In linker command line,  
 _Yes: `/INTEGRITYCHECK`  
 _Default: without the flag  
 _Yes_Manual_FORCE_INTEGRITY: `/INTEGRITYCHECK` and then use tool to Manually set `IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY` flag to true
