@@ -204,6 +204,13 @@ The Visual Studio 2022 "empty console application" template, compiled as Release
 
 The Visual Studio 2022 "empty console application" template, compiled as Release|x64.  The `/incremental:no` option disables incremental linking explicitly.  The `/ltcg` and `/gl` options are disabled explicitly.
 
+## Native_x64_VS2022_[Console/KernelModeDriver/UserModeDriver]_IntegrityCheck_[variant].[exe/sys/dll]
+
+The Visual Studio 2022 default C++ Console/KernelModeDriver/UserModeDriver template, compiled as Release|x64. In linker command line,  
+_Yes: `/INTEGRITYCHECK`  
+_Default: without the flag  
+_Yes_Manual_FORCE_INTEGRITY: `/INTEGRITYCHECK` and then use tool to Manually set `IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY` flag to true
+
 ## Native_x64_VS2022_PDBPageSize_8192.exe
 
 The Visual Studio 2022 "empty console application" template, compiled as Debug|x64.  The `/PDBPageSize:8192` linker option set page size to 8192.

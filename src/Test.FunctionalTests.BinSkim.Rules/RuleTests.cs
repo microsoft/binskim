@@ -1311,6 +1311,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2029_EnableIntegrityCheck_Pass()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableIntegrityCheck(), new HashSet<string>());
+            }
+        }
+
+        [Fact]
+        public void BA2029_EnableIntegrityCheck_Fail()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableIntegrityCheck(), new HashSet<string>());
+            }
+        }
+
+        [Fact]
+        public void BA2029_EnableIntegrityCheck_NotApplicable()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableIntegrityCheck(), new HashSet<string>());
+            }
+        }
+
+        [Fact]
         public void BA3001_EnablePositionIndependentExecutable_Pass()
         {
             this.VerifyPass(new EnablePositionIndependentExecutable(), bypassExtensionValidation: true);

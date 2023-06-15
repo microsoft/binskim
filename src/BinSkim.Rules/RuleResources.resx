@@ -642,4 +642,13 @@ Modules did not meet the criteria: {1}</value>
   <data name="BA6006_Warning" xml:space="preserve">
     <value>'{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.</value>
   </data>
+  <data name="BA2029_EnableIntegrityCheck_Description" xml:space="preserve">
+    <value>Binaries that are loaded by certain Windows features must (and device drivers should) opt into Windows validation of their digital signatures by setting the /INTEGRITYCHECK linker flag. This option sets the IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY attribute in the PE header of binaries which tells the memory manager to validate a binary's digital signature when loaded. Any user mode code that is interfacing with Early Launch Antimalware (ELAM) drivers, integrates with device firmware execution or is trying to load into protected process lite space must enable /INTEGRITYCHECK. This feature applies to both 32-but and 64-bit files. Binaries that opt into /INTEGRITYCHECK must be signed using the Microsoft Azure Code Signing program.</value>
+  </data>
+  <data name="BA2029_Error" xml:space="preserve">
+    <value>'{0}' was not compiled with /INTEGRITYCHECK and therefore will not have its digital signature validated at load time. Failing to validate binary signatures increases the risk of loading malicious code in low-level, high-privilege execution environments, including subsystems that provide critical security malware protections. To resolve this problem, pass '/INTEGRITYCHECK' on the linker command line and sign your files using the Microsoft Azure Code Signing program.</value>
+  </data>
+  <data name="BA2029_Pass" xml:space="preserve">
+    <value>'{0}' was compiled with /INTEGRITYCHECK and will therefore have its digital signature validated at load time when executing in sensitive Windows runtime environments.</value>
+  </data>
 </root>
