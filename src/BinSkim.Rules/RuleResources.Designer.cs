@@ -1016,27 +1016,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         /// <summary>
         ///   Looks up a localized string similar to Binaries that are loaded by certain Windows features must (and device drivers should) opt into Windows validation of their digital signatures by setting the /INTEGRITYCHECK linker flag. This option sets the IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY attribute in the PE header of binaries which tells the memory manager to validate a binary&apos;s digital signature when loaded. Any user mode code that is interfacing with Early Launch Antimalware (ELAM) drivers, integrates with device firmware execution or is trying  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string BA2101_EnableIntegrityCheck_Description {
+        internal static string BA2029_EnableIntegrityCheck_Description {
             get {
-                return ResourceManager.GetString("BA2101_EnableIntegrityCheck_Description", resourceCulture);
+                return ResourceManager.GetString("BA2029_EnableIntegrityCheck_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not compiled with /INTEGRITYCHECK and therefore will not have its digital signature validated at load time. Failing to validate binary signatures increases the risk of loading malicious code in low-level, high-privilege execution environments, including subsystems that provide critical security malware protections. To resolve this problem, pass &apos;/INTEGRITYCHECK&apos; on the linker command line and sign your files using the Microsoft Azure Code Signing program..
         /// </summary>
-        internal static string BA2101_Error {
+        internal static string BA2029_Error {
             get {
-                return ResourceManager.GetString("BA2101_Error", resourceCulture);
+                return ResourceManager.GetString("BA2029_Error", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with /INTEGRITYCHECK and will therefore have its digital signature validated at load time when executing in sensitive Windows runtime environments..
         /// </summary>
-        internal static string BA2101_Pass {
+        internal static string BA2029_Pass {
             get {
-                return ResourceManager.GetString("BA2101_Pass", resourceCulture);
+                return ResourceManager.GetString("BA2029_Pass", resourceCulture);
             }
         }
         

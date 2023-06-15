@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     public class EnableIntegrityCheck : PEBinarySkimmerBase
     {
         /// <summary>
-        /// BA2101
+        /// BA2029
         /// </summary>
         public override string Id => RuleIds.EnableIntegrityCheck;
 
@@ -34,14 +34,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString
         {
-            Text = RuleResources.BA2101_EnableIntegrityCheck_Description
+            Text = RuleResources.BA2029_EnableIntegrityCheck_Description
         };
 
         public override bool EnabledByDefault => false;
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
-            nameof(RuleResources.BA2101_Pass),
-            nameof(RuleResources.BA2101_Error),
+            nameof(RuleResources.BA2029_Pass),
+            nameof(RuleResources.BA2029_Error),
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // validated at load time when executing in sensitive Windows runtime environments.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                    nameof(RuleResources.BA2101_Pass),
+                    nameof(RuleResources.BA2029_Pass),
                     context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // on the linker command line and sign your files using the Microsoft Azure Code Signing program.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                nameof(RuleResources.BA2101_Error),
+                nameof(RuleResources.BA2029_Error),
                 context.CurrentTarget.Uri.GetFileName()));
             return;
         }

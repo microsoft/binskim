@@ -1311,7 +1311,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void BA2101_EnableIntegrityCheck_Pass()
+        public void BA2029_EnableIntegrityCheck_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
@@ -1320,7 +1320,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void BA2101_EnableIntegrityCheck_Fail()
+        public void BA2029_EnableIntegrityCheck_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
@@ -1329,7 +1329,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void BA2101_EnableIntegrityCheck_NotApplicable()
+        public void BA2029_EnableIntegrityCheck_NotApplicable()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
