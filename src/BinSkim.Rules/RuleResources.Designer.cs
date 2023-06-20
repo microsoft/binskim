@@ -133,8 +133,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
-        ///{1}.
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were hashed using an insecure ({1}) checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+        ///{2}.
         /// </summary>
         internal static string BA2004_Error_NativeWithInsecureDirectCompilands {
             get {
@@ -152,12 +152,32 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
-        ///{1}.
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that links one or more static libraries that include object files which were hashed using an insecure ({1}) checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+        ///{2}.
         /// </summary>
         internal static string BA2004_Warning_NativeWithInsecureStaticLibraryCompilands {
             get {
                 return ResourceManager.GetString("BA2004_Warning_NativeWithInsecureStaticLibraryCompilands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+        ///{1}.
+        /// </summary>
+        internal static string BA2004_Warning_NativeWithNoHashDirectCompilands {
+            get {
+                return ResourceManager.GetString("BA2004_Warning_NativeWithNoHashDirectCompilands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+        ///{1}.
+        /// </summary>
+        internal static string BA2004_Warning_NativeWithNoHashStaticLibraryCompilands {
+            get {
+                return ResourceManager.GetString("BA2004_Warning_NativeWithNoHashStaticLibraryCompilands", resourceCulture);
             }
         }
         

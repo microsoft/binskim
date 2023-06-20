@@ -481,15 +481,15 @@ Modules did not meet the criteria: {1}</value>
     <value>'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm.</value>
   </data>
   <data name="BA2004_Warning_NativeWithInsecureStaticLibraryCompilands" xml:space="preserve">
-    <value>'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
-{1}</value>
+    <value>'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure ({1}) checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+{2}</value>
   </data>
   <data name="BA2004_EnableSecureSourceCodeHashing_Description" xml:space="preserve">
     <value>Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '&lt;ChecksumAlgorithm&gt;' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing.</value>
   </data>
   <data name="BA2004_Error_NativeWithInsecureDirectCompilands" xml:space="preserve">
-    <value>'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
-{1}</value>
+    <value>'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure ({1}) checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+{2}</value>
   </data>
   <data name="BA2006_Error_OutdatedCsc" xml:space="preserve">
     <value>'{0}' is a managed assembly that was compiled with an outdated toolchain ({1}) that does not support security features (such as SHA256 PDB checksums and reproducible builds) that must be enabled by policy. To resolve this issue, compile with more recent tools ({2} or later).</value>
@@ -641,5 +641,13 @@ Modules did not meet the criteria: {1}</value>
   </data>
   <data name="BA6006_Warning" xml:space="preserve">
     <value>'{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.</value>
+  </data>
+  <data name="BA2004_Warning_NativeWithNoHashDirectCompilands" xml:space="preserve">
+    <value>'{0}' is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+{1}</value>
+  </data>
+  <data name="BA2004_Warning_NativeWithNoHashStaticLibraryCompilands" xml:space="preserve">
+    <value>'{0}' is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+{1}</value>
   </data>
 </root>

@@ -12,6 +12,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public static class RulesExtensionMethods
     {
+        private static readonly char CommentMarker = '`';
+
         public static string CreateOutputCoalescedByCompiler(this IList<ObjectModuleDetails> objectModuleDetailsList)
         {
             var compilerToLibraries = new Dictionary<string, Dictionary<string, SortedSet<string>>>();
@@ -24,19 +26,32 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     libraries = compilerToLibraries[compiler] = new Dictionary<string, SortedSet<string>>();
                 }
 
-                string modulesKey = "[directly linked]";
                 string name = Path.GetFileName(objectModuleDetail.Name);
                 string libraryName = Path.GetFileName(objectModuleDetail.Library);
 
-                if (Path.GetExtension(name) != ".obj" || name != libraryName)
+                (string onlyName, string nameComment) = ExtractNameAndComment(name);
+                (string onlyLibraryName, string libraryComment) = ExtractNameAndComment(libraryName, includeCommentMarkers: true);
+
+                string modulesKey;
+
+                // If there is a library
+                if (Path.GetExtension(onlyName) != ".obj" || onlyName != onlyLibraryName)
                 {
                     modulesKey = libraryName;
+                }
+                // Else directly linked
+                else
+                {
+                    modulesKey = string.IsNullOrWhiteSpace(libraryComment)
+                        ? string.Format($"[directly linked]")
+                        : string.Format($"[directly linked] {libraryComment}");
                 }
 
                 if (!libraries.TryGetValue(modulesKey, out SortedSet<string> modules))
                 {
                     modules = libraries[modulesKey] = new SortedSet<string>();
                 }
+
                 modules.Add(name);
             }
 
@@ -54,7 +69,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 foreach (string library in sortedByLibrary)
                 {
-                    sb.Append(compiler + " : " + library);
+                    (string onlyLibraryName, string hash) = ExtractNameAndComment(library);
+
+                    if (string.IsNullOrWhiteSpace(hash))
+                    {
+                        sb.Append(string.Format($"{compiler} : {onlyLibraryName}"));
+                    }
+                    else
+                    {
+                        sb.Append(string.Format($"{compiler} (Hash={hash}) : {onlyLibraryName}"));
+                    }
 
                     SortedSet<string> modules = libraryToModules[library];
                     if (modules.Count != 1)
@@ -82,6 +106,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     objectModules = librariesToObjectModulesMap[key] = new List<string>();
                 }
+
                 objectModules.Add(Path.GetFileName(objectModuleDetail.Name));
             }
 
@@ -106,6 +131,42 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             return sb.ToString();
+        }
+
+        public static (string nameOnly, string comment) ExtractNameAndComment(string nameWithComment, bool includeCommentMarkers = false)
+        {
+            string nameOnly = string.Empty;
+            string comment = string.Empty;
+
+            if (nameWithComment == null)
+            {
+                return (nameOnly, comment);
+            }
+
+            // Look for marker for start of comment
+            int index = nameWithComment.IndexOf(CommentMarker);
+
+            // if start of comment is found
+            if (index != -1)
+            {
+                // Name is everything up to but not including the comment start special character
+                nameOnly = nameWithComment.Substring(0, index - 1).Trim();
+
+                if (includeCommentMarkers)
+                {
+                    comment = nameWithComment.Substring(index);
+                }
+                else
+                {
+                    comment = nameWithComment.Substring(index).Trim(CommentMarker);
+                }
+            }
+            else
+            {
+                nameOnly = nameWithComment;
+            }
+
+            return (nameOnly, comment);
         }
 
         private static string CreateCompilerKey(ObjectModuleDetails objectModuleDetail)
@@ -281,6 +342,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 throw new InvalidOperationException("Unrecognized crypto HRESULT: 0x" + cryptoError.ToString("x"));
             }
+
             return result;
         }
     }

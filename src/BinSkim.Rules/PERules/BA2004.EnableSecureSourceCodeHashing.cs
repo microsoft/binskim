@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
@@ -35,9 +36,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA2004_Pass),
+            nameof(RuleResources.BA2004_Warning_NativeWithNoHashStaticLibraryCompilands),
             nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
             nameof(RuleResources.BA2004_Error_Managed),
             nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
+            nameof(RuleResources.BA2004_Warning_NativeWithNoHashDirectCompilands),
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
@@ -104,8 +107,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            var compilandsBinaryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
             var compilandsLibraryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
+            var compilandsLibraryWithOneOrMoreNoFileHashes = new List<ObjectModuleDetails>();
+
+            var compilandsBinaryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
+            var compilandsBinaryWithOneOrMoreNoFileHashes = new List<ObjectModuleDetails>();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -194,76 +200,180 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     if (sf.HashType != HashType.SHA256)
                     {
+                        // Adding the `MD5` or `SHA1` etc, comment delimited by a backquote/backtick (`) to the library name
+                        string libraryNameWithHashComment = string.Format($"{omDetails.Library} `{sf.HashType}`");
+                        var objectModuleDetailsWithHashComment = new ObjectModuleDetails(omDetails.Name, libraryNameWithHashComment, omDetails.CompilerName, omDetails.CompilerFrontEndVersion, omDetails.CompilerBackEndVersion, omDetails.RawCommandLine, omDetails.Language, omDetails.HasSecurityChecks, omDetails.HasDebugInfo);
+
                         if (!string.IsNullOrEmpty(record.Library))
                         {
-                            compilandsLibraryWithOneOrMoreInsecureFileHashes.Add(omDetails);
+                            if (sf.HashType != HashType.None)
+                            {
+                                compilandsLibraryWithOneOrMoreInsecureFileHashes.Add(objectModuleDetailsWithHashComment);
+                            }
+                            else
+                            {
+                                compilandsLibraryWithOneOrMoreNoFileHashes.Add(objectModuleDetailsWithHashComment);
+                            }
                         }
                         else
                         {
-                            compilandsBinaryWithOneOrMoreInsecureFileHashes.Add(omDetails);
+                            if (sf.HashType != HashType.None)
+                            {
+                                compilandsBinaryWithOneOrMoreInsecureFileHashes.Add(objectModuleDetailsWithHashComment);
+                            }
+                            else
+                            {
+                                compilandsBinaryWithOneOrMoreNoFileHashes.Add(objectModuleDetailsWithHashComment);
+                            }
                         }
                     }
+
                     // We only need to check a single source file per compiland, as the relevant
                     // command-line options will be applied to all files in the translation unit.
                     break;
                 }
             }
 
-            if (compilandsLibraryWithOneOrMoreInsecureFileHashes.Count > 0 || compilandsBinaryWithOneOrMoreInsecureFileHashes.Count > 0)
-            {
-                if (compilandsLibraryWithOneOrMoreInsecureFileHashes.Count > 0)
-                {
-                    GenerateCompilandsAndLog(context, compilandsLibraryWithOneOrMoreInsecureFileHashes, FailureLevel.Warning);
-                }
-
-                if (compilandsBinaryWithOneOrMoreInsecureFileHashes.Count > 0)
-                {
-                    GenerateCompilandsAndLog(context, compilandsBinaryWithOneOrMoreInsecureFileHashes, FailureLevel.Error);
-                }
-
-                return;
-            }
-
-            // '{0}' is a {1} binary which was compiled with a secure (SHA-256)
-            // source code hashing algorithm.
-            context.Logger.Log(this,
-                    RuleUtilities.BuildResult(ResultKind.Pass,
-                                              context,
-                                              region: null,
-                                              nameof(RuleResources.BA2004_Pass),
-                                              context.CurrentTarget.Uri.GetFileName(),
-                                              "native"));
+            GenerateCompilandsAndLog(context, compilandsLibraryWithOneOrMoreInsecureFileHashes, compilandsLibraryWithOneOrMoreNoFileHashes, compilandsBinaryWithOneOrMoreInsecureFileHashes, compilandsBinaryWithOneOrMoreNoFileHashes);
         }
 
-        private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
+        private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsLibraryWithOneOrMoreInsecureFileHashes, List<ObjectModuleDetails> compilandsLibraryWithOneOrMoreNoFileHashes, List<ObjectModuleDetails> compilandsBinaryWithOneOrMoreInsecureFileHashes, List<ObjectModuleDetails> compilandsBinaryWithOneOrMoreNoFileHashes)
         {
-            string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByCompiler();
+            bool anyWarningsOrErrors = false;
 
-            //'{0}' is a native binary that links one or more object files which were hashed
-            // using an insecure checksum algorithm. Insecure algorithms are subject to collision attacks
-            // and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the
-            // cl.exe command-line to enable secure source code hashing. The following modules
-            // are out of policy: {1}
-            if (failureLevel == FailureLevel.Warning)
+            if (compilandsLibraryWithOneOrMoreInsecureFileHashes.Count > 0)
             {
+                string compilands = compilandsLibraryWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByCompiler();
+
+                // The hash type is embedded as a comment in with the Library name and this extracts it
+                (_, string hashType) = RulesExtensionMethods.ExtractNameAndComment(compilandsLibraryWithOneOrMoreInsecureFileHashes[0].Library);
+
+                // '{0}' is a native binary that links one or more static libraries that 
+                // include object files which were hashed using an insecure ({1}) source 
+                // code hashing algorithm. Insecure hashing algorithms are subject to 
+                // collision attacks and its use can compromise supply chain integrity. 
+                // Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source 
+                // code hashing. The following modules are out of policy: {2}
                 context.Logger.Log(this,
-                    RuleUtilities.BuildResult(failureLevel,
-                                              context,
-                                              region: null,
-                                              nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
-                                              context.CurrentTarget.Uri.GetFileName(),
-                                              compilands));
-                return;
+                        RuleUtilities.BuildResult(FailureLevel.Warning,
+                        context,
+                        region: null,
+                        nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
+                        context.CurrentTarget.Uri.GetFileName(),
+                        hashType,
+                        compilands));
+
+                anyWarningsOrErrors = true;
             }
 
-            context.Logger.Log(this,
-                RuleUtilities.BuildResult(failureLevel,
-                                          context,
-                                          region: null,
-                                          nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
-                                          context.CurrentTarget.Uri.GetFileName(),
-                                          compilands));
+            if (compilandsLibraryWithOneOrMoreNoFileHashes.Count > 0)
+            {
+                string compilands = compilandsLibraryWithOneOrMoreNoFileHashes.CreateOutputCoalescedByCompiler();
+
+                // '{0}' is a native binary that directly compiles and links one or more 
+                // object files which were not hashed with a checksum algorithm. Not having 
+                // a checksum hash can compromise supply chain integrity. Pass '/ZH:SHA_256'
+                // on the cl.exe command-line to enable secure source code hashing. 
+                // The following modules are out of policy: {1}
+                context.Logger.Log(this,
+                        RuleUtilities.BuildResult(FailureLevel.Warning,
+                        context,
+                        region: null,
+                        nameof(RuleResources.BA2004_Warning_NativeWithNoHashStaticLibraryCompilands),
+                        context.CurrentTarget.Uri.GetFileName(),
+                        compilands));
+
+                anyWarningsOrErrors = true;
+            }
+
+            if (compilandsBinaryWithOneOrMoreInsecureFileHashes.Count > 0)
+            {
+                string compilands = compilandsBinaryWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByCompiler();
+
+                // The hash type is embedded as a comment in with the Library name and this extracts it
+                (_, string hashType) = RulesExtensionMethods.ExtractNameAndComment(compilandsBinaryWithOneOrMoreInsecureFileHashes[0].Library);
+
+                // '{0}' is a native binary that directly compiles and links one or more
+                //  object files which were hashed using an insecure ({1}) source code 
+                // hashing algorithm. Insecure source code hashing algorithms are subject
+                // to collision attacks and its use can compromise supply chain integrity.
+                // Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source
+                // code hashing. The following modules are out of policy: {2}
+                context.Logger.Log(this,
+                        RuleUtilities.BuildResult(FailureLevel.Error,
+                        context,
+                        region: null,
+                        nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
+                        context.CurrentTarget.Uri.GetFileName(),
+                        hashType,
+                        compilands));
+
+                anyWarningsOrErrors = true;
+            }
+
+            if (compilandsBinaryWithOneOrMoreNoFileHashes.Count > 0)
+            {
+                string compilands = compilandsBinaryWithOneOrMoreNoFileHashes.CreateOutputCoalescedByCompiler();
+
+                // '{0}' is a native binary that directly compiles and links one or more 
+                // object files which were not hashed with a checksum algorithm. Not having 
+                // a checksum hash can compromise supply chain integrity. Pass '/ZH:SHA_256' 
+                // on the cl.exe command-line to enable secure source code hashing. The 
+                // following modules are out of policy: {1}
+                context.Logger.Log(this,
+                        RuleUtilities.BuildResult(FailureLevel.Warning,
+                        context,
+                        region: null,
+                        nameof(RuleResources.BA2004_Warning_NativeWithNoHashDirectCompilands),
+                        context.CurrentTarget.Uri.GetFileName(),
+                        compilands));
+
+                anyWarningsOrErrors = true;
+            }
+
+            if (!anyWarningsOrErrors)
+            {
+                // '{0}' is a {1} binary which was compiled with a secure (SHA-256)
+                // source code hashing algorithm.
+                context.Logger.Log(this,
+                        RuleUtilities.BuildResult(ResultKind.Pass,
+                                                  context,
+                                                  region: null,
+                                                  nameof(RuleResources.BA2004_Pass),
+                                                  context.CurrentTarget.Uri.GetFileName(),
+                                                  "native"));
+            }
         }
+
+        //private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
+        //{
+        //    string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByCompiler();
+
+        //    //'{0}' is a native binary that links one or more object files which were hashed
+        //    // using an insecure checksum algorithm. Insecure algorithms are subject to collision attacks
+        //    // and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the
+        //    // cl.exe command-line to enable secure source code hashing. The following modules
+        //    // are out of policy: {1}
+        //    if (failureLevel == FailureLevel.Warning)
+        //    {
+        //        context.Logger.Log(this,
+        //            RuleUtilities.BuildResult(failureLevel,
+        //                                      context,
+        //                                      region: null,
+        //                                      nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
+        //                                      context.CurrentTarget.Uri.GetFileName(),
+        //                                      compilands));
+        //        return;
+        //    }
+
+        //    context.Logger.Log(this,
+        //        RuleUtilities.BuildResult(failureLevel,
+        //                                  context,
+        //                                  region: null,
+        //                                  nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
+        //                                  context.CurrentTarget.Uri.GetFileName(),
+        //                                  compilands));
+        //}
 
         public IEnumerable<IOption> GetOptions()
         {
