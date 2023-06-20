@@ -652,11 +652,11 @@ Modules did not meet the criteria: {1}</value>
     <value>'{0}' was compiled with /INTEGRITYCHECK and will therefore have its digital signature validated at load time when executing in sensitive Windows runtime environments.</value>
   </data>
   <data name="BA2004_Warning_NativeWithNoHashDirectCompilands" xml:space="preserve">
-    <value>'{0}' is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+    <value>'{0}' is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. This is likely a compiler bug. Pass /PH to generate #pragma file_hash when preprocessing. The following modules are out of policy:
 {1}</value>
   </data>
   <data name="BA2004_Warning_NativeWithNoHashStaticLibraryCompilands" xml:space="preserve">
-    <value>'{0}' is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+    <value>'{0}' is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. This is likely a compiler bug. Pass /PH to generate #pragma file_hash when preprocessing. The following modules are out of policy:
 {1}</value>
   </data>
 </root>
