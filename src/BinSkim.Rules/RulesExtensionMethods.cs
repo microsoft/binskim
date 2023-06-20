@@ -28,8 +28,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 string name = Path.GetFileName(objectModuleDetail.Name);
                 string libraryName = Path.GetFileName(objectModuleDetail.Library);
-
-                (string onlyName, string nameComment) = ExtractNameAndComment(name);
+                (string onlyName, _) = ExtractNameAndComment(name);
                 (string onlyLibraryName, string libraryComment) = ExtractNameAndComment(libraryName, includeCommentMarkers: true);
 
                 string modulesKey;
@@ -152,14 +151,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // Name is everything up to but not including the comment start special character
                 nameOnly = nameWithComment.Substring(0, index - 1).Trim();
 
-                if (includeCommentMarkers)
-                {
-                    comment = nameWithComment.Substring(index);
-                }
-                else
-                {
-                    comment = nameWithComment.Substring(index).Trim(CommentMarker);
-                }
+                comment = includeCommentMarkers ? nameWithComment.Substring(index) : nameWithComment.Substring(index).Trim(CommentMarker);
             }
             else
             {
