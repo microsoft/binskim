@@ -345,36 +345,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        //private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
-        //{
-        //    string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByCompiler();
-
-        //    //'{0}' is a native binary that links one or more object files which were hashed
-        //    // using an insecure checksum algorithm. Insecure algorithms are subject to collision attacks
-        //    // and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the
-        //    // cl.exe command-line to enable secure source code hashing. The following modules
-        //    // are out of policy: {1}
-        //    if (failureLevel == FailureLevel.Warning)
-        //    {
-        //        context.Logger.Log(this,
-        //            RuleUtilities.BuildResult(failureLevel,
-        //                                      context,
-        //                                      region: null,
-        //                                      nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
-        //                                      context.CurrentTarget.Uri.GetFileName(),
-        //                                      compilands));
-        //        return;
-        //    }
-
-        //    context.Logger.Log(this,
-        //        RuleUtilities.BuildResult(failureLevel,
-        //                                  context,
-        //                                  region: null,
-        //                                  nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
-        //                                  context.CurrentTarget.Uri.GetFileName(),
-        //                                  compilands));
-        //}
-
         public IEnumerable<IOption> GetOptions()
         {
             return new List<IOption>
