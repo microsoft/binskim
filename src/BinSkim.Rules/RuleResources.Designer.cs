@@ -162,7 +162,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. This is likely a compiler bug. Pass /PH to generate #pragma file_hash when preprocessing. The following modules are out of policy:
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The absence of hash data may indicate a compiler problem. Passing /PH to generate #pragma file_hash data when preprocessing may resolve the issue. The following modules are out of policy:
         ///{1}.
         /// </summary>
         internal static string BA2004_Warning_NativeWithNoHashDirectCompilands {
@@ -172,7 +172,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. This is likely a compiler bug. Pass /PH to generate #pragma file_hash when preprocessing. The following modules are out of policy:
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The absence of hash data may indicate a compiler problem. Passing /PH to generate #pragma file_hash data when preprocessing may resolve the issue. The following modules are out of policy:
         ///{1}.
         /// </summary>
         internal static string BA2004_Warning_NativeWithNoHashStaticLibraryCompilands {
