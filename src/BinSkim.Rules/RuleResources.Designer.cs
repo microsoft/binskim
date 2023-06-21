@@ -924,6 +924,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The following modules were compiled with a toolset that supports /Qspectre but no compiler command line is present and therefore it cannot be determined if /Qspectre was specified: {0}.
+        /// </summary>
+        internal static string BA2024_Warning_SpectreMitigationUnknownNoCommandLine {
+            get {
+                return ResourceManager.GetString("BA2024_Warning_SpectreMitigationUnknownNoCommandLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash..
         /// </summary>
         internal static string BA2025_EnableShadowStack_Description {

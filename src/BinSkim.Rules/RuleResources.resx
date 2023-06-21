@@ -651,4 +651,7 @@ Modules did not meet the criteria: {1}</value>
   <data name="BA2029_Pass" xml:space="preserve">
     <value>'{0}' was compiled with /INTEGRITYCHECK and will therefore have its digital signature validated at load time when executing in sensitive Windows runtime environments.</value>
   </data>
+  <data name="BA2024_Warning_SpectreMitigationUnknownNoCommandLine" xml:space="preserve">
+    <value>The following modules were compiled with a toolset that supports /Qspectre but no compiler command line is present and therefore it cannot be determined if /Qspectre was specified: {0}</value>
+  </data>
 </root>

@@ -45,6 +45,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2024_Warning),
+                    nameof(RuleResources.BA2024_Warning_SpectreMitigationUnknownNoCommandLine),
                     nameof(RuleResources.BA2024_Warning_OptimizationsDisabled),
                     nameof(RuleResources.BA2024_Warning_SpectreMitigationNotEnabled),
                     nameof(RuleResources.BA2024_Warning_SpectreMitigationExplicitlyDisabled),
@@ -134,6 +135,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Pdb pdb = target.Pdb;
 
             var masmModules = new List<ObjectModuleDetails>();
+            var mitigationUnknownNoCommandLineRaw = new List<ObjectModuleDetails>();
             var mitigationNotEnabledModules = new List<ObjectModuleDetails>();
             var mitigationDisabledInDebugBuild = new List<ObjectModuleDetails>();
             var mitigationExplicitlyDisabledModules = new List<ObjectModuleDetails>();
@@ -176,6 +178,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             // TODO: https://github.com/Microsoft/binskim/issues/114
                             continue;
                         }
+
                         break;
                     }
 
@@ -226,6 +229,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         // TODO: https://github.com/Microsoft/binskim/issues/117
                         // Review unknown languages for this and all checks
                     }
+
                     continue;
                 }
 
@@ -241,6 +245,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // mitigations. We do not report here. BA2006 will fire instead.
                     continue;
                 }
+
+                // If the Command Line is not embedded in the binary, then just add a warning for this condition, and there is no point in checking switch states
+                if (string.IsNullOrWhiteSpace(omDetails.RawCommandLine))
+                {
+                    mitigationUnknownNoCommandLineRaw.Add(omDetails);
+                    continue;
+                }
+
                 string[] mitigationSwitches = new string[] { "/Qspectre", "/Qspectre-load", "/Qspectre-load-cf", "/guardspecload" };
 
                 SwitchState effectiveState;
@@ -307,6 +319,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             string line;
             var sb = new StringBuilder();
+
+            if (mitigationUnknownNoCommandLineRaw.Count > 0)
+            {
+                // The following modules were compiled with a toolset that supports
+                // /Qspectre but no compiler command line is present and therefore
+                // it cannot be determined if /Qspectre was specified: {0}
+                line = string.Format(
+                RuleResources.BA2024_Warning_SpectreMitigationUnknownNoCommandLine,
+                        mitigationExplicitlyDisabledModules.CreateOutputCoalescedByLibrary());
+                sb.AppendLine(line);
+            }
 
             if (mitigationExplicitlyDisabledModules.Count > 0)
             {
