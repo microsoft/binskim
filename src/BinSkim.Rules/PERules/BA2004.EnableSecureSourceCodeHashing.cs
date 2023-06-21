@@ -270,10 +270,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 string compilands = compilandsLibraryWithOneOrMoreNoFileHashes.CreateOutputCoalescedByCompiler();
 
-                // '{0}' is a native binary that directly compiles and links one or more 
-                // object files which were not hashed with a checksum algorithm. Not having 
+                // '{0}' is a native binary that directly compiles and links one or more
+                // object files which were not hashed with a checksum algorithm. Not having
                 // a checksum hash can compromise supply chain integrity. Pass '/ZH:SHA_256'
-                // on the cl.exe command-line to enable secure source code hashing. 
+                // on the cl.exe command-line to enable secure source code hashing. The
+                // absence of hash data may indicate a compiler problem. Passing /PH to
+                // generate #pragma file_hash data when preprocessing may resolve the issue.
                 // The following modules are out of policy: {1}
                 context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Warning,
@@ -318,8 +320,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // '{0}' is a native binary that directly compiles and links one or more 
                 // object files which were not hashed with a checksum algorithm. Not having 
                 // a checksum hash can compromise supply chain integrity. Pass '/ZH:SHA_256' 
-                // on the cl.exe command-line to enable secure source code hashing. The 
-                // following modules are out of policy: {1}
+                // on the cl.exe command-line to enable secure source code hashing. The
+                // absence of hash data may indicate a compiler problem. Passing /PH to
+                // generate #pragma file_hash data when preprocessing may resolve the issue.
+                // The following modules are out of policy: {1}
                 context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Warning,
                         context,
