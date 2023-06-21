@@ -16,6 +16,7 @@
 - NEW => new feature 
 
 ## UNRELEASED
+* NEW: `BA2024.EnableSpectreMitigations` Inform user when compiler command line is missing and inform that unable to determine if `/Qspectre` is specified.  [#927](https://github.com/microsoft/binskim/pull/927)
 * NR : `BA2029.EnableIntegrityCheck` ([Rule Request](https://github.com/microsoft/binskim/issues/909)) [#922](https://github.com/microsoft/binskim/pull/922)
 * BUG: Fix `System.InvalidOperationException`: `Sequence contains more than one matching element` when `--trace` is provided. [896](https://github.com/microsoft/binskim/pull/896)
 * BUG: Fix `--trace` missing supported values from SARIF SDK (`ScanTime`, `RuleScanTime`, `PeakWorkingSet`, `TargetsScanned`, `ResultsSummary`). [896](https://github.com/microsoft/binskim/pull/896)
