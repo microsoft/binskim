@@ -933,6 +933,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules with a toolset that supports /Qspectre but no compiler command line is present and therefore it cannot be determined if /Qspectre was specified and whether code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities was enabled. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, ensure that the compiler comman [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BA2024_WarningMissingCommandLine {
+            get {
+                return ResourceManager.GetString("BA2024_WarningMissingCommandLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash..
         /// </summary>
         internal static string BA2025_EnableShadowStack_Description {

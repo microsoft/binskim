@@ -45,6 +45,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2024_Warning),
+                    nameof(RuleResources.BA2024_WarningMissingCommandLine),
                     nameof(RuleResources.BA2024_Warning_SpectreMitigationUnknownNoCommandLine),
                     nameof(RuleResources.BA2024_Warning_OptimizationsDisabled),
                     nameof(RuleResources.BA2024_Warning_SpectreMitigationNotEnabled),
@@ -320,21 +321,28 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string line;
             var sb = new StringBuilder();
 
+            bool mitigationMissingCommandLineUnknownOnly = false;
+
             if (mitigationUnknownNoCommandLineRaw.Count > 0)
             {
+                mitigationMissingCommandLineUnknownOnly = true;
+
                 // The following modules were compiled with a toolset that supports
                 // /Qspectre but no compiler command line is present and therefore
                 // it cannot be determined if /Qspectre was specified: {0}
                 line = string.Format(
                 RuleResources.BA2024_Warning_SpectreMitigationUnknownNoCommandLine,
-                        mitigationExplicitlyDisabledModules.CreateOutputCoalescedByLibrary());
+                        mitigationUnknownNoCommandLineRaw.CreateOutputCoalescedByLibrary());
                 sb.AppendLine(line);
             }
 
             if (mitigationExplicitlyDisabledModules.Count > 0)
             {
-                // The following modules were compiled with Spectre
-                // mitigations explicitly disabled: {0}
+                mitigationMissingCommandLineUnknownOnly = false;
+
+                // The following modules were compiled with a toolset that supports
+                // /Qspectre but no compiler command line is present and therefore
+                // it cannot be determined if /Qspectre was specified: {0}
                 line = string.Format(
                         RuleResources.BA2024_Warning_SpectreMitigationExplicitlyDisabled,
                         mitigationExplicitlyDisabledModules.CreateOutputCoalescedByLibrary());
@@ -343,6 +351,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (mitigationNotEnabledModules.Count > 0)
             {
+                mitigationMissingCommandLineUnknownOnly = false;
+
                 // The following modules were compiled with a toolset that supports
                 // /Qspectre but the switch was not enabled on the command-line: {0}
                 line = string.Format(
@@ -353,6 +363,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (mitigationDisabledInDebugBuild.Count > 0)
             {
+                mitigationMissingCommandLineUnknownOnly = false;
+
                 // The following modules were compiled with optimizations disabled(/ Od),
                 // a condition that disables Spectre mitigations: {0}
                 line = string.Format(
@@ -364,6 +376,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if ((context.Policy.GetProperty(Reporting) & ReportingOptions.WarnIfMasmModulesPresent) == ReportingOptions.WarnIfMasmModulesPresent &&
                 masmModules.Count > 0)
             {
+                mitigationMissingCommandLineUnknownOnly = false;
+
                 line = string.Format(
                         RuleResources.BA2024_Warning_MasmModulesDetected,
                         masmModules.CreateOutputCoalescedByLibrary());
@@ -372,6 +386,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (sb.Length > 0)
             {
+                if (mitigationMissingCommandLineUnknownOnly)
+                {
+
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
+                            nameof(RuleResources.BA2024_WarningMissingCommandLine),
+                            context.CurrentTarget.Uri.GetFileName(),
+                            sb.ToString()));
+                    return;
+                }
+
                 // '{0}' was compiled with one or more modules that do not enable code generation
                 // mitigations for speculative execution side - channel attack(Spectre)
                 // vulnerabilities.Spectre attacks can compromise hardware - based isolation,
