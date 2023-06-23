@@ -23,18 +23,18 @@
 * DEP: Update `Microsoft.CodeAnalysis.NetAnalyzers` package from 7.0.0 to 7.0.1 to resolve build warnings. [#903](https://github.com/microsoft/binskim/pull/903)
 
 ## **v4.1.0**
-* NEW: `CompilerInformation` telemetry now emits the last modified date of the scan target. [#873](https://github.com/microsoft/binskim/pull/873)
-* NEW: `CompilerInformation` telemetry now emits the last modified date of the PDB associated with the analyzed binary. [#871](https://github.com/microsoft/binskim/pull/871)
 * DEP: Update Sarif.Sdk submodule from [120fae3 to bc8cb57](https://github.com/microsoft/sarif-sdk/compare/120fae3...bc8cb57). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/bc8cb57/ReleaseHistory.md).
 * DEP: Upgrade ELFSharp from 2.16.1 to 2.17.1. [#872](https://github.com/microsoft/binskim/pull/872)
 * BRK: Remove `--verbose` command-line option (in favor of `--level` and `--kind`). [#853](https://github.com/microsoft/binskim/pull/853)
 * BRK: Remove `--hashes` command-line option (in favor of `--insert Hashes`). [#853](https://github.com/microsoft/binskim/pull/853)
+* FPS: Fix false positive for rule `BA2024.EnableSpectreMitigations` incorrectly flags compilation units using debug runtime (which are not Spectre-mitigated by design). [887](https://github.com/microsoft/binskim/pull/887)
 * BUG: Fix `BA2004.EnableSecureSourceCodeHashing` to report the actual broken hash algorithm (rather than always reporting SHA-1). [#868](https://github.com/microsoft/binskim/pull/868)
 * BUG: Fix `BA2022.SignSecurely` unhandled `InvalidOperationException`: `Unrecognized crypto HRESULT: 0x80096011`, which is `TRUST_E_MALFORMED_SIGNATURE`, by refreshing `CryptoError` enum with latest data from Windows SDK for Windows 11 (10.0.22621.0). [850](https://github.com/microsoft/binskim/pull/850)
 * BUG: Probe local symbols directory for PDBs in all code paths. [828](https://github.com/microsoft/binskim/pull/828)
 * BUG: Add missing output in PDB load tracing (enabled by `--trace PdbLoad`. [828](https://github.com/microsoft/binskim/pull/828)
 * BUG: Provide additional note for `BA2025.EnableShadowStack` that enabling it with older versions of .NET (.NET 6 or earlier) may cause the process to crash. [874](https://github.com/microsoft/binskim/pull/874)
-* FPS: Fix false positive for rule `BA2024.EnableSpectreMitigations` incorrectly flags compilation units using debug runtime (which are not Spectre-mitigated by design). [887](https://github.com/microsoft/binskim/pull/887)
+* NEW: `CompilerInformation` telemetry now emits the last modified date of the scan target. [#873](https://github.com/microsoft/binskim/pull/873)
+* NEW: `CompilerInformation` telemetry now emits the last modified date of the PDB associated with the analyzed binary. [#871](https://github.com/microsoft/binskim/pull/871)
 
 ## **v4.0.0**
 * DEP: Update Sarif.Sdk submodule from [fc9a9df to 2d52c53](https://github.com/microsoft/sarif-sdk/compare/fc9a9df...2d52c53). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/2d52c53/ReleaseHistory.md).
