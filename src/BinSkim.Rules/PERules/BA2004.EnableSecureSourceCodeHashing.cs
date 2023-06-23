@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.IO;
-using System.Reflection.Metadata.Ecma335;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -104,8 +104,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            var compilandsBinaryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
-            var compilandsLibraryWithOneOrMoreInsecureFileHashes = new List<ObjectModuleDetails>();
+            var compilandsBinaryWithOneOrMoreInsecureFileHashes = new Dictionary<HashType, List<ObjectModuleDetails>>();
+            var compilandsLibraryWithOneOrMoreInsecureFileHashes = new Dictionary<HashType, List<ObjectModuleDetails>>();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -194,15 +194,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     if (sf.HashType != HashType.SHA256)
                     {
-                        if (!string.IsNullOrEmpty(record.Library))
+                        Dictionary<HashType, List<ObjectModuleDetails>> compilands;
+                        
+                        compilands = !string.IsNullOrEmpty(record.Library)
+                            ? compilandsLibraryWithOneOrMoreInsecureFileHashes
+                            : compilandsBinaryWithOneOrMoreInsecureFileHashes;
+
+                        if (!compilands.TryGetValue(sf.HashType, out List<ObjectModuleDetails> objectModuleDetails))
                         {
-                            compilandsLibraryWithOneOrMoreInsecureFileHashes.Add(omDetails);
+                            objectModuleDetails = compilands[sf.HashType] = new List<ObjectModuleDetails>();
                         }
-                        else
-                        {
-                            compilandsBinaryWithOneOrMoreInsecureFileHashes.Add(omDetails);
-                        }
+
+                        objectModuleDetails.Add(omDetails);
                     }
+
                     // We only need to check a single source file per compiland, as the relevant
                     // command-line options will be applied to all files in the translation unit.
                     break;
@@ -235,34 +240,61 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                               "native"));
         }
 
-        private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, List<ObjectModuleDetails> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
+        private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, Dictionary<HashType, List<ObjectModuleDetails>> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
         {
-            string compilands = compilandsWithOneOrMoreInsecureFileHashes.CreateOutputCoalescedByCompiler();
+            string message;
+            List<ObjectModuleDetails> objectModuleDetails;
 
-            //'{0}' is a native binary that links one or more object files which were hashed
-            // using an insecure checksum algorithm. Insecure algorithms are subject to collision attacks
-            // and its use can compromise supply chain integrity. Pass '/ZH:SHA-256' on the
-            // cl.exe command-line to enable secure source code hashing. The following modules
-            // are out of policy: {1}
+            if (compilandsWithOneOrMoreInsecureFileHashes.TryGetValue(HashType.None, out objectModuleDetails))
+            {
+                message = objectModuleDetails.CreateOutputCoalescedByCompiler("No hash value present");
+                GenerateCompilandsAndLog(context, message, FailureLevel.Warning);
+                compilandsWithOneOrMoreInsecureFileHashes.Remove(HashType.None);
+            }
+
+            string[] messages = new string[compilandsWithOneOrMoreInsecureFileHashes.Count];
+
+            int hashTypeCount = 0;
+            foreach(HashType hashType in compilandsWithOneOrMoreInsecureFileHashes.Keys)
+            {
+                objectModuleDetails = compilandsWithOneOrMoreInsecureFileHashes[hashType];
+                messages[hashTypeCount++] = objectModuleDetails.CreateOutputCoalescedByCompiler(hashType.ToString());
+                message = string.Join(Environment.NewLine, messages);
+                GenerateCompilandsAndLog(context, message, failureLevel);
+            }
+        }
+
+        private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, string message, FailureLevel failureLevel)
+        {
             if (failureLevel == FailureLevel.Warning)
             {
+                // '{0}' is a native binary that links one or more static libraries that include object files which were
+                // hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision
+                // attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe
+                // command-line to enable secure source code hashing. The following modules are out of policy: {1}
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(failureLevel,
                                               context,
                                               region: null,
                                               nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
                                               context.CurrentTarget.Uri.GetFileName(),
-                                              compilands));
+                                              message));
                 return;
             }
 
+            // '{0}' is a native binary that directly compiles and links one or more object files which were hashed
+            // using an insecure checksum algorithm or for which no hash data is present. Insecure checksum
+            // algorithms are subject to collision attacks and their use can compromise supply chain integrity.
+            // Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The absence of
+            // hash data may result from the use of #line directives. Passing /PH to generate #pragma file_hash
+            // data when preprocessing may resolve the issue. The following modules are out of policy: {1}
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(failureLevel,
                                           context,
                                           region: null,
                                           nameof(RuleResources.BA2004_Error_NativeWithInsecureDirectCompilands),
                                           context.CurrentTarget.Uri.GetFileName(),
-                                          compilands));
+                                          message));
         }
 
         public IEnumerable<IOption> GetOptions()
