@@ -195,7 +195,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     if (sf.HashType != HashType.SHA256)
                     {
                         Dictionary<HashType, List<ObjectModuleDetails>> compilands;
-                        
+
                         compilands = !string.IsNullOrEmpty(record.Library)
                             ? compilandsLibraryWithOneOrMoreInsecureFileHashes
                             : compilandsBinaryWithOneOrMoreInsecureFileHashes;
@@ -255,7 +255,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string[] messages = new string[compilandsWithOneOrMoreInsecureFileHashes.Count];
 
             int hashTypeCount = 0;
-            foreach(HashType hashType in compilandsWithOneOrMoreInsecureFileHashes.Keys)
+            foreach (HashType hashType in compilandsWithOneOrMoreInsecureFileHashes.Keys)
             {
                 objectModuleDetails = compilandsWithOneOrMoreInsecureFileHashes[hashType];
                 messages[hashTypeCount++] = objectModuleDetails.CreateOutputCoalescedByCompiler(hashType.ToString());

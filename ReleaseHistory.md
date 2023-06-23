@@ -18,7 +18,7 @@
 ## UNRELEASED
 * DEP: Update `Microsoft.CodeAnalysis.NetAnalyzers` package from 7.0.0 to 7.0.1 to resolve build warnings. [#903](https://github.com/microsoft/binskim/pull/903)
 * NR : `BA2029.EnableIntegrityCheck` ([Rule Request](https://github.com/microsoft/binskim/issues/909)) [#922](https://github.com/microsoft/binskim/pull/922)
-* BUG: `BA2004.EnableSecureSourceCodeHashing` now explicitly reports the insecure hash algorithm or that the module has no hash data present (in that circumstance).
+* BUG: `BA2004.EnableSecureSourceCodeHashing` now explicitly reports the insecure hash algorithm or that the module has no hash data present (in that circumstance). [#929](https://github.com/microsoft/binskim/pull/929)
 * BUG: Fix `System.InvalidOperationException`: `Sequence contains more than one matching element` when `--trace` is provided. [896](https://github.com/microsoft/binskim/pull/896)
 * BUG: Fix `--trace` missing supported values from SARIF SDK (`ScanTime`, `RuleScanTime`, `PeakWorkingSet`, `TargetsScanned`, `ResultsSummary`). [896](https://github.com/microsoft/binskim/pull/896)
 
