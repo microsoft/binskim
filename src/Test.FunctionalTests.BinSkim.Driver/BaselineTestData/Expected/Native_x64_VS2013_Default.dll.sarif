@@ -55,7 +55,8 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Native_x64_VS2013_Default.dll",
-              "Microsoft (R) Macro Assembler : masm : 12.0.20806.0 : MSVCRTD.lib (amdsecgs.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib (atonexit.obj,cinitexe.obj,crtdll.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,gshandler.obj,loadcfg.obj,natstart.obj,pesect.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib (error.obj,init.obj,initsect.obj,pdblkup.obj,tncleanup.obj,userapi.obj)\r\n"
+              "MD5",
+              "Microsoft (R) Macro Assembler : masm : 12.0.20806.0 (Hash=MD5) : MSVCRTD.lib (amdsecgs.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 18.0.20806.0 (Hash=MD5) : MSVCRTD.lib (atonexit.obj,cinitexe.obj,crtdll.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,gshandler.obj,loadcfg.obj,natstart.obj,pesect.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 (Hash=MD5) : MSVCRTD.lib (error.obj,init.obj,initsect.obj,pdblkup.obj,tncleanup.obj,userapi.obj)\r\n"
             ]
           },
           "locations": [
@@ -77,7 +78,8 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Native_x64_VS2013_Default.dll",
-              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] (dllmain.obj,Native_x64_VS2013_Default.obj,stdafx.obj)\r\n"
+              "MD5",
+              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 (Hash=MD5) : [directly linked] (dllmain.obj,Native_x64_VS2013_Default.obj,stdafx.obj)\r\n"
             ]
           },
           "locations": [
@@ -529,14 +531,20 @@
                 "Pass": {
                   "text": "'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm."
                 },
+                "Warning_NativeWithNoHashStaticLibraryCompilands": {
+                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The absence of hash data may indicate a compiler problem. Passing /PH to generate #pragma file_hash data when preprocessing may resolve the issue. The following modules are out of policy:\r\n{1}"
+                },
                 "Warning_NativeWithInsecureStaticLibraryCompilands": {
-                  "text": "'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
+                  "text": "'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure ({1}) checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{2}"
                 },
                 "Error_Managed": {
                   "text": "'{0}' is a managed binary compiled with an insecure ({1}) source code hashing algorithm. {1} is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing."
                 },
                 "Error_NativeWithInsecureDirectCompilands": {
-                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
+                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure ({1}) checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{2}"
+                },
+                "Warning_NativeWithNoHashDirectCompilands": {
+                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The absence of hash data may indicate a compiler problem. Passing /PH to generate #pragma file_hash data when preprocessing may resolve the issue. The following modules are out of policy:\r\n{1}"
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."

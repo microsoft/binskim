@@ -352,10 +352,15 @@ Compilers can generate and store checksums of source files in order to provide l
 
 '{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm.
 
+#### `NativeWithNoHashStaticLibraryCompilands`: Warning
+
+'{0}' is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The absence of hash data may indicate a compiler problem. Passing /PH to generate #pragma file_hash data when preprocessing may resolve the issue. The following modules are out of policy:
+{1}
+
 #### `NativeWithInsecureStaticLibraryCompilands`: Warning
 
-'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
-{1}
+'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure ({1}) checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+{2}
 
 #### `Managed`: Error
 
@@ -363,7 +368,12 @@ Compilers can generate and store checksums of source files in order to provide l
 
 #### `NativeWithInsecureDirectCompilands`: Error
 
-'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure ({1}) checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+{2}
+
+#### `NativeWithNoHashDirectCompilands`: Warning
+
+'{0}' is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The absence of hash data may indicate a compiler problem. Passing /PH to generate #pragma file_hash data when preprocessing may resolve the issue. The following modules are out of policy:
 {1}
 
 #### `InvalidMetadata`: NotApplicable
@@ -901,6 +911,28 @@ The PDB for '{0}' contains SourceLink information, maximizing engineering and se
 #### `Warning`: Warning
 
 The PDB for '{0}' does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response. Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider. See https://aka.ms/sourcelink for more information.
+
+---
+
+## Rule `BA2029.EnableIntegrityCheck`
+
+### Description
+
+Binaries that are loaded by certain Windows features must (and device drivers should) opt into Windows validation of their digital signatures by setting the /INTEGRITYCHECK linker flag. This option sets the IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY attribute in the PE header of binaries which tells the memory manager to validate a binary's digital signature when loaded. Any user mode code that is interfacing with Early Launch Antimalware (ELAM) drivers, integrates with device firmware execution or is trying to load into protected process lite space must enable /INTEGRITYCHECK. This feature applies to both 32-but and 64-bit files. Binaries that opt into /INTEGRITYCHECK must be signed using the Microsoft Azure Code Signing program.
+
+### Messages
+
+#### `Pass`: Pass
+
+'{0}' was compiled with /INTEGRITYCHECK and will therefore have its digital signature validated at load time when executing in sensitive Windows runtime environments.
+
+#### `Error`: Error
+
+'{0}' was not compiled with /INTEGRITYCHECK and therefore will not have its digital signature validated at load time. Failing to validate binary signatures increases the risk of loading malicious code in low-level, high-privilege execution environments, including subsystems that provide critical security malware protections. To resolve this problem, pass '/INTEGRITYCHECK' on the linker command line and sign your files using the Microsoft Azure Code Signing program.
+
+#### `InvalidMetadata`: NotApplicable
+
+'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}.
 
 ---
 

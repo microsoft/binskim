@@ -55,7 +55,8 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "clangcl.pe.cpp.codeview.exe",
-              "Microsoft (R) Macro Assembler : masm : 14.29.30034.2 : libcmtd.lib (amdsecgs.obj,chkstk.obj,guard_dispatch.obj,guard_xfg_dispatch.obj)\r\nMicrosoft (R) Macro Assembler : masm : 14.29.30034.2 : libvcruntimed.lib (handlers.obj,memcmp.obj,memcpy.obj,memset.obj,notify.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.29.30034.2 : libcmtd.lib (cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,pesect.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.29.30034.2 : libvcruntimed.lib (jbcxrval.obj,jmpuwind.obj,strchr.obj,strrchr.obj,wcschr.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.29.30034.2 : libcmtd.lib (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,delete_scalar.obj,delete_scalar_size.obj,denormal_control.obj,env_mode.obj,exe_main.obj,file_mode.obj,gshandler.obj,gshandlereh.obj,gshandlerseh.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,std_type_info_static.obj,thread_locale.obj,tncleanup.obj,utility.obj,utility_desktop.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.29.30034.2 : libvcruntimed.lib (chandler_noexcept.obj,ehhelpers.obj,ehstate.obj,frame.obj,initialization.obj,locks.obj,per_thread_data.obj,purevirt.obj,purevirt_data.obj,riscchandler.obj,risctrnsctrl.obj,std_exception.obj,std_type_info.obj,throw.obj,undname.obj,winapi_downlevel.obj)\r\n"
+              "MD5",
+              "Microsoft (R) Macro Assembler : masm : 14.29.30034.2 (Hash=MD5) : libcmtd.lib (amdsecgs.obj,chkstk.obj,guard_dispatch.obj,guard_xfg_dispatch.obj)\r\nMicrosoft (R) Macro Assembler : masm : 14.29.30034.2 (Hash=MD5) : libvcruntimed.lib (handlers.obj,memcmp.obj,memcpy.obj,memset.obj,notify.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.29.30034.2 (Hash=MD5) : libcmtd.lib (cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,pesect.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.29.30034.2 (Hash=MD5) : libvcruntimed.lib (jbcxrval.obj,jmpuwind.obj,strchr.obj,strrchr.obj,wcschr.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.29.30034.2 (Hash=MD5) : libcmtd.lib (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,delete_scalar.obj,delete_scalar_size.obj,denormal_control.obj,env_mode.obj,exe_main.obj,file_mode.obj,gshandler.obj,gshandlereh.obj,gshandlerseh.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,std_type_info_static.obj,thread_locale.obj,tncleanup.obj,utility.obj,utility_desktop.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.29.30034.2 (Hash=MD5) : libvcruntimed.lib (chandler_noexcept.obj,ehhelpers.obj,ehstate.obj,frame.obj,initialization.obj,locks.obj,per_thread_data.obj,purevirt.obj,purevirt_data.obj,riscchandler.obj,risctrnsctrl.obj,std_exception.obj,std_type_info.obj,throw.obj,undname.obj,winapi_downlevel.obj)\r\n"
             ]
           },
           "locations": [
@@ -77,7 +78,8 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "clangcl.pe.cpp.codeview.exe",
-              "clang version 13.0.0 : cxx : 13000.0.0.0 : [directly linked] (hello-d24821.obj)\r\n"
+              "MD5",
+              "clang version 13.0.0 : cxx : 13000.0.0.0 (Hash=MD5) : [directly linked] (hello-d24821.obj)\r\n"
             ]
           },
           "locations": [
@@ -509,14 +511,20 @@
                 "Pass": {
                   "text": "'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm."
                 },
+                "Warning_NativeWithNoHashStaticLibraryCompilands": {
+                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The absence of hash data may indicate a compiler problem. Passing /PH to generate #pragma file_hash data when preprocessing may resolve the issue. The following modules are out of policy:\r\n{1}"
+                },
                 "Warning_NativeWithInsecureStaticLibraryCompilands": {
-                  "text": "'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
+                  "text": "'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure ({1}) checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{2}"
                 },
                 "Error_Managed": {
                   "text": "'{0}' is a managed binary compiled with an insecure ({1}) source code hashing algorithm. {1} is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing."
                 },
                 "Error_NativeWithInsecureDirectCompilands": {
-                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{1}"
+                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure ({1}) checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:\r\n{2}"
+                },
+                "Warning_NativeWithNoHashDirectCompilands": {
+                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were not hashed with a checksum algorithm. Not having a checksum algorithm hash can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The absence of hash data may indicate a compiler problem. Passing /PH to generate #pragma file_hash data when preprocessing may resolve the issue. The following modules are out of policy:\r\n{1}"
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
