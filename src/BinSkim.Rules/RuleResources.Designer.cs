@@ -924,7 +924,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following modules were compiled with a toolset that supports /Qspectre but no compiler command line is present and therefore it cannot be determined if /Qspectre was specified: {0}.
+        ///   Looks up a localized string similar to The following modules were compiled with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. The likely cause is that the code was linked to a static library with no debug information: {0}.
         /// </summary>
         internal static string BA2024_Warning_SpectreMitigationUnknownNoCommandLine {
             get {
@@ -933,7 +933,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules with a toolset that supports /Qspectre but no compiler command line is present and therefore it cannot be determined if /Qspectre was specified and whether code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities was enabled. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, ensure that the compiler comman [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. The likely cause is that the code was linked to a static library with no debug information.  It is not known whether code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities was enabled. Spectre attacks can compromise hardware-based isolation, allowing non-pr [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2024_WarningMissingCommandLine {
             get {

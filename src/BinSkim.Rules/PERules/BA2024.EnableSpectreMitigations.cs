@@ -247,7 +247,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
-                // If the Command Line is not embedded in the binary, then just add a warning for this condition, and there is no point in checking switch states
+                // If the command line is not embedded in the binary, then just add a
+                // warning for this condition, and there is no point in checking switch states.
                 if (string.IsNullOrWhiteSpace(omDetails.RawCommandLine))
                 {
                     mitigationUnknownNoCommandLineRaw.Add(omDetails);
@@ -388,12 +389,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 if (mitigationMissingCommandLineUnknownOnly)
                 {
-
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                             nameof(RuleResources.BA2024_WarningMissingCommandLine),
                             context.CurrentTarget.Uri.GetFileName(),
                             sb.ToString()));
+
                     return;
                 }
 
