@@ -9,4 +9,4 @@ namespace Microsoft.CodeAnalysis.IL
         public const string FileVersion = "4.1.0" + ".0";
         public const string Version = AssemblyVersion + Prerelease;
     }
- }
+}
