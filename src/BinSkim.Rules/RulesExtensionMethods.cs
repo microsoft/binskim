@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public static class RulesExtensionMethods
     {
-        public static string CreateOutputCoalescedByCompiler(this IList<ObjectModuleDetails> objectModuleDetailsList)
+        public static string CreateOutputCoalescedByCompiler(this IList<ObjectModuleDetails> objectModuleDetailsList, string comment = null)
         {
             var compilerToLibraries = new Dictionary<string, Dictionary<string, SortedSet<string>>>();
 
@@ -31,6 +31,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (Path.GetExtension(name) != ".obj" || name != libraryName)
                 {
                     modulesKey = libraryName;
+                }
+
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    modulesKey = $"{modulesKey} [{comment}]";
                 }
 
                 if (!libraries.TryGetValue(modulesKey, out SortedSet<string> modules))

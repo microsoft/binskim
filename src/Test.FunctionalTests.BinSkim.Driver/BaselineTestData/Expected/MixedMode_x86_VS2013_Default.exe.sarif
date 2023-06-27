@@ -33,7 +33,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "MixedMode_x86_VS2013_Default.exe",
-              "Microsoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib (atonexit.obj,chandler4gs.obj,cinitexe.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,loadcfg.obj,merr.obj,natstart.obj,secchk.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCMRTD.lib (managdeh.obj,ManagedMain.obj,msilexit.obj,mstartup.obj,puremsilcode.obj,wdllargv.obj,wildcard.obj,xncommod.obj,xthdloc.obj,xtxtmode.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib (initsect.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib [MD5] (atonexit.obj,chandler4gs.obj,cinitexe.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,loadcfg.obj,merr.obj,natstart.obj,secchk.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCMRTD.lib [MD5] (managdeh.obj,ManagedMain.obj,msilexit.obj,mstartup.obj,puremsilcode.obj,wdllargv.obj,wildcard.obj,xncommod.obj,xthdloc.obj,xtxtmode.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib [MD5] (initsect.obj)\r\n"
             ]
           },
           "locations": [
@@ -55,7 +55,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "MixedMode_x86_VS2013_Default.exe",
-              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] (.NETFramework,Version=v4.5.AssemblyAttributes.obj,AssemblyInfo.obj,MixedMode_x86_VS2013_Default.obj,stdafx.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] [MD5] (.NETFramework,Version=v4.5.AssemblyAttributes.obj,AssemblyInfo.obj,MixedMode_x86_VS2013_Default.obj,stdafx.obj)\r\n"
             ]
           },
           "locations": [

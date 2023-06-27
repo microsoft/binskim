@@ -33,7 +33,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Native_x86_VS2019_SDL_Enabled.exe",
-              "Microsoft (R) Optimizing Compiler : c : 19.29.30034.2 : MSVCRTD.lib (chandler4gs.obj,cpu_disp.obj,debugger_jmc.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,secchk.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.29.30034.2 : MSVCRTD.lib (argv_mode.obj,chandler4_noexcept.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,denormal_control.obj,env_mode.obj,error.obj,exe_main.obj,file_mode.obj,init.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,pdblkup.obj,stack.obj,thread_locale.obj,tncleanup.obj,ucrt_stubs.obj,userapi.obj,utility.obj,utility_desktop.obj,x86_exception_filter.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : c : 19.29.30034.2 : MSVCRTD.lib [MD5] (chandler4gs.obj,cpu_disp.obj,debugger_jmc.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,secchk.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.29.30034.2 : MSVCRTD.lib [MD5] (argv_mode.obj,chandler4_noexcept.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,denormal_control.obj,env_mode.obj,error.obj,exe_main.obj,file_mode.obj,init.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,pdblkup.obj,stack.obj,thread_locale.obj,tncleanup.obj,ucrt_stubs.obj,userapi.obj,utility.obj,utility_desktop.obj,x86_exception_filter.obj)\r\n"
             ]
           },
           "locations": [
@@ -55,7 +55,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Native_x86_VS2019_SDL_Enabled.exe",
-              "Microsoft (R) Optimizing Compiler : cxx : 19.29.30038.1 : [directly linked] (Native_x64_VS2019.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 19.29.30038.1 : [directly linked] [MD5] (Native_x64_VS2019.obj)\r\n"
             ]
           },
           "locations": [
