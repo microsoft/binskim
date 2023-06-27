@@ -259,9 +259,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 objectModuleDetails = compilandsWithOneOrMoreInsecureFileHashes[hashType];
                 messages[hashTypeCount++] = objectModuleDetails.CreateOutputCoalescedByCompiler(hashType.ToString());
-                message = string.Join(Environment.NewLine, messages);
-                GenerateCompilandsAndLog(context, message, failureLevel);
             }
+
+            message = string.Join(Environment.NewLine, messages);
+            GenerateCompilandsAndLog(context, message, failureLevel);
         }
 
         private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, string message, FailureLevel failureLevel)

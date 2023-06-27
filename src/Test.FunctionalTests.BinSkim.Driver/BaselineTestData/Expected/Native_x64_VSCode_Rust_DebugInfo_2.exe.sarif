@@ -55,27 +55,6 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Native_x64_VSCode_Rust_DebugInfo_2.exe",
-              "clang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : liballoc-e1d125b3a421e009.rlib [SHA1] (alloc-e1d125b3a421e009.alloc.b6d975c0-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libcompiler_builtins-55394bc732b75eeb.rlib [SHA1] (compiler_builtins-55394bc732b75eeb.compiler_builtins.4be54af4-cgu.116.rcgu.o,compiler_builtins-55394bc732b75eeb.compiler_builtins.4be54af4-cgu.30.rcgu.o,compiler_builtins-55394bc732b75eeb.compiler_builtins.4be54af4-cgu.93.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libcore-f309332ab230c371.rlib [SHA1] (core-f309332ab230c371.core.8174c79a-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libpanic_unwind-c3aa48ffdde66347.rlib [SHA1] (panic_unwind-c3aa48ffdde66347.panic_unwind.932dc30b-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : librustc_demangle-cd2025f252bca17e.rlib [SHA1] (rustc_demangle-cd2025f252bca17e.rustc_demangle.7bc06e87-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libstd-ac1aca38635ef0b8.rlib [SHA1] (std-ac1aca38635ef0b8.std.b81c7b07-cgu.0.rcgu.o)\r\n\r\n"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_2.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2004",
-          "ruleIndex": 2,
-          "message": {
-            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_2.exe",
               "clang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : liballoc-e1d125b3a421e009.rlib [SHA1] (alloc-e1d125b3a421e009.alloc.b6d975c0-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libcompiler_builtins-55394bc732b75eeb.rlib [SHA1] (compiler_builtins-55394bc732b75eeb.compiler_builtins.4be54af4-cgu.116.rcgu.o,compiler_builtins-55394bc732b75eeb.compiler_builtins.4be54af4-cgu.30.rcgu.o,compiler_builtins-55394bc732b75eeb.compiler_builtins.4be54af4-cgu.93.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libcore-f309332ab230c371.rlib [SHA1] (core-f309332ab230c371.core.8174c79a-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libpanic_unwind-c3aa48ffdde66347.rlib [SHA1] (panic_unwind-c3aa48ffdde66347.panic_unwind.932dc30b-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : librustc_demangle-cd2025f252bca17e.rlib [SHA1] (rustc_demangle-cd2025f252bca17e.rustc_demangle.7bc06e87-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libstd-ac1aca38635ef0b8.rlib [SHA1] (std-ac1aca38635ef0b8.std.b81c7b07-cgu.0.rcgu.o)\r\n\r\nMicrosoft (R) Macro Assembler : masm : 14.29.30034.2 : msvcrt.lib [MD5] (chkstk.obj,guard_dispatch.obj,guard_xfg_dispatch.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.29.30034.2 : msvcrt.lib [MD5] (cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.29.30034.2 : msvcrt.lib [MD5] (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,delete_scalar.obj,delete_scalar_size.obj,denormal_control.obj,env_mode.obj,exe_main.obj,file_mode.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,std_type_info_static.obj,thread_locale.obj,tlssup.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_desktop.obj)\r\n"
             ]
           },
