@@ -328,9 +328,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 mitigationMissingCommandLineUnknownOnly = true;
 
-                // The following modules were compiled with a toolset that supports
-                // /Qspectre but no compiler command line is present and therefore
-                // it cannot be determined if /Qspectre was specified: {0}
+                // The following modules were compiled with a toolset that supports /Qspectre but a
+                // compiland `RawCommandLine` value is missing and the rule is therefore not able
+                // to determine if `/Qspectre` is specified. The likely cause is that the code
+                // was linked to a static library with no debug information: {0}
                 line = string.Format(
                 RuleResources.BA2024_Warning_SpectreMitigationUnknownNoCommandLine,
                         mitigationUnknownNoCommandLineRaw.CreateOutputCoalescedByLibrary());
@@ -341,9 +342,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 mitigationMissingCommandLineUnknownOnly = false;
 
-                // The following modules were compiled with a toolset that supports
-                // /Qspectre but no compiler command line is present and therefore
-                // it cannot be determined if /Qspectre was specified: {0}
+                // The following modules were compiled with Spectre mitigations explicitly disabled: {0}
                 line = string.Format(
                         RuleResources.BA2024_Warning_SpectreMitigationExplicitlyDisabled,
                         mitigationExplicitlyDisabledModules.CreateOutputCoalescedByLibrary());
