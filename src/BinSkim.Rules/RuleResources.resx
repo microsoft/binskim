@@ -651,4 +651,10 @@ Modules did not meet the criteria: {1}</value>
   <data name="BA2029_Pass" xml:space="preserve">
     <value>'{0}' was compiled with /INTEGRITYCHECK and will therefore have its digital signature validated at load time when executing in sensitive Windows runtime environments.</value>
   </data>
+  <data name="BA2024_WarningMissingCommandLine" xml:space="preserve">
+    <value>{0}' was compiled with one or more modules with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. The likely cause is that the code was linked to a static library with no debug information.  It is not known whether code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities was enabled. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, ensure that the compiler command line is present (provide the /Z7 switch) and provide the /Qspectre switch on the compiler command-line (or specify &lt;SpectreMitigation&gt;Spectre&lt;/SpectreMitigation&gt; in build properties), or pass /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre. This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.</value>
+  </data>
+  <data name="BA2024_Warning_SpectreMitigationUnknownNoCommandLine" xml:space="preserve">
+    <value>The following modules were compiled with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. The likely cause is that the code was linked to a static library with no debug information: {0}</value>
+  </data>
 </root>
