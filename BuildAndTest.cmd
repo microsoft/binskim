@@ -96,7 +96,7 @@ Exit /B %ERRORLEVEL%
 :CreatePublishPackage
 set Framework=%~1
 set RuntimeArg=%~2
-dotnet publish %~dp0src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework% --runtime %RuntimeArg%
+dotnet publish %~dp0src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework% --runtime %RuntimeArg% --self-contained
 Exit /B %ERRORLEVEL%
 
 :ExitFailed
