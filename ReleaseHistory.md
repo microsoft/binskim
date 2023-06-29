@@ -16,8 +16,8 @@
 - NEW => new feature 
 
 ## UNRELEASED
-* DEP: Remove Dependency `Microsoft.CodeAnalysis`. [#934](https://github.com/microsoft/binskim/pull/934)
-* DEP: Remove Dependency `Microsoft.CodeAnalysis.NetAnalyzers`. [#934](https://github.com/microsoft/binskim/pull/934)
+* DEP: Remove `Microsoft.CodeAnalysis`. [#934](https://github.com/microsoft/binskim/pull/934)
+* DEP: Remove `Microsoft.CodeAnalysis.NetAnalyzers`. [#934](https://github.com/microsoft/binskim/pull/934)
 * DEP: Update `ELFSharp` package from 2.17.1 to 2.17.2. [#930](https://github.com/microsoft/binskim/pull/930)
 * DEP: Update `System.Reflection.Metadata` package from 7.0.0 to 7.0.2. [#930](https://github.com/microsoft/binskim/pull/930)
 * DEP: Update `Newtonsoft.Json` package from 13.0.1 to 13.0.3. [#930](https://github.com/microsoft/binskim/pull/930)
