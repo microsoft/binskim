@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             ConventionBuilder conventions = GetConventions<T>();
 
-            assemblies = assemblies ?? new Assembly[] { typeof(DoNotShipVulnerableBinaries).Assembly };
+            assemblies ??= new Assembly[] { typeof(DoNotShipVulnerableBinaries).Assembly };
 
             return new ContainerConfiguration()
                 .WithAssemblies(assemblies, conventions)

@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (string target in targets)
             {
-                context = this.CreateContext(logger, policy, target);
+                context = CreateContext(logger, policy, target);
 
                 if (!context.IsValidAnalysisTarget) { continue; }
 
@@ -188,7 +188,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Assert.Empty(other);
         }
 
-        private string GetTestDirectoryFor(string ruleName)
+        private static string GetTestDirectoryFor(string ruleName)
         {
             string ruleId = (string)typeof(RuleIds)
                                 .GetField(ruleName)
@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return ruleId + "." + ruleName;
         }
 
-        private BinaryAnalyzerContext CreateContext(TestMessageLogger logger, PropertiesDictionary policy, string target)
+        private static BinaryAnalyzerContext CreateContext(TestMessageLogger logger, PropertiesDictionary policy, string target)
         {
             var context = new BinaryAnalyzerContext
             {
@@ -216,7 +216,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return context;
         }
 
-        private void VerifyThrows<ExceptionType>(
+        private static void VerifyThrows<ExceptionType>(
             BinarySkimmer skimmer,
             bool useDefaultPolicy = false) where ExceptionType : Exception
         {
@@ -259,7 +259,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             foreach (string target in targets)
             {
-                context = this.CreateContext(logger, policy, target);
+                context = CreateContext(logger, policy, target);
 
                 context.Rule = skimmer;
 
@@ -280,7 +280,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             string ruleName = skimmer.GetType().Name;
 
-            HashSet<string> targets = this.GetTestFilesMatchingConditions(applicabilityConditions);
+            HashSet<string> targets = GetTestFilesMatchingConditions(applicabilityConditions);
 
             VerifyApplicabilityResults(
                 skimmer,
@@ -304,7 +304,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, "NotApplicable");
 
-            HashSet<string> targets = this.GetTestFilesMatchingConditions(applicabilityConditions);
+            HashSet<string> targets = GetTestFilesMatchingConditions(applicabilityConditions);
 
             if (Directory.Exists(testFilesDirectory))
             {
@@ -345,7 +345,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 string extension = Path.GetExtension(target);
 
-                context = this.CreateContext(logger, null, target);
+                context = CreateContext(logger, null, target);
                 if (!context.IsValidAnalysisTarget) { continue; }
 
                 if (useDefaultPolicy)
@@ -399,7 +399,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Assert.Equal(0, sb.Length);
         }
 
-        private HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
+        private static HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
         {
             string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestData");
 
@@ -568,7 +568,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -583,7 +583,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -605,7 +605,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -618,7 +618,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new EnableSecureSourceCodeHashing(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new EnableSecureSourceCodeHashing(), useDefaultPolicy: true);
             }
         }
 
@@ -631,7 +631,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -644,7 +644,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 
@@ -657,7 +657,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 
@@ -690,7 +690,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -705,7 +705,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -731,7 +731,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -746,7 +746,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -776,7 +776,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -868,7 +868,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 
@@ -881,7 +881,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 
@@ -941,7 +941,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 
@@ -956,7 +956,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
             }
         }
 
@@ -991,7 +991,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -1007,12 +1007,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 this.VerifyFail(
                     new DoNotDisableStackProtectionForFunctions(),
-                    this.GetTestFilesMatchingConditions(failureConditions),
+                    GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -1039,7 +1039,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -1175,7 +1175,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
             }
         }
 
@@ -1237,14 +1237,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2025_EnableShadowStack_NotApplicable()
         {
-            HashSet<string> notApplicableArm64 = new HashSet<string>() { MetadataConditions.ImageIsArm64BitBinary };
+            var notApplicableArm64 = new HashSet<string>() { MetadataConditions.ImageIsArm64BitBinary };
 
             this.VerifyApplicabililtyByConditionsOnly(
                 skimmer: new EnableShadowStack(),
                 applicabilityConditions: notApplicableArm64,
                 expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArm64BitBinary);
 
-            HashSet<string> notApplicableArm = new HashSet<string>() { MetadataConditions.ImageIsArmBinary };
+            var notApplicableArm = new HashSet<string>() { MetadataConditions.ImageIsArmBinary };
 
             this.VerifyApplicabililtyByConditionsOnly(
                 skimmer: new EnableShadowStack(),
@@ -1565,7 +1565,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
             }
         }
 
@@ -1578,7 +1578,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new DisableIncrementalLinkingInReleaseBuilds(), useDefaultPolicy: true);
             }
         }
 
@@ -1610,7 +1610,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new EliminateDuplicateStrings(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new EliminateDuplicateStrings(), useDefaultPolicy: true);
             }
         }
 
@@ -1623,7 +1623,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new EliminateDuplicateStrings(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new EliminateDuplicateStrings(), useDefaultPolicy: true);
             }
         }
 
@@ -1655,7 +1655,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new EnableComdatFolding(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new EnableComdatFolding(), useDefaultPolicy: true);
             }
         }
 
@@ -1668,7 +1668,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new EnableComdatFolding(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new EnableComdatFolding(), useDefaultPolicy: true);
             }
         }
 
@@ -1700,7 +1700,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new EnableOptimizeReferences(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new EnableOptimizeReferences(), useDefaultPolicy: true);
             }
         }
 
@@ -1713,7 +1713,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new EnableOptimizeReferences(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new EnableOptimizeReferences(), useDefaultPolicy: true);
             }
         }
 
@@ -1745,7 +1745,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new EnableLinkTimeCodeGeneration(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new EnableLinkTimeCodeGeneration(), useDefaultPolicy: true);
             }
         }
 
@@ -1758,7 +1758,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
             else
             {
-                this.VerifyThrows<PlatformNotSupportedException>(new EnableLinkTimeCodeGeneration(), useDefaultPolicy: true);
+                VerifyThrows<PlatformNotSupportedException>(new EnableLinkTimeCodeGeneration(), useDefaultPolicy: true);
             }
         }
 
