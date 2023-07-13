@@ -1,51 +1,69 @@
 pr:
-- '*'
+  - "*"
 
 jobs:
-- job: linux
-  pool:
-    vmImage: 'ubuntu-20.04'
-  steps:
-  - checkout: self
-    submodules: true
+  - job: linux
+    pool:
+      vmImage: "ubuntu-20.04"
+    steps:
+      - task: UseDotNet@2
+        displayName: .NET Core 3.1 sdk
+        inputs:
+          version: "3.1.x"
+          packageType: sdk
 
-  - task: Bash@3
-    displayName: 'Build and Test'
-    inputs:
-      filePath: 'BuildAndTest.sh'
-      failOnStderr: true
+      - checkout: self
+        submodules: true
 
-- job: windows
-  pool:
-    vmImage: 'windows-latest'
-  steps:
-  - checkout: self
-    submodules: true
+      - task: Bash@3
+        displayName: "Build and Test"
+        inputs:
+          filePath: "BuildAndTest.sh"
+          failOnStderr: true
 
-  - task: CmdLine@2
-    displayName: 'Build and Test'
-    inputs:
-      script: 'BuildAndTest.cmd'
+  - job: windows
+    pool:
+      vmImage: "windows-latest"
+    steps:
+      - task: UseDotNet@2
+        displayName: .NET Core 3.1 sdk
+        inputs:
+          version: "3.1.x"
+          packageType: sdk
 
-  - task: ComponentGovernanceComponentDetection@0
-    inputs:
-      ignoreDirectories: 'src\sarif-sdk'
+      - checkout: self
+        submodules: true
 
-- job: mac
-  pool:
-    vmImage: 'macOS-latest'
-  steps:
-  - checkout: self
-    submodules: true
+      - task: CmdLine@2
+        displayName: "Build and Test"
+        inputs:
+          script: "BuildAndTest.cmd"
 
-  - task: Bash@3
-    displayName: 'Build and Test'
-    inputs:
-      filePath: 'BuildAndTest.sh'
-      failOnStderr: true
+      - task: ComponentGovernanceComponentDetection@0
+        inputs:
+          ignoreDirectories: 'src\sarif-sdk'
 
-  - task: Bash@3
-    displayName: 'Run BinSkim'
-    inputs:
-      targetType: 'inline'
-      script: 'dotnet bld/bin/x64_Release/netcoreapp3.1/binskim.dll analyze src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.*'
+  - job: mac
+    pool:
+      vmImage: "macOS-latest"
+    steps:
+      - task: UseDotNet@2
+        displayName: .NET Core 3.1 sdk
+        inputs:
+          version: "3.1.x"
+          packageType: sdk
+
+      - checkout: self
+        submodules: true
+
+      - task: Bash@3
+        displayName: "Build and Test"
+        inputs:
+          filePath: "BuildAndTest.sh"
+          failOnStderr: true
+
+      - task: Bash@3
+        displayName: "Run BinSkim"
+        inputs:
+          targetType: "inline"
+          script: "dotnet bld/bin/x64_Release/netcoreapp3.1/binskim.dll analyze src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.*"
