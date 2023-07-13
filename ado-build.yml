@@ -22,7 +22,7 @@ jobs:
         submodules: true
 
       - task: Bash@3
-        displayName: "Build and Test  "
+        displayName: "Build and Test   "
         inputs:
           filePath: "BuildAndTest.sh"
           failOnStderr: true
