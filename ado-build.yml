@@ -12,6 +12,12 @@ jobs:
           version: "3.1.x"
           packageType: sdk
 
+      - task: UseDotNet@2
+        displayName: .NET Core 6.0 sdk
+        inputs:
+          version: "6.0.x"
+          packageType: sdk
+
       - checkout: self
         submodules: true
 
@@ -29,6 +35,12 @@ jobs:
         displayName: .NET Core 3.1 sdk
         inputs:
           version: "3.1.x"
+          packageType: sdk
+
+      - task: UseDotNet@2
+        displayName: .NET Core 6.0 sdk
+        inputs:
+          version: "6.0.x"
           packageType: sdk
 
       - checkout: self
@@ -51,6 +63,12 @@ jobs:
         displayName: .NET Core 3.1 sdk
         inputs:
           version: "3.1.x"
+          packageType: sdk
+
+      - task: UseDotNet@2
+        displayName: .NET Core 6.0 sdk
+        inputs:
+          version: "6.0.x"
           packageType: sdk
 
       - checkout: self
