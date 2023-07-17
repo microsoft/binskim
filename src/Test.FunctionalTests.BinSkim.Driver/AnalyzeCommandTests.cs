@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 
 using FluentAssertions;
+using FluentAssertions.Execution;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL;
@@ -162,9 +163,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
-        public void AnalyzeCommand_WixTest()
+        public void AnalyzeCommand_IncludeWixBinariesTest()
         {
-            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_WixTest.sarif");
+            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_IncludeWixBinariesTest.sarif");
             string testPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
             var options = new AnalyzeOptions
             {
@@ -176,15 +177,18 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             };
             var command = new MultithreadedAnalyzeCommand();
 
-            command.Run(options);
-            var log = SarifLog.Load(fileName);
-            log.Runs[0].Results.Should().HaveCount(0);
+            using (new AssertionScope())
+            {
+                command.Run(options);
+                var log = SarifLog.Load(fileName);
+                log.Runs[0].Results.Should().HaveCount(0);
 
-            options.IncludeWixBinaries = true;
+                options.IncludeWixBinaries = true;
 
-            command.Run(options);
-            log = SarifLog.Load(fileName);
-            log.Runs[0].Results.Should().HaveCount(1);
+                command.Run(options);
+                log = SarifLog.Load(fileName);
+                log.Runs[0].Results.Should().HaveCount(1);
+            }
         }
 
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)
