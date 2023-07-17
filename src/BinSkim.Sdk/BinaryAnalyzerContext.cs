@@ -79,6 +79,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public bool IgnorePdbLoadError { get; set; }
 
+        public bool IncludeWixBinaries { get; set; }
+
         internal bool disposed = false;
 
         protected virtual void Dispose(bool disposing)

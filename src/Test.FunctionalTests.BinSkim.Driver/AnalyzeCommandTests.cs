@@ -161,6 +161,32 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("skipped")).Should().BeGreaterThanOrEqualTo(1);
         }
 
+        [Fact]
+        public void AnalyzeCommand_WixTest()
+        {
+            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_WixTest.sarif");
+            string testPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new string[] {
+                    testPath
+                },
+                OutputFilePath = fileName,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+            };
+            var command = new MultithreadedAnalyzeCommand();
+
+            command.Run(options);
+            var log = SarifLog.Load(fileName);
+            log.Runs[0].Results.Should().HaveCount(0);
+
+            options.IncludeWixBinaries = true;
+
+            command.Run(options);
+            log = SarifLog.Load(fileName);
+            log.Runs[0].Results.Should().HaveCount(1);
+        }
+
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)
         {
             SarifLog sarifLog;

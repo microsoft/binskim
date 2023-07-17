@@ -69,6 +69,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             // Update context object based on command-line parameters.
             context.SymbolPath = options.SymbolsPath;
+            context.IncludeWixBinaries = options.IncludeWixBinaries;
             context.IgnorePdbLoadError = options.IgnorePdbLoadError;
             context.LocalSymbolDirectories = options.LocalSymbolDirectories;
             context.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
@@ -101,6 +102,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             scanTargetContext.CompilerDataLogger = context.CompilerDataLogger;
             scanTargetContext.SymbolPath = context.SymbolPath;
+            scanTargetContext.IncludeWixBinaries = context.IncludeWixBinaries;
             scanTargetContext.IgnorePdbLoadError = context.IgnorePdbLoadError;
             scanTargetContext.LocalSymbolDirectories = context.LocalSymbolDirectories;
             scanTargetContext.TracePdbLoads = context.TracePdbLoads;
