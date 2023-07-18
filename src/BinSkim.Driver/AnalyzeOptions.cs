@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         [Option(
             "includeWixBinaries",
-            HelpText = "If enabled, BinSkim will skip Wix Binaries.")]
+            HelpText = "If enabled, BinSkim will include Wix binaries in the analysis.")]
         public bool IncludeWixBinaries { get; set; }
     }
 }

@@ -204,8 +204,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 }
                 else
                 {
-                    // Notifications of `WRN998.UnsupportedPlatform` in Unix-like OS.
                     log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().HaveCountGreaterThan(1);
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.All(n => n.Descriptor.Id == "WRN998.UnsupportedPlatform");
                 }
 
                 options.IncludeWixBinaries = true;
@@ -217,11 +217,12 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().HaveCount(1);
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.All(n => n.Descriptor.Id == "ERR997.ExceptionLoadingPdb");
                 }
                 else
                 {
-                    // Notifications of `WRN998.UnsupportedPlatform` in Unix-like OS.
                     log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().HaveCountGreaterThan(1);
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.All(n => n.Descriptor.Id == "WRN998.UnsupportedPlatform");
                 }
             }
         }
