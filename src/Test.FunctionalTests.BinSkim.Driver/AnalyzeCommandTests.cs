@@ -166,11 +166,12 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         public void AnalyzeCommand_IncludeWixBinariesTest()
         {
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_IncludeWixBinariesTest.sarif");
-            string testPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
+            string testPathV3 = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
+            string testPathV4 = Path.Combine(PEBinaryTests.TestData, "PE", "Wix_4.0.1_VS2022_Bundle.exe");
             var options = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[] {
-                    testPath
+                    testPathV3
                 },
                 OutputFilePath = fileName,
                 OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
@@ -188,6 +189,21 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 command.Run(options);
                 log = SarifLog.Load(fileName);
                 log.Runs[0].Results.Should().HaveCount(1);
+
+                options.TargetFileSpecifiers = new string[] { testPathV4 };
+                options.IncludeWixBinaries = false;
+
+                command.Run(options);
+                log = SarifLog.Load(fileName);
+                log.Runs[0].Results.Should().HaveCount(0);
+                log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().BeNull();
+
+                options.IncludeWixBinaries = true;
+
+                command.Run(options);
+                log = SarifLog.Load(fileName);
+                log.Runs[0].Results.Should().HaveCount(0);
+                log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().HaveCount(1);
             }
         }
 
