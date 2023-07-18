@@ -163,6 +163,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
+        [Trait(TestTraits.WindowsOnly, "true")]
         public void AnalyzeCommand_IncludeWixBinariesTest()
         {
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_IncludeWixBinariesTest.sarif");
