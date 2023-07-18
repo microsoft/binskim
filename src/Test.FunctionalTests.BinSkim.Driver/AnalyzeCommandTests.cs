@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 using FluentAssertions;
@@ -163,7 +164,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
-        [Trait(TestTraits.WindowsOnly, "true")]
         public void AnalyzeCommand_IncludeWixBinariesTest()
         {
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_IncludeWixBinariesTest.sarif");
@@ -197,14 +197,32 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 command.Run(options);
                 log = SarifLog.Load(fileName);
                 log.Runs[0].Results.Should().HaveCount(0);
-                log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().BeNull();
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().BeNull();
+                }
+                else
+                {
+                    // Notifications of `WRN998.UnsupportedPlatform` in Unix-like OS.
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().HaveCountGreaterThan(1);
+                }
 
                 options.IncludeWixBinaries = true;
 
                 command.Run(options);
                 log = SarifLog.Load(fileName);
                 log.Runs[0].Results.Should().HaveCount(0);
-                log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().HaveCount(1);
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().HaveCount(1);
+                }
+                else
+                {
+                    // Notifications of `WRN998.UnsupportedPlatform` in Unix-like OS.
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().HaveCountGreaterThan(1);
+                }
             }
         }
 
