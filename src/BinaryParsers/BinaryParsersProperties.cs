@@ -17,7 +17,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 ComprehensiveBinaryParsing,
                 IgnorePdbLoadError,
-                IncludeWixBinaries
+                IncludeWixBinaries,
+                LocalSymbolDirectories,
+                SymbolPath
             }.ToImmutableArray();
         }
 
@@ -36,5 +38,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             new PerLanguageOption<bool>(
                 "BinaryParsers", nameof(IncludeWixBinaries), defaultValue: () => false,
                 "Set this value to 'true' to include Wix binaries in the analysis.");
+
+        public static PerLanguageOption<string> LocalSymbolDirectories { get; } =
+            new PerLanguageOption<string>(
+                "BinaryParsers", nameof(LocalSymbolDirectories), defaultValue: () => null,
+                "A set of semicolon-delimited local directory paths that will be examined when attempting to locate PDBs.");
+
+        public static PerLanguageOption<string> SymbolPath { get; } =
+            new PerLanguageOption<string>(
+                "BinaryParsers", nameof(SymbolPath), defaultValue: () => null,
+                "Symbols path value, e.g., Cache*c:\\symbols;SRV*https://msdl.microsoft.com/download/symbols " +
+                "or Cache*d:\\symbols;Srv*https://symweb. See " +
+                "https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/advanced-symsrv-use for " +
+                "syntax information. Note that BinSkim will clear the _NT_SYMBOL_PATH and _NT_ALT_SYMBOL_PATH " +
+                "environment variables at runtime. Use this argument instead for specifying the symbol path." +
+                "WARNING: Be sure to specify a local file cache in the symbol path if at all possible, in order " +
+                "to avoid the possibility of significance time-to-analyze performance degradataion.");
     }
 }

@@ -38,7 +38,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             get => this.Binary?.Valid == true;
         }
 
-        public string LocalSymbolDirectories { get; set; }
+        public string LocalSymbolDirectories
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.LocalSymbolDirectories);
+            set => this.Policy.SetProperty(BinaryParsersProperties.LocalSymbolDirectories, value);
+        }
 
         public bool ComprehensiveBinaryParsing
         {
@@ -48,7 +52,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public bool TracePdbLoads { get; set; }
 
-        public string SymbolPath { get; set; }
+        public string SymbolPath
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.SymbolPath);
+            set => this.Policy.SetProperty(BinaryParsersProperties.SymbolPath, value);
+        }
 
         public override IAnalysisLogger Logger { get; set; }
 
@@ -66,16 +74,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public override bool AnalysisComplete { get; set; }
 
-        public CompilerDataLogger CompilerDataLogger
-        {
-            get
-            {
-                return this.Policy != null
-                    ? this.Policy.GetProperty(SharedCompilerDataLoggerProperty)
-                    : null;
-            }
-            set { this.Policy.SetProperty(SharedCompilerDataLoggerProperty, value); }
-        }
+        public CompilerDataLogger CompilerDataLogger { get; set; }
 
         public bool IgnorePdbLoadError
         {
@@ -109,11 +108,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 this.disposed = true;
             }
         }
-
-        public static PerLanguageOption<CompilerDataLogger> SharedCompilerDataLoggerProperty { get; } =
-            new PerLanguageOption<CompilerDataLogger>(
-                "CompilerTelemetry", nameof(SharedCompilerDataLoggerProperty), defaultValue: () => null,
-                "A shared CompilerDataLogger instance that will be passed to all skimmers.");
 
         public override void Dispose()
         {

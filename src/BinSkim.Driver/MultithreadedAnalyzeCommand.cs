@@ -68,9 +68,9 @@ namespace Microsoft.CodeAnalysis.IL
             base.InitializeGlobalContextFromOptions(options, ref context);
 
             // Update context object based on command-line parameters.
-            context.SymbolPath = options.SymbolsPath;
+            context.SymbolPath = options.SymbolsPath ?? context.SymbolPath;
             context.IgnorePdbLoadError = options.IgnorePdbLoadError != null ? options.IgnorePdbLoadError.Value : context.IgnorePdbLoadError;
-            context.LocalSymbolDirectories = options.LocalSymbolDirectories;
+            context.LocalSymbolDirectories = options.LocalSymbolDirectories ?? context.LocalSymbolDirectories;
             context.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
 
             context.CompilerDataLogger =
