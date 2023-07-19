@@ -26,7 +26,8 @@
 * BUG: Fix `System.InvalidOperationException`: `Sequence contains more than one matching element` when `--trace` is provided. [896](https://github.com/microsoft/binskim/pull/896)
 * BUG: Fix `--trace` missing supported values from SARIF SDK (`ScanTime`, `RuleScanTime`, `PeakWorkingSet`, `TargetsScanned`, `ResultsSummary`). [896](https://github.com/microsoft/binskim/pull/896)
 * NEW: `BA2024.EnableSpectreMitigations` now informs user when a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. [#933](https://github.com/microsoft/binskim/pull/933)
-* NEW: Add `--includeWixBinaries` option to include Wix binaries in the analysis. [#944](https://github.com/microsoft/binskim/pull/944)
+* NEW: Add `IncludeWixBinaries` option when using config file, to include Wix binaries in the analysis. [#944](https://github.com/microsoft/binskim/pull/944)
+* NEW: Support `SymbolPath`, `LocalSymbolDirectories`, `IgnorePdbLoadError` option when using config file, in addtion to passing as command line parameters. [#944](https://github.com/microsoft/binskim/pull/944)
 
 ## **v4.1.0**
 * DEP: Update Sarif.Sdk submodule from [120fae3 to bc8cb57](https://github.com/microsoft/sarif-sdk/compare/120fae3...bc8cb57). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/bc8cb57/ReleaseHistory.md).
