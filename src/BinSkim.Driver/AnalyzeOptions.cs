@@ -52,10 +52,5 @@ namespace Microsoft.CodeAnalysis.IL
             "ignorePdbLoadError",
             HelpText = "If enabled, BinSkim won't break if we have a 'PdbLoadingException'.")]
         public bool? IgnorePdbLoadError { get; set; }
-
-        [Option(
-            "includeWixBinaries",
-            HelpText = "If enabled, BinSkim will include Wix binaries in the analysis.")]
-        public bool? IncludeWixBinaries { get; set; }
     }
 }
