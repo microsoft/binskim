@@ -41,12 +41,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public static PerLanguageOption<string> LocalSymbolDirectories { get; } =
             new PerLanguageOption<string>(
-                "BinaryParsers", nameof(LocalSymbolDirectories), defaultValue: () => null,
+                "BinaryParsers", nameof(LocalSymbolDirectories), defaultValue: () => string.Empty,
                 "A set of semicolon-delimited local directory paths that will be examined when attempting to locate PDBs.");
 
         public static PerLanguageOption<string> SymbolPath { get; } =
             new PerLanguageOption<string>(
-                "BinaryParsers", nameof(SymbolPath), defaultValue: () => null,
+                "BinaryParsers", nameof(SymbolPath), defaultValue: () => string.Empty,
                 "Symbols path value, e.g., Cache*c:\\symbols;SRV*https://msdl.microsoft.com/download/symbols " +
                 "or Cache*d:\\symbols;Srv*https://symweb. See " +
                 "https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/advanced-symsrv-use for " +
