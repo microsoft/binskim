@@ -42,8 +42,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public bool ComprehensiveBinaryParsing
         {
-            get { return this.Policy?.GetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing) == true; }
-            set { this.Policy.SetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing, value); }
+            get => this.Policy?.GetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing) == true;
+            set => this.Policy.SetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing, value);
         }
 
         public bool TracePdbLoads { get; set; }
@@ -77,9 +77,17 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             set { this.Policy.SetProperty(SharedCompilerDataLoggerProperty, value); }
         }
 
-        public bool IgnorePdbLoadError { get; set; }
+        public bool IgnorePdbLoadError
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.IgnorePdbLoadError) == true;
+            set => this.Policy.SetProperty(BinaryParsersProperties.IgnorePdbLoadError, value);
+        }
 
-        public bool IncludeWixBinaries { get; set; }
+        public bool IncludeWixBinaries
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.IncludeWixBinaries) == true;
+            set => this.Policy.SetProperty(BinaryParsersProperties.IncludeWixBinaries, value);
+        }
 
         internal bool disposed = false;
 

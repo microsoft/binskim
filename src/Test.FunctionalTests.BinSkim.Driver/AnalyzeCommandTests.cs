@@ -181,20 +181,22 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
 
             using (new AssertionScope())
             {
-                command.Run(options);
+                var context = new BinaryAnalyzerContext();
+                command.Run(options, ref context);
                 var log = SarifLog.Load(fileName);
                 log.Runs[0].Results.Should().HaveCount(0);
 
-                options.IncludeWixBinaries = true;
-
-                command.Run(options);
+                context.IncludeWixBinaries = true;
+                command.Run(options, ref context);
                 log = SarifLog.Load(fileName);
                 log.Runs[0].Results.Should().HaveCount(1);
 
                 options.TargetFileSpecifiers = new string[] { testPathV4 };
-                options.IncludeWixBinaries = false;
-
-                command.Run(options);
+                context = new BinaryAnalyzerContext
+                {
+                    IncludeWixBinaries = false
+                };
+                command.Run(options, ref context);
                 log = SarifLog.Load(fileName);
                 log.Runs[0].Results.Should().HaveCount(0);
 
@@ -208,9 +210,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                     log.Runs[0].Invocations[0].ToolConfigurationNotifications.All(n => n.Descriptor.Id == "WRN998.UnsupportedPlatform");
                 }
 
-                options.IncludeWixBinaries = true;
-
-                command.Run(options);
+                context.IncludeWixBinaries = true;
+                command.Run(options, ref context);
                 log = SarifLog.Load(fileName);
                 log.Runs[0].Results.Should().HaveCount(0);
 
