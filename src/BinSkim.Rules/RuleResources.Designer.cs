@@ -924,6 +924,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The following modules were compiled with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. The likely cause is that the code was linked to a static library with no debug information: {0}.
+        /// </summary>
+        internal static string BA2024_Warning_SpectreMitigationUnknownNoCommandLine {
+            get {
+                return ResourceManager.GetString("BA2024_Warning_SpectreMitigationUnknownNoCommandLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}&apos; was compiled with one or more modules with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. The likely cause is that the code was linked to a static library with no debug information.  It is not known whether code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities was enabled. Spectre attacks can compromise hardware-based isolation, allowing non-pri [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BA2024_WarningMissingCommandLine {
+            get {
+                return ResourceManager.GetString("BA2024_WarningMissingCommandLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash..
         /// </summary>
         internal static string BA2025_EnableShadowStack_Description {
@@ -1010,6 +1028,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2027_Warning {
             get {
                 return ResourceManager.GetString("BA2027_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Binaries that are loaded by certain Windows features must (and device drivers should) opt into Windows validation of their digital signatures by setting the /INTEGRITYCHECK linker flag. This option sets the IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY attribute in the PE header of binaries which tells the memory manager to validate a binary&apos;s digital signature when loaded. Any user mode code that is interfacing with Early Launch Antimalware (ELAM) drivers, integrates with device firmware execution or is trying  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BA2029_EnableIntegrityCheck_Description {
+            get {
+                return ResourceManager.GetString("BA2029_EnableIntegrityCheck_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was not compiled with /INTEGRITYCHECK and therefore will not have its digital signature validated at load time. Failing to validate binary signatures increases the risk of loading malicious code in low-level, high-privilege execution environments, including subsystems that provide critical security malware protections. To resolve this problem, pass &apos;/INTEGRITYCHECK&apos; on the linker command line and sign your files using the Microsoft Azure Code Signing program..
+        /// </summary>
+        internal static string BA2029_Error {
+            get {
+                return ResourceManager.GetString("BA2029_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with /INTEGRITYCHECK and will therefore have its digital signature validated at load time when executing in sensitive Windows runtime environments..
+        /// </summary>
+        internal static string BA2029_Pass {
+            get {
+                return ResourceManager.GetString("BA2029_Pass", resourceCulture);
             }
         }
         

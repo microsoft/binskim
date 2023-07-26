@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-	 <CoyoteVersion>1.7.8</CoyoteVersion>
+	 <CoyoteVersion>1.7.9</CoyoteVersion>
 	 <PowershellExecutable Condition="'$(OS)'=='Windows_NT'">powershell</PowershellExecutable>
 	 <PowershellExecutable Condition="'$(PowershellExecutable)'==''">pwsh</PowershellExecutable>
 	 <PathSeparator Condition="'$(OS)'=='Windows_NT'">\</PathSeparator>
@@ -16,9 +16,9 @@
 		<PackageReference Include="Microsoft.Coyote" Version="$(CoyoteVersion)" />
 		<PackageReference Include="Microsoft.Coyote.Test" Version="$(CoyoteVersion)" />
 		<PackageReference Include="Microsoft.Coyote.Tool" Version="$(CoyoteVersion)" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-		<PackageReference Include="MSTest.TestAdapter" Version="2.2.9" />
-		<PackageReference Include="MSTest.TestFramework" Version="2.2.9" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
+		<PackageReference Include="MSTest.TestAdapter" Version="3.0.4" />
+		<PackageReference Include="MSTest.TestFramework" Version="3.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>

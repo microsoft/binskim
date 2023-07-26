@@ -45,6 +45,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         protected override IEnumerable<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2024_Warning),
+                    nameof(RuleResources.BA2024_WarningMissingCommandLine),
+                    nameof(RuleResources.BA2024_Warning_SpectreMitigationUnknownNoCommandLine),
                     nameof(RuleResources.BA2024_Warning_OptimizationsDisabled),
                     nameof(RuleResources.BA2024_Warning_SpectreMitigationNotEnabled),
                     nameof(RuleResources.BA2024_Warning_SpectreMitigationExplicitlyDisabled),
@@ -134,6 +136,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Pdb pdb = target.Pdb;
 
             var masmModules = new List<ObjectModuleDetails>();
+            var mitigationUnknownNoCommandLineRaw = new List<ObjectModuleDetails>();
             var mitigationNotEnabledModules = new List<ObjectModuleDetails>();
             var mitigationDisabledInDebugBuild = new List<ObjectModuleDetails>();
             var mitigationExplicitlyDisabledModules = new List<ObjectModuleDetails>();
@@ -176,6 +179,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             // TODO: https://github.com/Microsoft/binskim/issues/114
                             continue;
                         }
+
                         break;
                     }
 
@@ -226,6 +230,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         // TODO: https://github.com/Microsoft/binskim/issues/117
                         // Review unknown languages for this and all checks
                     }
+
                     continue;
                 }
 
@@ -241,6 +246,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // mitigations. We do not report here. BA2006 will fire instead.
                     continue;
                 }
+
+                // If the command line is not embedded in the binary, then just add a
+                // warning for this condition, and there is no point in checking switch states.
+                if (string.IsNullOrWhiteSpace(omDetails.RawCommandLine))
+                {
+                    mitigationUnknownNoCommandLineRaw.Add(omDetails);
+                    continue;
+                }
+
                 string[] mitigationSwitches = new string[] { "/Qspectre", "/Qspectre-load", "/Qspectre-load-cf", "/guardspecload" };
 
                 SwitchState effectiveState;
@@ -308,10 +322,25 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string line;
             var sb = new StringBuilder();
 
+            bool IsOnlyMissingCommandLineWarningPresent = true;
+
+            if (mitigationUnknownNoCommandLineRaw.Count > 0)
+            {
+                // The following modules were compiled with a toolset that supports /Qspectre but a
+                // compiland `RawCommandLine` value is missing and the rule is therefore not able
+                // to determine if `/Qspectre` is specified. The likely cause is that the code
+                // was linked to a static library with no debug information: {0}
+                line = string.Format(
+                RuleResources.BA2024_Warning_SpectreMitigationUnknownNoCommandLine,
+                        mitigationUnknownNoCommandLineRaw.CreateOutputCoalescedByLibrary());
+                sb.AppendLine(line);
+            }
+
             if (mitigationExplicitlyDisabledModules.Count > 0)
             {
-                // The following modules were compiled with Spectre
-                // mitigations explicitly disabled: {0}
+                IsOnlyMissingCommandLineWarningPresent = false;
+
+                // The following modules were compiled with Spectre mitigations explicitly disabled: {0}
                 line = string.Format(
                         RuleResources.BA2024_Warning_SpectreMitigationExplicitlyDisabled,
                         mitigationExplicitlyDisabledModules.CreateOutputCoalescedByLibrary());
@@ -320,6 +349,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (mitigationNotEnabledModules.Count > 0)
             {
+                IsOnlyMissingCommandLineWarningPresent = false;
+
                 // The following modules were compiled with a toolset that supports
                 // /Qspectre but the switch was not enabled on the command-line: {0}
                 line = string.Format(
@@ -330,6 +361,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (mitigationDisabledInDebugBuild.Count > 0)
             {
+                IsOnlyMissingCommandLineWarningPresent = false;
+
                 // The following modules were compiled with optimizations disabled(/ Od),
                 // a condition that disables Spectre mitigations: {0}
                 line = string.Format(
@@ -341,6 +374,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if ((context.Policy.GetProperty(Reporting) & ReportingOptions.WarnIfMasmModulesPresent) == ReportingOptions.WarnIfMasmModulesPresent &&
                 masmModules.Count > 0)
             {
+                IsOnlyMissingCommandLineWarningPresent = false;
+
+                // The following MASM modules were detected. The MASM compiler does not
+                // currently mitigate against speculative execution attacks: {0}
                 line = string.Format(
                         RuleResources.BA2024_Warning_MasmModulesDetected,
                         masmModules.CreateOutputCoalescedByLibrary());
@@ -349,6 +386,31 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (sb.Length > 0)
             {
+                if (IsOnlyMissingCommandLineWarningPresent)
+                {
+                    // {0}' was compiled with one or more modules with a toolset that supports /Qspectre but a
+                    // compiland `RawCommandLine` value is missing and the rule is therefore not able to determine
+                    // if `/Qspectre` is specified. The likely cause is that the code was linked to a static
+                    // library with no debug information.  It is not known whether code generation mitigations
+                    // for speculative execution side-channel attack (Spectre) vulnerabilities was enabled.
+                    // Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to
+                    // retrieve potentially sensitive data from the CPU cache. To resolve the issue, ensure that
+                    // the compiler command line is present (provide the /Z7 switch) and provide the /Qspectre
+                    // switch on the compiler command-line (or specify <SpectreMitigation>Spectre</SpectreMitigation>
+                    // in build properties), or pass /d2guardspecload in cases where your compiler supports this
+                    // switch and it is not possible to update to a toolset that supports /Qspectre. This warning
+                    // should be addressed for code that operates on data that crosses a trust boundary and that
+                    // can affect execution, such as parsing untrusted file inputs or processing query strings
+                    // of a web request.
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
+                            nameof(RuleResources.BA2024_WarningMissingCommandLine),
+                            context.CurrentTarget.Uri.GetFileName(),
+                            sb.ToString()));
+
+                    return;
+                }
+
                 // '{0}' was compiled with one or more modules that do not enable code generation
                 // mitigations for speculative execution side - channel attack(Spectre)
                 // vulnerabilities.Spectre attacks can compromise hardware - based isolation,
@@ -369,7 +431,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            // All linked modules ‘{0}’ were compiled with mitigations enabled that help prevent Spectre (speculative execution side-channel attack) vulnerabilities.
+            // All linked modules ‘{0}’ were compiled with mitigations enabled that help
+            // prevent Spectre (speculative execution side-channel attack) vulnerabilities.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                 nameof(RuleResources.BA2024_Pass),

@@ -33,7 +33,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
-              "Microsoft (R) Optimizing Compiler : c : 19.0.23013.0 : MSVCRTD.lib (_chandler4gs_.obj,_cpu_disp_.obj,_secchk_.obj,checkcfg.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.0.23013.0 : MSVCRTD.lib (_error_.obj,_init_.obj,_initsect_.obj,_pdblkup_.obj,_stack_.obj,_userapi_.obj,argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,denormal_control.obj,exe_wwinmain.obj,file_mode.obj,initializers.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,thread_locale.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_desktop.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : c : 19.0.23013.0 : MSVCRTD.lib [MD5] (_chandler4gs_.obj,_cpu_disp_.obj,_secchk_.obj,checkcfg.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.0.23013.0 : MSVCRTD.lib [MD5] (_error_.obj,_init_.obj,_initsect_.obj,_pdblkup_.obj,_stack_.obj,_userapi_.obj,argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,denormal_control.obj,exe_wwinmain.obj,file_mode.obj,initializers.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,thread_locale.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_desktop.obj)\r\n"
             ]
           },
           "locations": [
@@ -55,7 +55,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
-              "Microsoft (R) Optimizing Compiler : cxx : 19.0.23026.0 : [directly linked] (Native_x86_VS2015_Default.obj,stdafx.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 19.0.23026.0 : [directly linked] [MD5] (Native_x86_VS2015_Default.obj,stdafx.obj)\r\n"
             ]
           },
           "locations": [
@@ -969,6 +969,12 @@
               "messageStrings": {
                 "Warning": {
                   "text": "'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or specify <SpectreMitigation>Spectre</SpectreMitigation> in build properties), or pass /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre. This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.\r\n{1}"
+                },
+                "WarningMissingCommandLine": {
+                  "text": "{0}' was compiled with one or more modules with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. The likely cause is that the code was linked to a static library with no debug information.  It is not known whether code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities was enabled. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, ensure that the compiler command line is present (provide the /Z7 switch) and provide the /Qspectre switch on the compiler command-line (or specify <SpectreMitigation>Spectre</SpectreMitigation> in build properties), or pass /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre. This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request."
+                },
+                "Warning_SpectreMitigationUnknownNoCommandLine": {
+                  "text": "The following modules were compiled with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. The likely cause is that the code was linked to a static library with no debug information: {0}"
                 },
                 "Warning_OptimizationsDisabled": {
                   "text": "The following modules were compiled with optimizations disabled (/Od), a condition that disables Spectre mitigations:\r\n{0}"
