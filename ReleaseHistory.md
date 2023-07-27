@@ -28,6 +28,7 @@
 * BUG: Fix `System.InvalidOperationException`: `Sequence contains more than one matching element` when `--trace` is provided. [896](https://github.com/microsoft/binskim/pull/896)
 * BUG: Fix `--trace` missing supported values from SARIF SDK (`ScanTime`, `RuleScanTime`, `PeakWorkingSet`, `TargetsScanned`, `ResultsSummary`). [896](https://github.com/microsoft/binskim/pull/896)
 * BUG: Temporarily restore command-line option `--hashes` and `--statistics` as obsolete for compatibility reasons. Please do not use them as they will be removed in future releases. [945](https://github.com/microsoft/binskim/pull/945)
+* BUG: Fix `--quiet`, `--recurse`, `--rich-return-code`, `--ignorePdbLoadError` and `--environment` not working without explicitly adding `true`. [946](https://github.com/microsoft/binskim/pull/946)
 * NEW: `BA2024.EnableSpectreMitigations` now informs user when a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. [#933](https://github.com/microsoft/binskim/pull/933)
 * NEW: Add `IncludeWixBinaries` option when using config file, to include Wix binaries in the analysis. [#944](https://github.com/microsoft/binskim/pull/944)
 * NEW: Support `SymbolPath`, `LocalSymbolDirectories`, `IgnorePdbLoadError` option when using config file, in addtion to passing as command line parameters. [#944](https://github.com/microsoft/binskim/pull/944)
