@@ -162,7 +162,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
-        [Trait(TestTraits.WindowsOnly, "true")]
         public void AnalyzeCommand_ComputeFileHashes_Works()
         {
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_ComputeFileHashes_Works.sarif");
