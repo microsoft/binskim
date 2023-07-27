@@ -18,6 +18,8 @@
 ## UNRELEASED
 * DEP: Remove `Microsoft.CodeAnalysis`. [#934](https://github.com/microsoft/binskim/pull/934)
 * DEP: Remove `Microsoft.CodeAnalysis.NetAnalyzers`. [#934](https://github.com/microsoft/binskim/pull/934)
+* DEP: Update `msdia140.dll` from 14.32.31326.0 to 14.36.32532.0. [936](https://github.com/microsoft/binskim/pull/936)
+* DEP: Update `symsrv.dll` from 10.0.10150.0 to 10.0.22621.755. [936](https://github.com/microsoft/binskim/pull/936)
 * DEP: Update `ELFSharp` package from 2.17.1 to 2.17.2. [#930](https://github.com/microsoft/binskim/pull/930)
 * DEP: Update `System.Reflection.Metadata` package from 7.0.0 to 7.0.2. [#930](https://github.com/microsoft/binskim/pull/930)
 * DEP: Update `Newtonsoft.Json` package from 13.0.1 to 13.0.3. [#930](https://github.com/microsoft/binskim/pull/930)
