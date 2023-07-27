@@ -252,17 +252,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 compilandsWithOneOrMoreInsecureFileHashes.Remove(HashType.None);
             }
 
-            string[] messages = new string[compilandsWithOneOrMoreInsecureFileHashes.Count];
-
-            int hashTypeCount = 0;
-            foreach (HashType hashType in compilandsWithOneOrMoreInsecureFileHashes.Keys)
+            if (compilandsWithOneOrMoreInsecureFileHashes.Count > 0)
             {
-                objectModuleDetails = compilandsWithOneOrMoreInsecureFileHashes[hashType];
-                messages[hashTypeCount++] = objectModuleDetails.CreateOutputCoalescedByCompiler(hashType.ToString());
-            }
+                string[] messages = new string[compilandsWithOneOrMoreInsecureFileHashes.Count];
 
-            message = string.Join(Environment.NewLine, messages);
-            GenerateCompilandsAndLog(context, message, failureLevel);
+                int hashTypeCount = 0;
+                foreach (HashType hashType in compilandsWithOneOrMoreInsecureFileHashes.Keys)
+                {
+                    objectModuleDetails = compilandsWithOneOrMoreInsecureFileHashes[hashType];
+                    messages[hashTypeCount++] = objectModuleDetails.CreateOutputCoalescedByCompiler(hashType.ToString());
+                }
+
+                message = string.Join(Environment.NewLine, messages);
+                GenerateCompilandsAndLog(context, message, failureLevel);
+            }
         }
 
         private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, string message, FailureLevel failureLevel)
