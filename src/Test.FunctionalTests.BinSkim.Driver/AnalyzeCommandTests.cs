@@ -161,6 +161,35 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("skipped")).Should().BeGreaterThanOrEqualTo(1);
         }
 
+        [Fact]
+        public void AnalyzeCommand_ComputeFileHashes_Works()
+        {
+            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_ComputeFileHashes_Works.sarif");
+            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "Managed_x64_VS2022_CSharp_Net48_Default.exe");
+
+#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0612 // Type or member is obsolete
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new string[] {
+                    pathDeterminismTest
+                },
+                OutputFilePath = fileName,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                ComputeFileHashes = true,
+                Statistics = true,
+            };
+#pragma warning restore CS0612 // Type or member is obsolete
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            var command = new MultithreadedAnalyzeCommand();
+
+            command.Run(options);
+            var log = SarifLog.Load(fileName);
+
+            log.Runs[0].Artifacts[0].Hashes.Should().HaveCount(3);
+        }
+
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)
         {
             SarifLog sarifLog;
