@@ -80,7 +80,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsWixBinary;
-            if (portableExecutable.IsWixBinary) { return result; }
+            if (!context.IncludeWixBinaries && portableExecutable.IsWixBinary) { return result; }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsILLibraryAssembly;
             if (portableExecutable.IsILLibrary) { return result; }

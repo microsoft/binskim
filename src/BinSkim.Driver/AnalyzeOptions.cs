@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis.IL
         [Option(
             "ignorePdbLoadError",
             HelpText = "If enabled, BinSkim won't break if we have a 'PdbLoadingException'.")]
-        public bool IgnorePdbLoadError { get; set; }
+        public bool? IgnorePdbLoadError { get; set; }
 
         [Option(
             's',

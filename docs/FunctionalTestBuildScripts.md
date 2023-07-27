@@ -218,3 +218,8 @@ The Visual Studio 2022 "empty console application" template, compiled as Debug|x
 ## Sha256SignedUntrustedRoot.exe
 
 The Visual Studio 2022 default executable template, in project property signing tab enable sign the assembly with a test certificate with sha256RSA.
+
+## Wix_4.0.1_VS2022_Bundle.exe
+
+The Visual Studio 2022 "Wix Bundle" template, with one "Wix MSI package" that combines a default C# helloworld console app and a default C++ helloworld console app.
+The default C++ helloworld console app itself will trigger BinSkim rules. Currently BinSkim does not scan files inside the package and the bundle file itself will pass BinSkim rules.

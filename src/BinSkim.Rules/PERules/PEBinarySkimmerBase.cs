@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 PEBinary target = context.PEBinary();
                 return target.PE?.IsPEFile == true
-                    ? this.CanAnalyzePE(target, context.Policy, out reasonForNotAnalyzing)
+                    ? this.CanAnalyzePE(target, context, out reasonForNotAnalyzing)
                     : AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
             else
@@ -23,6 +23,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        public abstract AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing);
+        public abstract AnalysisApplicability CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, out string reasonForNotAnalyzing);
     }
 }

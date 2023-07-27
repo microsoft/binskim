@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             base.Initialize(context);
         }
 
-        public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             // Source Link is supported on the C# compiler and MSVC only.
             if (!target.PE.IsManaged && target.Pdb != null && !target.PE.IsTargetCompiledWithMsvc(target.Pdb))

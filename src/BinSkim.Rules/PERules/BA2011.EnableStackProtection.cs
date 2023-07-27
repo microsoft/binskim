@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.NotApplicable_InvalidMetadata)
                 };
 
-        public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             return StackProtectionUtilities.CommonCanAnalyze(target, out reasonForNotAnalyzing);
         }
