@@ -25,6 +25,7 @@
 * BUG: `BA2004.EnableSecureSourceCodeHashing` now explicitly reports the insecure hash algorithm or that the module has no hash data present (in that circumstance). [#929](https://github.com/microsoft/binskim/pull/929)
 * BUG: Fix `System.InvalidOperationException`: `Sequence contains more than one matching element` when `--trace` is provided. [896](https://github.com/microsoft/binskim/pull/896)
 * BUG: Fix `--trace` missing supported values from SARIF SDK (`ScanTime`, `RuleScanTime`, `PeakWorkingSet`, `TargetsScanned`, `ResultsSummary`). [896](https://github.com/microsoft/binskim/pull/896)
+* BUG: Temporarily restore command-line option `--hashes` and `--statistics` as obsolete for compatibility reasons. Please do not use them as they will be removed in future releases. [945](https://github.com/microsoft/binskim/pull/945)
 * NEW: `BA2024.EnableSpectreMitigations` now informs user when a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. [#933](https://github.com/microsoft/binskim/pull/933)
 
 ## **v4.1.0**

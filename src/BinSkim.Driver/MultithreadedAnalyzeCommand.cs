@@ -200,6 +200,18 @@ namespace Microsoft.CodeAnalysis.IL
                     "Pass 'Current' on the command-line or omit the '-v|--sarif-output-version' argument entirely.");
             }
 
+            // Type or member is obsolete
+#pragma warning disable CS0618
+            if (analyzeOptions.ComputeFileHashes)
+#pragma warning restore CS0618
+            {
+                OptionallyEmittedData dataToInsert = analyzeOptions.DataToInsert.ToFlags();
+                dataToInsert |= OptionallyEmittedData.Hashes;
+
+                analyzeOptions.DataToInsert = Enum.GetValues(typeof(OptionallyEmittedData)).Cast<OptionallyEmittedData>()
+                    .Where(oed => dataToInsert.HasFlag(oed)).ToList();
+            }
+
             int result = 0;
 
             try
