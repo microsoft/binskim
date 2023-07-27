@@ -164,6 +164,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         [Fact]
         public void AnalyzeCommand_ComputeFileHashes_Works()
         {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_ComputeFileHashes_Works.sarif");
             string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "Managed_x64_VS2022_CSharp_Net48_Default.exe");
 
