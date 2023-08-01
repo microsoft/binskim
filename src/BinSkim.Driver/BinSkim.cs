@@ -17,6 +17,7 @@ namespace Microsoft.CodeAnalysis.IL
         private static int Main(string[] args)
         {
             args = EntryPointUtilities.GenerateArguments(args, new FileSystem(), new EnvironmentVariables());
+            args = RewriteArgs(args);
 
             var rewrittenArgs = new List<string>(args);
 
@@ -44,6 +45,56 @@ namespace Microsoft.CodeAnalysis.IL
             return args.Any(arg => validArgs.Contains(arg, StringComparer.OrdinalIgnoreCase))
                 ? richResultCode ? (int)RuntimeConditions.None : 0
                 : richResultCode ? (int)RuntimeConditions.InvalidCommandLineOption : 1;
+        }
+
+        private static string[] RewriteArgs(string[] args)
+        {
+            var rewritten = new List<string>();
+            for (int i = 0; i < args.Length; i++)
+            {
+                rewritten.Add(args[i]);
+                string next =
+                    i + 1 < args.Length
+                        ? args[i + 1]
+                        : null;
+
+                switch (args[i])
+                {
+                    // AnalyzeOptionsBase
+                    case "-q":
+                    case "--quiet":
+                    case "-r":
+                    case "--recurse":
+                    case "-e":
+                    case "--environment":
+                    case "--rich-return-code":
+
+                    // AnalyzeOptions
+                    case "--ignorePdbLoadError":
+                    {
+                        if (!EvaluatesToTrueOrFalse(next))
+                        {
+                            rewritten.Add("True");
+                        }
+
+                        break;
+                    }
+
+                    default:
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return rewritten.ToArray();
+        }
+
+        private static bool EvaluatesToTrueOrFalse(string value)
+        {
+            return value == "True" || value == "False" ||
+                   value == "true" || value == "false" ||
+                   value == "1" || value == "0";
         }
     }
 }
