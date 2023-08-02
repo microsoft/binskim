@@ -16,6 +16,8 @@
 - NEW => new feature 
 
 ## UNRELEASED
+
+## **v4.2.0**
 * DEP: Remove `Microsoft.CodeAnalysis`. [#934](https://github.com/microsoft/binskim/pull/934)
 * DEP: Remove `Microsoft.CodeAnalysis.NetAnalyzers`. [#934](https://github.com/microsoft/binskim/pull/934)
 * DEP: Update `msdia140.dll` from 14.32.31326.0 to 14.36.32532.0. [936](https://github.com/microsoft/binskim/pull/936)
