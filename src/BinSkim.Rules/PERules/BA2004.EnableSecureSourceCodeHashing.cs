@@ -173,21 +173,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                 // assembly, a Win RT API 'metadata' file.
                                 continue;
                             }
-                            else if (pchFileName != string.Empty)
+                            else if (sf.FileName.EndsWith(".pch"))
                             {
-                                // 2. The file used to create a precompiled header using the /Yc switch
-                                // TODO - We need a prepass on the library / final link to determine which file was
-                                //        used to create the pch, as this is the file that will have a HashType.None
-                                // 3. The pch file itself
-                                if (sfName == Path.GetFileName(pchFileName))
-                                {
-                                    continue;
-                                }
-                                // TODO - check this against the filename used to create the pch.  For now just let it pass
-                                else // if(sfName == pchCreationTUFileName)
-                                {
-                                    continue;
-                                }
+                                // Precompiled headers currently does not emit hash.
+                                continue;
                             }
                         }
                     }
