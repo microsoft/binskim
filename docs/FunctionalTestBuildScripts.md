@@ -215,6 +215,10 @@ _Yes_Manual_FORCE_INTEGRITY: `/INTEGRITYCHECK` and then use tool to Manually set
 
 The Visual Studio 2022 "empty console application" template, compiled as Debug|x64.  The `/PDBPageSize:8192` linker option set page size to 8192.
 
+## Native_x64_VS2022_WithPCH_[sha256/sha1].exe
+
+The Visual Studio 2022 default C++ Console template, compiled as Debug|x64. In C++ Precompiled Headers setting, set to /Yc, use file name `apch.h` and set output file to `$(IntDir)renamedapch.pch`.
+
 ## Sha256SignedUntrustedRoot.exe
 
 The Visual Studio 2022 default executable template, in project property signing tab enable sign the assembly with a test certificate with sha256RSA.
