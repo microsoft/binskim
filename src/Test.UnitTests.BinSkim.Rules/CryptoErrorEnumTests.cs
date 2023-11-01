@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             IEnumerable<CryptoError> enumValues = Enum.GetValues(typeof(CryptoError)).Cast<CryptoError>();
             Dictionary<CryptoError, string> dictionaryValues = RulesExtensionMethods.BuildCryptoErrorDescriptions();
             var missingValues = enumValues.Where(value => !dictionaryValues.ContainsKey(value)).ToList();
-            missingValues.Should().HaveCount(0, "BuildCryptoErrorDescriptions() should contain all cases from CryptoError.");
+            missingValues.Should().HaveCount(0, "BuildCryptoErrorDescriptions() should contain all cases from CryptoError enum.");
         }
     }
 }
