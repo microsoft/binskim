@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 
+[assembly: InternalsVisibleToAttribute("Test.UnitTests.BinSkim.Rules")]
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     public static class RulesExtensionMethods
@@ -130,7 +132,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static readonly Dictionary<CryptoError, string> s_cryptoErrorToDescriptionMap = BuildCryptoErrorDescriptions();
 
-        public static Dictionary<CryptoError, string> BuildCryptoErrorDescriptions()
+        internal static Dictionary<CryptoError, string> BuildCryptoErrorDescriptions()
         {
             var result = new Dictionary<CryptoError, string>()
             {
