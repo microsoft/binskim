@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     /// </summary>
     public enum CryptoError : uint
     {
-        // Whenever this file is refreshed,
+        // Whenever this file is modified,
         // RulesExtensionMethods.BuildCryptoErrorDescriptions() must be updated accordingly.
         ERROR_SUCCESS = 0,
         CERT_E_CHAINING = 0x800B010A, // A certificate chain could not be built to a trusted root authority.
