@@ -20,6 +20,11 @@
   </ItemGroup>
     
   <ItemGroup>
+    <Compile Update="EnvironmentResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EnvironmentResources.resx</DependentUpon>
+    </Compile>
     <Compile Update="SdkResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -28,6 +33,10 @@
   </ItemGroup>
   
   <ItemGroup>
+    <EmbeddedResource Update="EnvironmentResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EnvironmentResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="SdkResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SdkResources.Designer.cs</LastGenOutput>

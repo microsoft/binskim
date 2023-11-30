@@ -34,6 +34,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 "BinaryParsers", nameof(IgnorePdbLoadError), defaultValue: () => false,
                 "Set this value to 'true' to don't break if we have a 'PdbLoadingException'.");
 
+        public static PerLanguageOption<bool> DisableTelemetry { get; } =
+            new PerLanguageOption<bool>(
+                "BinaryParsers", nameof(DisableTelemetry), defaultValue: () => false,
+                "Set this value to 'true' to disable telemetry.");
+
         public static PerLanguageOption<bool> IncludeWixBinaries { get; } =
             new PerLanguageOption<bool>(
                 "BinaryParsers", nameof(IncludeWixBinaries), defaultValue: () => false,

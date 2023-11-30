@@ -124,6 +124,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 return "InstrumentationKey=" + appInsightsKey;
             }
 
+            // Fall back to DefaultTelemetryConnectionString.
+            string defaultTelemetryConnectionString = EnvironmentResources.DefaultTelemetryConnectionString;
+            if (!string.IsNullOrWhiteSpace(defaultTelemetryConnectionString))
+            {
+                return defaultTelemetryConnectionString;
+            }
+
             return null;
         }
 
