@@ -17,6 +17,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 ComprehensiveBinaryParsing,
                 IgnorePdbLoadError,
+                DisableTelemetry,
                 IncludeWixBinaries,
                 LocalSymbolDirectories,
                 SymbolPath
