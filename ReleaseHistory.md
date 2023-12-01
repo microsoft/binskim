@@ -16,6 +16,7 @@
 - NEW => new feature 
 
 ## UNRELEASED
+* NEW: Add `--disable-telemetry` argument to disable telemetry collection.
 
 ## **v4.2.1**
 * FPS: `BA2004.EnableSecureSourceCodeHashing` now will no longer generate false positives on precompiled headers, they are always without hash. [#965](https://github.com/microsoft/binskim/pull/965)
