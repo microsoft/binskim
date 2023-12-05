@@ -38,17 +38,25 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             get => this.Binary?.Valid == true;
         }
 
-        public string LocalSymbolDirectories { get; set; }
+        public string LocalSymbolDirectories
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.LocalSymbolDirectories);
+            set => this.Policy.SetProperty(BinaryParsersProperties.LocalSymbolDirectories, value);
+        }
 
         public bool ComprehensiveBinaryParsing
         {
-            get { return this.Policy?.GetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing) == true; }
-            set { this.Policy.SetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing, value); }
+            get => this.Policy?.GetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing) == true;
+            set => this.Policy.SetProperty(BinaryParsersProperties.ComprehensiveBinaryParsing, value);
         }
 
         public bool TracePdbLoads { get; set; }
 
-        public string SymbolPath { get; set; }
+        public string SymbolPath
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.SymbolPath);
+            set => this.Policy.SetProperty(BinaryParsersProperties.SymbolPath, value);
+        }
 
         public override IAnalysisLogger Logger { get; set; }
 
@@ -66,18 +74,19 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public override bool AnalysisComplete { get; set; }
 
-        public CompilerDataLogger CompilerDataLogger
+        public CompilerDataLogger CompilerDataLogger { get; set; }
+
+        public bool IgnorePdbLoadError
         {
-            get
-            {
-                return this.Policy != null
-                    ? this.Policy.GetProperty(SharedCompilerDataLoggerProperty)
-                    : null;
-            }
-            set { this.Policy.SetProperty(SharedCompilerDataLoggerProperty, value); }
+            get => this.Policy?.GetProperty(BinaryParsersProperties.IgnorePdbLoadError) == true;
+            set => this.Policy.SetProperty(BinaryParsersProperties.IgnorePdbLoadError, value);
         }
 
-        public bool IgnorePdbLoadError { get; set; }
+        public bool IncludeWixBinaries
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.IncludeWixBinaries) == true;
+            set => this.Policy.SetProperty(BinaryParsersProperties.IncludeWixBinaries, value);
+        }
 
         internal bool disposed = false;
 
@@ -99,11 +108,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 this.disposed = true;
             }
         }
-
-        public static PerLanguageOption<CompilerDataLogger> SharedCompilerDataLoggerProperty { get; } =
-            new PerLanguageOption<CompilerDataLogger>(
-                "CompilerTelemetry", nameof(SharedCompilerDataLoggerProperty), defaultValue: () => null,
-                "A shared CompilerDataLogger instance that will be passed to all skimmers.");
 
         public override void Dispose()
         {

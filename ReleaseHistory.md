@@ -16,8 +16,15 @@
 - NEW => new feature 
 
 ## UNRELEASED
+
+## **v4.2.1**
+* FPS: `BA2004.EnableSecureSourceCodeHashing` now will no longer generate false positives on precompiled headers, they are always without hash. [#965](https://github.com/microsoft/binskim/pull/965)
+
+## **v4.2.0**
 * DEP: Remove `Microsoft.CodeAnalysis`. [#934](https://github.com/microsoft/binskim/pull/934)
 * DEP: Remove `Microsoft.CodeAnalysis.NetAnalyzers`. [#934](https://github.com/microsoft/binskim/pull/934)
+* DEP: Update `msdia140.dll` from 14.32.31326.0 to 14.36.32532.0. [936](https://github.com/microsoft/binskim/pull/936)
+* DEP: Update `symsrv.dll` from 10.0.10150.0 to 10.0.22621.755. [936](https://github.com/microsoft/binskim/pull/936)
 * DEP: Update `ELFSharp` package from 2.17.1 to 2.17.2. [#930](https://github.com/microsoft/binskim/pull/930)
 * DEP: Update `System.Reflection.Metadata` package from 7.0.0 to 7.0.2. [#930](https://github.com/microsoft/binskim/pull/930)
 * DEP: Update `Newtonsoft.Json` package from 13.0.1 to 13.0.3. [#930](https://github.com/microsoft/binskim/pull/930)
@@ -26,7 +33,11 @@
 * BUG: `BA2004.EnableSecureSourceCodeHashing` now explicitly reports the insecure hash algorithm or that the module has no hash data present (in that circumstance). [#929](https://github.com/microsoft/binskim/pull/929)
 * BUG: Fix `System.InvalidOperationException`: `Sequence contains more than one matching element` when `--trace` is provided. [896](https://github.com/microsoft/binskim/pull/896)
 * BUG: Fix `--trace` missing supported values from SARIF SDK (`ScanTime`, `RuleScanTime`, `PeakWorkingSet`, `TargetsScanned`, `ResultsSummary`). [896](https://github.com/microsoft/binskim/pull/896)
+* BUG: Temporarily restore command-line option `--hashes` and `--statistics` as obsolete for compatibility reasons. Please do not use them as they will be removed in future releases. [945](https://github.com/microsoft/binskim/pull/945)
+* BUG: Fix `--quiet`, `--recurse`, `--rich-return-code`, `--ignorePdbLoadError` and `--environment` not working without explicitly adding `true`. [946](https://github.com/microsoft/binskim/pull/946)
 * NEW: `BA2024.EnableSpectreMitigations` now informs user when a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. [#933](https://github.com/microsoft/binskim/pull/933)
+* NEW: Add `IncludeWixBinaries` option when using config file, to include Wix binaries in the analysis. [#944](https://github.com/microsoft/binskim/pull/944)
+* NEW: Support `SymbolPath`, `LocalSymbolDirectories`, `IgnorePdbLoadError` option when using config file, in addtion to passing as command line parameters. [#944](https://github.com/microsoft/binskim/pull/944)
 
 ## **v4.1.0**
 * DEP: Update Sarif.Sdk submodule from [120fae3 to bc8cb57](https://github.com/microsoft/sarif-sdk/compare/120fae3...bc8cb57). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/bc8cb57/ReleaseHistory.md).

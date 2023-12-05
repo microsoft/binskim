@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public const uint IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY = 0x0080;
 
-        public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
             AnalysisApplicability notApplicable = AnalysisApplicability.NotApplicableToSpecifiedTarget;

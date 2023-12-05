@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 using FluentAssertions;
+using FluentAssertions.Execution;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL;
@@ -159,6 +161,102 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
 
             log.Runs[0].Invocations[0].ToolExecutionNotifications.Should().BeNull();
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("skipped")).Should().BeGreaterThanOrEqualTo(1);
+        }
+
+        [Fact]
+        public void AnalyzeCommand_ComputeFileHashes_Works()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_ComputeFileHashes_Works.sarif");
+            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "Managed_x64_VS2022_CSharp_Net48_Default.exe");
+
+#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0612 // Type or member is obsolete
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new string[] {
+                    pathDeterminismTest
+                },
+                OutputFilePath = fileName,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                ComputeFileHashes = true,
+                Statistics = true,
+            };
+#pragma warning restore CS0612 // Type or member is obsolete
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            var command = new MultithreadedAnalyzeCommand();
+
+            command.Run(options);
+            var log = SarifLog.Load(fileName);
+
+            log.Runs[0].Artifacts[0].Hashes.Should().HaveCount(3);
+        }
+
+        [Fact]
+        public void AnalyzeCommand_IncludeWixBinariesTest()
+        {
+            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_IncludeWixBinariesTest.sarif");
+            string testPathV3 = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
+            string testPathV4 = Path.Combine(PEBinaryTests.TestData, "PE", "Wix_4.0.1_VS2022_Bundle.exe");
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new string[] {
+                    testPathV3
+                },
+                OutputFilePath = fileName,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+            };
+            var command = new MultithreadedAnalyzeCommand();
+
+            using (new AssertionScope())
+            {
+                var context = new BinaryAnalyzerContext();
+                command.Run(options, ref context);
+                var log = SarifLog.Load(fileName);
+                log.Runs[0].Results.Should().HaveCount(0);
+
+                context.IncludeWixBinaries = true;
+                command.Run(options, ref context);
+                log = SarifLog.Load(fileName);
+                log.Runs[0].Results.Should().HaveCount(1);
+
+                options.TargetFileSpecifiers = new string[] { testPathV4 };
+                context = new BinaryAnalyzerContext
+                {
+                    IncludeWixBinaries = false
+                };
+                command.Run(options, ref context);
+                log = SarifLog.Load(fileName);
+                log.Runs[0].Results.Should().HaveCount(0);
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().BeNull();
+                }
+                else
+                {
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().HaveCountGreaterThan(1);
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.All(n => n.Descriptor.Id == "WRN998.UnsupportedPlatform");
+                }
+
+                context.IncludeWixBinaries = true;
+                command.Run(options, ref context);
+                log = SarifLog.Load(fileName);
+                log.Runs[0].Results.Should().HaveCount(0);
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().HaveCount(1);
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.All(n => n.Descriptor.Id == "ERR997.ExceptionLoadingPdb");
+                }
+                else
+                {
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().HaveCountGreaterThan(1);
+                    log.Runs[0].Invocations[0].ToolConfigurationNotifications.All(n => n.Descriptor.Id == "WRN998.UnsupportedPlatform");
+                }
+            }
         }
 
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)

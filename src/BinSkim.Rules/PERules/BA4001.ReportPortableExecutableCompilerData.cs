@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        public override AnalysisApplicability CanAnalyzePE(PEBinary target, PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;

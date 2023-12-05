@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
-        public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
@@ -173,21 +173,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                 // assembly, a Win RT API 'metadata' file.
                                 continue;
                             }
-                            else if (pchFileName != string.Empty)
+                            else if (sf.FileName.EndsWith(".pch"))
                             {
-                                // 2. The file used to create a precompiled header using the /Yc switch
-                                // TODO - We need a prepass on the library / final link to determine which file was
-                                //        used to create the pch, as this is the file that will have a HashType.None
-                                // 3. The pch file itself
-                                if (sfName == Path.GetFileName(pchFileName))
-                                {
-                                    continue;
-                                }
-                                // TODO - check this against the filename used to create the pch.  For now just let it pass
-                                else // if(sfName == pchCreationTUFileName)
-                                {
-                                    continue;
-                                }
+                                // Precompiled headers currently does not emit hash.
+                                continue;
                             }
                         }
                     }
@@ -252,17 +241,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 compilandsWithOneOrMoreInsecureFileHashes.Remove(HashType.None);
             }
 
-            string[] messages = new string[compilandsWithOneOrMoreInsecureFileHashes.Count];
-
-            int hashTypeCount = 0;
-            foreach (HashType hashType in compilandsWithOneOrMoreInsecureFileHashes.Keys)
+            if (compilandsWithOneOrMoreInsecureFileHashes.Count > 0)
             {
-                objectModuleDetails = compilandsWithOneOrMoreInsecureFileHashes[hashType];
-                messages[hashTypeCount++] = objectModuleDetails.CreateOutputCoalescedByCompiler(hashType.ToString());
-            }
+                string[] messages = new string[compilandsWithOneOrMoreInsecureFileHashes.Count];
 
-            message = string.Join(Environment.NewLine, messages);
-            GenerateCompilandsAndLog(context, message, failureLevel);
+                int hashTypeCount = 0;
+                foreach (HashType hashType in compilandsWithOneOrMoreInsecureFileHashes.Keys)
+                {
+                    objectModuleDetails = compilandsWithOneOrMoreInsecureFileHashes[hashType];
+                    messages[hashTypeCount++] = objectModuleDetails.CreateOutputCoalescedByCompiler(hashType.ToString());
+                }
+
+                message = string.Join(Environment.NewLine, messages);
+                GenerateCompilandsAndLog(context, message, failureLevel);
+            }
         }
 
         private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, string message, FailureLevel failureLevel)

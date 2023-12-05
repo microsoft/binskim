@@ -65,7 +65,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public const uint IMAGE_GUARD_CF_CHECKS =
             IMAGE_GUARD_CF_INSTRUMENTED | IMAGE_GUARD_CF_FUNCTION_TABLE_PRESENT;
 
-        public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -85,7 +85,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             reasonForNotAnalyzing = MetadataConditions.ImageIsBootBinary;
             if (portableExecutable.IsBoot) { return result; }
 
-            Version minimumRequiredLinkerVersion = policy.GetProperty(MinimumRequiredLinkerVersion);
+            Version minimumRequiredLinkerVersion = context.Policy.GetProperty(MinimumRequiredLinkerVersion);
 
             if (portableExecutable.LinkerVersion < minimumRequiredLinkerVersion)
             {
@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsWixBinary;
-            if (portableExecutable.IsWixBinary) { return result; }
+            if (!context.IncludeWixBinaries && portableExecutable.IsWixBinary) { return result; }
 
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;

@@ -68,9 +68,9 @@ namespace Microsoft.CodeAnalysis.IL
             base.InitializeGlobalContextFromOptions(options, ref context);
 
             // Update context object based on command-line parameters.
-            context.SymbolPath = options.SymbolsPath;
-            context.IgnorePdbLoadError = options.IgnorePdbLoadError;
-            context.LocalSymbolDirectories = options.LocalSymbolDirectories;
+            context.SymbolPath = options.SymbolsPath ?? context.SymbolPath;
+            context.IgnorePdbLoadError = options.IgnorePdbLoadError != null ? options.IgnorePdbLoadError.Value : context.IgnorePdbLoadError;
+            context.LocalSymbolDirectories = options.LocalSymbolDirectories ?? context.LocalSymbolDirectories;
             context.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
 
             context.CompilerDataLogger =
@@ -101,6 +101,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             scanTargetContext.CompilerDataLogger = context.CompilerDataLogger;
             scanTargetContext.SymbolPath = context.SymbolPath;
+            scanTargetContext.IncludeWixBinaries = context.IncludeWixBinaries;
             scanTargetContext.IgnorePdbLoadError = context.IgnorePdbLoadError;
             scanTargetContext.LocalSymbolDirectories = context.LocalSymbolDirectories;
             scanTargetContext.TracePdbLoads = context.TracePdbLoads;
@@ -198,6 +199,18 @@ namespace Microsoft.CodeAnalysis.IL
                 throw new InvalidOperationException(
                     "BinSkim no longer supports emitting SARIF 1.0 (an obsolete format). " +
                     "Pass 'Current' on the command-line or omit the '-v|--sarif-output-version' argument entirely.");
+            }
+
+            // Type or member is obsolete
+#pragma warning disable CS0618
+            if (analyzeOptions.ComputeFileHashes)
+#pragma warning restore CS0618
+            {
+                OptionallyEmittedData dataToInsert = analyzeOptions.DataToInsert.ToFlags();
+                dataToInsert |= OptionallyEmittedData.Hashes;
+
+                analyzeOptions.DataToInsert = Enum.GetValues(typeof(OptionallyEmittedData)).Cast<OptionallyEmittedData>()
+                    .Where(oed => dataToInsert.HasFlag(oed)).ToList();
             }
 
             int result = 0;
