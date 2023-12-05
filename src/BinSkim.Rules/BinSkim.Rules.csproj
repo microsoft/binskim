@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="dia2lib">
+    <Reference Include="Dia2Lib">
       <HintPath>..\..\refs\Dia2Lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
