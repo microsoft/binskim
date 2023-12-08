@@ -14,10 +14,10 @@
 - UEE => eliminate unhandled exceptions in engine
 - DEP => upgrade dependency versions
 - NEW => new feature 
-
 ## UNRELEASED
 * DEP: Update `Sarif.Sdk` submodule from [bc8cb57 to fd6e615](https://github.com/microsoft/sarif-sdk/compare/bc8cb57...fd6e615). Reference [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/fd6e615/ReleaseHistory.md).
 * NEW: Add `--disable-telemetry` argument to disable telemetry collection.
+* BUG: Fix `ERR998.ExceptionInAnalyze`: `InvalidOperationException: Unrecognized crypto HRESULT: 0x80096011` for check `BA2022.SignSecurely` when the signature is malformed, by adding missing error code to error description mappings. [969](https://github.com/microsoft/binskim/pull/969)
 
 ## **v4.2.1**
 * FPS: `BA2004.EnableSecureSourceCodeHashing` now will no longer generate false positives on precompiled headers, they are always without hash. [#965](https://github.com/microsoft/binskim/pull/965)
