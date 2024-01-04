@@ -14,8 +14,12 @@
 - UEE => eliminate unhandled exceptions in engine
 - DEP => upgrade dependency versions
 - NEW => new feature 
-
 ## UNRELEASED
+* DEP: Update `Sarif.Sdk` submodule from [bc8cb57 to fd6e615](https://github.com/microsoft/sarif-sdk/compare/bc8cb57...fd6e615). Reference [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/fd6e615/ReleaseHistory.md).
+* BUG: Fix `ERR998.ExceptionInAnalyze`: `InvalidOperationException: Unrecognized crypto HRESULT: 0x80096011` for check `BA2022.SignSecurely` when the signature is malformed, by adding missing error code to error description mappings. [969](https://github.com/microsoft/binskim/pull/969)
+
+## **v4.2.1**
+* FPS: `BA2004.EnableSecureSourceCodeHashing` now will no longer generate false positives on precompiled headers, they are always without hash. [#965](https://github.com/microsoft/binskim/pull/965)
 
 ## **v4.2.0**
 * DEP: Remove `Microsoft.CodeAnalysis`. [#934](https://github.com/microsoft/binskim/pull/934)
@@ -36,7 +40,7 @@
 * NEW: Support `SymbolPath`, `LocalSymbolDirectories`, `IgnorePdbLoadError` option when using config file, in addtion to passing as command line parameters. [#944](https://github.com/microsoft/binskim/pull/944)
 
 ## **v4.1.0**
-* DEP: Update Sarif.Sdk submodule from [120fae3 to bc8cb57](https://github.com/microsoft/sarif-sdk/compare/120fae3...bc8cb57). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/bc8cb57/ReleaseHistory.md).
+* DEP: Update `Sarif.Sdk` submodule from [120fae3 to bc8cb57](https://github.com/microsoft/sarif-sdk/compare/120fae3...bc8cb57). Reference [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/bc8cb57/ReleaseHistory.md).
 * DEP: Upgrade ELFSharp from 2.16.1 to 2.17.1. [#872](https://github.com/microsoft/binskim/pull/872)
 * BRK: Remove `--verbose` command-line option (in favor of `--level` and `--kind`). [#853](https://github.com/microsoft/binskim/pull/853)
 * BRK: Remove `--hashes` command-line option (in favor of `--insert Hashes`). [#853](https://github.com/microsoft/binskim/pull/853)
@@ -50,7 +54,7 @@
 * NEW: `CompilerInformation` telemetry now emits the last modified date of the PDB associated with the analyzed binary. [#871](https://github.com/microsoft/binskim/pull/871)
 
 ## **v4.0.0**
-* DEP: Update Sarif.Sdk submodule from [fc9a9df to 2d52c53](https://github.com/microsoft/sarif-sdk/compare/fc9a9df...2d52c53). Full [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/2d52c53/ReleaseHistory.md).
+* DEP: Update `Sarif.Sdk` submodule from [fc9a9df to 2d52c53](https://github.com/microsoft/sarif-sdk/compare/fc9a9df...2d52c53). Reference [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/2d52c53/ReleaseHistory.md).
 * DEP: Upgrade `Elfsharp.2.16.0` to `Elfsharp.2.16.1`[#791](https://github.com/microsoft/binskim/pull/791)
 * DEP: Upgrade BinSkim to .net6.0 as .net core 3.1 reached end of support on 12/13/2022.
 * DEP: Upgrade `Newtonsoft.JSON` package to 13.0.2 to resolve security alert.
@@ -75,7 +79,7 @@
 ## **v1.9.5** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/1.9.5)
 * DEP: Upgrade ELFSharp from 2.14.0 to 2.15.0. [#631](https://github.com/microsoft/binskim/pull/631)
 * DEP: Upgrade System.Reflection.Metadata from 5.0.0 to 6.0.1 and System.Collections.Immutable from 5.0.0 to 6.0.0. [#605](https://github.com/microsoft/binskim/pull/605)
-* DEP: Upgrade Sarif.Sdk by updating submodule from [4e9f606 to fc9a9df](https://github.com/microsoft/sarif-sdk/compare/4e9f606bb0e88428866e253352cdc70dc68f98cb...fc9a9dfb865096b5aaa9fa3651854670940f7459). [#638](https://github.com/microsoft/binskim/pull/638)
+* DEP: Update `Sarif.Sdk` submodule from [4e9f606 to fc9a9df](https://github.com/microsoft/sarif-sdk/compare/4e9f606...fc9a9df). Reference [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/fc9a9df/ReleaseHistory.md).
 * NEW: Enable BinSkim for MacOS. [#576](https://github.com/microsoft/binskim/pull/576)
 * FPR: Skip `BA2025.EnableShadowStack` rule for ARM Binaries which cannot use `/CETCOMPAT`. [#650](https://github.com/microsoft/binskim/pull/650)
 * BUG: Fix missing `commandLineId` from `CommandLineInformation` event. [#652](https://github.com/microsoft/binskim/pull/652)
