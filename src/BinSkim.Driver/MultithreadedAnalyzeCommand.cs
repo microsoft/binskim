@@ -70,6 +70,7 @@ namespace Microsoft.CodeAnalysis.IL
             // Update context object based on command-line parameters.
             context.SymbolPath = options.SymbolsPath ?? context.SymbolPath;
             context.IgnorePdbLoadError = options.IgnorePdbLoadError != null ? options.IgnorePdbLoadError.Value : context.IgnorePdbLoadError;
+            context.DisableTelemetry = options.DisableTelemetry != null ? options.DisableTelemetry.Value : context.DisableTelemetry;
             context.LocalSymbolDirectories = options.LocalSymbolDirectories ?? context.LocalSymbolDirectories;
             context.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
 
@@ -172,6 +173,11 @@ namespace Microsoft.CodeAnalysis.IL
         {
             Stopwatch stopwatch = null;
 
+            if (analyzeOptions.DisableTelemetry == true)
+            {
+                this.Telemetry = null;
+            }
+
             if (analyzeOptions.Trace.Where(s => s == nameof(DefaultTraces.ScanTime)).Any())
             {
                 stopwatch = Stopwatch.StartNew();
@@ -243,6 +249,6 @@ namespace Microsoft.CodeAnalysis.IL
 
         internal Sarif.SarifVersion UnitTestOutputVersion { get; set; }
 
-        private Sdk.Telemetry Telemetry { get; }
+        private Sdk.Telemetry Telemetry { get; set; }
     }
 }

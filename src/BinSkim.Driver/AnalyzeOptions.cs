@@ -54,6 +54,11 @@ namespace Microsoft.CodeAnalysis.IL
         public bool? IgnorePdbLoadError { get; set; }
 
         [Option(
+            "disable-telemetry",
+            HelpText = "If enabled, BinSkim will disable telemetry.")]
+        public bool? DisableTelemetry { get; set; }
+
+        [Option(
             's',
             "statistics",
             HelpText = "Generate timing and other statistics for analysis session.")]
