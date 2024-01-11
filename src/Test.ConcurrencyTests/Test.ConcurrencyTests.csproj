@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-	 <CoyoteVersion>1.7.9</CoyoteVersion>
+	 <CoyoteVersion>1.7.10</CoyoteVersion>
 	 <PowershellExecutable Condition="'$(OS)'=='Windows_NT'">powershell</PowershellExecutable>
 	 <PowershellExecutable Condition="'$(PowershellExecutable)'==''">pwsh</PowershellExecutable>
 	 <PathSeparator Condition="'$(OS)'=='Windows_NT'">\</PathSeparator>
