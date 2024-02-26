@@ -17,6 +17,7 @@
 ## UNRELEASED
 * DEP: Update `Sarif.Sdk` submodule from [bc8cb57 to fd6e615](https://github.com/microsoft/sarif-sdk/compare/bc8cb57...fd6e615). Reference [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/fd6e615/ReleaseHistory.md).
 * NEW: Add `--disable-telemetry` argument to disable telemetry collection.
+* FPS: `BA2004.EnableSecureSourceCodeHashing` now will no longer generate false positives for UWP App regarding `dummy.obj`. [#976](https://github.com/microsoft/binskim/pull/976)
 * BUG: Fix `ERR998.ExceptionInAnalyze`: `InvalidOperationException: Unrecognized crypto HRESULT: 0x80096011` for check `BA2022.SignSecurely` when the signature is malformed, by adding missing error code to error description mappings. [969](https://github.com/microsoft/binskim/pull/969)
 
 ## **v4.2.1**
