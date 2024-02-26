@@ -303,7 +303,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        internal static bool IsLikelyUwpDummyObj(Language language, string library, string name) => 
+        internal static bool IsLikelyUwpDummyObj(Language language, string library, string name) =>
             language == Language.MASM && library?.Equals(name) == true && library == @"c:\dummy.obj";
     }
 }
