@@ -124,6 +124,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
+                if (IsLikelyUwpDummyObj(omDetails.Language, omDetails.Library, omDetails.Name))
+                {
+                    continue;
+                }
+
                 bool isMsvc = (omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftC ||
                                omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftCxx);
 
@@ -297,5 +302,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 //                RequiredCompilerWarnings,
             }.ToImmutableArray();
         }
+
+        internal static bool IsLikelyUwpDummyObj(Language language, string library, string name) =>
+            language == Language.MASM &&
+            library != null &&
+            library.Equals(name, StringComparison.Ordinal) &&
+            library.Equals(@"c:\dummy.obj", StringComparison.Ordinal);
     }
 }
