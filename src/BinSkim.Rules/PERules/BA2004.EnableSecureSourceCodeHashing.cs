@@ -304,6 +304,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         internal static bool IsLikelyUwpDummyObj(Language language, string library, string name) =>
-            language == Language.MASM && library?.Equals(name) == true && library == @"c:\dummy.obj";
+            language == Language.MASM &&
+            library != null &&
+            library.Equals(name, StringComparison.Ordinal) &&
+            library.Equals(@"c:\dummy.obj", StringComparison.Ordinal);
     }
 }
