@@ -111,7 +111,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
 
             WindowsBinaryAndPdbSkimmerBase.s_PdbExceptions.Clear();
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_DeterminismTest.sarif");
-            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "Determinism", "*.dll");
+            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "Determinism", "*.exe");
             var options = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[] {
