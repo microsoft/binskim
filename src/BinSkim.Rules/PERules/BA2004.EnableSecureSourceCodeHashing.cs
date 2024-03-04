@@ -25,6 +25,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// BA2004
         /// </summary>
         public const string MSVCPredefinedTypesFileName = "predefined C++ types (compiler internal)";
+        public const string MSVCCliAttributeTypesFileName = "CLI attribute types (compiler internal)";
+        public const string MSVCStandardApplicationFrameworkFileName = "stdafx.obj";
+        public const string AssemblyAttributesObjFileName = "AssemblyAttributes.obj";
+        public const string AssemblyInfoObjFileName = "AssemblyInfo.obj";
+
 
         public override string Id => RuleIds.EnableSecureSourceCodeHashing;
 
@@ -124,6 +129,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
+                if (omDetails.Name.EndsWith(MSVCStandardApplicationFrameworkFileName) ||
+                    omDetails.Name.EndsWith(AssemblyAttributesObjFileName) ||
+                    omDetails.Name.EndsWith(AssemblyInfoObjFileName))
+                {
+                    continue;
+                }
+
                 bool isMsvc = (omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftC ||
                                omDetails.WellKnownCompiler == WellKnownCompilers.MicrosoftCxx);
 
@@ -162,8 +174,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                             string sfName = Path.GetFileName(sf.FileName);
 
-                            // 1. Some compiler injected code that is listed as being in "predefined C++ types (compiler internal)"
-                            if (sfName == MSVCPredefinedTypesFileName)
+                            // 1. Some compiler injected code that is listed as being in
+                            // "predefined C++ types (compiler internal)" or "CLI attribute types(compiler internal)".
+                            if (sfName == MSVCPredefinedTypesFileName || sfName == MSVCCliAttributeTypesFileName)
                             {
                                 continue;
                             }

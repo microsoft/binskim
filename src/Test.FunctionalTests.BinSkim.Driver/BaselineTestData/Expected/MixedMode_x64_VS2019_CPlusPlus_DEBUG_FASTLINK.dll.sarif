@@ -72,27 +72,6 @@
         {
           "ruleId": "BA2004",
           "ruleIndex": 2,
-          "message": {
-            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
-            "arguments": [
-              "MixedMode_x64_VS2019_CPlusPlus_DEBUG_FASTLINK.dll",
-              "Microsoft (R) Optimizing Compiler : cxx : 19.29.30133.0 : [directly linked] [No hash value present] (.NETFramework,Version=v4.0.AssemblyAttributes.obj)\r\n"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2019_CPlusPlus_DEBUG_FASTLINK.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2004",
-          "ruleIndex": 2,
           "level": "error",
           "message": {
             "id": "Error_NativeWithInsecureDirectCompilands",
