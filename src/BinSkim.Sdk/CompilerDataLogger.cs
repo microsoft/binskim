@@ -109,9 +109,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             this.symbolPath = context.SymbolPath;
             this.telemetryClient = telemetry?.TelemetryClient;
 
-            bool forceOverwrite = context.ForceOverwrite;
-            string csvFilePath = context.Policy.GetProperty(CsvOutputPath);
-            CreateCsvOutputFile(csvFilePath, forceOverwrite);
+            if (!context.DisableTelemetry)
+            {
+                bool forceOverwrite = context.ForceOverwrite;
+                string csvFilePath = context.Policy.GetProperty(CsvOutputPath);
+                CreateCsvOutputFile(csvFilePath, forceOverwrite);
+            }
 
             // If the user has configured compiler telemetry collection, then we require analysis results
             // are persisted to a disk-based log file (to produce the telemetry 'summary' data persisted
