@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -21,6 +20,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// BA2027
         /// </summary>
         public override string Id => RuleIds.EnableSourceLink;
+
+        public override bool LogPdbLoadException => false;
 
         /// <summary>
         /// Enable SourceLink.
@@ -66,6 +67,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override void AnalyzePortableExecutableAndPdb(BinaryAnalyzerContext context)
         {
+            PEBinary target = context.PEBinary();
+            Pdb pdb = target.Pdb;
+
+            if (pdb == null)
+            {
+                return;
+            }
+
             if (!HasSourceLink(context))
             {
                 // The PDB for '{0}' does not contain SourceLink information, compromising
