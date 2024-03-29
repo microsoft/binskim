@@ -98,7 +98,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "MixedMode_x64_VS2013_Default.dll",
-              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] [MD5] (.NETFramework,Version=v4.5.AssemblyAttributes.obj,AssemblyInfo.obj,MixedMode_x64_VS2013_Default.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] [MD5] (MixedMode_x64_VS2013_Default.obj)\r\n"
             ]
           },
           "locations": [

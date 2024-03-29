@@ -55,7 +55,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
-              "Microsoft (R) Optimizing Compiler : cxx : 19.0.23026.0 : [directly linked] [MD5] (Native_x86_VS2015_Default.obj,stdafx.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 19.0.23026.0 : [directly linked] [MD5] (Native_x86_VS2015_Default.obj)\r\n"
             ]
           },
           "locations": [
