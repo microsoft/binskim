@@ -112,7 +112,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3030_UseGccCheckedFunctions_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA3030_Pass_AllFunctionsChecked),
                     nameof(RuleResources.BA3030_Pass_SomeFunctionsChecked),
                     nameof(RuleResources.BA3030_Pass_NoCheckableFunctions),

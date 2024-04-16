@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2014_DoNotDisableStackProtectionForFunctions_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2014_Pass),
                     nameof(RuleResources.BA2014_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)

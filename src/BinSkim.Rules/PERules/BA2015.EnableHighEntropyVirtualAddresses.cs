@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2015_EnableHighEntropyVirtualAddresses_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2015_Pass),
                     nameof(RuleResources.BA2015_Error_NoHighEntropyVA),
                     nameof(RuleResources.BA2015_Error_NoLargeAddressAware),

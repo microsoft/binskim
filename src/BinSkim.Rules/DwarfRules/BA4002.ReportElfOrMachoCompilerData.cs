@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA4002_ReportELFCompilerData_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => Array.Empty<string>();
+        protected override ICollection<string> MessageResourceNames => Array.Empty<string>();
 
         public override AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {

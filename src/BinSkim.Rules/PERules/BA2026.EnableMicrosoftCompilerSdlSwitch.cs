@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Text = RuleResources.BA2026_EnableAdditionalSecurityChecks_Description
         };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA2026_Pass),
             nameof(RuleResources.BA2026_Warning),
             nameof(RuleResources.NotApplicable_InvalidMetadata)

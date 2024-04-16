@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA3001_EnablePositionIndependentExecutable_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA3001_Pass_Executable),
                     nameof(RuleResources.BA3001_Pass_Library),
                     nameof(RuleResources.BA3001_Error),

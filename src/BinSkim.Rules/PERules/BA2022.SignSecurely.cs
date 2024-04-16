@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2022_SignCorrectly_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2022_Pass),
                     nameof(RuleResources.BA2022_Error_BadSigningAlgorithm),
                     nameof(RuleResources.BA2022_Error_DidNotVerify),

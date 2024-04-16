@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2008_EnableControlFlowGuard_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2008_Pass),
                     nameof(RuleResources.BA2008_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata),

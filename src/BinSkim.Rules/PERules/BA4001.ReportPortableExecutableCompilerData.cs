@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA4001_ReportPECompilerData_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => Array.Empty<string>();
+        protected override ICollection<string> MessageResourceNames => Array.Empty<string>();
 
         public IEnumerable<IOption> GetOptions()
         {
