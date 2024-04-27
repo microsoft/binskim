@@ -16,7 +16,7 @@
 - NEW => new feature 
 
 ## UNRELEASED
-* DEP: Update `Sarif.Sdk` submodule from [bc8cb57 to a9c7b1b](https://github.com/microsoft/sarif-sdk/compare/bc8cb57...a9c7b1b). Reference [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/a9c7b1b/ReleaseHistory.md).
+* DEP: Update `Sarif.Sdk` submodule from [bc8cb57 to 9e95888](https://github.com/microsoft/sarif-sdk/compare/bc8cb57...9e95888). Reference [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/9e95888/ReleaseHistory.md).
 * BUG: Fix `BA2027.EnableSourceLink` unexpectedly causes `ExceptionLoadingPdb` error when the PDB file is missing. [988](https://github.com/microsoft/binskim/pull/988).
 * BUG: Exclude system-generated files `AssemblyAttributes.obj`, `AssemblyInfo.obj`, `stdafx.obj` from `BA2004.EnableSecureSourceCodeHashing`. [989](https://github.com/microsoft/binskim/pull/989).
 * BUG: Fix `ERR998.ExceptionInAnalyze`: `InvalidOperationException: Unrecognized crypto HRESULT: 0x80096011` for check `BA2022.SignSecurely` when the signature is malformed, by adding missing error code to error description mappings. [969](https://github.com/microsoft/binskim/pull/969)
