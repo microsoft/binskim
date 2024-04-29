@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override bool EnabledByDefault => false;
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA2029_Pass),
             nameof(RuleResources.BA2029_Error),
             nameof(RuleResources.NotApplicable_InvalidMetadata)

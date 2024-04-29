@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2011_EnableStackProtection_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2011_Pass),
                     nameof(RuleResources.BA2011_Error),
                     nameof(RuleResources.BA2011_Error_UnknownModuleLanguage),

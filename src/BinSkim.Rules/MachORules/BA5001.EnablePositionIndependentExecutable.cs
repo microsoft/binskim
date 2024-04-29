@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA5001_EnablePositionIndependentExecutable_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA5001_Pass),
                     nameof(RuleResources.BA5001_Error),
                     nameof(RuleResources.NotApplicable_InvalidMetadata)

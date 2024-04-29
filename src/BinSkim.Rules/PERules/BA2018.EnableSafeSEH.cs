@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2018_EnableSafeSEH_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA2018_Pass),
                     nameof(RuleResources.BA2018_Pass_NoSEH),
                     nameof(RuleResources.BA2018_Error),

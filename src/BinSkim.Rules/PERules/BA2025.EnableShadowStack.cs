@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Text = RuleResources.BA2025_EnableShadowStack_Description
         };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA2025_Pass),
             nameof(RuleResources.BA2025_Warning),
             nameof(RuleResources.NotApplicable_InvalidMetadata)

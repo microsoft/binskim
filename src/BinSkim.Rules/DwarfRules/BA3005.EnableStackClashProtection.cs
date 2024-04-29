@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override MultiformatMessageString FullDescription =>
             new MultiformatMessageString { Text = RuleResources.BA3005_EnableStackClashProtection_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA3005_Pass),
             nameof(RuleResources.BA3005_Error),
             nameof(RuleResources.NotApplicable_InvalidMetadata)

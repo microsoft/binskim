@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA2027_EnableSourceLink_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[]
+        protected override ICollection<string> MessageResourceNames => new string[]
         {
             nameof(RuleResources.BA2027_Pass),
             nameof(RuleResources.BA2027_Warning)

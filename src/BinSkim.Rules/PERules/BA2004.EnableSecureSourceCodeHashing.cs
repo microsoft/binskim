@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override MultiformatMessageString FullDescription => new MultiformatMessageString
         { Text = RuleResources.BA2004_EnableSecureSourceCodeHashing_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA2004_Pass),
             nameof(RuleResources.BA2004_Warning_NativeWithInsecureStaticLibraryCompilands),
             nameof(RuleResources.BA2004_Error_Managed),
