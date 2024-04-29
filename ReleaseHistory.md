@@ -16,6 +16,8 @@
 - NEW => new feature 
 
 ## UNRELEASED
+
+## **v4.2.2**
 * DEP: Update `Sarif.Sdk` submodule from [bc8cb57 to 9e95888](https://github.com/microsoft/sarif-sdk/compare/bc8cb57...9e95888). Reference [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/9e95888/ReleaseHistory.md).
 * BUG: Fix `BA2027.EnableSourceLink` unexpectedly causes `ExceptionLoadingPdb` error when the PDB file is missing. [988](https://github.com/microsoft/binskim/pull/988).
 * BUG: Exclude system-generated files `AssemblyAttributes.obj`, `AssemblyInfo.obj`, `stdafx.obj` from `BA2004.EnableSecureSourceCodeHashing`. [989](https://github.com/microsoft/binskim/pull/989).
