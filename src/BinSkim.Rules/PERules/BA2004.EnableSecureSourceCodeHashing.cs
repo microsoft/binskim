@@ -129,6 +129,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
+                if (IsLikelyUwpDummyObj(omDetails.Language, omDetails.Library, omDetails.Name))
+                {
+                    continue;
+                }
+
                 if (omDetails.Name.EndsWith(MSVCStandardApplicationFrameworkFileName) ||
                     omDetails.Name.EndsWith(AssemblyAttributesObjFileName) ||
                     omDetails.Name.EndsWith(AssemblyInfoObjFileName))
@@ -310,5 +315,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 //                RequiredCompilerWarnings,
             }.ToImmutableArray();
         }
+
+        internal static bool IsLikelyUwpDummyObj(Language language, string library, string name) =>
+            language == Language.MASM &&
+            library != null &&
+            library.Equals(name, StringComparison.Ordinal) &&
+            library.Equals(@"c:\dummy.obj", StringComparison.Ordinal);
     }
 }
