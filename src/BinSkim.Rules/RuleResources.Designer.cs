@@ -61,7 +61,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from co [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a 64-bit image with a preferred base address below the 4GB boundary. 
+        ///Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities.
+        ///To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2001_Error {
             get {
@@ -70,7 +72,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to 64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities.
+        ///To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2001_LoadImageAboveFourGigabyteAddress_Description {
             get {
@@ -115,7 +118,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code.
+        ///This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs.
+        ///This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm use [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2004_EnableSecureSourceCodeHashing_Description {
             get {
@@ -133,7 +138,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm.
+        ///Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity.
+        ///Use MSVC 17.0 (14.30.*) or later if possible.
+        ///When using older MSVC versions, pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing.
+        ///The following modules are out of policy:
         ///{1}.
         /// </summary>
         internal static string BA2004_Error_NativeWithInsecureDirectCompilands {
@@ -152,7 +161,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass &apos;/ZH:SHA_256&apos; on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm.
+        ///Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity.
+        ///To resolve this issue, use newer versions of libraries that are compiled with /ZH:SHA_256. MSVC: 17.0 (14.30.*) or later. Windows SDK: 10.0.18362.0 or later.
+        ///The following modules are out of policy:
         ///{1}.
         /// </summary>
         internal static string BA2004_Warning_NativeWithInsecureStaticLibraryCompilands {
@@ -171,7 +183,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning..
+        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. 
+        ///To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning..
         /// </summary>
         internal static string BA2005_Error {
             get {
@@ -207,7 +220,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks..
+        ///   Looks up a localized string similar to Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. 
+        ///Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks..
         /// </summary>
         internal static string BA2006_BuildWithSecureTools_Description {
             get {
@@ -216,7 +230,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}). More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning. Modules built outs [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}). More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce.
+        ///To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning. Modules built out [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2006_Error {
             get {
@@ -261,7 +276,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted..
+        ///   Looks up a localized string similar to Binaries should be compiled with a warning level that enables all critical security-relevant checks.
+        ///Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities.
+        ///To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted.
+        ///For VC projects use %(ClCompile.WarningLevel) ItemDefin [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2007_EnableCriticalCompilerWarnings_Description {
             get {
@@ -270,8 +288,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled at too low a warning level (effective warning level {1} for one or more modules). Warning level 3 enables important static analysis in the compiler to flag bugs that can lead to memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted. An example compiler command line triggering this check: {2}
-        ///Modules triggering this check: {3}.
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled at too low a warning level (effective warning level {1} for one or more modules).
+        ///Warning level 3 enables important static analysis in the compiler to flag bugs that can lead to memory corruption, information disclosure, or double-free vulnerabilities.
+        ///To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted.
+        ///For VC projects use ItemDefinitionGroup - ClCompile - WarningLevel property with &apos;Level3&apos;, &apos;Le [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2007_Error_InsufficientWarningLevel {
             get {
@@ -289,8 +309,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation. An example compiler command line triggering this check was: {1}
-        ///Modules tr [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities.
+        ///To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation.
+        ///For VC projects check ItemDefinitionGroup - ClCompile - DisableSpecificWa [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2007_Error_WarningsDisabled {
             get {
@@ -317,7 +338,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /guard:cf on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG..
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the control flow guard (CFG) mitigation.
+        ///To resolve this issue, pass /guard:cf on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG.
+        ///For VC projects use ItemDefinitionGroup - ClCompile - ControlFlowGuard property with &apos;Guard&apos; value, link CFG property will be set automatically..
         /// </summary>
         internal static string BA2008_Error {
             get {
@@ -353,7 +376,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities.
+        ///To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line.
+        ///For VC projects use ItemDefinitionGroup - Link - RandomizedBaseAddress property with &apos;true&apos; value [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2009_Error_NotDynamicBase {
             get {
@@ -389,7 +414,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable.
+        ///To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2010_DoNotMarkImportsSectionAsExecutable_Description {
             get {
@@ -398,7 +424,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here. To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the &quot;.rdata&quot; segment into a [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here.
+        ///To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the &quot;.rdata&quot; segment into  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2010_Error {
             get {
@@ -416,7 +443,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line..
+        ///   Looks up a localized string similar to Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.
+        ///To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the cl.exe command line.
+        ///For VC projects use ItemDefinitionGroup - ClCompile - BufferSecurityCheck property with &apos;true&apos; value..
         /// </summary>
         internal static string BA2011_EnableStackProtection_Description {
             get {
@@ -425,7 +454,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}.
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities.
+        ///To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on cl.exe command line.
+        ///For VC projects use ItemDefinitionGroup - ClCompile - BufferSecurityCheck property with &apos;true&apos; value.        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2011_Error {
             get {
@@ -452,7 +483,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the &quot;security cookie&quot;, to detect these buffer overflows. This &apos;cookie&apos; is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. 
+        ///The stack protector relies on a random number, called the &quot;security cookie&quot;, to detect these buffer overflows. This &apos;cookie&apos; is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie.
+        ///On recent Windows versions, the loader looks for  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2012_DoNotModifyStackProtectionCookie_Description {
             get {
@@ -461,7 +494,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a C or C++ binary that interferes with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the &quot;security cookie&quot;, to detect these buffer overflows. This &apos;cookie&apos; is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks fo [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a C or C++ binary that interferes with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities.
+        ///The stack protector relies on a random number, called the &quot;security cookie&quot;, to detect these buffer overflows. This &apos;cookie&apos; is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie.
+        ///On recent Windows versions, the loader looks  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2012_Error {
             get {
@@ -515,7 +550,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary&apos;s entry point as possible. Failing to do so will result in spurious bu [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities.
+        ///The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary&apos;s entry point as possible. Failing to do so will result in spurious b [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2013_Error {
             get {
@@ -524,7 +560,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary&apos;s entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To re [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.
+        ///The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary&apos;s entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector.
+        ///To  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2013_InitializeStackProtection_Description {
             get {
@@ -560,7 +598,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been s [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities.
+        ///Disabling the stack protector, even on a function-by-function basis, can compromise the security of code.
+        ///To resolve this issue, remove occurrences of __declspec(safebuffers) from your code.
+        ///If the additional code inserted by the stack protector has bee [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2014_DoNotDisableStackProtectionForFunctions_Description {
             get {
@@ -569,7 +610,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in prof [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities.
+        ///Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy.
+        ///To resolve this issue, remove occurrences of __declspec(safebuffers) from your code.
+        ///If the additional code inserted by the stack protector has been shown in p [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2014_Error {
             get {
@@ -587,7 +631,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR..
+        ///   Looks up a localized string similar to Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities.
+        ///To resolve this issue, don&apos;t set /HIGHENTROPYV:NO on link.exe command line and allow it to be enabled by default. .
         /// </summary>
         internal static string BA2015_EnableHighEntropyVirtualAddresses_Description {
             get {
@@ -596,7 +641,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line..
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
+        ///To resolve this issue, don&apos;t set /HIGHENTROPYVA:NO and /LARGEADDRESSAWARE:NO on link.exe command line and allow then to be enabled by default..
         /// </summary>
         internal static string BA2015_Error_NeitherHighEntropyVANorLargeAddressAware {
             get {
@@ -605,7 +651,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.).
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
+        ///To resolve this issue, don&apos;t set /HIGHENTROPYVA:NO on link.exe command line and allow it to be enabled by default. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.).
         /// </summary>
         internal static string BA2015_Error_NoHighEntropyVA {
             get {
@@ -614,7 +661,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible by supplying /LARGEADDRESSAWARE to the C or C++ linker command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.).
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
+        ///To resolve this issue, don&apos;t set /LARGEADDRESSAWARE:NO on link.exe command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.).
         /// </summary>
         internal static string BA2015_Error_NoLargeAddressAware {
             get {
@@ -632,7 +680,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is not marked NX compatible. The NXCompat bit, also known as &quot;Data Execution Prevention&quot; (DEP) or &quot;Execute Disable&quot; (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, en [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; is not marked NX compatible. The NXCompat bit, also known as &quot;Data Execution Prevention&quot; (DEP) or &quot;Execute Disable&quot; (XD), is a processor feature that allows a program to mark a piece of memory as non-executable.
+        ///This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment.
+        ///To resolve this issue,  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2016_Error {
             get {
@@ -641,7 +691,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as &quot;Data Execution Prevention&quot; (DEP) or &quot;Execute Disable&quot; (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data s [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as &quot;Data Execution Prevention&quot; (DEP) or &quot;Execute Disable&quot; (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable.
+        ///This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2016_MarkImageAsNXCompatible_Description {
             get {
@@ -659,7 +710,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to sup [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode).
+        ///To resolve this issue, supply the /SafeSEH flag on link.exe command line.
+        ///For VC projects use ItemDefinitionGroup - Link = ImageHasSafe [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2018_EnableSafeSEH_Description {
             get {
@@ -668,7 +721,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode).
+        ///To resolve this issue, supply the /SafeSEH flag on link.exe command line.
+        ///For VC projects use ItemDefinitionGroup - Link = ImageH [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2018_Error {
             get {
@@ -731,7 +786,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IP [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process.
+        ///If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.).
+        ///If you must share common data across processes (for inter-process communication ( [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2019_DoNotMarkWritableSectionsAsShared_Description {
             get {
@@ -740,7 +797,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for in [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process.
+        ///If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.).
+        ///If you must share common data across processes (for  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2019_Error {
             get {
@@ -758,7 +817,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attribu [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode.
+        ///To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attrib [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2021_DoNotMarkWritableSectionsAsExecutable_Description {
             get {
@@ -767,7 +827,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, w [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode.
+        ///To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code,  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2021_Error {
             get {
@@ -839,7 +900,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application code should be compiled with the Spectre mitigations switch (/Qspectre cl.exe command-line argument or &lt;SpectreMitigation&gt;Spectre&lt;/SpectreMitigation&gt; build property). Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve this issue, provide the /Qspectre switch on the compiler command-line (or specify &lt;SpectreMitigation&gt;Spectre&lt;/SpectreMitigation&gt; in build properties), or pass /d2guardspecload  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Application code which stores sensitive data in memory should be compiled with the Spectre mitigations switch (/Qspectre cl.exe command-line argument or &lt;SpectreMitigation&gt;Spectre&lt;/SpectreMitigation&gt; build property).
+        ///Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache.
+        ///To resolve this issue, ensure that all modules compiled into the binary are compiled with /Qspectre switch on cl.exe command-line.
+        ///You may need to [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2024_EnableSpectreMitigations_Description {
             get {
@@ -866,7 +930,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or specify &lt;SpectreMitigation&gt;Spectre&lt;/SpectreMitigation&gt; in build properties), or pass /d2guardspecload in cases where y [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities.
+        ///Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache.
+        ///To resolve this issue, ensure that all modules compiled into the binary are compiled with /Qspectre switch on cl.exe command-line.
+        ///You may need to install the &apos;C++ spectre-mitigated libs&apos; component f [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2024_Warning {
             get {
@@ -924,7 +991,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following modules were compiled with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. The likely cause is that the code was linked to a static library with no debug information: {0}.
+        ///   Looks up a localized string similar to The following modules were compiled with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified.
+        ///The likely cause is that the code was linked to a static library with no debug information: {0}.
         /// </summary>
         internal static string BA2024_Warning_SpectreMitigationUnknownNoCommandLine {
             get {
@@ -933,7 +1001,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}&apos; was compiled with one or more modules with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. The likely cause is that the code was linked to a static library with no debug information.  It is not known whether code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities was enabled. Spectre attacks can compromise hardware-based isolation, allowing non-pri [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to {0}&apos; was compiled with one or more modules with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified.
+        ///The likely cause is that the code was linked to a static library with no debug information.  It is not known whether code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities was enabled.
+        ///Spectre attacks can compromise hardware-based isolation, allowing non-p [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2024_WarningMissingCommandLine {
             get {
@@ -960,7 +1030,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash..
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation.
+        ///To resolve this issue, pass /CETCOMPAT on the linker command lines.
+        ///For VC projects use ItemDefinitionGroup - Link - CETCompat property with &apos;true&apos; value.
+        ///Note: older .NET versions are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash..
         /// </summary>
         internal static string BA2025_Warning {
             get {
@@ -996,7 +1069,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that wasn&apos;t compiled with recommended Security Development Lifecycle (SDL) checks. As a result some critical compile-time and runtime checks may be disabled, increasing the possibility of an exploitable runtime issue. To resolve this problem, pass &apos;/sdl&apos; on the cl.exe command-line, set the &apos;SDL checks&apos; property in the &apos;C/C++ -&gt; General&apos; Configuration property page, or explicitly set the &apos;SDLCheck&apos; property in the project file (nested within a &apos;CLCompile&apos; element) to &apos;true&apos;..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that wasn&apos;t compiled with recommended Security Development Lifecycle (SDL) checks. As a result some critical compile-time and runtime checks may be disabled, increasing the possibility of an exploitable runtime issue.
+        ///To resolve this problem, pass &apos;/sdl&apos; on the cl.exe command-line.
+        ///For VC projects use ItemDefinitionGroup - ClCompile - SDLCheck property with &apos;true&apos; value..
         /// </summary>
         internal static string BA2026_Warning {
             get {
@@ -1005,7 +1080,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user expe [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler.
+        ///The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user exp [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2027_EnableSourceLink_Description {
             get {
@@ -1023,7 +1099,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response. Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider. See https://aka.ms/sourcelink for more information..
+        ///   Looks up a localized string similar to The PDB for &apos;{0}&apos; does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response.
+        ///Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider.
+        ///See https://aka.ms/sourcelink for more information..
         /// </summary>
         internal static string BA2027_Warning {
             get {
@@ -1032,7 +1110,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binaries that are loaded by certain Windows features must (and device drivers should) opt into Windows validation of their digital signatures by setting the /INTEGRITYCHECK linker flag. This option sets the IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY attribute in the PE header of binaries which tells the memory manager to validate a binary&apos;s digital signature when loaded. Any user mode code that is interfacing with Early Launch Antimalware (ELAM) drivers, integrates with device firmware execution or is trying  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Binaries that are loaded by certain Windows features must (and device drivers should) opt into Windows validation of their digital signatures by setting the /INTEGRITYCHECK linker flag.
+        ///This option sets the IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY attribute in the PE header of binaries which tells the memory manager to validate a binary&apos;s digital signature when loaded.
+        ///Any user mode code that is interfacing with Early Launch Antimalware (ELAM) drivers, integrates with device firmware execution or is tryin [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA2029_EnableIntegrityCheck_Description {
             get {
@@ -1041,7 +1121,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was not compiled with /INTEGRITYCHECK and therefore will not have its digital signature validated at load time. Failing to validate binary signatures increases the risk of loading malicious code in low-level, high-privilege execution environments, including subsystems that provide critical security malware protections. To resolve this problem, pass &apos;/INTEGRITYCHECK&apos; on the linker command line and sign your files using the Microsoft Azure Code Signing program..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was not compiled with /INTEGRITYCHECK and therefore will not have its digital signature validated at load time.
+        ///Failing to validate binary signatures increases the risk of loading malicious code in low-level, high-privilege execution environments, including subsystems that provide critical security malware protections.
+        ///To resolve this problem, pass &apos;/INTEGRITYCHECK&apos; on link.exe command line and sign your files using the Microsoft Azure Code Signing program..
         /// </summary>
         internal static string BA2029_Error {
             get {
@@ -1448,7 +1530,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.  The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking..
+        ///   Looks up a localized string similar to Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.
+        ///The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking..
         /// </summary>
         internal static string BA6001_DisableIncrementalLinkingInReleaseBuilds_Description {
             get {
@@ -1493,7 +1576,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.
+        ///For VC projects use ItemDefinitionGroup - ClCompile - StringPooling property with &apos;true&apos; value.
+        ///The following modules do not specify that policy: {1}..
         /// </summary>
         internal static string BA6002_Warning {
             get {
@@ -1520,7 +1605,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size.
+        ///For VC projects use ItemDefinitionGroup - Link - EnableCOMDATFolding property with &apos;true&apos; value..
         /// </summary>
         internal static string BA6004_Warning_DisabledForRelease {
             get {
@@ -1529,7 +1615,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That may make debugging more difficult..
+        ///   Looks up a localized string similar to &apos;{0}&apos; appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled.
+        ///For VC projects check ItemDefinitionGroup - Link - EnableCOMDATFolding property. That may make debugging more difficult..
         /// </summary>
         internal static string BA6004_Warning_EnabledForDebug {
             get {
@@ -1556,7 +1643,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with Optimize References (/OPT:REF) disabled, increasing binary size..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with Optimize References (/OPT:REF) disabled, increasing binary size.
+        ///For VC projects use ItemDefinitionGroup - Link - OptimizeReferences property with &apos;true&apos; value..
         /// </summary>
         internal static string BA6005_Warning {
             get {
@@ -1583,7 +1671,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance..
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.
+        ///For VC projects use WholeProgramOptimization property with &apos;true&apos; value..
         /// </summary>
         internal static string BA6006_Warning {
             get {
