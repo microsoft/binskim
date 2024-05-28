@@ -662,7 +662,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
-        ///To resolve this issue, don&apos;t set /LARGEADDRESSAWARE:NO on link.exe command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.).
+        ///To resolve this issue, don&apos;t set /LARGEADDRESSAWARE:NO on link.exe command line and allow it to be enabled by default. (This image was determined to have been properly compiled as /HIGHENTROPYVA.).
         /// </summary>
         internal static string BA2015_Error_NoLargeAddressAware {
             get {

@@ -338,7 +338,7 @@ To resolve this issue, don't set /HIGHENTROPYVA:NO on link.exe command line and 
   </data>
   <data name="BA2015_Error_NoLargeAddressAware" xml:space="preserve">
     <value>'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
-To resolve this issue, don't set /LARGEADDRESSAWARE:NO on link.exe command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.)</value>
+To resolve this issue, don't set /LARGEADDRESSAWARE:NO on link.exe command line and allow it to be enabled by default. (This image was determined to have been properly compiled as /HIGHENTROPYVA.)</value>
   </data>
   <data name="BA2015_Pass" xml:space="preserve">
     <value>'{0}' is high entropy ASLR compatible, reducing an attacker's ability to exploit code in well-known locations.</value>
