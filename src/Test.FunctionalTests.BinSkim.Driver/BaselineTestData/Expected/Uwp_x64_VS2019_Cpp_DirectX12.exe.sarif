@@ -445,10 +445,8 @@
         {
           "ruleId": "BA6004",
           "ruleIndex": 19,
-          "kind": "pass",
-          "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "Warning_DisabledForRelease",
             "arguments": [
               "Uwp_x64_VS2019_Cpp_DirectX12.exe"
             ]
@@ -467,10 +465,8 @@
         {
           "ruleId": "BA6005",
           "ruleIndex": 20,
-          "kind": "pass",
-          "level": "none",
           "message": {
-            "id": "Pass",
+            "id": "Warning",
             "arguments": [
               "Uwp_x64_VS2019_Cpp_DirectX12.exe"
             ]
