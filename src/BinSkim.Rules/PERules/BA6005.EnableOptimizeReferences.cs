@@ -34,6 +34,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override MultiformatMessageString FullDescription =>
             new MultiformatMessageString { Text = RuleResources.BA6005_EnableOptimizeReferences_Description };
 
+        public override bool EnabledByDefault => false;
+
+
         protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA6005_Pass),
                     nameof(RuleResources.BA6005_Warning),

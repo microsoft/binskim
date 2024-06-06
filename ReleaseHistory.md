@@ -16,7 +16,8 @@
 - NEW => new feature 
 
 ## UNRELEASED
-* DEP: Update `msdia140.dll` from 14.36.32532.0 to 14.40.33810.0. This update fixes the `System.AccessViolationException: Attempted to read or write protected memory` exception that occurs when reading certain PDB files. [936](https://github.com/microsoft/binskim/pull/996)
+* DEP: Update `msdia140.dll` from 14.36.32532.0 to 14.40.33810.0. This update fixes the `System.AccessViolationException: Attempted to read or write protected memory` exception that occurs when reading certain PDB files. [996](https://github.com/microsoft/binskim/pull/996)
+* BRK: Temporarily disable performance rules due to a bug in latest `msdia140.dll`: `BA6001.DisableIncrementalLinkingInReleaseBuilds`, `BA6002.EliminateDuplicateStrings`, `BA6004.EnableCOMDATFolding`, `BA6005.EnableOptimizeReferences` and `BA6006.EnableLinkTimeCodeGeneration`. [996](https://github.com/microsoft/binskim/pull/996)
 
 ## **v4.2.2**
 * DEP: Update `Sarif.Sdk` submodule from [bc8cb57 to 9e95888](https://github.com/microsoft/sarif-sdk/compare/bc8cb57...9e95888). Reference [SARIF SDK Release History](https://github.com/microsoft/sarif-sdk/blob/9e95888/ReleaseHistory.md).

@@ -34,6 +34,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override MultiformatMessageString FullDescription =>
             new MultiformatMessageString { Text = RuleResources.BA6006_EnableLinkTimeCodeGeneration_Description };
 
+        public override bool EnabledByDefault => false;
+
         protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA6006_Pass),
                     nameof(RuleResources.BA6006_Warning),
