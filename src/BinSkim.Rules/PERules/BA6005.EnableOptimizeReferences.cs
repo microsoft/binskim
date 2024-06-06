@@ -36,7 +36,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override bool EnabledByDefault => false;
 
-
         protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA6005_Pass),
                     nameof(RuleResources.BA6005_Warning),
