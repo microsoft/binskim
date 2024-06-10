@@ -16,6 +16,8 @@
 - NEW => new feature 
 
 ## UNRELEASED
+
+## **v4.3.0**
 * DEP: Update `msdia140.dll` from 14.36.32532.0 to 14.40.33810.0. This update fixes the `System.AccessViolationException: Attempted to read or write protected memory` exception that occurs when reading certain PDB files. [996](https://github.com/microsoft/binskim/pull/996)
 * BRK: Temporarily disable performance rules due to a bug in latest `msdia140.dll`: `BA6001.DisableIncrementalLinkingInReleaseBuilds`, `BA6002.EliminateDuplicateStrings`, `BA6004.EnableCOMDATFolding`, `BA6005.EnableOptimizeReferences` and `BA6006.EnableLinkTimeCodeGeneration`. [996](https://github.com/microsoft/binskim/pull/996)
 

@@ -300,7 +300,10 @@ Stack on '{0}' is executable, which means that an attacker could use it as a pla
 
 ### Description
 
-64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.
+64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities.
+To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE).
+Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.
+For VC projects make sure that ItemDefinitionGroup - Link - BaseAddress property is not set.
 
 ### Messages
 
@@ -310,7 +313,11 @@ Stack on '{0}' is executable, which means that an attacker could use it as a pla
 
 #### `Error`: Error
 
-'{0}' is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.
+'{0}' is a 64-bit image with a preferred base address below the 4GB boundary. 
+Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities.
+To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE).
+Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.
+For VC projects make sure that ItemDefinitionGroup - Link - BaseAddress property is not set.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -344,7 +351,14 @@ Binaries should not take dependencies on code with known security vulnerabilitie
 
 ### Description
 
-Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code. This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs. This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure. Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files). Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler. For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing. For native binaries, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing.
+Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code.
+This information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs.
+This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure.
+Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files).
+Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler.
+For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing.
+For native code - use to MSVC 17.0 (14.30.*) or later if possible. For VC projects use PlatformToolset property with 'v143' or later value.
+When using older MSVC versions add /ZH:SHA_256 on cl.exe command line.
 
 ### Messages
 
@@ -354,7 +368,10 @@ Compilers can generate and store checksums of source files in order to provide l
 
 #### `NativeWithInsecureStaticLibraryCompilands`: Warning
 
-'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm.
+Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity.
+To resolve this issue, use newer versions of libraries that are compiled with /ZH:SHA_256. MSVC: 17.0 (14.30.*) or later. Windows SDK: 10.0.18362.0 or later.
+The following modules are out of policy:
 {1}
 
 #### `Managed`: Error
@@ -363,7 +380,11 @@ Compilers can generate and store checksums of source files in order to provide l
 
 #### `NativeWithInsecureDirectCompilands`: Error
 
-'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm. Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity. Pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing. The following modules are out of policy:
+'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm.
+Insecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity.
+Use MSVC 17.0 (14.30.*) or later if possible.
+When using older MSVC versions, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing.
+The following modules are out of policy:
 {1}
 
 #### `InvalidMetadata`: NotApplicable
@@ -386,7 +407,8 @@ Do not ship obsolete libraries for which there are known security vulnerabilitie
 
 #### `Error`: Error
 
-'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.
+'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. 
+To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning.
 
 #### `CouldNotParseVersion`: Error
 
@@ -402,13 +424,15 @@ Version information for '{0}' could not be parsed. The binary therefore could no
 
 ### Description
 
-Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks.
+Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. 
+Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks.
 
 ### Messages
 
 #### `Error`: Error
 
-'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}). More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce. To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning. Modules built outside of policy: 
+'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}). More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce.
+To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning. Modules built outside of policy: 
 {2}
 
 #### `BadModule`: Error
@@ -429,7 +453,10 @@ All linked modules of '{0}' satisfy configured policy (observed compilers: {1}).
 
 ### Description
 
-Binaries should be compiled with a warning level that enables all critical security-relevant checks. Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted.
+Binaries should be compiled with a warning level that enables all critical security-relevant checks.
+Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities.
+To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted.
+For VC projects use %(ClCompile.WarningLevel) ItemDefinitionGroup property with 'Level3', 'Level4' or 'EnableAllWarnings' values.
 
 ### Messages
 
@@ -439,13 +466,19 @@ Binaries should be compiled with a warning level that enables all critical secur
 
 #### `WarningsDisabled`: Error
 
-'{0}' disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation. An example compiler command line triggering this check was: {1}
+'{0}' disables compiler warning(s) which are required by policy. A compiler warning is typically required if it has a high likelihood of flagging memory corruption, information disclosure, or double-free vulnerabilities.
+To resolve this issue, enable the indicated warning(s) by removing /Wxxxx switches (where xxxx is a warning id indicated here) from your command line, and resolve any warnings subsequently raised during compilation.
+For VC projects check ItemDefinitionGroup - ClCompile - DisableSpecificWarnings property.
+An example compiler command line triggering this check was: {1}
 Modules triggering this check were:
 {2}
 
 #### `InsufficientWarningLevel`: Error
 
-'{0}' was compiled at too low a warning level (effective warning level {1} for one or more modules). Warning level 3 enables important static analysis in the compiler to flag bugs that can lead to memory corruption, information disclosure, or double-free vulnerabilities. To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted. An example compiler command line triggering this check: {2}
+'{0}' was compiled at too low a warning level (effective warning level {1} for one or more modules).
+Warning level 3 enables important static analysis in the compiler to flag bugs that can lead to memory corruption, information disclosure, or double-free vulnerabilities.
+To resolve this issue, compile at warning level 3 or higher by supplying /W3, /W4, or /Wall to the compiler, and resolve the warnings emitted.
+For VC projects use ItemDefinitionGroup - ClCompile - WarningLevel property with 'Level3', 'Level4' or 'EnableAllWarnings' values. An example compiler command line triggering this check: {2}
 Modules triggering this check: {3}
 
 #### `UnknownModuleLanguage`: Error
@@ -472,7 +505,9 @@ Binaries should enable the compiler control guard feature (CFG) at build time to
 
 #### `Error`: Error
 
-'{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /guard:cf on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG.
+'{0}' does not enable the control flow guard (CFG) mitigation.
+To resolve this issue, pass /guard:cf on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG.
+For VC projects use ItemDefinitionGroup - ClCompile - ControlFlowGuard property with 'Guard' value, link CFG property will be set automatically.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -498,7 +533,10 @@ Binaries should linked as DYNAMICBASE to be eligible for relocation by Address S
 
 #### `NotDynamicBase`: Error
 
-'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later.
+'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities.
+To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line.
+For VC projects use ItemDefinitionGroup - Link - RandomizedBaseAddress property with 'true' value.
+For .NET applications, use a compiler shipping with Visual Studio 2008 or later.
 
 #### `RelocsStripped`: Error
 
@@ -518,7 +556,8 @@ Binaries should linked as DYNAMICBASE to be eligible for relocation by Address S
 
 ### Description
 
-PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the ".rdata" segment into an executable section.
+PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable.
+To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the ".rdata" segment into an executable section.
 
 ### Messages
 
@@ -528,7 +567,8 @@ PE sections should not be marked as both writable and executable. This condition
 
 #### `Error`: Error
 
-'{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here. To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the ".rdata" segment into an executable section.
+'{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here.
+To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the ".rdata" segment into an executable section.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -540,7 +580,9 @@ PE sections should not be marked as both writable and executable. This condition
 
 ### Description
 
-Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line.
+Binaries should be built with the stack protector buffer security feature (/GS) enabled to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.
+To resolve this issue, ensure that all modules compiled into the binary are compiled with the stack protector enabled by supplying /GS on the cl.exe command line.
+For VC projects use ItemDefinitionGroup - ClCompile - BufferSecurityCheck property with 'true' value.
 
 ### Messages
 
@@ -550,7 +592,10 @@ Binaries should be built with the stack protector buffer security feature (/GS) 
 
 #### `Error`: Error
 
-'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on the Visual C++ compiler command line. The affected modules were: {1}
+'{0}' is a C or C++ binary built with the stack protector buffer security feature disabled in one or more modules. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities.
+To resolve this issue, ensure that your code is compiled with the stack protector enabled by supplying /GS on cl.exe command line.
+For VC projects use ItemDefinitionGroup - ClCompile - BufferSecurityCheck property with 'true' value.
+The affected modules were: {1}
 
 #### `UnknownModuleLanguage`: Error
 
@@ -566,7 +611,11 @@ Binaries should be built with the stack protector buffer security feature (/GS) 
 
 ### Description
 
-Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the "security cookie", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement.
+Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. 
+The stack protector relies on a random number, called the "security cookie", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie.
+On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code.
+When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector.
+To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement.
 
 ### Messages
 
@@ -580,7 +629,12 @@ Application code should not interfere with the stack protector. The stack protec
 
 #### `Error`: Error
 
-'{0}' is a C or C++ binary that interferes with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the "security cookie", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the magic statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement. NOTE: the modified cookie value detected was: {1}
+'{0}' is a C or C++ binary that interferes with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities.
+The stack protector relies on a random number, called the "security cookie", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie.
+On recent Windows versions, the loader looks for the magic statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code.
+When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector.
+To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement.
+NOTE: the modified cookie value detected was: {1}
 
 #### `CouldNotLocateCookie`: Error
 
@@ -600,7 +654,9 @@ Application code should not interfere with the stack protector. The stack protec
 
 ### Description
 
-Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.
+Binaries should properly initialize the stack protector (/GS) in order to increase the difficulty of exploiting stack buffer overflow memory corruption vulnerabilities.
+The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector.
+To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.
 
 ### Messages
 
@@ -618,7 +674,9 @@ Binaries should properly initialize the stack protector (/GS) in order to increa
 
 #### `Error`: Error
 
-'{0}' is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector. To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.
+'{0}' is a C or C++ binary that does not initialize the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities.
+The stack protector requires access to entropy in order to be effective, which means a binary must initialize a random number generator at startup, by calling __security_init_cookie() as close to the binary's entry point as possible. Failing to do so will result in spurious buffer overflow detections on the part of the stack protector.
+To resolve this issue, use the default entry point provided by the C runtime, which will make this call for you, or call __security_init_cookie() manually in your custom entry point.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -630,7 +688,10 @@ Binaries should properly initialize the stack protector (/GS) in order to increa
 
 ### Description
 
-Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, can compromise the security of code. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.
+Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities.
+Disabling the stack protector, even on a function-by-function basis, can compromise the security of code.
+To resolve this issue, remove occurrences of __declspec(safebuffers) from your code.
+If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.
 
 ### Messages
 
@@ -640,7 +701,10 @@ Application code should not disable stack protection for individual functions. T
 
 #### `Error`: Error
 
-'{0}' is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy. To resolve this issue, remove occurrences of __declspec(safebuffers) from your code. If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.
+'{0}' is a C or C++ binary built with function(s) ({1}) that disable the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities.
+Disabling the stack protector, even on a function-by-function basis, is disallowed by SDL policy.
+To resolve this issue, remove occurrences of __declspec(safebuffers) from your code.
+If the additional code inserted by the stack protector has been shown in profiling to cause a significant performance problem for your application, attempt to move stack buffer modifications out of the hot path of execution to allow the compiler to avoid inserting stack protector checks in these locations rather than disabling the stack protector altogether.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -652,7 +716,8 @@ Application code should not disable stack protection for individual functions. T
 
 ### Description
 
-Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR.
+Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities.
+To resolve this issue, don't set /HIGHENTROPYV:NO on link.exe command line and allow it to be enabled by default. 
 
 ### Messages
 
@@ -662,15 +727,18 @@ Binaries should be marked as high entropy Address Space Layout Randomization (AS
 
 #### `NoHighEntropyVA`: Error
 
-'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.)
+'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
+To resolve this issue, don't set /HIGHENTROPYVA:NO on link.exe command line and allow it to be enabled by default. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.)
 
 #### `NoLargeAddressAware`: Error
 
-'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible by supplying /LARGEADDRESSAWARE to the C or C++ linker command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.)
+'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
+To resolve this issue, don't set /LARGEADDRESSAWARE:NO on link.exe command line and allow it to be enabled by default. (This image was determined to have been properly compiled as /HIGHENTROPYVA.)
 
 #### `NeitherHighEntropyVANorLargeAddressAware`: Error
 
-'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line.
+'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
+To resolve this issue, don't set /HIGHENTROPYVA:NO and /LARGEADDRESSAWARE:NO on link.exe command line and allow then to be enabled by default.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -682,7 +750,9 @@ Binaries should be marked as high entropy Address Space Layout Randomization (AS
 
 ### Description
 
-Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as "Data Execution Prevention" (DEP) or "Execute Disable" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment). Ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker.
+Binaries should be marked as NX compatible to help prevent execution of untrusted data as code. The NXCompat bit, also known as "Data Execution Prevention" (DEP) or "Execute Disable" (XD), triggers a processor security feature that allows a program to mark a piece of memory as non-executable.
+This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit (because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment).
+To resolve this issue, don't set /NXCOMPAT:NO on link.exe command line and allow it to be enabled by default.
 
 ### Messages
 
@@ -692,7 +762,9 @@ Binaries should be marked as NX compatible to help prevent execution of untruste
 
 #### `Error`: Error
 
-'{0}' is not marked NX compatible. The NXCompat bit, also known as "Data Execution Prevention" (DEP) or "Execute Disable" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable. This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment. To resolve this issue, ensure that your tools are configured to mark your binaries as NX compatible, e.g. by passing /NXCOMPAT to the C/C++ linker.
+'{0}' is not marked NX compatible. The NXCompat bit, also known as "Data Execution Prevention" (DEP) or "Execute Disable" (XD), is a processor feature that allows a program to mark a piece of memory as non-executable.
+This helps mitigate memory corruption vulnerabilities by preventing an attacker from supplying direct shellcode in their exploit, because the exploit comes in the form of input data to the exploited program on a data segment, rather than on an executable code segment.
+To resolve this issue, don't set /NXCOMPAT:NO on link.exe command line and allow it to be enabled by default.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -704,7 +776,10 @@ Binaries should be marked as NX compatible to help prevent execution of untruste
 
 ### Description
 
-X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.
+X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory corruption issues. SafeSEH makes it more difficult to exploit vulnerabilities that permit overwriting SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode).
+To resolve this issue, supply the /SafeSEH flag on link.exe command line.
+For VC projects use ItemDefinitionGroup - Link = ImageHasSafeExceptionHandlers property with 'true' value.
+Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.
 
 ### Messages
 
@@ -718,7 +793,10 @@ X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory
 
 #### `Error`: Error
 
-'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode). To resolve this issue, supply the /SafeSEH flag on the linker command line. Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.
+'{0}' is an x86 binary which {1}, indicating that it does not enable the SafeSEH mitigation. SafeSEH makes it more difficult to exploit memory corruption vulnerabilities that can overwrite SEH control blocks on the stack, by verifying that the location to which a thrown SEH exception would jump is indeed defined as an exception handler in the source program (and not shellcode).
+To resolve this issue, supply the /SafeSEH flag on link.exe command line.
+For VC projects use ItemDefinitionGroup - Link = ImageHasSafeExceptionHandlers property with 'true' value.
+Note that you will need to configure your build system to supply this flag for x86 builds only, as the /SafeSEH flag is invalid when linking for ARM and x64.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -730,7 +808,9 @@ X86 binaries should enable the SafeSEH mitigation to minimize exploitable memory
 
 ### Description
 
-Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).
+Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process.
+If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.).
+If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).
 
 ### Messages
 
@@ -740,7 +820,9 @@ Code or data sections should not be marked as both shared and writable. Because 
 
 #### `Error`: Error
 
-'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).
+'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process.
+If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.).
+If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.).
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -752,7 +834,9 @@ Code or data sections should not be marked as both shared and writable. Because 
 
 ### Description
 
-PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function.
+PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode.
+To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.
+Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function.
 
 ### Messages
 
@@ -762,7 +846,10 @@ PE sections should not be marked as both writable and executable. This condition
 
 #### `Error`: Error
 
-'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Enabling incremental linking via the /INCREMENTAL argument (the default for Microsoft Visual Studio debug build) can also result in a writable and executable section named 'textbss'. For this case, disable incremental linking (or analyze an alternate build configuration that disables this feature) to resolve the problem.
+'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode.
+To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.
+Enabling incremental linking via the /INCREMENTAL argument (the default for Microsoft Visual Studio debug build) can also result in a writable and executable section named 'textbss'. For this case, disable incremental linking (or analyze an alternate build configuration that disables this feature) to resolve the problem.
+For VC projects use ItemDefinitionGroup - Link - LinkIncremental property with 'false' value.
 
 #### `UnexpectedSectionAligment`: Error
 
@@ -808,22 +895,42 @@ Images should be correctly signed by trusted publishers using cryptographically 
 
 ### Description
 
-Application code should be compiled with the Spectre mitigations switch (/Qspectre cl.exe command-line argument or <SpectreMitigation>Spectre</SpectreMitigation> build property). Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve this issue, provide the /Qspectre switch on the compiler command-line (or specify <SpectreMitigation>Spectre</SpectreMitigation> in build properties), or pass /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre. This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request. You may need to install the 'C++ spectre-mitigated libs' component from the Visual Studio installer if you observe violations against C runtime libraries such as libcmt.lib, libvcruntime.lib, etc.
+Application code which stores sensitive data in memory should be compiled with the Spectre mitigations switch (/Qspectre cl.exe command-line argument or <SpectreMitigation>Spectre</SpectreMitigation> build property).
+Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache.
+To resolve this issue, ensure that all modules compiled into the binary are compiled with /Qspectre switch on cl.exe command-line.
+You may need to install the 'C++ spectre-mitigated libs' component from the Visual Studio installer if you observe violations against C runtime libraries such as libcmt.lib, libvcruntime.lib, etc.
+For VC projects use SpectreMitigation property with 'Spectre' value.
+When using older MSVC versions pass /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre.
+This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.
+For mitigation to be effective, all dlls and libs that are part of an exe, should be compiled with /QSpectre, so decision should be made for the whole process.
+Can cause some perf degradations, so should not be used when not needed.
 
 ### Messages
 
 #### `Warning`: Warning
 
-'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, provide the /Qspectre switch on the compiler command-line (or specify <SpectreMitigation>Spectre</SpectreMitigation> in build properties), or pass /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre. This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.
-{1}
+'{0}' was compiled with one or more modules that do not enable code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities.
+Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache.
+To resolve this issue, ensure that all modules compiled into the binary are compiled with /Qspectre switch on cl.exe command-line.
+You may need to install the 'C++ spectre-mitigated libs' component from the Visual Studio installer if you observe violations against C runtime libraries such as libcmt.lib, libvcruntime.lib, etc.
+For VC projects use SpectreMitigation property with 'Spectre' value.
+When using older MSVC versions pass /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre.
+This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.
+For mitigation to be effective, all dlls and libs that are part of an exe, should be compiled with /QSpectre, so decision should be made for the whole process.
+Can cause some perf degradations, so should not be used when not needed.
 
 #### `WarningMissingCommandLine`: Warning
 
-{0}' was compiled with one or more modules with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. The likely cause is that the code was linked to a static library with no debug information.  It is not known whether code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities was enabled. Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache. To resolve the issue, ensure that the compiler command line is present (provide the /Z7 switch) and provide the /Qspectre switch on the compiler command-line (or specify <SpectreMitigation>Spectre</SpectreMitigation> in build properties), or pass /d2guardspecload in cases where your compiler supports this switch and it is not possible to update to a toolset that supports /Qspectre. This warning should be addressed for code that operates on data that crosses a trust boundary and that can affect execution, such as parsing untrusted file inputs or processing query strings of a web request.
+{0}' was compiled with one or more modules with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified.
+The likely cause is that the code was linked to a static library with no debug information.  It is not known whether code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities was enabled.
+Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache.
+To resolve the issue, ensure that the static library pdb is availble or compile static library code with /Z7 switch which makes symbols to be included in .obj.
+For VC projects use ItemDefinitionGroup - ClCompile - DebugInformationFormat property with 'ProgramDatabase' (/Zi) or 'OldStyle' (/Z7) value.
 
 #### `SpectreMitigationUnknownNoCommandLine`: Warning
 
-The following modules were compiled with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified. The likely cause is that the code was linked to a static library with no debug information: {0}
+The following modules were compiled with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified.
+The likely cause is that the code was linked to a static library with no debug information: {0}
 
 #### `OptimizationsDisabled`: Warning
 
@@ -864,7 +971,10 @@ Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor f
 
 #### `Warning`: Warning
 
-'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation. To resolve this issue, pass /CETCOMPAT on the linker command lines. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash.
+'{0}' does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation.
+To resolve this issue, pass /CETCOMPAT on the linker command lines.
+For VC projects use ItemDefinitionGroup - Link - CETCompat property with 'true' value.
+Note: older .NET versions are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -886,7 +996,9 @@ Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor f
 
 #### `Warning`: Warning
 
-'{0}' is a Windows PE that wasn't compiled with recommended Security Development Lifecycle (SDL) checks. As a result some critical compile-time and runtime checks may be disabled, increasing the possibility of an exploitable runtime issue. To resolve this problem, pass '/sdl' on the cl.exe command-line, set the 'SDL checks' property in the 'C/C++ -> General' Configuration property page, or explicitly set the 'SDLCheck' property in the project file (nested within a 'CLCompile' element) to 'true'.
+'{0}' is a Windows PE that wasn't compiled with recommended Security Development Lifecycle (SDL) checks. As a result some critical compile-time and runtime checks may be disabled, increasing the possibility of an exploitable runtime issue.
+To resolve this problem, pass '/sdl' on the cl.exe command-line.
+For VC projects use ItemDefinitionGroup - ClCompile - SDLCheck property with 'true' value.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -898,7 +1010,9 @@ Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor f
 
 ### Description
 
-SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler. The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise. See https://aka.ms/sourcelink for more information.
+SourceLink information should be present in the PDB. This applies to binaries built with the C# and MSVC compilers. When enabled, SourceLink information is added to the PDB. That information includes the repository URLs and commit IDs for all source files fed to the compiler.
+The PDB should also be uploaded to a symbol server so that it can be discovered by a debugger such as Visual Studio. Developers can then step into the matching source code. Frictionless source-driven debugging provides a good user experience for consumers and also accelerates security response in the event of supply-chain compromise.
+See https://aka.ms/sourcelink for more information.
 
 ### Messages
 
@@ -908,7 +1022,9 @@ The PDB for '{0}' contains SourceLink information, maximizing engineering and se
 
 #### `Warning`: Warning
 
-The PDB for '{0}' does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response. Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider. See https://aka.ms/sourcelink for more information.
+The PDB for '{0}' does not contain SourceLink information, compromising frictionless source-driven debugging and increasing latency of security response.
+Enable SourceLink by configuring necessary project properties and adding a package reference for your source control provider.
+See https://aka.ms/sourcelink for more information.
 
 ---
 
@@ -916,7 +1032,10 @@ The PDB for '{0}' does not contain SourceLink information, compromising friction
 
 ### Description
 
-Binaries that are loaded by certain Windows features must (and device drivers should) opt into Windows validation of their digital signatures by setting the /INTEGRITYCHECK linker flag. This option sets the IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY attribute in the PE header of binaries which tells the memory manager to validate a binary's digital signature when loaded. Any user mode code that is interfacing with Early Launch Antimalware (ELAM) drivers, integrates with device firmware execution or is trying to load into protected process lite space must enable /INTEGRITYCHECK. This feature applies to both 32-but and 64-bit files. Binaries that opt into /INTEGRITYCHECK must be signed using the Microsoft Azure Code Signing program.
+Binaries that are loaded by certain Windows features must (and device drivers should) opt into Windows validation of their digital signatures by setting the /INTEGRITYCHECK linker flag.
+This option sets the IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY attribute in the PE header of binaries which tells the memory manager to validate a binary's digital signature when loaded.
+Any user mode code that is interfacing with Early Launch Antimalware (ELAM) drivers, integrates with device firmware execution or is trying to load into protected process lite space must enable /INTEGRITYCHECK.
+This feature applies to both 32-but and 64-bit files. Binaries that opt into /INTEGRITYCHECK must be signed using the Microsoft Azure Code Signing program.
 
 ### Messages
 
@@ -926,7 +1045,9 @@ Binaries that are loaded by certain Windows features must (and device drivers sh
 
 #### `Error`: Error
 
-'{0}' was not compiled with /INTEGRITYCHECK and therefore will not have its digital signature validated at load time. Failing to validate binary signatures increases the risk of loading malicious code in low-level, high-privilege execution environments, including subsystems that provide critical security malware protections. To resolve this problem, pass '/INTEGRITYCHECK' on the linker command line and sign your files using the Microsoft Azure Code Signing program.
+'{0}' was not compiled with /INTEGRITYCHECK and therefore will not have its digital signature validated at load time.
+Failing to validate binary signatures increases the risk of loading malicious code in low-level, high-privilege execution environments, including subsystems that provide critical security malware protections.
+To resolve this problem, pass '/INTEGRITYCHECK' on link.exe command line and sign your files using the Microsoft Azure Code Signing program.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -948,7 +1069,8 @@ This rule emits CSV data to the console for every compiler/language/version comb
 
 ### Description
 
-Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.  The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking.
+Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.
+The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking.
 
 ### Messages
 
@@ -980,7 +1102,9 @@ The /GF compiler option, also known as Eliminate Duplicate Strings or String Poo
 
 #### `Warning`: Warning
 
-'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.  The following modules do not specify that policy: {1}.
+'{0}' was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.
+For VC projects use ItemDefinitionGroup - ClCompile - StringPooling property with 'true' value.
+The following modules do not specify that policy: {1}.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -1002,11 +1126,13 @@ COMDAT folding can significantly reduce binary size by combining functions which
 
 #### `EnabledForDebug`: Warning
 
-'{0}' appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled. That may make debugging more difficult.
+'{0}' appears to be a Debug build which was compiled with COMDAT folding (/OPT:ICF) enabled.
+For VC projects check ItemDefinitionGroup - Link - EnableCOMDATFolding property. That may make debugging more difficult.
 
 #### `DisabledForRelease`: Warning
 
 '{0}' was compiled with COMDAT folding (/OPT:ICF) disabled, increasing binary size.
+For VC projects use ItemDefinitionGroup - Link - EnableCOMDATFolding property with 'true' value.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -1029,6 +1155,7 @@ Optimize References can significantly reduce binary size because it instructs th
 #### `Warning`: Warning
 
 '{0}' was compiled with Optimize References (/OPT:REF) disabled, increasing binary size.
+For VC projects use ItemDefinitionGroup - Link - OptimizeReferences property with 'true' value.
 
 #### `InvalidMetadata`: NotApplicable
 
@@ -1051,6 +1178,7 @@ Enabling Link Time Code Generation (LTCG) performs whole-program optimization, w
 #### `Warning`: Warning
 
 '{0}' was compiled without Link Time Code Generation (/LTCG). Enabling LTCG can improve optimizations and performance.
+For VC projects use WholeProgramOptimization property with 'true' value.
 
 #### `InvalidMetadata`: NotApplicable
 
