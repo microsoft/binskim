@@ -34,8 +34,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override MultiformatMessageString FullDescription =>
             new MultiformatMessageString { Text = RuleResources.BA6004_EnableCOMDATFolding_Description };
 
-        public override bool EnabledByDefault => false;
-
         protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BA6004_Pass),
                     nameof(RuleResources.BA6004_Warning_EnabledForDebug),
