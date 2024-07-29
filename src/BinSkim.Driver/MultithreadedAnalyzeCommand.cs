@@ -48,6 +48,8 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override BinaryAnalyzerContext InitializeGlobalContextFromOptions(AnalyzeOptions options, ref BinaryAnalyzerContext context)
         {
+            base.InitializeGlobalContextFromOptions(options, ref context);
+
             if (this.Telemetry?.TelemetryClient != null)
             {
                 var aggregatingLogger = new AggregatingLogger();
@@ -55,6 +57,7 @@ namespace Microsoft.CodeAnalysis.IL
                 var ruleTelemetryLogger = new RuleTelemetryLogger(this.Telemetry.TelemetryClient);
                 ruleTelemetryLogger.AnalysisStarted();
 
+                aggregatingLogger.Loggers.Add(context.Logger);
                 aggregatingLogger.Loggers.Add(ruleTelemetryLogger);
                 context.Logger = aggregatingLogger;
             }
@@ -65,7 +68,7 @@ namespace Microsoft.CodeAnalysis.IL
                 ? options.MaxFileSizeInKilobytes.Value
                 : long.MaxValue;
 
-            base.InitializeGlobalContextFromOptions(options, ref context);
+
 
             // Update context object based on command-line parameters.
             context.SymbolPath = options.SymbolsPath ?? context.SymbolPath;
