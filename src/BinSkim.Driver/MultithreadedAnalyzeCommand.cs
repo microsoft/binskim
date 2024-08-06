@@ -57,6 +57,7 @@ namespace Microsoft.CodeAnalysis.IL
                 var ruleTelemetryLogger = new RuleTelemetryLogger(this.Telemetry.TelemetryClient);
                 ruleTelemetryLogger.AnalysisStarted();
 
+                // Combine rule telemetry with any other loggers that may be present.
                 aggregatingLogger.Loggers.Add(context.Logger);
                 aggregatingLogger.Loggers.Add(ruleTelemetryLogger);
                 context.Logger = aggregatingLogger;
