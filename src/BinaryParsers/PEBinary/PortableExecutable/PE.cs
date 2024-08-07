@@ -868,7 +868,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 out MetadataReaderProvider pdbProvider,
                 out _))
             {
-                pdbProvider = MetadataReaderProvider.FromPortablePdbStream(File.OpenRead(pdb.PdbLocation));
+                if (File.Exists(pdb.PdbLocation))
+                {
+                    pdbProvider = MetadataReaderProvider.FromPortablePdbStream(File.OpenRead(pdb.PdbLocation));
+                }
+
                 if (pdbProvider == null)
                 {
                     pdbMetadataReader = null;
