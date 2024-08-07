@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+using CommandLine;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -52,13 +54,21 @@ namespace Microsoft.CodeAnalysis.IL
 
             if (this.Telemetry?.TelemetryClient != null)
             {
+                // Create an aggregating logger that will combine all loggers into a single logger.
                 var aggregatingLogger = new AggregatingLogger();
+                if (context.Logger is AggregatingLogger)
+                {
+                    aggregatingLogger = context.Logger as AggregatingLogger;
+                }
+                else
+                {
+                    aggregatingLogger.Loggers.Add(context.Logger);
+                }
 
                 var ruleTelemetryLogger = new RuleTelemetryLogger(this.Telemetry.TelemetryClient);
                 ruleTelemetryLogger.AnalysisStarted();
 
                 // Combine rule telemetry with any other loggers that may be present.
-                aggregatingLogger.Loggers.Add(context.Logger);
                 aggregatingLogger.Loggers.Add(ruleTelemetryLogger);
                 context.Logger = aggregatingLogger;
             }
