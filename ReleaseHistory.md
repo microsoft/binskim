@@ -16,8 +16,10 @@
 - NEW => new feature 
 
 ## UNRELEASED
-* DEP: Update `msdia140.dll` from 14.40.33810.0 to 14.40.33812
-* BUG: Fix `TryGetPortablePdbMetadataReader` unexpectedly causes `UnauthorizedAccessException` error when the PDB file is missing. [1001](https://github.com/microsoft/binskim/pull/1001).
+
+## **v4.3.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.3.1)
+* DEP: Update `msdia140.dll` from 14.40.33810.0 to 14.40.33812. [1000](https://github.com/microsoft/binskim/pull/1002)
+* BUG: Fix `TryGetPortablePdbMetadataReader` unexpectedly causes `UnauthorizedAccessException` error when the PDB file is missing. [1004](https://github.com/microsoft/binskim/pull/1004)
 * BUG: Fork telemetry to log always to Console and AppInsights in the same time when Error occur. [1002](https://github.com/microsoft/binskim/pull/1002)
 
 ## **v4.3.0**
