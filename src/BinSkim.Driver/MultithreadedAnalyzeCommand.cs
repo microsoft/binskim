@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+using CommandLine;
+
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -48,13 +50,25 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override BinaryAnalyzerContext InitializeGlobalContextFromOptions(AnalyzeOptions options, ref BinaryAnalyzerContext context)
         {
+            base.InitializeGlobalContextFromOptions(options, ref context);
+
             if (this.Telemetry?.TelemetryClient != null)
             {
+                // Create an aggregating logger that will combine all loggers into a single logger.
                 var aggregatingLogger = new AggregatingLogger();
+                if (context.Logger is AggregatingLogger)
+                {
+                    aggregatingLogger = context.Logger as AggregatingLogger;
+                }
+                else
+                {
+                    aggregatingLogger.Loggers.Add(context.Logger);
+                }
 
                 var ruleTelemetryLogger = new RuleTelemetryLogger(this.Telemetry.TelemetryClient);
                 ruleTelemetryLogger.AnalysisStarted();
 
+                // Combine rule telemetry with any other loggers that may be present.
                 aggregatingLogger.Loggers.Add(ruleTelemetryLogger);
                 context.Logger = aggregatingLogger;
             }
@@ -65,7 +79,7 @@ namespace Microsoft.CodeAnalysis.IL
                 ? options.MaxFileSizeInKilobytes.Value
                 : long.MaxValue;
 
-            base.InitializeGlobalContextFromOptions(options, ref context);
+
 
             // Update context object based on command-line parameters.
             context.SymbolPath = options.SymbolsPath ?? context.SymbolPath;
