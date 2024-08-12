@@ -19,8 +19,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     public class RuleTests
     {
         private readonly ITestOutputHelper testOutputHelper;
-        private const string SkipPerformanceRulesDueToBugInLatestMsdia =
-            "Skip performance rules due to a bug in the latest msdia140.dll 14.40.33810.0.";
 
         public RuleTests(ITestOutputHelper output)
         {
@@ -1549,7 +1547,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             this.VerifyApplicability(new DoNotAllowExecutableStack(), new HashSet<string>());
         }
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6001_DisableIncrementalLinkingInReleaseBuilds_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1571,7 +1569,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6001_DisableIncrementalLinkingInReleaseBuilds_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1584,7 +1582,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6001_DisableIncrementalLinkingInReleaseBuilds_NotApplicable()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1594,7 +1592,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6002_EliminateDuplicateStrings_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1616,7 +1614,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6002_EliminateDuplicateStrings_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1629,7 +1627,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6002_EliminateDuplicateStrings_NotApplicable()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1639,7 +1637,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6004_EnableCOMDATFolding_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1661,7 +1659,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6004_EnableCOMDATFolding_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1674,7 +1672,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6004_EnableCOMDATFolding_NotApplicable()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1684,7 +1682,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6005_EnableOptimizeReferences_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1706,7 +1704,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6005_EnableOptimizeReferences_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1719,7 +1717,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6005_EnableOptimizeReferences_NotApplicable()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1729,7 +1727,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6006_EnableLinkTimeCodeGeneration_Fail()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1751,7 +1749,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6006_EnableLinkTimeCodeGeneration_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
@@ -1764,7 +1762,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact(Skip = SkipPerformanceRulesDueToBugInLatestMsdia)]
+        [Fact]
         public void BA6006_EnableLinkTimeCodeGeneration_NotApplicable()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
