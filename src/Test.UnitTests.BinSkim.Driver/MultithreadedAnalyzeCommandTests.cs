@@ -2,11 +2,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 using FluentAssertions;
 
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.CodeAnalysis.IL;
+using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif.Writers;
 
 using Xunit;
 
@@ -149,6 +154,90 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             }
 
             return data;
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_TelemetryNotSpecifiedHasOneConsoleLogger()
+        {
+            var options = new AnalyzeOptions();
+            options.TargetFileSpecifiers = new List<string> { "test.dll" };
+            options.DisableTelemetry = true;
+            options.OutputFilePath = "test/path/";
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand();
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            Assert.IsType<Sarif.Driver.AggregatingLogger>(context.Logger);
+
+            var aggregatingLogger = (Sarif.Driver.AggregatingLogger)context.Logger;
+            Assert.Contains(aggregatingLogger.Loggers, l => l is ConsoleLogger);
+            Assert.Equal(1, aggregatingLogger.Loggers.Count);
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_TelemetrySpecifiedHasTwoLoggers()
+        {
+            var telemetryConfiguration = TelemetryConfiguration.CreateDefault();
+            var telemetryClient = new TelemetryClient(telemetryConfiguration);
+            var telemetry = new Telemetry(telemetryConfiguration);
+
+            var options = new AnalyzeOptions();
+            options.TargetFileSpecifiers = new List<string> { "test.dll" };
+            options.OutputFilePath = "test/path/";
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand(telemetry);
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            Assert.IsType<Sarif.Driver.AggregatingLogger>(context.Logger);
+
+            var aggregatingLogger = (Sarif.Driver.AggregatingLogger)context.Logger;
+            Assert.Contains(aggregatingLogger.Loggers, l => l is ConsoleLogger);
+            Assert.Contains(aggregatingLogger.Loggers, l => l is RuleTelemetryLogger);
+            Assert.Equal(2, aggregatingLogger.Loggers.Count);
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_QuietOptionSetHasOneRuleTelemetryLogger()
+        {
+            var telemetryConfiguration = TelemetryConfiguration.CreateDefault();
+            var telemetryClient = new TelemetryClient(telemetryConfiguration);
+            var telemetry = new Telemetry(telemetryConfiguration);
+
+            var options = new AnalyzeOptions();
+            options.TargetFileSpecifiers = new List<string> { "test.dll" };
+            options.OutputFilePath = "test/path/";
+            options.Quiet = true;
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand(telemetry);
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            Assert.IsType<Sarif.Driver.AggregatingLogger>(context.Logger);
+
+            var aggregatingLogger = (Sarif.Driver.AggregatingLogger)context.Logger;
+            Assert.Contains(aggregatingLogger.Loggers, l => l is RuleTelemetryLogger);
+            Assert.Equal(1, aggregatingLogger.Loggers.Count);
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_QuietOptionSetAndNoTelemetryHasOneConsoleLogger()
+        {
+            var options = new AnalyzeOptions();
+            options.TargetFileSpecifiers = new List<string> { "test.dll" };
+            options.DisableTelemetry = true;
+            options.Quiet = true;
+            options.OutputFilePath = "test/path/";
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand();
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            Assert.IsType<Sarif.Driver.AggregatingLogger>(context.Logger);
+
+            var aggregatingLogger = (Sarif.Driver.AggregatingLogger)context.Logger;
+            Assert.Equal(0, aggregatingLogger.Loggers.Count);
         }
     }
 }
