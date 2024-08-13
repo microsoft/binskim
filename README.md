@@ -16,19 +16,13 @@ This repository contains the source code for BinSkim, a Portable Executable (PE)
 
 ## For Users
 
-1. Download BinSkim from **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**
+1. In order to get the tool, compile it from sources.
 2. Read the **[User Guide](./docs/UserGuide.md)**
 3. Find out more about the Static Analysis Results Interchange Format **([SARIF](https://github.com/sarif-standard/sarif-spec/))** used to output Binskim results
 
-### How to extract the exe file from the nuget package
+### How to run
 
-If you only want to run the Binskim tool without installing anything, then you can
-
-1. Download BinSkim from **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**
-2. Rename the file extension from .nupkg to .zip (ie. via commandline: `rename microsoft.codeanalysis.binskim.x.y.z.nupkg microsoft.codeanalysis.binskim.x.y.z.zip`)
-3. Unzip
-4. Executable files are now available in the OS specific folder within _tools\netcoreapp3.1_ (ie. linux-x64, win-x64, and osx-x64).
-5. Navigate to this location to invoke the executable:
+Invoke the executable:
     - Windows: `binskim.exe analyze c:\bld\*.dll --recurse true --output MyRun.sarif`
     - Linux/Unix: `./BinSkim analyze /someDirectory/testBinary -o MyRun.sarif`
     - Mac: `./BinSkim analyze /someDirectory/testBinary -o MyRun.sarif`
