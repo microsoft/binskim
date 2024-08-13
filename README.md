@@ -2,12 +2,23 @@
 
 This repository contains the source code for BinSkim, a Portable Executable (PE) light-weight scanner that validates compiler/linker settings and other security-relevant binary characteristics.
 
+## How to build (Linux)
+
+In order to get the latest version, it's required to build from sources. Recent versions are not uploaded neither to Nuget nor archived with Github Releases. 
+
+For Docker-based build follow these steps:
+
+- Use some `dotnet` Docker image, for example `mcr.microsoft.com/dotnet/sdk:8.0`.
+- Execute `BuildAndTest.sh` and ignore test errors (only build matters).
+- Resulted binaries will be located in `bld/bin/x64_Release/netcoreapp3.1/`, execute `BinSkim` from there.
+- Note: there might be some errors about .NET mismatch, in this case use `mcr.microsoft.com/dotnet/runtime:3.1` image to execute the tool.
+
 ## For Developers
 
 1. Fork the repository -- **[Need Help?](https://help.github.com/articles/fork-a-repo/)**
 2. Read the **[Rule Contributions Guide](./docs/RuleContributions.md)**
 3. Load and compile `src\BinSkim.sln` to develop changes for contribution.
-4. Execute BuildAndTest.cmd at the root of the enlistment to validate before submitting a PR.
+4. Execute `BuildAndTest.cmd` at the root of the enlistment to validate before submitting a PR.
 
 ### Submit Pull Requests
 
