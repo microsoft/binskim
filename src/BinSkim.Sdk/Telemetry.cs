@@ -87,7 +87,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private static void ConfigureTelemetryContext(TelemetryContext context)
         {
             context.Session.Id = CreateRandomSessionId();
-            context.Component.Version = Assembly.GetCallingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+            AssemblyFileVersionAttribute? versionAttribute = Assembly.GetCallingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>();
+            context.Component.Version = versionAttribute?.Version ?? "Unknown";
             context.Device.OperatingSystem = RuntimeInformation.OSDescription;
         }
 

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 using Dia2Lib;
 
@@ -215,8 +217,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public void PEBinary_CanCreateIDiaSourceFromMsdia()
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
-
-            Action action = () => { IDiaDataSource source = ProgramDatabase.MsdiaComWrapper.GetDiaSource(); };
+            Action action = () => { if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) { IDiaDataSource source = MsdiaComWrapper.GetDiaSource(); } };
             action.Should().NotThrow();
         }
 
