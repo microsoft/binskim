@@ -6,10 +6,6 @@ if [[  "$(uname)" == "Linux" || "$(uname)" == "Darwin" ]]; then
   sed 's#\\#/#g' src/BinSkim.sln > src/BinSkimUnix.sln
 fi
 
-if [ ! -f src/sarif-sdk/src/Sarif.Sdk.sln ]; then
-  echo "Get submodule..."
-  git submodule update --init --recursive
-fi
 
 dotnet build src/BinSkimUnix.sln --configuration Release /p:Platform="x64"
 
