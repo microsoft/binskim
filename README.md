@@ -27,7 +27,7 @@ If you only want to run the Binskim tool without installing anything, then you c
 1. Download BinSkim from **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**
 2. Rename the file extension from .nupkg to .zip (ie. via commandline: `rename microsoft.codeanalysis.binskim.x.y.z.nupkg microsoft.codeanalysis.binskim.x.y.z.zip`)
 3. Unzip
-4. Executable files are now available in the OS specific folder within _tools\netcoreapp3.1_ (ie. linux-x64, win-x64, and osx-x64).
+4. Executable files are now available in the OS specific folder within _tools\net8.0_ (ie. linux-x64, win-x64, and osx-x64).
 5. Navigate to this location to invoke the executable:
     - Windows: `binskim.exe analyze c:\bld\*.dll --recurse true --output MyRun.sarif`
     - Linux/Unix: `./BinSkim analyze /someDirectory/testBinary -o MyRun.sarif`
@@ -35,26 +35,32 @@ If you only want to run the Binskim tool without installing anything, then you c
     - Using dotnet sdk: `dotnet binskim.dll analyze /directoryPath/testBinary -o MyRun.sarif`
 
 ### Command-Line Quick Guide
+For more information you can follow our [UserGuide.md](https://github.com/microsoft/binskim/blob/main/docs/UserGuide.md).
 
-| Argument (short form, long form) | Meaning |
-| -------------------------------- | ------- |
-| **`--trace`** | Execution traces, expressed as a semicolon-delimited list enclosed in double quotes, that should be emitted to the console and log file (if appropriate). Valid values: PdbLoad, ScanTime, RuleScanTime, PeakWorkingSet, TargetsScanned, ResultsSummary. |
-| **`--sympath`** | Symbol paths, expressed as a semicolon-delimited list enclosed in double quotes. (e.g. `SRV*https://msdl.microsoft.com/download/symbols` or `Cache*d:\symbols;Srv*https://symweb`) See https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/advanced-symsrv-use for syntax information. |
-| **`--local-symbol-directories`** | Local directory paths, expressed as a semicolon-delimited list enclosed in double quotes, that will be examined when attempting to locate PDBs. |
-| **`-o, --output`** | File path used to write and output analysis using [SARIF](https://github.com/Microsoft/sarif-sdk) |
-| **`-r, --recurse [true\|false]`** | If true, recurse into subdirectories when evaluating file specifier arguments |
-| **`-c, --config`** | (Default: ‘default’) Path to policy file to be used to configure analysis. Passing value of 'default' (or omitting the argument) invokes built-in settings |
-| **`-q, --quiet [true\|false]`** | If true, do not log results to the console |
-| **`-s, --statistics`** | Generate timing and other statistics for analysis session |
-| **`--insert`** | Optionally present data, expressed as a semicolon-delimited list enclosed in double quotes, that should be inserted into the log file. Valid values include Hashes, TextFiles, BinaryFiles, EnvironmentVariables, RegionSnippets, ContextRegionSnippets, ContextRegionSnippetPartialFingerprints, Guids, VersionControlDetails, and NondeterministicProperties. |
-| **`-e, --environment [true\|false]`** | <p>If true, log machine environment details of run to output file.</p><p>**WARNING:** This option records potentially sensitive information (such as all environment variable values) to the log file.</p> |
-| **`-p, --plugin`** | Paths to plugin, expressed as a semicolon-delimited list enclosed in double quotes, that will be invoked against all targets in the analysis set. |
-| **`--rich-return-code [true\|false]`** | If true, output a more detailed exit code consisting of a series of flags about execution, rather than outputting '0' for success/'1' for failure (see codes below) |
-| **`--level`** | Failure levels, expressed as a semicolon-delimited list enclosed in double quotes, that is used to filter the scan results. Valid values: Error, Warning and Note. |
-| **`--kind`** | Result kinds, expressed as a semicolon-delimited list enclosed in double quotes, that is used to filter the scan results. Valid values: Fail (for literal scan results), Pass, Review, Open, NotApplicable and Informational. |
-| **`--baseline`** | A Sarif file to be used as baseline. |
-| **`--help`** | Table of argument information. |
-| **`--version`** | BinSkim version details. |
-| **`value pos. 0`** | One or more specifiers to a file, directory, or filter pattern that resolves to one or more binaries to analyze. |
+#### Analyze Command
+The primary function of BinSkim is to analyze Windows portable executables (.dlls, .exes, etc). To analyze a file, pass one or more arguments that resolve one or more portable executables.
+```pwsh
+    // Analyze a single binary named MyProjectFile.dll found in c:\temp
+    // and emit verbose messages during analysis
+    binskime.exe analyze c:\temp\MyProjectFile.dll –verbose
+    // Analyze all files with the .dll or .exe extension starting in the
+    // current working directory and recursing through all child directories
+    binskim analyze *.exe *.dll –recurse
+    // Analyze all files with the .dll extension starting in the current
+    // current directory and write results to a SARIF log file
+    binskim analyze *.dll --output MyLog.sarif 
+```
 
-**Example:** `binskim.exe analyze c:\bld\*.dll --recurse true --output MyRun.sarif`
+#### Help command
+The following command-lines invoke the general BinSkime help message. This message will display all the built-in ModernCop commands (help, analyze, capture, et al) for which more detailed help can be requested: 
+```pwsh
+    binskim.exe --help
+```
+To request detailed help for specific commands, invoke ‘binskim.exe help [command]’, eg:
+```pwsh
+    binskim.exe help analyze
+    binskim.exe help exportRules
+    binskim.exe help exportConfig
+    binskim.exe help dump
+    binskim.exe help version
+```

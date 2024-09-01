@@ -172,7 +172,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             var aggregatingLogger = (Sarif.Driver.AggregatingLogger)context.Logger;
             Assert.Contains(aggregatingLogger.Loggers, l => l is ConsoleLogger);
-            Assert.Equal(1, aggregatingLogger.Loggers.Count);
+            Assert.Single(aggregatingLogger.Loggers);
         }
 
         [Fact]
@@ -218,7 +218,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             var aggregatingLogger = (Sarif.Driver.AggregatingLogger)context.Logger;
             Assert.Contains(aggregatingLogger.Loggers, l => l is RuleTelemetryLogger);
-            Assert.Equal(1, aggregatingLogger.Loggers.Count);
+            Assert.Single(aggregatingLogger.Loggers);
         }
 
         [Fact]
@@ -237,7 +237,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             Assert.IsType<Sarif.Driver.AggregatingLogger>(context.Logger);
 
             var aggregatingLogger = (Sarif.Driver.AggregatingLogger)context.Logger;
-            Assert.Equal(0, aggregatingLogger.Loggers.Count);
+            Assert.Empty(aggregatingLogger.Loggers);
         }
     }
 }
