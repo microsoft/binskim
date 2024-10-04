@@ -47,6 +47,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PE portableExecutable = target.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
+            PEBinary target = context.PEBinary();
+            if (target.PE.PEHeaders.CorHeader != null)
+            {
+                CoffHeader coffHeader = target.PE.PEHeaders.CoffHeader;
+
+                // .NET does not follow Windows layout rules on non-Windows platforms.
+                // The Machine value in the CoffHeader for Windows ARM64 will not be the same for Linux ARM64.
+                // As a result, we can detect .NET PE's that are non-Windows and skip.
+                reasonForNotAnalyzing = MetadataConditions.ImageIsNonWindowsDotNetAssembly;
+                if (IsNonWindowsMachineTarget(coffHeader.Machine)) { return result; }
+            }
+
             reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeBinary;
             if (portableExecutable.IsKernelMode) { return result; }
 
@@ -115,6 +127,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2021_Error),
                     context.CurrentTarget.Uri.GetFileName(),
                     badSectionsText));
+        }
+
+        private bool IsNonWindowsMachineTarget(Machine machine)
+        {
+            return (machine & (Machine.Amd64 | Machine.Arm | Machine.Arm64));
         }
     }
 }
