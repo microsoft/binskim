@@ -130,7 +130,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private bool IsNonWindowsMachineTarget(Machine machine)
         {
-            return machine != Machine.Amd64 && machine != Machine.Arm && machine != Machine.Arm64;
+            return machine != Machine.Amd64 && machine != Machine.I386 && machine != Machine.Arm && machine != Machine.Arm64;
         }
     }
 }
