@@ -47,10 +47,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             PE portableExecutable = target.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
 
-            PEBinary target = context.PEBinary();
-            if (target.PE.PEHeaders.CorHeader != null)
+            if (portableExecutable.PEHeaders.CorHeader != null)
             {
-                CoffHeader coffHeader = target.PE.PEHeaders.CoffHeader;
+                CoffHeader coffHeader = portableExecutable.PEHeaders.CoffHeader;
 
                 // .NET does not follow Windows layout rules on non-Windows platforms.
                 // The Machine value in the CoffHeader for Windows ARM64 will not be the same for Linux ARM64.
@@ -131,7 +130,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private bool IsNonWindowsMachineTarget(Machine machine)
         {
-            return (machine & (Machine.Amd64 | Machine.Arm | Machine.Arm64));
+            return machine != Machine.Amd64 && machine != Machine.Arm && machine != Machine.Arm64;
         }
     }
 }
