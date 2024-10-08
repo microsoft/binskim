@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.IL
     {
         private static int Main(string[] args)
         {
-            args = GenerateArguments(args, new FileSystem(), new EnvironmentVariables());
+            args = ExpandArguments.GenerateArguments(args, new FileSystem(), new EnvironmentVariables());
             args = RewriteArgs(args);
 
             var rewrittenArgs = new List<string>(args);
@@ -95,49 +95,6 @@ namespace Microsoft.CodeAnalysis.IL
             return value == "True" || value == "False" ||
                    value == "true" || value == "false" ||
                    value == "1" || value == "0";
-        }
-
-        public static string[] GenerateArguments(
-            string[] args,
-            IFileSystem fileSystem,
-            IEnvironmentVariables environmentVariables)
-        {
-            var expandedArguments = new List<string>();
-
-            foreach (string argument in args)
-            {
-                if (!IsResponseFileArgument(argument))
-                {
-                    expandedArguments.Add(argument);
-                    continue;
-                }
-
-                string responseFile = argument.Trim('"').Substring(1);
-
-                responseFile = environmentVariables.ExpandEnvironmentVariables(responseFile);
-                responseFile = fileSystem.PathGetFullPath(responseFile);
-
-                string[] responseFileLines = fileSystem.FileReadAllLines(responseFile);
-                ExpandResponseFile(responseFileLines, expandedArguments);
-            }
-
-            return expandedArguments.ToArray();
-        }
-
-        private static bool IsResponseFileArgument(string argument)
-        {
-            return argument.Length > 1 && argument[0] == '@';
-        }
-
-        private static void ExpandResponseFile(string[] responseFileLines, List<string> expandedArguments)
-        {
-            foreach (string responseFileLine in responseFileLines)
-            {
-                List<string> fileList = ArgumentSplitter.CommandLineToArgvW(responseFileLine.Trim()) ??
-                    throw new InvalidOperationException("Could not parse response file line:" + responseFileLine);
-
-                expandedArguments.AddRange(fileList);
-            }
         }
     }
 }
