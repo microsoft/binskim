@@ -2,4 +2,4 @@
 # This file controls who is tagged for review for any given pull request.
 
 # For anything not explicitly taken by someone else:
-*       @microsoft/1es-sdl-engineering @AllDwarf @martin-reznik @mkacmar
+*       @microsoft/1es-sdl-engineering
