@@ -20,13 +20,14 @@ namespace Microsoft.CodeAnalysis.IL
 
             foreach (string argument in args)
             {
-                if (!IsResponseFileArgument(argument))
+                string trimArgument = argument.Trim('"');
+                if (!IsResponseFileArgument(trimArgument))
                 {
-                    expandedArguments.Add(argument);
+                    expandedArguments.Add(trimArgument);
                     continue;
                 }
 
-                string responseFile = argument.Trim('"').Substring(1);
+                string responseFile = trimArgument.Substring(1);
 
                 responseFile = environmentVariables.ExpandEnvironmentVariables(responseFile);
                 responseFile = fileSystem.PathGetFullPath(responseFile);
