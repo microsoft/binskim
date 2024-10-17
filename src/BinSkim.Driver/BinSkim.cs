@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.IL
     {
         private static int Main(string[] args)
         {
-            args = EntryPointUtilities.GenerateArguments(args, new FileSystem(), new EnvironmentVariables());
+            args = ExpandArguments.GenerateArguments(args, new FileSystem(), new EnvironmentVariables());
             args = RewriteArgs(args);
 
             var rewrittenArgs = new List<string>(args);
