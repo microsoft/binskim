@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     {
         private readonly IDiaSymbol sym;
         private bool disposed;
-
+        private readonly ResourceReleaser resourceReleaser = new();
         /// <summary>Creates a new <see cref="Symbol"/> around a COM <see cref="IDiaSymbol"/> implementation.</summary>
         /// <param name="symbol">The symbol to wrap, or null. This method takes ownership of the <see cref="IDiaSymbol"/> COM RCW.</param>
         /// <returns>If <paramref name="symbol"/> is null, null; otherwise a <see cref="Symbol"/> wrapper around <paramref name="symbol"/>.</returns>
@@ -364,7 +364,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             if (!this.disposed)
             {
-                Marshal.ReleaseComObject(this.sym);
+                resourceReleaser.Release(this.sym);
             }
 
             this.disposed = true;
@@ -505,7 +505,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 if (enumSymbols != null)
                 {
-                    Marshal.ReleaseComObject(enumSymbols);
+                    resourceReleaser.Release(enumSymbols);
                 }
             }
         }

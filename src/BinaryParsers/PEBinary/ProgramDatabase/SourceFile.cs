@@ -17,6 +17,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         private readonly IDiaSourceFile sourceFile;
         private readonly Lazy<byte[]> hashBytes;
         private bool disposed;
+        private readonly ResourceReleaser resourceReleaser = new();
 
         /// <summary>
         /// Constructs a wrapper object around an <see cref="IDiaSourceFile"/> instance.
@@ -86,7 +87,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             if (!this.disposed)
             {
-                Marshal.ReleaseComObject(this.sourceFile);
+                resourceReleaser.Release(this.sourceFile);
             }
 
             this.disposed = true;
