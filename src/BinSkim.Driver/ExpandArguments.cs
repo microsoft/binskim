@@ -48,7 +48,16 @@ namespace Microsoft.CodeAnalysis.IL
         {
             foreach (string responseFileLine in responseFileLines)
             {
-                List<string> fileList = ArgumentSplitter.CommandLineToArgvW(responseFileLine.Trim()) ??
+                string responseFilePath = responseFileLine;
+
+                // Ignore comments from response file lines
+                int commentIndex = responseFileLine.IndexOf('#');
+                if (commentIndex >= 0)
+                {
+                    responseFilePath = responseFileLine.Substring(0, commentIndex);
+                }
+
+                List<string> fileList = ArgumentSplitter.CommandLineToArgvW(responseFilePath.Trim()) ??
                     throw new InvalidOperationException("Could not parse response file line:" + responseFileLine);
 
                 expandedArguments.AddRange(fileList);

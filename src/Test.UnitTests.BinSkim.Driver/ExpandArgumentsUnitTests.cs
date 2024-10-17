@@ -91,6 +91,32 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         }
 
         [Theory]
+        [InlineData(new[] { "/b", "/c:val /d", "# Random Comment", "   /e   " }, new[] { "/a", "/b", "/c:val", "/d", "/e", "/f" })]
+        [InlineData(new[] { "/b", "/c:val /d#Another Comment", "   /e   " }, new[] { "/a", "/b", "/c:val", "/d", "/e", "/f" })]
+        public void GenerateArguments_TrimCommentsFromResponseFileContents(string[] rspContent, string[] expected)
+        {
+            const string ResponseFileName = "Mocked.rsp";
+            string[] args = new[] { "/a", "@" + ResponseFileName, "/f" };
+
+            SetupTestMocks(
+                ResponseFileName,
+                rspContent,
+                out Mock<IFileSystem> fileSystemMock,
+                out Mock<IEnvironmentVariables> environmentVariablesMock);
+
+            IFileSystem fileSystem = fileSystemMock.Object;
+            IEnvironmentVariables environmentVariables = environmentVariablesMock.Object;
+
+            string[] result = ExpandArguments.GenerateArguments(args, fileSystem, environmentVariables);
+
+            result.Should().ContainInOrder(expected);
+
+            fileSystemMock.Verify(fs => fs.PathGetFullPath(ResponseFileName), Times.Once);
+            fileSystemMock.Verify(fs => fs.FileReadAllLines(ResponseFileName), Times.Once);
+            environmentVariablesMock.Verify(ev => ev.ExpandEnvironmentVariables(ResponseFileName), Times.Once);
+        }
+
+        [Theory]
         [InlineData(new[] { "a \"one two\" b" }, new[] { "a", "one two", "b" })]
         public void GenerateArguments_StripsQuotesFromAroundArgsWithSpacesInResponseFiles(string[] rspContent, string[] expected)
         {
