@@ -3,6 +3,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 using Dia2Lib;
 
@@ -23,7 +24,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid riid,
             out IntPtr ppvObject);
 
-        private static void CoCreateFromMsdia(Guid clsidOfServer, Guid riid, out IntPtr pvObject)
+        [SupportedOSPlatform("windows")]
+        private static void CoCreateFromMsdia(Guid clsidOfServer, Guid riid, out IntPtr pvObject, IResourceReleaser resourceReleaser)
         {
             IntPtr pClassFactory = IntPtr.Zero;
             int hr = DllGetClassObject(clsidOfServer, new Guid("00000001-0000-0000-C000-000000000046"), out pClassFactory);
@@ -31,19 +33,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 throw new InvalidOperationException("Could not get class object.");
             }
+
             var classFactory = (IClassFactory)Marshal.GetObjectForIUnknown(pClassFactory);
             classFactory.CreateInstance(IntPtr.Zero, ref riid, out pvObject);
-            Marshal.Release(pClassFactory);
-            Marshal.ReleaseComObject(classFactory);
+            resourceReleaser.Release(pClassFactory);
+            resourceReleaser.Release(classFactory);
         }
 
         private const string IDiaDataSourceRiid = "79F1BB5F-B66E-48E5-B6A9-1545C323CA3D";
         private const string DiaSourceClsid = "E6756135-1E65-4D17-8576-610761398C3C";
 
+        [SupportedOSPlatform("windows")]
         public static IDiaDataSource GetDiaSource()
         {
             IntPtr diaSourcePtr = IntPtr.Zero;
-            CoCreateFromMsdia(new Guid(DiaSourceClsid), new Guid(IDiaDataSourceRiid), out diaSourcePtr);
+            CoCreateFromMsdia(new Guid(DiaSourceClsid), new Guid(IDiaDataSourceRiid), out diaSourcePtr, new ResourceReleaser());
             object objectForIUnknown = Marshal.GetObjectForIUnknown(diaSourcePtr);
             var diaSourceInstance = objectForIUnknown as IDiaDataSource;
             return diaSourceInstance;
