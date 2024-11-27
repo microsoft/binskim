@@ -2,7 +2,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
   <Import Project="..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" />
-
   <PropertyGroup>
     <RootNamespace>Microsoft.CodeAnalysis.BinaryParsers</RootNamespace>
     <TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
@@ -10,26 +9,23 @@
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <Platforms>x64</Platforms>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="6.11.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
-    <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
-    <PackageReference Include="xunit" Version="2.4.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Sarif.Driver" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="Dia2Lib">
       <HintPath>..\..\refs\Dia2Lib.dll</HintPath>
     </Reference>
   </ItemGroup>
-
 </Project>
