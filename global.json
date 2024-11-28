@@ -1,0 +1,9 @@
+{
+  "sdk": {
+    "version": "8.0.111",
+    "rollForward": "latestPatch"
+  },
+  "msbuild-sdks": {
+    "Microsoft.Build.Traversal": "2.0.48"
+  }
+}
