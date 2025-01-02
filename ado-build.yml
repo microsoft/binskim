@@ -19,7 +19,6 @@ jobs:
           packageType: sdk
 
       - checkout: self
-        submodules: true
 
       - task: Bash@3
         displayName: "Build and Test"
@@ -44,7 +43,6 @@ jobs:
           packageType: sdk
 
       - checkout: self
-        submodules: true
 
       - task: CmdLine@2
         displayName: "Build and Test"
@@ -70,7 +68,6 @@ jobs:
           packageType: sdk
 
       - checkout: self
-        submodules: true
 
       - task: Bash@3
         displayName: "Build and Test"
