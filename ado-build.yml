@@ -20,6 +20,12 @@ jobs:
 
       - checkout: self
 
+      - task: UseDotNet@2
+        displayName: .NET Core 8 sdk
+        inputs:
+          version: "8.0.x"
+          packageType: sdk
+
       - task: Bash@3
         displayName: "Build and Test"
         inputs:
@@ -40,6 +46,12 @@ jobs:
         displayName: .NET Core 6.0 sdk
         inputs:
           version: "6.0.x"
+          packageType: sdk
+
+      - task: UseDotNet@2
+        displayName: .NET Core 8 sdk
+        inputs:
+          version: "8.0.x"
           packageType: sdk
 
       - checkout: self
@@ -65,6 +77,12 @@ jobs:
         displayName: .NET Core 6.0 sdk
         inputs:
           version: "6.0.x"
+          packageType: sdk
+
+      - task: UseDotNet@2
+        displayName: .NET Core 8 sdk
+        inputs:
+          version: "8.0.x"
           packageType: sdk
 
       - checkout: self
