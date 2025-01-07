@@ -38,8 +38,6 @@ echo         public const string Version = AssemblyVersion + Prerelease;        
 echo     }                                                                           >> %VERSION_CONSTANTS%
 echo  }                                                                              >> %VERSION_CONSTANTS%
 
-::Download Submodules
-if not exist %~dp0src\sarif-sdk\src\Sarif.Sdk.sln (git submodule update --init --recursive)
 
 ::Restore packages
 echo Restoring packages...
@@ -78,7 +76,6 @@ call BuildPackages.cmd || goto :ExitFailed
 
 echo dotnet-format
 dotnet tool update --global dotnet-format --version 4.1.131201
-dotnet-format --folder --exclude .\src\sarif-sdk\
 
 ::Update BinSkimRules.md to cover any xml changes
 echo Exporting any BinSkim rules

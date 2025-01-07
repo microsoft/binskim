@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
-
   <PropertyGroup>
     <AssemblyName>BinSkim</AssemblyName>
     <!--  Condition="'$(OS)'=='Windows_NT'" -->
@@ -10,7 +9,6 @@
     <OutputType>Exe</OutputType>
     <Platforms>x64</Platforms>
   </PropertyGroup>
-
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -19,35 +17,30 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Microsoft/binskim</RepositoryUrl>
   </PropertyGroup>
-
   <ItemGroup>
     <Content Include="README.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
-    <PackageReference Include="System.Private.Uri" Version="4.3.2" />
-    <PackageReference Include="System.Reflection.Metadata" Version="7.0.2" />
+    <PackageReference Include="CommandLineParser" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="System.Private.Uri" />
+    <PackageReference Include="System.Reflection.Metadata" />
+    <PackageReference Include="Sarif.Driver" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="Dia2Lib">
       <HintPath>..\..\refs\Dia2Lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\sarif-sdk\src\Sarif.Driver\Sarif.Driver.csproj" />
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
     <ProjectReference Include="..\BinSkim.Rules\BinSkim.Rules.csproj" />
     <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="DriverResources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -55,7 +48,6 @@
       <DependentUpon>DriverResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="DriverResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -63,17 +55,14 @@
       <CustomToolNamespace>Microsoft.CodeAnalysis.IL</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
-
-  <ItemGroup>   
+  <ItemGroup>
     <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(RuntimeIdentifier)'==''" />
-	<!-- Note: Official Release builds on Windows should specify a RID. Build using the BuildAndTest.cmd script. -->
+    <!-- Note: Official Release builds on Windows should specify a RID. Build using the BuildAndTest.cmd script. -->
     <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(RuntimeIdentifier)'=='win-x64'" />
     <MsDiaLibs Include="..\..\refs\msdia140.dll.manifest" />
-
     <!-- Required DLLs for Microsoft Visual C++ runtime. -->
     <MsRuntime Include="..\..\refs\runtime\*" />
   </ItemGroup>
-
   <Target Name="CopyMsDiaLibs" AfterTargets="build">
     <Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(OutputPath)\" />
     <Copy SourceFiles="@(MsRuntime)" DestinationFolder="$(OutputPath)\" />

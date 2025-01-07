@@ -19,7 +19,6 @@
   <files>
     <file src="bld\bin\x64_$configuration$\Publish\**\*" target="tools"/>   
     <file src="ReleaseHistory.md" target="tools\ReleaseHistory.md" />
-    <file src="src\sarif-sdk\ReleaseHistory.md" target="tools\ReleaseHistory-Sarif-Sdk.md" />
     <file src="src\BinaryParsers\**\*.cs" target="src\BinaryParsers" />
     <file src="src\BinSkim.Driver\**\*.cs" target="src\BinSkim.Driver" />
     <file src="src\BinSkim.Rules\**\*.cs" target="src\BinSkim.Rules" />
