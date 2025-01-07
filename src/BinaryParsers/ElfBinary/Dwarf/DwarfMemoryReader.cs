@@ -121,13 +121,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Reads the string from the current position in the stream.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions]
         public string ReadString()
         {
-            string result = Marshal.PtrToStringAnsi(pointer + Position);
-
-            Position += result.Length + 1;
-            return result;
+            try
+            {
+                string result = Marshal.PtrToStringAnsi(pointer + Position);
+                Position += result.Length + 1;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to read string from memory.", ex);
+            }
         }
 
         /// <summary>
