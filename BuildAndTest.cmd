@@ -75,7 +75,7 @@ echo BuildPackages.cmd
 call BuildPackages.cmd || goto :ExitFailed
 
 echo dotnet-format
-dotnet tool update --global dotnet-format --version 4.1.131201
+dotnet tool update --global dotnet-format
 
 ::Update BinSkimRules.md to cover any xml changes
 echo Exporting any BinSkim rules
