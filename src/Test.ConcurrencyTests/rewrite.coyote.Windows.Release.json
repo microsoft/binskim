@@ -1,4 +1,4 @@
 {
-  "AssembliesPath": ".\\bin\\Release\\netcoreapp3.1",
+  "AssembliesPath": ".\\bin\\Release\\net8.0",
   "Assemblies": [ "Test.ConcurrencyTests.dll" ]
 }

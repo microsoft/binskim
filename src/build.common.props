@@ -19,9 +19,9 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AnalysisLevel>latest</AnalysisLevel>
-    <!-- This property exists temporarily while we support netcoreapp3.1,
+    <!-- This property exists temporarily while we support net8.0,
          it suppresses build warnings about how some dependencies aren't
-         completely tested with netcoreapp3.1. We should remove this property
+         completely tested with net8.0. We should remove this property
          when we drop support for this framework version (soon).-->
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>

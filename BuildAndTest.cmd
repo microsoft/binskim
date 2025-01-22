@@ -63,12 +63,9 @@ call :RunTestProject BinSkim.Rules Functional  || goto :ExitFailed
 
 ::Create the BinSkim platform specific publish packages
 echo Creating Platform Specific BinSkim 'Publish' Packages
-call :CreatePublishPackage netcoreapp3.1 win-x64 || goto :ExitFailed
-call :CreatePublishPackage netcoreapp3.1 linux-x64 || goto :ExitFailed
-call :CreatePublishPackage netcoreapp3.1 osx-x64 || goto :ExitFailed
-call :CreatePublishPackage net6.0 win-x64 || goto :ExitFailed
-call :CreatePublishPackage net6.0 linux-x64 || goto :ExitFailed
-call :CreatePublishPackage net6.0 osx-x64 || goto :ExitFailed
+call :CreatePublishPackage net8.0 win-x64 || goto :ExitFailed
+call :CreatePublishPackage net8.0 linux-x64 || goto :ExitFailed
+call :CreatePublishPackage net8.0 osx-x64 || goto :ExitFailed
 
 ::Build NuGet package
 echo BuildPackages.cmd
@@ -79,7 +76,7 @@ dotnet tool update --global dotnet-format
 
 ::Update BinSkimRules.md to cover any xml changes
 echo Exporting any BinSkim rules
-.\bld\bin\x64_Release\netcoreapp3.1\BinSkim.exe export-rules .\docs\BinSkimRules.md
+.\bld\bin\x64_Release\net8.0\BinSkim.exe export-rules .\docs\BinSkimRules.md
 
 goto :Exit
 

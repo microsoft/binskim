@@ -16,6 +16,7 @@
 - NEW => new feature 
 
 ## UNRELEASED
+* DEP: Upgrade BinSkim to .net8.0 as .net6.0 reached end of support on 11/12/2024.
 * NEW: Remove sarif-sdk submodule and use nuget package instead
 
 ## **v4.3.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.3.1)
