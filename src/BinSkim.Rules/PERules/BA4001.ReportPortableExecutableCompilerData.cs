@@ -85,7 +85,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 var record = new CompilerData
                 {
                     BinaryType = "PE",
-                    CompilerName = ".NET Compiler",
+                    CompilerName = pdb.GetCompilerName() ?? pdb.GetCompilerNameFromCompilandDetails() ?? ".NET Compiler", // Inexpensive -> expensive -> fallback
                     Language = nameof(Language.MSIL),
                     DebuggingFileName = pdb.GlobalScope?.Name,
                     DebuggingFileGuid = pdb.GlobalScope?.Guid.ToString(),

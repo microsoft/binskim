@@ -366,6 +366,37 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         }
 
         /// <summary>
+        /// Inexpensive lookup to get the compiler name.
+        /// </summary>
+        /// <returns>String containing the name of the compiler or null.</returns>
+        public string GetCompilerName()
+        {
+            return this.session.globalScope.compilerName;
+        }
+
+        /// <summary>
+        /// Potentially expensive lookup to get the compiler name by searching within the details of the compiland.
+        /// The target project may have to set "DebugType" to "full" in their .*proj file to get this information.
+        /// </summary>
+        /// <returns>String containing the name of the compiler or null.</returns>
+        public string GetCompilerNameFromCompilandDetails()
+        {
+            IDiaEnumSymbols enumSymbols;
+            this.session.globalScope.findChildren(SymTagEnum.SymTagCompiland, null, 0, out enumSymbols);
+            foreach (IDiaSymbol compilandDetails in enumSymbols)
+            {
+                IDiaEnumSymbols enumDetails;
+                compilandDetails.findChildren(SymTagEnum.SymTagCompilandDetails, null, 0, out enumDetails);
+                foreach (IDiaSymbol detail in enumDetails)
+                {
+                    return detail.compilerName;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Returns the location of the PDB for this module
         /// </summary>
         public string PdbLocation
