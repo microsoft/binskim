@@ -6,7 +6,8 @@ $tool = "BinSkim"
 $repoRoot = ( Resolve-Path "$PSScriptRoot\..\..\" ).ToString()
 $utility = "$repoRoot\bld\bin\AnyCPU_Release\net9.0\win-x64\$tool.exe"
 
-function Build-Tool() {
+function Build-Tool()
+{
     Write-Host "Building the tool..."  -NoNewline
     # Out-Null *and* /noconsolelogger here because our scripts call out to batch files and similar
     # that don't respect msbuild's /noconsolelogger switch.
@@ -15,7 +16,8 @@ function Build-Tool() {
 }
 
 
-function Build-Baselines($sourceExtension) {
+function Build-Baselines($sourceExtension)
+{
     Write-Host "Building baselines..."
     $expectedDirectory = Join-Path "$PSScriptRoot\BaselineTestData" $ruleName
     $expectedDirectory = Join-Path $expectedDirectory "Expected"
