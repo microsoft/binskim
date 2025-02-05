@@ -213,7 +213,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
-        [SupportedOSPlatform("windows")]
         public void PEBinary_CanCreateIDiaSourceFromMsdia()
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
