@@ -3,7 +3,7 @@
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
   <PropertyGroup>
     <RootNamespace>Microsoft.CodeAnalysis.IL.Rules</RootNamespace>
-    <TargetFramework>$(NetStandardVersion)</TargetFramework>
+    <TargetFramework>$(NetCoreVersion)</TargetFramework>
     <Platforms>x64</Platforms>
   </PropertyGroup>
   <ItemGroup>

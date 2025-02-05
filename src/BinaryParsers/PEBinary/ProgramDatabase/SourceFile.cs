@@ -86,7 +86,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             if (!this.disposed)
             {
-                Marshal.ReleaseComObject(this.sourceFile);
+                ResourceReleaser.Release(this.sourceFile);
             }
 
             this.disposed = true;

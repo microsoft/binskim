@@ -31,10 +31,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 throw new InvalidOperationException("Could not get class object.");
             }
-            var classFactory = (IClassFactory)Marshal.GetObjectForIUnknown(pClassFactory);
+            var classFactory = (IClassFactory)ResourceReleaser.GetObjectForIUnknown(pClassFactory);
             classFactory.CreateInstance(IntPtr.Zero, ref riid, out pvObject);
             Marshal.Release(pClassFactory);
-            Marshal.ReleaseComObject(classFactory);
+            ResourceReleaser.Release(classFactory);
         }
 
         private const string IDiaDataSourceRiid = "79F1BB5F-B66E-48E5-B6A9-1545C323CA3D";
@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             IntPtr diaSourcePtr = IntPtr.Zero;
             CoCreateFromMsdia(new Guid(DiaSourceClsid), new Guid(IDiaDataSourceRiid), out diaSourcePtr);
-            object objectForIUnknown = Marshal.GetObjectForIUnknown(diaSourcePtr);
+            object objectForIUnknown = ResourceReleaser.GetObjectForIUnknown(diaSourcePtr);
             var diaSourceInstance = objectForIUnknown as IDiaDataSource;
             return diaSourceInstance;
         }

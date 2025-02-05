@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>$(NetCoreVersion)</TargetFramework>
 	 <CoyoteVersion>1.7.9</CoyoteVersion>
 	 <PowershellExecutable Condition="'$(OS)'=='Windows_NT'">powershell</PowershellExecutable>
 	 <PowershellExecutable Condition="'$(PowershellExecutable)'==''">pwsh</PowershellExecutable>
@@ -33,7 +33,7 @@
 	  </None>
 	</ItemGroup>
 
-	<Target Name="CoyoteRewriting" AfterTargets="AfterBuild" Condition=" '$(TargetFramework)'=='netcoreapp3.1' And '$(OS)'=='Windows_NT' ">
+	<Target Name="CoyoteRewriting" AfterTargets="AfterBuild" Condition="'$(OS)'=='Windows_NT' ">
 		<Exec Command="$(ExecCommand)" />
 	</Target>		
 
