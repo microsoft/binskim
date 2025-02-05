@@ -36,7 +36,7 @@ echo         public const string AssemblyVersion = "%MAJOR%.%MINOR%.%PATCH%" + "
 echo         public const string FileVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0";>> %VERSION_CONSTANTS%
 echo         public const string Version = AssemblyVersion + Prerelease;>> %VERSION_CONSTANTS%
 echo     }>> %VERSION_CONSTANTS%
-echo  }>> %VERSION_CONSTANTS%
+echo }>> %VERSION_CONSTANTS%
 
 
 ::Restore packages
