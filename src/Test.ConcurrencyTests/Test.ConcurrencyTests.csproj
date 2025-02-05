@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreVersion)</TargetFramework>
+	 <CoyoteVersion>1.7.9</CoyoteVersion>
+	 <PowershellExecutable Condition="'$(OS)'=='Windows_NT'">powershell</PowershellExecutable>
+	 <PowershellExecutable Condition="'$(PowershellExecutable)'==''">pwsh</PowershellExecutable>
+	 <PathSeparator Condition="'$(OS)'=='Windows_NT'">\</PathSeparator>
+	 <PathSeparator Condition="'$(OS)'!='Windows_NT'">/</PathSeparator>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<ExecCommand>$(PowershellExecutable) -executionpolicy bypass -command ".$(PathSeparator)rewriteUnitTests.ps1 -Configuration $(Configuration) -CoyoteVersion $(CoyoteVersion) -TargetFramework $(TargetFramework)"</ExecCommand>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Coyote" Version="$(CoyoteVersion)" />
+		<PackageReference Include="Microsoft.Coyote.Test" Version="$(CoyoteVersion)" />
+		<PackageReference Include="Microsoft.Coyote.Tool" Version="$(CoyoteVersion)" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
+		<PackageReference Include="MSTest.TestAdapter" Version="3.0.4" />
+		<PackageReference Include="MSTest.TestFramework" Version="3.0.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="rewrite.coyote.Windows.Debug.json">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+		<None Update="rewrite.coyote.Windows.Release.json">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+	  <None Update="rewriteUnitTests.ps1">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<Target Name="CoyoteRewriting" AfterTargets="AfterBuild" Condition="'$(OS)'=='Windows_NT' ">
+		<Exec Command="$(ExecCommand)" />
+	</Target>		
+
+</Project>
