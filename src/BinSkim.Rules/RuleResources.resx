@@ -785,4 +785,7 @@ For VC projects use ItemDefinitionGroup - ClCompile - DebugInformationFormat pro
     <value>The following modules were compiled with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified.
 The likely cause is that the code was linked to a static library with no debug information: {0}</value>
   </data>
+  <data name="ERR998_ExceptionInCanAnalyze" xml:space="preserve">
+    <value>An exception was raised attempting to determine whether '{0}' is a valid analysis target for check '{1}' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however.</value>
+  </data>
 </root>
