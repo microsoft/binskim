@@ -54,6 +54,11 @@ namespace Microsoft.CodeAnalysis.IL
         public bool? IgnorePdbLoadError { get; set; }
 
         [Option(
+            "ignoreExceptionInCanAnalyzeError",
+            HelpText = "If enabled, BinSkim won't break if we have a ExceptionInCanAnalyzeError")]
+        public bool? IgnoreExceptionInCanAnalyzeError { get; set; }
+
+        [Option(
             "disable-telemetry",
             HelpText = "If enabled, BinSkim will disable telemetry.")]
         public bool? DisableTelemetry { get; set; }
