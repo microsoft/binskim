@@ -1699,6 +1699,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An exception was raised attempting to determine whether &apos;{0}&apos; is a valid analysis target for check &apos;{1}&apos; (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however..
+        /// </summary>
+        internal static string ERR998_ExceptionInCanAnalyze {
+            get {
+                return ResourceManager.GetString("ERR998_ExceptionInCanAnalyze", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was not evaluated for check &apos;{1}&apos; as the analysis is not relevant based on observed metadata: {2}..
         /// </summary>
         internal static string NotApplicable_InvalidMetadata {

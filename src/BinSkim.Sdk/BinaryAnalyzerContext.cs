@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.Sarif;
@@ -80,6 +79,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             get => this.Policy?.GetProperty(BinaryParsersProperties.IgnorePdbLoadError) == true;
             set => this.Policy.SetProperty(BinaryParsersProperties.IgnorePdbLoadError, value);
+        }
+
+        public bool IgnorePELoadError
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.IgnorePELoadError) == true;
+            set => this.Policy.SetProperty(BinaryParsersProperties.IgnorePELoadError, value);
         }
 
         public bool DisableTelemetry

@@ -136,6 +136,58 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
+        public void AnalyzeCommand_IgnoreExceptionInCanAnalyzeErrorTest()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_IgnoreExceptionInCanAnalyzeErrorTest.sarif");
+            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "PELoadErrors", "*.exe");
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new string[] {
+                    pathDeterminismTest
+                },
+                Level = new[] { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
+                Kind = new[] { ResultKind.Fail, ResultKind.Pass },
+                OutputFilePath = fileName,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                Recurse = true,
+                Threads = 10,
+                IgnorePELoadError = true,
+                DataToInsert = new[] { OptionallyEmittedData.Hashes }
+            };
+            var command = new MultithreadedAnalyzeCommand();
+            command.Run(options);
+            var log = SarifLog.Load(fileName);
+            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("System.InvalidOperationException: RVA does not belong to any section")).Should().Be(4);
+        }
+
+        [Fact]
+        public void AnalyzeCommand_NotIgnoreExceptionInCanAnalyzeErrorTest()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+            string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_IgnoreExceptionInCanAnalyzeErrorTest.sarif");
+            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "PELoadErrors", "*.exe");
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new string[] {
+                    pathDeterminismTest
+                },
+                Level = new[] { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note, FailureLevel.None },
+                Kind = new[] { ResultKind.Fail, ResultKind.Pass },
+                OutputFilePath = fileName,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                Recurse = true,
+                Threads = 10,
+                IgnorePELoadError = false,
+                DataToInsert = new[] { OptionallyEmittedData.Hashes }
+            };
+            var command = new MultithreadedAnalyzeCommand();
+            command.Run(options);
+            var log = SarifLog.Load(fileName);
+            log.Runs[0].Invocations[0].ToolExecutionNotifications.Count(t => t.Exception.Kind.Equals("InvalidOperationException")).Should().Be(4);
+        }
+
+        [Fact]
         public void AnalyzeCommand_ZeroByteTest()
         {
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_ZeroByteTest.sarif");
