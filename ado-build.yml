@@ -19,7 +19,12 @@ jobs:
           packageType: sdk
 
       - checkout: self
-        submodules: true
+
+      - task: UseDotNet@2
+        displayName: .NET Core 8 sdk
+        inputs:
+          version: "8.0.x"
+          packageType: sdk
 
       - task: Bash@3
         displayName: "Build and Test"
@@ -43,8 +48,13 @@ jobs:
           version: "6.0.x"
           packageType: sdk
 
+      - task: UseDotNet@2
+        displayName: .NET Core 8 sdk
+        inputs:
+          version: "8.0.x"
+          packageType: sdk
+
       - checkout: self
-        submodules: true
 
       - task: CmdLine@2
         displayName: "Build and Test"
@@ -52,8 +62,6 @@ jobs:
           script: "BuildAndTest.cmd"
 
       - task: ComponentGovernanceComponentDetection@0
-        inputs:
-          ignoreDirectories: 'src\sarif-sdk'
 
   - job: mac
     pool:
@@ -71,8 +79,13 @@ jobs:
           version: "6.0.x"
           packageType: sdk
 
+      - task: UseDotNet@2
+        displayName: .NET Core 8 sdk
+        inputs:
+          version: "8.0.x"
+          packageType: sdk
+
       - checkout: self
-        submodules: true
 
       - task: Bash@3
         displayName: "Build and Test"

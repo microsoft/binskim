@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
-    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
   <PropertyGroup>
     <RootNamespace>Microsoft.CodeAnalysis.IL.Sdk</RootNamespace>
     <TargetFramework>$(NetStandardVersion)</TargetFramework>
     <Platforms>x64</Platforms>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="Sarif.Driver" />
   </ItemGroup>
-  
   <ItemGroup>
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
-    <ProjectReference Include="..\sarif-sdk\src\Sarif.Driver\Sarif.Driver.csproj" />
   </ItemGroup>
-    
   <ItemGroup>
     <Compile Update="EnvironmentResources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -31,7 +27,6 @@
       <DependentUpon>SdkResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-  
   <ItemGroup>
     <EmbeddedResource Update="EnvironmentResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -43,5 +38,4 @@
       <CustomToolNamespace>Microsoft.CodeAnalysis.IL.Sdk</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
-  
 </Project>

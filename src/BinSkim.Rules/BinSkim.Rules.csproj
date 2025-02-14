@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
   <PropertyGroup>
     <RootNamespace>Microsoft.CodeAnalysis.IL.Rules</RootNamespace>
     <TargetFramework>$(NetStandardVersion)</TargetFramework>
     <Platforms>x64</Platforms>
   </PropertyGroup>
-
   <ItemGroup>
     <Reference Include="Dia2Lib">
       <HintPath>..\..\refs\Dia2Lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
-  
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
-    <PackageReference Include="System.Composition" Version="7.0.0" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="System.Composition" />
+    <PackageReference Include="Sarif.Driver" />
   </ItemGroup>
-  
   <ItemGroup>
-    <ProjectReference Include="..\sarif-sdk\src\Sarif.Driver\Sarif.Driver.csproj" />
     <ProjectReference Include="..\BinaryParsers\BinaryParsers.csproj" />
     <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
   </ItemGroup>
-  
   <ItemGroup>
     <Compile Update="RuleResources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -34,7 +29,6 @@
       <DependentUpon>RuleResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-  
   <ItemGroup>
     <EmbeddedResource Update="RuleResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -42,5 +36,4 @@
       <CustomToolNamespace>Microsoft.CodeAnalysis.IL.Rules</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
-  
 </Project>
