@@ -1160,7 +1160,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             var notApplicableTo = new HashSet<string>
             {
-                MetadataConditions.ImageIsKernelModeBinary
+                MetadataConditions.ImageIsKernelModeBinary,
+                MetadataConditions.ImageIsNonWindowsDotNetAssembly
             };
 
             this.VerifyApplicability(new DoNotMarkWritableSectionsAsExecutable(), notApplicableTo);
