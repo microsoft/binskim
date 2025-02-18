@@ -84,7 +84,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public static bool IsNonWindowsMachineTarget(Machine machine)
         {
-            return machine != Machine.Amd64 && machine != Machine.I386 && machine != Machine.Arm && machine != Machine.Arm64 
+            return machine != Machine.Amd64 && machine != Machine.I386 && machine != Machine.Arm && machine != Machine.Arm64
                 && machine != Machine.IA64 && machine != Machine.Thumb;
         }
 
