@@ -136,9 +136,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
-        public void AnalyzeCommand_IgnoreExceptionInCanAnalyzeErrorTest()
+        public void AnalyzeCommand_IgnoreExceptionInReadingPeFiles()
         {
-            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_IgnoreExceptionInCanAnalyzeErrorTest.sarif");
             string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "PELoadErrors", "*.exe");
             var options = new AnalyzeOptions
@@ -162,9 +161,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
-        public void AnalyzeCommand_NotIgnoreExceptionInCanAnalyzeErrorTest()
+        public void AnalyzeCommand_NotIgnoreExceptionInReadingPeFiles()
         {
-            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_IgnoreExceptionInCanAnalyzeErrorTest.sarif");
             string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "PELoadErrors", "*.exe");
             var options = new AnalyzeOptions

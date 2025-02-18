@@ -64,6 +64,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public static PerLanguageOption<bool> IgnorePELoadError { get; } =
             new PerLanguageOption<bool>(
                 "BinaryParsers", nameof(IgnorePELoadError), defaultValue: () => false,
-                "Set this value to 'true' to ignore exceptions thrown in CanAnalyze method.");
+                "Set this value to 'true' to ignore exceptions thrown in reading PE files.");
     }
 }
