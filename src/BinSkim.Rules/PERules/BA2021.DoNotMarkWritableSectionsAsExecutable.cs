@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // The Machine value in the CoffHeader for Windows ARM64 will not be the same for Linux ARM64.
                 // As a result, we can detect .NET PE's that are non-Windows and skip.
                 reasonForNotAnalyzing = MetadataConditions.ImageIsNonWindowsDotNetAssembly;
-                if (IsNonWindowsMachineTarget(coffHeader.Machine)) { return result; }
+                if (PE.IsNonWindowsMachineTarget(coffHeader.Machine)) { return result; }
             }
 
             reasonForNotAnalyzing = MetadataConditions.ImageIsKernelModeBinary;
