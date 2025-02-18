@@ -49,8 +49,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 throw new ArgumentNullException(nameof(context));
             }
 
-            string path = context.CurrentTarget.Uri.OriginalString;
-
             // The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however..
             context.Logger.LogConfigurationNotification(
                 Errors.CreateNotification(
@@ -63,7 +61,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     RuleResources.ERR998_ExceptionInCanAnalyze,
                     context.CurrentTarget.Uri.GetFileName(),
                     ex.ToString()));
-
 
             if (context is BinaryAnalyzerContext binaryAnalyzerContext && !binaryAnalyzerContext.IgnorePELoadError)
             {
