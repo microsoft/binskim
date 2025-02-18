@@ -19,7 +19,7 @@ set Platform=x64
 )
 
 call SetCurrentVersion.cmd
-set Version=%MAJOR%.%MINOR%.%PATCH%%PRERELEASE%
+set Version=%MAJOR%.%MINOR%.%PATCH%.%REV%%PRERELEASE%
 set NuGetOutputDirectory=..\..\bld\bin\nuget\
 call BuildPackages.cmd %Configuration% %Platform% %NuGetOutputDirectory% %Version% || goto :ExitFailed
 
