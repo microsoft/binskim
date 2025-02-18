@@ -17,7 +17,7 @@
 
 ## UNRELEASED
 
-## **v4.3.1-rc2**
+## **v4.3.1.1**
 * NEW: Remove sarif-sdk submodule and use nuget package instead
 * NEW: Add `--ignorePELoadErrors` argument to disable exit code 1 when an exception is thrown in `CanAnalyze` method
 
