@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.IL
         public bool? IgnorePdbLoadError { get; set; }
 
         [Option(
-            "ignorePELoadErrors",
+            "ignorePELoadError",
             HelpText = "If enabled, BinSkim won't break if we have a ExceptionInCanAnalyzeError")]
         public bool? IgnorePELoadError { get; set; }
 

@@ -79,6 +79,15 @@ namespace Microsoft.CodeAnalysis.IL
 
                         break;
                     }
+                    case "--ignorePELoadError":
+                    {
+                        if (!EvaluatesToTrueOrFalse(next))
+                        {
+                            rewritten.Add("True");
+                        }
+
+                        break;
+                    }
 
                     default:
                     {
