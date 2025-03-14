@@ -16,6 +16,7 @@
 - NEW => new feature 
 
 ## UNRELEASED
+  NEW: Dynamic Lookup of Compiler Name for Managed PE for BA4001
 
 ## **v4.3.1.1**
 * NEW: Remove sarif-sdk submodule and use nuget package instead
