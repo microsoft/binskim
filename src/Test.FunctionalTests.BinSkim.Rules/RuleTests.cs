@@ -1252,15 +1252,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArmBinary);
         }
 
-        // [Fact]
-        // public void BA2026_EnableMicrosoftCompilerSdlSwitch_Pass()
-        // {
-        //     if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
-        //     {
-        //         this.VerifyPass(new EnableMicrosoftCompilerSdlSwitch(), useDefaultPolicy: true);
-        //     }
-        // }
-
         [Fact]
         public void BA2026_EnableMicrosoftCompilerSdlSwitch_Fail()
         {
