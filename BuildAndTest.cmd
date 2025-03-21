@@ -25,6 +25,7 @@ call SetCurrentVersion.cmd
 set VERSION_CONSTANTS=%~dp0src\BinaryParsers\VersionConstants.cs
 
 @REM Rewrite VersionConstants.cs
+
 echo // Copyright (c) Microsoft. All rights reserved. Licensed under the MIT>  %VERSION_CONSTANTS%
 echo // license. See LICENSE file in the project root for full license information.>> %VERSION_CONSTANTS%
 echo namespace Microsoft.CodeAnalysis.IL>> %VERSION_CONSTANTS%
