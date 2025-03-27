@@ -16,6 +16,8 @@
 - NEW => new feature 
 
 ## UNRELEASED
+* DEP: Dotnet update to 9.x
+* DEP: FluentAssertions version dependency update to 7.x due to a license change.
 
 ## **v4.4.0**
 * NEW: Cross-Platform .rsp File Support. [#1016](https://github.com/microsoft/binskim/pull/1016)
