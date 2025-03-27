@@ -12,7 +12,7 @@
 [CmdletBinding()]
 param(
     [string]
-    $BinSkimFolder = "..\bld\bin\x64_Release\netcoreapp3.1",
+    $BinSkimFolder = "..\bld\bin\x64_Release\net9.0",
 
     [string]
     $SessionName = "stress",
