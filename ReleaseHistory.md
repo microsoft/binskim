@@ -16,6 +16,7 @@
 - NEW => new feature 
 
 ## UNRELEASED
+  NEW: Dynamic Lookup of Compiler Name for Managed PE for BA4001
 
 ## **v4.4.0**
 * NEW: Cross-Platform .rsp File Support. [#1016](https://github.com/microsoft/binskim/pull/1016)
