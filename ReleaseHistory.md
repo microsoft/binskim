@@ -16,9 +16,12 @@
 - NEW => new feature 
 
 ## UNRELEASED
+
+## **v4.4.1**
+* RRR: Skip BA2021 Analysis on .NET R2R & NativeAOT PE on non-Windows Platforms. [#1013](https://github.com/microsoft/binskim/pull/1013)
 * DEP: Dotnet update to 9.x. [#1024](https://github.com/microsoft/binskim/pull/1024)
-* DEP: FluentAssertions version dependency update to 7.x due to a license change. [#1059](https://github.com/microsoft/binskim/pull/1059)
 * NEW: Dynamic Lookup of Compiler Name for Managed PE for BA4001 [#1049](https://github.com/microsoft/binskim/pull/1049)
+* DEP: FluentAssertions version dependency update to 7.x due to a license change. [#1059](https://github.com/microsoft/binskim/pull/1059)
 
 ## **v4.4.0**
 * NEW: Cross-Platform .rsp File Support. [#1016](https://github.com/microsoft/binskim/pull/1016)
