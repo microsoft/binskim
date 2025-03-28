@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 using Dia2Lib;
 
@@ -364,9 +363,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         {
             if (!this.disposed)
             {
-                Marshal.ReleaseComObject(this.sym);
+                ResourceReleaser.Release(this.sym);
             }
-
             this.disposed = true;
         }
 
@@ -505,7 +503,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 if (enumSymbols != null)
                 {
-                    Marshal.ReleaseComObject(enumSymbols);
+                    ResourceReleaser.Release(enumSymbols);
                 }
             }
         }
