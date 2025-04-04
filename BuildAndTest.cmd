@@ -46,7 +46,7 @@ dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --packages 
 
 :: Build the solution 
 echo Building solution...
-dotnet build --no-restore /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
+dotnet build /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
 :nightly
 if "%NightlyTest%" EQU "nightly" (
@@ -77,7 +77,7 @@ dotnet tool update --global dotnet-format
 
 ::Update BinSkimRules.md to cover any xml changes
 echo Exporting any BinSkim rules
-.\bld\bin\x64_Release\net9.0\BinSkim.exe export-rules .\docs\BinSkimRules.md
+.\bld\bin\x64_Release\Publish\net9.0\win-x64\BinSkim.exe export-rules .\docs\BinSkimRules.md
 
 goto :Exit
 
@@ -91,7 +91,7 @@ Exit /B %ERRORLEVEL%
 :CreatePublishPackage
 set Framework=%~1
 set RuntimeArg=%~2
-dotnet publish %~dp0src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework% --runtime %RuntimeArg% --self-contained
+dotnet publish %~dp0src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework% --runtime %RuntimeArg% --self-contained true
 Exit /B %ERRORLEVEL%
 
 :ExitFailed
