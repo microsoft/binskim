@@ -46,7 +46,7 @@ dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --packages 
 
 :: Build the solution 
 echo Building solution...
-dotnet build /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
+dotnet build --no-restore /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
 :nightly
 if "%NightlyTest%" EQU "nightly" (
