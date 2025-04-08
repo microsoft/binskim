@@ -9,7 +9,6 @@
     <OutputType>Exe</OutputType>
     <Platforms>x64</Platforms>
     <SelfContained>true</SelfContained>
-    <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
