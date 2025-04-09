@@ -302,7 +302,24 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             attributeValue.Value = (ulong)debugData.ReadOffset(is64bit);
                             if (attribute == DwarfAttribute.RankStrOffsetsBase)
                             {
-                                indexOffset = (int)((ulong)attributeValue.Value / (ulong)(is64bit ? 8 : 4));
+                                try
+                                {
+                                    ulong divisor = (ulong)(is64bit ? 8 : 4);
+                                    if (((ulong)attributeValue.Value) > (int.MaxValue * divisor))
+                                    {
+                                        Console.WriteLine($"Warning: String offset base value too large: {attributeValue.Value}");
+                                        indexOffset = -1;
+                                    }
+                                    else
+                                    {
+                                        indexOffset = (int)((ulong)attributeValue.Value / divisor);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Warning: Error calculating index offset: {ex.Message}");
+                                    indexOffset = -1;
+                                }
                             }
                             break;
 
@@ -394,13 +411,39 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         if (dwarfAttributeValue.Offset == null ||
                             dwarfAttributeValue.Type != DwarfAttributeValueType.String)
                         {
-                            // We current do not post-process all address types.
                             continue;
                         }
 
-                        int debugStringOffsetIndex = Convert.ToInt32(dwarfAttributeValue.Value) + indexOffset;
-                        int offset = debugStringOffsets[debugStringOffsetIndex];
-                        dwarfAttributeValue.Value = debugStrings.ReadString(offset);
+                        if (!TryGetInt32Value(dwarfAttributeValue.Value, out int baseOffset, out string error))
+                        {
+                            Console.WriteLine($"Warning: {error}");
+                            continue;
+                        }
+
+                        // Check if addition would overflow
+                        try
+                        {
+                            int debugStringOffsetIndex = checked(baseOffset + indexOffset);
+
+                            if (debugStringOffsetIndex < 0 || debugStringOffsetIndex >= debugStringOffsets.Count)
+                            {
+                                Console.WriteLine($"Warning: Debug string offset index {debugStringOffsetIndex} is out of bounds. Valid range is 0 to {debugStringOffsets.Count - 1}");
+                                continue;
+                            }
+
+                            int offset = debugStringOffsets[debugStringOffsetIndex];
+                            dwarfAttributeValue.Value = debugStrings.ReadString(offset);
+                        }
+                        catch (OverflowException)
+                        {
+                            Console.WriteLine($"Warning: Adding offset would cause overflow: base={baseOffset}, index={indexOffset}");
+                            continue;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Warning: Error processing string offset: {ex.Message}");
+                            continue;
+                        }
                     }
                 }
 
@@ -428,8 +471,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     symbol.Children = new List<DwarfSymbol>();
                     parents.Push(symbol);
                 }
-
-                break;
             }
 
             SymbolsTree = symbols.ToArray();
@@ -529,6 +570,57 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             }
 
             return stringOffsets;
+        }
+
+        private bool TryGetInt32Value(object value, out int result, out string error)
+        {
+            result = 0;
+            error = null;
+
+            try
+            {
+                if (value == null)
+                {
+                    error = "Null value encountered";
+                    return false;
+                }
+
+                if (value is ulong ulongValue)
+                {
+                    if (ulongValue > int.MaxValue)
+                    {
+                        error = $"Value {ulongValue} is too large for Int32";
+                        return false;
+                    }
+                    result = (int)ulongValue;
+                    return true;
+                }
+
+                if (value is long longValue)
+                {
+                    if (longValue > int.MaxValue || longValue < int.MinValue)
+                    {
+                        error = $"Value {longValue} is outside Int32 range";
+                        return false;
+                    }
+                    result = (int)longValue;
+                    return true;
+                }
+
+                if (value is int intValue)
+                {
+                    result = intValue;
+                    return true;
+                }
+
+                error = $"Unexpected value type: {value.GetType()}";
+                return false;
+            }
+            catch (Exception ex)
+            {
+                error = $"Error converting value: {ex.Message}";
+                return false;
+            }
         }
 
         /// <summary>
