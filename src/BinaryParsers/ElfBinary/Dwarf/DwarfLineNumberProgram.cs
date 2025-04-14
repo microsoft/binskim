@@ -578,7 +578,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 }
                 case DwarfFormat.UData:
                 {
-                    timestamp = BitConverter.GetBytes((ulong)reader.ULEB128());
+                    timestamp = BitConverter.GetBytes(reader.ULEB128());
                     break;
                 }
                 case DwarfFormat.Block:
@@ -619,7 +619,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 }
                 case DwarfFormat.UData:
                 {
-                    size = (ulong)reader.ULEB128();
+                    size = reader.ULEB128();
                     break;
                 }
             }
@@ -633,11 +633,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             {
                 case DwarfFormat.Data1:
                 {
-                    return (int)debugLine.ReadByte();
+                    return debugLine.ReadByte();
                 }
                 case DwarfFormat.Data2:
                 {
-                    return (int)debugLine.ReadUshort();
+                    return debugLine.ReadUshort();
                 }
                 case DwarfFormat.UData:
                 {
