@@ -4,9 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
@@ -38,7 +35,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                     DwarfMemoryReader debugDataDescription,
                                     DwarfMemoryReader debugStrings,
                                     DwarfMemoryReader debugLineStrings,
-                                    IList<int> debugStringOffsets,
+                                    DwarfMemoryReader debugStringOffsets,
                                     NormalizeAddressDelegate addressNormalizer)
         {
             ReadData(dwarfBinary,
@@ -78,7 +75,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                               DwarfMemoryReader debugDataDescription,
                               DwarfMemoryReader debugStrings,
                               DwarfMemoryReader debugLineStrings,
-                              IList<int> debugStringOffsets,
+                              DwarfMemoryReader debugStringOffsets,
                               NormalizeAddressDelegate addressNormalizer)
         {
             // Read header
@@ -209,7 +206,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.UData:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            attributeValue.Value = (ulong)debugData.ULEB128();
+                            attributeValue.Value = debugData.ULEB128();
                             break;
 
                         case DwarfFormat.String:
@@ -304,16 +301,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             {
                                 try
                                 {
-                                    ulong divisor = (ulong)(is64bit ? 8 : 4);
-                                    if (((ulong)attributeValue.Value) > (int.MaxValue * divisor))
-                                    {
-                                        Console.WriteLine($"Warning: String offset base value too large: {attributeValue.Value}");
-                                        indexOffset = -1;
-                                    }
-                                    else
-                                    {
-                                        indexOffset = (int)((ulong)attributeValue.Value / divisor);
-                                    }
+                                    indexOffset = Convert.ToInt32(attributeValue.Value);
                                 }
                                 catch (Exception ex)
                                 {
@@ -404,46 +392,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     }
                 }
 
-                if (indexOffset > -1)
+                if (indexOffset != -1)
                 {
                     foreach (DwarfAttributeValue dwarfAttributeValue in attributes.Values)
                     {
                         if (dwarfAttributeValue.Offset == null ||
                             dwarfAttributeValue.Type != DwarfAttributeValueType.String)
                         {
+                            // We current do not post-process all address types.
                             continue;
                         }
 
-                        if (!TryGetInt32Value(dwarfAttributeValue.Value, out int baseOffset, out string error))
-                        {
-                            Console.WriteLine($"Warning: {error}");
-                            continue;
-                        }
-
-                        // Check if addition would overflow
-                        try
-                        {
-                            int debugStringOffsetIndex = checked(baseOffset + indexOffset);
-
-                            if (debugStringOffsetIndex < 0 || debugStringOffsetIndex >= debugStringOffsets.Count)
-                            {
-                                Console.WriteLine($"Warning: Debug string offset index {debugStringOffsetIndex} is out of bounds. Valid range is 0 to {debugStringOffsets.Count - 1}");
-                                continue;
-                            }
-
-                            int offset = debugStringOffsets[debugStringOffsetIndex];
-                            dwarfAttributeValue.Value = debugStrings.ReadString(offset);
-                        }
-                        catch (OverflowException)
-                        {
-                            Console.WriteLine($"Warning: Adding offset would cause overflow: base={baseOffset}, index={indexOffset}");
-                            continue;
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine($"Warning: Error processing string offset: {ex.Message}");
-                            continue;
-                        }
+                        int debugStringOffsetIndex = Convert.ToInt32(dwarfAttributeValue.Value) + indexOffset;
+                        debugStringOffsets.Position = debugStringOffsetIndex;
+                        int offset = debugStringOffsets.ReadOffset(is64bit);
+                        dwarfAttributeValue.Value = debugStrings.ReadString(offset);
                     }
                 }
 
