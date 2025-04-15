@@ -60,6 +60,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// Attribute value represents offset.
         /// </summary>
         SecOffset,
+
+        /// <summary>
+        /// Attribute value represents index into the location list table.
+        /// </summary>
+        Loclistx,
     }
 
     /// <summary>

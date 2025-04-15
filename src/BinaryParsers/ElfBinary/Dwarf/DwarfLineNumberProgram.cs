@@ -26,10 +26,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         internal DwarfLineNumberProgram(int dwarfVersion,
                                         DwarfMemoryReader debugLine,
                                         DwarfMemoryReader debugStrings,
-                                        DwarfMemoryReader debugLineStrings,
                                         NormalizeAddressDelegate addressNormalizer)
         {
-            Files = ReadData(dwarfVersion, debugLine, debugStrings, debugLineStrings, addressNormalizer);
+            Files = ReadData(dwarfVersion, debugLine, debugStrings, addressNormalizer);
         }
 
         /// <summary>
@@ -181,7 +180,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         private static List<DwarfFileInformation> ReadData(int dwarfVersion,
                                                            DwarfMemoryReader debugLine,
                                                            DwarfMemoryReader debugStrings,
-                                                           DwarfMemoryReader debugLineStrings,
                                                            NormalizeAddressDelegate addressNormalizer)
         {
             // Read header
@@ -194,7 +192,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 return null;
             }
 
-            int endPosition = debugLine.Position + (int)unitLength;
+            uint endPosition = debugLine.Position + (uint)unitLength;
 
             if (endPosition > debugLine.Data.Length - 1)
             {
@@ -298,7 +296,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             case DwarfLineNumberHeaderEntryFormat.Path:
                             {
                                 DwarfFormat format = defDescriptors[0].AttributeFormat;
-                                path = ParsePathValue(format, is64bit, debugLine, debugStrings, debugLineStrings);
+                                path = ParsePathValue(format, is64bit, debugLine, debugStrings);
                                 break;
                             }
                             default:
@@ -340,7 +338,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         {
                             case DwarfLineNumberHeaderEntryFormat.Path:
                             {
-                                name = ParsePathValue(format, is64bit, debugLine, debugStrings, debugLineStrings);
+                                name = ParsePathValue(format, is64bit, debugLine, debugStrings);
                                 break;
                             }
                             case DwarfLineNumberHeaderEntryFormat.DirectoryIndex:
@@ -415,7 +413,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         case DwarfLineNumberStandardOpcode.Extended:
                         {
                             ulong extendedLength = debugLine.ULEB128();
-                            int newPosition = debugLine.Position + (int)extendedLength;
+                            uint newPosition = debugLine.Position + (uint)extendedLength;
                             DwarfLineNumberExtendedOpcode extendedCode = DwarfLineNumberExtendedOpcode.Unknown;
                             if (debugLine.Position + 1 <= debugLine.Data.Length)
                             {
@@ -534,19 +532,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             return files;
         }
 
-        private static string ParsePathValue(DwarfFormat format, bool is64bit, DwarfMemoryReader debugLine, DwarfMemoryReader debugStrings, DwarfMemoryReader debugLineStrings)
+        private static string ParsePathValue(DwarfFormat format, bool is64bit, DwarfMemoryReader debugLine, DwarfMemoryReader debugStrings)
         {
             switch (format)
             {
                 case DwarfFormat.Strp:
                 {
                     int offsetStrp = debugLine.ReadOffset(is64bit);
-                    return debugStrings.ReadString(offsetStrp);
+                    return offsetStrp >= 0 ? debugStrings.ReadString((uint)offsetStrp) : "";
                 }
                 case DwarfFormat.LineStrp:
                 {
                     int offsetStrp = debugLine.ReadOffset(is64bit);
-                    return debugLineStrings.ReadString(offsetStrp);
+                    return offsetStrp >= 0 ? debugStrings.ReadString((uint)offsetStrp) : "";
                 }
                 case DwarfFormat.StrpSup:
                 {
