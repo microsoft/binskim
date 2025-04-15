@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 using FluentAssertions;
@@ -168,8 +169,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             // Hello.c compiled using: gcc -Wall -O2 -g -gdwarf-4 hello.c -o hello4
             string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
             using var binary = new ElfBinary(new Uri(fileName));
+
             binary.DwarfVersion.Should().Be(4);
-            binary.CommandLineInfos.Should().OnlyContain(x => x.CommandLine.Contains("O2"));
+            binary.CommandLineInfos
+                .Where(x => x.Language != DwarfLanguage.Unknown)
+                .Should()
+                .OnlyContain(x => x.CommandLine.Contains("O2"));
             binary.GetLanguage().Should().Be(DwarfLanguage.C99);
         }
 
@@ -180,8 +185,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf5-o2");
             using var binary = new ElfBinary(new Uri(fileName));
             binary.DwarfVersion.Should().Be(5);
-            binary.CommandLineInfos.Should().OnlyContain(x => x.CommandLine.Contains("O2"));
+            binary.CommandLineInfos
+                .Where(x => x.Language != DwarfLanguage.Unknown)
+                .Should()
+                .OnlyContain(x => x.CommandLine.Contains("O2"));
             binary.GetLanguage().Should().Be(DwarfLanguage.C11);
+        }
+
+        [Fact]
+        public void ValidateDwarfV5_Rust()
+        {
+            // hello world rust compiled using: -Zdwarf-version=5
+            string fileName = Path.Combine(TestData, "Dwarf/hello_world_rust");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.DwarfVersion.Should().Be(5);
+            binary.Compilers.Any(c => c.FullDescription.Contains("rustc"));
+            binary.GetLanguage().Should().Be(DwarfLanguage.Rust);
         }
 
         [Fact]
