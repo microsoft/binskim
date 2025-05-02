@@ -16,6 +16,7 @@
 - NEW => new feature 
 
 ## UNRELEASED
+*DEP: updated version, for propagation [#1071](https://github.com/microsoft/binskim/pull/1071)
 
 ## **v4.4.1**
 * RRR: Skip BA2021 Analysis on .NET R2R & NativeAOT PE on non-Windows Platforms. [#1013](https://github.com/microsoft/binskim/pull/1013)
