@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             uint beginPosition = debugData.Position;
             ulong length = debugData.ReadLength(out bool is64bit);
             uint endPosition = debugData.Position + (uint)length;
-            NextOffset = (uint)endPosition;
+            NextOffset = endPosition;
             ushort version = debugData.ReadUshort();
 
             byte addressSize;
@@ -191,19 +191,25 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             attributeValue.Value = (ulong)debugData.ReadUshort();
                             break;
 
-                        case DwarfFormat.Data4://here 
+                        case DwarfFormat.Data4:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
                             attributeValue.Value = (ulong)debugData.ReadUint();
                             break;
 
                         case DwarfFormat.Data8:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            attributeValue.Value = debugData.ReadUlong();
+                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            {
+                                attributeValue.Value = debugData.ReadUlong();
+                            }
                             break;
 
                         case DwarfFormat.Data16:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            attributeValue.Value = debugData.ReadBlock(16);
+                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            {
+                                attributeValue.Value = debugData.ReadBlock(16);
+                            }
                             break;
 
                         case DwarfFormat.SData:
@@ -251,8 +257,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Ref1:
                             attributeValue.Type = DwarfAttributeValueType.Reference;
-                            if (debugData.Position + beginPosition <= debugData.Data.Length)
-                            { attributeValue.Value = debugData.ReadByte() + (ulong)beginPosition; }
+                            attributeValue.Value = debugData.ReadByte() + (ulong)beginPosition;
                             break;
 
                         case DwarfFormat.Ref2:
@@ -299,7 +304,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.ExpressionLocation:
                             attributeValue.Type = DwarfAttributeValueType.ExpressionLocation;
-                            attributeValue.Value = debugData.ReadBlock(debugData.ULEB128()); //this should be equialet of ulong
+                            attributeValue.Value = debugData.ReadBlock(debugData.ULEB128());
                             break;
 
                         case DwarfFormat.SecOffset:
@@ -307,21 +312,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             attributeValue.Value = (ulong)debugData.ReadOffset(is64bit);
                             if (attribute == DwarfAttribute.RankStrOffsetsBase)
                             {
-                                try
-                                {
-                                    indexOffset = (ulong)attributeValue.Value / (ulong)(is64bit ? 8 : 4);
-                                    isIndexOffsetOK = true;
-                                }
-                                catch (OverflowException)
-                                {
-                                    Console.WriteLine("Warning: Arithmetic overflow error while calculating index offset.");
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine($"Warning: Error calculating index offset: {ex.Message}");
-                                    indexOffset = 0;
-                                    isIndexOffsetOK = false;
-                                }
+                                indexOffset = (ulong)attributeValue.Value / (ulong)(is64bit ? 8 : 4);
+                                isIndexOffsetOK = true;
                             }
                             break;
 
@@ -539,70 +531,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         }
                     }
                 }
-            }
-        }
-
-        private List<int> BuildStringOffsets(DwarfMemoryReader reader, bool is64bit)
-        {
-            var stringOffsets = new List<int>();
-
-            while (!reader.IsEnd)
-            {
-                int offset = reader.ReadOffset(is64bit);
-                stringOffsets.Add(offset);
-            }
-
-            return stringOffsets;
-        }
-
-        private bool TryGetInt32Value(object value, out int result, out string error)
-        {
-            result = 0;
-            error = null;
-
-            try
-            {
-                if (value == null)
-                {
-                    error = "Null value encountered";
-                    return false;
-                }
-
-                if (value is ulong ulongValue)
-                {
-                    if (ulongValue > int.MaxValue)
-                    {
-                        error = $"Value {ulongValue} is too large for Int32";
-                        return false;
-                    }
-                    result = (int)ulongValue;
-                    return true;
-                }
-
-                if (value is long longValue)
-                {
-                    if (longValue > int.MaxValue || longValue < int.MinValue)
-                    {
-                        error = $"Value {longValue} is outside Int32 range";
-                        return false;
-                    }
-                    result = (int)longValue;
-                    return true;
-                }
-
-                if (value is int intValue)
-                {
-                    result = intValue;
-                    return true;
-                }
-
-                error = $"Unexpected value type: {value.GetType()}";
-                return false;
-            }
-            catch (Exception ex)
-            {
-                error = $"Error converting value: {ex.Message}";
-                return false;
             }
         }
 

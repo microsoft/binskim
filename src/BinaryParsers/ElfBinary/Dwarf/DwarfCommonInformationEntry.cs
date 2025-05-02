@@ -336,20 +336,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 CommonInformationEntry = entry
             };
             uint instructionsStart = 0;
-            bool isInstructionsStartFilled = false;
             if (entry.Augmentation.Length >= 1 && entry.Augmentation[0] == 'z')
             {
                 ulong length = data.ULEB128();
-
                 instructionsStart = data.Position + (uint)length;
-                isInstructionsStartFilled = true;
+
                 if (entry.LanguageSpecificDataAreaEncoding != DwarfExceptionHandlingEncoding.Omit)
                 {
                     ReadEncodedAddress(data, entry.LanguageSpecificDataAreaEncoding, input);
                 }
-            }
-            if (isInstructionsStartFilled)
-            {
                 data.Position = instructionsStart;
             }
             description.Instructions = data.ReadBlock(endPosition - data.Position);
@@ -516,7 +511,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             AddressSize = input.DefaultAddressSize;
             SegmentSelectorSize = 0;
             uint instructionsStart = 0;
-            bool isInstructiosStartOK = false;
 
             for (int i = 0; i < Augmentation.Length; i++)
             {
@@ -524,7 +518,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 {
                     ulong length = data.ULEB128();
                     instructionsStart = data.Position + (uint)length;
-                    isInstructiosStartOK = true;
                 }
                 else if (Augmentation[i] == 'L')
                 {
@@ -548,7 +541,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     break;
                 }
             }
-            if (isInstructiosStartOK)
+            if (instructionsStart <= data.Position && instructionsStart <= data.ULEB128())
             {
                 data.Position = instructionsStart;
             }
