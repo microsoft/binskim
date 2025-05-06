@@ -7,6 +7,7 @@ using System.Composition;
 using ELFSharp.ELF;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -68,8 +69,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
 
-            // Fail
-            context.Logger.Log(this,
+            PEBinary target = context.PEBinary();
+            Pdb pdb = target.Pdb;
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                //TODO 
+                //THIS IS NOT USED
+            }
+
+                // Fail
+                context.Logger.Log(this,
                 RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA3010_Error),
                     context.CurrentTarget.Uri.GetFileName()));

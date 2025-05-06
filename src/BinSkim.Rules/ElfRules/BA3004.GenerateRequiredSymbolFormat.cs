@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Composition;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -61,6 +62,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         nameof(RuleResources.BA3004_Error),
                         context.CurrentTarget.Uri.GetFileName(), dwarfVersion.ToString()));
                 return;
+            }
+
+            if(dwarfVersion >= 5)
+            {
+                PEBinary target = context.PEBinary();
+                Pdb pdb = target.Pdb;
+                foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+                {
+                    //TODO
+                    //THIS IS NOT USED
+                }
             }
 
             // The version of the debugging dwarf format is '{0}' for the file '{1}'

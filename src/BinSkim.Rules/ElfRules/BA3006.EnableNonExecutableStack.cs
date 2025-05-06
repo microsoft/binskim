@@ -8,6 +8,7 @@ using ELFSharp.ELF.Segments;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.Elf;
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -48,15 +49,22 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 
-            reasonForNotAnalyzing = null;
+                reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
         public override void Analyze(BinaryAnalyzerContext context)
         {
             ElfBinary elfBinary = context.ElfBinary();
+            PEBinary target = context.PEBinary();
+            Pdb pdb = target.Pdb;
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator()) 
+            { 
+            //todo 
+            //THIS IS NOT USED FUNCTION!!!!
+            }
 
-            if ((elfBinary.GetSegmentFlags(ElfSegmentType.PT_GNU_STACK) & SegmentFlags.Execute) != 0)
+                if ((elfBinary.GetSegmentFlags(ElfSegmentType.PT_GNU_STACK) & SegmentFlags.Execute) != 0)
             {
                 // The non-executable stack is not enabled for this binary,
                 // so '{0}' can have a vulnerability of execution of the data written on the stack.

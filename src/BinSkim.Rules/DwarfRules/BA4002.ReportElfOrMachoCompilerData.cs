@@ -60,6 +60,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 this.WriteCompilerData(context, binary.CommandLineInfos, binary.Compilers);
             }
 
+            if (binary.DwarfVersion >= 5 && binary.GetLanguage() == DwarfLanguage.Rust)
+            {
+                //TODO
+
+            }
+
             if (binary is MachOBinary machO)
             {
                 machO.MachOs.ToList().ForEach

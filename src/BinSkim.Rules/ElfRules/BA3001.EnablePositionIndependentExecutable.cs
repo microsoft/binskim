@@ -9,6 +9,7 @@ using ELFSharp.ELF;
 using ELFSharp.ELF.Segments;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -54,6 +55,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override void Analyze(BinaryAnalyzerContext context)
         {
             IELF elf = context.ElfBinary().ELF;
+            PEBinary target = context.PEBinary();
+            Pdb pdb = target.Pdb;
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
+                //TODO
+                
+
+            }
+
             if (elf.Type == FileType.Executable)
             {
                 context.Logger.Log(this,

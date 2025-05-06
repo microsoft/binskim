@@ -81,6 +81,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         continue;
                     }
 
+                    if (info.Language == DwarfLanguage.Rust)
+                    {
+                        //only for version 5+ 
+                        //TODO
+
+                    }
+
                     if (!info.CommandLine.Contains("-fstack-clash-protection", StringComparison.OrdinalIgnoreCase)
                         || info.CommandLine.Contains("-fno-stack-clash-protection", StringComparison.OrdinalIgnoreCase))
                     {

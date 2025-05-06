@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Composition;
 
@@ -8,6 +9,7 @@ using ELFSharp.ELF;
 using ELFSharp.ELF.Segments;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -84,8 +86,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
             }
 
-            // If the GNU_STACK isn't present, the stack is probably loaded as executable
-            context.Logger.Log(this,
+            //create into function called with context 
+            PEBinary target = context.PEBinary();
+            Pdb pdb = target.Pdb;
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                ObjectModuleDetails omDetails =om.GetObjectModuleDetails();
+                if(omDetails.RawCommandLine.Contains("CFG") || omDetails.RawCommandLine.Contains("CheckCFlags"))
+                {
+                   //TODO
+                   //!!!THIS IS NOT CALLED ANYWHERE
+                }
+               // All Rust binaries must be built using supported internal toolchain and the compiler version should be logged in telemetry
+            }
+
+                // If the GNU_STACK isn't present, the stack is probably loaded as executable
+                context.Logger.Log(this,
                 RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                     nameof(RuleResources.BA3002_Error_NoStackSeg),
                     context.CurrentTarget.Uri.GetFileName()));
