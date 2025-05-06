@@ -148,6 +148,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     continue;
                 }
 
+                //TODO wellknownMSCOmpilers -RU
+
                 switch (omDetails.Language)
                 {
                     case Language.LINK:
