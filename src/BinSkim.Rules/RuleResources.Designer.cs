@@ -274,7 +274,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("BA2006_Pass_Csc", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a managed assembly that was compiled with toolchain ({1}) that supports all security features that must be enabled by policy..
+        /// </summary>
+        internal static string BA2006_Warning_NotInternaltoolChain
+        {
+            get
+            {
+                return ResourceManager.GetString("BA2006_Warning_NotInternalToolChain", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Binaries should be compiled with a warning level that enables all critical security-relevant checks.
         ///Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities.
