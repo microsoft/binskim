@@ -26,12 +26,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     [Export(typeof(IOptionsProvider))]
     [Export(typeof(ReportingDescriptor))]
     [Export(typeof(Skimmer<BinaryAnalyzerContext>))]
-    public class RULEFRIENDLYNAME : PEBinarySkimmerBase, IOptionsProvider /* Delete this if no special configuration required */
+    public class BuildWithInternalToolChain : PEBinarySkimmerBase, IOptionsProvider
     {
         /// <summary>
-        /// BAXXXX
+        /// BA3032
         /// </summary>
-        public override string Id => RuleIds.RULEFRIENDLYNAME;
+        public override string Id => RuleIds.BuildWithInternalToolChain;
 
         /// <summary>
         /// Recapitulate the full text of the rule description returned below
@@ -39,11 +39,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
 
         public override MultiformatMessageString FullDescription =>
-            new MultiformatMessageString { Text = RuleResources.BAXXXX_RULEFRIENDLYNAME_Description };
+            new MultiformatMessageString { Text = RuleResources.BA3032_BuildWithInternalToolChain_Description };
 
         protected override ICollection<string> MessageResourceNames => new string[] {
-                    nameof(RuleResources.BAXXXX_Pass),
-                    nameof(RuleResources.BAXXXX_Error)
+                    nameof(RuleResources.BA3032_Pass),
+                    nameof(RuleResources.BA3032_Error),
+                    nameof(RuleResources.BA3032_BuildWithInternalToolChain_Description)
                 };
 
         public IEnumerable<IOption> GetOptions()
@@ -54,13 +55,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }.ToImmutableArray();
         }
 
-        private const string AnalyzerName = RuleIds.RULEFRIENDLYNAMEId + "." + nameof(RULEFRIENDLYNAME);
+        private const string AnalyzerName = RuleIds.BuildWithInternalToolChain + "." + nameof(BuildWithInternalToolChain);
 
         public static PerLanguageOption<Version> MinimumRequiredLinkerVersion { get; } =
             new PerLanguageOption<Version>(
                 AnalyzerName, nameof(MinimumRequiredLinkerVersion), defaultValue: () => new Version("14.0"));
 
-        public override AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
@@ -114,7 +115,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // /beSecure option in order to enable the enhanced setting.
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                        nameof(RuleResources.BAXXXX_Error),
+                        nameof(RuleResources.BA3032_Error),
                         context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
@@ -125,7 +126,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // often-profitable foolishness.
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
-                    nameof(RuleResources.BAXXXX_Pass),
+                    nameof(RuleResources.BA3032_Pass),
                         context.CurrentTarget.Uri.GetFileName()));
         }
 
@@ -134,6 +135,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             // Add relevant PE-level examination 
             return false;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        {
+            return base.CanAnalyze(context, out reasonForNotAnalyzing);
+        }
+
+        public override AnalysisApplicability CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        {
+            throw new NotImplementedException();
         }
     }
 }
