@@ -10,6 +10,7 @@ using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -64,8 +65,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
             PE portableExecutable = target.PE;
+            Pdb pdb = target.Pdb;
             AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
-
+            
             // Review the range of metadata conditions and return NotApplicableToSpecifiedTarget
             // from this method for all cases where a binary is detected that is not valid to scan.
             //
@@ -94,6 +96,30 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // ApplicableToSpecifiedTarget.
             //
             reasonForNotAnalyzing = null;
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol om = omView.Value;
+                ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
+
+                if (omDetails.WellKnownCompiler != WellKnownCompilers.ClangLLVMRustc && omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix)) //omDetails.Language == Language.Rust &&
+                {
+                    // '{0}' was compiled with one or more modules which were not built using
+                    // minimum required tool versions ({1}). More recent toolchains
+                    // contain mitigations that make it more difficult for an attacker to exploit
+                    // vulnerabilities in programs they produce. To resolve this issue, compile
+                    // and /or link your binary with more recent tools. If you are servicing a
+                    // product where the tool chain cannot be modified (e.g. producing a hotfix
+                    // for an already shipped version) ignore this warning. Modules built outside
+                    // of policy: {2}
+                   /* context.Logger.Log(this,
+                        RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
+                        nameof(RuleResources.BA3032_BuildWithInternalToolChain_Description),
+                            context.CurrentTarget.Uri.GetFileName(),
+                            minimumRequiredCompilers,
+                            outOfPolicyModulesText));*/
+                    return AnalysisApplicability.ApplicableToSpecifiedTarget;
+                }
+            }
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
 
@@ -101,23 +127,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             PEBinary target = context.PEBinary();
             PE pe = target.PE;
-
+            Pdb pdb = target.Pdb;
             // Analysis may return one or more failures, each of which uses a format 
             // string stored in the MessageResourceNames array above to produce a result.
             // By convention, we recapitulate that format string when we return the 
             // associated result, to document the specific failure or pass condition.
-
-            if (!this.IsSecure(target))
+            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
-                // '{0}' is not secure for some reaons. 
-                // To resolve this issue, pass /beEvenMoreSecure on both the compiler
-                // and linker command lines. Binaries also require the 
-                // /beSecure option in order to enable the enhanced setting.
-                context.Logger.Log(this,
-                    RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                        nameof(RuleResources.BA3032_Error),
-                        context.CurrentTarget.Uri.GetFileName()));
-                return;
+                Symbol om = omView.Value;
+                ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
+                if (omDetails.Language == Language.Rust && omDetails.WellKnownCompiler != WellKnownCompilers.ClangLLVMRustc && omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix))
+                {
+                    // '{0}' is not secure for some reaons. 
+                    // To resolve this issue, pass /beEvenMoreSecure on both the compiler
+                    // and linker command lines. Binaries also require the 
+                    // /beSecure option in order to enable the enhanced setting.
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                            nameof(RuleResources.BA3032_Error),
+                            context.CurrentTarget.Uri.GetFileName()));
+                    return;
+                }
             }
 
             // '{0}' enables /beEvenMoreSecure on both the compiler and linker
