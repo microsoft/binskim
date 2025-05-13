@@ -202,6 +202,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     this.wellKnownCompiler = WellKnownCompilers.ClangLLVMRustc;
                 }
             }
+
+            if(this.Language == Language.Rust)
+            {
+                if(this.CompilerName == CompilerNames.ClangLLVMPrefix)
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.ClangLLVMRustc;
+                }else if (CompilerName == CompilerNames.ClangLLVMRustcPrefix)
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.ClangLLVMRustc;
+                }else if(CompilerName == CompilerNames.ClangPrefix)
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.Clang;
+                }
+            }
         }
 
         public bool HasSecurityChecks { get; private set; }
