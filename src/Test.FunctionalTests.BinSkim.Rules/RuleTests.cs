@@ -1160,7 +1160,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             var notApplicableTo = new HashSet<string>
             {
-                MetadataConditions.ImageIsKernelModeBinary
+                MetadataConditions.ImageIsKernelModeBinary,
+                MetadataConditions.ImageIsNonWindowsDotNetAssembly
             };
 
             this.VerifyApplicability(new DoNotMarkWritableSectionsAsExecutable(), notApplicableTo);
@@ -1250,15 +1251,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 skimmer: new EnableShadowStack(),
                 applicabilityConditions: notApplicableArm64,
                 expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArmBinary);
-        }
-
-        [Fact]
-        public void BA2026_EnableMicrosoftCompilerSdlSwitch_Pass()
-        {
-            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
-            {
-                this.VerifyPass(new EnableMicrosoftCompilerSdlSwitch(), useDefaultPolicy: true);
-            }
         }
 
         [Fact]

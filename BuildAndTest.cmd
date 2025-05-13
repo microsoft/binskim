@@ -25,18 +25,19 @@ call SetCurrentVersion.cmd
 set VERSION_CONSTANTS=%~dp0src\BinaryParsers\VersionConstants.cs
 
 @REM Rewrite VersionConstants.cs
-echo // Copyright (c) Microsoft. All rights reserved. Licensed under the MIT         >  %VERSION_CONSTANTS%
-echo // license. See LICENSE file in the project root for full license information.  >> %VERSION_CONSTANTS%
-echo namespace Microsoft.CodeAnalysis.IL                                             >> %VERSION_CONSTANTS%
-echo {                                                                               >> %VERSION_CONSTANTS%
-echo     public static class VersionConstants                                        >> %VERSION_CONSTANTS%
-echo     {                                                                           >> %VERSION_CONSTANTS%
-echo         public const string Prerelease = "%PRERELEASE%";                        >> %VERSION_CONSTANTS%
-echo         public const string AssemblyVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0"; >> %VERSION_CONSTANTS%
-echo         public const string FileVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0";     >> %VERSION_CONSTANTS%
-echo         public const string Version = AssemblyVersion + Prerelease;             >> %VERSION_CONSTANTS%
-echo     }                                                                           >> %VERSION_CONSTANTS%
-echo  }                                                                              >> %VERSION_CONSTANTS%
+
+echo // Copyright (c) Microsoft. All rights reserved. Licensed under the MIT>  %VERSION_CONSTANTS%
+echo // license. See LICENSE file in the project root for full license information.>> %VERSION_CONSTANTS%
+echo namespace Microsoft.CodeAnalysis.IL>> %VERSION_CONSTANTS%
+echo {>> %VERSION_CONSTANTS%
+echo     public static class VersionConstants>> %VERSION_CONSTANTS%
+echo     {>> %VERSION_CONSTANTS%
+echo         public const string Prerelease = "%PRERELEASE%";>> %VERSION_CONSTANTS%
+echo         public const string AssemblyVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0";>> %VERSION_CONSTANTS%
+echo         public const string FileVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0";>> %VERSION_CONSTANTS%
+echo         public const string Version = AssemblyVersion + Prerelease;>> %VERSION_CONSTANTS%
+echo     }>> %VERSION_CONSTANTS%
+echo }>> %VERSION_CONSTANTS%
 
 
 ::Restore packages
@@ -63,12 +64,9 @@ call :RunTestProject BinSkim.Rules Functional  || goto :ExitFailed
 
 ::Create the BinSkim platform specific publish packages
 echo Creating Platform Specific BinSkim 'Publish' Packages
-call :CreatePublishPackage netcoreapp3.1 win-x64 || goto :ExitFailed
-call :CreatePublishPackage netcoreapp3.1 linux-x64 || goto :ExitFailed
-call :CreatePublishPackage netcoreapp3.1 osx-x64 || goto :ExitFailed
-call :CreatePublishPackage net6.0 win-x64 || goto :ExitFailed
-call :CreatePublishPackage net6.0 linux-x64 || goto :ExitFailed
-call :CreatePublishPackage net6.0 osx-x64 || goto :ExitFailed
+call :CreatePublishPackage net9.0 win-x64 || goto :ExitFailed
+call :CreatePublishPackage net9.0 linux-x64 || goto :ExitFailed
+call :CreatePublishPackage net9.0 osx-x64 || goto :ExitFailed
 
 ::Build NuGet package
 echo BuildPackages.cmd
@@ -79,7 +77,7 @@ dotnet tool update --global dotnet-format
 
 ::Update BinSkimRules.md to cover any xml changes
 echo Exporting any BinSkim rules
-.\bld\bin\x64_Release\netcoreapp3.1\BinSkim.exe export-rules .\docs\BinSkimRules.md
+.\bld\bin\x64_Release\Publish\net9.0\win-x64\BinSkim.exe export-rules .\docs\BinSkimRules.md
 
 goto :Exit
 
@@ -93,7 +91,7 @@ Exit /B %ERRORLEVEL%
 :CreatePublishPackage
 set Framework=%~1
 set RuntimeArg=%~2
-dotnet publish %~dp0src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework% --runtime %RuntimeArg% --self-contained
+dotnet publish %~dp0src\BinSkim.Driver\BinSkim.Driver.csproj --no-restore -c %Configuration% -f %Framework% --runtime %RuntimeArg% --self-contained true
 Exit /B %ERRORLEVEL%
 
 :ExitFailed

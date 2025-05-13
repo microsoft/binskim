@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 
@@ -43,7 +44,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Gets or sets the current position in the stream.
         /// </summary>
-        public int Position { get; set; }
+        public uint Position { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether stream has reached the end.
@@ -82,9 +83,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <typeparam name="T">Type of the structure to be read</typeparam>
         public T ReadStructure<T>()
         {
-            T result = Marshal.PtrToStructure<T>(pointer + Position);
-
-            Position += Marshal.SizeOf<T>();
+            T result = Marshal.PtrToStructure<T>((nint)(pointer + Position));
+            Position += (uint)Marshal.SizeOf<T>();
             return result;
         }
 
@@ -121,13 +121,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Reads the string from the current position in the stream.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions]
         public string ReadString()
         {
-            string result = Marshal.PtrToStringAnsi(pointer + Position);
-
-            Position += result.Length + 1;
-            return result;
+            try
+            {
+                string result = Marshal.PtrToStringAnsi((nint)(pointer + Position));
+                Position += (uint)result.Length + 1;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to read string from memory.", ex);
+            }
         }
 
         /// <summary>
@@ -143,7 +148,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public ushort ReadUshort()
         {
-            ushort result = (ushort)Marshal.ReadInt16(pointer, Position);
+            ushort result = (ushort)Marshal.ReadInt16(pointer, (int)Position);
 
             Position += 2;
             return result;
@@ -151,7 +156,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
         public uint ReadThreeBytes()
         {
-            uint firstTwo = (uint)Marshal.ReadInt16(pointer, Position);
+            uint firstTwo = (uint)Marshal.ReadInt16(pointer, (short)Position);
             Position += 2;
 
             return (firstTwo << 16) + ReadByte();
@@ -162,7 +167,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public uint ReadUint()
         {
-            uint result = (uint)Marshal.ReadInt32(pointer, Position);
+            uint result = (uint)Marshal.ReadInt32(pointer, (int)Position);
 
             Position += 4;
             return result;
@@ -173,7 +178,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public ulong ReadUlong()
         {
-            ulong result = (ulong)Marshal.ReadInt64(pointer, Position);
+            ulong result = (ulong)Marshal.ReadInt64(pointer, (int)Position);
 
             Position += 8;
             return result;
@@ -243,10 +248,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="size">The size of block.</param>
         public byte[] ReadBlock(ulong size)
         {
+            size = (ulong)Math.Min((float)size, (Data.Length - Position));
             byte[] block = new byte[size];
 
             Array.Copy(Data, Position, block, 0, block.Length);
-            Position += block.Length;
+            Position += (uint)block.Length;
             return block;
         }
 
@@ -255,14 +261,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         /// <param name="size">The size.</param>
         /// <param name="position">The position.</param>
-        public byte[] ReadBlock(uint size, int position)
+        public byte[] ReadBlock(uint size, uint position)
         {
             if (position < 0 || position >= Data.Length)
             {
                 return Array.Empty<byte>();
             }
 
-            int originalPosition = Position;
+            uint originalPosition = Position;
             Position = position;
             byte[] result = ReadBlock(size);
             Position = originalPosition;
@@ -273,14 +279,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// Reads the string from the specified position in the stream.
         /// </summary>
         /// <param name="position">The position.</param>
-        public string ReadString(int position)
+        public string ReadString(uint position)
         {
-            if (position < 0 || position >= Data.Length)
+            if (position >= Data.Length)
             {
                 return string.Empty;
             }
 
-            int originalPosition = Position;
+            uint originalPosition = Position;
             Position = position;
             string result = ReadString();
             Position = originalPosition;
@@ -291,14 +297,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// Reads the unsigned int from the specified position in the stream.
         /// </summary>
         /// <param name="position">The position.</param>
-        public uint ReadUint(int position)
+        public uint ReadUint(uint position)
         {
             if (position < 0 || position >= Data.Length)
             {
                 return 0;
             }
 
-            int originalPosition = Position;
+            uint originalPosition = Position;
             Position = position;
             uint result = ReadUint();
             Position = originalPosition;
@@ -310,14 +316,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         /// <typeparam name="T">Type of the structure to be read.</typeparam>
         /// <param name="position">The position.</param>
-        public T ReadStructure<T>(int position)
+        public T ReadStructure<T>(uint position)
         {
             if (position < 0 || position >= Data.Length)
             {
                 return default;
             }
 
-            int originalPosition = Position;
+            uint originalPosition = Position;
             Position = position;
             T result = ReadStructure<T>();
             Position = originalPosition;

@@ -4,26 +4,14 @@ pr:
 jobs:
   - job: linux
     pool:
-      vmImage: "ubuntu-20.04"
+      vmImage: "ubuntu-latest"
     steps:
-      - task: UseDotNet@2
-        displayName: .NET Core 3.1 sdk
-        inputs:
-          version: "3.1.x"
-          packageType: sdk
-
-      - task: UseDotNet@2
-        displayName: .NET Core 6.0 sdk
-        inputs:
-          version: "6.0.x"
-          packageType: sdk
-
       - checkout: self
 
       - task: UseDotNet@2
-        displayName: .NET Core 8 sdk
+        displayName: .NET Core 9 sdk
         inputs:
-          version: "8.0.x"
+          version: "9.0.x"
           packageType: sdk
 
       - task: Bash@3
@@ -37,21 +25,9 @@ jobs:
       vmImage: "windows-latest"
     steps:
       - task: UseDotNet@2
-        displayName: .NET Core 3.1 sdk
+        displayName: .NET Core 9 sdk
         inputs:
-          version: "3.1.x"
-          packageType: sdk
-
-      - task: UseDotNet@2
-        displayName: .NET Core 6.0 sdk
-        inputs:
-          version: "6.0.x"
-          packageType: sdk
-
-      - task: UseDotNet@2
-        displayName: .NET Core 8 sdk
-        inputs:
-          version: "8.0.x"
+          version: "9.0.x"
           packageType: sdk
 
       - checkout: self
@@ -68,21 +44,9 @@ jobs:
       vmImage: "macOS-latest"
     steps:
       - task: UseDotNet@2
-        displayName: .NET Core 3.1 sdk
+        displayName: .NET Core 9 sdk
         inputs:
-          version: "3.1.x"
-          packageType: sdk
-
-      - task: UseDotNet@2
-        displayName: .NET Core 6.0 sdk
-        inputs:
-          version: "6.0.x"
-          packageType: sdk
-
-      - task: UseDotNet@2
-        displayName: .NET Core 8 sdk
-        inputs:
-          version: "8.0.x"
+          version: "9.0.x"
           packageType: sdk
 
       - checkout: self
@@ -97,4 +61,4 @@ jobs:
         displayName: "Run BinSkim"
         inputs:
           targetType: "inline"
-          script: "dotnet bld/bin/x64_Release/netcoreapp3.1/binskim.dll analyze src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.*"
+          script: "dotnet bld/bin/x64_Release/net9.0/osx-x64/BinSkim.dll analyze src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.*"

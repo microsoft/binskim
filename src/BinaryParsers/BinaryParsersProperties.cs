@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
@@ -20,7 +19,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 DisableTelemetry,
                 IncludeWixBinaries,
                 LocalSymbolDirectories,
-                SymbolPath
+                SymbolPath,
+                IgnorePELoadError
             }.ToImmutableArray();
         }
 
@@ -60,5 +60,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 "environment variables at runtime. Use this argument instead for specifying the symbol path." +
                 "WARNING: Be sure to specify a local file cache in the symbol path if at all possible, in order " +
                 "to avoid the possibility of significance time-to-analyze performance degradataion.");
+
+        public static PerLanguageOption<bool> IgnorePELoadError { get; } =
+            new PerLanguageOption<bool>(
+                "BinaryParsers", nameof(IgnorePELoadError), defaultValue: () => false,
+                "Set this value to 'true' to ignore exceptions thrown in reading PE files.");
     }
 }

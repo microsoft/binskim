@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="data">The data memory reader.</param>
         /// <param name="commonInformationEntry">The common information entry.</param>
         /// <param name="endPosition">The end position.</param>
-        public DwarfFrameDescriptionEntry(DwarfMemoryReader data, DwarfCommonInformationEntry commonInformationEntry, int endPosition)
+        public DwarfFrameDescriptionEntry(DwarfMemoryReader data, DwarfCommonInformationEntry commonInformationEntry, uint endPosition)
         {
             CommonInformationEntry = commonInformationEntry;
             ParseData(data, endPosition);
@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         /// <param name="data">The data.</param>
         /// <param name="endPosition">The end position.</param>
-        private void ParseData(DwarfMemoryReader data, int endPosition)
+        private void ParseData(DwarfMemoryReader data, uint endPosition)
         {
             InitialLocation = data.ReadUlong(CommonInformationEntry.AddressSize);
             AddressRange = data.ReadUlong(CommonInformationEntry.AddressSize);

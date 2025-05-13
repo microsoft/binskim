@@ -16,7 +16,20 @@
 - NEW => new feature 
 
 ## UNRELEASED
-* NEW: Remove sarif-sdk submodule and use nuget package instead
+PRF: changing binaries pointers from int to uint [#1069](https://github.com/microsoft/binskim/pull/1069)
+
+## **v4.4.1**
+* RRR: Skip BA2021 Analysis on .NET R2R & NativeAOT PE on non-Windows Platforms. [#1013](https://github.com/microsoft/binskim/pull/1013)
+* DEP: Dotnet update to 9.x. [#1024](https://github.com/microsoft/binskim/pull/1024)
+* NEW: Dynamic Lookup of Compiler Name for Managed PE for BA4001 [#1049](https://github.com/microsoft/binskim/pull/1049)
+* DEP: FluentAssertions version dependency update to 7.x due to a license change. [#1059](https://github.com/microsoft/binskim/pull/1059)
+
+## **v4.4.0**
+* NEW: Cross-Platform .rsp File Support. [#1016](https://github.com/microsoft/binskim/pull/1016)
+
+## **v4.3.1.1**
+* NEW: Remove sarif-sdk submodule and use nuget package instead [#1035](https://github.com/microsoft/binskim/pull/1035)
+* UER: Add `--ignorePELoadErrors` argument to disable exit code 1 when an exception is thrown in `CanAnalyze` method [#1041](https://github.com/microsoft/binskim/pull/1041)
 
 ## **v4.3.1** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.3.1)
 * DEP: Update `msdia140.dll` from 14.40.33810.0 to 14.40.33812. [1000](https://github.com/microsoft/binskim/pull/1002)

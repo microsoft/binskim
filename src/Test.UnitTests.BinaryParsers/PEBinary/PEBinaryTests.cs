@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Versioning;
 
 using Dia2Lib;
 
@@ -380,6 +381,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             using (var peBinary = new PEBinary(new Uri(fileFullPath)))
             {
                 return peBinary.PE.IsDotNetNativeBootstrapExe;
+            }
+        }
+
+        [Theory]
+        [InlineData("PE/Managed_x64_Csharp_CompilerName_DEBUG_NONE.exe", null)]
+        [InlineData("PE/Managed_x64_CSharp_CompilerName_DEBUG_FULL.exe", "C# - 4.12.0-3.24574.8+dfa7fc6bdea31a858a402168384192b633c811fa")]
+        [InlineData("PE/Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll", "Microsoft (R) CVTRES")]
+        public void Pdb_GetCompilerNameFromCompilandDetails_ReturnsExpectedCompilerName(string testFile, string testCompilerName)
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            string fileName = Path.Combine(TestData, testFile);
+            using (var peBinary = new PEBinary(new Uri(fileName)))
+            {
+                string compilerName = peBinary.Pdb.GetCompilerNameFromCompilandDetails();
+                compilerName.Should().Be(testCompilerName);
             }
         }
     }

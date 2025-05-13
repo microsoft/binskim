@@ -8,6 +8,7 @@
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <OutputType>Exe</OutputType>
     <Platforms>x64</Platforms>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>

@@ -203,7 +203,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 if (sourceFilesEnum != null)
                 {
-                    Marshal.ReleaseComObject(sourceFilesEnum);
+                    ResourceReleaser.Release(sourceFilesEnum);
                 }
             }
         }
@@ -241,7 +241,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     IDiaTable table = enumTables.Item(i);
                     if (!(table is T result))
                     {
-                        Marshal.ReleaseComObject(table);
+                        ResourceReleaser.Release(table);
                     }
                     else
                     {
@@ -253,7 +253,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 if (enumTables != null)
                 {
-                    Marshal.ReleaseComObject(enumTables);
+                    ResourceReleaser.Release(enumTables);
                 }
             }
 
@@ -288,7 +288,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     }
                     finally
                     {
-                        Marshal.ReleaseComObject(segment);
+                        ResourceReleaser.Release(segment);
                     }
                 }
             }
@@ -296,7 +296,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 if (enumSegments != null)
                 {
-                    Marshal.ReleaseComObject(enumSegments);
+                    ResourceReleaser.Release(enumSegments);
                 }
             }
 
@@ -341,7 +341,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     }
                     finally
                     {
-                        Marshal.ReleaseComObject(sectionContrib);
+                        ResourceReleaser.Release(sectionContrib);
                     }
                 }
             }
@@ -349,7 +349,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             {
                 if (enumSectionContribs != null)
                 {
-                    Marshal.ReleaseComObject(enumSectionContribs);
+                    ResourceReleaser.Release(enumSectionContribs);
                 }
             }
             return result;
@@ -388,6 +388,41 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             }
         }
 
+        /// <summary>
+        /// Potentially expensive lookup to get the compiler name by searching within the details of the compiland.
+        /// The target project may have to set "DebugType" to "full" in their .*proj file to get this information.
+        /// </summary>
+        /// <returns>String containing the name of the compiler or null.</returns>
+        public string GetCompilerNameFromCompilandDetails()
+        {
+            IDiaEnumSymbols enumSymbols;
+            this.session.globalScope.findChildren(SymTagEnum.SymTagCompiland, null, 0, out enumSymbols);
+            if (enumSymbols == null)
+            {
+                return null;
+            }
+
+            foreach (IDiaSymbol compilandDetails in enumSymbols)
+            {
+                IDiaEnumSymbols enumDetails;
+                compilandDetails.findChildren(SymTagEnum.SymTagCompilandDetails, null, 0, out enumDetails);
+                if (enumDetails == null)
+                {
+                    continue;
+                }
+
+                foreach (IDiaSymbol detail in enumDetails)
+                {
+                    if (detail.compilerName != null)
+                    {
+                        return detail.compilerName;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public void Dispose()
         {
             if (this.globalScope.IsValueCreated)
@@ -397,12 +432,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             if (this.session != null)
             {
-                Marshal.ReleaseComObject(this.session);
+                ResourceReleaser.Release(this.session);
             }
 
             if (this.dataSource != null)
             {
-                Marshal.ReleaseComObject(this.dataSource);
+                ResourceReleaser.Release(this.dataSource);
             }
         }
 
@@ -463,7 +498,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             Environment.SetEnvironmentVariable("_NT_SYMBOL_PATH", "");
             Environment.SetEnvironmentVariable("_NT_ALT_SYMBOL_PATH", "");
 
-            object pCallback = this.loadTrace != null ? this : (object)IntPtr.Zero;
+            object pCallback = this.loadTrace != null ? this : nint.Zero;
 
             if (!string.IsNullOrEmpty(localSymbolDirectories))
             {
