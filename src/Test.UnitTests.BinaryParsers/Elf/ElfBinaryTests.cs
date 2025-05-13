@@ -196,7 +196,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
         public void ValidateDwarfV5_Rust()
         {
             // hello world rust compiled using: -Zdwarf-version=5
-            string fileName = Path.Combine(TestData, "Dwarf/hello_world_rust");
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf5_rust_nightly_build");
             using var binary = new ElfBinary(new Uri(fileName));
             binary.DwarfVersion.Should().Be(5);
             binary.Compilers.Any(c => c.FullDescription.Contains("rustc"));
