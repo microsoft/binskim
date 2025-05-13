@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.PortableExecutable;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
@@ -33,10 +32,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                                                             byte[] debugStringOffsets,
                                                                             NormalizeAddressDelegate addressNormalizer)
         {
-            int offset = 0;
+            uint offset = 0;
             DwarfCompilationUnit compilationUnit;
             List<DwarfCompilationUnit> returnValue = new List<DwarfCompilationUnit>();
-
             List<int> debugStringOffsetsValues = DwarfSymbolProvider.ParseDebugStringOffsets(debugStringOffsets, dwarfBinary.Is64bit);
 
             while (true)
@@ -46,7 +44,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                                                   debugDataDescription,
                                                                   debugStrings,
                                                                   debugLineStrings,
-                                                                  debugStringOffsetsValues,
+                                                                  debugStringOffsets,
                                                                   addressNormalizer,
                                                                   offset);
 
@@ -80,15 +78,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                                                              byte[] debugDataDescription,
                                                                              byte[] debugStrings,
                                                                              byte[] debugLineStrings,
-                                                                             IList<int> debugStringOffsets,
+                                                                             byte[] debugStringOffsets,
                                                                              NormalizeAddressDelegate addressNormalizer,
-                                                                             int offset)
+                                                                             uint offset)
         {
             using var debugDataReader = new DwarfMemoryReader(debugData);
             using var debugStringsReader = new DwarfMemoryReader(debugStrings);
             using var debugLineStringsReader = new DwarfMemoryReader(debugLineStrings);
             using var debugDataDescriptionReader = new DwarfMemoryReader(debugDataDescription);
-
+            IList<int> debugStringOffsetsReader = ParseDebugStringOffsets(debugStringOffsets, dwarfBinary.Is64bit);
             if (offset >= debugDataReader.Data.Length)
             {
                 return null;
@@ -100,10 +98,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                             debugDataDescriptionReader,
                                             debugStringsReader,
                                             debugLineStringsReader,
-                                            debugStringOffsets,
+                                            debugStringOffsetsReader,
                                             addressNormalizer);
         }
-
 
         internal static List<int> ParseDebugStringOffsets(byte[] debugStringOffsets, bool is64bit)
         {
@@ -143,7 +140,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     new DwarfLineNumberProgram(dwarfVersion,
                                                debugLineReader,
                                                debugStringsReader,
-                                               debugLineStringsReader,
                                                addressNormalizer);
 
                 if (program.Files == null)
