@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2006_Error_BadModule),
                     nameof(RuleResources.BA2006_Pass),
                     nameof(RuleResources.NotApplicable_InvalidMetadata),
-                    nameof(RuleResources.BA2006_Warning_NotInternaltoolChain)};
+                    nameof(RuleResources.BA2006_Warning_NotInternalToolChain)};
 
         public IEnumerable<IOption> GetOptions()
         {
@@ -139,37 +139,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
-
-                if (omDetails.Language == Language.Rust && omDetails.WellKnownCompiler != WellKnownCompilers.ClangLLVMRustc && omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix))
+                if (omDetails?.WellKnownCompiler != null && omDetails?.CompilerName != null)
                 {
-                    string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToOutOfPolicyModules);
-                    string outOfPolicyModulesText = BuildOutOfPolicyModulesList(languageToOutOfPolicyModules);
-
-                    // '{0}' was compiled with one or more modules which were not built using
-                    // minimum required tool versions ({1}). More recent toolchains
-                    // contain mitigations that make it more difficult for an attacker to exploit
-                    // vulnerabilities in programs they produce. To resolve this issue, compile
-                    // and /or link your binary with more recent tools. If you are servicing a
-                    // product where the tool chain cannot be modified (e.g. producing a hotfix
-                    // for an already shipped version) ignore this warning. Modules built outside
-                    // of policy: {2}
-                    context.Logger.Log(this,
-                        RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
-                        nameof(RuleResources.BA2006_Warning_NotInternaltoolChain),
-                            context.CurrentTarget.Uri.GetFileName(),
-                            minimumRequiredCompilers,
-                            outOfPolicyModulesText));
-                    return;
+                    if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftC &&
+                        omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftCxx &&
+                         omDetails.Language != Language.Rust)
+                    {
+                        // TODO: MikeFan (1/6/2022)
+                        // We need to take a step back and comprehensively review our compiler/language support.
+                        // https://github.com/Microsoft/binskim/issues/114
+                        continue;
+                    }
                 }
 
-                if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftC &&
-                    omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftCxx)
-                {
-                    // TODO: MikeFan (1/6/2022)
-                    // We need to take a step back and comprehensively review our compiler/language support.
-                    // https://github.com/Microsoft/binskim/issues/114
-                    continue;
-                }
 
                 switch (omDetails.Language)
                 {
@@ -272,6 +254,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.Rust:
                     {
                         actualVersion = omDetails.CompilerBackEndVersion;
+                        string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToOutOfPolicyModules);
+                        string outOfPolicyModulesText = BuildOutOfPolicyModulesList(languageToOutOfPolicyModules);
+                        if (string.IsNullOrEmpty(omDetails.CompilerName) ||
+                        !(omDetails.CompilerName.Contains(CompilerNames.MicrosoftRustc)))  //TBD in noverber 2025 &&  omDetails.CompilerFrontEndVersion >= new Version(1, 86, 0, 0) 
+                        {
+                            // '{0}' was compiled with one or more modules which were not built using
+                            // minimum required tool versions ({1}). More recent toolchains
+                            // contain mitigations that make it more difficult for an attacker to exploit
+                            // vulnerabilities in programs they produce. To resolve this issue, compile
+                            // and /or link your binary with more recent tools. If you are servicing a
+                            // product where the tool chain cannot be modified (e.g. producing a hotfix
+                            // for an already shipped version) ignore this warning. Modules built outside
+                            // of policy: {2}
+                            context.Logger.Log(this,
+                                RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
+                                nameof(RuleResources.BA2006_Warning_NotInternalToolChain),
+                                    context.CurrentTarget.Uri.GetFileName(),
+                                    minimumRequiredCompilers,
+                                    outOfPolicyModulesText));
+                            return;
+                        }
                         break;
                     }
 
@@ -443,6 +446,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 //[nameof(Language.LINK)] = new Version(17, 0, 65501, 17013),
                 //[nameof(Language.CSharp)] = new Version(19, 0, 0, 0),
                 //[nameof(Language.CVTRES)] = new Version(12, 0, 0, 0),
+                [nameof(Language.Rust)] = new Version(1, 86, 0, 0),
                 [nameof(Language.Unknown)] = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue),
                 [MIN_XBOX_COMPILER_VER] = new Version(16, 0, 11886, 0)
             };

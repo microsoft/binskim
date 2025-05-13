@@ -599,6 +599,16 @@ The following modules are out of policy:
   <data name="BA2006_Pass_Csc" xml:space="preserve">
     <value>'{0}' is a managed assembly that was compiled with toolchain ({1}) that supports all security features that must be enabled by policy.</value>
   </data>
+  <data name="BA2006_Warning_NotInternalToolChain" xml:space="preserve">
+    <value>' {0}' was compiled with one or more modules which were not built using
+                            // minimum required tool versions ({1}). More recent toolchains
+                            // contain mitigations that make it more difficult for an attacker to exploit
+                            // vulnerabilities in programs they produce. To resolve this issue, compile
+                            // and /or link your binary with more recent tools. If you are servicing a
+                            // product where the tool chain cannot be modified (e.g. producing a hotfix
+                            // for an already shipped version) ignore this warning. Modules built outside
+                            // of policy: {2}</value>
+  </data>
   <data name="BA4001_ReportPECompilerData_Description" xml:space="preserve">
     <value>This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland.</value>
   </data>

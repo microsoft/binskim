@@ -7,6 +7,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
     {
         public const string MicrosoftC = "Microsoft (R) Optimizing Compiler";      // cl.exe / c1.dll / c2.dll
         public const string MicrosoftCxx = "Microsoft (R) Optimizing Compiler";    // cl.exe / c1xx.dll / c2.dll
+        public const string MicrosoftRustc = "Microsoft (R) Optimizing Compiler";        // rustc.exe
         public const string MicrosoftLink = "Microsoft (R) LINK";                  // link.exe
         public const string MicrosoftCsharp = "test";
         public const string MicrosoftRc = "test";

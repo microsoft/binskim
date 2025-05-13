@@ -292,6 +292,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     // This option is the default for code compiled as C++.
                     versionNumber = "14";
                 }
+                else if (this.WellKnownCompiler == WellKnownCompilers.ClangLLVMRustc)
+                {
+                    versionNumber = "1.86";
+                }
             }
 
             return $"{this.WellKnownCompiler} {versionNumber}";
