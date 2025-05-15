@@ -142,7 +142,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (omDetails?.WellKnownCompiler != null && omDetails?.CompilerName != null)
                 {
                     if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftC &&
-                        omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftCxx)
+                        omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftCxx &&
+                        omDetails.WellKnownCompiler != WellKnownCompilers.ClangLLVMRustc &&
+                        omDetails.WellKnownCompiler != WellKnownCompilers.Clang)
                     {
                         // TODO: MikeFan (1/6/2022)
                         // We need to take a step back and comprehensively review our compiler/language support.
@@ -253,13 +255,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.Rust:
                     {
                         actualVersion = omDetails.CompilerBackEndVersion;
-                        if(!((omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix) ||
+                        string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToOutOfPolicyModules);
+                        string outOfPolicyModulesText = BuildOutOfPolicyModulesList(languageToOutOfPolicyModules);
+                        if (!((omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix) ||
                         omDetails.CompilerName.Contains(CompilerNames.ClangLLVMPrefix) ||
                         omDetails.CompilerName.Contains(CompilerNames.ClangPrefix)) &&
                         omDetails.CompilerFrontEndVersion >= new Version(1, 86, 0, 0)))
                         {
-                            string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToOutOfPolicyModules);
-                            string outOfPolicyModulesText = BuildOutOfPolicyModulesList(languageToOutOfPolicyModules);
+                           
 
                             // '{0}' was compiled with one or more modules which were not built using
                             // minimum required tool versions ({1}). More recent toolchains
@@ -277,7 +280,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                     outOfPolicyModulesText));
                             return;
                         }
-                        break;
+                        else
+                        {
+                            context.Logger.Log(this,
+                                RuleUtilities.BuildResult(FailureLevel.None, context, null,
+                                nameof(RuleResources.BA2006_BuildWithSecureTools_Description),
+                                    context.CurrentTarget.Uri.GetFileName(),
+                                    minimumRequiredCompilers,
+                                    outOfPolicyModulesText));
+                        }
+                            break;
                     }
 
                     default:
