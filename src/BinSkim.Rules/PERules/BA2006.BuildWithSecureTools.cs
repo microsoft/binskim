@@ -253,10 +253,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.Rust:
                     {
                         actualVersion = omDetails.CompilerBackEndVersion;
-                        if(!((omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix) ||
-                        omDetails.CompilerName.Contains(CompilerNames.ClangLLVMPrefix) ||
-                        omDetails.CompilerName.Contains(CompilerNames.ClangPrefix)) &&
-                        omDetails.CompilerFrontEndVersion >= new Version(1, 86, 0, 0)))
+                        if (string.IsNullOrEmpty(omDetails.CompilerName) ||
+                            !((omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix) ||
+                            omDetails.CompilerName.Contains(CompilerNames.ClangLLVMPrefix) ||
+                            omDetails.CompilerName.Contains(CompilerNames.ClangPrefix)) &&
+                            omDetails.CompilerFrontEndVersion >= new Version(1, 86, 0, 0)))
                         {
                             string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToOutOfPolicyModules);
                             string outOfPolicyModulesText = BuildOutOfPolicyModulesList(languageToOutOfPolicyModules);
