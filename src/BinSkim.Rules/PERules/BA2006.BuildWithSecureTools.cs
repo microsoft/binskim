@@ -142,7 +142,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 if (omDetails?.WellKnownCompiler != null && omDetails?.CompilerName != null)
                 {
                     if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftC &&
-                        omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftCxx)
+                        omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftCxx &&
+                        omDetails.WellKnownCompiler != WellKnownCompilers.ClangLLVMRustc &&
+                        omDetails.WellKnownCompiler != WellKnownCompilers.Clang)
                     {
                         // TODO: MikeFan (1/6/2022)
                         // We need to take a step back and comprehensively review our compiler/language support.
@@ -150,7 +152,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         continue;
                     }
                 }
-                
+
 
                 switch (omDetails.Language)
                 {
@@ -253,13 +255,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case Language.Rust:
                     {
                         actualVersion = omDetails.CompilerBackEndVersion;
-                        if(!((omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix) ||
+                        string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToOutOfPolicyModules);
+                        string outOfPolicyModulesText = BuildOutOfPolicyModulesList(languageToOutOfPolicyModules);
+                        if (string.IsNullOrEmpty(omDetails.CompilerName) ||
+                        !((omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix) ||
                         omDetails.CompilerName.Contains(CompilerNames.ClangLLVMPrefix) ||
                         omDetails.CompilerName.Contains(CompilerNames.ClangPrefix)) &&
                         omDetails.CompilerFrontEndVersion >= new Version(1, 86, 0, 0)))
                         {
-                            string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToOutOfPolicyModules);
-                            string outOfPolicyModulesText = BuildOutOfPolicyModulesList(languageToOutOfPolicyModules);
+                           
 
                             // '{0}' was compiled with one or more modules which were not built using
                             // minimum required tool versions ({1}). More recent toolchains
@@ -270,12 +274,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             // for an already shipped version) ignore this warning. Modules built outside
                             // of policy: {2}
                             context.Logger.Log(this,
-                                RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
-                                nameof(RuleResources.BA2006_Warning_NotInternaltoolChain),
+                                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                                nameof(RuleResources.BA2006_Error),
                                     context.CurrentTarget.Uri.GetFileName(),
                                     minimumRequiredCompilers,
                                     outOfPolicyModulesText));
                             return;
+                        }
+                        else
+                        {
+                            context.Logger.Log(this,
+                                RuleUtilities.BuildResult(FailureLevel.None, context, null,
+                                nameof(RuleResources.BA2006_BuildWithSecureTools_Description),
+                                    context.CurrentTarget.Uri.GetFileName(),
+                                    minimumRequiredCompilers,
+                                    outOfPolicyModulesText));
                         }
                         break;
                     }
@@ -448,6 +461,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 //[nameof(Language.LINK)] = new Version(17, 0, 65501, 17013),
                 //[nameof(Language.CSharp)] = new Version(19, 0, 0, 0),
                 //[nameof(Language.CVTRES)] = new Version(12, 0, 0, 0),
+                [nameof(Language.Rust)] = new Version(1, 86, 0, 0),
                 [nameof(Language.Unknown)] = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue),
                 [MIN_XBOX_COMPILER_VER] = new Version(16, 0, 11886, 0)
             };

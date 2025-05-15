@@ -203,15 +203,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 }
             }
 
-            if(this.Language == Language.Rust)
+            if (this.Language == Language.Rust)
             {
-                if(this.CompilerName == CompilerNames.ClangLLVMPrefix)
+                if (this.CompilerName.Contains(CompilerNames.ClangLLVMPrefix) ||
+                this.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix))
                 {
                     this.wellKnownCompiler = WellKnownCompilers.ClangLLVMRustc;
-                }else if (CompilerName == CompilerNames.ClangLLVMRustcPrefix)
-                {
-                    this.wellKnownCompiler = WellKnownCompilers.ClangLLVMRustc;
-                }else if(CompilerName == CompilerNames.ClangPrefix)
+                }
+                else if (CompilerName == CompilerNames.ClangPrefix)
                 {
                     this.wellKnownCompiler = WellKnownCompilers.Clang;
                 }
@@ -305,6 +304,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     // The /std:c++14 option enables C++14 standard-specific features implemented by the MSVC compiler.
                     // This option is the default for code compiled as C++.
                     versionNumber = "14";
+                }
+                else if (this.WellKnownCompiler == WellKnownCompilers.ClangLLVMRustc)
+                {
+                    versionNumber = "1.86";
                 }
             }
 
