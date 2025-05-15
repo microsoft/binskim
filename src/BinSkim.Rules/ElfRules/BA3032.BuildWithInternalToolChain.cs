@@ -101,8 +101,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                if (omDetails.WellKnownCompiler != WellKnownCompilers.ClangLLVMRustc && omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix)) //omDetails.Language == Language.Rust &&
-                {
+                if (omDetails.Language == Language.Rust && 
+                    omDetails.WellKnownCompiler != WellKnownCompilers.ClangLLVMRustc && 
+                    omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix)) //omDetails.Language == Language.Rust &&
+                {   //fail
+                    //todo add context 
+
                     // '{0}' was compiled with one or more modules which were not built using
                     // minimum required tool versions ({1}). More recent toolchains
                     // contain mitigations that make it more difficult for an attacker to exploit
@@ -111,12 +115,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // product where the tool chain cannot be modified (e.g. producing a hotfix
                     // for an already shipped version) ignore this warning. Modules built outside
                     // of policy: {2}
-                   /* context.Logger.Log(this,
+                    context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
                         nameof(RuleResources.BA3032_BuildWithInternalToolChain_Description),
                             context.CurrentTarget.Uri.GetFileName(),
                             minimumRequiredCompilers,
-                            outOfPolicyModulesText));*/
+                            outOfPolicyModulesText));
                     return AnalysisApplicability.ApplicableToSpecifiedTarget;
                 }
             }
