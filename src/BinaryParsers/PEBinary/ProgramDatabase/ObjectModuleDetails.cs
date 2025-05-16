@@ -303,6 +303,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     // The /std:c++14 option enables C++14 standard-specific features implemented by the MSVC compiler.
                     // This option is the default for code compiled as C++.
                     versionNumber = "14";
+                }else if(this.WellKnownCompiler == WellKnownCompilers.ClangLLVMRustc)
+                {
+                    versionNumber = "1.86";
                 }
             }
 
