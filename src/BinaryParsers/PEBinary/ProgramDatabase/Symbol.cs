@@ -400,6 +400,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
                 compilerName = compilandSymbol.compilerName;
                 language = (Language)compilandSymbol.language;
+                //GetToKnowLanguage(compilandSymbol);
                 hasSecurityChecks = compilandSymbol.hasSecurityChecks != 0;
                 debugInfo = compilandSymbol.hasDebugInfo != 0;
 
@@ -419,6 +420,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             return new ObjectModuleDetails(this.Name, this.Lib, compilerName, frontEndVersion, backEndVersion, commandLine, language, hasSecurityChecks, debugInfo);
         }
+
+       /* public Language GetToKnowLanguage(IDiaSymbol symbol)
+        {
+            if(symbol.language == 0)
+            {
+
+            }
+        }*/
 
         /// <summary>
         /// The library "hash". This is an XOR of the 1st 16 bytes of all source file hashes.
