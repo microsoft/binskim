@@ -205,8 +205,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             if(this.Language == Language.Rust)
             {
-                if(this.CompilerName == CompilerNames.ClangLLVMPrefix ||
-                    CompilerName == CompilerNames.ClangLLVMRustcPrefix)
+                if(this.CompilerName.Contains(CompilerNames.ClangLLVMPrefix) ||
+                    this.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix))
                 {
                     this.wellKnownCompiler = WellKnownCompilers.ClangLLVMRustc;
                 }else if(CompilerName == CompilerNames.ClangPrefix)

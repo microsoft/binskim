@@ -172,7 +172,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     case Language.Rust:
                     {
-                        minCompilerVersion = context.Policy.GetProperty(MinimumToolVersions)[nameof(Language.Rust)];
+                        minCompilerVersion = omDetails.CompilerFrontEndVersion;
                         break;
                     }
 
@@ -257,13 +257,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         actualVersion = omDetails.CompilerBackEndVersion;
                         string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToOutOfPolicyModules);
                         string outOfPolicyModulesText = BuildOutOfPolicyModulesList(languageToOutOfPolicyModules);
-                        if (!((omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix) ||
-                        omDetails.CompilerName.Contains(CompilerNames.ClangLLVMPrefix) ||
-                        omDetails.CompilerName.Contains(CompilerNames.ClangPrefix)) &&
-                        omDetails.CompilerFrontEndVersion >= new Version(1, 86, 0, 0)))
+                            if (string.IsNullOrEmpty(omDetails.CompilerName) ||
+                            !((omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix) ||
+                            omDetails.CompilerName.Contains(CompilerNames.ClangLLVMPrefix) ||
+                            omDetails.CompilerName.Contains(CompilerNames.ClangPrefix)) &&
+                            omDetails.CompilerFrontEndVersion >= new Version(1, 86, 0, 0)))
                         {
-                           
-
                             // '{0}' was compiled with one or more modules which were not built using
                             // minimum required tool versions ({1}). More recent toolchains
                             // contain mitigations that make it more difficult for an attacker to exploit
