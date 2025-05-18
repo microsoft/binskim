@@ -42,11 +42,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             if (LinkerCommandLine.IsLinkerCommandLine(commandLine))
             {
                 this.linkerCommandLine = new LinkerCommandLine(commandLine);
-                this.compilerCommandLine = new CompilerCommandLine(String.Empty);
+                this.compilerCommandLine = new CompilerCommandLine(string.Empty);
             }
             else
             {
-                this.linkerCommandLine = new LinkerCommandLine(String.Empty);
+                this.linkerCommandLine = new LinkerCommandLine(string.Empty);
                 this.compilerCommandLine = new CompilerCommandLine(commandLine ?? string.Empty);
             }
             this.Language = language;
@@ -205,15 +205,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             if(this.Language == Language.Rust)
             {
-                if (this.CompilerName == CompilerNames.ClangLLVMRustcPrefix)
+                if (this.CompilerName == CompilerNames.ClangLLVMRustcPrefix ||
+                    this.CompilerName == CompilerNames.ClangLLVMPrefix)
                 {
                     this.wellKnownCompiler = WellKnownCompilers.ClangLLVMRustc;
                 }else if(this.CompilerName.StartsWith(CompilerNames.ClangPrefix))
                 {
                     this.wellKnownCompiler = WellKnownCompilers.Clang;
-                }else if(this.CompilerName == CompilerNames.ClangLLVMPrefix)
-                {
-                    this.wellKnownCompiler = WellKnownCompilers.ClangLLVMRustc;
                 }
             }
         }
@@ -305,6 +303,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     // The /std:c++14 option enables C++14 standard-specific features implemented by the MSVC compiler.
                     // This option is the default for code compiled as C++.
                     versionNumber = "14";
+                }else if(this.WellKnownCompiler == WellKnownCompilers.ClangLLVMRustc)
+                {
+                    versionNumber = "1.86.0";
                 }
             }
 

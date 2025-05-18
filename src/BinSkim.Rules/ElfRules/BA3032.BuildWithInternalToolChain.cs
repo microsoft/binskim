@@ -6,7 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+using System.Linq;
 using System.Reflection.PortableExecutable;
+
+using ELFSharp.ELF;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
@@ -27,7 +30,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     [Export(typeof(IOptionsProvider))]
     [Export(typeof(ReportingDescriptor))]
     [Export(typeof(Skimmer<BinaryAnalyzerContext>))]
-    public class BuildWithInternalToolChain : PEBinarySkimmerBase, IOptionsProvider
+    public class BuildWithInternalToolChain : ElfBinarySkimmer
     {
         /// <summary>
         /// BA3032
@@ -48,6 +51,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA3032_BuildWithInternalToolChain_Description)
                 };
 
+        public static PerLanguageOption<StringToVersionMap> MinimumToolVersions { get; } =
+            new PerLanguageOption<StringToVersionMap>(
+                AnalyzerName, nameof(MinimumToolVersions), defaultValue: () => BuildMinimumToolVersionsMap());
         public IEnumerable<IOption> GetOptions()
         {
             return new List<IOption>
@@ -62,51 +68,56 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             new PerLanguageOption<Version>(
                 AnalyzerName, nameof(MinimumRequiredLinkerVersion), defaultValue: () => new Version("14.0"));
 
-        public AnalysisApplicability CanAnalyzePE(PEBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
+        public override AnalysisApplicability CanAnalyzeElf(ElfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {
-            PE portableExecutable = target.PE;
-            Pdb pdb = target.Pdb;
-            AnalysisApplicability result = AnalysisApplicability.NotApplicableToSpecifiedTarget;
-            
-            // Review the range of metadata conditions and return NotApplicableToSpecifiedTarget
-            // from this method for all cases where a binary is detected that is not valid to scan.
-            //
-            reasonForNotAnalyzing = MetadataConditions.ImageIsResourceOnlyBinary;
-            if (portableExecutable.IsResourceOnly) { return result; }
+            IELF elf = target.ELF;
 
-            // Here's an example of parameterizing a rule from input XML. In this example,
-            // we enforce that the linker is of a minimal version, otherwise the scan will
-            // not occur (because the toolset producing the binary is not sufficiently 
-            // current to enable the security mitigation).
-            //
-            Version minimumRequiredLinkerVersion = policy.GetProperty(MinimumRequiredLinkerVersion);
-
-            if (portableExecutable.LinkerVersion < minimumRequiredLinkerVersion)
+            if (elf.Type == FileType.Core || elf.Type == FileType.None || elf.Type == FileType.Relocatable)
             {
-                reasonForNotAnalyzing = string.Format(
-                    MetadataConditions.ImageCompiledWithOutdatedTools,
-                    portableExecutable.LinkerVersion,
-                    minimumRequiredLinkerVersion);
-
-                return result;
+                reasonForNotAnalyzing = MetadataConditions.ElfIsCoreNoneOrRelocatable;
+                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
             }
 
-            // If we get to this location, we've determined the binary is valid to analyze.
-            // We clear the 'reasonForNotAnalyzing' output variable and return 
-            // ApplicableToSpecifiedTarget.
-            //
+            if (!target.Compilers.Any(c => c.Compiler == ElfCompilerType.Clang))
+            {
+                reasonForNotAnalyzing = MetadataConditions.ElfNotBuiltWithClang;
+                return AnalysisApplicability.NotApplicableToSpecifiedTarget;
+            }
+
             reasonForNotAnalyzing = null;
+            return AnalysisApplicability.ApplicableToSpecifiedTarget;
+        }
+
+        public override void Analyze(BinaryAnalyzerContext context)
+        {
+            PEBinary target = context.PEBinary();
+            PE pe = target.PE;
+            Pdb pdb = target.Pdb;
+
+            var languageToOutOfPolicyModules = new SortedDictionary<Language, List<ObjectModuleDetails>>();
+
+      
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
                 Symbol om = omView.Value;
                 ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
 
-                if (omDetails.Language == Language.Rust && 
-                    omDetails.WellKnownCompiler != WellKnownCompilers.ClangLLVMRustc && 
-                    omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix)) //omDetails.Language == Language.Rust &&
+                if (string.IsNullOrEmpty(omDetails.CompilerName) ||
+                            !((omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix) ||
+                            omDetails.CompilerName.Contains(CompilerNames.ClangLLVMPrefix) ||
+                            omDetails.CompilerName.Contains(CompilerNames.ClangPrefix)) &&
+                            omDetails.CompilerFrontEndVersion >= new Version(1, 86, 0, 0))) //omDetails.Languag
+                                                                                            //e == Language.Rust &&
                 {   //fail
                     //todo add context 
-
+                    if (!languageToOutOfPolicyModules.TryGetValue(omDetails.Language, out List<ObjectModuleDetails> outOfPolicyModules))
+                    {
+                        outOfPolicyModules = new List<ObjectModuleDetails>();
+                        languageToOutOfPolicyModules.Add(omDetails.Language, outOfPolicyModules);
+                    }
+                    Version minCompilerVersion = omDetails.CompilerFrontEndVersion;
+                    string minimumRequiredCompilers = BuildMinimumCompilersList(context, languageToOutOfPolicyModules);
+                    string outOfPolicyModulesText = BuildOutOfPolicyModulesList(languageToOutOfPolicyModules);
                     // '{0}' was compiled with one or more modules which were not built using
                     // minimum required tool versions ({1}). More recent toolchains
                     // contain mitigations that make it more difficult for an attacker to exploit
@@ -117,39 +128,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // of policy: {2}
                     context.Logger.Log(this,
                         RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
-                        nameof(RuleResources.BA3032_BuildWithInternalToolChain_Description),
+                        nameof(RuleResources.BA3032_Error),
                             context.CurrentTarget.Uri.GetFileName(),
                             minimumRequiredCompilers,
                             outOfPolicyModulesText));
-                    return AnalysisApplicability.ApplicableToSpecifiedTarget;
-                }
-            }
-            return AnalysisApplicability.ApplicableToSpecifiedTarget;
-        }
-
-        public override void Analyze(BinaryAnalyzerContext context)
-        {
-            PEBinary target = context.PEBinary();
-            PE pe = target.PE;
-            Pdb pdb = target.Pdb;
-            // Analysis may return one or more failures, each of which uses a format 
-            // string stored in the MessageResourceNames array above to produce a result.
-            // By convention, we recapitulate that format string when we return the 
-            // associated result, to document the specific failure or pass condition.
-            foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
-            {
-                Symbol om = omView.Value;
-                ObjectModuleDetails omDetails = om.GetObjectModuleDetails();
-                if (omDetails.Language == Language.Rust && omDetails.WellKnownCompiler != WellKnownCompilers.ClangLLVMRustc && omDetails.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix))
-                {
-                    // '{0}' is not secure for some reaons. 
-                    // To resolve this issue, pass /beEvenMoreSecure on both the compiler
-                    // and linker command lines. Binaries also require the 
-                    // /beSecure option in order to enable the enhanced setting.
-                    context.Logger.Log(this,
-                        RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                            nameof(RuleResources.BA3032_Error),
-                            context.CurrentTarget.Uri.GetFileName()));
                     return;
                 }
             }
@@ -171,24 +153,41 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return false;
         }
 
-        public override bool Equals(object obj)
+        private string BuildMinimumCompilersList(BinaryAnalyzerContext context, SortedDictionary<Language, List<ObjectModuleDetails>> languageToOutOfPolicyModules)
         {
-            return base.Equals(obj);
+            var languages = new List<string>();
+
+            foreach (Language language in languageToOutOfPolicyModules.Keys)
+            {
+                Version version = context.Policy.GetProperty(MinimumToolVersions)[language.ToString()];
+                languages.Add($"{language} ({version})");
+            }
+            return string.Join(", ", languages);
         }
 
-        public override int GetHashCode()
+        private static StringToVersionMap BuildMinimumToolVersionsMap()
         {
-            return base.GetHashCode();
+            var result = new StringToVersionMap
+            {
+                [nameof(Language.Rust)] = new Version(1, 86, 0, 0),
+                [nameof(Language.Unknown)] = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue)
+                
+            };
+
+
+            return result;
         }
 
-        public override AnalysisApplicability CanAnalyze(BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
+        private string BuildOutOfPolicyModulesList(SortedDictionary<Language, List<ObjectModuleDetails>> languageToOutOfPolicyModules)
         {
-            return base.CanAnalyze(context, out reasonForNotAnalyzing);
-        }
+            var coalescedModules = new List<string>();
 
-        public override AnalysisApplicability CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
-        {
-            throw new NotImplementedException();
+            foreach (Language language in languageToOutOfPolicyModules.Keys)
+            {
+                string modulesText = languageToOutOfPolicyModules[language].CreateOutputCoalescedByCompiler();
+                coalescedModules.Add(modulesText);
+            }
+            return string.Join(string.Empty, coalescedModules);
         }
     }
 }
