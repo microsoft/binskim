@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     nameof(RuleResources.BA2006_Error_BadModule),
                     nameof(RuleResources.BA2006_Pass),
                     nameof(RuleResources.NotApplicable_InvalidMetadata),
-                    nameof(RuleResources.BA2006_Warning_NotInternaltoolChain)};
+                    nameof(RuleResources.BA2006_Warning_NotInternalToolChain)};
 
         public IEnumerable<IOption> GetOptions()
         {
@@ -263,8 +263,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         omDetails.CompilerName.Contains(CompilerNames.ClangPrefix)) &&
                         omDetails.CompilerFrontEndVersion >= new Version(1, 86, 0, 0)))
                         {
-                           
-
                             // '{0}' was compiled with one or more modules which were not built using
                             // minimum required tool versions ({1}). More recent toolchains
                             // contain mitigations that make it more difficult for an attacker to exploit
@@ -274,8 +272,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             // for an already shipped version) ignore this warning. Modules built outside
                             // of policy: {2}
                             context.Logger.Log(this,
-                                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
-                                nameof(RuleResources.BA2006_Error),
+                                RuleUtilities.BuildResult(FailureLevel.Warning, context, null,
+                                nameof(RuleResources.BA2006_Warning_NotInternalToolChain),
                                     context.CurrentTarget.Uri.GetFileName(),
                                     minimumRequiredCompilers,
                                     outOfPolicyModulesText));
