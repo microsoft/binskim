@@ -91,6 +91,7 @@ if "%suceeded%" NEQ "0" (
     echo Some tests failed.
     goto :ExitFailed
 )
+Exit /B 0
 
 :RunTestProject
 set TestProject=%1
