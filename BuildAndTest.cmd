@@ -57,11 +57,8 @@ if "%NightlyTest%" EQU "nightly" (
 )
 
 ::Run unit tests 
-echo Run all multitargeting xunit tests
-call :RunTestProject BinaryParsers Unit || goto :ExitFailed
-call :RunTestProject BinSkim.Rules Unit || goto :ExitFailed
-call :RunTestProject BinSkim.Driver Functional || goto :ExitFailed
-call :RunTestProject BinSkim.Rules Functional  || goto :ExitFailed
+echo Run all multitargeting xunit Tests
+call :RunAllTests
 
 ::Create the BinSkim platform specific publish packages
 echo Creating Platform Specific BinSkim 'Publish' Packages
@@ -81,6 +78,19 @@ echo Exporting any BinSkim rules
 .\bld\bin\x64_Release\Publish\net9.0\win-x64\BinSkim.exe export-rules .\docs\BinSkimRules.md
 
 goto :Exit
+
+:RunAllTests
+set suceeded = 1 
+call :RunTestProject BinaryParsers Unit || set suceeded = 0
+call :RunTestProject BinSkim.Rules Unit || set suceeded = 0
+call :RunTestProject BinSkim.Driver Functional || set suceeded = 0
+call :RunTestProject BinSkim.Rules Functional || set suceeded = 0
+if "%suceeded%" NEQ "0" (
+    echo All tests executed successfully.
+) else (
+    echo Some tests failed.
+    goto :ExitFailed
+)
 
 :RunTestProject
 set TestProject=%1
