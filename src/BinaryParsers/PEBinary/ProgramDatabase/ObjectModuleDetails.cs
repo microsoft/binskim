@@ -42,11 +42,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             if (LinkerCommandLine.IsLinkerCommandLine(commandLine))
             {
                 this.linkerCommandLine = new LinkerCommandLine(commandLine);
-                this.compilerCommandLine = new CompilerCommandLine(String.Empty);
+                this.compilerCommandLine = new CompilerCommandLine(string.Empty);
             }
             else
             {
-                this.linkerCommandLine = new LinkerCommandLine(String.Empty);
+                this.linkerCommandLine = new LinkerCommandLine(string.Empty);
                 this.compilerCommandLine = new CompilerCommandLine(commandLine ?? string.Empty);
             }
             this.Language = language;
@@ -202,6 +202,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     this.wellKnownCompiler = WellKnownCompilers.ClangLLVMRustc;
                 }
             }
+
+            if (this.Language == Language.Rust)
+            {
+                if (this.CompilerName.Contains(CompilerNames.ClangLLVMPrefix) ||
+                this.CompilerName.Contains(CompilerNames.ClangLLVMRustcPrefix))
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.ClangLLVMRustc;
+                }
+                else if (CompilerName == CompilerNames.ClangPrefix)
+                {
+                    this.wellKnownCompiler = WellKnownCompilers.Clang;
+                }
+            }
         }
 
         public bool HasSecurityChecks { get; private set; }
@@ -291,6 +304,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                     // The /std:c++14 option enables C++14 standard-specific features implemented by the MSVC compiler.
                     // This option is the default for code compiled as C++.
                     versionNumber = "14";
+                }
+                else if (this.WellKnownCompiler == WellKnownCompilers.ClangLLVMRustc)
+                {
+                    versionNumber = "1.86";
                 }
             }
 
