@@ -173,6 +173,11 @@ To resolve this issue, compile and/or link your binary with more recent tools. I
   <data name="BA2006_Pass" xml:space="preserve">
     <value>All linked modules of '{0}' satisfy configured policy (observed compilers: {1}).</value>
   </data>
+	<data name="BA2006_Warning_NotInternalToolChain" xml:space="preserve">
+    <value>'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}). More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce.
+To resolve this issue, compile and/or link your binary with more recent tools. If you are servicing a product where the tool chain cannot be modified (e.g. producing a hotfix for an already shipped version) ignore this warning. Modules built outside of policy: 
+{2}</value>
+  </data>
   <data name="BA2007_EnableCriticalCompilerWarnings_Description" xml:space="preserve">
     <value>Binaries should be compiled with a warning level that enables all critical security-relevant checks.
 Enabling at least warning level 3 enables important static analysis in the compiler that can identify bugs with a potential to provoke memory corruption, information disclosure, or double-free vulnerabilities.

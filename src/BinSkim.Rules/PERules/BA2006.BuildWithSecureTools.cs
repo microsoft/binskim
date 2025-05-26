@@ -143,7 +143,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     if (omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftC &&
                         omDetails.WellKnownCompiler != WellKnownCompilers.MicrosoftCxx &&
-                         omDetails.Language != Language.Rust)
+                        !(omDetails.Language == Language.Rust && omDetails.CompilerName == CompilerNames.MicrosoftRustc))
                     {
                         // TODO: MikeFan (1/6/2022)
                         // We need to take a step back and comprehensively review our compiler/language support.
@@ -273,7 +273,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                     context.CurrentTarget.Uri.GetFileName(),
                                     minimumRequiredCompilers,
                                     outOfPolicyModulesText));
-                            return;
+                           // return;
                         }
                         break;
                     }
