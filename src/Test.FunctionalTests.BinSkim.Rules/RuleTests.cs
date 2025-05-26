@@ -1504,6 +1504,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA3032_BuildWithInternalToolChain_Pass()
+        {
+            this.VerifyPass(new BuildWithInternalToolChain(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3032_BuildWithInternalToolChain_Fail()
+        {
+            this.VerifyFail(new BuildWithInternalToolChain(), bypassExtensionValidation: true);
+        }
+
+        [Fact]
+        public void BA3032_BuildWithInternalToolChain_NotApplicable()
+        {
+            this.VerifyApplicability(new BuildWithInternalToolChain(), new HashSet<string>());
+        }
+
+        [Fact]
         public void BA5001_EnablePositionIndependentExecutableMachO_Pass()
         {
             this.VerifyPass(new EnablePositionIndependentExecutableMachO(), bypassExtensionValidation: true);
