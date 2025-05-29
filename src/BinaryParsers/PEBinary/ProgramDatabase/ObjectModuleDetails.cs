@@ -42,11 +42,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
             if (LinkerCommandLine.IsLinkerCommandLine(commandLine))
             {
                 this.linkerCommandLine = new LinkerCommandLine(commandLine);
-                this.compilerCommandLine = new CompilerCommandLine(String.Empty);
+                this.compilerCommandLine = new CompilerCommandLine(string.Empty);
             }
             else
             {
-                this.linkerCommandLine = new LinkerCommandLine(String.Empty);
+                this.linkerCommandLine = new LinkerCommandLine(string.Empty);
                 this.compilerCommandLine = new CompilerCommandLine(commandLine ?? string.Empty);
             }
             this.Language = language;
