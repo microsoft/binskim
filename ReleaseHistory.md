@@ -16,6 +16,7 @@
 - NEW => new feature 
 
 ## UNRELEASED
+* DEP: Update destination folder for MsDiaLib, after their update [#1079](https://github.com/microsoft/binskim/pull/1079)
 
 ## **v4.4.3**
 * DEP: Updated version, for propagation [#1071](https://github.com/microsoft/binskim/pull/1071)
