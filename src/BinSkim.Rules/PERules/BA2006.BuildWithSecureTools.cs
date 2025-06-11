@@ -46,8 +46,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return new List<IOption>
             {
                 AllowedLibraries,
-                MinimumToolVersions,
-                AdvancedMitigationsEnforced
+                MinimumToolVersions
             }.ToImmutableArray();
         }
 
@@ -62,10 +61,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public static PerLanguageOption<StringToVersionMap> AllowedLibraries { get; } =
             new PerLanguageOption<StringToVersionMap>(
                 AnalyzerName, nameof(AllowedLibraries), defaultValue: () => BuildAllowedLibraries());
-
-        public static PerLanguageOption<AdvancedMitigations> AdvancedMitigationsEnforced { get; } =
-            new PerLanguageOption<AdvancedMitigations>(
-                AnalyzerName, nameof(AdvancedMitigationsEnforced), defaultValue: () => AdvancedMitigations.None);
 
         public override void Initialize(BinaryAnalyzerContext context)
         {
@@ -246,10 +241,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 bool foundIssue = actualVersion < minimumVersion;
 
-                AdvancedMitigations advancedMitigations = context.Policy.GetProperty(AdvancedMitigationsEnforced);
                 if (!foundIssue &&
-                    target.PE != null &&
-                    (advancedMitigations & AdvancedMitigations.Spectre) == AdvancedMitigations.Spectre)
+                    target.PE != null)
                 {
                     var machineType = (ExtendedMachine)target.PE.Machine;
 
@@ -257,21 +250,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     // Now we'll retrieve relevant compiler mitigation details to
                     // ensure this object module's build and revision meet
                     // expectations.
-                    CompilerMitigations newMitigationData =
+                    CompilerMitigations compilerMitigation =
                         EnableSpectreMitigations.GetAvailableMitigations(context, machineType, actualVersion);
 
-                    // Current compiler version does not support Spectre mitigations.
-                    foundIssue = !newMitigationData.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable)
-                                 && !newMitigationData.HasFlag(CompilerMitigations.QSpectreAvailable);
+                    // Determine if required Spectre mitigations are missing
+                    bool hasNoMitigations = compilerMitigation.HasFlag(CompilerMitigations.None);
+                    bool lacksSpectreMitigations =
+                        !compilerMitigation.HasFlag(CompilerMitigations.D2GuardSpecLoadAvailable) &&
+                        !compilerMitigation.HasFlag(CompilerMitigations.QSpectreAvailable);
 
-                    if (foundIssue)
+                    if (hasNoMitigations || lacksSpectreMitigations)
                     {
-                        // Get the closest compiler version that has mitigations--i.e. if the user is using a 19.0 (VS2015) compiler, we should be recommending an upgrade to the
-                        // 19.0 version that has the mitigations, not an upgrade to a 19.10+ (VS2017) compiler.
-                        // Limitation--if there are multiple 'upgrade to' versions to recommend, this just going to give users the last one we see in the error.
-                        minCompilerVersion = EnableSpectreMitigations.GetClosestCompilerVersionWithSpectreMitigations(context, machineType, actualVersion);
+                        foundIssue = true;
 
-                        // Indicates Spectre mitigations are not supported on this platform.  We won't flag this case.
+                        // Attempt to find the closest compiler version that supports Spectre mitigations
+                        minCompilerVersion = EnableSpectreMitigations.GetClosestCompilerVersionWithSpectreMitigations(
+                            context, machineType, actualVersion);
+
+                        // If no suitable compiler version is found, Spectre mitigations are not supported on this platform
                         if (minCompilerVersion == null)
                         {
                             foundIssue = false;
