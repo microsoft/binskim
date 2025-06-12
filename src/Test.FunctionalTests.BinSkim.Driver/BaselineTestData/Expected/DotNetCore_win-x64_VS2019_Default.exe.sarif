@@ -212,17 +212,17 @@
               "id": "BA2001",
               "name": "LoadImageAboveFourGigabyteAddress",
               "fullDescription": {
-                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
+                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities.\r\nTo resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE).\r\nNote that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.\r\nFor VC projects make sure that ItemDefinitionGroup - Link - BaseAddress property is not set."
               },
               "help": {
-                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
+                "text": "64-bit images should have a preferred base address above the 4GB boundary to prevent triggering an Address Space Layout Randomization (ASLR) compatibility mode that decreases security. ASLR compatibility mode reduces the number of locations to which ASLR may relocate the binary, reducing its effectiveness at mitigating memory corruption vulnerabilities.\r\nTo resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE).\r\nNote that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.\r\nFor VC projects make sure that ItemDefinitionGroup - Link - BaseAddress property is not set."
               },
               "messageStrings": {
                 "Pass": {
                   "text": "'{0}' is a 64-bit image with a base address that is >= 4 gigabytes, increasing the effectiveness of Address Space Layout Randomization (which helps prevent attackers from executing security-sensitive code in well-known locations)."
                 },
                 "Error": {
-                  "text": "'{0}' is a 64-bit image with a preferred base address below the 4GB boundary. Having a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities. To resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE). Note that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries."
+                  "text": "'{0}' is a 64-bit image with a preferred base address below the 4GB boundary. \r\nHaving a preferred base address below this boundary triggers a compatibility mode in Address Space Layout Randomization (ASLR) on recent versions of Windows that reduces the number of locations to which ASLR may relocate the binary. This reduces the effectiveness of ASLR at mitigating memory corruption vulnerabilities.\r\nTo resolve this issue, either use the default preferred base address by removing any uses of /baseaddress from compiler command lines, or /BASE from linker command lines (recommended), or configure your program to start at a base address above 4GB when compiled for 64 bit platforms (by changing the constant passed to /baseaddress or /BASE).\r\nNote that if you choose to continue using a custom preferred base address, you will need to make this modification only for 64-bit builds, as base addresses above 4GB are not valid for 32-bit binaries.\r\nFor VC projects make sure that ItemDefinitionGroup - Link - BaseAddress property is not set."
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
@@ -247,7 +247,7 @@
                   "text": "'{0}' is not known to be an obsolete binary that is vulnerable to one or more security problems."
                 },
                 "Error": {
-                  "text": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. To resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning."
+                  "text": "'{0}' appears to be an obsolete library (version {1}) for which there are known security vulnerabilities. \r\nTo resolve this issue, obtain a version of {0} that is newer than version {2}. If this binary is not in fact {0}, ignore this warning."
                 },
                 "Error_CouldNotParseVersion": {
                   "text": "Version information for '{0}' could not be parsed. The binary therefore could not be verified not to be an obsolete binary that is known to be vulnerable to one or more security problems."
@@ -275,7 +275,7 @@
                   "text": "'{0}' enables the control flow guard mitigation. As a result, the operating system will force an application to close if an attacker is able to redirect execution in the component to an unexpected location."
                 },
                 "Error": {
-                  "text": "'{0}' does not enable the control flow guard (CFG) mitigation. To resolve this issue, pass /guard:cf on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG."
+                  "text": "'{0}' does not enable the control flow guard (CFG) mitigation.\r\nTo resolve this issue, pass /guard:cf on both the compiler and linker command lines. Binaries also require the /DYNAMICBASE linker option in order to enable CFG.\r\nFor VC projects use ItemDefinitionGroup - ClCompile - ControlFlowGuard property with 'Guard' value, link CFG property will be set automatically."
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
@@ -303,7 +303,7 @@
                   "text": "'{0}' is properly compiled to enable Address Space Layout Randomization, reducing an attacker's ability to exploit code in well-known locations."
                 },
                 "Error_NotDynamicBase": {
-                  "text": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities. To resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line. For .NET applications, use a compiler shipping with Visual Studio 2008 or later."
+                  "text": "'{0}' is not marked as DYNAMICBASE. This means that the binary is not eligible for relocation by Address Space Layout Randomization (ASLR). ASLR is an important mitigation that makes it more difficult for an attacker to exploit memory corruption vulnerabilities.\r\nTo resolve this issue, configure your tools to build with this feature enabled. For C and C++ binaries, add /DYNAMICBASE to your linker command line.\r\nFor VC projects use ItemDefinitionGroup - Link - RandomizedBaseAddress property with 'true' value.\r\nFor .NET applications, use a compiler shipping with Visual Studio 2008 or later."
                 },
                 "Error_RelocsStripped": {
                   "text": "'{0}' is marked as DYNAMICBASE but relocation data has been stripped from the image, preventing address space layout randomization. "
@@ -324,17 +324,17 @@
               "id": "BA2010",
               "name": "DoNotMarkImportsSectionAsExecutable",
               "fullDescription": {
-                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
+                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable.\r\nTo resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
               },
               "help": {
-                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable. To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
+                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable.\r\nTo resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
               },
               "messageStrings": {
                 "Pass": {
                   "text": "'{0}' does not have an imports section that is marked as executable, helping to prevent the exploitation of code vulnerabilities."
                 },
                 "Error": {
-                  "text": "'{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here. To resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
+                  "text": "'{0}' has the imports section marked executable. Because the loader will always mark the imports section as writable, it is important to mark this section as non-executable, so that an attacker cannot place shellcode here.\r\nTo resolve this issue, ensure that your program does not mark the imports section as executable. Look for uses of /SECTION or /MERGE on the linker command line, or #pragma segment in source code, which change the imports section to be executable, or which merge the \".rdata\" segment into an executable section."
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
@@ -349,10 +349,10 @@
               "id": "BA2012",
               "name": "DoNotModifyStackProtectionCookie",
               "fullDescription": {
-                "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
+                "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. \r\nThe stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie.\r\nOn recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code.\r\nWhen this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector.\r\nTo resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
               },
               "help": {
-                "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
+                "text": "Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. \r\nThe stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie.\r\nOn recent Windows versions, the loader looks for the statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code.\r\nWhen this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector.\r\nTo resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement."
               },
               "messageStrings": {
                 "Pass": {
@@ -362,7 +362,7 @@
                   "text": "'{0}' is  C or C++binary that does not contain a load config table, which indicates either that it was compiled and linked with a version of the compiler that precedes stack protection features or is a binary (such as an ngen'ed assembly) that is not subject to relevant security issues."
                 },
                 "Error": {
-                  "text": "'{0}' is a C or C++ binary that interferes with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. The stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie. On recent Windows versions, the loader looks for the magic statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code. When this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector. To resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement. NOTE: the modified cookie value detected was: {1}"
+                  "text": "'{0}' is a C or C++ binary that interferes with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities.\r\nThe stack protector relies on a random number, called the \"security cookie\", to detect these buffer overflows. This 'cookie' is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie.\r\nOn recent Windows versions, the loader looks for the magic statically linked value of this cookie, and initializes the cookie with a far better source of entropy -- the system's secure random number generator -- rather than the limited random number generator available early in the C runtime startup code.\r\nWhen this symbol is not the default value, the additional entropy is not injected by the operating system, reducing the effectiveness of the stack protector.\r\nTo resolve this issue, ensure that your code does not reference or create a symbol named __security_cookie or __security_cookie_complement.\r\nNOTE: the modified cookie value detected was: {1}"
                 },
                 "Error_CouldNotLocateCookie": {
                   "text": "'{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted."
@@ -383,23 +383,23 @@
               "id": "BA2015",
               "name": "EnableHighEntropyVirtualAddresses",
               "fullDescription": {
-                "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR."
+                "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities.\r\nTo resolve this issue, don't set /HIGHENTROPYV:NO on link.exe command line and allow it to be enabled by default. "
               },
               "help": {
-                "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tool chain to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. Binaries must also be compiled as /LARGEADDRESSAWARE in order to enable high entropy ASLR."
+                "text": "Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities.\r\nTo resolve this issue, don't set /HIGHENTROPYV:NO on link.exe command line and allow it to be enabled by default. "
               },
               "messageStrings": {
                 "Pass": {
                   "text": "'{0}' is high entropy ASLR compatible, reducing an attacker's ability to exploit code in well-known locations."
                 },
                 "Error_NoHighEntropyVA": {
-                  "text": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA to the C or C++ linker command line. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.)"
+                  "text": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.\r\nTo resolve this issue, don't set /HIGHENTROPYVA:NO on link.exe command line and allow it to be enabled by default. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.)"
                 },
                 "Error_NoLargeAddressAware": {
-                  "text": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible by supplying /LARGEADDRESSAWARE to the C or C++ linker command line. (This image was determined to have been properly compiled as /HIGHENTROPYVA.)"
+                  "text": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.\r\nTo resolve this issue, don't set /LARGEADDRESSAWARE:NO on link.exe command line and allow it to be enabled by default. (This image was determined to have been properly compiled as /HIGHENTROPYVA.)"
                 },
                 "Error_NeitherHighEntropyVANorLargeAddressAware": {
-                  "text": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities. To resolve this issue, configure your tools to mark the program high entropy compatible; e.g. by supplying /HIGHENTROPYVA as well as /LARGEADDRESSAWARE to the C or C++ linker command line."
+                  "text": "'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.\r\nTo resolve this issue, don't set /HIGHENTROPYVA:NO and /LARGEADDRESSAWARE:NO on link.exe command line and allow then to be enabled by default."
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
@@ -414,17 +414,17 @@
               "id": "BA2019",
               "name": "DoNotMarkWritableSectionsAsShared",
               "fullDescription": {
-                "text": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+                "text": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process.\r\nIf you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.).\r\nIf you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
               },
               "help": {
-                "text": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+                "text": "Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process.\r\nIf you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.).\r\nIf you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
               },
               "messageStrings": {
                 "Pass": {
                   "text": "'{0}' contains no data or code sections marked as both shared and writable, helping to prevent the exploitation of code vulnerabilities."
                 },
                 "Error": {
-                  "text": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process. If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.). If you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
+                  "text": "'{0}' contains one or more code or data sections ({1}) which are marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process.\r\nIf you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.).\r\nIf you must share common data across processes (for inter-process communication (IPC) or other purposes) use CreateFileMapping with proper security attributes or an actual IPC mechanism instead (COM, named pipes, LPC, etc.)."
                 },
                 "NotApplicable_InvalidMetadata": {
                   "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
@@ -439,17 +439,17 @@
               "id": "BA2021",
               "name": "DoNotMarkWritableSectionsAsExecutable",
               "fullDescription": {
-                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function."
+                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode.\r\nTo resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.\r\nBe sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function."
               },
               "help": {
-                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Be sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function."
+                "text": "PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode.\r\nTo resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.\r\nBe sure to disable incremental linking in release builds, as this feature creates a writable and executable section named '.textbss' in order to function."
               },
               "messageStrings": {
                 "Pass": {
                   "text": "'{0}' contains no data or code sections marked as both shared and executable, helping to prevent the exploitation of code vulnerabilities."
                 },
                 "Error": {
-                  "text": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode. To resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes. Enabling incremental linking via the /INCREMENTAL argument (the default for Microsoft Visual Studio debug build) can also result in a writable and executable section named 'textbss'. For this case, disable incremental linking (or analyze an alternate build configuration that disables this feature) to resolve the problem."
+                  "text": "'{0}' contains PE section(s) ({1}) that are both writable and executable. Writable and executable memory segments make it easier for an attacker to exploit memory corruption vulnerabilities, because it may provide an attacker executable location(s) to inject shellcode.\r\nTo resolve this issue, configure your tools to not emit memory sections that are writable and executable. For example, look for uses of /SECTION on the linker command line for C and C++ programs, or #pragma section in C and C++ source code, which mark a section with both attributes.\r\nEnabling incremental linking via the /INCREMENTAL argument (the default for Microsoft Visual Studio debug build) can also result in a writable and executable section named 'textbss'. For this case, disable incremental linking (or analyze an alternate build configuration that disables this feature) to resolve the problem.\r\nFor VC projects use ItemDefinitionGroup - Link - LinkIncremental property with 'false' value."
                 },
                 "Error_UnexpectedSectionAligment": {
                   "text": "'{0}' has a section alignment ({1}) that is smaller than its page size ({2})."
@@ -471,7 +471,1613 @@
       },
       "invocations": [
         {
-          "executionSuccessful": true
+          "toolExecutionNotifications": [
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                      "index": 0
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "An exception was raised attempting to determine whether 'DotNetCore_win-x64_VS2019_Default.exe' is a valid analysis target for check 'EnableSourceLink' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however."
+              },
+              "level": "error",
+              "exception": {
+                "kind": "DllNotFoundException",
+                "message": "Unable to load DLL 'msdia140.dll' or one of its dependencies: The specified module could not be found. (0x8007007E)",
+                "stack": {
+                  "frames": [
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.DllGetClassObject(Guid ClassId, Guid riid, IntPtr& ppvObject)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
+                            "index": 1
+                          },
+                          "region": {
+                            "startLine": 29
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.CoCreateFromMsdia(Guid clsidOfServer, Guid riid, IntPtr& pvObject)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
+                            "index": 1
+                          },
+                          "region": {
+                            "startLine": 46
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.GetDiaSource()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 528
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.WindowsNativeLoadPdbFromPEUsingDia(String peOrPdbPath, String symbolPath, String localSymbolDirectories)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 454
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String pePath, String symbolPath, String localSymbolDirectories)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 54
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String pePath, String symbolPath, String localSymbolDirectories, Boolean traceLoads)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 232
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.TryLoadPdb(String peOrPdbPath, String extension, String symbolPath, String localSymbolDirectories, Boolean tracePdbLoad, Pdb& pdb)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 140
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.LoadPdb()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.ViaFactory(LazyThreadSafetyMode mode)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.ExecutionAndPublication(LazyHelper executionAndPublication, Boolean useDefaultConstructor)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.CreateValue()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 83
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.get_Pdb()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/BA2027.EnableSourceLink.cs",
+                            "index": 4
+                          },
+                          "region": {
+                            "startLine": 45
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.EnableSourceLink.CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/PEBinarySkimmerBase.cs",
+                            "index": 5
+                          },
+                          "region": {
+                            "startLine": 24
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.PEBinarySkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs",
+                            "index": 6
+                          },
+                          "region": {
+                            "startLine": 67
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.MultithreadedAnalyzeCommandBase`2.DetermineApplicabilityForTargetHelper(TContext context, IEnumerable`1 skimmers, ISet`1 disabledSkimmers)"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              },
+              "descriptor": {
+                "id": "ERR998.ExceptionInCanAnalyze"
+              },
+              "associatedRule": {
+                "id": "BA2027"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                      "index": 0
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "An exception was raised attempting to determine whether 'DotNetCore_win-x64_VS2019_Default.exe' is a valid analysis target for check 'DisableIncrementalLinkingInReleaseBuilds' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however."
+              },
+              "level": "error",
+              "exception": {
+                "kind": "DllNotFoundException",
+                "message": "Unable to load DLL 'msdia140.dll' or one of its dependencies: The specified module could not be found. (0x8007007E)",
+                "stack": {
+                  "frames": [
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.DllGetClassObject(Guid ClassId, Guid riid, IntPtr& ppvObject)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
+                            "index": 1
+                          },
+                          "region": {
+                            "startLine": 29
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.CoCreateFromMsdia(Guid clsidOfServer, Guid riid, IntPtr& pvObject)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
+                            "index": 1
+                          },
+                          "region": {
+                            "startLine": 46
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.GetDiaSource()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 528
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.WindowsNativeLoadPdbFromPEUsingDia(String peOrPdbPath, String symbolPath, String localSymbolDirectories)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 454
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String pePath, String symbolPath, String localSymbolDirectories)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 54
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String pePath, String symbolPath, String localSymbolDirectories, Boolean traceLoads)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 232
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.TryLoadPdb(String peOrPdbPath, String extension, String symbolPath, String localSymbolDirectories, Boolean tracePdbLoad, Pdb& pdb)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 140
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.LoadPdb()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.ViaFactory(LazyThreadSafetyMode mode)"
+                          }
+                        ]
+                      }
+                    },
+                    {},
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.CreateValue()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 83
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.get_Pdb()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/BA6001.DisableIncrementalLinkingInReleaseBuilds.cs",
+                            "index": 7
+                          },
+                          "region": {
+                            "startLine": 57
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.DisableIncrementalLinkingInReleaseBuilds.CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/PEBinarySkimmerBase.cs",
+                            "index": 5
+                          },
+                          "region": {
+                            "startLine": 24
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.PEBinarySkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs",
+                            "index": 6
+                          },
+                          "region": {
+                            "startLine": 67
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.MultithreadedAnalyzeCommandBase`2.DetermineApplicabilityForTargetHelper(TContext context, IEnumerable`1 skimmers, ISet`1 disabledSkimmers)"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              },
+              "descriptor": {
+                "id": "ERR998.ExceptionInCanAnalyze"
+              },
+              "associatedRule": {
+                "id": "BA6001"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                      "index": 0
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "An exception was raised attempting to determine whether 'DotNetCore_win-x64_VS2019_Default.exe' is a valid analysis target for check 'EliminateDuplicateStrings' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however."
+              },
+              "level": "error",
+              "exception": {
+                "kind": "DllNotFoundException",
+                "message": "Unable to load DLL 'msdia140.dll' or one of its dependencies: The specified module could not be found. (0x8007007E)",
+                "stack": {
+                  "frames": [
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.DllGetClassObject(Guid ClassId, Guid riid, IntPtr& ppvObject)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
+                            "index": 1
+                          },
+                          "region": {
+                            "startLine": 29
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.CoCreateFromMsdia(Guid clsidOfServer, Guid riid, IntPtr& pvObject)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
+                            "index": 1
+                          },
+                          "region": {
+                            "startLine": 46
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.GetDiaSource()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 528
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.WindowsNativeLoadPdbFromPEUsingDia(String peOrPdbPath, String symbolPath, String localSymbolDirectories)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 454
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String pePath, String symbolPath, String localSymbolDirectories)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 54
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String pePath, String symbolPath, String localSymbolDirectories, Boolean traceLoads)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 232
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.TryLoadPdb(String peOrPdbPath, String extension, String symbolPath, String localSymbolDirectories, Boolean tracePdbLoad, Pdb& pdb)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 140
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.LoadPdb()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.ViaFactory(LazyThreadSafetyMode mode)"
+                          }
+                        ]
+                      }
+                    },
+                    {},
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.CreateValue()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 83
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.get_Pdb()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/BA6002.EliminateDuplicateStrings.cs",
+                            "index": 8
+                          },
+                          "region": {
+                            "startLine": 57
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.EliminateDuplicateStrings.CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/PEBinarySkimmerBase.cs",
+                            "index": 5
+                          },
+                          "region": {
+                            "startLine": 24
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.PEBinarySkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs",
+                            "index": 6
+                          },
+                          "region": {
+                            "startLine": 67
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.MultithreadedAnalyzeCommandBase`2.DetermineApplicabilityForTargetHelper(TContext context, IEnumerable`1 skimmers, ISet`1 disabledSkimmers)"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              },
+              "descriptor": {
+                "id": "ERR998.ExceptionInCanAnalyze"
+              },
+              "associatedRule": {
+                "id": "BA6002"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                      "index": 0
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "An exception was raised attempting to determine whether 'DotNetCore_win-x64_VS2019_Default.exe' is a valid analysis target for check 'EnableComdatFolding' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however."
+              },
+              "level": "error",
+              "exception": {
+                "kind": "DllNotFoundException",
+                "message": "Unable to load DLL 'msdia140.dll' or one of its dependencies: The specified module could not be found. (0x8007007E)",
+                "stack": {
+                  "frames": [
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.DllGetClassObject(Guid ClassId, Guid riid, IntPtr& ppvObject)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
+                            "index": 1
+                          },
+                          "region": {
+                            "startLine": 29
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.CoCreateFromMsdia(Guid clsidOfServer, Guid riid, IntPtr& pvObject)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
+                            "index": 1
+                          },
+                          "region": {
+                            "startLine": 46
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.GetDiaSource()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 528
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.WindowsNativeLoadPdbFromPEUsingDia(String peOrPdbPath, String symbolPath, String localSymbolDirectories)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 454
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String pePath, String symbolPath, String localSymbolDirectories)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 54
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String pePath, String symbolPath, String localSymbolDirectories, Boolean traceLoads)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 232
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.TryLoadPdb(String peOrPdbPath, String extension, String symbolPath, String localSymbolDirectories, Boolean tracePdbLoad, Pdb& pdb)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 140
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.LoadPdb()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.ViaFactory(LazyThreadSafetyMode mode)"
+                          }
+                        ]
+                      }
+                    },
+                    {},
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.CreateValue()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 83
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.get_Pdb()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/BA6004.EnableComdatFolding.cs",
+                            "index": 9
+                          },
+                          "region": {
+                            "startLine": 58
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.EnableComdatFolding.CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/PEBinarySkimmerBase.cs",
+                            "index": 5
+                          },
+                          "region": {
+                            "startLine": 24
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.PEBinarySkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs",
+                            "index": 6
+                          },
+                          "region": {
+                            "startLine": 67
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.MultithreadedAnalyzeCommandBase`2.DetermineApplicabilityForTargetHelper(TContext context, IEnumerable`1 skimmers, ISet`1 disabledSkimmers)"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              },
+              "descriptor": {
+                "id": "ERR998.ExceptionInCanAnalyze"
+              },
+              "associatedRule": {
+                "id": "BA6004"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                      "index": 0
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "An exception was raised attempting to determine whether 'DotNetCore_win-x64_VS2019_Default.exe' is a valid analysis target for check 'EnableOptimizeReferences' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however."
+              },
+              "level": "error",
+              "exception": {
+                "kind": "DllNotFoundException",
+                "message": "Unable to load DLL 'msdia140.dll' or one of its dependencies: The specified module could not be found. (0x8007007E)",
+                "stack": {
+                  "frames": [
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.DllGetClassObject(Guid ClassId, Guid riid, IntPtr& ppvObject)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
+                            "index": 1
+                          },
+                          "region": {
+                            "startLine": 29
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.CoCreateFromMsdia(Guid clsidOfServer, Guid riid, IntPtr& pvObject)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
+                            "index": 1
+                          },
+                          "region": {
+                            "startLine": 46
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.GetDiaSource()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 528
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.WindowsNativeLoadPdbFromPEUsingDia(String peOrPdbPath, String symbolPath, String localSymbolDirectories)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 454
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String pePath, String symbolPath, String localSymbolDirectories)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 54
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String pePath, String symbolPath, String localSymbolDirectories, Boolean traceLoads)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 232
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.TryLoadPdb(String peOrPdbPath, String extension, String symbolPath, String localSymbolDirectories, Boolean tracePdbLoad, Pdb& pdb)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 140
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.LoadPdb()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.ViaFactory(LazyThreadSafetyMode mode)"
+                          }
+                        ]
+                      }
+                    },
+                    {},
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.CreateValue()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 83
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.get_Pdb()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/BA6005.EnableOptimizeReferences.cs",
+                            "index": 10
+                          },
+                          "region": {
+                            "startLine": 57
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.EnableOptimizeReferences.CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/PEBinarySkimmerBase.cs",
+                            "index": 5
+                          },
+                          "region": {
+                            "startLine": 24
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.PEBinarySkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs",
+                            "index": 6
+                          },
+                          "region": {
+                            "startLine": 67
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.MultithreadedAnalyzeCommandBase`2.DetermineApplicabilityForTargetHelper(TContext context, IEnumerable`1 skimmers, ISet`1 disabledSkimmers)"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              },
+              "descriptor": {
+                "id": "ERR998.ExceptionInCanAnalyze"
+              },
+              "associatedRule": {
+                "id": "BA6005"
+              }
+            },
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x64_VS2019_Default.exe",
+                      "index": 0
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "An exception was raised attempting to determine whether 'DotNetCore_win-x64_VS2019_Default.exe' is a valid analysis target for check 'EnableLinkTimeCodeGeneration' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however."
+              },
+              "level": "error",
+              "exception": {
+                "kind": "DllNotFoundException",
+                "message": "Unable to load DLL 'msdia140.dll' or one of its dependencies: The specified module could not be found. (0x8007007E)",
+                "stack": {
+                  "frames": [
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.DllGetClassObject(Guid ClassId, Guid riid, IntPtr& ppvObject)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
+                            "index": 1
+                          },
+                          "region": {
+                            "startLine": 29
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.CoCreateFromMsdia(Guid clsidOfServer, Guid riid, IntPtr& pvObject)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
+                            "index": 1
+                          },
+                          "region": {
+                            "startLine": 46
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.GetDiaSource()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 528
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.WindowsNativeLoadPdbFromPEUsingDia(String peOrPdbPath, String symbolPath, String localSymbolDirectories)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 454
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String pePath, String symbolPath, String localSymbolDirectories)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
+                            "index": 2
+                          },
+                          "region": {
+                            "startLine": 54
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String pePath, String symbolPath, String localSymbolDirectories, Boolean traceLoads)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 232
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.TryLoadPdb(String peOrPdbPath, String extension, String symbolPath, String localSymbolDirectories, Boolean tracePdbLoad, Pdb& pdb)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 140
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.LoadPdb()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.ViaFactory(LazyThreadSafetyMode mode)"
+                          }
+                        ]
+                      }
+                    },
+                    {},
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Lazy`1.CreateValue()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
+                            "index": 3
+                          },
+                          "region": {
+                            "startLine": 83
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.get_Pdb()"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/BA6006.EnableLinkTimeCodeGeneration.cs",
+                            "index": 11
+                          },
+                          "region": {
+                            "startLine": 57
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.EnableLinkTimeCodeGeneration.CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/PEBinarySkimmerBase.cs",
+                            "index": 5
+                          },
+                          "region": {
+                            "startLine": 24
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.PEBinarySkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs",
+                            "index": 6
+                          },
+                          "region": {
+                            "startLine": 67
+                          }
+                        },
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.CanAnalyze(BinaryAnalyzerContext context, String& reasonForNotAnalyzing)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.MultithreadedAnalyzeCommandBase`2.DetermineApplicabilityForTargetHelper(TContext context, IEnumerable`1 skimmers, ISet`1 disabledSkimmers)"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              },
+              "descriptor": {
+                "id": "ERR998.ExceptionInCanAnalyze"
+              },
+              "associatedRule": {
+                "id": "BA6006"
+              }
+            }
+          ],
+          "executionSuccessful": false
         }
       ],
       "artifacts": [
@@ -484,6 +2090,116 @@
             "md5": "A319FC7B1A799AC87680A8D740AB0FB1",
             "sha-1": "AD7F1F5DDC7751BBA26BAC9D15F00CADD503EFB7",
             "sha-256": "F348F1796433F875967A2FF53960F51F0903121E3912D4B615DA711388803CAF"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs"
+          },
+          "hashes": {
+            "md5": "DF56E61BAF300BFE613EDA15FA3E7F45",
+            "sha-1": "45DD507A04D02BF6EB997B3002C22B0E88E7CA27",
+            "sha-256": "C6D240FB7861CD2B032BBEF3D73BA349A143C7EC766469F31B45AA13FB6573FF"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs"
+          },
+          "hashes": {
+            "md5": "D21EE88677C585BB477014CDD8159978",
+            "sha-1": "A970ED6BD51DD7687BB0E40072D4C72E59CC870D",
+            "sha-256": "02B617EBD2707E35F2DA1F1CB675B49340FFEB5F173504E93F4B75B19E120D77"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs"
+          },
+          "hashes": {
+            "md5": "F6158200BE34B8FAB3BC45F86BFCCF33",
+            "sha-1": "D656010570C32C8B4E9BF04C6E8070732409C3D7",
+            "sha-256": "30926CDCDDD21ECC14ECCD5808D850A7218BA9085DE30BB10BD107E8B0951108"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///Z:/src/BinSkim.Rules/PERules/BA2027.EnableSourceLink.cs"
+          },
+          "hashes": {
+            "md5": "489E87630E745BD3622B1750673D2603",
+            "sha-1": "F98470F9CBCEB102F3CB38C1DFA51376D93D9FD5",
+            "sha-256": "9B3233B7681A393C51658777FAB81C9E6DC98A8CA2A97B0853349EA2C4AF7933"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///Z:/src/BinSkim.Rules/PERules/PEBinarySkimmerBase.cs"
+          },
+          "hashes": {
+            "md5": "E9C924D787EF8AFF8675935BC059616A",
+            "sha-1": "0AF99EC2A7793D6DE0A5DDCE955ABC1F2F9E2BA0",
+            "sha-256": "B3D382A6ECE19D0EE05095F95A45CAEA28AA73BE936144F07D0A09A2E142F4AE"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs"
+          },
+          "hashes": {
+            "md5": "5F6A8D2B9B25346EC0682557BB3F7B80",
+            "sha-1": "A579DAB6D724A08182CF63C02339A42D07D7E8B7",
+            "sha-256": "DA86BA4F75062DE575F6A44C1092984FAA60D3FB2CF7A04F301D455E2F9AB0DB"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///Z:/src/BinSkim.Rules/PERules/BA6001.DisableIncrementalLinkingInReleaseBuilds.cs"
+          },
+          "hashes": {
+            "md5": "AF47716E6FFC2B6439E279646CA66EA3",
+            "sha-1": "EBB58E6D0DD3EDA0351E28EE370D9441CEBB9DE5",
+            "sha-256": "93F9E8C81A3EF388DFDA8641B178929851C5CBAFA197BBE642DF5F3F811E9E67"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///Z:/src/BinSkim.Rules/PERules/BA6002.EliminateDuplicateStrings.cs"
+          },
+          "hashes": {
+            "md5": "9C26C32B68D3739C14C323CA405E40DD",
+            "sha-1": "757941BB43D6286BC2C60FCC9584A63C4FA85BC0",
+            "sha-256": "89EC83A0EBEFFAC9C79E0A5D0683DCDDBDA8F119812782A7D9848C3BBEF8C308"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///Z:/src/BinSkim.Rules/PERules/BA6004.EnableComdatFolding.cs"
+          },
+          "hashes": {
+            "md5": "56A3E07385873C1A501E38FC45A44A56",
+            "sha-1": "7FF2105F9C41F518F871CAD517631150A0B35CFB",
+            "sha-256": "99FFB5E5D5D9D8F065471F93921A37726FF3D5DA4F97ECEB333103A709AC5638"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///Z:/src/BinSkim.Rules/PERules/BA6005.EnableOptimizeReferences.cs"
+          },
+          "hashes": {
+            "md5": "92641C6477C33367DDA3F09407C3E128",
+            "sha-1": "B768264592CC2511D1B0C0208071C7FC7C545F3F",
+            "sha-256": "0EFFAFE8B92080F0BA474183D35881AB30EF2C2C5EBACDADF103D1C26917DAE6"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///Z:/src/BinSkim.Rules/PERules/BA6006.EnableLinkTimeCodeGeneration.cs"
+          },
+          "hashes": {
+            "md5": "E17687363C5B8C9AEC61DCF8FF093E56",
+            "sha-1": "1D3F2502480B85CE598D00C5528668EDF6EEDBB3",
+            "sha-256": "3D4A3522475BFA132D0865D606976022D1281543A438AEA1A99F890322F9D308"
           }
         }
       ],
