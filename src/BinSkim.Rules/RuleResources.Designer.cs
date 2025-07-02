@@ -1458,6 +1458,33 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TBD.
+        /// </summary>
+        internal static string BA3032_BuildWithInternalToolChain_Description {
+            get {
+                return ResourceManager.GetString("BA3032_BuildWithInternalToolChain_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{1}&apos; .
+        /// </summary>
+        internal static string BA3032_Error {
+            get {
+                return ResourceManager.GetString("BA3032_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with internal toolchain.
+        /// </summary>
+        internal static string BA3032_Pass {
+            get {
+                return ResourceManager.GetString("BA3032_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This rule emits CSV data to the console for every compiler/language/version combination that&apos;s observed in any PDB-linked compiland..
         /// </summary>
         internal static string BA4001_ReportPECompilerData_Description {

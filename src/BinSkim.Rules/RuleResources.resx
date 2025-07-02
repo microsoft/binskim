@@ -788,4 +788,13 @@ The likely cause is that the code was linked to a static library with no debug i
   <data name="ERR998_ExceptionInCanAnalyze" xml:space="preserve">
     <value>An exception was raised attempting to determine whether '{0}' is a valid analysis target for check '{1}' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target and not specific to the rule, however.</value>
   </data>
+  <data name="BA3032_Pass" xml:space="preserve">
+    <value>'{0}' was compiled with internal toolchain</value>
+  </data>
+  <data name="BA3032_Error" xml:space="preserve">
+    <value>'{1}' </value>
+  </data>
+  <data name="BA3032_BuildWithInternalToolChain_Description" xml:space="preserve">
+    <value>TBD</value>
+  </data>
 </root>

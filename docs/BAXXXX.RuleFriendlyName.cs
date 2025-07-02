@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public override MultiformatMessageString FullDescription =>
             new MultiformatMessageString { Text = RuleResources.BAXXXX_RULEFRIENDLYNAME_Description };
 
-        protected override IEnumerable<string> MessageResourceNames => new string[] {
+        protected override ICollection<string> MessageResourceNames => new string[] {
                     nameof(RuleResources.BAXXXX_Pass),
                     nameof(RuleResources.BAXXXX_Error)
                 };
@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,
                         nameof(RuleResources.BAXXXX_Error),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
                 return;
             }
 
@@ -126,7 +126,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             context.Logger.Log(this,
                 RuleUtilities.BuildResult(ResultKind.Pass, context, null,
                     nameof(RuleResources.BAXXXX_Pass),
-                        context.TargetUri.GetFileName()));
+                        context.CurrentTarget.Uri.GetFileName()));
         }
 
         // Not considered a meaningful method name. Be sure to do a better job.
