@@ -16,6 +16,7 @@
 - NEW => new feature 
 
 ## UNRELEASED
+* FCR: add new pipelinies 1ES
 
 ## **v4.4.4**
 * DEP: Update destination folder for MsDiaLib, after their update [#1079](https://github.com/microsoft/binskim/pull/1079)
