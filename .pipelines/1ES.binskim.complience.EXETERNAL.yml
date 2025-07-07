@@ -1,0 +1,58 @@
+name: BasicReleasePipelineWithPipelineArtifact
+trigger: none
+
+resources:
+  repositories:
+  - repository: 1ESPipelineTemplates
+    type: git
+    name: 1ESPipelineTemplates/1ESPipelineTemplates
+    ref: refs/tags/release
+  - repository: self
+    type: git
+    ref: refs/heads/main
+
+extends:
+  template: v1/1ES.Unofficial.PipelineTemplate.yml@1ESPipelineTemplates
+  parameters:
+    customBuildTags:
+    - 1ES.PT.ViaStartRight
+    pool:
+      name: pool-1espt-mseng
+      image: pool-1espt-mseng-image
+      os: windows
+
+    stages:
+    - stage: release
+      jobs:
+      - job: Complience
+        steps:
+        - script: tree.com $(Pipeline.Workspace) /f
+          displayName: List files
+        - task: UseDotNet@2
+          displayName: 'Use .NET Core sdk 9'
+          inputs:
+              version: 9.x
+        - task: BatchScript@1
+          displayName: 'Run script BuildAndTest.cmd' 
+          inputs:
+            filename: BuildAndTest.cmd
+
+
+        - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@4
+          displayName: 'Run BinSkim '
+          inputs:
+            toolVersion: Exact
+            exactToolVersion: 4.3.1
+            AnalyzeTargetGlob: '$(Build.SourcesDirectory)/src/binskim/bld/bin/AnyCPU_Release/net9.0/**/*.dll;$(Build.SourcesDirectory)/src/binskim/bld/bin/AnyCPU_Release/net9.0/**/*.exe'
+            AnalyzeSymPath: 'Cache*$(Build.SourcesDirectory)\symbols;Srv*http://symweb'
+            AnalyzeHashes: true
+            AnalyzeStatistics: true
+        - task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2
+          displayName: 'Run CredScan'
+          inputs:
+            toolMajorVersion: V2
+            outputFormat: sarif
+            debugMode: false
+          continueOnError: true
+        - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
+          displayName: 'Publish Security Analysis Logs'
