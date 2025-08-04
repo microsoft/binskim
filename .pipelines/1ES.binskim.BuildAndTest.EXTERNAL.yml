@@ -1,0 +1,65 @@
+name: BuildAndTestBinskim
+trigger:
+  - "*"
+
+resources:
+  repositories:
+  - repository: 1ESPipelineTemplates
+    type: git
+    name: 1ESPipelineTemplates/1ESPipelineTemplates
+    ref: refs/tags/release
+  - repository: Binskim
+    type: github
+    name: Microsoft/binskim
+    ref: refs/heads/main
+    endpoint: github.com_1esSecToolsDetectDev 
+
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
+  parameters:
+    pool:
+      name: pool-1espt-mseng
+      image: pool-1espt-mseng-image
+      os: windows
+
+    stages:
+    - stage: stage1
+      displayName: Build And Test
+      jobs:
+        - job: linux
+          pool:
+            name: pool-1espt-linux-mseng-dev
+            os: linux
+          steps:
+          - checkout: self
+
+          - task: UseDotNet@2
+            displayName: .NET Core 9 sdk
+            inputs:
+              version: "9.0.x"
+              packageType: sdk
+
+          - task: Bash@3
+            displayName: "Build and Test"
+            inputs:
+              filePath: "BuildAndTest.sh"
+
+        - job: windows
+          pool:
+            name: pool-1espt-mseng
+            image: pool-1espt-mseng-image
+            os: windows
+          steps:
+          - task: UseDotNet@2
+            displayName: .NET Core 9 sdk
+            inputs:
+              version: "9.0.x"
+              packageType: sdk
+
+          - checkout: self
+
+          - task: CmdLine@2
+            displayName: "Build and Test"
+            inputs:
+              script: "BuildAndTest.cmd"
+          - task: ComponentGovernanceComponentDetection@0
