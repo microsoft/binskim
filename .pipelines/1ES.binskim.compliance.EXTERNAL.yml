@@ -27,7 +27,7 @@ extends:
     stages:
     - stage: release
       jobs:
-      - job: Complience
+      - job: Compliance
         steps:
         - task: UseDotNet@2
           displayName: 'Use .NET Core sdk 9'
