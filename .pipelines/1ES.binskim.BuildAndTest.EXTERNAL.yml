@@ -11,11 +11,6 @@ resources:
 
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
-  parameters:
-    pool:
-      name: pool-1espt-mseng
-      image: pool-1espt-mseng-image
-      os: windows
 
     stages:
     - stage: stage1
