@@ -17,6 +17,9 @@
 
 ## UNRELEASED
 
+## **v4.4.4**
+* DEP: Update destination folder for MsDiaLib, after their update [#1079](https://github.com/microsoft/binskim/pull/1079)
+
 ## **v4.4.3**
 * DEP: Updated version, for propagation [#1071](https://github.com/microsoft/binskim/pull/1071)
 * PRF: Changing binaries pointers from int to uint [#1069](https://github.com/microsoft/binskim/pull/1069)
