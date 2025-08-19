@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public DwarfLanguage GetLanguage()
         {
-            if (CompilationUnits.Value.Count == 0)
+            if (CompilationUnits?.Value == null || CompilationUnits?.Value?.Count == 0)
             {
                 return DwarfLanguage.Unknown;
             }

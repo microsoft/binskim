@@ -33,7 +33,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Gets or sets the offset.
         /// </summary>
-        internal int Offset { get; set; }
+        internal uint Offset { get; set; }
+
+        internal bool IsOffsetSet { get; set; }
 
         /// <summary>
         /// Gets the name.

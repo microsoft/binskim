@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="data">The data memory reader.</param>
         /// <param name="defaultAddressSize">Default size of the address.</param>
         /// <param name="endPosition">The end position in the memory stream.</param>
-        private DwarfCommonInformationEntry(DwarfMemoryReader data, byte defaultAddressSize, int endPosition)
+        private DwarfCommonInformationEntry(DwarfMemoryReader data, byte defaultAddressSize, uint endPosition)
         {
             ParseData(data, defaultAddressSize, endPosition);
         }
@@ -83,17 +83,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <returns>All the parsed common information entries</returns>
         public static DwarfCommonInformationEntry[] ParseAll(DwarfMemoryReader data, byte defaultAddressSize)
         {
-            Dictionary<int, DwarfCommonInformationEntry> entries = new Dictionary<int, DwarfCommonInformationEntry>();
+            Dictionary<uint, DwarfCommonInformationEntry> entries = new Dictionary<uint, DwarfCommonInformationEntry>();
 
             while (!data.IsEnd)
             {
-                int startPosition = data.Position;
+                uint startPosition = data.Position;
                 ulong length = data.ReadLength(out bool is64bit);
-                int endPosition = data.Position + (int)length;
-                int offset = data.ReadOffset(is64bit);
+                uint endPosition = data.Position + (uint)length;
+                uint offset = (uint)data.ReadOffset(is64bit);
+                bool isOffsetOK = data.ReadOffset(is64bit) != -1;
                 DwarfCommonInformationEntry entry;
 
-                if (offset == -1)
+                if (!isOffsetOK)
                 {
                     entry = new DwarfCommonInformationEntry(data, defaultAddressSize, endPosition);
                     entries.Add(startPosition, entry);
@@ -122,14 +123,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="defaultAddressSize">Default size of the address.</param>
         /// <param name="startPosition">The start position.</param>
         /// <returns>Parsed common information entry.</returns>
-        private static DwarfCommonInformationEntry ParseEntry(DwarfMemoryReader data, byte defaultAddressSize, int startPosition)
+        private static DwarfCommonInformationEntry ParseEntry(DwarfMemoryReader data, byte defaultAddressSize, uint startPosition)
         {
-            int position = data.Position;
+            uint position = data.Position;
 
             data.Position = startPosition;
 
             ulong length = data.ReadLength(out bool is64bit);
-            int endPosition = data.Position + (int)length;
+            uint endPosition = data.Position + (uint)length;
             int offset = data.ReadOffset(is64bit);
 
             if (offset != -1)
@@ -149,7 +150,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="data">The data memory reader.</param>
         /// <param name="defaultAddressSize">Default size of the address.</param>
         /// <param name="endPosition">The end position.</param>
-        private void ParseData(DwarfMemoryReader data, byte defaultAddressSize, int endPosition)
+        private void ParseData(DwarfMemoryReader data, byte defaultAddressSize, uint endPosition)
         {
             Version = data.ReadByte();
             Augmentation = data.ReadString();
@@ -177,7 +178,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 DataAlignmentFactor = data.ULEB128();
                 ReturnAddressRegister = data.ULEB128();
             }
-            InitialInstructions = data.ReadBlock((uint)(endPosition - data.Position));
+            InitialInstructions = data.ReadBlock(endPosition - data.Position);
         }
     }
 
@@ -232,7 +233,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="data">The data memory reader.</param>
         /// <param name="endPosition">The end position in the memory stream.</param>
         /// <param name="input">The input data for parsing configuration.</param>
-        public DwarfExceptionHandlingCommonInformationEntry(DwarfMemoryReader data, int endPosition, DwarfExceptionHandlingFrameParsingInput input)
+        public DwarfExceptionHandlingCommonInformationEntry(DwarfMemoryReader data, uint endPosition, DwarfExceptionHandlingFrameParsingInput input)
         {
             ParseData(data, endPosition, input);
         }
@@ -272,20 +273,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <returns>All the parsed common information entries</returns>
         public static DwarfExceptionHandlingCommonInformationEntry[] ParseAll(DwarfMemoryReader data, DwarfExceptionHandlingFrameParsingInput input)
         {
-            Dictionary<int, DwarfExceptionHandlingCommonInformationEntry> entries = new Dictionary<int, DwarfExceptionHandlingCommonInformationEntry>();
+            Dictionary<uint, DwarfExceptionHandlingCommonInformationEntry> entries = new Dictionary<uint, DwarfExceptionHandlingCommonInformationEntry>();
 
             while (!data.IsEnd)
             {
-                int startPosition = data.Position;
+                uint startPosition = data.Position;
                 ulong length = data.ReadLength(out bool is64bit);
-                int endPosition = data.Position + (int)length;
+                uint endPosition = data.Position + (uint)length;
 
                 if (length == 0 || endPosition >= data.Data.Length)
                 {
                     break;
                 }
 
-                int offsetBase = data.Position;
+                uint offsetBase = data.Position;
                 int offset = data.ReadOffset(is64bit);
                 DwarfExceptionHandlingCommonInformationEntry entry;
 
@@ -296,7 +297,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 }
                 else
                 {
-                    int entryOffset = offsetBase - offset;
+                    uint entryOffset = offsetBase - (uint)offset;
 
                     if (entryOffset < 0 || entryOffset >= data.Data.Length)
                     {
@@ -326,7 +327,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="endPosition">Position in the data reader where parsed frame description ends.</param>
         /// <param name="input">The input data for parsing configuration.</param>
         /// <returns>Parsed frame description.</returns>
-        private static DwarfFrameDescriptionEntry ParseDescription(DwarfMemoryReader data, DwarfExceptionHandlingCommonInformationEntry entry, int endPosition, DwarfExceptionHandlingFrameParsingInput input)
+        private static DwarfFrameDescriptionEntry ParseDescription(DwarfMemoryReader data, DwarfExceptionHandlingCommonInformationEntry entry, uint endPosition, DwarfExceptionHandlingFrameParsingInput input)
         {
             DwarfFrameDescriptionEntry description = new DwarfFrameDescriptionEntry
             {
@@ -334,22 +335,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 AddressRange = ReadEncodedAddress(data, entry.FrameDescriptionAddressEncoding & DwarfExceptionHandlingEncoding.Mask, input),
                 CommonInformationEntry = entry
             };
-            int instructionsStart = -1;
+            uint instructionsStart = 0;
             if (entry.Augmentation.Length >= 1 && entry.Augmentation[0] == 'z')
             {
                 ulong length = data.ULEB128();
+                instructionsStart = data.Position + (uint)length;
 
-                instructionsStart = data.Position + (int)length;
                 if (entry.LanguageSpecificDataAreaEncoding != DwarfExceptionHandlingEncoding.Omit)
                 {
                     ReadEncodedAddress(data, entry.LanguageSpecificDataAreaEncoding, input);
                 }
-            }
-            if (instructionsStart >= 0)
-            {
                 data.Position = instructionsStart;
             }
-            description.Instructions = data.ReadBlock((uint)(endPosition - data.Position));
+            description.Instructions = data.ReadBlock(endPosition - data.Position);
             return description;
         }
 
@@ -398,7 +396,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                 case DwarfExceptionHandlingEncoding.Aligned:
                 {
-                    int alignment = data.Position % input.DefaultAddressSize;
+                    uint alignment = data.Position % input.DefaultAddressSize;
 
                     if (alignment > 0)
                     {
@@ -469,15 +467,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="startPosition">The start position.</param>
         /// <param name="input">The input data for parsing configuration.</param>
         /// <returns>Parsed common information entry.</returns>
-        private static DwarfExceptionHandlingCommonInformationEntry ParseEntry(DwarfMemoryReader data, int startPosition, DwarfExceptionHandlingFrameParsingInput input)
+        private static DwarfExceptionHandlingCommonInformationEntry ParseEntry(DwarfMemoryReader data, uint startPosition, DwarfExceptionHandlingFrameParsingInput input)
         {
-            int position = data.Position;
+            uint position = data.Position;
 
             data.Position = startPosition;
 
             ulong length = data.ReadLength(out bool is64bit);
-            int endPosition = data.Position + (int)length;
-            int offset = data.ReadOffset(is64bit);
+            uint endPosition = data.Position + (uint)length;
+            uint offset = (uint)data.ReadOffset(is64bit);
 
             if (offset != 0)
             {
@@ -496,7 +494,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="data">The data memory reader.</param>
         /// <param name="endPosition">The end position.</param>
         /// <param name="input">The input data for parsing configuration.</param>
-        private void ParseData(DwarfMemoryReader data, int endPosition, DwarfExceptionHandlingFrameParsingInput input)
+        private void ParseData(DwarfMemoryReader data, uint endPosition, DwarfExceptionHandlingFrameParsingInput input)
         {
             Version = data.ReadByte();
             Augmentation = data.ReadString();
@@ -512,14 +510,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             }
             AddressSize = input.DefaultAddressSize;
             SegmentSelectorSize = 0;
-            int instructionsStart = -1;
+            uint instructionsStart = 0;
 
             for (int i = 0; i < Augmentation.Length; i++)
             {
                 if (Augmentation[i] == 'z')
                 {
                     ulong length = data.ULEB128();
-                    instructionsStart = data.Position + (int)length;
+                    instructionsStart = data.Position + (uint)length;
                 }
                 else if (Augmentation[i] == 'L')
                 {
@@ -543,11 +541,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     break;
                 }
             }
-            if (instructionsStart >= 0)
+            if (instructionsStart <= data.Position && instructionsStart <= data.ULEB128())
             {
                 data.Position = instructionsStart;
             }
-            InitialInstructions = data.ReadBlock((uint)(endPosition - data.Position));
+            InitialInstructions = data.ReadBlock(endPosition - data.Position);
         }
     }
 }
