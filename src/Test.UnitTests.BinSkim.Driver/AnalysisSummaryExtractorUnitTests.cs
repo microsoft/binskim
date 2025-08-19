@@ -121,6 +121,20 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         public void ExtractAnalysisSummary_WithoutBuildPipelineInfo()
         {
             var summary = new AnalysisSummary();
+
+            PrepareEnvironmentVariables(new List<(string, string)>
+            {
+                (AnalysisSummaryExtractor.BuildDefinitionIdVariableName, null),
+                (AnalysisSummaryExtractor.BuildDefinitionNameVariableName, null),
+                (AnalysisSummaryExtractor.BuildDefinitionRunIdVariableName, null),
+                (AnalysisSummaryExtractor.RepositoryIdVariableName, null),
+                (AnalysisSummaryExtractor.RepositoryNameVariableName, null),
+                (AnalysisSummaryExtractor.OrganizationIdVariableName, null),
+                (AnalysisSummaryExtractor.OrganizationNameVariableName, null),
+                (AnalysisSummaryExtractor.ProjectIdVariableName, null),
+                (AnalysisSummaryExtractor.ProjectNameVariableName, null),
+            });
+
             AnalysisSummaryExtractor.UpdateBuildPipelineInfo(summary);
 
             summary.BuildDefinitionId.Should().BeNullOrEmpty();
