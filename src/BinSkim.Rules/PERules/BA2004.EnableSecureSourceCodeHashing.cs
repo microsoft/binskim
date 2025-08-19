@@ -154,7 +154,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     if (omDetails.GetOptionValue(pchOptionSwitches, OrderOfPrecedence.FirstWins, ref pchHeaderFile) == true)
                     {
                         // Now check to see if a pch file name was specified using /Fp:
-                        string[] pchFileNameOptions = { "/Fp:" };
+                        string[] pchFileNameOptions = { "/Fp" };
                         if (omDetails.GetOptionValue(pchFileNameOptions, OrderOfPrecedence.FirstWins, ref pchFileName) != true)
                         {
                             // no pch filename specified, so the filename defaults to the pchHeaderFile with the extension swapped to ".pch"
