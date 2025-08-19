@@ -4,9 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
@@ -18,12 +15,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// The dictionary of symbols located by offset in the debug data stream.
         /// </summary>
-        private readonly Dictionary<int, DwarfSymbol> symbolsByOffset = new Dictionary<int, DwarfSymbol>();
+        private readonly Dictionary<uint, DwarfSymbol> symbolsByOffset = new Dictionary<uint, DwarfSymbol>();
 
         /// <summary>
         /// The offset of next Compilation Unit
         /// </summary>
-        public int NextOffset { get; set; }
+        public uint NextOffset { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DwarfCompilationUnit"/> class.
@@ -82,14 +79,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                               NormalizeAddressDelegate addressNormalizer)
         {
             // Read header
-            int beginPosition = debugData.Position;
+            uint beginPosition = debugData.Position;
             ulong length = debugData.ReadLength(out bool is64bit);
-            int endPosition = debugData.Position + (int)length;
+            uint endPosition = debugData.Position + (uint)length;
             NextOffset = endPosition;
             ushort version = debugData.ReadUshort();
 
             byte addressSize;
-            int debugDataDescriptionOffset;
+            uint debugDataDescriptionOffset;
 
             dwarfBinary.DwarfVersion = version;
 
@@ -97,7 +94,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             {
                 dwarfBinary.DwarfUnitType = (DwarfUnitType)(debugData.ReadByte());
                 addressSize = debugData.ReadByte();
-                debugDataDescriptionOffset = debugData.ReadOffset(is64bit);
+                debugDataDescriptionOffset = (uint)debugData.ReadOffset(is64bit);
                 if (dwarfBinary.DwarfUnitType == DwarfUnitType.Skeleton || dwarfBinary.DwarfUnitType == DwarfUnitType.SplitCompile)
                 {
                     debugData.ReadUlong();
@@ -105,7 +102,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             }
             else if (version > 0 && version < 5)
             {
-                debugDataDescriptionOffset = debugData.ReadOffset(is64bit);
+                debugDataDescriptionOffset = (uint)debugData.ReadOffset(is64bit);
                 addressSize = debugData.ReadByte();
             }
             else
@@ -121,7 +118,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             while (debugData.Position < endPosition)
             {
-                int dataPosition = debugData.Position;
+                uint dataPosition = debugData.Position;
                 ulong code = debugData.ULEB128();
 
                 if (code == 0)
@@ -142,7 +139,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     description.Attributes.RemoveAll(a => a.Attribute == DwarfAttribute.Name);
                 }
 
-                int indexOffset = -1;
+                ulong indexOffset = 0;
+                bool isIndexOffsetOK = false;
 
                 foreach (DataDescriptionAttribute descriptionAttribute in description.Attributes)
                 {
@@ -159,12 +157,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Block:
                             attributeValue.Type = DwarfAttributeValueType.Block;
-                            attributeValue.Value = debugData.ReadBlock(debugData.ULEB128());
+                            attributeValue.Value = debugData.ReadBlock((uint)debugData.ULEB128());
                             break;
 
                         case DwarfFormat.Block1:
                             attributeValue.Type = DwarfAttributeValueType.Block;
-                            attributeValue.Value = debugData.ReadBlock(debugData.ReadByte());
+                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            {
+                                attributeValue.Value = debugData.ReadBlock(debugData.ReadByte());
+                            }
                             break;
 
                         case DwarfFormat.Block2:
@@ -179,7 +180,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Data1:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            attributeValue.Value = (ulong)debugData.ReadByte();
+                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            {
+                                attributeValue.Value = (ulong)debugData.ReadByte();
+                            }
                             break;
 
                         case DwarfFormat.Data2:
@@ -194,12 +198,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Data8:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            attributeValue.Value = debugData.ReadUlong();
+                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            {
+                                attributeValue.Value = debugData.ReadUlong();
+                            }
                             break;
 
                         case DwarfFormat.Data16:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            attributeValue.Value = debugData.ReadBlock(16);
+                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            {
+                                attributeValue.Value = debugData.ReadBlock(16);
+                            }
                             break;
 
                         case DwarfFormat.SData:
@@ -209,7 +219,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.UData:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            attributeValue.Value = (ulong)debugData.ULEB128();
+                            attributeValue.Value = debugData.ULEB128();
                             break;
 
                         case DwarfFormat.String:
@@ -220,13 +230,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         case DwarfFormat.LineStrp:
                             attributeValue.Type = DwarfAttributeValueType.String;
                             int offsetStrp = debugData.ReadOffset(is64bit);
-                            attributeValue.Value = debugLineStrings.ReadString(offsetStrp);
+                            attributeValue.Value = debugLineStrings.ReadString((uint)offsetStrp);
                             break;
 
                         case DwarfFormat.Strp:
                             attributeValue.Type = DwarfAttributeValueType.String;
                             offsetStrp = debugData.ReadOffset(is64bit);
-                            attributeValue.Value = debugStrings.ReadString(offsetStrp);
+                            attributeValue.Value = debugStrings.ReadString((uint)offsetStrp);
                             break;
 
                         case DwarfFormat.StrpSup:
@@ -302,7 +312,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             attributeValue.Value = (ulong)debugData.ReadOffset(is64bit);
                             if (attribute == DwarfAttribute.RankStrOffsetsBase)
                             {
-                                indexOffset = (int)((ulong)attributeValue.Value / (ulong)(is64bit ? 8 : 4));
+                                indexOffset = (ulong)attributeValue.Value / (ulong)(is64bit ? 8 : 4);
+                                isIndexOffsetOK = true;
                             }
                             break;
 
@@ -367,6 +378,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             attributeValue.Value = debugData.ULEB128();
                             break;
 
+                        case DwarfFormat.Loclistx:
+                            attributeValue.Type = DwarfAttributeValueType.Loclistx;
+                            attributeValue.Value = (long)debugData.ReadOffset(is64bit);
+                            break;
+
                         case DwarfFormat.GNUAddrIndex:
                             break;
 
@@ -387,7 +403,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     }
                 }
 
-                if (indexOffset > -1)
+                if (isIndexOffsetOK)
                 {
                     foreach (DwarfAttributeValue dwarfAttributeValue in attributes.Values)
                     {
@@ -397,10 +413,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             // We current do not post-process all address types.
                             continue;
                         }
-
-                        int debugStringOffsetIndex = Convert.ToInt32(dwarfAttributeValue.Value) + indexOffset;
-                        int offset = debugStringOffsets[debugStringOffsetIndex];
-                        dwarfAttributeValue.Value = debugStrings.ReadString(offset);
+                        if (dwarfAttributeValue.Value != null)
+                        {
+                            ulong debugStringOffsetIndex = (ulong)dwarfAttributeValue.Value + indexOffset;
+                            uint offset = (uint)debugStringOffsets[(int)debugStringOffsetIndex];
+                            dwarfAttributeValue.Value = debugStrings.ReadString(offset);
+                        }
                     }
                 }
 
@@ -428,8 +446,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     symbol.Children = new List<DwarfSymbol>();
                     parents.Push(symbol);
                 }
-
-                break;
             }
 
             SymbolsTree = symbols.ToArray();
@@ -440,7 +456,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 DwarfSymbol voidSymbol = new DwarfSymbol()
                 {
                     Tag = DwarfTag.BaseType,
-                    Offset = -1,
+                    Offset = 0,
                     Parent = SymbolsTree[0],
                     Attributes = new Dictionary<DwarfAttribute, DwarfAttributeValue>()
                     {
@@ -464,9 +480,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     {
                         foreach (DwarfAttributeValue value in attributes.Values)
                         {
-                            if (value.Type == DwarfAttributeValueType.Reference)
+                            if (value.Type == DwarfAttributeValueType.ResolvedReference)
                             {
-                                if (symbolsByOffset.TryGetValue((int)value.Address, out DwarfSymbol reference))
+                                if (symbolsByOffset.TryGetValue((uint)value.Address, out DwarfSymbol reference))
                                 {
                                     value.Type = DwarfAttributeValueType.ResolvedReference;
                                     value.Value = reference;
@@ -516,19 +532,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     }
                 }
             }
-        }
-
-        private List<int> BuildStringOffsets(DwarfMemoryReader reader, bool is64bit)
-        {
-            var stringOffsets = new List<int>();
-
-            while (!reader.IsEnd)
-            {
-                int offset = reader.ReadOffset(is64bit);
-                stringOffsets.Add(offset);
-            }
-
-            return stringOffsets;
         }
 
         /// <summary>
@@ -594,14 +597,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// <summary>
             /// The last read position.
             /// </summary>
-            private int lastReadPosition;
+            private uint lastReadPosition;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="DataDescriptionReader"/> class.
             /// </summary>
             /// <param name="debugDataDescription">The debug data description.</param>
             /// <param name="startingPosition">The starting position.</param>
-            public DataDescriptionReader(DwarfMemoryReader debugDataDescription, int startingPosition)
+            public DataDescriptionReader(DwarfMemoryReader debugDataDescription, uint startingPosition)
             {
                 readDescriptions = new Dictionary<ulong, DataDescription>();
                 lastReadPosition = startingPosition;
