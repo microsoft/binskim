@@ -17,6 +17,16 @@
 
 ## UNRELEASED
 
+## **v4.4.4**
+* DEP: Update destination folder for MsDiaLib, after their update [#1079](https://github.com/microsoft/binskim/pull/1079)
+
+## **v4.4.3**
+* DEP: Updated version, for propagation [#1071](https://github.com/microsoft/binskim/pull/1071)
+* PRF: Changing binaries pointers from int to uint [#1069](https://github.com/microsoft/binskim/pull/1069)
+
+## **v4.4.2**
+* DEP: Adding possibility for SelfContained and R2R Publish [#1062](https://github.com/microsoft/binskim/pull/1062)
+
 ## **v4.4.1**
 * RRR: Skip BA2021 Analysis on .NET R2R & NativeAOT PE on non-Windows Platforms. [#1013](https://github.com/microsoft/binskim/pull/1013)
 * DEP: Dotnet update to 9.x. [#1024](https://github.com/microsoft/binskim/pull/1024)
