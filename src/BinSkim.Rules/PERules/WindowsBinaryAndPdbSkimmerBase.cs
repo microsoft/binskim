@@ -133,12 +133,30 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 throw new ArgumentNullException(nameof(context));
             }
-
-            string path = context.CurrentTarget.Uri.OriginalString;
-            string key = $"{path}@{pdbException.ExceptionDisplayMessage}";
-            if (s_PdbExceptions.ContainsKey(key))
+            string key = "";
+            if (pdbException == null)
             {
+                context.Logger.LogConfigurationNotification(
+                   Errors.CreateNotification(
+                       context.CurrentTarget.Uri,
+                       "ERR997.ExceptionLoadingPdb",
+                       string.Empty,
+                       FailureLevel.Error,
+                       new Exception(),
+                       persistExceptionStack: false,
+                       RuleResources.ERR997_ExceptionLoadingPdbGeneric,
+                       context.CurrentTarget.Uri.GetFileName(),
+                       context.CurrentTarget.Uri.LocalPath));
                 return;
+            }
+            else
+            {
+                string path = context.CurrentTarget.Uri.OriginalString;
+                key = $"{path}@{pdbException.ExceptionDisplayMessage}";
+                if (s_PdbExceptions.ContainsKey(key))
+                {
+                    return;
+                }
             }
 
             // '{0}' was not evaluated because its PDB could not be loaded ({1}).

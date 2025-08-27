@@ -527,7 +527,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     return this.isManagedResourceOnly.Value;
                 }
 
-                this.isManagedResourceOnly = this.metadataReader.MethodDefinitions.Count == 0;
+                this.isManagedResourceOnly = this.metadataReader?.MethodDefinitions.Count == 0;
                 return this.isManagedResourceOnly.Value;
             }
         }
@@ -547,8 +547,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         }
 
         public bool IsDotNetCoreBootstrapExe =>
-                // The .NET core bootstrap exe is a generated native binary that loads
-                // its corresponding .NET core application entry point dll.
+        // The .NET core bootstrap exe is a generated native binary that loads
+        // its corresponding .NET core application entry point dll.
                 !this.IsDotNetCore
                     && this.CodeViewDebugDirectoryData.Path != null
                     && (this.CodeViewDebugDirectoryData.Path.EndsWith("apphost.pdb", StringComparison.OrdinalIgnoreCase)
@@ -593,7 +593,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         internal static ManagedPlatform ComputeIsDotNetCore(MetadataReader metadataReader)
         {
-            if (metadataReader.AssemblyReferences.Count == 0)
+            if (metadataReader?.AssemblyReferences == null)
+            {
+                return ManagedPlatform.Unknown;
+            }
+
+            if (metadataReader?.AssemblyReferences.Count == 0)
             {
                 return ManagedPlatform.DotNetFramework;
             }
