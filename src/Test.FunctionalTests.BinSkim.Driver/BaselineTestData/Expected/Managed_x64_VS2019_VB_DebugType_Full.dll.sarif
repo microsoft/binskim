@@ -5,14 +5,15 @@
     {
       "results": [
         {
-          "ruleId": "BA2005",
+          "ruleId": "BA2004",
           "ruleIndex": 0,
           "kind": "pass",
           "level": "none",
           "message": {
             "id": "Pass",
             "arguments": [
-              "Managed_x64_VS2019_VB_DebugType_Full.dll"
+              "Managed_x64_VS2019_VB_DebugType_Full.dll",
+              "managed"
             ]
           },
           "locations": [
@@ -27,7 +28,7 @@
           ]
         },
         {
-          "ruleId": "BA2009",
+          "ruleId": "BA2005",
           "ruleIndex": 1,
           "kind": "pass",
           "level": "none",
@@ -49,7 +50,7 @@
           ]
         },
         {
-          "ruleId": "BA2016",
+          "ruleId": "BA2009",
           "ruleIndex": 2,
           "kind": "pass",
           "level": "none",
@@ -71,8 +72,30 @@
           ]
         },
         {
-          "ruleId": "BA2018",
+          "ruleId": "BA2016",
           "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_VB_DebugType_Full.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Full.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2018",
+          "ruleIndex": 4,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -94,7 +117,7 @@
         },
         {
           "ruleId": "BA2019",
-          "ruleIndex": 4,
+          "ruleIndex": 5,
           "kind": "pass",
           "level": "none",
           "message": {
@@ -116,11 +139,31 @@
         },
         {
           "ruleId": "BA2021",
-          "ruleIndex": 5,
+          "ruleIndex": 6,
           "kind": "pass",
           "level": "none",
           "message": {
             "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_VB_DebugType_Full.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Full.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2027",
+          "ruleIndex": 7,
+          "message": {
+            "id": "Warning",
             "arguments": [
               "Managed_x64_VS2019_VB_DebugType_Full.dll"
             ]
@@ -142,6 +185,34 @@
           "name": "testhost",
           "version": "15.0.0.0",
           "rules": [
+            {
+              "id": "BA2004",
+              "name": "EnableSecureSourceCodeHashing",
+              "fullDescription": {
+                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code.\r\nThis information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs.\r\nThis validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure.\r\nLegacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files).\r\nUsing a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler.\r\nFor managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing.\r\nFor native code - use to MSVC 17.0 (14.30.*) or later if possible. For VC projects use PlatformToolset property with 'v143' or later value.\r\nWhen using older MSVC versions add /ZH:SHA_256 on cl.exe command line."
+              },
+              "help": {
+                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code.\r\nThis information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs.\r\nThis validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure.\r\nLegacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files).\r\nUsing a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler.\r\nFor managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing.\r\nFor native code - use to MSVC 17.0 (14.30.*) or later if possible. For VC projects use PlatformToolset property with 'v143' or later value.\r\nWhen using older MSVC versions add /ZH:SHA_256 on cl.exe command line."
+              },
+              "messageStrings": {
+                "Pass": {
+                  "text": "'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm."
+                },
+                "Warning_NativeWithInsecureStaticLibraryCompilands": {
+                  "text": "'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm.\r\nInsecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity.\r\nTo resolve this issue, use newer versions of libraries that are compiled with /ZH:SHA_256. MSVC: 17.0 (14.30.*) or later. Windows SDK: 10.0.18362.0 or later.\r\nThe following modules are out of policy:\r\n{1}"
+                },
+                "Error_Managed": {
+                  "text": "'{0}' is a managed binary compiled with an insecure ({1}) source code hashing algorithm. {1} is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing."
+                },
+                "Error_NativeWithInsecureDirectCompilands": {
+                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm.\r\nInsecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity.\r\nUse MSVC 17.0 (14.30.*) or later if possible.\r\nWhen using older MSVC versions, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing.\r\nThe following modules are out of policy:\r\n{1}"
+                },
+                "NotApplicable_InvalidMetadata": {
+                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
+                }
+              },
+              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2004EnableSecureSourceCodeHashing"
+            },
             {
               "id": "BA2005",
               "name": "DoNotShipVulnerableBinaries",
@@ -308,34 +379,6 @@
               }
             },
             {
-              "id": "BA2004",
-              "name": "EnableSecureSourceCodeHashing",
-              "fullDescription": {
-                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code.\r\nThis information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs.\r\nThis validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure.\r\nLegacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files).\r\nUsing a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler.\r\nFor managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing.\r\nFor native code - use to MSVC 17.0 (14.30.*) or later if possible. For VC projects use PlatformToolset property with 'v143' or later value.\r\nWhen using older MSVC versions add /ZH:SHA_256 on cl.exe command line."
-              },
-              "help": {
-                "text": "Compilers can generate and store checksums of source files in order to provide linkage between binaries, their PDBs, and associated source code.\r\nThis information is typically used to resolve source file when debugging but it can also be used to verify that a specific body of source code is, in fact, the code that was used to produce a specific set of binaries and PDBs.\r\nThis validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure.\r\nLegacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files).\r\nUsing a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler.\r\nFor managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing.\r\nFor native code - use to MSVC 17.0 (14.30.*) or later if possible. For VC projects use PlatformToolset property with 'v143' or later value.\r\nWhen using older MSVC versions add /ZH:SHA_256 on cl.exe command line."
-              },
-              "messageStrings": {
-                "Pass": {
-                  "text": "'{0}' is a {1} binary which was compiled with a secure (SHA-256) source code hashing algorithm."
-                },
-                "Warning_NativeWithInsecureStaticLibraryCompilands": {
-                  "text": "'{0}' is a native binary that links one or more static libraries that include object files which were hashed using an insecure checksum algorithm.\r\nInsecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity.\r\nTo resolve this issue, use newer versions of libraries that are compiled with /ZH:SHA_256. MSVC: 17.0 (14.30.*) or later. Windows SDK: 10.0.18362.0 or later.\r\nThe following modules are out of policy:\r\n{1}"
-                },
-                "Error_Managed": {
-                  "text": "'{0}' is a managed binary compiled with an insecure ({1}) source code hashing algorithm. {1} is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing."
-                },
-                "Error_NativeWithInsecureDirectCompilands": {
-                  "text": "'{0}' is a native binary that directly compiles and links one or more object files which were hashed using an insecure checksum algorithm.\r\nInsecure checksum algorithms are subject to collision attacks and its use can compromise supply chain integrity.\r\nUse MSVC 17.0 (14.30.*) or later if possible.\r\nWhen using older MSVC versions, pass '/ZH:SHA_256' on the cl.exe command-line to enable secure source code hashing.\r\nThe following modules are out of policy:\r\n{1}"
-                },
-                "NotApplicable_InvalidMetadata": {
-                  "text": "'{0}' was not evaluated for check '{1}' as the analysis is not relevant based on observed metadata: {2}."
-                }
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2004EnableSecureSourceCodeHashing"
-            },
-            {
               "id": "BA2027",
               "name": "EnableSourceLink",
               "fullDescription": {
@@ -353,17 +396,6 @@
                 }
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2027EnableSourceLink"
-            },
-            {
-              "id": "BA4001",
-              "name": "ReportPECompilerData",
-              "fullDescription": {
-                "text": "This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland."
-              },
-              "help": {
-                "text": "This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland."
-              },
-              "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA4001ReportPECompilerData"
             }
           ],
           "properties": {
@@ -373,710 +405,7 @@
       },
       "invocations": [
         {
-          "toolExecutionNotifications": [
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Full.dll",
-                      "index": 0
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "An exception of type 'DllNotFoundException' was raised analyzing 'Managed_x64_VS2019_VB_DebugType_Full.dll' for check 'EnableSecureSourceCodeHashing' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however."
-              },
-              "level": "error",
-              "exception": {
-                "kind": "DllNotFoundException",
-                "message": "Unable to load DLL 'msdia140.dll' or one of its dependencies: The specified module could not be found. (0x8007007E)",
-                "stack": {
-                  "frames": [
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.DllGetClassObject(Guid ClassId, Guid riid, IntPtr& ppvObject)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
-                            "index": 1
-                          },
-                          "region": {
-                            "startLine": 29
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.CoCreateFromMsdia(Guid clsidOfServer, Guid riid, IntPtr& pvObject)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
-                            "index": 1
-                          },
-                          "region": {
-                            "startLine": 46
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.GetDiaSource()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
-                            "index": 2
-                          },
-                          "region": {
-                            "startLine": 528
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.WindowsNativeLoadPdbFromPEUsingDia(String peOrPdbPath, String symbolPath, String localSymbolDirectories)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
-                            "index": 2
-                          },
-                          "region": {
-                            "startLine": 454
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String pePath, String symbolPath, String localSymbolDirectories)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
-                            "index": 2
-                          },
-                          "region": {
-                            "startLine": 54
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String pePath, String symbolPath, String localSymbolDirectories, Boolean traceLoads)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
-                            "index": 3
-                          },
-                          "region": {
-                            "startLine": 232
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.TryLoadPdb(String peOrPdbPath, String extension, String symbolPath, String localSymbolDirectories, Boolean tracePdbLoad, Pdb& pdb)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
-                            "index": 3
-                          },
-                          "region": {
-                            "startLine": 140
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.LoadPdb()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "System.Lazy`1.ViaFactory(LazyThreadSafetyMode mode)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "System.Lazy`1.ExecutionAndPublication(LazyHelper executionAndPublication, Boolean useDefaultConstructor)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "System.Lazy`1.CreateValue()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
-                            "index": 3
-                          },
-                          "region": {
-                            "startLine": 83
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.get_Pdb()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs",
-                            "index": 4
-                          },
-                          "region": {
-                            "startLine": 39
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.Analyze(BinaryAnalyzerContext context)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.MultithreadedAnalyzeCommandBase`2.AnalyzeTargetHelper(TContext context, IEnumerable`1 skimmers, ISet`1 disabledSkimmers)"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              },
-              "descriptor": {
-                "id": "ERR998.ExceptionInAnalyze"
-              },
-              "associatedRule": {
-                "id": "BA2004",
-                "index": 6
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Full.dll",
-                      "index": 0
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "An exception of type 'DllNotFoundException' was raised analyzing 'Managed_x64_VS2019_VB_DebugType_Full.dll' for check 'EnableSourceLink' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however."
-              },
-              "level": "error",
-              "exception": {
-                "kind": "DllNotFoundException",
-                "message": "Unable to load DLL 'msdia140.dll' or one of its dependencies: The specified module could not be found. (0x8007007E)",
-                "stack": {
-                  "frames": [
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.DllGetClassObject(Guid ClassId, Guid riid, IntPtr& ppvObject)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
-                            "index": 1
-                          },
-                          "region": {
-                            "startLine": 29
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.CoCreateFromMsdia(Guid clsidOfServer, Guid riid, IntPtr& pvObject)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
-                            "index": 1
-                          },
-                          "region": {
-                            "startLine": 46
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.GetDiaSource()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
-                            "index": 2
-                          },
-                          "region": {
-                            "startLine": 528
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.WindowsNativeLoadPdbFromPEUsingDia(String peOrPdbPath, String symbolPath, String localSymbolDirectories)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
-                            "index": 2
-                          },
-                          "region": {
-                            "startLine": 454
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String pePath, String symbolPath, String localSymbolDirectories)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
-                            "index": 2
-                          },
-                          "region": {
-                            "startLine": 54
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String pePath, String symbolPath, String localSymbolDirectories, Boolean traceLoads)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
-                            "index": 3
-                          },
-                          "region": {
-                            "startLine": 232
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.TryLoadPdb(String peOrPdbPath, String extension, String symbolPath, String localSymbolDirectories, Boolean tracePdbLoad, Pdb& pdb)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
-                            "index": 3
-                          },
-                          "region": {
-                            "startLine": 140
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.LoadPdb()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "System.Lazy`1.ViaFactory(LazyThreadSafetyMode mode)"
-                          }
-                        ]
-                      }
-                    },
-                    {},
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "System.Lazy`1.CreateValue()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
-                            "index": 3
-                          },
-                          "region": {
-                            "startLine": 83
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.get_Pdb()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs",
-                            "index": 4
-                          },
-                          "region": {
-                            "startLine": 39
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.Analyze(BinaryAnalyzerContext context)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.MultithreadedAnalyzeCommandBase`2.AnalyzeTargetHelper(TContext context, IEnumerable`1 skimmers, ISet`1 disabledSkimmers)"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              },
-              "descriptor": {
-                "id": "ERR998.ExceptionInAnalyze"
-              },
-              "associatedRule": {
-                "id": "BA2027",
-                "index": 7
-              }
-            },
-            {
-              "locations": [
-                {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_VB_DebugType_Full.dll",
-                      "index": 0
-                    }
-                  }
-                }
-              ],
-              "message": {
-                "text": "An exception of type 'DllNotFoundException' was raised analyzing 'Managed_x64_VS2019_VB_DebugType_Full.dll' for check 'ReportPECompilerData' (which has been disabled). The exception may have resulted from a problem related to parsing the analysis target, and not specific to the rule, however."
-              },
-              "level": "error",
-              "exception": {
-                "kind": "DllNotFoundException",
-                "message": "Unable to load DLL 'msdia140.dll' or one of its dependencies: The specified module could not be found. (0x8007007E)",
-                "stack": {
-                  "frames": [
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.DllGetClassObject(Guid ClassId, Guid riid, IntPtr& ppvObject)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
-                            "index": 1
-                          },
-                          "region": {
-                            "startLine": 29
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.CoCreateFromMsdia(Guid clsidOfServer, Guid riid, IntPtr& pvObject)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs",
-                            "index": 1
-                          },
-                          "region": {
-                            "startLine": 46
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.MsdiaComWrapper.GetDiaSource()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
-                            "index": 2
-                          },
-                          "region": {
-                            "startLine": 528
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.WindowsNativeLoadPdbFromPEUsingDia(String peOrPdbPath, String symbolPath, String localSymbolDirectories)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
-                            "index": 2
-                          },
-                          "region": {
-                            "startLine": 454
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb.Init(String pePath, String symbolPath, String localSymbolDirectories)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs",
-                            "index": 2
-                          },
-                          "region": {
-                            "startLine": 54
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase.Pdb..ctor(String pePath, String symbolPath, String localSymbolDirectories, Boolean traceLoads)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
-                            "index": 3
-                          },
-                          "region": {
-                            "startLine": 232
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.TryLoadPdb(String peOrPdbPath, String extension, String symbolPath, String localSymbolDirectories, Boolean tracePdbLoad, Pdb& pdb)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
-                            "index": 3
-                          },
-                          "region": {
-                            "startLine": 140
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.LoadPdb()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "System.Lazy`1.ViaFactory(LazyThreadSafetyMode mode)"
-                          }
-                        ]
-                      }
-                    },
-                    {},
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "System.Lazy`1.CreateValue()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs",
-                            "index": 3
-                          },
-                          "region": {
-                            "startLine": 83
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.BinaryParsers.PEBinary.get_Pdb()"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "physicalLocation": {
-                          "artifactLocation": {
-                            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs",
-                            "index": 4
-                          },
-                          "region": {
-                            "startLine": 39
-                          }
-                        },
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.IL.Rules.WindowsBinaryAndPdbSkimmerBase.Analyze(BinaryAnalyzerContext context)"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "location": {
-                        "logicalLocations": [
-                          {
-                            "fullyQualifiedName": "Microsoft.CodeAnalysis.Sarif.Driver.MultithreadedAnalyzeCommandBase`2.AnalyzeTargetHelper(TContext context, IEnumerable`1 skimmers, ISet`1 disabledSkimmers)"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
-                "innerExceptions": []
-              },
-              "descriptor": {
-                "id": "ERR998.ExceptionInAnalyze"
-              },
-              "associatedRule": {
-                "id": "BA4001",
-                "index": 8
-              }
-            }
-          ],
-          "executionSuccessful": false
+          "executionSuccessful": true
         }
       ],
       "artifacts": [
@@ -1089,46 +418,6 @@
             "md5": "C6A689BE712A5082C8B1E2BAF6EDB5E6",
             "sha-1": "DBCEA8ED6EF54390C2719F4782F99203EE9BC462",
             "sha-256": "0A65C916658F5ABA864C53ADCB9EA022CB1A4C5BD644696876D4630408AEEF84"
-          }
-        },
-        {
-          "location": {
-            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/MSDiaComWrapper.cs"
-          },
-          "hashes": {
-            "md5": "DF56E61BAF300BFE613EDA15FA3E7F45",
-            "sha-1": "45DD507A04D02BF6EB997B3002C22B0E88E7CA27",
-            "sha-256": "C6D240FB7861CD2B032BBEF3D73BA349A143C7EC766469F31B45AA13FB6573FF"
-          }
-        },
-        {
-          "location": {
-            "uri": "file:///Z:/src/BinaryParsers/PEBinary/ProgramDatabase/Pdb.cs"
-          },
-          "hashes": {
-            "md5": "D21EE88677C585BB477014CDD8159978",
-            "sha-1": "A970ED6BD51DD7687BB0E40072D4C72E59CC870D",
-            "sha-256": "02B617EBD2707E35F2DA1F1CB675B49340FFEB5F173504E93F4B75B19E120D77"
-          }
-        },
-        {
-          "location": {
-            "uri": "file:///Z:/src/BinaryParsers/PEBinary/PEBinary.cs"
-          },
-          "hashes": {
-            "md5": "F6158200BE34B8FAB3BC45F86BFCCF33",
-            "sha-1": "D656010570C32C8B4E9BF04C6E8070732409C3D7",
-            "sha-256": "30926CDCDDD21ECC14ECCD5808D850A7218BA9085DE30BB10BD107E8B0951108"
-          }
-        },
-        {
-          "location": {
-            "uri": "file:///Z:/src/BinSkim.Rules/PERules/WindowsBinaryAndPdbSkimmerBase.cs"
-          },
-          "hashes": {
-            "md5": "5F6A8D2B9B25346EC0682557BB3F7B80",
-            "sha-1": "A579DAB6D724A08182CF63C02339A42D07D7E8B7",
-            "sha-256": "DA86BA4F75062DE575F6A44C1092984FAA60D3FB2CF7A04F301D455E2F9AB0DB"
           }
         }
       ],
