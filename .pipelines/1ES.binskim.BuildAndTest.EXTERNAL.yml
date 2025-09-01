@@ -54,7 +54,7 @@ extends:
           - task: DotNetCoreCLI@2
             inputs:
               command: 'custom'
-              custom: 'add package Microsoft.CodeAnalysis.BinSkim --version 4.4.4'
+              custom: 'dotnet add package Microsoft.CodeAnalysis.BinSkim --version 4.4.4'
           - task: CmdLine@2
             displayName: "Build and Test"
             inputs:
