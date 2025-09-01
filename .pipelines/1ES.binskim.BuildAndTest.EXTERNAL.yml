@@ -51,12 +51,10 @@ extends:
               packageType: sdk
 
           - checkout: self
-          - task: NuGetCommand@2
+          - task: DotNetCoreCLI@2
             inputs:
-              command: 'restore'
-              restoreSolution: 'Nuget.config'
-              feedsToUse: 'config'
-              nugetConfigPath: 'Microsoft.CodeAnalysis.BinSkim'
+              command: 'custom'
+              custom: 'add package Microsoft.CodeAnalysis.BinSkim --version 4.4.4'
           - task: CmdLine@2
             displayName: "Build and Test"
             inputs:
