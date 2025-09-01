@@ -51,10 +51,15 @@ extends:
               packageType: sdk
 
           - checkout: self
+          #- task: DotNetCoreCLI@2
+          #  inputs:
+          #    command: 'custom'
+          #    custom: ' add package Microsoft.CodeAnalysis.BinSkim --version 4.4.4'
           - task: DotNetCoreCLI@2
             inputs:
+              azureSubscription: '1ES-BinSkim-ESRP'
               command: 'custom'
-              custom: ' add package Microsoft.CodeAnalysis.BinSkim --version 4.4.4'
+              custom: 'add package Microsoft.CodeAnalysis.BinSkim --version 4.4.4'
           - task: CmdLine@2
             displayName: "Build and Test"
             inputs:
