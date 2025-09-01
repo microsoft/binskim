@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Sarif;
 
 namespace Microsoft.CodeAnalysis.IL
 {
-    internal class BaselineRewriter :SarifRewritingVisitor
+    internal class BaselineRewriter : SarifRewritingVisitor
     {
         public override Tool VisitTool(Tool node)
         {
