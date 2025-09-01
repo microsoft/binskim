@@ -57,16 +57,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(RuntimeIdentifier)'==''" />
-    <!-- Note: Official Release builds on Windows should specify a RID. Build using the BuildAndTest.cmd script. -->
-    <MsDiaLibs Include="..\..\refs\x64\*" Condition="'$(RuntimeIdentifier)'=='win-x64'" />
+    <MsDiaLibs Include="..\..\refs\x64\*" />
     <MsDiaLibs Include="..\..\refs\msdia140.dll.manifest" />
     <!-- Required DLLs for Microsoft Visual C++ runtime. -->
     <MsRuntime Include="..\..\refs\runtime\*" />
   </ItemGroup>
   <Target Name="CopyMsDiaLibs" AfterTargets="build">
-	<Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(OutputPath)\net9.0\" />
-    <Copy SourceFiles="@(MsRuntime)" DestinationFolder="$(OutputPath)\" />
+	<Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(OutputPath)\" />
+  <Copy SourceFiles="@(MsRuntime)" DestinationFolder="$(OutputPath)\" />
   </Target>
   <Target Name="PublishMsDiaLibs" AfterTargets="publish">
     <Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(PublishDir)\" />

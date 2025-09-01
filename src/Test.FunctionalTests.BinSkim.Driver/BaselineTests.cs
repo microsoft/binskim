@@ -478,10 +478,14 @@ namespace Microsoft.CodeAnalysis.IL
 
             // Write back the normalized actual text so that the diff command given on failure shows what was actually compared.
 
+            SarifLog actualLog = JsonConvert.DeserializeObject<SarifLog>(actualText, settings);
+            var baselineRewriter = new BaselineRewriter();
+            baselineRewriter.Visit(actualLog);
+
             Encoding utf8encoding = new UTF8Encoding(true);
             using (var textWriter = new StreamWriter(actualFileName, false, utf8encoding))
             {
-                textWriter.Write(actualText);
+                textWriter.Write(JsonConvert.SerializeObject(actualLog, settings));
             }
 
             // Make sure we can successfully deserialize what was just generated
@@ -489,8 +493,6 @@ namespace Microsoft.CodeAnalysis.IL
                                     expectedText,
                                     settings.Formatting,
                                     out expectedText);
-
-            SarifLog actualLog = JsonConvert.DeserializeObject<SarifLog>(actualText, settings);
 
             var visitor = new ResultDiffingVisitor(expectedLog);
 
