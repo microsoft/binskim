@@ -47,10 +47,15 @@ extends:
           - task: UseDotNet@2
             displayName: .NET Core 9 sdk
             inputs:
-              version: "9.0.x"
+              version: "5.0.x"#9
               packageType: sdk
 
           - checkout: self
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'custom'
+              custom: 'dotnet add package Microsoft.Binary.Parsers'
+              arguments: '--version 4.4.4'
           - task: DotNetCoreCLI@2
             inputs:
               command: 'custom'
