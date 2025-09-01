@@ -56,7 +56,7 @@ extends:
               command: 'restore'
               restoreSolution: 'Nuget.config'
               feedsToUse: 'config'
-              nugetConfigPath: 'binskimExternal'
+              nugetConfigPath: 'Microsoft.CodeAnalysis.BinSkim'
           - task: CmdLine@2
             displayName: "Build and Test"
             inputs:
