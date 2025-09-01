@@ -51,7 +51,12 @@ extends:
               packageType: sdk
 
           - checkout: self
-
+          - task: NuGetCommand@2
+            inputs:
+              command: 'restore'
+              restoreSolution: 'Nuget.config'
+              feedsToUse: 'config'
+              nugetConfigPath: 'binskimExternal'
           - task: CmdLine@2
             displayName: "Build and Test"
             inputs:
