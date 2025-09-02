@@ -47,7 +47,7 @@ extends:
           - task: UseDotNet@2
             displayName: .NET Core 9 sdk
             inputs:
-              version: "5.0.x"#9
+              version: "9.0.x"
               packageType: sdk
 
           - checkout: self
