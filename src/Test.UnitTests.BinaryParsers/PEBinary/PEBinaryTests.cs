@@ -27,10 +27,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         internal static string GetTestDirectory(string relativeDirectory)
         {
-            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().Location);
-            string codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
+            string codeBasePath = Assembly.GetExecutingAssembly().Location;
             string dirPath = Path.GetDirectoryName(codeBasePath);
-            dirPath = Path.Combine(dirPath, string.Format(@"..{0}..{0}..{0}..{0}src{0}", Path.DirectorySeparatorChar));
+            dirPath = Path.Combine(dirPath, "..", "..", "..", "..", "src");
             dirPath = Path.GetFullPath(dirPath);
             return Path.Combine(dirPath, relativeDirectory);
         }

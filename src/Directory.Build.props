@@ -1,0 +1,22 @@
+<Project>
+  <PropertyGroup>
+    <ArtifactsPath>$(MSBuildThisFileDirectory)..\bld</ArtifactsPath>
+    <AssemblySearchPath_UseCandidateAssemblyFiles>false</AssemblySearchPath_UseCandidateAssemblyFiles>
+    <EnableImplicitNoneItems>false</EnableImplicitNoneItems>
+
+    <!-- Deploy dia dlls to official, published win-x64 build -->
+    <DeployDia Condition="$(RuntimeIdentifier) == 'win-x64'">true</DeployDia>
+    <!-- Deploy dia dll to unofficial, unpublished build, but only on Windows -->
+    <DeployDia Condition="$(RuntimeIdentifier) == '' and '$(OS)' == 'Windows_NT'">true</DeployDia>
+    <!-- But don't deploy to non-exes and non-test projects-->
+    <DeployDia Condition="'$(OutputType)' != 'Exe' and !$(MSBuildProjectName.StartsWith('Test'))">false</DeployDia>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(DeployDia)' == 'true'">
+    <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\x64\*" Condition="'$(RuntimeIdentifier)'==''" />
+    <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\x64\*" Condition="'$(RuntimeIdentifier)'=='win-x64'" />
+    <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\msdia140.dll.manifest" />
+    <MsRuntime Include="$(MSBuildThisFileDirectory)..\refs\runtime\*" />
+    <None Include="@(MsDiaLibs);@(MsRuntime)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup> 
+</Project>

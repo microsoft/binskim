@@ -17,7 +17,9 @@
     <iconUrl>https://go.microsoft.com/fwlink/?linkid=2008940</iconUrl>
   </metadata>
   <files>
-    <file src="bld\bin\x64_$configuration$\Publish\**\*" target="tools"/>   
+    <file src="bld\publish\BinSkim.Driver\$configuration$_win-x64\**\*" target="tools\win-x64"/>
+    <file src="bld\publish\BinSkim.Driver\$configuration$_linux-x64\**\*" target="tools\linux-x64"/>
+    <file src="bld\publish\BinSkim.Driver\$configuration$_osx-x64\**\*" target="tools\osx-x64"/>
     <file src="ReleaseHistory.md" target="tools\ReleaseHistory.md" />
     <file src="src\BinaryParsers\**\*.cs" target="src\BinaryParsers" />
     <file src="src\BinSkim.Driver\**\*.cs" target="src\BinSkim.Driver" />

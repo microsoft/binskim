@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -399,9 +400,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             Assert.Equal(0, sb.Length);
         }
 
+        private static string GetTestDirectory(string relativeDirectory)
+        {
+            string codeBasePath = Assembly.GetExecutingAssembly().Location;
+            string dirPath = Path.GetDirectoryName(codeBasePath);
+            dirPath = Path.Combine(dirPath, "..", "..", "..", "..", "src");
+            dirPath = Path.GetFullPath(dirPath);
+            return Path.Combine(dirPath, relativeDirectory);
+        }
+
         private static HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
         {
-            string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestData");
+            string testFilesDirectory = GetTestDirectory("Test.FunctionalTests.BinSkim.Driver\\BaselineTestData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
