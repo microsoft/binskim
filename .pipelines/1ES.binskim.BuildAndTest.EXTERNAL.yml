@@ -54,13 +54,9 @@ extends:
           - task: DotNetCoreCLI@2
             inputs:
               command: 'custom'
-              custom: 'dotnet add package Microsoft.Binary.Parsers'
-              arguments: '--version 4.4.4'
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: 'custom'
-              custom: 'add package Microsoft.CodeAnalysis.BinSkim'
-              arguments: '--version 4.4.4'
+              custom: 'nuget'
+              arguments: 'add source -n BinSkim.Build https://pkgs.dev.azure.com/mseng/1ES/_packaging/BinSkim.Build/nuget/v3/index.json'
+              
           - task: CmdLine@2
             displayName: "Build and Test"
             inputs:
