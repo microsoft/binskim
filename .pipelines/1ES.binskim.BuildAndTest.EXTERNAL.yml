@@ -16,6 +16,8 @@ extends:
       name: pool-1espt-mseng
       image: pool-1espt-mseng-image
       os: windows
+    featureFlags:
+      autoEnableRoslynWithNewRuleset: false
     stages:
     - stage: stage1
       displayName: Build And Test
