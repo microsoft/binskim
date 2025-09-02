@@ -1,15 +1,8 @@
 #!/bin/bash
 
-echo $(uname)
-if [[  "$(uname)" == "Linux" || "$(uname)" == "Darwin" ]]; then
-  echo "Changing paths in BinSkim SLN to non-Windows paths due to msbuild issue #1957 (https://github.com/microsoft/msbuild/issues/1957)"
-  sed 's#\\#/#g' src/BinSkim.sln > src/BinSkimUnix.sln
-fi
+dotnet build src/BinSkim.sln --configuration Release
 
-
-dotnet build src/BinSkimUnix.sln --configuration Release /p:Platform="x64"
-
-dotnet test bld/bin/x64_Release/net9.0/Test.FunctionalTests.BinSkim.Driver.dll
-dotnet test bld/bin/x64_Release/net9.0/Test.FunctionalTests.BinSkim.Rules.dll
-dotnet test bld/bin/x64_Release/net9.0/Test.UnitTests.BinaryParsers.dll
-dotnet test bld/bin/x64_Release/net9.0/Test.UnitTests.BinSkim.Rules.dll
+dotnet test bld/bin/Test.FunctionalTests.BinSkim.Driver/release/Test.FunctionalTests.BinSkim.Driver.dll
+dotnet test bld/bin/Test.FunctionalTests.BinSkim.Rules/release/Test.FunctionalTests.BinSkim.Rules.dll
+dotnet test bld/bin/Test.UnitTests.BinaryParsers/release/Test.UnitTests.BinaryParsers.dll
+dotnet test bld/bin/Test.UnitTests.BinSkim.Rules/release/Test.UnitTests.BinSkim.Rules.dll

@@ -6,7 +6,6 @@ SETLOCAL
 @REM %~dp0.nuget\NuGet.exe update -self
 
 set Configuration=%1
-set Platform=x64
 
 if "%Configuration%" EQU "" (
 set Configuration=Release
@@ -17,7 +16,6 @@ set NightlyTest=%2
 @REM Remove existing build data
 if exist bld (rd /s /q bld)
 
-set NuGetPackageDir=%~dp0src\packages
 set NuGetOutputDirectory=%~dp0bld\bin\nuget\
 
 call SetCurrentVersion.cmd
@@ -43,7 +41,7 @@ echo Current Version: %MAJOR%.%MINOR%.%PATCH%%PRERELEASE%
 
 ::Restore packages
 echo Restoring packages...
-dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --packages "%NuGetPackageDir%
+dotnet restore %~dp0src\BinSkim.sln
 
 :: Build the solution 
 echo Building solution...
@@ -73,12 +71,9 @@ call :CreatePublishPackage net9.0 osx-x64 || goto :ExitFailed
 echo BuildPackages.cmd
 call BuildPackages.cmd || goto :ExitFailed
 
-echo dotnet-format
-dotnet tool update --global dotnet-format
-
 ::Update BinSkimRules.md to cover any xml changes
 echo Exporting any BinSkim rules
-.\bld\bin\x64_Release\Publish\net9.0\win-x64\BinSkim.exe export-rules .\docs\BinSkimRules.md
+.\bld\bin\BinSkim.Driver\release\BinSkim.exe export-rules .\docs\BinSkimRules.md
 
 goto :Exit
 
