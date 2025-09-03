@@ -80,24 +80,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
         public PE PE { get; private set; }
 
-        public Pdb Pdb
-        {
-            get
-            {
-                try
-                {
-                    return this.pdb?.Value;
-                }
-                catch (DllNotFoundException)
-                {
-                    return null;
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-            }
-        }
+        public Pdb Pdb => this.pdb?.Value;
 
         public StringBuilder PdbLoadTrace { get; set; }
 
@@ -255,6 +238,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             catch (PdbException ex)
             {
                 this.PdbParseException = ex;
+                return false;
+            }
+            catch (DllNotFoundException ex)
+            {
+                this.LoadException = ex;
                 return false;
             }
         }

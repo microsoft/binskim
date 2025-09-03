@@ -516,6 +516,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
+                //todo
+                if (!this.IsManaged)
+                {
+                    return false;
+                }
+
                 if (this.isManagedResourceOnly != null)
                 {
                     return this.isManagedResourceOnly.Value;
@@ -598,7 +604,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 return ManagedPlatform.Unknown;
             }
 
-            if (metadataReader?.AssemblyReferences.Count == 0)
+            if (metadataReader.AssemblyReferences.Count == 0)
             {
                 return ManagedPlatform.DotNetFramework;
             }

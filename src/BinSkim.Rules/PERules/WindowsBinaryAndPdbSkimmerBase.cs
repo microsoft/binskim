@@ -142,7 +142,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                        "ERR997.ExceptionLoadingPdb",
                        string.Empty,
                        FailureLevel.Error,
-                       new Exception(),
+                       new PdbException("ERR997.ExceptionLoadingPdb"),
                        persistExceptionStack: false,
                        RuleResources.ERR997_ExceptionLoadingPdbGeneric,
                        context.CurrentTarget.Uri.GetFileName(),
