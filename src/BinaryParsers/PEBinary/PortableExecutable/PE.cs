@@ -303,7 +303,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 byte[] buffer = new byte[4096];
 
                 // create the hash object
-                using (var sha1 = SHA1.Create())
+                using (var sha1 = SHA1.Create()) //CodeQL [SM02196] File checksum for diagnostic dump command (non-cryptographic use)
                 {
                     // open the input file
                     using (var fs = new FileStream(this.FileName, FileMode.Open, FileAccess.Read))
