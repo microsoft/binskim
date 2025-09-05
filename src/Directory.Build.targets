@@ -3,7 +3,7 @@
     <!-- Deploy dia dlls to official, published win-x64 build -->
     <DeployDia Condition="$(RuntimeIdentifier) == 'win-x64'">true</DeployDia>
     <!-- Deploy dia dll to unofficial, unpublished build, but only on Windows -->
-    <DeployDia Condition="$(RuntimeIdentifier) == '' and '$(OS)' == 'Windows_NT'">true</DeployDia>
+    <DeployDia Condition="$(RuntimeIdentifier) == '' and $([MSBuild]::IsOSPlatform('Windows')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'x64'">true</DeployDia>
     <!-- But don't deploy to non-exes and non-test projects-->
     <DeployDia Condition="'$(OutputType)' != 'Exe' and !$(MSBuildProjectName.StartsWith('Test'))">false</DeployDia>
   </PropertyGroup>
@@ -16,6 +16,8 @@
     <None Include="@(MsDiaLibs);@(MsRuntime)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup> 
 
+  <!-- Microsoft.Diagnostics.Tracing.TraceEvent contains DIA assets that conflict with ..\refs\* above. -->
+  <!-- This target excludes those assets from compilation and deployment. -->
   <Target Name="ExcludeTraceEventDiaAssets" AfterTargets="ResolvePackageAssets">
     <ItemGroup>
       <_RuntimeDiaItemsToExclude Include="@(RuntimeCopyLocalItems)" Condition="'%(RuntimeCopyLocalItems.Filename)' == 'Dia2Lib'" />
