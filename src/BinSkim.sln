@@ -1,7 +1,6 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.0.10929.73 d18.0
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinSkim.Driver", "BinSkim.Driver\BinSkim.Driver.csproj", "{7B4552DC-901C-4569-BFBD-9EA129D53288}"
 	ProjectSection(ProjectDependencies) = postProject
