@@ -516,7 +516,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                //todo
                 if (!this.IsManaged)
                 {
                     return false;
