@@ -240,11 +240,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 this.PdbParseException = ex;
                 return false;
             }
-            catch (DllNotFoundException ex)
-            {
-                this.LoadException = ex;
-                return false;
-            }
         }
 
         private string RetrievePdbPath(string pdbName)

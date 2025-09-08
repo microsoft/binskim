@@ -133,30 +133,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 throw new ArgumentNullException(nameof(context));
             }
-            string key = "";
+
             if (pdbException == null)
             {
-                context.Logger.LogConfigurationNotification(
-                   Errors.CreateNotification(
-                       context.CurrentTarget.Uri,
-                       "ERR997.ExceptionLoadingPdb",
-                       string.Empty,
-                       FailureLevel.Error,
-                       new PdbException("ERR997.ExceptionLoadingPdb"),
-                       persistExceptionStack: false,
-                       RuleResources.ERR997_ExceptionLoadingPdbGeneric,
-                       context.CurrentTarget.Uri.GetFileName(),
-                       context.CurrentTarget.Uri.LocalPath));
-                return;
+                pdbException = new PdbException("ERR997.ExceptionLoadingPdb");
             }
-            else
+           
+            string path = context.CurrentTarget.Uri.OriginalString;
+            string key = $"{path}@{pdbException?.ExceptionDisplayMessage}";
+            if (s_PdbExceptions.ContainsKey(key))
             {
-                string path = context.CurrentTarget.Uri.OriginalString;
-                key = $"{path}@{pdbException.ExceptionDisplayMessage}";
-                if (s_PdbExceptions.ContainsKey(key))
-                {
-                    return;
-                }
+                return;
             }
 
             // '{0}' was not evaluated because its PDB could not be loaded ({1}).
@@ -170,7 +157,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     persistExceptionStack: false,
                     RuleResources.ERR997_ExceptionLoadingPdbGeneric,
                     context.CurrentTarget.Uri.GetFileName(),
-                    pdbException.ExceptionDisplayMessage));
+                    pdbException?.ExceptionDisplayMessage ?? context.CurrentTarget.Uri.LocalPath));
 
             s_PdbExceptions.TryAdd(key, true);
 

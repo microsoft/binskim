@@ -516,11 +516,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         {
             get
             {
-                if (!this.IsManaged)
-                {
-                    return false;
-                }
-
                 if (this.isManagedResourceOnly != null)
                 {
                     return this.isManagedResourceOnly.Value;

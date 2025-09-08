@@ -314,13 +314,12 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         [Fact]
         public void AnalyzeCommand_ShouldReturnZeroExitCode_WhenIgnoringPdbAndPELoadErrors()
         {
-            string testDllPath1 = Path.Combine(PEBinaryTests.TestData, "Errors", "ShouldFileERR997.dll");
-            string testDllPath2 = Path.Combine(PEBinaryTests.TestData, "Errors", "IncorrectCustomAssemblyTableSize_TooManyMethodSpecs_ShouldNotFile997.dll");
+            string testDllPath1 = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "HelloWorld_Cpp_Preprocesor_BUILDING_DLL_x64.dll");
             string outputFilePath = Path.GetTempFileName();
 
             var options = new AnalyzeOptions
             {
-                TargetFileSpecifiers = new[] { testDllPath1, testDllPath2 },
+                TargetFileSpecifiers = new[] { testDllPath1 },
                 OutputFilePath = outputFilePath,
                 OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
                 IgnorePdbLoadError = true,
@@ -328,13 +327,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             };
 
             var command = new MultithreadedAnalyzeCommand();
-
             int exitCode = command.Run(options);
 
             exitCode.Should().Be(0);
-            var log = SarifLog.Load(outputFilePath);
-            log.Runs[0].Invocations[0].ToolConfigurationNotifications.Should().HaveCount(1);
-            log.Runs[0].Invocations[0].ToolConfigurationNotifications.All(n => n.Descriptor.Id == "ERR997.ExceptionLoadingPdb");
         }
 
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)

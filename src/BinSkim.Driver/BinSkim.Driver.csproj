@@ -65,7 +65,7 @@
     <MsRuntime Include="..\..\refs\runtime\*" />
   </ItemGroup>
   <Target Name="CopyMsDiaLibs" AfterTargets="build">
-	<Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(OutputPath)\net9.0\" />
+	  <Copy SourceFiles="@(MsDiaLibs)" DestinationFolder="$(OutputPath)\" />
     <Copy SourceFiles="@(MsRuntime)" DestinationFolder="$(OutputPath)\" />
   </Target>
   <Target Name="PublishMsDiaLibs" AfterTargets="publish">
