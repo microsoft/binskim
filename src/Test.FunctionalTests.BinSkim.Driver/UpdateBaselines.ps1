@@ -33,7 +33,7 @@ function Build-Baselines($sourceExtension)
 
         # Actually run the tool
         Remove-Item $outputTemp -ErrorAction SilentlyContinue
-        Write-Host "$utility analyze "$input" --output "$output" --kind "Fail`;Pass" --level "Error`;Warning`;Note" --insert Hashes --remove NondeterministicProperties --config default --quiet true --enlistment-root file:///D:/src/b3/ --log ForceOverwrite"
+        Write-Host "$utility analyze "$input" --output "$output" --kind "Fail`;Pass" --level "Error`;Warning`;Note" --insert Hashes --remove NondeterministicProperties --config default --quiet true --enlistment-root $repoRoot --log ForceOverwrite"
         &           $utility analyze "$input" --output "$output" --kind Fail`;Pass --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet true --enlistment-root $repoRoot --log ForceOverwrite
     }
 }
