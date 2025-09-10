@@ -1,12 +1,575 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
     {
+      "results": [
+        {
+          "ruleId": "BA2002",
+          "ruleIndex": 0,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 1,
+          "message": {
+            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
+              "Microsoft (R) Macro Assembler : masm : 14.0.23406.0 : MSVCRT.lib [MD5] (_sehprolg4_.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 17.0.65501.30015 : uuid.lib [MD5] (oaidl_i.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.0.23406.0 : MSVCRT.lib [MD5] (_chandler4gs_.obj,_cpu_disp_.obj,_secchk_.obj,checkcfg.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.0.23406.0 : MSVCRT.lib [MD5] (_initsect_.obj,default_local_stdio_options.obj,dll_dllmain.obj,initializers.obj,tncleanup.obj,ucrt_stubs.obj,utility_desktop.obj,utility.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "id": "Error_NativeWithInsecureDirectCompilands",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
+              "Microsoft (R) Optimizing Compiler : c : 19.0.23506.0 : [directly linked] [MD5] (dlldata.obj,Native_x86_VS2015_AtlProxyStub_i.obj,Native_x86_VS2015_AtlProxyStub_p.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "ruleIndex": 2,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2006",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
+              "Microsoft (R) Optimizing Compiler:C:17.0.65501.30015, Microsoft (R) Optimizing Compiler:C:19.0.23406.0, Microsoft (R) Optimizing Compiler:C:19.0.23506.0, Microsoft (R) Optimizing Compiler:Cxx:19.0.23406.0"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2007",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "id": "Error_InsufficientWarningLevel",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll",
+              "1",
+              "-c -Zi -nologo -W1 -WX- -O2 -Oy- -DWIN32 -DREGISTER_PROXY_DLL -DNDEBUG -D_WINDLL -D_UNICODE -DUNICODE -Gm- -EHs -EHc -MD -GS -fp:precise -Zc:wchar_t -Zc:forScope -Zc:inline -Gd -TC -analyze- -errorreport:prompt -I\"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\include\" -I\"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\atlmfc\\include\" -I\"C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.10240.0\\ucrt\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\um\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\shared\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\winrt\" -X",
+              "dlldata.obj [warning level: 1]\r\nNative_x86_VS2015_AtlProxyStub_p.obj [warning level: 1]\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2008",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2009",
+          "ruleIndex": 6,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2010",
+          "ruleIndex": 7,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2011",
+          "ruleIndex": 8,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2012",
+          "ruleIndex": 9,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2013",
+          "ruleIndex": 10,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2014",
+          "ruleIndex": 11,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2016",
+          "ruleIndex": 12,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2018",
+          "ruleIndex": 13,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "ruleIndex": 14,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 15,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2024",
+          "ruleIndex": 16,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2025",
+          "ruleIndex": 17,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2026",
+          "ruleIndex": 18,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2027",
+          "ruleIndex": 19,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6001",
+          "ruleIndex": 20,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6002",
+          "ruleIndex": 21,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6004",
+          "ruleIndex": 22,
+          "message": {
+            "id": "Warning_DisabledForRelease",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6005",
+          "ruleIndex": 23,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6006",
+          "ruleIndex": 24,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Native_x86_VS2015_AtlProxyStubPS.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
+          "organization": "Microsoft",
           "rules": [
             {
               "id": "BA2002",
@@ -669,10 +1232,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA6006EnableLinkTimeCodeGeneration"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -683,577 +1243,9 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
             "index": 0
-          },
-          "hashes": {
-            "md5": "6AE56F109CB2FC5A3FAB039C21CB9298",
-            "sha-1": "ADA174BDF6654D85507ADAA80F333F9EBDE1F221",
-            "sha-256": "D9933BFE1FF014C5AD2C6F84465ADD174DEE31326737B29B5DD26ACA701E0948"
           }
-        }
-      ],
-      "results": [
-        {
-          "ruleId": "BA2002",
-          "ruleIndex": 0,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2004",
-          "ruleIndex": 1,
-          "message": {
-            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll",
-              "Microsoft (R) Macro Assembler : masm : 14.0.23406.0 : MSVCRT.lib [MD5] (_sehprolg4_.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 17.0.65501.30015 : uuid.lib [MD5] (oaidl_i.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.0.23406.0 : MSVCRT.lib [MD5] (_chandler4gs_.obj,_cpu_disp_.obj,_secchk_.obj,checkcfg.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.0.23406.0 : MSVCRT.lib [MD5] (_initsect_.obj,default_local_stdio_options.obj,dll_dllmain.obj,initializers.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_desktop.obj)\r\n"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2004",
-          "ruleIndex": 1,
-          "level": "error",
-          "message": {
-            "id": "Error_NativeWithInsecureDirectCompilands",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll",
-              "Microsoft (R) Optimizing Compiler : c : 19.0.23506.0 : [directly linked] [MD5] (dlldata.obj,Native_x86_VS2015_AtlProxyStub_i.obj,Native_x86_VS2015_AtlProxyStub_p.obj)\r\n"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2005",
-          "ruleIndex": 2,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2006",
-          "ruleIndex": 3,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll",
-              "Microsoft (R) Optimizing Compiler:C:17.0.65501.30015, Microsoft (R) Optimizing Compiler:C:19.0.23406.0, Microsoft (R) Optimizing Compiler:C:19.0.23506.0, Microsoft (R) Optimizing Compiler:Cxx:19.0.23406.0"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2007",
-          "ruleIndex": 4,
-          "level": "error",
-          "message": {
-            "id": "Error_InsufficientWarningLevel",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll",
-              "1",
-              "-c -Zi -nologo -W1 -WX- -O2 -Oy- -DWIN32 -DREGISTER_PROXY_DLL -DNDEBUG -D_WINDLL -D_UNICODE -DUNICODE -Gm- -EHs -EHc -MD -GS -fp:precise -Zc:wchar_t -Zc:forScope -Zc:inline -Gd -TC -analyze- -errorreport:prompt -I\"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\include\" -I\"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\atlmfc\\include\" -I\"C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.10240.0\\ucrt\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\um\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\shared\" -I\"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\winrt\" -X",
-              "dlldata.obj [warning level: 1]\r\nNative_x86_VS2015_AtlProxyStub_p.obj [warning level: 1]\r\n"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2008",
-          "ruleIndex": 5,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
-          "ruleIndex": 6,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
-          "ruleIndex": 7,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2011",
-          "ruleIndex": 8,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2012",
-          "ruleIndex": 9,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2013",
-          "ruleIndex": 10,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2014",
-          "ruleIndex": 11,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2016",
-          "ruleIndex": 12,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2018",
-          "ruleIndex": 13,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2019",
-          "ruleIndex": 14,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2021",
-          "ruleIndex": 15,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2024",
-          "ruleIndex": 16,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2025",
-          "ruleIndex": 17,
-          "message": {
-            "id": "Warning",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2026",
-          "ruleIndex": 18,
-          "message": {
-            "id": "Warning",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2027",
-          "ruleIndex": 19,
-          "message": {
-            "id": "Warning",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6001",
-          "ruleIndex": 20,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6002",
-          "ruleIndex": 21,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6004",
-          "ruleIndex": 22,
-          "message": {
-            "id": "Warning_DisabledForRelease",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6005",
-          "ruleIndex": 23,
-          "message": {
-            "id": "Warning",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6006",
-          "ruleIndex": 24,
-          "message": {
-            "id": "Warning",
-            "arguments": [
-              "Native_x86_VS2015_AtlProxyStubPS.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2015_AtlProxyStubPS.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
         }
       ],
       "columnKind": "utf16CodeUnits"

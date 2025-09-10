@@ -1,12 +1,102 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
     {
+      "results": [
+        {
+          "ruleId": "BA2005",
+          "ruleIndex": 0,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2022_PdbRandomlyMissing.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2022_PdbRandomlyMissing.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2009",
+          "ruleIndex": 1,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2022_PdbRandomlyMissing.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2022_PdbRandomlyMissing.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "ruleIndex": 2,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2022_PdbRandomlyMissing.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2022_PdbRandomlyMissing.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x86_VS2022_PdbRandomlyMissing.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2022_PdbRandomlyMissing.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
+          "organization": "Microsoft",
           "rules": [
             {
               "id": "BA2005",
@@ -120,10 +210,7 @@
                 "equivalentBinScopeRuleReadableName": "WXCheck"
               }
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -134,104 +221,9 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2022_PdbRandomlyMissing.dll",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2022_PdbRandomlyMissing.dll",
             "index": 0
-          },
-          "hashes": {
-            "md5": "68A19DE304E6450EB2D2B4B65C7C47E3",
-            "sha-1": "13F06A8BCA79D5385AB59F1A5816211C96A52FDB",
-            "sha-256": "E349466D4205C2E9D0E94A2A0FCEE000DC082137BF6075F4E484870CDBFADF7D"
           }
-        }
-      ],
-      "results": [
-        {
-          "ruleId": "BA2005",
-          "ruleIndex": 0,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2022_PdbRandomlyMissing.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2022_PdbRandomlyMissing.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
-          "ruleIndex": 1,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2022_PdbRandomlyMissing.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2022_PdbRandomlyMissing.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2019",
-          "ruleIndex": 2,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2022_PdbRandomlyMissing.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2022_PdbRandomlyMissing.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2021",
-          "ruleIndex": 3,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x86_VS2022_PdbRandomlyMissing.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2022_PdbRandomlyMissing.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
         }
       ],
       "columnKind": "utf16CodeUnits"

@@ -1,12 +1,165 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
     {
+      "results": [
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "clang.relocationsro"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3002",
+          "ruleIndex": 1,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "clang.relocationsro"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3003",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "clang.relocationsro",
+              "clang.relocationsro"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3006",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "clang.relocationsro"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 4,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "clang.relocationsro"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3011",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "clang.relocationsro"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3031",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "clang.relocationsro"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
+          "organization": "Microsoft",
           "rules": [
             {
               "id": "BA3001",
@@ -171,10 +324,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3031EnableClangSafeStack"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -185,167 +335,9 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
             "index": 0
-          },
-          "hashes": {
-            "md5": "70856162BFDB775364758AD369AB447D",
-            "sha-1": "9854D5B06DE4D77D6F93E24E9D1FB4CCF0DCBE5B",
-            "sha-256": "675499E2D38945515C1B5B0F9DBEE05675F67F2D0CA597BAD3695981C67B1333"
           }
-        }
-      ],
-      "results": [
-        {
-          "ruleId": "BA3001",
-          "ruleIndex": 0,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "clang.relocationsro"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3002",
-          "ruleIndex": 1,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "clang.relocationsro"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3003",
-          "ruleIndex": 2,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "clang.relocationsro",
-              "clang.relocationsro"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3006",
-          "ruleIndex": 3,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "clang.relocationsro"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3010",
-          "ruleIndex": 4,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "clang.relocationsro"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3011",
-          "ruleIndex": 5,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "clang.relocationsro"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3031",
-          "ruleIndex": 6,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "clang.relocationsro"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.relocationsro",
-                  "index": 0
-                }
-              }
-            }
-          ]
         }
       ],
       "columnKind": "utf16CodeUnits"

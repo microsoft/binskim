@@ -4,6 +4,7 @@
 using System;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 
 using Microsoft.CodeAnalysis.Sarif;
@@ -109,7 +110,6 @@ namespace Microsoft.CodeAnalysis.IL
                 if (artifactLocation?.Uri != null && !string.IsNullOrEmpty(_enlistmentRoot))
                 {
                     string path = artifactLocation.Uri.GetFilePath();
-                    Console.WriteLine(path);
                     if (path.StartsWith(_enlistmentRoot, StringComparison.OrdinalIgnoreCase))
                     {
                         string relativePath = path.Substring(_enlistmentRoot.Length).TrimStart('\\', '/');

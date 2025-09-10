@@ -1,12 +1,166 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
     {
+      "results": [
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "gcc.fortified"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3002",
+          "ruleIndex": 1,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.fortified"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3003",
+          "ruleIndex": 2,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.fortified"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3006",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.fortified"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 4,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.fortified"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3011",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "gcc.fortified"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 6,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass_AllFunctionsChecked",
+            "arguments": [
+              "gcc.fortified"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
+          "organization": "Microsoft",
           "rules": [
             {
               "id": "BA3001",
@@ -174,10 +328,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseGccCheckedFunctions"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -188,168 +339,9 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
             "index": 0
-          },
-          "hashes": {
-            "md5": "C126E6DD12BE72445D405FB084838A98",
-            "sha-1": "D95AF462B0235B9ABBE49DF67A105C77C55A67E5",
-            "sha-256": "9885644E8553A14A5F87ABB0F882254D636FAC43334545F31283D0E2740CD1E8"
           }
-        }
-      ],
-      "results": [
-        {
-          "ruleId": "BA3001",
-          "ruleIndex": 0,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "gcc.fortified"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3002",
-          "ruleIndex": 1,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.fortified"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3003",
-          "ruleIndex": 2,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.fortified"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3006",
-          "ruleIndex": 3,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.fortified"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3010",
-          "ruleIndex": 4,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.fortified"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3011",
-          "ruleIndex": 5,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "gcc.fortified"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3030",
-          "ruleIndex": 6,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass_AllFunctionsChecked",
-            "arguments": [
-              "gcc.fortified"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.fortified",
-                  "index": 0
-                }
-              }
-            }
-          ]
         }
       ],
       "columnKind": "utf16CodeUnits"

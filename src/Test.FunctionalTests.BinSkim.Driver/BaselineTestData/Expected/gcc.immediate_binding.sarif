@@ -1,12 +1,166 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
     {
+      "results": [
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "gcc.immediate_binding"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3002",
+          "ruleIndex": 1,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.immediate_binding"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3003",
+          "ruleIndex": 2,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.immediate_binding"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3006",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.immediate_binding"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 4,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.immediate_binding"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3011",
+          "ruleIndex": 5,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.immediate_binding"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "gcc.immediate_binding"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
+          "organization": "Microsoft",
           "rules": [
             {
               "id": "BA3001",
@@ -174,10 +328,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseGccCheckedFunctions"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -188,168 +339,9 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
             "index": 0
-          },
-          "hashes": {
-            "md5": "6D2DDF15D894FEBD659F3622D377E238",
-            "sha-1": "E5F0FDF634619A41B8AAE83DCD1273195EFD3B9C",
-            "sha-256": "32C5B74D1D60B1AC979BFD548195336243081E0D50D0A27D36295357171E3ED2"
           }
-        }
-      ],
-      "results": [
-        {
-          "ruleId": "BA3001",
-          "ruleIndex": 0,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "gcc.immediate_binding"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3002",
-          "ruleIndex": 1,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.immediate_binding"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3003",
-          "ruleIndex": 2,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.immediate_binding"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3006",
-          "ruleIndex": 3,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.immediate_binding"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3010",
-          "ruleIndex": 4,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.immediate_binding"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3011",
-          "ruleIndex": 5,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.immediate_binding"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3030",
-          "ruleIndex": 6,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "gcc.immediate_binding"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.immediate_binding",
-                  "index": 0
-                }
-              }
-            }
-          ]
         }
       ],
       "columnKind": "utf16CodeUnits"

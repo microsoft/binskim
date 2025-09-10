@@ -1,12 +1,213 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
     {
+      "results": [
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 0,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass_Executable",
+            "arguments": [
+              "gcc.helloworld.5.o.no-stack-clash-protection"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3002",
+          "ruleIndex": 1,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.helloworld.5.o.no-stack-clash-protection"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3003",
+          "ruleIndex": 2,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.helloworld.5.o.no-stack-clash-protection"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3004",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "5",
+              "gcc.helloworld.5.o.no-stack-clash-protection"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3005",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "gcc.helloworld.5.o.no-stack-clash-protection",
+              "helloworld.cpp"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3006",
+          "ruleIndex": 5,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.helloworld.5.o.no-stack-clash-protection"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 6,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.helloworld.5.o.no-stack-clash-protection"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3011",
+          "ruleIndex": 7,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.helloworld.5.o.no-stack-clash-protection"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 8,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass_NoCheckableFunctions",
+            "arguments": [
+              "gcc.helloworld.5.o.no-stack-clash-protection"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
+          "organization": "Microsoft",
           "rules": [
             {
               "id": "BA3001",
@@ -218,10 +419,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseGccCheckedFunctions"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -232,215 +430,9 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
             "index": 0
-          },
-          "hashes": {
-            "md5": "38AFEDA47FD434021808E48E1109D9BC",
-            "sha-1": "0CFDED5F395B4178775D85E7214FFDBF1C2F7E64",
-            "sha-256": "719D548A3539EEC0A1F96CD00E8B21C598D90A3ECA985F73391125911BBD98C2"
           }
-        }
-      ],
-      "results": [
-        {
-          "ruleId": "BA3001",
-          "ruleIndex": 0,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass_Executable",
-            "arguments": [
-              "gcc.helloworld.5.o.no-stack-clash-protection"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3002",
-          "ruleIndex": 1,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.helloworld.5.o.no-stack-clash-protection"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3003",
-          "ruleIndex": 2,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.helloworld.5.o.no-stack-clash-protection"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3004",
-          "ruleIndex": 3,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "5",
-              "gcc.helloworld.5.o.no-stack-clash-protection"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3005",
-          "ruleIndex": 4,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "gcc.helloworld.5.o.no-stack-clash-protection",
-              "helloworld.cpp"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3006",
-          "ruleIndex": 5,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.helloworld.5.o.no-stack-clash-protection"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3010",
-          "ruleIndex": 6,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.helloworld.5.o.no-stack-clash-protection"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3011",
-          "ruleIndex": 7,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.helloworld.5.o.no-stack-clash-protection"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3030",
-          "ruleIndex": 8,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass_NoCheckableFunctions",
-            "arguments": [
-              "gcc.helloworld.5.o.no-stack-clash-protection"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.5.o.no-stack-clash-protection",
-                  "index": 0
-                }
-              }
-            }
-          ]
         }
       ],
       "columnKind": "utf16CodeUnits"

@@ -1,15 +1,13 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
     {
+      "results": [],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          "name": "BinSkim",
+          "organization": "Microsoft"
         }
       },
       "invocations": [
@@ -17,7 +15,6 @@
           "executionSuccessful": true
         }
       ],
-      "results": [],
       "columnKind": "utf16CodeUnits"
     }
   ]

@@ -20,7 +20,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
                   "index": 0
                 }
               }
@@ -42,7 +42,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
                   "index": 0
                 }
               }
@@ -64,7 +64,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
                   "index": 0
                 }
               }
@@ -86,7 +86,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
                   "index": 0
                 }
               }
@@ -108,7 +108,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
                   "index": 0
                 }
               }
@@ -130,7 +130,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
                   "index": 0
                 }
               }
@@ -152,7 +152,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
                   "index": 0
                 }
               }
@@ -172,7 +172,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
                   "index": 0
                 }
               }
@@ -408,13 +408,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_win-x86_VS2019_Default.dll",
             "index": 0
-          },
-          "hashes": {
-            "md5": "24C133E46FF2CD04B6E0E29E068C0F57",
-            "sha-1": "9912E7336039A3BF90113295FF63605A5F0ED05B",
-            "sha-256": "5FF81677C7A6931CF002DD52EB62111F72BF18BF4B9B04EC35B4DCBC8CAE4053"
           }
         }
       ],

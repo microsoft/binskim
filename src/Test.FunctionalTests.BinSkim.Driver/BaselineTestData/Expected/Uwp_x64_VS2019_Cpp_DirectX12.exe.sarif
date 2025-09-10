@@ -1,12 +1,518 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
     {
+      "results": [
+        {
+          "ruleId": "BA2001",
+          "ruleIndex": 0,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2002",
+          "ruleIndex": 1,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 2,
+          "message": {
+            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe",
+              "Microsoft (R) Macro Assembler : masm : 14.22.26504.99 : MSVCRT.lib [MD5] (amdsecgs.obj,guard_dispatch.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.22.26504.99 : MSVCRT.lib [MD5] (cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.22.26504.99 : MSVCRT.lib [MD5] (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,delete_array_size.obj,delete_array.obj,delete_scalar_size.obj,delete_scalar.obj,denormal_control.obj,ehvecctr.obj,ehvecdtr.obj,env_mode.obj,exe_winmain.obj,file_mode.obj,gshandler.obj,gshandlereh.obj,initializers.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,new_scalar.obj,std_type_info_static.obj,thread_locale.obj,thread_safe_statics.obj,throw_bad_alloc.obj,tlssup.obj,tncleanup.obj,ucrt_stubs.obj,utility_app.obj,utility.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.22.26504.99 : vccorlib.lib [MD5] (activation.obj,climain.obj,compiler.obj,init.obj,tmmta.obj,winmain.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "id": "Error_NativeWithInsecureDirectCompilands",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe",
+              "Microsoft (R) Optimizing Compiler : cxx : 19.22.27905.0 : [directly linked] [MD5] (App.obj,DeviceResources.obj,pch.obj,Sample3DSceneRenderer.obj,Uwp_x64_VS2019_Cpp_DirectX12Main.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2006",
+          "ruleIndex": 4,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe",
+              "Microsoft (R) Optimizing Compiler:C:19.22.26504.99, Microsoft (R) Optimizing Compiler:Cxx:19.22.26504.99, Microsoft (R) Optimizing Compiler:Cxx:19.22.27905.0"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2007",
+          "ruleIndex": 5,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe",
+              "3"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2008",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2009",
+          "ruleIndex": 7,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2010",
+          "ruleIndex": 8,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2011",
+          "ruleIndex": 9,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2012",
+          "ruleIndex": 10,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2013",
+          "ruleIndex": 11,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2014",
+          "ruleIndex": 12,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2015",
+          "ruleIndex": 13,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "ruleIndex": 14,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 15,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2027",
+          "ruleIndex": 16,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6001",
+          "ruleIndex": 17,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6002",
+          "ruleIndex": 18,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6004",
+          "ruleIndex": 19,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6005",
+          "ruleIndex": 20,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA6006",
+          "ruleIndex": 21,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
+          "organization": "Microsoft",
           "rules": [
             {
               "id": "BA2001",
@@ -591,10 +1097,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA6006EnableLinkTimeCodeGeneration"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -605,520 +1108,9 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
             "index": 0
-          },
-          "hashes": {
-            "md5": "26C697E66F1E229159D90D7EE8A00B77",
-            "sha-1": "4EF1E563257F71B1E4F0E015A8D42975419401C1",
-            "sha-256": "92846D36E0424197D691DF370529AA38B1C9FE82EA0665CEBBC8933E7094420D"
           }
-        }
-      ],
-      "results": [
-        {
-          "ruleId": "BA2001",
-          "ruleIndex": 0,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2002",
-          "ruleIndex": 1,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2004",
-          "ruleIndex": 2,
-          "message": {
-            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe",
-              "Microsoft (R) Macro Assembler : masm : 14.22.26504.99 : MSVCRT.lib [MD5] (amdsecgs.obj,guard_dispatch.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.22.26504.99 : MSVCRT.lib [MD5] (cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.22.26504.99 : MSVCRT.lib [MD5] (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,delete_array.obj,delete_array_size.obj,delete_scalar.obj,delete_scalar_size.obj,denormal_control.obj,ehvecctr.obj,ehvecdtr.obj,env_mode.obj,exe_winmain.obj,file_mode.obj,gshandler.obj,gshandlereh.obj,initializers.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,new_scalar.obj,std_type_info_static.obj,thread_locale.obj,thread_safe_statics.obj,throw_bad_alloc.obj,tlssup.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_app.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.22.26504.99 : vccorlib.lib [MD5] (activation.obj,climain.obj,compiler.obj,init.obj,tmmta.obj,winmain.obj)\r\n"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2004",
-          "ruleIndex": 2,
-          "level": "error",
-          "message": {
-            "id": "Error_NativeWithInsecureDirectCompilands",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe",
-              "Microsoft (R) Optimizing Compiler : cxx : 19.22.27905.0 : [directly linked] [MD5] (App.obj,DeviceResources.obj,pch.obj,Sample3DSceneRenderer.obj,Uwp_x64_VS2019_Cpp_DirectX12Main.obj)\r\n"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2005",
-          "ruleIndex": 3,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2006",
-          "ruleIndex": 4,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe",
-              "Microsoft (R) Optimizing Compiler:C:19.22.26504.99, Microsoft (R) Optimizing Compiler:Cxx:19.22.26504.99, Microsoft (R) Optimizing Compiler:Cxx:19.22.27905.0"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2007",
-          "ruleIndex": 5,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe",
-              "3"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2008",
-          "ruleIndex": 6,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
-          "ruleIndex": 7,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
-          "ruleIndex": 8,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2011",
-          "ruleIndex": 9,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2012",
-          "ruleIndex": 10,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2013",
-          "ruleIndex": 11,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2014",
-          "ruleIndex": 12,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2015",
-          "ruleIndex": 13,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2019",
-          "ruleIndex": 14,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2021",
-          "ruleIndex": 15,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2027",
-          "ruleIndex": 16,
-          "message": {
-            "id": "Warning",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6001",
-          "ruleIndex": 17,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6002",
-          "ruleIndex": 18,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6004",
-          "ruleIndex": 19,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6005",
-          "ruleIndex": 20,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA6006",
-          "ruleIndex": 21,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Uwp_x64_VS2019_Cpp_DirectX12.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_x64_VS2019_Cpp_DirectX12.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
         }
       ],
       "columnKind": "utf16CodeUnits"
