@@ -78,16 +78,10 @@ namespace Microsoft.CodeAnalysis.IL
         public bool ComputeFileHashes { get; set; }
 
 
-        // Hidden options for test normalization purposes.
-
+        // Hidden option for test normalization purposes.
         [Option("enlistment-root",
                 HelpText = "BinSkim enlistment root. Used for normalizing test outputs.",
                 Hidden = true)]
         public string EnlistmentRoot { get; set; }
-
-        [Option("normalize-output-for-comparison",
-                HelpText = "Normalize certain data in SARIF to support stable diff'ing across test environments.",
-                Hidden = true)]
-        public bool? NormalizeOutputForComparison { get; set; }
     }
 }

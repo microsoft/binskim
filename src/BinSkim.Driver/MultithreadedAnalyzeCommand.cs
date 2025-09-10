@@ -44,14 +44,14 @@ namespace Microsoft.CodeAnalysis.IL
         {
             base.InitializeOutputs(globalContext);
 
-            if (globalContext.NormalizeOutputForComparison)
+            if (!string.IsNullOrEmpty(globalContext.EnlistmentRootToNormalize))
             {
                 var aggregatingLogger = (AggregatingLogger)globalContext.Logger;
                 for (int i = 0; i< aggregatingLogger.Loggers.Count; i++)
                 {
                     if (aggregatingLogger.Loggers[i] is SarifLogger sarifLogger)
                     {
-                        aggregatingLogger.Loggers[i] = new NormalizingSarifLogger(sarifLogger, globalContext.EnlistmentRoot);
+                        aggregatingLogger.Loggers[i] = new NormalizingSarifLogger(sarifLogger, globalContext.EnlistmentRootToNormalize);
                     }
                 }
             }
@@ -98,8 +98,7 @@ namespace Microsoft.CodeAnalysis.IL
             context.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
 
             // Hidden options for test normalization purposes.
-            context.EnlistmentRoot = options.EnlistmentRoot ?? context.EnlistmentRoot;
-            context.NormalizeOutputForComparison = options.NormalizeOutputForComparison != null ? options.NormalizeOutputForComparison.Value : context.NormalizeOutputForComparison;
+            context.EnlistmentRootToNormalize = options.EnlistmentRoot ?? context.EnlistmentRootToNormalize;
 
             context.CompilerDataLogger =
                 new CompilerDataLogger(context.OutputFilePath,

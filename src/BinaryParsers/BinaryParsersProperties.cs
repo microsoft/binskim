@@ -18,9 +18,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 IgnorePdbLoadError,
                 DisableTelemetry,
                 IncludeWixBinaries,
-                EnlistmentRoot,
+                LocalSymbolDirectories,
                 SymbolPath,
-                IgnorePELoadError
+                IgnorePELoadError,
+                EnlistmentRootToNormalize,
             }.ToImmutableArray();
         }
 
@@ -45,11 +46,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 "BinaryParsers", nameof(IncludeWixBinaries), defaultValue: () => false,
                 "Set this value to 'true' to include Wix binaries in the analysis.");
 
-        public static PerLanguageOption<string> EnlistmentRoot { get; } =
-            new PerLanguageOption<string>(
-                "BinaryParsers", nameof(EnlistmentRoot), defaultValue: () => string.Empty,
-                "The root of the current enlistment. Used for normalizing file paths in test scenarios.");
-
         public static PerLanguageOption<string> LocalSymbolDirectories { get; } =
             new PerLanguageOption<string>(
                 "BinaryParsers", nameof(LocalSymbolDirectories), defaultValue: () => string.Empty,
@@ -71,9 +67,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 "BinaryParsers", nameof(IgnorePELoadError), defaultValue: () => false,
                 "Set this value to 'true' to ignore exceptions thrown in reading PE files.");
 
-        public static PerLanguageOption<bool> NormalizeOutputForComparison { get; } =
-            new PerLanguageOption<bool>(
-                "BinaryParsers", nameof(NormalizeOutputForComparison), defaultValue: () => false,
-                "Set this value to 'true' to normalize SARIF output for stable diffing in test contexts.");
+        public static PerLanguageOption<string> EnlistmentRootToNormalize { get; } =
+            new PerLanguageOption<string>(
+                "BinaryParsers", nameof(EnlistmentRootToNormalize), defaultValue: () => string.Empty,
+                "The root of the current enlistment. Used for normalizing file paths in test scenarios.");
     }
 }

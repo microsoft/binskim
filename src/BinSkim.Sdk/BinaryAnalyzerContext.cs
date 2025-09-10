@@ -37,11 +37,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             get => this.Binary?.Valid == true;
         }
 
-        public string EnlistmentRoot
-        {
-            get => this.Policy?.GetProperty(BinaryParsersProperties.EnlistmentRoot);
-            set => this.Policy.SetProperty(BinaryParsersProperties.EnlistmentRoot, value);
-        }
         public string LocalSymbolDirectories
         {
             get => this.Policy?.GetProperty(BinaryParsersProperties.LocalSymbolDirectories);
@@ -92,12 +87,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             set => this.Policy.SetProperty(BinaryParsersProperties.IgnorePELoadError, value);
         }
 
-        public bool NormalizeOutputForComparison
-        {
-            get => this.Policy.GetProperty(BinaryParsersProperties.NormalizeOutputForComparison);
-            set => this.Policy.SetProperty(BinaryParsersProperties.NormalizeOutputForComparison, value);
-        }
-
         public bool DisableTelemetry
         {
             get => this.Policy?.GetProperty(BinaryParsersProperties.DisableTelemetry) == true;
@@ -108,6 +97,16 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             get => this.Policy?.GetProperty(BinaryParsersProperties.IncludeWixBinaries) == true;
             set => this.Policy.SetProperty(BinaryParsersProperties.IncludeWixBinaries, value);
+        }
+
+
+        // This property is used to normalize paths in analysis results in
+        // test baseline files. When non-null, this also triggers other SARIF
+        // log stabilization, such as eliding certain version strings.
+        public string EnlistmentRootToNormalize
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.EnlistmentRootToNormalize);
+            set => this.Policy.SetProperty(BinaryParsersProperties.EnlistmentRootToNormalize, value);
         }
 
         internal bool disposed = false;

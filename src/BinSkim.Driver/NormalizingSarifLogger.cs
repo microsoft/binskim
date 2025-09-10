@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.IL
     internal class NormalizingSarifLogger : IAnalysisLogger, IDisposable
     {
         private IAnalysisLogger _innerLogger;
-        private SarifRewritingVisitor _pathRewritingVisitor;
+        private readonly SarifRewritingVisitor _pathRewritingVisitor;
 
         public NormalizingSarifLogger(IAnalysisLogger innerLogger, string enlistmentRoot)
         {
