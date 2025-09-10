@@ -3,184 +3,6 @@
   "version": "2.1.0",
   "runs": [
     {
-      "results": [
-        {
-          "ruleId": "BA2001",
-          "ruleIndex": 0,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "MixedMode_x64_VS2013_NoPdb.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2005",
-          "ruleIndex": 1,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "MixedMode_x64_VS2013_NoPdb.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
-          "ruleIndex": 2,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "MixedMode_x64_VS2013_NoPdb.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
-          "ruleIndex": 3,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "MixedMode_x64_VS2013_NoPdb.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2012",
-          "ruleIndex": 4,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "MixedMode_x64_VS2013_NoPdb.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2015",
-          "ruleIndex": 5,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "MixedMode_x64_VS2013_NoPdb.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2019",
-          "ruleIndex": 6,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "MixedMode_x64_VS2013_NoPdb.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2021",
-          "ruleIndex": 7,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "MixedMode_x64_VS2013_NoPdb.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        }
-      ],
       "tool": {
         "driver": {
           "name": "testhost",
@@ -427,7 +249,7 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
                       "index": 0
                     }
                   }
@@ -448,7 +270,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
             "index": 0
           },
           "hashes": {
@@ -456,6 +278,184 @@
             "sha-1": "662CAF4B0CAE28DE9EBAAB3FC6C0CB3C4B803EEE",
             "sha-256": "A95367654E0F3FE1C31F3CA77F32ACEEE7067272CBFC7E449A3E4E0631C5218F"
           }
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "BA2001",
+          "ruleIndex": 0,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "ruleIndex": 1,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2009",
+          "ruleIndex": 2,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2010",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2012",
+          "ruleIndex": 4,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2015",
+          "ruleIndex": 5,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "ruleIndex": 6,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 7,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "MixedMode_x64_VS2013_NoPdb.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
         }
       ],
       "columnKind": "utf16CodeUnits"

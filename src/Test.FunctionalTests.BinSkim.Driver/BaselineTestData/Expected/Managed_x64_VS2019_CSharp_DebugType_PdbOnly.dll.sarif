@@ -3,183 +3,6 @@
   "version": "2.1.0",
   "runs": [
     {
-      "results": [
-        {
-          "ruleId": "BA2004",
-          "ruleIndex": 0,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
-              "managed"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2005",
-          "ruleIndex": 1,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
-          "ruleIndex": 2,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2016",
-          "ruleIndex": 3,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2018",
-          "ruleIndex": 4,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass_NoSEH",
-            "arguments": [
-              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2019",
-          "ruleIndex": 5,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2021",
-          "ruleIndex": 6,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2027",
-          "ruleIndex": 7,
-          "message": {
-            "id": "Warning",
-            "arguments": [
-              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        }
-      ],
       "tool": {
         "driver": {
           "name": "testhost",
@@ -411,7 +234,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
             "index": 0
           },
           "hashes": {
@@ -419,6 +242,183 @@
             "sha-1": "82A3346FFD7606E34976E909EA02655734F8E3B0",
             "sha-256": "0B25EA000B3FED26F203116E89E9A3CB573986E6ECD8345A6F81C7C2CAFA0A99"
           }
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 0,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
+              "managed"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "ruleIndex": 1,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2009",
+          "ruleIndex": 2,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2016",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2018",
+          "ruleIndex": 4,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass_NoSEH",
+            "arguments": [
+              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "ruleIndex": 5,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 6,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2027",
+          "ruleIndex": 7,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x64_VS2019_CSharp_DebugType_PdbOnly.dll",
+                  "index": 0
+                }
+              }
+            }
+          ]
         }
       ],
       "columnKind": "utf16CodeUnits"

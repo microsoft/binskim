@@ -3,184 +3,6 @@
   "version": "2.1.0",
   "runs": [
     {
-      "results": [
-        {
-          "ruleId": "BA3001",
-          "ruleIndex": 0,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass_Executable",
-            "arguments": [
-              "gcc.objcopy.stripall.addgnudebuglink"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3002",
-          "ruleIndex": 1,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.objcopy.stripall.addgnudebuglink"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3003",
-          "ruleIndex": 2,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.objcopy.stripall.addgnudebuglink"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3005",
-          "ruleIndex": 3,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.objcopy.stripall.addgnudebuglink"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3006",
-          "ruleIndex": 4,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.objcopy.stripall.addgnudebuglink"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3010",
-          "ruleIndex": 5,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.objcopy.stripall.addgnudebuglink"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3011",
-          "ruleIndex": 6,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "gcc.objcopy.stripall.addgnudebuglink"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3030",
-          "ruleIndex": 7,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass_NoCheckableFunctions",
-            "arguments": [
-              "gcc.objcopy.stripall.addgnudebuglink"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        }
-      ],
       "tool": {
         "driver": {
           "name": "testhost",
@@ -388,7 +210,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
             "index": 0
           },
           "hashes": {
@@ -396,6 +218,184 @@
             "sha-1": "E222151011B1261F7727CC9B93D7FA9D1DD8CD85",
             "sha-256": "E2096D94B9C849F8A5429130F49BCA1F9F58ECB679D417B216AC56E8AD19E275"
           }
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "BA3001",
+          "ruleIndex": 0,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass_Executable",
+            "arguments": [
+              "gcc.objcopy.stripall.addgnudebuglink"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3002",
+          "ruleIndex": 1,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.objcopy.stripall.addgnudebuglink"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3003",
+          "ruleIndex": 2,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.objcopy.stripall.addgnudebuglink"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3005",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.objcopy.stripall.addgnudebuglink"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3006",
+          "ruleIndex": 4,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.objcopy.stripall.addgnudebuglink"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3010",
+          "ruleIndex": 5,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.objcopy.stripall.addgnudebuglink"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3011",
+          "ruleIndex": 6,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "gcc.objcopy.stripall.addgnudebuglink"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3030",
+          "ruleIndex": 7,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass_NoCheckableFunctions",
+            "arguments": [
+              "gcc.objcopy.stripall.addgnudebuglink"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
+                  "index": 0
+                }
+              }
+            }
+          ]
         }
       ],
       "columnKind": "utf16CodeUnits"

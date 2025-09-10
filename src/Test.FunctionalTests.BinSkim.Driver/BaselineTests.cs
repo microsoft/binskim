@@ -7,7 +7,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
 using FluentAssertions;
 
@@ -425,6 +424,9 @@ namespace Microsoft.CodeAnalysis.IL
                 Directory.CreateDirectory(actualDirectory);
             }
 
+            int index = expectedDirectory.IndexOf(@"\src\Test.FunctionalTests.BinSkim.Driver", StringComparison.OrdinalIgnoreCase);
+            string enlistmentRoot = expectedDirectory.Substring(0, index);
+
             string expectedFileName = Path.Combine(expectedDirectory, fileName + ".sarif");
             string actualFileName = Path.Combine(actualDirectory, fileName + ".sarif");
 
@@ -443,6 +445,7 @@ namespace Microsoft.CodeAnalysis.IL
                 Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note },
                 Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.Pass },
                 NormalizeOutputForComparison = true,
+                EnlistmentRoot = enlistmentRoot
             };
 
             command.UnitTestOutputVersion = version;
@@ -466,6 +469,7 @@ namespace Microsoft.CodeAnalysis.IL
             var visitor = new ResultDiffingVisitor(expectedLog);
 
             string actualText = File.ReadAllText(actualFileName);
+            File.WriteAllText(actualFileName, actualText, Encoding.UTF8);
             SarifLog actualLog = JsonConvert.DeserializeObject<SarifLog>(actualText, settings);
             if (!visitor.Diff(actualLog.Runs[0].Results))
             {

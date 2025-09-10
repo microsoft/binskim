@@ -37,6 +37,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             get => this.Binary?.Valid == true;
         }
 
+        public string EnlistmentRoot
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.EnlistmentRoot);
+            set => this.Policy.SetProperty(BinaryParsersProperties.EnlistmentRoot, value);
+        }
         public string LocalSymbolDirectories
         {
             get => this.Policy?.GetProperty(BinaryParsersProperties.LocalSymbolDirectories);

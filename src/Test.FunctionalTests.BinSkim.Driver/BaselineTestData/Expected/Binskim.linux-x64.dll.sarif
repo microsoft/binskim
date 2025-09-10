@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.linux-x64.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.linux-x64.dll",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.linux-x64.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.linux-x64.dll",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.linux-x64.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.linux-x64.dll",
                   "index": 0
                 }
               }
@@ -85,7 +85,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.linux-x64.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.linux-x64.dll",
                   "index": 0
                 }
               }
@@ -221,13 +221,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///D:/src/b3/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.linux-x64.dll",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.linux-x64.dll",
             "index": 0
-          },
-          "hashes": {
-            "md5": "63979BA83F61B297BF98FFB8CC39F718",
-            "sha-1": "A26878532EF854F64AE703DE152C6F2FD995EAFC",
-            "sha-256": "6BE657DC1C6BCF4C55102F37C7312EF1DAE2D7D0E19B0C67D3F3422BABB0AFBE"
           }
         }
       ],

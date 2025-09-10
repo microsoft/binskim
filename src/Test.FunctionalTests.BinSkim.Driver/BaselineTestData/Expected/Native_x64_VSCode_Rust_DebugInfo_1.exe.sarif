@@ -3,443 +3,6 @@
   "version": "2.1.0",
   "runs": [
     {
-      "results": [
-        {
-          "ruleId": "BA2001",
-          "ruleIndex": 0,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2002",
-          "ruleIndex": 1,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2004",
-          "ruleIndex": 2,
-          "message": {
-            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe",
-              "clang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : liballoc-e1d125b3a421e009.rlib [SHA1] (alloc-e1d125b3a421e009.alloc.b6d975c0-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libcompiler_builtins-55394bc732b75eeb.rlib [SHA1] (compiler_builtins-55394bc732b75eeb.compiler_builtins.4be54af4-cgu.116.rcgu.o,compiler_builtins-55394bc732b75eeb.compiler_builtins.4be54af4-cgu.30.rcgu.o,compiler_builtins-55394bc732b75eeb.compiler_builtins.4be54af4-cgu.93.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libcore-f309332ab230c371.rlib [SHA1] (core-f309332ab230c371.core.8174c79a-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libpanic_unwind-c3aa48ffdde66347.rlib [SHA1] (panic_unwind-c3aa48ffdde66347.panic_unwind.932dc30b-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : librustc_demangle-cd2025f252bca17e.rlib [SHA1] (rustc_demangle-cd2025f252bca17e.rustc_demangle.7bc06e87-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libstd-ac1aca38635ef0b8.rlib [SHA1] (std-ac1aca38635ef0b8.std.b81c7b07-cgu.0.rcgu.o)\r\n\r\nMicrosoft (R) Macro Assembler : masm : 14.29.30034.2 : msvcrt.lib [MD5] (chkstk.obj,guard_dispatch.obj,guard_xfg_dispatch.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.29.30034.2 : msvcrt.lib [MD5] (cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.29.30034.2 : msvcrt.lib [MD5] (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,delete_scalar_size.obj,delete_scalar.obj,denormal_control.obj,env_mode.obj,exe_main.obj,file_mode.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,std_type_info_static.obj,thread_locale.obj,tlssup.obj,tncleanup.obj,ucrt_stubs.obj,utility_desktop.obj,utility.obj)\r\n"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2004",
-          "ruleIndex": 2,
-          "level": "error",
-          "message": {
-            "id": "Error_NativeWithInsecureDirectCompilands",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe",
-              "clang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.1k5qwfmzy19q3kig.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.1k5qwfmzy19q3kig.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.27vfw0fciscxsz6y.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.27vfw0fciscxsz6y.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.2gjcwp7vv8uqg3qc.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.2gjcwp7vv8uqg3qc.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.3gxax3g0ofmz4fig.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.3gxax3g0ofmz4fig.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.3yw54ei7749bflg6.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.3yw54ei7749bflg6.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.4h0vt0n1oa539m4n.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.4h0vt0n1oa539m4n.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.4zmpgaqgf9sq6ubs.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.4zmpgaqgf9sq6ubs.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.bkyk0h7fcb0mbmn.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.bkyk0h7fcb0mbmn.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.l3p25bti6slif8i.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.l3p25bti6slif8i.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.ygd3fnoe1htpeox.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.ygd3fnoe1htpeox.rcgu.o)\r\n"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2005",
-          "ruleIndex": 3,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2006",
-          "ruleIndex": 4,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe",
-              "Microsoft (R) Optimizing Compiler:C:19.29.30034.2, Microsoft (R) Optimizing Compiler:Cxx:19.29.30034.2"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2007",
-          "ruleIndex": 5,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe",
-              "4"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2008",
-          "ruleIndex": 6,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2009",
-          "ruleIndex": 7,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2010",
-          "ruleIndex": 8,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2011",
-          "ruleIndex": 9,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2012",
-          "ruleIndex": 10,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2013",
-          "ruleIndex": 11,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2014",
-          "ruleIndex": 12,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2015",
-          "ruleIndex": 13,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2019",
-          "ruleIndex": 14,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2021",
-          "ruleIndex": 15,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2024",
-          "ruleIndex": 16,
-          "message": {
-            "id": "Warning",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe",
-              "The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:\r\nmsvcrt.lib,cxx,19.29.30034.2 (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,delete_scalar_size.obj,delete_scalar.obj,denormal_control.obj,env_mode.obj,exe_main.obj,file_mode.obj,fltused.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,std_type_info_static.obj,thread_locale.obj,tlssup.obj,tncleanup.obj,ucrt_stubs.obj,utility_desktop.obj,utility.obj)\r\nmsvcrt.lib,c,19.29.30034.2 (cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\n\r\n"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2025",
-          "ruleIndex": 17,
-          "message": {
-            "id": "Warning",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA2026",
-          "ruleIndex": 18,
-          "message": {
-            "id": "Warning",
-            "arguments": [
-              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        }
-      ],
       "tool": {
         "driver": {
           "name": "testhost",
@@ -991,7 +554,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
             "index": 0
           },
           "hashes": {
@@ -999,6 +562,443 @@
             "sha-1": "1D7B49883E0088DD4F3BBF7AD20D42E0B9CF3465",
             "sha-256": "D66F73A0AF254CD1C12A8A503046315EF5595274202A5B618AC08797B71D5373"
           }
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "BA2001",
+          "ruleIndex": 0,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2002",
+          "ruleIndex": 1,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 2,
+          "message": {
+            "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe",
+              "clang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : liballoc-e1d125b3a421e009.rlib [SHA1] (alloc-e1d125b3a421e009.alloc.b6d975c0-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libcompiler_builtins-55394bc732b75eeb.rlib [SHA1] (compiler_builtins-55394bc732b75eeb.compiler_builtins.4be54af4-cgu.116.rcgu.o,compiler_builtins-55394bc732b75eeb.compiler_builtins.4be54af4-cgu.30.rcgu.o,compiler_builtins-55394bc732b75eeb.compiler_builtins.4be54af4-cgu.93.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libcore-f309332ab230c371.rlib [SHA1] (core-f309332ab230c371.core.8174c79a-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libpanic_unwind-c3aa48ffdde66347.rlib [SHA1] (panic_unwind-c3aa48ffdde66347.panic_unwind.932dc30b-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : librustc_demangle-cd2025f252bca17e.rlib [SHA1] (rustc_demangle-cd2025f252bca17e.rustc_demangle.7bc06e87-cgu.0.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : libstd-ac1aca38635ef0b8.rlib [SHA1] (std-ac1aca38635ef0b8.std.b81c7b07-cgu.0.rcgu.o)\r\n\r\nMicrosoft (R) Macro Assembler : masm : 14.29.30034.2 : msvcrt.lib [MD5] (chkstk.obj,guard_dispatch.obj,guard_xfg_dispatch.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.29.30034.2 : msvcrt.lib [MD5] (cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.29.30034.2 : msvcrt.lib [MD5] (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,delete_scalar.obj,delete_scalar_size.obj,denormal_control.obj,env_mode.obj,exe_main.obj,file_mode.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,std_type_info_static.obj,thread_locale.obj,tlssup.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_desktop.obj)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2004",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "id": "Error_NativeWithInsecureDirectCompilands",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe",
+              "clang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.1k5qwfmzy19q3kig.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.1k5qwfmzy19q3kig.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.27vfw0fciscxsz6y.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.27vfw0fciscxsz6y.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.2gjcwp7vv8uqg3qc.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.2gjcwp7vv8uqg3qc.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.3gxax3g0ofmz4fig.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.3gxax3g0ofmz4fig.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.3yw54ei7749bflg6.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.3yw54ei7749bflg6.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.4h0vt0n1oa539m4n.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.4h0vt0n1oa539m4n.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.4zmpgaqgf9sq6ubs.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.4zmpgaqgf9sq6ubs.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.bkyk0h7fcb0mbmn.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.bkyk0h7fcb0mbmn.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.l3p25bti6slif8i.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.l3p25bti6slif8i.rcgu.o)\r\nclang LLVM (rustc version 1.55.0 (c8dfcfe04 2021-09-06)) : masm : 12001.0.0.0 : Native_x64_VSCode_Rust_DebugInfo_1.ygd3fnoe1htpeox.rcgu.o [SHA1] (Native_x64_VSCode_Rust_DebugInfo_1.ygd3fnoe1htpeox.rcgu.o)\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2005",
+          "ruleIndex": 3,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2006",
+          "ruleIndex": 4,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe",
+              "Microsoft (R) Optimizing Compiler:C:19.29.30034.2, Microsoft (R) Optimizing Compiler:Cxx:19.29.30034.2"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2007",
+          "ruleIndex": 5,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe",
+              "4"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2008",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2009",
+          "ruleIndex": 7,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2010",
+          "ruleIndex": 8,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2011",
+          "ruleIndex": 9,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2012",
+          "ruleIndex": 10,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2013",
+          "ruleIndex": 11,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2014",
+          "ruleIndex": 12,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2015",
+          "ruleIndex": 13,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2019",
+          "ruleIndex": 14,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2021",
+          "ruleIndex": 15,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2024",
+          "ruleIndex": 16,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe",
+              "The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:\r\nmsvcrt.lib,cxx,19.29.30034.2 (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,delete_scalar.obj,delete_scalar_size.obj,denormal_control.obj,env_mode.obj,exe_main.obj,file_mode.obj,fltused.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,std_type_info_static.obj,thread_locale.obj,tlssup.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_desktop.obj)\r\nmsvcrt.lib,c,19.29.30034.2 (cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\n\r\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2025",
+          "ruleIndex": 17,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA2026",
+          "ruleIndex": 18,
+          "message": {
+            "id": "Warning",
+            "arguments": [
+              "Native_x64_VSCode_Rust_DebugInfo_1.exe"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VSCode_Rust_DebugInfo_1.exe",
+                  "index": 0
+                }
+              }
+            }
+          ]
         }
       ],
       "columnKind": "utf16CodeUnits"

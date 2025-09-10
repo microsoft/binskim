@@ -3,7 +3,6 @@
   "version": "2.1.0",
   "runs": [
     {
-      "results": [],
       "tool": {
         "driver": {
           "name": "testhost",
@@ -21,7 +20,7 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.stack_protector.a",
+                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.stack_protector.a",
                       "index": 0
                     }
                   }
@@ -42,7 +41,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.stack_protector.a",
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.stack_protector.a",
             "index": 0
           },
           "hashes": {
@@ -52,6 +51,7 @@
           }
         }
       ],
+      "results": [],
       "columnKind": "utf16CodeUnits"
     }
   ]

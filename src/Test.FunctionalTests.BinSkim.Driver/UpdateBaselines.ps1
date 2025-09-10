@@ -33,8 +33,8 @@ function Build-Baselines($sourceExtension)
 
         # Actually run the tool
         Remove-Item $outputTemp -ErrorAction SilentlyContinue
-        Write-Host "$utility analyze "$input" --output "$output" --kind "Fail`;Pass" --level "Error`;Warning`;Note" --insert Hashes --remove NondeterministicProperties --config default --quiet true --normalize-output-for-comparison"
-        &           $utility analyze "$input" --output "$output" --kind Fail`;Pass --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet true --normalize-output-for-comparison --log ForceOverwrite
+        Write-Host "$utility analyze "$input" --output "$output" --kind "Fail`;Pass" --level "Error`;Warning`;Note" --insert Hashes --remove NondeterministicProperties --config default --quiet true --enlistment-root file:///D:/src/b3/ --normalize-output-for-comparison --log ""ForceOverwrite"""
+        &           $utility analyze "$input" --output "$output" --kind Fail`;Pass --level Error`;Warning`;Note --insert Hashes --remove NondeterministicProperties --config default --quiet true --enlistment-root file:///D:/src/b3/ --normalize-output-for-comparison --log "ForceOverwrite"
     }
 }
 
@@ -42,7 +42,7 @@ Build-Tool
 Build-Baselines "Binskim.linux-x64.dll"
 #Build-Baselines "*.dll"
 #Build-Baselines "*.exe"
-#Build-Baselines "gcc.*"
+###Build-Baselines "gcc.*"
 #Build-Baselines "clang.*"
 #Build-Baselines "macho.*"
 

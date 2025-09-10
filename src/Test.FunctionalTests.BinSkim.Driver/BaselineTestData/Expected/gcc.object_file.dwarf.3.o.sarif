@@ -3,52 +3,6 @@
   "version": "2.1.0",
   "runs": [
     {
-      "results": [
-        {
-          "ruleId": "BA3003",
-          "ruleIndex": 0,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "gcc.object_file.dwarf.3.o",
-              "gcc.object_file.dwarf.3.o"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3004",
-          "ruleIndex": 1,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "gcc.object_file.dwarf.3.o",
-              "3"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        }
-      ],
       "tool": {
         "driver": {
           "name": "testhost",
@@ -112,7 +66,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o",
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o",
             "index": 0
           },
           "hashes": {
@@ -120,6 +74,52 @@
             "sha-1": "EC69C335A5C685C6FA7729248326A952D015698E",
             "sha-256": "21C47C7BA176B37CF703D17983F9E4A4CF3F8F04482ED83D58D2A4E77B2C47A4"
           }
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "BA3003",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "gcc.object_file.dwarf.3.o",
+              "gcc.object_file.dwarf.3.o"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3004",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "gcc.object_file.dwarf.3.o",
+              "3"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
         }
       ],
       "columnKind": "utf16CodeUnits"

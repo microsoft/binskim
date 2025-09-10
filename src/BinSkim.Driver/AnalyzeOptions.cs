@@ -77,7 +77,17 @@ namespace Microsoft.CodeAnalysis.IL
         [Obsolete("Use --insert instead, passing 'Hashes' along with any other references to data to be inserted.")]
         public bool ComputeFileHashes { get; set; }
 
-        [Option("normalize-output-for-comparison", Required = false, HelpText = "Normalize certain data in SARIF to support stable diff'ing across test environments.", Default = false, Hidden = true)]
+
+        // Hidden options for test normalization purposes.
+
+        [Option("enlistment-root",
+                HelpText = "BinSkim enlistment root. Used for normalizing test outputs.",
+                Hidden = true)]
+        public string EnlistmentRoot { get; set; }
+
+        [Option("normalize-output-for-comparison",
+                HelpText = "Normalize certain data in SARIF to support stable diff'ing across test environments.",
+                Hidden = true)]
         public bool? NormalizeOutputForComparison { get; set; }
     }
 }

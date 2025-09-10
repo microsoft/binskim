@@ -2,6 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Data;
+using System.Globalization;
 using System.Reflection;
 
 using Microsoft.CodeAnalysis.Sarif;
@@ -12,10 +14,16 @@ namespace Microsoft.CodeAnalysis.IL
     internal class NormalizingSarifLogger : IAnalysisLogger, IDisposable
     {
         private IAnalysisLogger _innerLogger;
+        private SarifRewritingVisitor _pathRewritingVisitor;
 
-        public NormalizingSarifLogger(IAnalysisLogger innerLogger)
+        public NormalizingSarifLogger(IAnalysisLogger innerLogger, string enlistmentRoot)
         {
             _innerLogger = innerLogger;
+
+            if (!string.IsNullOrEmpty(enlistmentRoot))
+            {
+                _pathRewritingVisitor = new PathRewritingVisitor(enlistmentRoot);
+            }
 
             NormalizeRunTool(innerLogger);
         }
@@ -61,16 +69,20 @@ namespace Microsoft.CodeAnalysis.IL
 
         public void Log(ReportingDescriptor rule, Result result, int? extensionIndex = null)
         {
+            _pathRewritingVisitor?.Visit(rule);
+            _pathRewritingVisitor?.Visit(result);
             _innerLogger.Log(rule, result, extensionIndex);
         }
 
         public void LogConfigurationNotification(Notification notification)
         {
+            _pathRewritingVisitor?.Visit(notification);
             _innerLogger.LogConfigurationNotification(notification);
         }
 
         public void LogToolNotification(Notification notification, ReportingDescriptor associatedRule = null)
         {
+            _pathRewritingVisitor?.Visit(notification);
             _innerLogger.LogToolNotification(notification, associatedRule);
         }
 
@@ -83,6 +95,29 @@ namespace Microsoft.CodeAnalysis.IL
         {
             ((SarifLogger)_innerLogger)?.Dispose();
             _innerLogger = null;
+        }
+
+        private class PathRewritingVisitor : SarifRewritingVisitor
+        {
+            private readonly string _enlistmentRoot;
+            public PathRewritingVisitor(string enlistmentRoot)
+            {
+                _enlistmentRoot = enlistmentRoot;
+            }
+            public override ArtifactLocation VisitArtifactLocation(ArtifactLocation artifactLocation)
+            {
+                if (artifactLocation?.Uri != null && !string.IsNullOrEmpty(_enlistmentRoot))
+                {
+                    string path = artifactLocation.Uri.GetFilePath();
+                    Console.WriteLine(path);
+                    if (path.StartsWith(_enlistmentRoot, StringComparison.OrdinalIgnoreCase))
+                    {
+                        string relativePath = path.Substring(_enlistmentRoot.Length).TrimStart('\\', '/');
+                        artifactLocation.Uri = new Uri(relativePath, UriKind.Relative);
+                    }
+                }
+                return base.VisitArtifactLocation(artifactLocation);
+            }
         }
     }
 }

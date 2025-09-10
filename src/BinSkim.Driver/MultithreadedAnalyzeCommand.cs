@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis.IL
                 {
                     if (aggregatingLogger.Loggers[i] is SarifLogger sarifLogger)
                     {
-                        aggregatingLogger.Loggers[i] = new NormalizingSarifLogger(sarifLogger);
+                        aggregatingLogger.Loggers[i] = new NormalizingSarifLogger(sarifLogger, globalContext.EnlistmentRoot);
                     }
                 }
             }
@@ -92,10 +92,14 @@ namespace Microsoft.CodeAnalysis.IL
             context.SymbolPath = options.SymbolsPath ?? context.SymbolPath;
             context.IgnorePdbLoadError = options.IgnorePdbLoadError != null ? options.IgnorePdbLoadError.Value : context.IgnorePdbLoadError;
             context.IgnorePELoadError = options.IgnorePELoadError != null ? options.IgnorePELoadError.Value : context.IgnorePELoadError;
-            context.NormalizeOutputForComparison = options.NormalizeOutputForComparison != null ? options.NormalizeOutputForComparison.Value : context.NormalizeOutputForComparison;
+
             context.DisableTelemetry = options.DisableTelemetry != null ? options.DisableTelemetry.Value : context.DisableTelemetry;
             context.LocalSymbolDirectories = options.LocalSymbolDirectories ?? context.LocalSymbolDirectories;
             context.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
+
+            // Hidden options for test normalization purposes.
+            context.EnlistmentRoot = options.EnlistmentRoot ?? context.EnlistmentRoot;
+            context.NormalizeOutputForComparison = options.NormalizeOutputForComparison != null ? options.NormalizeOutputForComparison.Value : context.NormalizeOutputForComparison;
 
             context.CompilerDataLogger =
                 new CompilerDataLogger(context.OutputFilePath,

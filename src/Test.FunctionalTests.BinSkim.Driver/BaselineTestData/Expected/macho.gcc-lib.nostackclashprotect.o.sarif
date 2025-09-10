@@ -3,74 +3,6 @@
   "version": "2.1.0",
   "runs": [
     {
-      "results": [
-        {
-          "ruleId": "BA3003",
-          "ruleIndex": 0,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
-              "mymod.c"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA3005",
-          "ruleIndex": 1,
-          "level": "error",
-          "message": {
-            "id": "Error",
-            "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o",
-              "mymod.c"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "BA5001",
-          "ruleIndex": 2,
-          "kind": "pass",
-          "level": "none",
-          "message": {
-            "id": "Pass",
-            "arguments": [
-              "macho.gcc-lib.nostackclashprotect.o"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        }
-      ],
       "tool": {
         "driver": {
           "name": "testhost",
@@ -156,7 +88,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
+            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
             "index": 0
           },
           "hashes": {
@@ -164,6 +96,74 @@
             "sha-1": "A0D80EB1F40F8A5D464B52359C2AB789D0137256",
             "sha-256": "3E0EAA3C62955E43290E284A68DE4E40AAAD648D07E42F6F27E2024557DF6B2F"
           }
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "BA3003",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "macho.gcc-lib.nostackclashprotect.o",
+              "mymod.c"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA3005",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "id": "Error",
+            "arguments": [
+              "macho.gcc-lib.nostackclashprotect.o",
+              "mymod.c"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "BA5001",
+          "ruleIndex": 2,
+          "kind": "pass",
+          "level": "none",
+          "message": {
+            "id": "Pass",
+            "arguments": [
+              "macho.gcc-lib.nostackclashprotect.o"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
+                  "index": 0
+                }
+              }
+            }
+          ]
         }
       ],
       "columnKind": "utf16CodeUnits"

@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 IgnorePdbLoadError,
                 DisableTelemetry,
                 IncludeWixBinaries,
-                LocalSymbolDirectories,
+                EnlistmentRoot,
                 SymbolPath,
                 IgnorePELoadError
             }.ToImmutableArray();
@@ -44,6 +44,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             new PerLanguageOption<bool>(
                 "BinaryParsers", nameof(IncludeWixBinaries), defaultValue: () => false,
                 "Set this value to 'true' to include Wix binaries in the analysis.");
+
+        public static PerLanguageOption<string> EnlistmentRoot { get; } =
+            new PerLanguageOption<string>(
+                "BinaryParsers", nameof(EnlistmentRoot), defaultValue: () => string.Empty,
+                "The root of the current enlistment. Used for normalizing file paths in test scenarios.");
 
         public static PerLanguageOption<string> LocalSymbolDirectories { get; } =
             new PerLanguageOption<string>(
