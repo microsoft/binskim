@@ -76,5 +76,8 @@ namespace Microsoft.CodeAnalysis.IL
             HelpText = "Output MD5, SHA1, and SHA-256 hash of analysis targets when emitting SARIF reports.")]
         [Obsolete("Use --insert instead, passing 'Hashes' along with any other references to data to be inserted.")]
         public bool ComputeFileHashes { get; set; }
+
+        [Option("normalize-output-for-comparison", Required = false, HelpText = "Normalize certain data in SARIF to support stable diff'ing across test environments.", Default = false, Hidden = true)]
+        public bool? NormalizeOutputForComparison { get; set; }
     }
 }

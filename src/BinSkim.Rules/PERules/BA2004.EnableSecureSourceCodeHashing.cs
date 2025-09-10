@@ -109,8 +109,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            var compilandsBinaryWithOneOrMoreInsecureFileHashes = new Dictionary<HashType, List<ObjectModuleDetails>>();
-            var compilandsLibraryWithOneOrMoreInsecureFileHashes = new Dictionary<HashType, List<ObjectModuleDetails>>();
+            var compilandsBinaryWithOneOrMoreInsecureFileHashes = new Dictionary<HashType, SortedList<string, ObjectModuleDetails>>();
+            var compilandsLibraryWithOneOrMoreInsecureFileHashes = new Dictionary<HashType, SortedList<string, ObjectModuleDetails>>();
 
             foreach (DisposableEnumerableView<Symbol> omView in pdb.CreateObjectModuleIterator())
             {
@@ -201,18 +201,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     if (sf.HashType != HashType.SHA256)
                     {
-                        Dictionary<HashType, List<ObjectModuleDetails>> compilands;
+                        Dictionary<HashType, SortedList<string, ObjectModuleDetails>> compilands;
 
                         compilands = !string.IsNullOrEmpty(record.Library)
                             ? compilandsLibraryWithOneOrMoreInsecureFileHashes
                             : compilandsBinaryWithOneOrMoreInsecureFileHashes;
 
-                        if (!compilands.TryGetValue(sf.HashType, out List<ObjectModuleDetails> objectModuleDetails))
+                        if (!compilands.TryGetValue(sf.HashType, out SortedList<string, ObjectModuleDetails> objectModuleDetails))
                         {
-                            objectModuleDetails = compilands[sf.HashType] = new List<ObjectModuleDetails>();
+                            objectModuleDetails = compilands[sf.HashType] = new SortedList<string, ObjectModuleDetails>(StringComparer.Ordinal);
                         }
 
-                        objectModuleDetails.Add(omDetails);
+                        objectModuleDetails.Add(omDetails.Name, omDetails);
                     }
 
                     // We only need to check a single source file per compiland, as the relevant
@@ -247,14 +247,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                                               "native"));
         }
 
-        private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, Dictionary<HashType, List<ObjectModuleDetails>> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
+        private void GenerateCompilandsAndLog(BinaryAnalyzerContext context, Dictionary<HashType, SortedList<string, ObjectModuleDetails>> compilandsWithOneOrMoreInsecureFileHashes, FailureLevel failureLevel)
         {
             string message;
-            List<ObjectModuleDetails> objectModuleDetails;
+            SortedList<string, ObjectModuleDetails> objectModuleDetails;
 
             if (compilandsWithOneOrMoreInsecureFileHashes.TryGetValue(HashType.None, out objectModuleDetails))
             {
-                message = objectModuleDetails.CreateOutputCoalescedByCompiler("No hash value present");
+                message = objectModuleDetails.Values.CreateOutputCoalescedByCompiler("No hash value present");
                 GenerateCompilandsAndLog(context, message, FailureLevel.Warning);
                 compilandsWithOneOrMoreInsecureFileHashes.Remove(HashType.None);
             }
@@ -267,7 +267,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 foreach (HashType hashType in compilandsWithOneOrMoreInsecureFileHashes.Keys)
                 {
                     objectModuleDetails = compilandsWithOneOrMoreInsecureFileHashes[hashType];
-                    messages[hashTypeCount++] = objectModuleDetails.CreateOutputCoalescedByCompiler(hashType.ToString());
+                    messages[hashTypeCount++] = objectModuleDetails.Values.CreateOutputCoalescedByCompiler(hashType.ToString());
                 }
 
                 message = string.Join(Environment.NewLine, messages);

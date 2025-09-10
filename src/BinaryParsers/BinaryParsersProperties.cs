@@ -65,5 +65,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             new PerLanguageOption<bool>(
                 "BinaryParsers", nameof(IgnorePELoadError), defaultValue: () => false,
                 "Set this value to 'true' to ignore exceptions thrown in reading PE files.");
+
+        public static PerLanguageOption<bool> NormalizeOutputForComparison { get; } =
+            new PerLanguageOption<bool>(
+                "BinaryParsers", nameof(NormalizeOutputForComparison), defaultValue: () => false,
+                "Set this value to 'true' to normalize SARIF output for stable diffing in test contexts.");
     }
 }

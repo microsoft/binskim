@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
+                  "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
                   "index": 0
                 }
               }
@@ -156,7 +156,7 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
+            "uri": "file:///Z://src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o",
             "index": 0
           },
           "hashes": {
