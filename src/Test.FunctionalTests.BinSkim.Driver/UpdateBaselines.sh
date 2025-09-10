@@ -27,7 +27,7 @@ RunBaseline ()
         output="$expectedDirectory/$outputFile.sarif"
         outputTemp="$output.temp"
 
-        echo "$TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level 'Error;Warning;Note' --insert Hashes --remove NondeterministicProperties --config default --quiet true --enlistmentRoot $repoRoot --log ForceOverwrite"
+        echo "$TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level 'Error;Warning;Note' --remove NondeterministicProperties --config default --quiet true --enlistmentRoot $repoRoot --log ForceOverwrite"
         $TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level 'Error;Warning;Note' --insert Hashes --remove NondeterministicProperties --config default --quiet true --enlistmentRoot $repoRoot --log ForceOverwrite
 
         mv $outputTemp $output
