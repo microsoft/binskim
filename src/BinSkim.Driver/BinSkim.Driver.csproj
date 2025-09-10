@@ -45,8 +45,9 @@
     <Compile Update="DriverResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>DriverResources.resx</DependentUpon>
+      <DependentUpon>DriverResources.resx</DependentUpon>      
     </Compile>
+    <RuntimeHostConfigurationOption Include="System.Globalization.UseNls" Value="true" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="DriverResources.resx">

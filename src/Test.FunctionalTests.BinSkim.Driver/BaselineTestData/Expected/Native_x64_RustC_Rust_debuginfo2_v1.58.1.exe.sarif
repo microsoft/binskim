@@ -385,7 +385,7 @@
             "id": "Warning",
             "arguments": [
               "Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe",
-              "The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:\r\nmsvcrt.lib,cxx,19.30.30625.1 (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,delete_scalar_size.obj,delete_scalar.obj,denormal_control.obj,env_mode.obj,exe_main.obj,file_mode.obj,fltused.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,std_type_info_static.obj,thread_locale.obj,tlssup.obj,tncleanup.obj,ucrt_stubs.obj,utility_desktop.obj,utility.obj)\r\nmsvcrt.lib,c,19.30.30625.1 (cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\n\r\n"
+              "The following modules were compiled with a toolset that supports /Qspectre but the switch was not enabled on the command-line:\r\nmsvcrt.lib,cxx,19.30.30625.1 (argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,delete_scalar.obj,delete_scalar_size.obj,denormal_control.obj,env_mode.obj,exe_main.obj,file_mode.obj,fltused.obj,initializers.obj,initsect.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,std_type_info_static.obj,thread_locale.obj,tlssup.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_desktop.obj)\r\nmsvcrt.lib,c,19.30.30625.1 (cpu_disp.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\n\r\n"
             ]
           },
           "locations": [

@@ -378,9 +378,7 @@ namespace Microsoft.CodeAnalysis.IL
                 foreach (string file in testFiles)
                 {
                     this.RunRules(sb, file, version);
-                    break;
                 }
-                break;
             }
 
             if (sb.Length == 0)
@@ -469,7 +467,6 @@ namespace Microsoft.CodeAnalysis.IL
             var visitor = new ResultDiffingVisitor(expectedLog);
 
             string actualText = File.ReadAllText(actualFileName);
-            File.WriteAllText(actualFileName, actualText, Encoding.UTF8);
             SarifLog actualLog = JsonConvert.DeserializeObject<SarifLog>(actualText, settings);
             if (!visitor.Diff(actualLog.Runs[0].Results))
             {
