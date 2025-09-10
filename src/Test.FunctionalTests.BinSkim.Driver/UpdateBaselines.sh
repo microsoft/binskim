@@ -27,16 +27,8 @@ RunBaseline ()
         output="$expectedDirectory/$outputFile.sarif"
         outputTemp="$output.temp"
 
-        echo "$TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level 'Error;Warning;Note' --insert Hashes --remove NondeterministicProperties --config default --quiet true --sarif-output-version Current"
-        $TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level 'Error;Warning;Note' --insert Hashes --remove NondeterministicProperties --config default --quiet true --sarif-output-version Current
-
-        # Normalize paths--replace the repository root with '/home/user'
-        echo "Normalizing file output"
-        sed s#$repoRoot/#\/home\/user/#g $outputTemp -i
-
-        # Potential future work--remove stack traces/etc., similar to the powershell script.
-        # At the moment, BinSkim doesn't include stack traces, and the comparison shouldn't 
-        # compare times--so this isn't strictly necessary.
+        echo "$TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level 'Error;Warning;Note' --insert Hashes --remove NondeterministicProperties --config default --quiet true --enlistmentRoot $repoRoot --log ForceOverwrite"
+        $TOOLPATH analyze $targetFile --output $outputTemp --kind 'Fail;Pass' --level 'Error;Warning;Note' --insert Hashes --remove NondeterministicProperties --config default --quiet true --enlistmentRoot $repoRoot --log ForceOverwrite
 
         mv $outputTemp $output
     done

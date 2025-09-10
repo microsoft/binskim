@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.IL
             if (run?.Tool?.Driver != null)
             {
                 run.Tool.Driver.Name = "BinSkim";
-                run.Tool.Driver.Organization = "Microsoft";
+                run.Tool.Driver.Organization = null;
                 run.Tool.Driver.Product = null;
                 run.Tool.Driver.FullName = null;
                 run.Tool.Driver.Version = default;

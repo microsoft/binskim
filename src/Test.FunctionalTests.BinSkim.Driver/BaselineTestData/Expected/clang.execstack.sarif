@@ -157,7 +157,6 @@
       "tool": {
         "driver": {
           "name": "BinSkim",
-          "organization": "Microsoft",
           "rules": [
             {
               "id": "BA3001",

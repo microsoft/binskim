@@ -6,8 +6,7 @@
       "results": [],
       "tool": {
         "driver": {
-          "name": "BinSkim",
-          "organization": "Microsoft"
+          "name": "BinSkim"
         }
       },
       "invocations": [
