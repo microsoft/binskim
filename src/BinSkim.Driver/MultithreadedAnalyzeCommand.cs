@@ -40,18 +40,18 @@ namespace Microsoft.CodeAnalysis.IL
             set => throw new InvalidOperationException();
         }
 
-        public override void InitializeOutputs(BinaryAnalyzerContext globalContext)
+        public override void InitializeOutputs(BinaryAnalyzerContext context)
         {
-            base.InitializeOutputs(globalContext);
+            base.InitializeOutputs(context);
 
-            if (!string.IsNullOrEmpty(globalContext.EnlistmentRootToNormalize))
+            if (!string.IsNullOrEmpty(context.EnlistmentRootToNormalize))
             {
-                var aggregatingLogger = (AggregatingLogger)globalContext.Logger;
+                var aggregatingLogger = (AggregatingLogger)context.Logger;
                 for (int i = 0; i< aggregatingLogger.Loggers.Count; i++)
                 {
                     if (aggregatingLogger.Loggers[i] is SarifLogger sarifLogger)
                     {
-                        aggregatingLogger.Loggers[i] = new NormalizingSarifLogger(sarifLogger, globalContext.EnlistmentRootToNormalize);
+                        aggregatingLogger.Loggers[i] = new NormalizingSarifLogger(sarifLogger, context.EnlistmentRootToNormalize);
                     }
                 }
             }

@@ -442,7 +442,6 @@ namespace Microsoft.CodeAnalysis.IL
                 TargetFileSpecifiers = new string[] { inputFileName },
                 Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note },
                 Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.Pass },
-                NormalizeOutputForComparison = true,
                 EnlistmentRoot = enlistmentRoot
             };
 
