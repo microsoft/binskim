@@ -107,6 +107,8 @@ namespace Microsoft.CodeAnalysis.IL
             }
             public override ArtifactLocation VisitArtifactLocation(ArtifactLocation artifactLocation)
             {
+                artifactLocation = base.VisitArtifactLocation(artifactLocation);
+
                 if (artifactLocation?.Uri != null && !string.IsNullOrEmpty(_enlistmentRoot))
                 {
                     string path = artifactLocation.Uri.GetFilePath();
@@ -117,7 +119,8 @@ namespace Microsoft.CodeAnalysis.IL
                         artifactLocation.Uri = new Uri(relativePath, UriKind.Relative);
                     }
                 }
-                return base.VisitArtifactLocation(artifactLocation);
+
+                return artifactLocation;
             }
         }
     }

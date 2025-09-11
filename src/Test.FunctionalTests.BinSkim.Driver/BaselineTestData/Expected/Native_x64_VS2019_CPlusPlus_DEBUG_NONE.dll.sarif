@@ -19,7 +19,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll",
+                  "index": 0
                 }
               }
             }
@@ -40,7 +41,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll",
+                  "index": 0
                 }
               }
             }
@@ -60,7 +62,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll",
+                  "index": 0
                 }
               }
             }
@@ -81,7 +84,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll",
+                  "index": 0
                 }
               }
             }
@@ -102,7 +106,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll",
+                  "index": 0
                 }
               }
             }
@@ -123,7 +128,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll",
+                  "index": 0
                 }
               }
             }
@@ -144,7 +150,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll",
+                  "index": 0
                 }
               }
             }
@@ -165,7 +172,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll",
+                  "index": 0
                 }
               }
             }
@@ -411,7 +419,8 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll"
+                      "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll",
+                      "index": 0
                     }
                   }
                 }
@@ -426,6 +435,14 @@
             }
           ],
           "executionSuccessful": false
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2019_CPlusPlus_DEBUG_NONE.dll",
+            "index": 0
+          }
         }
       ],
       "columnKind": "utf16CodeUnits"

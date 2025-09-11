@@ -17,7 +17,8 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.stack_protector.a"
+                      "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.stack_protector.a",
+                      "index": 0
                     }
                   }
                 }
@@ -32,6 +33,19 @@
             }
           ],
           "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.stack_protector.a",
+            "index": 0
+          },
+          "hashes": {
+            "md5": "D41D8CD98F00B204E9800998ECF8427E",
+            "sha-1": "DA39A3EE5E6B4B0D3255BFEF95601890AFD80709",
+            "sha-256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+          }
         }
       ],
       "columnKind": "utf16CodeUnits"

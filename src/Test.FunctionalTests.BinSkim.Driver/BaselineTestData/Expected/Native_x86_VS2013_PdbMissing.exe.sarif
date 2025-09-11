@@ -19,7 +19,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe",
+                  "index": 0
                 }
               }
             }
@@ -40,7 +41,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe",
+                  "index": 0
                 }
               }
             }
@@ -61,7 +63,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe",
+                  "index": 0
                 }
               }
             }
@@ -82,7 +85,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe",
+                  "index": 0
                 }
               }
             }
@@ -103,7 +107,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe",
+                  "index": 0
                 }
               }
             }
@@ -124,7 +129,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe",
+                  "index": 0
                 }
               }
             }
@@ -145,7 +151,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe",
+                  "index": 0
                 }
               }
             }
@@ -166,7 +173,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe",
+                  "index": 0
                 }
               }
             }
@@ -412,7 +420,8 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe"
+                      "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe",
+                      "index": 0
                     }
                   }
                 }
@@ -427,6 +436,14 @@
             }
           ],
           "executionSuccessful": false
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_PdbMissing.exe",
+            "index": 0
+          }
         }
       ],
       "columnKind": "utf16CodeUnits"
