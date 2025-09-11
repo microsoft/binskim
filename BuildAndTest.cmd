@@ -17,7 +17,6 @@ set NightlyTest=%2
 @REM Remove existing build data
 if exist bld (rd /s /q bld)
 
-set NuGetPackageDir=%~dp0src\packages
 set NuGetOutputDirectory=%~dp0bld\bin\nuget\
 
 call SetCurrentVersion.cmd
