@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -60,7 +60,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -81,7 +81,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -102,7 +102,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -124,7 +124,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -146,7 +146,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -166,7 +166,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -187,7 +187,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -208,7 +208,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -229,7 +229,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -250,7 +250,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -271,7 +271,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -292,7 +292,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -313,7 +313,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -334,7 +334,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -355,7 +355,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -374,7 +374,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -393,7 +393,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -413,7 +413,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -434,7 +434,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }
@@ -453,7 +453,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x64_VS2015_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x64_VS2015_Default.dll"
                 }
               }
             }

@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.no_stack_protector"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector"
                 }
               }
             }
@@ -39,7 +39,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.no_stack_protector"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector"
                 }
               }
             }
@@ -60,7 +60,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.no_stack_protector"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector"
                 }
               }
             }
@@ -81,7 +81,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.no_stack_protector"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector"
                 }
               }
             }
@@ -102,7 +102,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.no_stack_protector"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector"
                 }
               }
             }
@@ -122,7 +122,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.no_stack_protector"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector"
                 }
               }
             }
@@ -142,7 +142,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.no_stack_protector"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector"
                 }
               }
             }

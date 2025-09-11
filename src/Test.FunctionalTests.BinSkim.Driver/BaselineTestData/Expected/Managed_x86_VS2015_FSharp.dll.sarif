@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2015_FSharp.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2015_FSharp.dll"
                 }
               }
             }
@@ -39,7 +39,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2015_FSharp.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2015_FSharp.dll"
                 }
               }
             }
@@ -60,7 +60,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2015_FSharp.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2015_FSharp.dll"
                 }
               }
             }
@@ -81,7 +81,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2015_FSharp.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2015_FSharp.dll"
                 }
               }
             }
@@ -102,7 +102,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2015_FSharp.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2015_FSharp.dll"
                 }
               }
             }
@@ -123,7 +123,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2015_FSharp.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2015_FSharp.dll"
                 }
               }
             }
@@ -144,7 +144,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2015_FSharp.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2015_FSharp.dll"
                 }
               }
             }
@@ -163,7 +163,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2015_FSharp.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2015_FSharp.dll"
                 }
               }
             }

@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.execstack"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack"
                 }
               }
             }
@@ -38,7 +38,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.execstack"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack"
                 }
               }
             }
@@ -59,7 +59,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.execstack"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack"
                 }
               }
             }
@@ -79,7 +79,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.execstack"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack"
                 }
               }
             }
@@ -100,7 +100,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.execstack"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack"
                 }
               }
             }
@@ -120,7 +120,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.execstack"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack"
                 }
               }
             }
@@ -140,7 +140,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.execstack"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.execstack"
                 }
               }
             }

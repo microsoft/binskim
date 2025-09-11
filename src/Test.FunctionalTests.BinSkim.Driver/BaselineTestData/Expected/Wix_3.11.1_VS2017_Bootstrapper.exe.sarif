@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Wix_3.11.1_VS2017_Bootstrapper.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Wix_3.11.1_VS2017_Bootstrapper.exe"
                 }
               }
             }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Wix_3.11.1_VS2017_Bootstrapper.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Wix_3.11.1_VS2017_Bootstrapper.exe"
                 }
               }
             }
@@ -61,7 +61,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Wix_3.11.1_VS2017_Bootstrapper.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Wix_3.11.1_VS2017_Bootstrapper.exe"
                 }
               }
             }
@@ -82,7 +82,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Wix_3.11.1_VS2017_Bootstrapper.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Wix_3.11.1_VS2017_Bootstrapper.exe"
                 }
               }
             }
@@ -103,7 +103,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Wix_3.11.1_VS2017_Bootstrapper.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Wix_3.11.1_VS2017_Bootstrapper.exe"
                 }
               }
             }
@@ -124,7 +124,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Wix_3.11.1_VS2017_Bootstrapper.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Wix_3.11.1_VS2017_Bootstrapper.exe"
                 }
               }
             }
@@ -145,7 +145,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Wix_3.11.1_VS2017_Bootstrapper.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Wix_3.11.1_VS2017_Bootstrapper.exe"
                 }
               }
             }
@@ -166,7 +166,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Wix_3.11.1_VS2017_Bootstrapper.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Wix_3.11.1_VS2017_Bootstrapper.exe"
                 }
               }
             }

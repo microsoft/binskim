@@ -17,7 +17,7 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Corrupted_Native_x86_VS2013_Default.exe"
+                      "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Corrupted_Native_x86_VS2013_Default.exe"
                     }
                   }
                 }

@@ -20,7 +20,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2013_ResourceOnly.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll"
                 }
               }
             }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2013_ResourceOnly.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll"
                 }
               }
             }
@@ -62,7 +62,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2013_ResourceOnly.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll"
                 }
               }
             }
@@ -83,7 +83,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2013_ResourceOnly.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll"
                 }
               }
             }
@@ -104,7 +104,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2013_ResourceOnly.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll"
                 }
               }
             }
@@ -125,7 +125,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2013_ResourceOnly.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2013_ResourceOnly.dll"
                 }
               }
             }

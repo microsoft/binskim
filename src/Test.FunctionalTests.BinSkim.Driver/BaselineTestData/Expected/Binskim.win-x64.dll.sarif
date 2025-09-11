@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Binskim.win-x64.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.win-x64.dll"
                 }
               }
             }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Binskim.win-x64.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.win-x64.dll"
                 }
               }
             }
@@ -61,7 +61,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Binskim.win-x64.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.win-x64.dll"
                 }
               }
             }
@@ -82,7 +82,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Binskim.win-x64.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Binskim.win-x64.dll"
                 }
               }
             }

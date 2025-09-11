@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2013_Wpf.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2013_Wpf.exe"
                 }
               }
             }
@@ -39,7 +39,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2013_Wpf.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2013_Wpf.exe"
                 }
               }
             }
@@ -60,7 +60,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2013_Wpf.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2013_Wpf.exe"
                 }
               }
             }
@@ -81,7 +81,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2013_Wpf.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2013_Wpf.exe"
                 }
               }
             }
@@ -102,7 +102,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2013_Wpf.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2013_Wpf.exe"
                 }
               }
             }
@@ -123,7 +123,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2013_Wpf.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2013_Wpf.exe"
                 }
               }
             }
@@ -144,7 +144,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2013_Wpf.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2013_Wpf.exe"
                 }
               }
             }
@@ -163,7 +163,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Managed_x86_VS2013_Wpf.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Managed_x86_VS2013_Wpf.exe"
                 }
               }
             }

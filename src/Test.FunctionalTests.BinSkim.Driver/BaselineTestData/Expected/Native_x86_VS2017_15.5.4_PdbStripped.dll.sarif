@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2017_15.5.4_PdbStripped.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2017_15.5.4_PdbStripped.dll"
                 }
               }
             }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2017_15.5.4_PdbStripped.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2017_15.5.4_PdbStripped.dll"
                 }
               }
             }
@@ -61,7 +61,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2017_15.5.4_PdbStripped.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2017_15.5.4_PdbStripped.dll"
                 }
               }
             }
@@ -82,7 +82,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2017_15.5.4_PdbStripped.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2017_15.5.4_PdbStripped.dll"
                 }
               }
             }
@@ -103,7 +103,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2017_15.5.4_PdbStripped.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2017_15.5.4_PdbStripped.dll"
                 }
               }
             }
@@ -124,7 +124,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2017_15.5.4_PdbStripped.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2017_15.5.4_PdbStripped.dll"
                 }
               }
             }
@@ -145,7 +145,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2017_15.5.4_PdbStripped.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2017_15.5.4_PdbStripped.dll"
                 }
               }
             }
@@ -166,7 +166,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2017_15.5.4_PdbStripped.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2017_15.5.4_PdbStripped.dll"
                 }
               }
             }
@@ -187,7 +187,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2017_15.5.4_PdbStripped.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2017_15.5.4_PdbStripped.dll"
                 }
               }
             }
@@ -461,7 +461,7 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Native_x86_VS2017_15.5.4_PdbStripped.dll"
+                      "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2017_15.5.4_PdbStripped.dll"
                     }
                   }
                 }

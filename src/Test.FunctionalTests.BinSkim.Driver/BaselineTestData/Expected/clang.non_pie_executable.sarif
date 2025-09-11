@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.non_pie_executable"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.non_pie_executable"
                 }
               }
             }
@@ -39,7 +39,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.non_pie_executable"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.non_pie_executable"
                 }
               }
             }
@@ -60,7 +60,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.non_pie_executable"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.non_pie_executable"
                 }
               }
             }
@@ -81,7 +81,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.non_pie_executable"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.non_pie_executable"
                 }
               }
             }
@@ -102,7 +102,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.non_pie_executable"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.non_pie_executable"
                 }
               }
             }
@@ -122,7 +122,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.non_pie_executable"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.non_pie_executable"
                 }
               }
             }
@@ -142,7 +142,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.non_pie_executable"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.non_pie_executable"
                 }
               }
             }

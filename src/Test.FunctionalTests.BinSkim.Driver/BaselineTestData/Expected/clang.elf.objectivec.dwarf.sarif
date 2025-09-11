@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.elf.objectivec.dwarf"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.elf.objectivec.dwarf"
                 }
               }
             }
@@ -39,7 +39,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.elf.objectivec.dwarf"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.elf.objectivec.dwarf"
                 }
               }
             }
@@ -60,7 +60,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.elf.objectivec.dwarf"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.elf.objectivec.dwarf"
                 }
               }
             }
@@ -81,7 +81,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.elf.objectivec.dwarf"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.elf.objectivec.dwarf"
                 }
               }
             }
@@ -102,7 +102,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.elf.objectivec.dwarf"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.elf.objectivec.dwarf"
                 }
               }
             }
@@ -123,7 +123,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.elf.objectivec.dwarf"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.elf.objectivec.dwarf"
                 }
               }
             }
@@ -143,7 +143,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.elf.objectivec.dwarf"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.elf.objectivec.dwarf"
                 }
               }
             }
@@ -163,7 +163,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\clang.elf.objectivec.dwarf"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.elf.objectivec.dwarf"
                 }
               }
             }

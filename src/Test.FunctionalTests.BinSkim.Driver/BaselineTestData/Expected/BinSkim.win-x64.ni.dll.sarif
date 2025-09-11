@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\BinSkim.win-x64.ni.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/BinSkim.win-x64.ni.dll"
                 }
               }
             }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\BinSkim.win-x64.ni.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/BinSkim.win-x64.ni.dll"
                 }
               }
             }
@@ -61,7 +61,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\BinSkim.win-x64.ni.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/BinSkim.win-x64.ni.dll"
                 }
               }
             }
@@ -82,7 +82,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\BinSkim.win-x64.ni.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/BinSkim.win-x64.ni.dll"
                 }
               }
             }
@@ -103,7 +103,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\BinSkim.win-x64.ni.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/BinSkim.win-x64.ni.dll"
                 }
               }
             }
@@ -124,7 +124,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\BinSkim.win-x64.ni.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/BinSkim.win-x64.ni.dll"
                 }
               }
             }
@@ -145,7 +145,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\BinSkim.win-x64.ni.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/BinSkim.win-x64.ni.dll"
                 }
               }
             }

@@ -20,7 +20,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\DotNetCore_RTR_win-x86_VS2019_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_RTR_win-x86_VS2019_Default.dll"
                 }
               }
             }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\DotNetCore_RTR_win-x86_VS2019_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_RTR_win-x86_VS2019_Default.dll"
                 }
               }
             }
@@ -62,7 +62,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\DotNetCore_RTR_win-x86_VS2019_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_RTR_win-x86_VS2019_Default.dll"
                 }
               }
             }
@@ -83,7 +83,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\DotNetCore_RTR_win-x86_VS2019_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_RTR_win-x86_VS2019_Default.dll"
                 }
               }
             }
@@ -104,7 +104,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\DotNetCore_RTR_win-x86_VS2019_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_RTR_win-x86_VS2019_Default.dll"
                 }
               }
             }
@@ -125,7 +125,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\DotNetCore_RTR_win-x86_VS2019_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_RTR_win-x86_VS2019_Default.dll"
                 }
               }
             }
@@ -146,7 +146,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\DotNetCore_RTR_win-x86_VS2019_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_RTR_win-x86_VS2019_Default.dll"
                 }
               }
             }
@@ -165,7 +165,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\DotNetCore_RTR_win-x86_VS2019_Default.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/DotNetCore_RTR_win-x86_VS2019_Default.dll"
                 }
               }
             }

@@ -17,7 +17,7 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.stack_protector.a"
+                      "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.stack_protector.a"
                     }
                   }
                 }

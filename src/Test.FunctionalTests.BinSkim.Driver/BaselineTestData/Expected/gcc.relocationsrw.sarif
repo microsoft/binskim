@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.relocationsrw"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.relocationsrw"
                 }
               }
             }
@@ -39,7 +39,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.relocationsrw"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.relocationsrw"
                 }
               }
             }
@@ -60,7 +60,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.relocationsrw"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.relocationsrw"
                 }
               }
             }
@@ -81,7 +81,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.relocationsrw"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.relocationsrw"
                 }
               }
             }
@@ -101,7 +101,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.relocationsrw"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.relocationsrw"
                 }
               }
             }
@@ -121,7 +121,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.relocationsrw"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.relocationsrw"
                 }
               }
             }
@@ -141,7 +141,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.relocationsrw"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.relocationsrw"
                 }
               }
             }

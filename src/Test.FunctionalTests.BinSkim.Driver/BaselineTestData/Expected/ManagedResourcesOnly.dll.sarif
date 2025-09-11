@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\ManagedResourcesOnly.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/ManagedResourcesOnly.dll"
                 }
               }
             }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\ManagedResourcesOnly.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/ManagedResourcesOnly.dll"
                 }
               }
             }
@@ -61,7 +61,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\ManagedResourcesOnly.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/ManagedResourcesOnly.dll"
                 }
               }
             }
@@ -82,7 +82,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\ManagedResourcesOnly.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/ManagedResourcesOnly.dll"
                 }
               }
             }
@@ -104,7 +104,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\ManagedResourcesOnly.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/ManagedResourcesOnly.dll"
                 }
               }
             }

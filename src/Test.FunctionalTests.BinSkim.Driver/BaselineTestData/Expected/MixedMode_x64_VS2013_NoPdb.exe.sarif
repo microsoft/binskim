@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\MixedMode_x64_VS2013_NoPdb.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe"
                 }
               }
             }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\MixedMode_x64_VS2013_NoPdb.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe"
                 }
               }
             }
@@ -61,7 +61,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\MixedMode_x64_VS2013_NoPdb.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe"
                 }
               }
             }
@@ -82,7 +82,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\MixedMode_x64_VS2013_NoPdb.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe"
                 }
               }
             }
@@ -103,7 +103,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\MixedMode_x64_VS2013_NoPdb.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe"
                 }
               }
             }
@@ -124,7 +124,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\MixedMode_x64_VS2013_NoPdb.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe"
                 }
               }
             }
@@ -145,7 +145,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\MixedMode_x64_VS2013_NoPdb.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe"
                 }
               }
             }
@@ -166,7 +166,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\MixedMode_x64_VS2013_NoPdb.exe"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe"
                 }
               }
             }
@@ -415,7 +415,7 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\MixedMode_x64_VS2013_NoPdb.exe"
+                      "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/MixedMode_x64_VS2013_NoPdb.exe"
                     }
                   }
                 }

@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.unfortified"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.unfortified"
                 }
               }
             }
@@ -39,7 +39,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.unfortified"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.unfortified"
                 }
               }
             }
@@ -60,7 +60,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.unfortified"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.unfortified"
                 }
               }
             }
@@ -81,7 +81,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.unfortified"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.unfortified"
                 }
               }
             }
@@ -102,7 +102,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.unfortified"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.unfortified"
                 }
               }
             }
@@ -122,7 +122,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.unfortified"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.unfortified"
                 }
               }
             }
@@ -142,7 +142,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.unfortified"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.unfortified"
                 }
               }
             }

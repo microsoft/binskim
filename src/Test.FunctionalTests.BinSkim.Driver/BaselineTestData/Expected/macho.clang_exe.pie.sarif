@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\macho.clang_exe.pie"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.clang_exe.pie"
                 }
               }
             }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\macho.clang_exe.pie"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.clang_exe.pie"
                 }
               }
             }

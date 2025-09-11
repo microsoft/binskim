@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.execstack.5.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o"
                 }
               }
             }
@@ -39,7 +39,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.execstack.5.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o"
                 }
               }
             }
@@ -60,7 +60,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.execstack.5.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o"
                 }
               }
             }
@@ -82,7 +82,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.execstack.5.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o"
                 }
               }
             }
@@ -103,7 +103,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.execstack.5.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o"
                 }
               }
             }
@@ -123,7 +123,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.execstack.5.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o"
                 }
               }
             }
@@ -144,7 +144,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.execstack.5.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o"
                 }
               }
             }
@@ -165,7 +165,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.execstack.5.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o"
                 }
               }
             }
@@ -186,7 +186,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.execstack.5.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o"
                 }
               }
             }

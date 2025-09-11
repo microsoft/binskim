@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
                 }
               }
             }
@@ -39,7 +39,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
                 }
               }
             }
@@ -60,7 +60,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
                 }
               }
             }
@@ -81,7 +81,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
                 }
               }
             }
@@ -102,7 +102,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
                 }
               }
             }
@@ -123,7 +123,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
                 }
               }
             }
@@ -144,7 +144,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
                 }
               }
             }
@@ -163,7 +163,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_AnyCpu_VS2019_Vb_ClassLibrary.dll"
                 }
               }
             }

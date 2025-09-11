@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.4.o.no-stack-clash-protection"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.4.o.no-stack-clash-protection"
                 }
               }
             }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.4.o.no-stack-clash-protection"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.4.o.no-stack-clash-protection"
                 }
               }
             }
@@ -61,7 +61,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.4.o.no-stack-clash-protection"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.4.o.no-stack-clash-protection"
                 }
               }
             }
@@ -82,7 +82,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.4.o.no-stack-clash-protection"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.4.o.no-stack-clash-protection"
                 }
               }
             }
@@ -103,7 +103,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.4.o.no-stack-clash-protection"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.4.o.no-stack-clash-protection"
                 }
               }
             }
@@ -124,7 +124,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.4.o.no-stack-clash-protection"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.4.o.no-stack-clash-protection"
                 }
               }
             }
@@ -145,7 +145,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.4.o.no-stack-clash-protection"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.4.o.no-stack-clash-protection"
                 }
               }
             }
@@ -166,7 +166,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.4.o.no-stack-clash-protection"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.4.o.no-stack-clash-protection"
                 }
               }
             }
@@ -187,7 +187,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.helloworld.4.o.no-stack-clash-protection"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.4.o.no-stack-clash-protection"
                 }
               }
             }

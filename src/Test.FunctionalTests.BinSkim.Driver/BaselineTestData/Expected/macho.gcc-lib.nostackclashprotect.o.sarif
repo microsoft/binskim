@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\macho.gcc-lib.nostackclashprotect.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o"
                 }
               }
             }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\macho.gcc-lib.nostackclashprotect.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o"
                 }
               }
             }
@@ -61,7 +61,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\macho.gcc-lib.nostackclashprotect.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.gcc-lib.nostackclashprotect.o"
                 }
               }
             }

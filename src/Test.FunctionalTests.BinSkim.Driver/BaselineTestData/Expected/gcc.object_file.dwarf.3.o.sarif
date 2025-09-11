@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.object_file.dwarf.3.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o"
                 }
               }
             }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.object_file.dwarf.3.o"
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o"
                 }
               }
             }
