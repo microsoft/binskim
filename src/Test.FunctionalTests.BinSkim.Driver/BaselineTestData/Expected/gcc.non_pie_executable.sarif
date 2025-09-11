@@ -18,8 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.non_pie_executable",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.non_pie_executable"
                 }
               }
             }
@@ -40,8 +39,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.non_pie_executable",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.non_pie_executable"
                 }
               }
             }
@@ -62,8 +60,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.non_pie_executable",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.non_pie_executable"
                 }
               }
             }
@@ -84,8 +81,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.non_pie_executable",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.non_pie_executable"
                 }
               }
             }
@@ -106,8 +102,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.non_pie_executable",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.non_pie_executable"
                 }
               }
             }
@@ -127,8 +122,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.non_pie_executable",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.non_pie_executable"
                 }
               }
             }
@@ -148,8 +142,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.non_pie_executable",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.non_pie_executable"
                 }
               }
             }
@@ -332,14 +325,6 @@
       "invocations": [
         {
           "executionSuccessful": true
-        }
-      ],
-      "artifacts": [
-        {
-          "location": {
-            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.non_pie_executable",
-            "index": 0
-          }
         }
       ],
       "columnKind": "utf16CodeUnits"

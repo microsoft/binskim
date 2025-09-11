@@ -19,8 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.objcopy.stripall.addgnudebuglink"
                 }
               }
             }
@@ -41,8 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.objcopy.stripall.addgnudebuglink"
                 }
               }
             }
@@ -63,8 +61,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.objcopy.stripall.addgnudebuglink"
                 }
               }
             }
@@ -85,8 +82,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.objcopy.stripall.addgnudebuglink"
                 }
               }
             }
@@ -107,8 +103,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.objcopy.stripall.addgnudebuglink"
                 }
               }
             }
@@ -129,8 +124,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.objcopy.stripall.addgnudebuglink"
                 }
               }
             }
@@ -151,8 +145,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.objcopy.stripall.addgnudebuglink"
                 }
               }
             }
@@ -173,8 +166,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-                  "index": 0
+                  "uri": "src\\Test.FunctionalTests.BinSkim.Driver\\BaselineTestData\\gcc.objcopy.stripall.addgnudebuglink"
                 }
               }
             }
@@ -379,14 +371,6 @@
       "invocations": [
         {
           "executionSuccessful": true
-        }
-      ],
-      "artifacts": [
-        {
-          "location": {
-            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.objcopy.stripall.addgnudebuglink",
-            "index": 0
-          }
         }
       ],
       "columnKind": "utf16CodeUnits"

@@ -113,6 +113,7 @@ namespace Microsoft.CodeAnalysis.IL
                     if (path.StartsWith(_enlistmentRoot, StringComparison.OrdinalIgnoreCase))
                     {
                         string relativePath = path.Substring(_enlistmentRoot.Length).TrimStart('\\', '/');
+                        relativePath = relativePath.Replace('\\', '/');
                         artifactLocation.Uri = new Uri(relativePath, UriKind.Relative);
                     }
                 }
