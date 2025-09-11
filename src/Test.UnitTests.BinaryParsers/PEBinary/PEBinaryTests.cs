@@ -15,6 +15,7 @@ using FluentAssertions.Execution;
 
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.Diagnostics.Tracing.Parsers.Kernel;
 
 using Xunit;
 
@@ -104,19 +105,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
         }
 
-        [Fact]
-        public void PEBinary_NativeBinaryContainsExpectedLanguageCode()
+        [Theory]
+        [InlineData("clangcl.pe.c.codeview.exe", Language.C, true)]
+        [InlineData("clangcl.pe.cpp.codeview.exe", Language.Cxx, true)]
+        [InlineData("Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe", Language.Rust, false)]
+        [InlineData("Native_x64_RustC_Rust_debuginfo2_v1.59.0.exe", Language.Rust, true)]
+        [InlineData("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll", Language.Cxx, true)]
+        public void PEBinary_NativeBinaryContainsExpectedLanguageCode(string FileName, Language language, bool expected)
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
             using (new AssertionScope())
             {
-                ContainsLanguageCode("clangcl.pe.c.codeview.exe", Language.C).Should().BeTrue();
-                ContainsLanguageCode("clangcl.pe.cpp.codeview.exe", Language.Cxx).Should().BeTrue();
-                // Rust official compiler RustC supports this new CV_CFL_LANG value starting from version v1.59.0.
-                ContainsLanguageCode("Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe", Language.Rust).Should().BeFalse();
-                ContainsLanguageCode("Native_x64_RustC_Rust_debuginfo2_v1.59.0.exe", Language.Rust).Should().BeTrue();
-                ContainsLanguageCode("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll", Language.Cxx).Should().BeTrue();
+                ContainsLanguageCode(FileName, language).Should().Be(expected);
             }
         }
 

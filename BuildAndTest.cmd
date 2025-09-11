@@ -43,7 +43,7 @@ echo Current Version: %MAJOR%.%MINOR%.%PATCH%%PRERELEASE%
 
 ::Restore packages
 echo Restoring packages...
-dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --packages "%NuGetPackageDir%
+dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration%
 
 :: Build the solution 
 echo Building solution...
