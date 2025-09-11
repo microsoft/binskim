@@ -108,6 +108,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [Theory]
         [InlineData("clangcl.pe.c.codeview.exe", Language.C, true)]
         [InlineData("clangcl.pe.cpp.codeview.exe", Language.Cxx, true)]
+        // Rust official compiler RustC supports this new CV_CFL_LANG value starting from version v1.59.0.
         [InlineData("Native_x64_RustC_Rust_debuginfo2_v1.58.1.exe", Language.Rust, false)]
         [InlineData("Native_x64_RustC_Rust_debuginfo2_v1.59.0.exe", Language.Rust, true)]
         [InlineData("Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll", Language.Cxx, true)]
