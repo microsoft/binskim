@@ -122,7 +122,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             };
             var compilerOptions = new PropertiesDictionary
             {
-                { "CsvOutputPath", @"C:\temp\" }
+                { "CsvOutputPath", Path.GetTempPath() }
             };
 
             context.Policy = new PropertiesDictionary
@@ -141,7 +141,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             var fileSystem = new Mock<IFileSystem>();
             fileSystem.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
-            using BinaryAnalyzerContext context = CreateTestContext(forceOverwrite: true, targetUriPath: @"C:\temp\");
+            using BinaryAnalyzerContext context = CreateTestContext(forceOverwrite: true, targetUriPath: Path.GetTempPath());
             using var compilerDataLogger = new CompilerDataLogger(GetExampleSarifPath(Sarif.SarifVersion.Current),
                                                                   Sarif.SarifVersion.Current,
                                                                   context,
@@ -379,7 +379,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
         private BinaryAnalyzerContext CreateTestContext(bool forceOverwrite = false, string outputPath = null, string targetUriPath = null)
         {
-            string csvOutputPath = outputPath ?? @$"C:\temp\{Guid.NewGuid()}.csv";
+            string csvOutputPath = outputPath ?? Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.csv");
             targetUriPath = targetUriPath ?? TargetUriPath;
 
             var context = new BinaryAnalyzerContext()
