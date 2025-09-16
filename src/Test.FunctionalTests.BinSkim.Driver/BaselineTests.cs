@@ -30,12 +30,12 @@ using Xunit.Abstractions;
 
 namespace Microsoft.CodeAnalysis.IL
 {
-    public class BuiltInRuleFunctionalTests
+    public class BuiltInRuleFunctionalTests : CultureDependantTests
     {
         private readonly ITestOutputHelper testOutputHelper;
         private TelemetryConfiguration telemetryConfiguration;
 
-        public BuiltInRuleFunctionalTests(ITestOutputHelper output)
+        public BuiltInRuleFunctionalTests(ITestOutputHelper output) : base("en-US")
         {
             this.testOutputHelper = output;
         }
@@ -437,7 +437,7 @@ namespace Microsoft.CodeAnalysis.IL
                 SarifOutputVersion = Sarif.SarifVersion.Current,
                 TargetFileSpecifiers = new string[] { inputFileName },
                 Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note },
-                Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.Pass },
+                Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.Pass }
             };
 
             command.UnitTestOutputVersion = version;
