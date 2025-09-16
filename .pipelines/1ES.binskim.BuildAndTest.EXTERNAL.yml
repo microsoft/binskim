@@ -62,17 +62,17 @@ extends:
           - task: DotNetCoreCLI@2
             inputs:
               command: 'restore'
-              arguments: '**/*.sln'
+              arguments: 'src/BinSkim.sln'
 
           - task: DotNetCoreCLI@2
             inputs:
               command: 'build'
-              arguments: '**/*.sln'
+              arguments: 'src/BinSkim.sln'
 
           - task: DotNetCoreCLI@2
             inputs:
               command: 'test'
-              arguments: '**/*.sln'
+              arguments: 'src/BinSkim.sln'
               
           - task: CmdLine@2
             displayName: "Build and Test"
