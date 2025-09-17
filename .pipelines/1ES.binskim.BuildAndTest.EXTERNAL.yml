@@ -65,11 +65,16 @@ extends:
               custom: 'nuget'
               arguments: 'add source -n BinSkim.Build https://pkgs.dev.azure.com/mseng/1ES/_packaging/BinSkim.Build/nuget/v3/index.json'
 
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'custom'
+              custom: 'nuget'
+              arguments: 'disable source nuget'
+
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
               script: |
-                ls
                 Get-Content nuget.config
               failOnStderr: true
               showWarnings: true
