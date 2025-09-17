@@ -59,12 +59,6 @@ extends:
               command: 'custom'
               custom: 'nuget'
               arguments: 'add source -n BinSkim.Build https://pkgs.dev.azure.com/mseng/1ES/_packaging/BinSkim.Build/nuget/v3/index.json'
-
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: 'custom'
-              custom: 'nuget'
-              arguments: 'disable source nuget'
               
           - task: CmdLine@2
             displayName: "Build and Test"
