@@ -70,15 +70,6 @@ extends:
               command: 'custom'
               custom: 'nuget'
               arguments: 'disable source nuget'
-
-          - task: PowerShell@2
-            inputs:
-              targetType: 'inline'
-              script: |
-                Get-Content nuget.config
-              failOnStderr: true
-              showWarnings: true
-              pwsh: true
               
           - task: CmdLine@2
             displayName: "Build and Test"
