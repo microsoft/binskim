@@ -4,7 +4,6 @@
   <PropertyGroup>
     <RootNamespace>Microsoft.CodeAnalysis.IL.Sdk</RootNamespace>
     <TargetFramework>$(NetCoreVersion)</TargetFramework>
-    <Platforms>x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights" />

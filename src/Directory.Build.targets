@@ -1,0 +1,31 @@
+<Project>
+  <PropertyGroup>
+    <!-- Deploy dia dlls to official, published win-x64 build -->
+    <DeployDia Condition="$(RuntimeIdentifier) == 'win-x64'">true</DeployDia>
+    <!-- Deploy dia dll to unofficial, unpublished build, but only on Windows -->
+    <DeployDia Condition="$(RuntimeIdentifier) == '' and $([MSBuild]::IsOSPlatform('Windows')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'x64'">true</DeployDia>
+    <!-- But don't deploy to non-exes and non-test projects-->
+    <DeployDia Condition="'$(OutputType)' != 'Exe' and !$(MSBuildProjectName.StartsWith('Test'))">false</DeployDia>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(DeployDia)' == 'true'">
+    <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\x64\*" />
+    <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\x64\*" />
+    <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\msdia140.dll.manifest" />
+    <MsRuntime Include="$(MSBuildThisFileDirectory)..\refs\runtime\*" />
+    <None Include="@(MsDiaLibs);@(MsRuntime)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup> 
+
+  <!-- Microsoft.Diagnostics.Tracing.TraceEvent contains DIA assets that conflict with ..\refs\* above. -->
+  <!-- This target excludes those assets from compilation and deployment. -->
+  <Target Name="ExcludeTraceEventDiaAssets" AfterTargets="ResolvePackageAssets">
+    <ItemGroup>
+      <_RuntimeDiaItemsToExclude Include="@(RuntimeCopyLocalItems)" Condition="'%(RuntimeCopyLocalItems.Filename)' == 'Dia2Lib'" />
+      <_CompileDiaItemsToExclude Include="@(ResolvedCompileFileDefinitions)" Condition="'%(ResolvedCompileFileDefinitions.Filename)' == 'Dia2Lib'" />
+      <_NoneDiaItemsToExclude Include="@(None)" Condition="$([MSBuild]::ValueOrDefault('%(None.FullPath)', '').Contains('microsoft.diagnostics.tracing.traceevent'))" />
+      <RuntimeCopyLocalItems Remove="@(_RuntimeDiaItemsToExclude)" />
+      <ResolvedCompileFileDefinitions Remove="@(_CompileDiaItemsToExclude)" />
+      <None Remove="@(_NoneDiaItemsToExclude)" />
+    </ItemGroup>
+  </Target>
+</Project>

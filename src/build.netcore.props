@@ -4,6 +4,5 @@
 
   <PropertyGroup>    
     <NetCoreVersion>net9.0</NetCoreVersion>  
-    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
-    </PropertyGroup>
+  </PropertyGroup>
 </Project>
