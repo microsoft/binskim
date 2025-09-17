@@ -53,11 +53,6 @@ extends:
               packageType: sdk
 
           - checkout: self
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: 'custom'
-              custom: 'new'
-              arguments: 'nuget.config'
 
           - task: DotNetCoreCLI@2
             inputs:
