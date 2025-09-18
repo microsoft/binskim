@@ -122,7 +122,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             };
             var compilerOptions = new PropertiesDictionary
             {
-                { "CsvOutputPath", @"C:\temp\" }
+                { "CsvOutputPath", Path.GetTempPath() }
             };
 
             context.Policy = new PropertiesDictionary
@@ -141,7 +141,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             var fileSystem = new Mock<IFileSystem>();
             fileSystem.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
-            using BinaryAnalyzerContext context = CreateTestContext(forceOverwrite: true, targetUriPath: @"C:\temp\");
+            using BinaryAnalyzerContext context = CreateTestContext(forceOverwrite: true, targetUriPath: Path.GetTempPath());
             using var compilerDataLogger = new CompilerDataLogger(GetExampleSarifPath(Sarif.SarifVersion.Current),
                                                                   Sarif.SarifVersion.Current,
                                                                   context,
@@ -234,7 +234,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         [Fact]
         public void CompilerDataLogger_Dispose_ShouldNotLogSummaryIfDisabled()
         {
-            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
+            string sarifLogPath = Path.Combine(BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
             var fileSystem = new Mock<IFileSystem>();
             using BinaryAnalyzerContext context = CreateTestContext();
 
@@ -289,7 +289,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         [Fact]
         public void CompilerDataLogger_WriteException_ShouldLogExecutionExceptions()
         {
-            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
+            string sarifLogPath = Path.Combine(BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
             using BinaryAnalyzerContext context = CreateTestContext();
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
                                                               sarifVersion: Sarif.SarifVersion.Current,
@@ -379,7 +379,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
         private BinaryAnalyzerContext CreateTestContext(bool forceOverwrite = false, string outputPath = null, string targetUriPath = null)
         {
-            string csvOutputPath = outputPath ?? @$"C:\temp\{Guid.NewGuid()}.csv";
+            string csvOutputPath = outputPath ?? Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.csv");
             targetUriPath = targetUriPath ?? TargetUriPath;
 
             var context = new BinaryAnalyzerContext()
@@ -758,18 +758,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         public static string GetExampleSarifPath(Sarif.SarifVersion sarifVersion)
         {
             return sarifVersion == Sarif.SarifVersion.Current
-                ? Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath)
+                ? Path.Combine(BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath)
                 : Path.Combine(GetTestDirectory("Test.UnitTests.BinSkim.Driver"), "Samples", "Native_x86_VS2019_SDL_Enabled_Sarif.v1.0.0.sarif");
-        }
-
-        internal static string GetTestDirectory(string relativeDirectory)
-        {
-            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().Location);
-            string codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
-            string dirPath = Path.GetDirectoryName(codeBasePath);
-            dirPath = Path.Combine(dirPath, string.Format(@"..{0}..{0}..{0}..{0}src{0}", Path.DirectorySeparatorChar));
-            dirPath = Path.GetFullPath(dirPath);
-            return Path.Combine(dirPath, relativeDirectory);
         }
 
         internal static int CalculateChunkedContentSize(int contentLength)

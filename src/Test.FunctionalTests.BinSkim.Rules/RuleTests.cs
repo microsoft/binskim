@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -401,7 +402,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
         {
-            string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestData");
+            string testFilesDirectory = GetTestDirectory("Test.FunctionalTests.BinSkim.Driver", "BaselineTestData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

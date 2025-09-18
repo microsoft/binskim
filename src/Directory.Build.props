@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <ArtifactsPath>$(MSBuildThisFileDirectory)..\bld</ArtifactsPath>
+    <AssemblySearchPath_UseCandidateAssemblyFiles>false</AssemblySearchPath_UseCandidateAssemblyFiles>
+    <EnableImplicitNoneItems>false</EnableImplicitNoneItems>
+  </PropertyGroup>
+
+  <ItemGroup Condition="$(MSBuildProjectName.StartsWith('Test'))">
+    <Compile Include="$(MSBuildThisFileDirectory)Shared\TestHelpers.cs" />
+  </ItemGroup>
+
+</Project>

@@ -22,6 +22,7 @@ launchsettings.json
 [Dd]ebug/
 [Rr]elease/
 x64/
+*.binlog
 
 # Workaround for an msbuild/dotnet bug on Linux
 src/BinSkimLinux.sln

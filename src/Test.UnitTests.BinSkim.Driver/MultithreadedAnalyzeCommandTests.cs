@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 
 using FluentAssertions;
@@ -31,6 +32,12 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         [Fact]
         public void MultithreadedAnalyzeCommand_ReturnCommonPathRootFromTargetSpecifiersIfOneExists()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // Not applicable. Test cases below are Windows paths.
+                return;
+            }
+
             var testCases = new[]
             {
                 new

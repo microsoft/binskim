@@ -60,8 +60,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
             var sb = new StringBuilder();
-            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;
-            string testFile = Path.Combine(testDirectory, "DotNetCore_win-x86_VS2019_Default.dll");
+            string testFile = Path.Combine(BaselineTestDataDirectory, "DotNetCore_win-x86_VS2019_Default.dll");
 
             SarifLog sarifResult = RunRules(sb, testFile);
 
@@ -189,8 +188,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
             var sb = new StringBuilder();
-            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;
-            string testFile = Path.Combine(testDirectory, "Native_x64_VS2015_Default.dll");
+            string testFile = Path.Combine(BaselineTestDataDirectory, "Native_x64_VS2015_Default.dll");
 
             SarifLog sarifResult = RunRules(sb, testFile);
 
@@ -370,7 +368,7 @@ namespace Microsoft.CodeAnalysis.IL
         private void BatchRuleRules(string ruleName, Sarif.SarifVersion version, params string[] inputFilters)
         {
             var sb = new StringBuilder();
-            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar + ruleName;
+            string testDirectory = Path.Combine(BaselineTestDataDirectory, ruleName);
 
             foreach (string inputFilter in inputFilters)
             {
