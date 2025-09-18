@@ -527,7 +527,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     return this.isManagedResourceOnly.Value;
                 }
 
-                this.isManagedResourceOnly = this.metadataReader.MethodDefinitions.Count == 0;
+                this.isManagedResourceOnly = this.metadataReader?.MethodDefinitions.Count == 0;
                 return this.isManagedResourceOnly.Value;
             }
         }
@@ -593,6 +593,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         internal static ManagedPlatform ComputeIsDotNetCore(MetadataReader metadataReader)
         {
+            if (metadataReader?.AssemblyReferences == null)
+            {
+                return ManagedPlatform.Unknown;
+            }
             if (metadataReader.AssemblyReferences.Count == 0)
             {
                 return ManagedPlatform.DotNetFramework;
