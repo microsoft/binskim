@@ -311,6 +311,28 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             }
         }
 
+        [Theory]
+        [InlineData("HelloWorld_Cpp_Preprocesor_BUILDING_DLL_x64.dll")]
+        public void AnalyzeCommand_ShouldReturnZeroExitCode_WhenIgnoringPdbAndPELoadErrors(string testDllPath)
+        {
+            string testDllPathCombined = Path.Combine(TestData, "Error", testDllPath);
+            string outputFilePath = Path.GetTempFileName();
+
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new[] { testDllPathCombined },
+                OutputFilePath = outputFilePath,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                IgnorePdbLoadError = true,
+                IgnorePELoadError = true
+            };
+
+            var command = new MultithreadedAnalyzeCommand();
+            int exitCode = command.Run(options);
+
+            exitCode.Should().Be(0);
+        }
+
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)
         {
             SarifLog sarifLog;
