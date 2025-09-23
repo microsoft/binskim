@@ -33,7 +33,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Native_x86_VS2013_Default.exe",
-              "Microsoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib [MD5] (_newmode.obj,atonexit.obj,chandler4gs.obj,cinitexe.obj,fp8.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,loadcfg.obj,merr.obj,natstart.obj,pesect.obj,secchk.obj,wcrtexew.obj,wdllargv.obj,wildcard.obj,xncommod.obj,xthdloc.obj,xtxtmode.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : atls.lib [MD5] (atlbase.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib [MD5] (ehvecdtr.obj,error.obj,init.obj,initsect.obj,pdblkup.obj,stack.obj,ti_inst.obj,unhandld.obj,userapi.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib [MD5] (_newmode.obj,atonexit.obj,chandler4gs.obj,cinitexe.obj,fp8.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,loadcfg.obj,merr.obj,natstart.obj,pesect.obj,secchk.obj,wcrtexew.obj,wdllargv.obj,wildcard.obj,xncommod.obj,xthdloc.obj,xtxtmode.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib [MD5] (ehvecdtr.obj,error.obj,init.obj,initsect.obj,pdblkup.obj,stack.obj,ti_inst.obj,unhandld.obj,userapi.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : atls.lib [MD5] (atlbase.obj)\r\n"
             ]
           },
           "locations": [
