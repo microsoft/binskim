@@ -33,7 +33,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Native_x86_VS2015_Default.exe",
-              "Microsoft (R) Optimizing Compiler : c : 19.0.23013.0 : MSVCRTD.lib [MD5] (_chandler4gs_.obj,_cpu_disp_.obj,_secchk_.obj,checkcfg.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.0.23013.0 : MSVCRTD.lib [MD5] (_error_.obj,_init_.obj,_initsect_.obj,_pdblkup_.obj,_stack_.obj,_userapi_.obj,argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,denormal_control.obj,exe_wwinmain.obj,file_mode.obj,initializers.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,thread_locale.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_desktop.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : c : 19.0.23013.0 : MSVCRTD.lib [MD5] (_chandler4gs_.obj,_cpu_disp_.obj,_secchk_.obj,checkcfg.obj,dyn_tls_dtor.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,matherr_detection.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.0.23013.0 : MSVCRTD.lib [MD5] (_error_.obj,_init_.obj,_initsect_.obj,_pdblkup_.obj,_stack_.obj,_userapi_.obj,argv_mode.obj,commit_mode.obj,default_local_stdio_options.obj,default_precision.obj,denormal_control.obj,exe_wwinmain.obj,file_mode.obj,initializers.obj,invalid_parameter_handler.obj,matherr.obj,new_mode.obj,thread_locale.obj,tncleanup.obj,ucrt_stubs.obj,utility_desktop.obj,utility.obj)\r\n"
             ]
           },
           "locations": [

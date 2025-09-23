@@ -33,7 +33,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Native_x86_VS2015_AtlProxyStubPS.dll",
-              "Microsoft (R) Macro Assembler : masm : 14.0.23406.0 : MSVCRT.lib [MD5] (_sehprolg4_.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 17.0.65501.30015 : uuid.lib [MD5] (oaidl_i.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.0.23406.0 : MSVCRT.lib [MD5] (_chandler4gs_.obj,_cpu_disp_.obj,_secchk_.obj,checkcfg.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.0.23406.0 : MSVCRT.lib [MD5] (_initsect_.obj,default_local_stdio_options.obj,dll_dllmain.obj,initializers.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_desktop.obj)\r\n"
+              "Microsoft (R) Macro Assembler : masm : 14.0.23406.0 : MSVCRT.lib [MD5] (_sehprolg4_.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 17.0.65501.30015 : uuid.lib [MD5] (oaidl_i.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.0.23406.0 : MSVCRT.lib [MD5] (_chandler4gs_.obj,_cpu_disp_.obj,_secchk_.obj,checkcfg.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.0.23406.0 : MSVCRT.lib [MD5] (_initsect_.obj,default_local_stdio_options.obj,dll_dllmain.obj,initializers.obj,tncleanup.obj,ucrt_stubs.obj,utility_desktop.obj,utility.obj)\r\n"
             ]
           },
           "locations": [

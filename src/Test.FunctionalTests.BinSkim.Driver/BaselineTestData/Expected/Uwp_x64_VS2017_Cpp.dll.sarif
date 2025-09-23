@@ -33,7 +33,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "Uwp_x64_VS2017_Cpp.dll",
-              "Microsoft (R) Macro Assembler : masm : 14.15.26706.0 : MSVCRT.lib [MD5] (sehprolg4.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.15.26706.0 : MSVCRT.lib [MD5] (chandler4gs.obj,cpu_disp.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,secchk.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.15.26706.0 : MSVCRT.lib [MD5] (app_appinit.obj,argv_mode.obj,default_local_stdio_options.obj,dll_dllmain.obj,initializers.obj,tncleanup.obj,ucrt_stubs.obj,utility.obj,utility_app.obj)\r\n"
+              "Microsoft (R) Macro Assembler : masm : 14.15.26706.0 : MSVCRT.lib [MD5] (sehprolg4.obj)\r\nMicrosoft (R) Optimizing Compiler : c : 19.15.26706.0 : MSVCRT.lib [MD5] (chandler4gs.obj,cpu_disp.obj,dyn_tls_init.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,guard_support.obj,loadcfg.obj,secchk.obj,ucrt_detection.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 19.15.26706.0 : MSVCRT.lib [MD5] (app_appinit.obj,argv_mode.obj,default_local_stdio_options.obj,dll_dllmain.obj,initializers.obj,tncleanup.obj,ucrt_stubs.obj,utility_app.obj,utility.obj)\r\n"
             ]
           },
           "locations": [
