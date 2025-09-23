@@ -17,17 +17,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
 {
     public class ElfBinaryTests
     {
-        internal static string TestData = GetTestDirectory("Test.UnitTests.BinaryParsers" + Path.DirectorySeparatorChar + "TestData");
-
-        internal static string GetTestDirectory(string relativeDirectory)
-        {
-            string codeBasePath = Assembly.GetExecutingAssembly().Location;
-            string dirPath = Path.GetDirectoryName(codeBasePath);
-            dirPath = Path.Combine(dirPath, "..", "..", "..", "..", "src");
-            dirPath = Path.GetFullPath(dirPath);
-            return Path.Combine(dirPath, relativeDirectory);
-        }
-
         [Fact]
         public void Validate_MachineType()
         {

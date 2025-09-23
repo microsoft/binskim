@@ -11,8 +11,6 @@ if "%Configuration%" EQU "" (
 set Configuration=Release
 )
 
-set NightlyTest=%2
-
 @REM Remove existing build data
 if exist bld (rd /s /q bld)
 
@@ -47,19 +45,9 @@ dotnet restore %~dp0src\BinSkim.sln
 echo Building solution...
 dotnet build --no-restore /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
-:nightly
-if "%NightlyTest%" EQU "nightly" (
-    echo Running nightly Tests
-    dotnet test %~dp0src\BinSkim.sln --no-build --filter TestCategory=NightlyTest
-    goto :Exit
-)
-
 ::Run unit tests 
-echo Run all multitargeting xunit tests
-call :RunTestProject BinaryParsers Unit || goto :ExitFailed
-call :RunTestProject BinSkim.Rules Unit || goto :ExitFailed
-call :RunTestProject BinSkim.Driver Functional || goto :ExitFailed
-call :RunTestProject BinSkim.Rules Functional  || goto :ExitFailed
+echo Run unit tests
+call :RunTests || goto :ExitFailed
 
 ::Create the BinSkim platform specific publish packages
 echo Creating Platform Specific BinSkim 'Publish' Packages
@@ -71,20 +59,15 @@ call :CreatePublishPackage net9.0 osx-x64 || goto :ExitFailed
 echo BuildPackages.cmd
 call BuildPackages.cmd || goto :ExitFailed
 
-echo dotnet-format
-dotnet tool update --global dotnet-format
-
 ::Update BinSkimRules.md to cover any xml changes
 echo Exporting any BinSkim rules
 .\bld\bin\BinSkim.Driver\release\BinSkim.exe export-rules .\docs\BinSkimRules.md
 
 goto :Exit
 
-:RunTestProject
-set TestProject=%1
-set TestType=%2
-pushd %~dp0src\Test.%TestType%Tests.%TestProject% && dotnet test --no-build -c %Configuration% && popd
-if "%ERRORLEVEL%" NEQ "0" (echo %TestProject% %TestType% tests execution FAILED.)
+:RunTests
+dotnet test src\BinSkim.sln --no-build -c %Configuration%
+if "%ERRORLEVEL%" NEQ "0" (echo Tests execution FAILED.)
 Exit /B %ERRORLEVEL%
 
 :CreatePublishPackage

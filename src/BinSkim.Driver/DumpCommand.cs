@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.IL
                 }
             }
 
-            var dumpTask = Task.Run(() => Parallel.ForEach(targets, (target) => this.DumpFile(target, dumpOptions.Verbose)));
+            Task<ParallelLoopResult> dumpTask = Task.Run(() => Parallel.ForEach(targets, (target) => this.DumpFile(target, dumpOptions.Verbose)));
             dumpTask.Wait();
 
             return 0;
