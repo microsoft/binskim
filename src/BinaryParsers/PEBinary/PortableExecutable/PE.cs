@@ -597,7 +597,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 return ManagedPlatform.Unknown;
             }
-            
+
             if (metadataReader.AssemblyReferences.Count == 0)
             {
                 return ManagedPlatform.DotNetFramework;
