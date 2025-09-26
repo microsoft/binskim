@@ -7,7 +7,8 @@
     <TargetFramework>$(NetCoreVersion)</TargetFramework>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
     <OutputType>Exe</OutputType>
-    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+    <Platforms>x64</Platforms>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -45,8 +46,14 @@
     <Compile Update="DriverResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>DriverResources.resx</DependentUpon>
+      <DependentUpon>DriverResources.resx</DependentUpon>      
     </Compile>
+    <!-- 
+      This option forces Windows collation when sorting strings. This is required to 
+      ensure deterministic output when running analysis on all platforms. Otherwise,
+      object names that include underscore characters will be sorted differently.
+    -->
+    <RuntimeHostConfigurationOption Include="System.Globalization.UseNls" Value="true" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="DriverResources.resx">

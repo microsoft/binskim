@@ -454,13 +454,13 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 Formatting = Formatting.Indented
             };
-           
+
             string expectedText = File.ReadAllText(expectedFileName);
             SarifLog expectedLog = PrereleaseCompatibilityTransformer.UpdateToCurrentVersion(
                                     expectedText,
                                     settings.Formatting,
                                     out expectedText);
-            
+
             var visitor = new ResultDiffingVisitor(expectedLog);
 
             string actualText = File.ReadAllText(actualFileName);

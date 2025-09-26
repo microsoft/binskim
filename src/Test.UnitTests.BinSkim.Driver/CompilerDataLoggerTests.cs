@@ -762,6 +762,16 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 : Path.Combine(GetTestDirectory("Test.UnitTests.BinSkim.Driver"), "Samples", "Native_x86_VS2019_SDL_Enabled_Sarif.v1.0.0.sarif");
         }
 
+        internal static string GetTestDirectory(string relativeDirectory)
+        {
+            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().Location);
+            string codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
+            string dirPath = Path.GetDirectoryName(codeBasePath);
+            dirPath = Path.Combine(dirPath, string.Format(@"..{0}..{0}..{0}..{0}src{0}", Path.DirectorySeparatorChar));
+            dirPath = Path.GetFullPath(dirPath);
+            return Path.Combine(dirPath, relativeDirectory);
+        }
+
         internal static int CalculateChunkedContentSize(int contentLength)
         {
             return (int)Math.Ceiling(1.0 * contentLength / CompilerDataLogger.s_chunkSize);

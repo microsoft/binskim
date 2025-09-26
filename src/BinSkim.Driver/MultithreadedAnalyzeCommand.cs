@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.IL
             if (!string.IsNullOrEmpty(context.EnlistmentRootToNormalize))
             {
                 var aggregatingLogger = (AggregatingLogger)context.Logger;
-                for (int i = 0; i< aggregatingLogger.Loggers.Count; i++)
+                for (int i = 0; i < aggregatingLogger.Loggers.Count; i++)
                 {
                     if (aggregatingLogger.Loggers[i] is SarifLogger sarifLogger)
                     {
