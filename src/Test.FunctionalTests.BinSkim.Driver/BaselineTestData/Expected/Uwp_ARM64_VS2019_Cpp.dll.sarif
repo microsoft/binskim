@@ -77,7 +77,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Uwp_ARM64_VS2019_Cpp.dll",
-              "Microsoft (R) Optimizing Compiler : cxx : 19.22.27905.0 : [directly linked] [MD5] (Uwp_ARM_VS2019_Cpp.obj,dllmain.obj,pch.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 19.22.27905.0 : [directly linked] [MD5] (dllmain.obj,pch.obj,Uwp_ARM_VS2019_Cpp.obj)\r\n"
             ]
           },
           "locations": [

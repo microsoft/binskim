@@ -55,7 +55,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Native_x86_VS2015_AtlProxyStubPS.dll",
-              "Microsoft (R) Optimizing Compiler : c : 19.0.23506.0 : [directly linked] [MD5] (Native_x86_VS2015_AtlProxyStub_i.obj,Native_x86_VS2015_AtlProxyStub_p.obj,dlldata.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : c : 19.0.23506.0 : [directly linked] [MD5] (dlldata.obj,Native_x86_VS2015_AtlProxyStub_i.obj,Native_x86_VS2015_AtlProxyStub_p.obj)\r\n"
             ]
           },
           "locations": [

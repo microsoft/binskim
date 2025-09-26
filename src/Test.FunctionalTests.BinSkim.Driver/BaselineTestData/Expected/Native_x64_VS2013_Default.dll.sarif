@@ -77,7 +77,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Native_x64_VS2013_Default.dll",
-              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] [MD5] (Native_x64_VS2013_Default.obj,dllmain.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] [MD5] (dllmain.obj,Native_x64_VS2013_Default.obj)\r\n"
             ]
           },
           "locations": [
@@ -404,7 +404,7 @@
             "id": "Warning",
             "arguments": [
               "Native_x64_VS2013_Default.dll",
-              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] (Native_x64_VS2013_Default.obj,dllmain.obj,stdafx.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 18.0.21005.1 : [directly linked] (dllmain.obj,Native_x64_VS2013_Default.obj,stdafx.obj)\r\n"
             ]
           },
           "locations": [
