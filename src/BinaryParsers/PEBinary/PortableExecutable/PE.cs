@@ -597,6 +597,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             {
                 return ManagedPlatform.Unknown;
             }
+
             if (metadataReader.AssemblyReferences.Count == 0)
             {
                 return ManagedPlatform.DotNetFramework;
@@ -626,6 +627,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     {
                         return ManagedPlatform.DotNetStandard;
                     }
+
+                    default:
+                        return ManagedPlatform.Unknown;
                 }
             }
 
