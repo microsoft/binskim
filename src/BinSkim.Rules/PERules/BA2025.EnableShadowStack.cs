@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
@@ -73,6 +74,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (portableExecutable.Machine == Machine.Arm || portableExecutable.Machine == Machine.ArmThumb2)
             {
                 reasonForNotAnalyzing = MetadataConditions.ImageIsArmBinary;
+                return notApplicable;
+            }
+
+            foreach (SectionHeader peSection in portableExecutable.PEHeaders.SectionHeaders
+                .Where(s => s.Name == ".a64xrm" && (ExtendedMachine)portableExecutable.Machine == ExtendedMachine.Amd64))
+            {
+                reasonForNotAnalyzing = MetadataConditions.ImageIsArm64EC;
                 return notApplicable;
             }
 
