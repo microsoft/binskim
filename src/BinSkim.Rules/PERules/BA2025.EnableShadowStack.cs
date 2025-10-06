@@ -76,6 +76,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return notApplicable;
             }
 
+            foreach(SectionHeader peSection in portableExecutable.PEHeaders.SectionHeaders)
+            {
+                if (peSection.Name == ".a64xrm" && (ExtendedMachine)portableExecutable.Machine == ExtendedMachine.Amd64)
+                {
+                    reasonForNotAnalyzing = MetadataConditions.ImageIsArm64EC;
+                    return notApplicable;
+                }
+            }
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
