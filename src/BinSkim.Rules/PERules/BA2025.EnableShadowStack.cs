@@ -77,8 +77,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return notApplicable;
             }
 
-            foreach (SectionHeader peSection in portableExecutable.PEHeaders.SectionHeaders
-                .Where(s => s.Name == ".a64xrm" && (ExtendedMachine)portableExecutable.Machine == ExtendedMachine.Amd64))
+            if (portableExecutable.IsARM64EC)
             {
                 reasonForNotAnalyzing = MetadataConditions.ImageIsArm64EC;
                 return notApplicable;

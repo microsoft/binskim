@@ -808,7 +808,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 {
                     foreach (SectionHeader sectionHeader in this.PEHeaders.SectionHeaders)
                     {
-                        if (sectionHeader.Name == ".wixburn")
+                        if (sectionHeader.Name == SectionHeaderName.WixBin)
                         {
                             this.isWixBinary = true;
                             break;
@@ -817,6 +817,32 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 }
 
                 return this.isWixBinary.Value;
+            }
+        }
+
+        public bool IsARM64EC
+        {
+            get
+            {
+                bool isARM64EC = false;
+                if(this.Machine != Machine.Amd64)
+                {
+                    return false;
+                }
+
+                if (this.PEHeaders?.SectionHeaders != null)
+                {
+                    foreach (SectionHeader sectionHeader in this.PEHeaders.SectionHeaders)
+                    {
+                        if (sectionHeader.Name == SectionHeaderName.Arm64XRM)
+                        {
+                            isARM64EC = true;
+                            break;
+                        }
+                    }
+                }
+
+                return isARM64EC;
             }
         }
 
@@ -1119,5 +1145,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
             return msvcModules > 0;
         }
+    }
+
+    public static class SectionHeaderName
+    {
+        public const string Unknown = "Unknown";
+        public const string Arm64XRM = ".a64xrm";
+        public const string WixBin = ".wixburn";
+        public const string Reloc = ".reloc";
     }
 }
