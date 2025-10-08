@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
@@ -77,7 +76,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return notApplicable;
             }
 
-            if (portableExecutable.IsARM64EC)
+            if (portableExecutable.IsArm64EC)
             {
                 reasonForNotAnalyzing = MetadataConditions.ImageIsArm64EC;
                 return notApplicable;

@@ -808,7 +808,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 {
                     foreach (SectionHeader sectionHeader in this.PEHeaders.SectionHeaders)
                     {
-                        if (sectionHeader.Name == SectionHeaderName.WixBin)
+                        if (sectionHeader.Name == SectionHeaderName.WIXBURN)
                         {
                             this.isWixBinary = true;
                             break;
@@ -820,12 +820,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-        public bool IsARM64EC
+        public bool IsArm64EC
         {
             get
             {
-                bool isARM64EC = false;
-                if(this.Machine != Machine.Amd64)
+                bool isArm64EC = false;
+                if (this.Machine != Machine.Amd64)
                 {
                     return false;
                 }
@@ -834,15 +834,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 {
                     foreach (SectionHeader sectionHeader in this.PEHeaders.SectionHeaders)
                     {
-                        if (sectionHeader.Name == SectionHeaderName.Arm64XRM)
+                        if (sectionHeader.Name == SectionHeaderName.ARM64XRM)
                         {
-                            isARM64EC = true;
+                            isArm64EC = true;
                             break;
                         }
                     }
                 }
 
-                return isARM64EC;
+                return isArm64EC;
             }
         }
 
@@ -1145,13 +1145,5 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
             return msvcModules > 0;
         }
-    }
-
-    public static class SectionHeaderName
-    {
-        public const string Unknown = "Unknown";
-        public const string Arm64XRM = ".a64xrm";
-        public const string WixBin = ".wixburn";
-        public const string Reloc = ".reloc";
     }
 }
