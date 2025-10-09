@@ -17,6 +17,8 @@
 
 ## UNRELEASED
 
+* FCR: BA2025 is not applicable for Arm64EC [#1120](https://github.com/microsoft/binskim/pull/1120)
+
 ## **v4.4.4**
 * DEP: Update destination folder for MsDiaLib, after their update [#1079](https://github.com/microsoft/binskim/pull/1079)
 
