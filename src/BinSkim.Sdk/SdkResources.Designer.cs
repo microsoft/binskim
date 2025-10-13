@@ -486,11 +486,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         // <summary>
         ///   Looks up a localized string similar to image is an Arm64EC binary.
         /// </summary>
-        internal static string MetadataCondition_ImageIsArm64EC
+        internal static string MetadataCondition_ImageIsArm64ECBinary
         {
             get
             {
-                return ResourceManager.GetString("MetadataCondition_ImageIsArm64EC", resourceCulture);
+                return ResourceManager.GetString("MetadataCondition_ImageIsArm64ECBinary", resourceCulture);
             }
         }
     }
