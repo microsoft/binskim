@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
@@ -6,11 +6,7 @@
       "results": [],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          "name": "BinSkim"
         }
       },
       "invocations": [
@@ -21,7 +17,7 @@
                 {
                   "physicalLocation": {
                     "artifactLocation": {
-                      "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.stack_protector.a",
+                      "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.stack_protector.a",
                       "index": 0
                     }
                   }
@@ -42,13 +38,13 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.stack_protector.a",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.stack_protector.a",
             "index": 0
           },
           "hashes": {
-            "md5": "C60E01E6A2660A3359EACF5D00799FA0",
-            "sha-1": "3E0D3A9216B0AA9D248A89C1C4398215A415B638",
-            "sha-256": "BA60EF8C65F0E9006620D357113E40205B201DFF4935C55D9101FDF0702A9E29"
+            "md5": "D41D8CD98F00B204E9800998ECF8427E",
+            "sha-1": "DA39A3EE5E6B4B0D3255BFEF95601890AFD80709",
+            "sha-256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
           }
         }
       ],

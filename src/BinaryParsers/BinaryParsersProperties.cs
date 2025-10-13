@@ -20,7 +20,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 IncludeWixBinaries,
                 LocalSymbolDirectories,
                 SymbolPath,
-                IgnorePELoadError
+                IgnorePELoadError,
+                EnlistmentRootToNormalize,
             }.ToImmutableArray();
         }
 
@@ -65,5 +66,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             new PerLanguageOption<bool>(
                 "BinaryParsers", nameof(IgnorePELoadError), defaultValue: () => false,
                 "Set this value to 'true' to ignore exceptions thrown in reading PE files.");
+
+        public static PerLanguageOption<string> EnlistmentRootToNormalize { get; } =
+            new PerLanguageOption<string>(
+                "BinaryParsers", nameof(EnlistmentRootToNormalize), defaultValue: () => string.Empty,
+                "The root of the current enlistment. Used for normalizing file paths in test scenarios.");
     }
 }

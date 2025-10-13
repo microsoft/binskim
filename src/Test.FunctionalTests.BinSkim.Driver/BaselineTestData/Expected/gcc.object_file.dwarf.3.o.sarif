@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o",
                   "index": 0
                 }
               }
@@ -51,8 +51,7 @@
       ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
           "rules": [
             {
               "id": "BA3003",
@@ -98,10 +97,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3004GenerateRequiredSymbolFormat"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -112,13 +108,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.object_file.dwarf.3.o",
             "index": 0
-          },
-          "hashes": {
-            "md5": "3740BF0F5EB38C17596CC0E41B418654",
-            "sha-1": "EC69C335A5C685C6FA7729248326A952D015698E",
-            "sha-256": "21C47C7BA176B37CF703D17983F9E4A4CF3F8F04482ED83D58D2A4E77B2C47A4"
           }
         }
       ],
