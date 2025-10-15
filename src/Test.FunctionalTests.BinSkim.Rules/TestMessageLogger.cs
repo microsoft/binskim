@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
+
+using Xunit.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -13,34 +16,79 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     {
         public TestMessageLogger()
         {
-            this.ErrorTargets = new HashSet<string>();
-            this.WarningTargets = new HashSet<string>();
-            this.NoteTargets = new HashSet<string>();
-            this.InformationalTargets = new HashSet<string>();
-            this.PassTargets = new HashSet<string>();
-            this.NotApplicableTargets = new HashSet<string>();
             this.ConfigurationErrorTargets = new HashSet<string>();
+
+            this.InitializeTargetsDictionary();
         }
 
         public RuntimeConditions RuntimeErrors { get; set; }
 
-        public HashSet<string> PassTargets { get; set; }
+        public Dictionary<ResultKind, Dictionary<FailureLevel, HashSet<string>>> Targets { get; set; }
 
-        public HashSet<string> ErrorTargets { get; set; }
+        public HashSet<string> PassTargets => GetAllTargetsForKind(ResultKind.Pass);
+        public HashSet<string> InformationalTargets => GetAllTargetsForKind(ResultKind.Informational);
+        public HashSet<string> NotApplicableTargets => GetAllTargetsForKind(ResultKind.NotApplicable);
 
-        public HashSet<string> WarningTargets { get; set; }
-
-        public HashSet<string> NoteTargets { get; set; }
-
-        public HashSet<string> InformationalTargets { get; set; }
+        public HashSet<string> ErrorTargets => Targets[ResultKind.Fail][FailureLevel.Error];
+        public HashSet<string> WarningTargets => Targets[ResultKind.Fail][FailureLevel.Warning];
+        public HashSet<string> NoteTargets => Targets[ResultKind.Fail][FailureLevel.Note];
 
         public HashSet<string> ConfigurationErrorTargets { get; set; }
-
-        public HashSet<string> NotApplicableTargets { get; set; }
         public FileRegionsCache FileRegionsCache { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        private HashSet<string> GetAllTargetsForKind(ResultKind kind) => Targets[kind].SelectMany(results => results.Value).ToHashSet();
+
+        public HashSet<string> AllFoundTargets() => Targets.SelectMany(kind => kind.Value.SelectMany(level => level.Value).ToHashSet()).ToHashSet();
 
         public void AnalysisStarted()
         {
+        }
+
+        public void InitializeTargetsDictionary()
+        {
+            this.Targets = Enum.GetValues<ResultKind>().ToDictionary(
+                kind => kind,
+                value => Enum.GetValues<FailureLevel>().ToDictionary(
+                    level => level,
+                    value => new HashSet<string>()
+                )
+            );
+        }
+
+        public Dictionary<ResultKind, FailureLevelSet> GetAllTargetResults(string target)
+            => Targets.Select(kind => KeyValuePair.Create(kind.Key, new FailureLevelSet(kind.Value.Where(level => level.Value.Contains(target)).Select(level => level.Key))))
+                    .Where(pair => pair.Value.Any())
+                    .ToDictionary();
+
+        public (IEnumerable<(ResultKind, FailureLevel)> Missing, IEnumerable<(ResultKind, FailureLevel)> Additional) ValidateTarget(string target, params (ResultKind, FailureLevel)[] expectedResults)
+        {
+            if (target == null)
+            {
+                throw new ArgumentNullException(nameof(target));
+            }
+
+            (IEnumerable<(ResultKind, FailureLevel)> Missing, IEnumerable<(ResultKind, FailureLevel)> Additional) result = (Array.Empty<(ResultKind, FailureLevel)>(), Array.Empty<(ResultKind, FailureLevel)>());
+
+            Dictionary<ResultKind, FailureLevelSet> targetResults = GetAllTargetResults(target);
+
+            foreach ((ResultKind expectedKind, FailureLevel expectedLevel) in expectedResults)
+            {
+                if (!targetResults
+                    .Where(kind => kind.Key == expectedKind)
+                    .Select(kind => kind.Value)
+                    .Where(level => level.Contains(expectedLevel))
+                    .Any())
+                {
+                    result.Missing.Append((expectedKind, expectedLevel));
+                }
+
+                // Remove expected results from the list so we can check for unexpected results later.
+                targetResults[expectedKind].Remove(expectedLevel);
+            }
+
+            result.Additional = targetResults.SelectMany(kind => kind.Value.Select(level => (kind.Key, level)));
+
+            return result;
         }
 
         public void AnalysisStopped(RuntimeConditions runtimeConditions)
@@ -54,66 +102,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void Log(ReportingDescriptor rule, Result result, int? extensionIndex = null)
         {
-            this.RecordTestResult(result.Kind, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
-            this.RecordTestResult(result.Level, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
-        }
-
-        public void RecordTestResult(ResultKind messageKind, string targetPath)
-        {
-            switch (messageKind)
-            {
-                case ResultKind.Pass:
-                {
-                    this.PassTargets.Add(targetPath);
-                    break;
-                }
-
-                case ResultKind.NotApplicable:
-                {
-                    this.NotApplicableTargets.Add(targetPath);
-                    break;
-                }
-
-                case ResultKind.Informational:
-                {
-                    this.InformationalTargets.Add(targetPath);
-                    break;
-                }
-
-                default:
-                {
-                    break;
-                }
-            }
-        }
-
-        public void RecordTestResult(FailureLevel messageKind, string targetPath)
-        {
-            switch (messageKind)
-            {
-                case FailureLevel.Error:
-                {
-                    this.ErrorTargets.Add(targetPath);
-                    break;
-                }
-
-                case FailureLevel.Warning:
-                {
-                    this.WarningTargets.Add(targetPath);
-                    break;
-                }
-
-                case FailureLevel.Note:
-                {
-                    this.NoteTargets.Add(targetPath);
-                    break;
-                }
-
-                default:
-                {
-                    break;
-                }
-            }
+            this.Targets[result.Kind][result.Level].Add(result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
         }
 
         public void LogToolNotification(Sarif.Notification notification, ReportingDescriptor associatedRule)
