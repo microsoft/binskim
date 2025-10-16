@@ -13,11 +13,53 @@
 - UER => eliminate unhandled exceptions in rules
 - UEE => eliminate unhandled exceptions in engine
 - DEP => upgrade dependency versions
+- DOC => documentation
+- CLN => cleaning solution 
+- ADM => administrative
 - NEW => new feature 
 
 ## UNRELEASED
 
-* FCR: BA2025 is not applicable for Arm64EC [#1120](https://github.com/microsoft/binskim/pull/1120)
+## **v4.4.7** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.7)
+* NEW: add posibility to test Infromational outpiut from rule [1122](https://github.com/microsoft/binskim/pull/1122)
+
+* FPS: BA2025 is not applicable for Arm64EC [1120](https://github.com/microsoft/binskim/pull/1120), [1121](https://github.com/microsoft/binskim/pull/1121)
+
+* New: add default case to managedPlatform [1114](https://github.com/microsoft/binskim/pull/1114)
+* PRF: check if metadataReader is not null - fix failing ERR998 [1110](https://github.com/microsoft/binskim/pull/1110)
+* NEW: adding culture enforcement to tests which depends on culture setting [1113](https://github.com/microsoft/binskim/pull/1113)
+
+* NEW: 
+    - Stop Using Platforms/Platform and rely on RuntimeIdentifier only.
+    - Use ArtifactsPath to move output directories. Projects were building to the same directory and this is risky and not really supported.
+    - Replace hack to overwrite files in microsoft.diagnostics.tracing.tracevent with a lesser hack to exclude the conflicting files in the build.
+    - Stop using local package directory that looks to have been just for (3).
+    - Disable CandidateAssemblyFile resolution, which was a long part of debugging the conflict with traceevent. This should be really have been off by default and it reminds to go disable it in our other repos.
+    - Don't set RuntimeIdentifiers in every project, it is only needed in the root exe project and putting it everywhere is triggering more project builds than necessary.
+    - Use TargetFramework instead of TargetFrameworks (plural) since there's only one TFM. Make build output folders tidier and speeds up the build.
+    - Remove unused x86 FCIBs and unused CommandLine.dll FCIB.
+    - Don't set SelfContained on exe project. Let the publish do this. Speeds up iteration time in IDE.
+    - Remove workaround in BuildAndTest.sh for bug fixed in 2017.
+    - Don't pass configuration to dotnet restore, it is a cross-configuration operation.
+    - Consolidate test API to locate files into one place. A Shared\TestHelpers.cs is injected into each test project for this. Also, remove P2P references between tests that were just to get this helper API from PEBinaryTests. That was not done consistently and many other times the helpers were manually copied around.
+    - Remove xunit.runner.console references. xunit.runner.visualstudio is sufficient for dotnet test on the command line.
+    - Use dotnet format built into the SDK and fix a few formatting issues it flagged. This is done because one of my changes ran into bug in old dotnet-format.
+    - Delete unused Test.ConcurrencyTests project that was not in solution and no longer builds successfully.
+    - Delete "nightly" test option from BuildAndTest.cmd that only would have run tests from (15) that don't exist.
+    - Make BuildAndTest.sh and BuildAndTest.cmd run all tests in sln. One project, Test.UnitTests.BinSkim.Driver was missing.
+    - Make BuildAndTest.shm more like BuildAndTest.cmd: take Configuration argument and don't try to run tests if build fails.
+    - Fix test failures on Linux.
+    [1112](https://github.com/microsoft/binskim/pull/1112)
+
+* ADM: delete obsolete  pipeline [1086](https://github.com/microsoft/binskim/pull/1086)
+* ADM: delete obsolete piepline [1103](https://github.com/microsoft/binskim/pull/1103)
+* FNS: supress sha1 for codeQL [1089](https://github.com/microsoft/binskim/pull/1089)
+* ADM: update external pipeline yml [1088](https://github.com/microsoft/binskim/pull/1088)
+* NEW: update yml pipelines [1084](https://github.com/microsoft/binskim/pull/1084)
+* NEW:prepare environment variables for the AnalysisSummary object in the ExtractAnalysisSummary_WithoutBuildPipelineInfo test. : [1083](https://github.com/microsoft/binskim/pull/1083)
+
+## **v4.4.6** 
+* DEP: ...
 
 ## **v4.4.4**
 * DEP: Update destination folder for MsDiaLib, after their update [#1079](https://github.com/microsoft/binskim/pull/1079)
