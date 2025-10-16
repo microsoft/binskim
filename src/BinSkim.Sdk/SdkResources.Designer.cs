@@ -493,5 +493,16 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
                 return ResourceManager.GetString("MetadataCondition_ImageIsArm64ECBinary", resourceCulture);
             }
         }
+
+        // <summary>
+        ///   Looks up a localized string similar to image is a Rust binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsRustBinary
+        {
+            get
+            {
+                return ResourceManager.GetString("MetadataCondition_ImageIsRustBinary", resourceCulture);
+            }
+        }
     }
 }
