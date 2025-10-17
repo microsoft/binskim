@@ -1270,7 +1270,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 MetadataConditions.ImageIsNativeUniversalWindowsPlatformBinary,
                 MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsILOnlyAssembly
+                MetadataConditions.ImageIsILOnlyAssembly,
+                MetadataConditions.ImageIsRustBinary
             };
 
             this.VerifyApplicability(new EnableMicrosoftCompilerSdlSwitch(), notApplicableTo);
