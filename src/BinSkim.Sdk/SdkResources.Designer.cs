@@ -493,5 +493,16 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
                 return ResourceManager.GetString("MetadataCondition_ImageIsArm64ECBinary", resourceCulture);
             }
         }
+
+        // <summary>
+        ///  Image is Not rust
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotRust
+        {
+            get
+            {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotRust", resourceCulture);
+            }
+        }
     }
 }
