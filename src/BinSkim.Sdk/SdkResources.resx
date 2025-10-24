@@ -258,4 +258,7 @@
   <data name="MetadataCondition_ImageIsNotBuiltWithMsvc" xml:space="preserve">
     <value>not compiled with Microsoft C/C++ compiler</value>
   </data>
+  <data name="MetadataCondition_ImageIsNotRust" xml:space="preserve">
+    <value>image is not rust binary</value>
+  </data>
 </root>
