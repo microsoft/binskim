@@ -261,4 +261,7 @@
   <data name="MetadataCondition_ImageIsNotRust" xml:space="preserve">
     <value>image is not rust binary</value>
   </data>
+  <data name="MetadataCondition_ImageIsArm64ECBinary" xml:space="preserve">
+    <value>image is Arm64EC binary</value>
+  </data>
 </root>
