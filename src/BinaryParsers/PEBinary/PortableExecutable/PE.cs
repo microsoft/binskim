@@ -527,7 +527,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     return this.isManagedResourceOnly.Value;
                 }
 
-                this.isManagedResourceOnly = this.metadataReader.MethodDefinitions.Count == 0;
+                this.isManagedResourceOnly = this.metadataReader?.MethodDefinitions.Count == 0;
                 return this.isManagedResourceOnly.Value;
             }
         }
@@ -593,6 +593,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         internal static ManagedPlatform ComputeIsDotNetCore(MetadataReader metadataReader)
         {
+            if (metadataReader?.AssemblyReferences == null)
+            {
+                return ManagedPlatform.Unknown;
+            }
+
             if (metadataReader.AssemblyReferences.Count == 0)
             {
                 return ManagedPlatform.DotNetFramework;
@@ -622,6 +627,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     {
                         return ManagedPlatform.DotNetStandard;
                     }
+
+                    default:
+                        return ManagedPlatform.Unknown;
                 }
             }
 
@@ -800,7 +808,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 {
                     foreach (SectionHeader sectionHeader in this.PEHeaders.SectionHeaders)
                     {
-                        if (sectionHeader.Name == ".wixburn")
+                        if (sectionHeader.Name == SectionHeaderName.WIXBURN)
                         {
                             this.isWixBinary = true;
                             break;
@@ -809,6 +817,32 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 }
 
                 return this.isWixBinary.Value;
+            }
+        }
+
+        public bool IsArm64EC
+        {
+            get
+            {
+                bool isArm64EC = false;
+                if (this.Machine != Machine.Amd64)
+                {
+                    return false;
+                }
+
+                if (this.PEHeaders?.SectionHeaders != null)
+                {
+                    foreach (SectionHeader sectionHeader in this.PEHeaders.SectionHeaders)
+                    {
+                        if (sectionHeader.Name == SectionHeaderName.ARM64XRM)
+                        {
+                            isArm64EC = true;
+                            break;
+                        }
+                    }
+                }
+
+                return isArm64EC;
             }
         }
 

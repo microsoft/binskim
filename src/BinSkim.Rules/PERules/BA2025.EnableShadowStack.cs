@@ -76,6 +76,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return notApplicable;
             }
 
+            if (portableExecutable.IsArm64EC)
+            {
+                reasonForNotAnalyzing = MetadataConditions.ImageIsArm64ECBinary;
+                return notApplicable;
+            }
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }

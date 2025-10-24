@@ -30,12 +30,12 @@ using Xunit.Abstractions;
 
 namespace Microsoft.CodeAnalysis.IL
 {
-    public class BuiltInRuleFunctionalTests
+    public class BuiltInRuleFunctionalTests : CultureDependantTests
     {
         private readonly ITestOutputHelper testOutputHelper;
         private TelemetryConfiguration telemetryConfiguration;
 
-        public BuiltInRuleFunctionalTests(ITestOutputHelper output)
+        public BuiltInRuleFunctionalTests(ITestOutputHelper output) : base("en-US")
         {
             this.testOutputHelper = output;
         }
@@ -60,8 +60,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
             var sb = new StringBuilder();
-            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;
-            string testFile = Path.Combine(testDirectory, "DotNetCore_win-x86_VS2019_Default.dll");
+            string testFile = Path.Combine(BaselineTestDataDirectory, "DotNetCore_win-x86_VS2019_Default.dll");
 
             SarifLog sarifResult = RunRules(sb, testFile);
 
@@ -189,8 +188,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
             var sb = new StringBuilder();
-            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;
-            string testFile = Path.Combine(testDirectory, "Native_x64_VS2015_Default.dll");
+            string testFile = Path.Combine(BaselineTestDataDirectory, "Native_x64_VS2015_Default.dll");
 
             SarifLog sarifResult = RunRules(sb, testFile);
 
@@ -370,7 +368,7 @@ namespace Microsoft.CodeAnalysis.IL
         private void BatchRuleRules(string ruleName, Sarif.SarifVersion version, params string[] inputFilters)
         {
             var sb = new StringBuilder();
-            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar + ruleName;
+            string testDirectory = Path.Combine(BaselineTestDataDirectory, ruleName);
 
             foreach (string inputFilter in inputFilters)
             {
@@ -439,7 +437,7 @@ namespace Microsoft.CodeAnalysis.IL
                 SarifOutputVersion = Sarif.SarifVersion.Current,
                 TargetFileSpecifiers = new string[] { inputFileName },
                 Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note },
-                Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.Pass },
+                Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.Pass }
             };
 
             command.UnitTestOutputVersion = version;

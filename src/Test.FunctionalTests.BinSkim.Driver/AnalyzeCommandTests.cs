@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         [Fact]
         public void AnalyzeCommand_ReadSarifLog_ShouldBeAbleToReadOneZeroZero()
         {
-            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Expected", "Binskim.empty.v1.0.0.sarif");
+            string sarifLogPath = Path.Combine(BaselineTestDataDirectory, "Expected", "Binskim.empty.v1.0.0.sarif");
             var fileSystem = new Mock<IFileSystem>();
             string content = File.ReadAllText(sarifLogPath);
             byte[] byteArray = Encoding.UTF8.GetBytes(content);
@@ -49,7 +49,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         [Fact]
         public void AnalyzeCommand_ReadSarifLog_ShouldBeAbleToReadCurrent()
         {
-            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Expected", "Binskim.linux-x64.dll.sarif");
+            string sarifLogPath = Path.Combine(BaselineTestDataDirectory, "Expected", "Binskim.linux-x64.dll.sarif");
 
             SarifLog sarifLog = ReadSarifLog(fileSystem: null, sarifLogPath, Sarif.SarifVersion.Current);
             sarifLog.Version.Should().Be(Sarif.SarifVersion.Current);
@@ -111,7 +111,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
 
             WindowsBinaryAndPdbSkimmerBase.s_PdbExceptions.Clear();
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_DeterminismTest.sarif");
-            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "Determinism", "*.exe");
+            string pathDeterminismTest = Path.Combine(TestData, "PE", "Determinism", "*.exe");
             var options = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[] {
@@ -140,7 +140,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_IgnoreExceptionInCanAnalyzeErrorTest.sarif");
-            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "PELoadErrors", "*.exe");
+            string pathDeterminismTest = Path.Combine(TestData, "PE", "PELoadErrors", "*.exe");
             var options = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[] {
@@ -166,7 +166,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_IgnoreExceptionInCanAnalyzeErrorTest.sarif");
-            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "PELoadErrors", "*.exe");
+            string pathDeterminismTest = Path.Combine(TestData, "PE", "PELoadErrors", "*.exe");
             var options = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[] {
@@ -191,7 +191,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         public void AnalyzeCommand_ZeroByteTest()
         {
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_ZeroByteTest.sarif");
-            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "Invalid", "ZeroByte", "*");
+            string pathDeterminismTest = Path.Combine(TestData, "Invalid", "ZeroByte", "*");
             var options = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[] {
@@ -221,7 +221,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_ComputeFileHashes_Works.sarif");
-            string pathDeterminismTest = Path.Combine(PEBinaryTests.TestData, "PE", "Managed_x64_VS2022_CSharp_Net48_Default.exe");
+            string pathDeterminismTest = Path.Combine(TestData, "PE", "Managed_x64_VS2022_CSharp_Net48_Default.exe");
 
 #pragma warning disable CS0618 // Type or member is obsolete
 #pragma warning disable CS0612 // Type or member is obsolete
@@ -250,8 +250,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         public void AnalyzeCommand_IncludeWixBinariesTest()
         {
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_IncludeWixBinariesTest.sarif");
-            string testPathV3 = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
-            string testPathV4 = Path.Combine(PEBinaryTests.TestData, "PE", "Wix_4.0.1_VS2022_Bundle.exe");
+            string testPathV3 = Path.Combine(BaselineTestDataDirectory, "Wix_3.11.1_VS2017_Bootstrapper.exe");
+            string testPathV4 = Path.Combine(TestData, "PE", "Wix_4.0.1_VS2022_Bundle.exe");
             var options = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[] {
@@ -309,6 +309,28 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                     log.Runs[0].Invocations[0].ToolConfigurationNotifications.All(n => n.Descriptor.Id == "WRN998.UnsupportedPlatform");
                 }
             }
+        }
+
+        [Theory]
+        [InlineData("HelloWorld_Cpp_Preprocesor_BUILDING_DLL_x64.dll")]
+        public void AnalyzeCommand_ShouldReturnZeroExitCode_WhenIgnoringPdbAndPELoadErrors(string testDllPath)
+        {
+            string testDllPathCombined = Path.Combine(TestData, "Error", testDllPath);
+            string outputFilePath = Path.GetTempFileName();
+
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new[] { testDllPathCombined },
+                OutputFilePath = outputFilePath,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                IgnorePdbLoadError = true,
+                IgnorePELoadError = true
+            };
+
+            var command = new MultithreadedAnalyzeCommand();
+            int exitCode = command.Run(options);
+
+            exitCode.Should().Be(0);
         }
 
         private static SarifLog ReadSarifLog(IFileSystem fileSystem, string outputFilePath, Sarif.SarifVersion readSarifVersion)
