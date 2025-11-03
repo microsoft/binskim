@@ -142,7 +142,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to image was compiled with a toolset version ({0}) that is not sufficiently recent ({1} or newer) to provide relevant settings.
+        ///   Looks up a localized string similar to image that was compiled with a toolset version ({0}) that is not sufficiently recent ({1} or newer) to provide relevant settings.
         /// </summary>
         internal static string MetadataCondition_ImageCompiledWithOutdatedTools {
             get {
@@ -165,6 +165,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageIsArm64BitBinary {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsArm64BitBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image is Arm64EC binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsArm64ECBinary {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsArm64ECBinary", resourceCulture);
             }
         }
         
@@ -228,6 +237,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageIsDotNetNativeBootstrapExe {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsDotNetNativeBootstrapExe", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to image is non Windows .NET assembly.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNonWindowsDotNetAssembly {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNonWindowsDotNetAssembly", resourceCulture);
             }
         }
         
