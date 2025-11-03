@@ -65,7 +65,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (isRustBinary(target.Pdb))
             {
-                reasonForNotAnalyzing = MetadataConditions.ImageIsRustBinary; 
+                reasonForNotAnalyzing = MetadataConditions.ImageIsRustBinary;
                 return notApplicable;
             }
             reasonForNotAnalyzing = null;
