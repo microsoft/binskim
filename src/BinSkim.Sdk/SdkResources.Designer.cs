@@ -230,15 +230,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
                 return ResourceManager.GetString("MetadataCondition_ImageIsDotNetNativeBootstrapExe", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to image is non Windows .NET assembly.
-        /// </summary>
-        internal static string MetadataCondition_ImageIsNonWindowsDotNetAssembly {
-            get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsNonWindowsDotNetAssembly", resourceCulture);
-            }
-        }
         
         /// <summary>
         ///   Looks up a localized string similar to image is a managed IL library (i.e., ahead of time compiled) assembly.
@@ -304,6 +295,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is a non-Windows .NET R2R or NativeAOT assembly.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNonWindowsDotNetAssembly {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNonWindowsDotNetAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is not a 32-bit binary.
         /// </summary>
         internal static string MetadataCondition_ImageIsNot32BitBinary {
@@ -363,6 +363,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageIsNotPE {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsNotPE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image is not rust binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotRust {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotRust", resourceCulture);
             }
         }
         
