@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
                   "index": 0
                 }
               }
@@ -39,7 +39,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
                   "index": 0
                 }
               }
@@ -61,7 +61,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
                   "index": 0
                 }
               }
@@ -82,7 +82,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
                   "index": 0
                 }
               }
@@ -104,7 +104,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
                   "index": 0
                 }
               }
@@ -125,7 +125,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
                   "index": 0
                 }
               }
@@ -146,7 +146,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
                   "index": 0
                 }
               }
@@ -156,8 +156,7 @@
       ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
           "rules": [
             {
               "id": "BA3001",
@@ -325,10 +324,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseGccCheckedFunctions"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -339,13 +335,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.execstack",
             "index": 0
-          },
-          "hashes": {
-            "md5": "582FA8D20CEADBEB96B46CDCBDBB4BCD",
-            "sha-1": "4306624F8C05FE498232E25919D9D029625F99B2",
-            "sha-256": "824D30A4AC4955FE48372FD7BF5176FFAEFE7C345D6CC948F00051B5183C2968"
           }
         }
       ],

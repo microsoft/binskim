@@ -99,6 +99,16 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             set => this.Policy.SetProperty(BinaryParsersProperties.IncludeWixBinaries, value);
         }
 
+
+        // This property is used to normalize paths in analysis results in
+        // test baseline files. When non-null, this also triggers other SARIF
+        // log stabilization, such as eliding certain version strings.
+        public string EnlistmentRootToNormalize
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.EnlistmentRootToNormalize);
+            set => this.Policy.SetProperty(BinaryParsersProperties.EnlistmentRootToNormalize, value);
+        }
+
         internal bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
