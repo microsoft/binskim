@@ -15,6 +15,7 @@ using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.CodeAnalysis.Sarif.Writers;
 
 namespace Microsoft.CodeAnalysis.IL
 {
@@ -39,13 +40,21 @@ namespace Microsoft.CodeAnalysis.IL
             set => throw new InvalidOperationException();
         }
 
-        private bool IsValidScanTarget(string file)
+        public override void InitializeOutputs(BinaryAnalyzerContext context)
         {
-            var uri = new Uri(file);
+            base.InitializeOutputs(context);
 
-            return PEBinary.CanLoadBinary(uri) ||
-                   ElfBinary.CanLoadBinary(uri) ||
-                   MachOBinary.CanLoadBinary(uri);
+            if (!string.IsNullOrEmpty(context.EnlistmentRootToNormalize))
+            {
+                var aggregatingLogger = (AggregatingLogger)context.Logger;
+                for (int i = 0; i < aggregatingLogger.Loggers.Count; i++)
+                {
+                    if (aggregatingLogger.Loggers[i] is SarifLogger sarifLogger)
+                    {
+                        aggregatingLogger.Loggers[i] = new NormalizingSarifLogger(sarifLogger, context.EnlistmentRootToNormalize);
+                    }
+                }
+            }
         }
 
         public override BinaryAnalyzerContext InitializeGlobalContextFromOptions(AnalyzeOptions options, ref BinaryAnalyzerContext context)
@@ -79,15 +88,17 @@ namespace Microsoft.CodeAnalysis.IL
                 ? options.MaxFileSizeInKilobytes.Value
                 : long.MaxValue;
 
-
-
             // Update context object based on command-line parameters.
             context.SymbolPath = options.SymbolsPath ?? context.SymbolPath;
             context.IgnorePdbLoadError = options.IgnorePdbLoadError != null ? options.IgnorePdbLoadError.Value : context.IgnorePdbLoadError;
             context.IgnorePELoadError = options.IgnorePELoadError != null ? options.IgnorePELoadError.Value : context.IgnorePELoadError;
+
             context.DisableTelemetry = options.DisableTelemetry != null ? options.DisableTelemetry.Value : context.DisableTelemetry;
             context.LocalSymbolDirectories = options.LocalSymbolDirectories ?? context.LocalSymbolDirectories;
             context.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
+
+            // Hidden options for test normalization purposes.
+            context.EnlistmentRootToNormalize = options.EnlistmentRoot ?? context.EnlistmentRootToNormalize;
 
             context.CompilerDataLogger =
                 new CompilerDataLogger(context.OutputFilePath,

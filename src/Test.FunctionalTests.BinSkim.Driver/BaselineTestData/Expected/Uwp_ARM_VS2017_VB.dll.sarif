@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
                   "index": 0
                 }
               }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
                   "index": 0
                 }
               }
@@ -62,7 +62,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
                   "index": 0
                 }
               }
@@ -84,7 +84,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
                   "index": 0
                 }
               }
@@ -106,7 +106,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
                   "index": 0
                 }
               }
@@ -126,7 +126,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
                   "index": 0
                 }
               }
@@ -136,8 +136,7 @@
       ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
           "rules": [
             {
               "id": "BA2004",
@@ -295,10 +294,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA2027EnableSourceLink"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -309,13 +305,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Uwp_ARM_VS2017_VB.dll",
             "index": 0
-          },
-          "hashes": {
-            "md5": "E51D02E358018F230E66031FD8AB270A",
-            "sha-1": "8415787E5DE33B546E452F6AE6DE0E1A30D6619E",
-            "sha-256": "F65DC5FA223BA12FB3DF823D0D3DAB655FCFF7655F0058AEC9AFE68CDAD15917"
           }
         }
       ],
