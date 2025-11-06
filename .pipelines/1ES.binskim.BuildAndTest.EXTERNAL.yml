@@ -13,8 +13,7 @@ extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
   parameters:
     pool:
-      name: pool-1espt-mseng
-      image: pool-1espt-mseng-image
+      name: guardian-build-infra-windows-x64-dev
       os: windows
     featureFlags:
       autoEnableRoslynWithNewRuleset: false
@@ -24,7 +23,7 @@ extends:
       jobs:
         - job: linux
           pool:
-            name: pool-1espt-linux-mseng-dev
+            name: guardian-build-infra-linux-arm64-dev
             os: linux
           steps:
           - checkout: self
@@ -42,8 +41,7 @@ extends:
 
         - job: windows
           pool:
-            name: pool-1espt-mseng
-            image: pool-1espt-mseng-image
+            name: guardian-build-infra-windows-x64-dev
             os: windows
           steps:
           - task: UseDotNet@2
