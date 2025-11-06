@@ -23,7 +23,7 @@ extends:
       jobs:
         - job: linux
           pool:
-            name: guardian-build-infra-linux-arm64-dev
+            name: guardian-build-infra-linux-x64-dev
             os: linux
           steps:
           - checkout: self
