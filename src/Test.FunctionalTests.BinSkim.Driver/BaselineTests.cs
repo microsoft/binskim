@@ -386,7 +386,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             string rebaselineMessage = "If the actual output is expected, generate new baselines by executing `UpdateBaselines.ps1` from a PS command prompt.";
-            sb.AppendLine(string.Format(CultureInfo.CurrentCulture, rebaselineMessage));
+            sb.AppendLine(string.Format(new CultureInfo("en-US"), rebaselineMessage));
 
             if (sb.Length > 0)
             {

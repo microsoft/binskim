@@ -4,7 +4,8 @@ Param(
 
 $tool = "BinSkim"
 $repoRoot = ( Resolve-Path "$PSScriptRoot\..\.." ).ToString()
-$utility = "$repoRoot\bld\bin\BinSkim.Driver\release\$tool.exe"
+$utility = "$repoRoot\bld\bin\BinSkim.Driver\release_win-x64\$tool.exe"
+
 
 function Build-Tool()
 {
@@ -20,7 +21,7 @@ function Build-Baselines($sourceExtension)
 {
     Write-Host "Building baselines..."
     $expectedDirectory = Join-Path "$PSScriptRoot\BaselineTestData" $ruleName
-    $expectedDirectory = Join-Path $expectedDirectory "Expected"
+    $expectedDirectory = "$expectedDirectory\Expected"
     $testsDirectory = "$PSScriptRoot\BaselineTestData\" 
     Write-Host "$sourceExtension"
 

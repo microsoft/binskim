@@ -4,7 +4,7 @@ ScriptDir=`dirname $0`
 
 TOOL="BinSkim"
 repoRoot=`readlink -f $ScriptDir/../../`
-BuildOutputPath="$repoRoot/bld/bin/AnyCPU_Release/net9.0/linux-x64"
+BuildOutputPath="$repoRoot/bld/bin/BinSkim.Driver/release_linux-x64"
 PROJECT="$repoRoot/src/BinSkim.Driver/BinSkim.Driver.csproj"
 
 BuildTool () 
