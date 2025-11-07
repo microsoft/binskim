@@ -555,10 +555,10 @@
               "id": "BA2006",
               "name": "BuildWithSecureTools",
               "fullDescription": {
-                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. \r\nAmong other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks."
+                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. \r\nAmong other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks. Enforces advanced mitigations such as Spectre mitigations, if required by policy."
               },
               "help": {
-                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. \r\nAmong other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks."
+                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. \r\nAmong other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks. Enforces advanced mitigations such as Spectre mitigations, if required by policy."
               },
               "messageStrings": {
                 "Error": {
