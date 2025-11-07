@@ -464,7 +464,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             // Normalize both logs for culture-independent comparison
             NormalizeSarifLogForComparison(expectedLog);
-          
+
             var visitor = new ResultDiffingVisitor(expectedLog);
 
             string actualText = File.ReadAllText(actualFileName);
