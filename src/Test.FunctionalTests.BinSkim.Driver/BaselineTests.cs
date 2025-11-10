@@ -386,7 +386,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             string rebaselineMessage = "If the actual output is expected, generate new baselines by executing `UpdateBaselines.ps1` from a PS command prompt.";
-            sb.AppendLine(string.Format(new CultureInfo("en-US"), rebaselineMessage));
+            sb.AppendLine(string.Format(CultureInfo.CurrentCulture, rebaselineMessage));
 
             if (sb.Length > 0)
             {
@@ -461,179 +461,22 @@ namespace Microsoft.CodeAnalysis.IL
                                     settings.Formatting,
                                     out expectedText);
 
-
-            // Normalize both logs for culture-independent comparison
-            NormalizeSarifLogForComparison(expectedLog);
-
             var visitor = new ResultDiffingVisitor(expectedLog);
 
             string actualText = File.ReadAllText(actualFileName);
             SarifLog actualLog = JsonConvert.DeserializeObject<SarifLog>(actualText, settings);
-            NormalizeSarifLogForComparison(actualLog);
-            // Perform semantic comparison instead of using ResultDiffingVisitor
-            if (!AreSarifLogsEquivalent(expectedLog, actualLog))
+            if (!visitor.Diff(actualLog.Runs[0].Results))
             {
-                // Write normalized versions for easier debugging
-                string normalizedExpectedFile = Path.Combine(actualDirectory, fileName + ".expected.normalized.sarif");
-                string normalizedActualFile = Path.Combine(actualDirectory, fileName + ".actual.normalized.sarif");
-
-                File.WriteAllText(normalizedExpectedFile, JsonConvert.SerializeObject(expectedLog, settings));
-                File.WriteAllText(normalizedActualFile, JsonConvert.SerializeObject(actualLog, settings));
 
                 string errorMessage = "The output of the tool did not match for input {0}.";
                 sb.AppendLine(string.Format(CultureInfo.CurrentCulture, errorMessage, inputFileName));
                 sb.AppendLine("Check differences with:");
-                sb.AppendLine(this.GenerateDiffCommand(normalizedExpectedFile, normalizedActualFile));
+                sb.AppendLine(this.GenerateDiffCommand(expectedFileName, actualFileName));
             }
 
             return actualLog;
         }
-
-        private bool AreSarifLogsEquivalent(SarifLog expected, SarifLog actual)
-        {
-            if (expected.Runs.Count != actual.Runs.Count)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < expected.Runs.Count; i++)
-            {
-                Run expectedRun = expected.Runs[i];
-                Run actualRun = actual.Runs[i];
-
-                // Compare results count
-                if ((expectedRun.Results?.Count ?? 0) != (actualRun.Results?.Count ?? 0))
-                {
-                    return false;
-                }
-
-                // Compare each result (after normalization they should be in the same order)
-                if (expectedRun.Results != null && actualRun.Results != null)
-                {
-                    for (int j = 0; j < expectedRun.Results.Count; j++)
-                    {
-                        if (!AreResultsEquivalent(expectedRun.Results[j], actualRun.Results[j]))
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                // Compare rules count
-                if ((expectedRun.Tool?.Driver?.Rules?.Count ?? 0) != (actualRun.Tool?.Driver?.Rules?.Count ?? 0))
-                {
-                    return false;
-                }
-
-                // Compare artifacts count
-                if ((expectedRun.Artifacts?.Count ?? 0) != (actualRun.Artifacts?.Count ?? 0))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private bool AreResultsEquivalent(Result expected, Result actual)
-        {
-            // Compare key properties
-            if (expected.RuleId != actual.RuleId)
-            {
-                return false;
-            }
-
-            if (expected.Kind != actual.Kind)
-            {
-                return false;
-            }
-
-            if (expected.Level != actual.Level)
-            {
-                return false;
-            }
-
-            // Compare message text (culture-independent)
-            string expectedMessage = expected.Message?.Text ?? string.Empty;
-            string actualMessage = actual.Message?.Text ?? string.Empty;
-            if (!string.Equals(expectedMessage, actualMessage, StringComparison.InvariantCulture))
-            {
-                return false;
-            }
-
-            // Compare locations if present
-            string expectedLocation = expected.Locations?.FirstOrDefault()?.PhysicalLocation?.ArtifactLocation?.Uri?.ToString() ?? string.Empty;
-            string actualLocation = actual.Locations?.FirstOrDefault()?.PhysicalLocation?.ArtifactLocation?.Uri?.ToString() ?? string.Empty;
-            if (!string.Equals(expectedLocation, actualLocation, StringComparison.InvariantCulture))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private void NormalizeSarifLogForComparison(SarifLog sarifLog)
-        {
-            if (sarifLog?.Runs == null) { return; }
-
-            foreach (Run run in sarifLog.Runs)
-            {
-                // Sort results by stable properties to ensure consistent ordering
-                if (run.Results != null)
-                {
-                    var sortedResults = run.Results
-                        .OrderBy(r => r.RuleId ?? string.Empty, StringComparer.InvariantCulture)
-                        .ThenBy(r => r.Message?.Text ?? string.Empty, StringComparer.InvariantCulture)
-                        .ThenBy(r => r.Locations?.FirstOrDefault()?.PhysicalLocation?.ArtifactLocation?.Uri?.ToString() ?? string.Empty, StringComparer.InvariantCulture)
-                        .ToList();
-                    run.Results = sortedResults;
-                }
-
-                // Sort rules if present
-                if (run.Tool?.Driver?.Rules != null)
-                {
-                    var sortedRules = run.Tool.Driver.Rules
-                        .OrderBy(r => r.Id ?? string.Empty, StringComparer.InvariantCulture)
-                        .ToList();
-                    run.Tool.Driver.Rules = sortedRules;
-                }
-
-                // Sort artifacts if present
-                if (run.Artifacts != null)
-                {
-                    var sortedArtifacts = run.Artifacts
-                        .OrderBy(a => a.Location?.Uri?.ToString() ?? string.Empty, StringComparer.InvariantCulture)
-                        .ToList();
-                    run.Artifacts = sortedArtifacts;
-                }
-
-                // Sort invocations if present
-                if (run.Invocations != null)
-                {
-                    foreach (Invocation invocation in run.Invocations)
-                    {
-                        if (invocation.ToolConfigurationNotifications != null)
-                        {
-                            var sortedNotifications = invocation.ToolConfigurationNotifications
-                                .OrderBy(n => n.Descriptor?.Id ?? string.Empty, StringComparer.InvariantCulture)
-                                .ThenBy(n => n.Message?.Text ?? string.Empty, StringComparer.InvariantCulture)
-                                .ToList();
-                            invocation.ToolConfigurationNotifications = sortedNotifications;
-                        }
-
-                        if (invocation.ToolExecutionNotifications != null)
-                        {
-                            var sortedNotifications = invocation.ToolExecutionNotifications
-                                .OrderBy(n => n.Descriptor?.Id ?? string.Empty, StringComparer.InvariantCulture)
-                                .ThenBy(n => n.Message?.Text ?? string.Empty, StringComparer.InvariantCulture)
-                                .ToList();
-                            invocation.ToolExecutionNotifications = sortedNotifications;
-                        }
-                    }
-                }
-            }
-        }
-
+        
         private List<ITelemetry> CompilerTelemetryTestSetup()
         {
             List<ITelemetry> sendItems = new List<ITelemetry>();
