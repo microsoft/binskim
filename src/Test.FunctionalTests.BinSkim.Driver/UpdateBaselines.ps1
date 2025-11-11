@@ -2,6 +2,10 @@ Param(
     [string]$RuleName
 )
 
+# Force invariant culture for consistent sorting
+[System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
+[System.Threading.Thread]::CurrentThread.CurrentUICulture = [System.Globalization.CultureInfo]::InvariantCulture
+
 $tool = "BinSkim"
 $repoRoot = ( Resolve-Path "$PSScriptRoot\..\.." ).ToString()
 $utility = "$repoRoot\bld\bin\BinSkim.Driver\release_win-x64\$tool.exe"
@@ -25,7 +29,12 @@ function Build-Baselines($sourceExtension)
     $testsDirectory = "$PSScriptRoot\BaselineTestData\" 
     Write-Host "$sourceExtension"
 
-    Get-ChildItem $testsDirectory -Filter $sourceExtension | ForEach-Object {
+    # Set environment variables for the BinSkim process to use invariant culture
+    $env:DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = "false"
+    $env:LC_ALL = "en-US.UTF-8"
+    $env:LANG = "en-US.UTF-8"
+
+    Get-ChildItem $testsDirectory -Filter $sourceExtension | Sort-Object -Property Name | ForEach-Object {
         Write-Host ""
         $input = $_.FullName
         $outputFile = $_.Name

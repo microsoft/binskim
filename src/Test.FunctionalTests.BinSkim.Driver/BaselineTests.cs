@@ -476,7 +476,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             return actualLog;
         }
-        
+
         private List<ITelemetry> CompilerTelemetryTestSetup()
         {
             List<ITelemetry> sendItems = new List<ITelemetry>();
