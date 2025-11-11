@@ -10,7 +10,6 @@
 
   <ItemGroup Condition="'$(DeployDia)' == 'true'">
     <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\x64\*" />
-    <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\x64\*" />
     <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\msdia140.dll.manifest" />
     <MsRuntime Include="$(MSBuildThisFileDirectory)..\refs\runtime\*" />
     <None Include="@(MsDiaLibs);@(MsRuntime)" CopyToOutputDirectory="PreserveNewest" />
