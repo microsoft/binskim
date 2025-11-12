@@ -258,13 +258,13 @@
   <data name="MetadataCondition_ImageIsNotBuiltWithMsvc" xml:space="preserve">
     <value>not compiled with Microsoft C/C++ compiler</value>
   </data>
-  <data name="MetadataCondition_ImageIsNotRust" xml:space="preserve">
-    <value>image is not rust binary</value>
-  </data>
   <data name="MetadataCondition_ImageIsArm64ECBinary" xml:space="preserve">
     <value>image is Arm64EC binary</value>
   </data>
   <data name="MetadataCondition_ImageIsRustBinary" xml:space="preserve">
     <value>Looks up a localized string similar to image is a Rust binary.</value>
+  </data>
+  <data name="MetadataCondition_ImageIsNotRustBinary" xml:space="preserve">
+    <value>image is not rust binary</value>
   </data>
 </root>
