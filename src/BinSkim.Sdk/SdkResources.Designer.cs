@@ -421,6 +421,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Looks up a localized string similar to image is a Rust binary..
+        /// </summary>
+        internal static string MetadataCondition_ImageIsRustBinary {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsRustBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image appears to be a WiX bootstrapper application.
         /// </summary>
         internal static string MetadataCondition_ImageIsWixBinary {
@@ -498,17 +507,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string Verbose_ReplaceWithLevelAndKind {
             get {
                 return ResourceManager.GetString("Verbose_ReplaceWithLevelAndKind", resourceCulture);
-            }
-        }
-
-        // <summary>
-        ///   Looks up a localized string similar to image is a Rust binary.
-        /// </summary>
-        internal static string MetadataCondition_ImageIsRustBinary
-        {
-            get
-            {
-                return ResourceManager.GetString("MetadataCondition_ImageIsRustBinary", resourceCulture);
             }
         }
     }
