@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 if (!libraries.TryGetValue(modulesKey, out SortedSet<string> modules))
                 {
-                    modules = libraries[modulesKey] = new SortedSet<string>();
+                    modules = libraries[modulesKey] = new SortedSet<string>(StringComparer.Ordinal);
                 }
                 modules.Add(name);
             }
@@ -50,14 +50,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var sb = new StringBuilder();
 
             string[] sortedByCompiler = compilerToLibraries.Keys.ToArray();
-            Array.Sort(sortedByCompiler);
+            Array.Sort(sortedByCompiler, StringComparer.Ordinal);
 
             foreach (string compiler in sortedByCompiler)
             {
                 Dictionary<string, SortedSet<string>> libraryToModules = compilerToLibraries[compiler];
 
                 string[] sortedByLibrary = libraryToModules.Keys.ToArray();
-                Array.Sort(sortedByLibrary);
+                Array.Sort(sortedByLibrary, StringComparer.Ordinal);
 
                 foreach (string library in sortedByLibrary)
                 {
@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 sb.Append(key);
 
                 List<string> objectModules = librariesToObjectModulesMap[key];
-                objectModules.Sort();
+                objectModules.Sort(StringComparer.Ordinal);
                 string[] oms = objectModules.ToArray();
 
                 if (oms.Length != 1 || !key.StartsWith(oms[0]))

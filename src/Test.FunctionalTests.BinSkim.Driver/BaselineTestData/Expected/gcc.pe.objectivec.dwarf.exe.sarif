@@ -412,7 +412,28 @@
       },
       "invocations": [
         {
-          "executionSuccessful": true
+          "toolConfigurationNotifications": [
+            {
+              "locations": [
+                {
+                  "physicalLocation": {
+                    "artifactLocation": {
+                      "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.pe.objectivec.dwarf.exe",
+                      "index": 0
+                    }
+                  }
+                }
+              ],
+              "message": {
+                "text": "'gcc.pe.objectivec.dwarf.exe' was not evaluated because its PDB could not be loaded (E_PDB_NO_DEBUG_INFO)."
+              },
+              "level": "error",
+              "descriptor": {
+                "id": "ERR997.ExceptionLoadingPdb"
+              }
+            }
+          ],
+          "executionSuccessful": false
         }
       ],
       "artifacts": [

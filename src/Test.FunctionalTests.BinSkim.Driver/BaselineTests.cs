@@ -467,6 +467,7 @@ namespace Microsoft.CodeAnalysis.IL
             SarifLog actualLog = JsonConvert.DeserializeObject<SarifLog>(actualText, settings);
             if (!visitor.Diff(actualLog.Runs[0].Results))
             {
+
                 string errorMessage = "The output of the tool did not match for input {0}.";
                 sb.AppendLine(string.Format(CultureInfo.CurrentCulture, errorMessage, inputFileName));
                 sb.AppendLine("Check differences with:");
