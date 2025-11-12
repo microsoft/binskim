@@ -27,3 +27,4 @@ x64/
 # Workaround for an msbuild/dotnet bug on Linux
 src/BinSkimLinux.sln
 .vscode/settings.json
+/.vscode/c_cpp_properties.json

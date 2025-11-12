@@ -55,7 +55,7 @@
             "id": "Error_NativeWithInsecureDirectCompilands",
             "arguments": [
               "Native_x86_VS2015_Default_Debug.dll",
-              "Microsoft (R) Optimizing Compiler : cxx : 19.0.24215.1 : [directly linked] [MD5] (dllmain.obj,Native_x86_VS2015_Default_Debug.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 19.0.24215.1 : [directly linked] [MD5] (Native_x86_VS2015_Default_Debug.obj,dllmain.obj)\r\n"
             ]
           },
           "locations": [
@@ -447,7 +447,7 @@
             "id": "Warning",
             "arguments": [
               "Native_x86_VS2015_Default_Debug.dll",
-              "Microsoft (R) Optimizing Compiler : cxx : 19.0.24215.1 : [directly linked] (dllmain.obj,Native_x86_VS2015_Default_Debug.obj,stdafx.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : cxx : 19.0.24215.1 : [directly linked] (Native_x86_VS2015_Default_Debug.obj,dllmain.obj,stdafx.obj)\r\n"
             ]
           },
           "locations": [
@@ -593,10 +593,10 @@
               "id": "BA2006",
               "name": "BuildWithSecureTools",
               "fullDescription": {
-                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. \r\nAmong other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks."
+                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. \r\nAmong other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks. Enforces advanced mitigations such as Spectre mitigations, if required by policy."
               },
               "help": {
-                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. \r\nAmong other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks."
+                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. \r\nAmong other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks. Enforces advanced mitigations such as Spectre mitigations, if required by policy."
               },
               "messageStrings": {
                 "Error": {

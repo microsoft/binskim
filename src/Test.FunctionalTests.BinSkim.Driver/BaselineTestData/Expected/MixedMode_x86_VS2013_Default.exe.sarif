@@ -33,7 +33,7 @@
             "id": "Warning_NativeWithInsecureStaticLibraryCompilands",
             "arguments": [
               "MixedMode_x86_VS2013_Default.exe",
-              "Microsoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib [MD5] (atonexit.obj,chandler4gs.obj,cinitexe.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,loadcfg.obj,merr.obj,natstart.obj,secchk.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCMRTD.lib [MD5] (managdeh.obj,ManagedMain.obj,msilexit.obj,mstartup.obj,puremsilcode.obj,wdllargv.obj,wildcard.obj,xncommod.obj,xthdloc.obj,xtxtmode.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib [MD5] (initsect.obj)\r\n"
+              "Microsoft (R) Optimizing Compiler : c : 18.0.20806.0 : MSVCRTD.lib [MD5] (atonexit.obj,chandler4gs.obj,cinitexe.obj,gs_cookie.obj,gs_report.obj,gs_support.obj,loadcfg.obj,merr.obj,natstart.obj,secchk.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCMRTD.lib [MD5] (ManagedMain.obj,managdeh.obj,msilexit.obj,mstartup.obj,puremsilcode.obj,wdllargv.obj,wildcard.obj,xncommod.obj,xthdloc.obj,xtxtmode.obj)\r\nMicrosoft (R) Optimizing Compiler : cxx : 18.0.20806.0 : MSVCRTD.lib [MD5] (initsect.obj)\r\n"
             ]
           },
           "locations": [
@@ -592,10 +592,10 @@
               "id": "BA2006",
               "name": "BuildWithSecureTools",
               "fullDescription": {
-                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. \r\nAmong other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks."
+                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. \r\nAmong other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks. Enforces advanced mitigations such as Spectre mitigations, if required by policy."
               },
               "help": {
-                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. \r\nAmong other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks."
+                "text": "Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. \r\nAmong other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks. Enforces advanced mitigations such as Spectre mitigations, if required by policy."
               },
               "messageStrings": {
                 "Error": {
