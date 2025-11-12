@@ -53,6 +53,7 @@ call :RunTests || goto :ExitFailed
 echo Creating Platform Specific BinSkim 'Publish' Packages
 call :CreatePublishPackage net9.0 win-x64 || goto :ExitFailed
 call :CreatePublishPackage net9.0 linux-x64 || goto :ExitFailed
+call :CreatePublishPackage net9.0 linux-arm64 || goto :ExitFailed
 call :CreatePublishPackage net9.0 osx-x64 || goto :ExitFailed
 
 ::Build NuGet package

@@ -19,6 +19,7 @@
   <files>
     <file src="bld\publish\BinSkim.Driver\$configuration$_win-x64\**\*" target="tools\net9.0\win-x64"/>
     <file src="bld\publish\BinSkim.Driver\$configuration$_linux-x64\**\*" target="tools\net9.0\linux-x64"/>
+    <file src="bld\publish\BinSkim.Driver\$configuration$_linux-arm64\**\*" target="tools\net9.0\linux-arm64"/>
     <file src="bld\publish\BinSkim.Driver\$configuration$_osx-x64\**\*" target="tools\net9.0\osx-x64"/>
     <file src="ReleaseHistory.md" target="tools\ReleaseHistory.md" />
     <file src="src\BinaryParsers\**\*.cs" target="src\BinaryParsers" />
