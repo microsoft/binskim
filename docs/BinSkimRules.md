@@ -425,7 +425,7 @@ Version information for '{0}' could not be parsed. The binary therefore could no
 ### Description
 
 Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. 
-Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks. Enforces advanced mitigations such as Spectre mitigations, if required by policy.
+Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks.  Enforces advanced mitigations such as Spectre mitigations, if required by policy.
 
 ### Messages
 
