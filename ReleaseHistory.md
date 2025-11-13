@@ -20,6 +20,22 @@
 
 ## UNRELEASED
 
+## **v4.4.8** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.8]
+* FPD: add binaryIsNotRust in metadata conditions [1128](https://github.com/microsoft/binskim/pull/1128)
+
+* NEW : adding posibility to build for Arm64 [1127](https://github.com/microsoft/binskim/pull/1127)
+
+* FPD: BA2026 - isNotApplicable for Rust  [1124](https://github.com/microsoft/binskim/pull/1124)
+
+* ADM: updating piepline [1126](https://github.com/microsoft/binskim/pull/1126)
+
+* PRF: update build baselines [1106](https://github.com/microsoft/binskim/pull/1106)
+
+* DOC: update documentation about BA2006  [1080](https://github.com/microsoft/binskim/pull/1080)
+
+
+
+
 ## **v4.4.7** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.7)
 * NEW: add posibility to test Infromational outpiut from rule [1122](https://github.com/microsoft/binskim/pull/1122)
 
