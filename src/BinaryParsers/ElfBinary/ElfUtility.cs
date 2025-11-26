@@ -54,6 +54,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 return DwarfCommandLineType.Clang;
             }
+            else if (!string.IsNullOrWhiteSpace(commandline)
+                && commandline.Contains("rustc", StringComparison.OrdinalIgnoreCase))
+            {
+                return DwarfCommandLineType.Rust;
+            }
             else
             {
                 return DwarfCommandLineType.Unknown;
