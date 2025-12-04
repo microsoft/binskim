@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             (new Regex(@"GCC:.+"), ElfCompilerType.GCC),
             (new Regex(@".*clang version.*"), ElfCompilerType.Clang),
-            (new Regex(@"rustc*"), ElfCompilerType.Rust), // Rust compiler, but we don't have a specific enum for it.
+            (new Regex(@"rustc*"), ElfCompilerType.Rust),
             (new Regex(@".*"), ElfCompilerType.Unknown)
         };
 
