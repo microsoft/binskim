@@ -20,6 +20,9 @@
 
 ## UNRELEASED
 
+## **v4.4.9** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9]
+* DEP: add rust compiler identification [1131](https://github.com/microsoft/binskim/pull/1131)
+
 ## **v4.4.8** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.8]
 * FPD: add binaryIsNotRust in metadata conditions [1128](https://github.com/microsoft/binskim/pull/1128)
 
