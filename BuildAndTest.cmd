@@ -64,6 +64,9 @@ call BuildPackages.cmd || goto :ExitFailed
 echo Exporting any BinSkim rules
 .\bld\bin\BinSkim.Driver\release\BinSkim.exe export-rules .\docs\BinSkimRules.md
 
+echo Fixing markdown angle brackets
+powershell -Command "$content = [System.IO.File]::ReadAllText('.\docs\BinSkimRules.md'); $content = $content -replace '<', '&lt;' -replace '>', '&gt;'; [System.IO.File]::WriteAllText('.\docs\BinSkimRules.md', $content)"
+
 goto :Exit
 
 :RunTests
