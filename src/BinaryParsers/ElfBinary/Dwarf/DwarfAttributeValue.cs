@@ -89,11 +89,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Gets the address if type is <see cref="DwarfAttributeValueType.Address"/>.
         /// </summary>
-        public ulong Address
+        public ulong? Address
         {
             get
             {
-                return (ulong)Value;
+                return Value != null ? (ulong)Value : null;
             }
         }
 
