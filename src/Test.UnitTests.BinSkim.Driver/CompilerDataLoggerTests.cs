@@ -130,13 +130,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             compilerEvent.Should().NotBeNull();
             compilerEvent.Properties.Should().ContainKey("isASanEnabled");
             compilerEvent.Properties["isASanEnabled"].Should().Be("True");
-
-            // Print all properties for visibility
-            Console.WriteLine("=== Compiler Telemetry Properties ===");
-            foreach (var kvp in compilerEvent.Properties)
-            {
-                Console.WriteLine($"{kvp.Key}: {kvp.Value}");
-            }
         }
 
         [Fact]
