@@ -189,7 +189,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 "Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version," +
                 "File Version,Binary Type,Language,Debugging FileName,Debugging FileGuid," +
                 "Debugging FileLastModifiedDateUTC, Target LastModifiedDateUTC, Command Line," +
-                "Dialect,Module Name,Module Library,Hash,Error";
+                "Dialect,Module Name,Module Library,Is ASan Enabled,Hash,Error";
 
             WriteToCsv(header);
         }
@@ -234,6 +234,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "dialect", compilerData.Dialect },
                 { "moduleName", compilerData.ModuleName ?? string.Empty },
                 { "moduleLibrary", (compilerData.ModuleName == compilerData.ModuleLibrary ? string.Empty : compilerData.ModuleLibrary ?? string.Empty) },
+                { "isASanEnabled", compilerData.IsASanEnabled.ToString() },
                 { "hash", fileHash },
                 { "error", string.Empty }
             };

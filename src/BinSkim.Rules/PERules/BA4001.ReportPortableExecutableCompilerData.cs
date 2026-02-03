@@ -80,6 +80,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 targetLastAccessDateUtc = string.Empty;
             }
 
+            // Detect ASAN runtime DLL usage
+            bool isASanEnabled = DetectAsanRuntime(target);
+
             if (target.PE.IsManaged)
             {
                 var record = new CompilerData
@@ -95,6 +98,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     CompilerBackEndVersion = target.PE.LinkerVersion.ToString(),
                     CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
                     AssemblyReferences = string.Join(';', target.PE.GetAssemblyReferenceStrings()),
+                    IsASanEnabled = isASanEnabled,
                 };
 
                 if (!records.ContainsKey(record))
@@ -125,6 +129,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         TargetLastModifiedDateUtc = targetLastAccessDateUtc,
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
+                        IsASanEnabled = isASanEnabled,
                     };
 
                     if (!records.ContainsKey(record))
@@ -138,6 +143,29 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 context.CompilerDataLogger.Write(context, kv.Key);
             }
+        }
+
+        /// <summary>
+        /// Detects if the binary links to any MSVC ASAN runtime DLLs.
+        /// </summary>
+        private static bool DetectAsanRuntime(PEBinary target)
+        {
+            if (target?.PE?.Imports == null || target.PE.Imports.Length == 0)
+            {
+                return false;
+            }
+
+            // Check for any ASAN runtime DLL matching the pattern clang_rt.asan_*.dll
+            foreach (string import in target.PE.Imports)
+            {
+                if (import.StartsWith("clang_rt.asan_", StringComparison.OrdinalIgnoreCase) &&
+                    import.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
