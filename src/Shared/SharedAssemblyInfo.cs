@@ -23,3 +23,9 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("Test.UnitTests.BinaryParsers")]
 [assembly: InternalsVisibleTo("Test.UnitTests.BinSkim.Driver")]
 [assembly: InternalsVisibleTo("Test.FunctionalTests.BinSkim.Driver")]
+
+#if VERSIONCONSTANTS_PRESENT
+[assembly: AssemblyVersion(Microsoft.CodeAnalysis.IL.VersionConstants.AssemblyVersion)]
+[assembly: AssemblyFileVersion(Microsoft.CodeAnalysis.IL.VersionConstants.FileVersion)]
+[assembly: AssemblyInformationalVersion(Microsoft.CodeAnalysis.IL.VersionConstants.Version)]
+#endif

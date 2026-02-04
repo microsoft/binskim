@@ -18,7 +18,7 @@ set NuGetOutputDirectory=%~dp0bld\bin\nuget\
 
 call SetCurrentVersion.cmd
 
-set VERSION_CONSTANTS=%~dp0src\BinaryParsers\VersionConstants.cs
+set VERSION_CONSTANTS=%~dp0src\Shared\VersionConstants.cs
 
 @REM Rewrite VersionConstants.cs
 
@@ -34,7 +34,7 @@ echo         public const string FileVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0";
 echo         public const string Version = AssemblyVersion + Prerelease;>> %VERSION_CONSTANTS%
 echo     }>> %VERSION_CONSTANTS%
 echo }>> %VERSION_CONSTANTS%
-echo Current Version: %MAJOR%.%MINOR%.%PATCH%%PRERELEASE%
+echo Current Version: %MAJOR%.%MINOR%.%PATCH%.%PRERELEASE%
 
 
 ::Restore packages

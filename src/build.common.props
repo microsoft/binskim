@@ -55,6 +55,13 @@
   <ItemGroup>
     <Compile Include="$(MsBuildThisFileDirectory)Shared\SharedAssemblyInfo.cs" />
   </ItemGroup>
+  <!-- Only include VersionConstants.cs in BinSkim.Driver and test projects, exclude from all libraries -->
+  <ItemGroup Condition=" ('$(MSBuildProjectName)' == 'BinSkim.Driver' or $(MSBuildProjectName.StartsWith('Test'))) 
+    and ('$(MSBuildProjectName)' != 'BinaryParsers') 
+    and ('$(MSBuildProjectName)' != 'BinSkim.Rules') 
+    and ('$(MSBuildProjectName)' != 'BinSkim.Sdk') ">
+    <Compile Include="$(MsBuildThisFileDirectory)Shared\VersionConstants.cs" />
+  </ItemGroup>
   
   <ItemGroup Label="Common Packages">
   </ItemGroup>
