@@ -18,7 +18,7 @@ set NuGetOutputDirectory=%~dp0bld\bin\nuget\
 
 call SetCurrentVersion.cmd
 
-set VERSION_CONSTANTS=%~dp0src\Shared\VersionConstants.cs
+set VERSION_CONSTANTS=%~dp0src\BinaryParsers\VersionConstants.cs
 
 @REM Rewrite VersionConstants.cs
 

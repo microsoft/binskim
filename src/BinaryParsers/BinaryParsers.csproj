@@ -14,9 +14,9 @@
     <PackageReference Include="System.Security.Cryptography.Algorithms" />
     <PackageReference Include="Sarif.Driver" />
   </ItemGroup>
-    <!-- Exclude VersionConstants.cs if present in Shared -->
+    <!-- Exclude VersionConstants.cs from BinaryParsers to avoid type conflicts -->
     <ItemGroup>
-      <Compile Remove="..\Shared\VersionConstants.cs" />
+      <Compile Remove="VersionConstants.cs" />
     </ItemGroup>
   <ItemGroup>
     <Reference Include="Dia2Lib">

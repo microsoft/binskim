@@ -60,7 +60,7 @@
     and ('$(MSBuildProjectName)' != 'BinaryParsers') 
     and ('$(MSBuildProjectName)' != 'BinSkim.Rules') 
     and ('$(MSBuildProjectName)' != 'BinSkim.Sdk') ">
-    <Compile Include="$(MsBuildThisFileDirectory)Shared\VersionConstants.cs" />
+      <Compile Include="$(MsBuildThisFileDirectory)BinaryParsers\VersionConstants.cs" />
   </ItemGroup>
   
   <ItemGroup Label="Common Packages">
