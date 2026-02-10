@@ -329,5 +329,49 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             Position = originalPosition;
             return result;
         }
+
+        /// <summary>
+        /// Reads unsigned LEB 128 value from the current position and validates it's in canonical form.
+        /// </summary>
+        /// <param name="value">The decoded value.</param>
+        /// <returns>True if encoding is canonical, false if non-canonical.</returns>
+        public bool TryReadCanonicalULEB128(out ulong value)
+        {
+            uint startPosition = Position;
+            value = ULEB128();
+            uint bytesRead = Position - startPosition;
+            
+            // Re-encode to canonical form and check length
+            uint canonicalLength = GetCanonicalULEB128Length(value);
+            
+            return bytesRead == canonicalLength;
+        }
+
+        /// <summary>
+        /// Gets the canonical (minimal) byte length for a ULEB128-encoded value.
+        /// </summary>
+        private uint GetCanonicalULEB128Length(ulong value)
+        {
+            if (value == 0) { return 1; }
+            
+            uint length = 0;
+            while (value != 0)
+            {
+                value >>= 7;
+                length++;
+            }
+            return length;
+        }
+
+        /// <summary>
+        /// Checks if the ULEB128 at current position is in canonical form without consuming it.
+        /// </summary>
+        public bool IsCanonicalULEB128()
+        {
+            uint originalPosition = Position;
+            bool isCanonical = TryReadCanonicalULEB128(out _);
+            Position = originalPosition;
+            return isCanonical;
+        }
     }
 }

@@ -4,6 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
+
+using ELFSharp.UImage;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
@@ -349,7 +352,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Addrx:
                             attributeValue.Type = DwarfAttributeValueType.Address;
-                            attributeValue.Value = debugData.ULEB128() + (ulong)beginPosition;
+                            
+                            // Read the ULEB128 and check if it's canonical
+                            if (!debugData.TryReadCanonicalULEB128(out ulong value))
+                            {
+                                // Non-canonical detected - log warning
+                                Console.WriteLine($"Warning: Non-canonical ULEB128 at position {debugData.Position}");
+                            }
+                            
+                            // Use the decoded value (whether canonical or not)
+                            attributeValue.Value = value + (ulong)beginPosition;
                             break;
 
                         // NOTE: we don't resolve any of these new DWARF5 address values yet.
