@@ -502,7 +502,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             }
                             else if (value.Type == DwarfAttributeValueType.Address)
                             {
-                                value.Value = addressNormalizer(value.Address);
+                                // Add null check before accessing Address property
+                                if (value.Value != null)
+                                {
+                                    value.Value = addressNormalizer(value.Address);
+                                }
                             }
                         }
 

@@ -93,13 +93,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             }
 
             debugDataReader.Position = offset;
-            return new DwarfCompilationUnit(dwarfBinary,
-                                            debugDataReader,
-                                            debugDataDescriptionReader,
-                                            debugStringsReader,
-                                            debugLineStringsReader,
-                                            debugStringOffsetsReader,
-                                            addressNormalizer);
+            try
+            {
+                return new DwarfCompilationUnit(dwarfBinary,
+                                                debugDataReader,
+                                                debugDataDescriptionReader,
+                                                debugStringsReader,
+                                                debugLineStringsReader,
+                                                debugStringOffsetsReader,
+                                                addressNormalizer);
+            }
+            catch (Exception ex) when (ex is InvalidOperationException or NullReferenceException or IndexOutOfRangeException)
+            {
+                // DWARF data is malformed, truncated, or has other parsing errors.
+                // Return null to allow analysis to continue with remaining compilation units.
+                return null;
+            }
         }
 
         internal static List<int> ParseDebugStringOffsets(byte[] debugStringOffsets, bool is64bit)
