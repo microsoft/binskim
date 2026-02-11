@@ -18,9 +18,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Microsoft/binskim</RepositoryUrl>
   </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants>$(DefineConstants);VERSIONCONSTANTS_PRESENT</DefineConstants>
-  </PropertyGroup>
+
   <ItemGroup>
     <Content Include="README.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
