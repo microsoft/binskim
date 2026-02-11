@@ -18,7 +18,6 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Microsoft/binskim</RepositoryUrl>
   </PropertyGroup>
-
   <ItemGroup>
     <Content Include="README.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

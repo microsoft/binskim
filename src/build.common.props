@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="$(MsBuildThisFileDirectory)Shared\SharedAssemblyInfo.cs" />
   </ItemGroup>
+  
   <ItemGroup Label="Common Packages">
   </ItemGroup>
   

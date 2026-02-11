@@ -2,7 +2,6 @@
 @ECHO off
 SETLOCAL
 
-
 call SetCurrentVersion.cmd
 
 REM Build version string, only add PRERELEASE if not empty
