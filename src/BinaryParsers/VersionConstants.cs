@@ -4,9 +4,9 @@ namespace Microsoft.CodeAnalysis.IL
 {
     public static class VersionConstants
     {
-        public const string Prerelease = "";
-        public const string AssemblyVersion = "4.4.9" + ".0";
-        public const string FileVersion = "4.4.9" + ".0";
-        public const string Version = AssemblyVersion + Prerelease;
+        public const string Prerelease = "5";
+        public const string AssemblyVersion = "4.4.9";
+        public const string FileVersion = "4.4.9";
+        public const string Version = AssemblyVersion + ".5";
     }
 }
