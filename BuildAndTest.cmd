@@ -22,7 +22,7 @@ set VERSION_CONSTANTS=%~dp0src\BinaryParsers\VersionConstants.cs
 
 REM Conditionally set DOT if PRERELEASE is not empty
 set DOT=
-if not "%PRERELEASE%"=="" set PRERELEASE=".%PRERELEASE%"
+if not "%PRERELEASE%"=="" set PRERELEASE=.%PRERELEASE%
 
 @REM Rewrite VersionConstants.cs
 
