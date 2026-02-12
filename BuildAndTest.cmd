@@ -20,8 +20,6 @@ call SetCurrentVersion.cmd
 
 set VERSION_CONSTANTS=%~dp0src\BinaryParsers\VersionConstants.cs
 
-REM Conditionally set DOT if PRERELEASE is not empty
-set DOT=
 if not "%PRERELEASE%"=="" set PRERELEASE=.%PRERELEASE%
 
 @REM Rewrite VersionConstants.cs
@@ -32,13 +30,14 @@ echo namespace Microsoft.CodeAnalysis.IL>> %VERSION_CONSTANTS%
 echo {>> %VERSION_CONSTANTS%
 echo     public static class VersionConstants>> %VERSION_CONSTANTS%
 echo     {>> %VERSION_CONSTANTS%
-echo         public const string Prerelease = "%DOT%%PRERELEASE%";>> %VERSION_CONSTANTS%
+echo         public const string Prerelease = "%PRERELEASE%";>> %VERSION_CONSTANTS%
 echo         public const string AssemblyVersion = "%MAJOR%.%MINOR%.%PATCH%";>> %VERSION_CONSTANTS%
 echo         public const string FileVersion = "%MAJOR%.%MINOR%.%PATCH%";>> %VERSION_CONSTANTS%
 echo         public const string Version = AssemblyVersion + Prerelease;>> %VERSION_CONSTANTS%
 echo     }>> %VERSION_CONSTANTS%
 echo }>> %VERSION_CONSTANTS%
-echo Current Version: %MAJOR%.%MINOR%.%PATCH%%DOT%%PRERELEASE%
+@REM Prerelease already contains dot if needed
+echo Current Version: %MAJOR%.%MINOR%.%PATCH%%PRERELEASE%
 
 
 ::Restore packages
