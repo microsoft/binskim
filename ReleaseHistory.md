@@ -20,6 +20,9 @@
 
 ## UNRELEASED
 
+## **v4.4.9.2** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.2]
+* ADM: fix version propagating [1139](https://github.com/microsoft/binskim/pull/1139)
+
 ## **v4.4.9** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9]
 * DEP: add rust compiler identification [1131](https://github.com/microsoft/binskim/pull/1131)
 
