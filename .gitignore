@@ -28,3 +28,7 @@ x64/
 src/BinSkimLinux.sln
 .vscode/settings.json
 /.vscode/c_cpp_properties.json
+
+# AI 
+.github/*
+.memory-bank/*
