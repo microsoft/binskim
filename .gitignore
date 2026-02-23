@@ -29,6 +29,8 @@ src/BinSkimLinux.sln
 .vscode/settings.json
 /.vscode/c_cpp_properties.json
 
-# AI 
-.github/*
-.memory-bank/*
+# AI - we can not ignore all .github folder! 
+.github/copilot-instructions.md
+.github/instructions/*.instructions.md
+.github/*.instructions.md
+.github/prompts/*
