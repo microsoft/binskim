@@ -535,7 +535,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (metadataConditions.Contains(MetadataConditions.ImageIsRustBinary))
             {
                 result.Add(Path.Combine(testFilesDirectory, "Rust_cargo_+ms-prod_build.exe"));
-                result.Add(Path.Combine(testFilesDirectory, "Rust_cargo_+ms-prod_build.pdb"));
             }
             return result;
         }
