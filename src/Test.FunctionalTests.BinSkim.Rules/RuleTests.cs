@@ -532,6 +532,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 result.Add(Path.Combine(testFilesDirectory, "ARM64_dotnet_CETShadowStack_NotApplicable.exe"));
             }
 
+            if (metadataConditions.Contains(MetadataConditions.ImageIsRustBinary))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "Rust_cargo_+ms-prod_build.exe"));
+                result.Add(Path.Combine(testFilesDirectory, "Rust_cargo_+ms-prod_build.pdb"));
+            }
             return result;
         }
 
