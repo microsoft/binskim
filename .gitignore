@@ -34,3 +34,4 @@ src/BinSkimLinux.sln
 .github/instructions/*.instructions.md
 .github/*.instructions.md
 .github/prompts/*
+.github/README.md
