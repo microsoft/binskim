@@ -172,7 +172,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
 
             binary.DwarfVersion.Should().Be(4);
             binary.CommandLineInfos
-                .Where(x => x.Language != DwarfLanguage.Unknown)
                 .Should()
                 .OnlyContain(x => x.CommandLine.Contains("O2"));
             binary.GetLanguage().Should().Be(DwarfLanguage.C99);
@@ -186,7 +185,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             using var binary = new ElfBinary(new Uri(fileName));
             binary.DwarfVersion.Should().Be(5);
             binary.CommandLineInfos
-                .Where(x => x.Language != DwarfLanguage.Unknown)
                 .Should()
                 .OnlyContain(x => x.CommandLine.Contains("O2"));
             binary.GetLanguage().Should().Be(DwarfLanguage.C11);

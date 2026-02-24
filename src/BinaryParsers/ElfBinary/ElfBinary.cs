@@ -56,28 +56,68 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 PublicSymbols = publicSymbols;
                 SectionRegions = ELF.Sections.Where(s => s.LoadAddress > 0).OrderBy(s => s.LoadAddress).ToArray();
 
-                CompilationUnits = new Lazy<List<DwarfCompilationUnit>>(()
-                    => LoadDebug(DwarfSymbolProvider.ParseAllCompilationUnits(this,
-                                                                              DebugData,
-                                                                              DebugDataDescription,
-                                                                              DebugDataStrings,
-                                                                              DebugLineStrings,
-                                                                              DebugStringOffsets,
-                                                                              NormalizeAddress),
-                                                                              localSymbolDirectories));
+                CompilationUnits = new Lazy<List<DwarfCompilationUnit>>(() =>
+                {
+                    try
+                    {
+                        return LoadDebug(DwarfSymbolProvider.ParseAllCompilationUnits(this,
+                                                                                      DebugData,
+                                                                                      DebugDataDescription,
+                                                                                      DebugDataStrings,
+                                                                                      DebugLineStrings,
+                                                                                      DebugStringOffsets,
+                                                                                      NormalizeAddress),
+                                                                                      localSymbolDirectories);
+                    }
+                    catch (DwarfParseException)
+                    {
+                        // Malformed DWARF debug info should not invalidate the
+                        // entire ELF binary. Treat it as if no DWARF info is
+                        // available.
+                        DebugFileLoaded = false;
+                        return new List<DwarfCompilationUnit>();
+                    }
+                });
 
-                commandLineInfos = new Lazy<List<DwarfCompileCommandLineInfo>>(()
-                    => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits.Value));
+                commandLineInfos = new Lazy<List<DwarfCompileCommandLineInfo>>(() =>
+                {
+                    try
+                    {
+                        return DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits.Value);
+                    }
+                    catch (DwarfParseException)
+                    {
+                        return new List<DwarfCompileCommandLineInfo>();
+                    }
+                });
 
-                LineNumberPrograms = new Lazy<IReadOnlyList<DwarfLineNumberProgram>>(()
-                    => DwarfSymbolProvider.ParseLineNumberPrograms(this,
-                                                                   DebugLine,
-                                                                   DebugDataStrings,
-                                                                   DebugLineStrings,
-                                                                   NormalizeAddress));
+                LineNumberPrograms = new Lazy<IReadOnlyList<DwarfLineNumberProgram>>(() =>
+                {
+                    try
+                    {
+                        return DwarfSymbolProvider.ParseLineNumberPrograms(this,
+                                                                           DebugLine,
+                                                                           DebugDataStrings,
+                                                                           DebugLineStrings,
+                                                                           NormalizeAddress);
+                    }
+                    catch (DwarfParseException)
+                    {
+                        return Array.Empty<DwarfLineNumberProgram>();
+                    }
+                });
 
-                CommonInformationEntries = new Lazy<IReadOnlyList<DwarfCommonInformationEntry>>(()
-                    => DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this)));
+                CommonInformationEntries = new Lazy<IReadOnlyList<DwarfCommonInformationEntry>>(() =>
+                {
+                    try
+                    {
+                        return DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this));
+                    }
+                    catch (DwarfParseException)
+                    {
+                        return Array.Empty<DwarfCommonInformationEntry>();
+                    }
+                });
 
                 // This conditional exists simply to conditionally provoke lazily loaded
                 // data. If forceComprehensiveParsing == false, the clause will short-circuit.

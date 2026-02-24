@@ -3,8 +3,8 @@
 
 using System;
 using System.Reflection;
-using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
@@ -47,6 +47,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public uint Position { get; set; }
 
         /// <summary>
+        /// Ensures that the requested number of bytes is available from the current position.
+        /// Throws <see cref="DwarfParseException"/> if the request would read past the end
+        /// of the underlying buffer.
+        /// </summary>
+        /// <param name="bytesRequested">The number of bytes to read.</param>
+        private void EnsureAvailable(int bytesRequested)
+        {
+            if (bytesRequested < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(bytesRequested));
+            }
+
+            // Position is uint, Data.Length is int. Use long arithmetic to avoid overflow.
+            if (Position > Data.Length || (long)Position + bytesRequested > Data.Length)
+            {
+                throw new DwarfParseException("Unexpected end of DWARF data.");
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether stream has reached the end.
         /// </summary>
         /// <value>
@@ -74,6 +94,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public byte Peek()
         {
+            EnsureAvailable(1);
             return Data[Position];
         }
 
@@ -83,8 +104,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <typeparam name="T">Type of the structure to be read</typeparam>
         public T ReadStructure<T>()
         {
+            int size = Marshal.SizeOf<T>();
+            EnsureAvailable(size);
             T result = Marshal.PtrToStructure<T>((nint)(pointer + Position));
-            Position += (uint)Marshal.SizeOf<T>();
+            Position += (uint)size;
             return result;
         }
 
@@ -123,16 +146,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public string ReadString()
         {
-            try
+            if (IsEnd)
             {
-                string result = Marshal.PtrToStringAnsi((nint)(pointer + Position));
-                Position += (uint)result.Length + 1;
-                return result;
+                throw new DwarfParseException("Unexpected end of DWARF data while reading string.");
             }
-            catch (Exception ex)
+
+            int start = (int)Position;
+            int end = Array.IndexOf(Data, (byte)0, start);
+
+            if (end == -1)
             {
-                throw new InvalidOperationException("Failed to read string from memory.", ex);
+                throw new DwarfParseException("Unterminated string in DWARF data.");
             }
+
+            string result = Encoding.ASCII.GetString(Data, start, end - start);
+            Position = (uint)(end + 1);
+            return result;
         }
 
         /// <summary>
@@ -140,6 +169,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public byte ReadByte()
         {
+            EnsureAvailable(1);
             return Data[Position++];
         }
 
@@ -148,14 +178,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public ushort ReadUshort()
         {
+            EnsureAvailable(2);
             ushort result = (ushort)Marshal.ReadInt16(pointer, (int)Position);
-
             Position += 2;
             return result;
         }
 
         public uint ReadThreeBytes()
         {
+            EnsureAvailable(3);
             uint firstTwo = (uint)Marshal.ReadInt16(pointer, (short)Position);
             Position += 2;
 
@@ -167,8 +198,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public uint ReadUint()
         {
+            EnsureAvailable(4);
             uint result = (uint)Marshal.ReadInt32(pointer, (int)Position);
-
             Position += 4;
             return result;
         }
@@ -178,8 +209,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public ulong ReadUlong()
         {
+            EnsureAvailable(8);
             ulong result = (ulong)Marshal.ReadInt64(pointer, (int)Position);
-
             Position += 8;
             return result;
         }
@@ -205,18 +236,33 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public ulong ULEB128()
         {
-            ulong x = 0;
+            ulong result = 0;
             int shift = 0;
 
-            while ((Data[Position] & 0x80) != 0)
+            while (true)
             {
-                x |= (uint)((Data[Position] & 0x7f) << shift);
+                if (IsEnd)
+                {
+                    throw new DwarfParseException("Unexpected end of DWARF data while reading ULEB128.");
+                }
+
+                byte b = Data[Position++];
+                result |= ((ulong)(b & 0x7f)) << shift;
+
+                if ((b & 0x80) == 0)
+                {
+                    break;
+                }
+
                 shift += 7;
-                Position++;
+
+                if (shift >= 64)
+                {
+                    throw new DwarfParseException("ULEB128 value is too large.");
+                }
             }
-            x |= (uint)(Data[Position] << shift);
-            Position++;
-            return x;
+
+            return result;
         }
 
         /// <summary>
@@ -224,22 +270,39 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public uint SLEB128()
         {
-            int x = 0;
+            int result = 0;
             int shift = 0;
+            byte b;
 
-            while ((Data[Position] & 0x80) != 0)
+            while (true)
             {
-                x |= (Data[Position] & 0x7f) << shift;
+                if (IsEnd)
+                {
+                    throw new DwarfParseException("Unexpected end of DWARF data while reading SLEB128.");
+                }
+
+                b = Data[Position++];
+                result |= (b & 0x7f) << shift;
                 shift += 7;
-                Position++;
+
+                if ((b & 0x80) == 0)
+                {
+                    break;
+                }
+
+                if (shift >= 32)
+                {
+                    throw new DwarfParseException("SLEB128 value is too large.");
+                }
             }
-            x |= Data[Position] << shift;
-            if ((Data[Position] & 0x40) != 0)
+
+            // If the sign bit of the final byte is set, sign-extend.
+            if ((shift < 32) && ((b & 0x40) != 0))
             {
-                x |= -(1 << (shift + 7)); // sign extend
+                result |= - (1 << shift);
             }
-            Position++;
-            return (uint)x;
+
+            return (uint)result;
         }
 
         /// <summary>
@@ -248,9 +311,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="size">The size of block.</param>
         public byte[] ReadBlock(ulong size)
         {
-            size = (ulong)Math.Min((float)size, (Data.Length - Position));
-            byte[] block = new byte[size];
+            if (size > int.MaxValue)
+            {
+                throw new DwarfParseException("Requested DWARF block size is too large.");
+            }
 
+            int bytes = (int)size;
+            EnsureAvailable(bytes);
+
+            byte[] block = new byte[bytes];
             Array.Copy(Data, Position, block, 0, block.Length);
             Position += (uint)block.Length;
             return block;

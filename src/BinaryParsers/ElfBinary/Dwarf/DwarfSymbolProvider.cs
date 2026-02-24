@@ -39,14 +39,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             while (true)
             {
-                compilationUnit = ParseOneCompilationUnitByOffset(dwarfBinary,
-                                                                  debugData,
-                                                                  debugDataDescription,
-                                                                  debugStrings,
-                                                                  debugLineStrings,
-                                                                  debugStringOffsets,
-                                                                  addressNormalizer,
-                                                                  offset);
+                try
+                {
+                    compilationUnit = ParseOneCompilationUnitByOffset(dwarfBinary,
+                                                                      debugData,
+                                                                      debugDataDescription,
+                                                                      debugStrings,
+                                                                      debugLineStrings,
+                                                                      debugStringOffsets,
+                                                                      addressNormalizer,
+                                                                      offset);
+                }
+                catch (DwarfParseException)
+                {
+                    // Malformed DWARF at this offset; stop parsing further units
+                    // and return those successfully parsed so far.
+                    return returnValue;
+                }
 
                 if (compilationUnit?.Symbols.Any() != true)
                 {
@@ -104,13 +113,27 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
         internal static List<int> ParseDebugStringOffsets(byte[] debugStringOffsets, bool is64bit)
         {
+            if (debugStringOffsets == null || debugStringOffsets.Length == 0)
+            {
+                return new List<int>();
+            }
+
             using var debugStringOffsetsReader = new DwarfMemoryReader(debugStringOffsets);
             var stringOffsets = new List<int>();
 
-            while (!debugStringOffsetsReader.IsEnd)
+            try
             {
-                int offset = debugStringOffsetsReader.ReadOffset(is64bit);
-                stringOffsets.Add(offset);
+                while (!debugStringOffsetsReader.IsEnd)
+                {
+                    int offset = debugStringOffsetsReader.ReadOffset(is64bit);
+                    stringOffsets.Add(offset);
+                }
+            }
+            catch (DwarfParseException)
+            {
+                // Truncated or malformed .debug_str_offsets; return what we
+                // have so far and allow higher layers to treat DWARF strings
+                // as partially or wholly unavailable instead of failing.
             }
 
             return stringOffsets;
@@ -136,11 +159,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             while (!debugLineReader.IsEnd)
             {
-                var program =
-                    new DwarfLineNumberProgram(dwarfVersion,
-                                               debugLineReader,
-                                               debugStringsReader,
-                                               addressNormalizer);
+                DwarfLineNumberProgram program;
+
+                try
+                {
+                    program =
+                        new DwarfLineNumberProgram(dwarfVersion,
+                                                   debugLineReader,
+                                                   debugStringsReader,
+                                                   addressNormalizer);
+                }
+                catch (DwarfParseException)
+                {
+                    // Malformed or truncated .debug_line data. Stop parsing
+                    // additional line number programs and return the programs
+                    // successfully parsed so far.
+                    break;
+                }
 
                 if (program.Files == null)
                 {

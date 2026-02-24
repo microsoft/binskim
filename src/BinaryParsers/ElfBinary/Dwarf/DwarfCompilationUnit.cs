@@ -81,6 +81,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             // Read header
             uint beginPosition = debugData.Position;
             ulong length = debugData.ReadLength(out bool is64bit);
+            // Validate that the reported length does not extend beyond the
+            // available debug data buffer. Malformed or malicious DWARF can
+            // otherwise cause out-of-bounds reads.
+            if ((ulong)debugData.Position + length > (ulong)debugData.Data.Length)
+            {
+                throw new DwarfParseException("DWARF compilation unit length exceeds .debug_info size.");
+            }
+
             uint endPosition = debugData.Position + (uint)length;
             NextOffset = endPosition;
             ushort version = debugData.ReadUshort();
@@ -107,7 +115,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             }
             else
             {
-                return;
+                throw new DwarfParseException($"Unsupported DWARF version: {version}.");
             }
 
             DataDescriptionReader dataDescriptionReader = new DataDescriptionReader(debugDataDescription, debugDataDescriptionOffset);
@@ -162,10 +170,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Block1:
                             attributeValue.Type = DwarfAttributeValueType.Block;
-                            if (debugData.Position + 1 <= debugData.Data.Length)
-                            {
-                                attributeValue.Value = debugData.ReadBlock(debugData.ReadByte());
-                            }
+                            attributeValue.Value = debugData.ReadBlock(debugData.ReadByte());
                             break;
 
                         case DwarfFormat.Block2:
@@ -180,10 +185,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Data1:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            if (debugData.Position + 1 <= debugData.Data.Length)
-                            {
-                                attributeValue.Value = (ulong)debugData.ReadByte();
-                            }
+                            attributeValue.Value = (ulong)debugData.ReadByte();
                             break;
 
                         case DwarfFormat.Data2:
@@ -198,18 +200,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Data8:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            if (debugData.Position + 1 <= debugData.Data.Length)
-                            {
-                                attributeValue.Value = debugData.ReadUlong();
-                            }
+                            attributeValue.Value = debugData.ReadUlong();
                             break;
 
                         case DwarfFormat.Data16:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            if (debugData.Position + 1 <= debugData.Data.Length)
-                            {
-                                attributeValue.Value = debugData.ReadBlock(16);
-                            }
+                            attributeValue.Value = debugData.ReadBlock(16);
                             break;
 
                         case DwarfFormat.SData:
@@ -416,6 +412,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                         if (dwarfAttributeValue.Value != null)
                         {
                             ulong debugStringOffsetIndex = (ulong)dwarfAttributeValue.Value + indexOffset;
+                            if (debugStringOffsetIndex >= (ulong)debugStringOffsets.Count)
+                            {
+                                throw new DwarfParseException("DWARF string index is out of range of .debug_str_offsets.");
+                            }
+
                             uint offset = (uint)debugStringOffsets[(int)debugStringOffsetIndex];
                             dwarfAttributeValue.Value = debugStrings.ReadString(offset);
                         }
