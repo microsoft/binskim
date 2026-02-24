@@ -87,6 +87,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             set => this.Policy.SetProperty(BinaryParsersProperties.IgnorePELoadError, value);
         }
 
+        public bool IgnoreBinaryAnalysisErrors
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.IgnoreBinaryAnalysisErrors) == true;
+            set => this.Policy.SetProperty(BinaryParsersProperties.IgnoreBinaryAnalysisErrors, value);
+        }
+
         public bool DisableTelemetry
         {
             get => this.Policy?.GetProperty(BinaryParsersProperties.DisableTelemetry) == true;
