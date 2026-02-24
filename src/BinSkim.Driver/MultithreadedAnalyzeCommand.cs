@@ -97,6 +97,7 @@ namespace Microsoft.CodeAnalysis.IL
             context.DisableTelemetry = options.DisableTelemetry != null ? options.DisableTelemetry.Value : context.DisableTelemetry;
             context.LocalSymbolDirectories = options.LocalSymbolDirectories ?? context.LocalSymbolDirectories;
             context.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
+            context.VerboseErrors = options.Trace.Any();
 
             // Hidden options for test normalization purposes.
             context.EnlistmentRootToNormalize = options.EnlistmentRoot ?? context.EnlistmentRootToNormalize;
@@ -135,6 +136,7 @@ namespace Microsoft.CodeAnalysis.IL
             scanTargetContext.IgnoreBinaryAnalysisErrors = context.IgnoreBinaryAnalysisErrors;
             scanTargetContext.LocalSymbolDirectories = context.LocalSymbolDirectories;
             scanTargetContext.TracePdbLoads = context.TracePdbLoads;
+            scanTargetContext.VerboseErrors = context.VerboseErrors;
 
             // Command-line provided policy is now initialized. Update context 
             // based on any possible configuration provided in this way.
@@ -247,11 +249,18 @@ namespace Microsoft.CodeAnalysis.IL
             // SDK behavior (Errors.LogUnhandledRuleExceptionAnalyzingTarget), this
             // does NOT set fatal RuntimeConditions and does NOT add the rule to
             // the disabledSkimmers set.
+            //
+            // By default only the exception type and message are shown. The full
+            // stack trace is included when any --trace option is specified.
+            bool verbose = context.VerboseErrors;
+
             string message =
                 $"An exception of type '{exception.GetType().Name}' was raised " +
                 $"{phase} '{context.CurrentTarget.Uri.GetFileName()}' for check " +
                 $"'{context.Rule.Name}' ('{context.Rule.Id}'). The rule remains " +
-                $"enabled for subsequent targets. Exception: {exception}";
+                $"enabled for subsequent targets. {exception.GetType().Name}: " +
+                $"{exception.Message}" +
+                (verbose ? $"\n{exception}" : string.Empty);
 
             context.Logger.LogToolNotification(
                 new Notification

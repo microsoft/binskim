@@ -93,6 +93,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             set => this.Policy.SetProperty(BinaryParsersProperties.IgnoreBinaryAnalysisErrors, value);
         }
 
+        /// <summary>
+        /// When true, exception stack traces are included in warning messages
+        /// logged by the --ignoreBinaryAnalysisErrors feature. Set to true
+        /// when the user specifies any --trace option.
+        /// </summary>
+        public bool VerboseErrors { get; set; }
+
         public bool DisableTelemetry
         {
             get => this.Policy?.GetProperty(BinaryParsersProperties.DisableTelemetry) == true;
