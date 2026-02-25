@@ -384,7 +384,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Addrx4:
                             attributeValue.Type = DwarfAttributeValueType.Address;
-                            attributeValue.Offset = debugData.ReadUlong();
+                            attributeValue.Offset = debugData.ReadUint();
                             break;
 
                         case DwarfFormat.Rnglistx:
@@ -394,7 +394,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Loclistx:
                             attributeValue.Type = DwarfAttributeValueType.Loclistx;
-                            attributeValue.Value = (long)debugData.ReadOffset(is64bit);
+                            attributeValue.Value = debugData.ULEB128();
                             break;
 
                         case DwarfFormat.GNUAddrIndex:
