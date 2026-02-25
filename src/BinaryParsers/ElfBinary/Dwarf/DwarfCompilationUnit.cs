@@ -162,6 +162,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     DwarfAttribute attribute = descriptionAttribute.Attribute;
                     DwarfFormat format = descriptionAttribute.Format;
 
+                    // Form encoding sizes verified against LLVM DWARFFormValue::extractValue and DWARF5 spec Section 7.5.5.
+                    // https://github.com/llvm/llvm-project/blob/main/llvm/lib/DebugInfo/DWARF/DWARFFormValue.cpp
+                    //
+                    // | LLVM method                        | Our method     |
+                    // |------------------------------------|----------------|
+                    // | Data.getU8                         | ReadByte       |
+                    // | Data.getU16                        | ReadUshort     |
+                    // | Data.getU24                        | ReadThreeBytes |
+                    // | Data.getU32 / getRelocatedValue(4) | ReadUint       |
+                    // | Data.getU64 / getRelocatedValue(8) | ReadUlong      |
+                    // | Data.getULEB128                    | ULEB128        |
+                    // | Data.getSLEB128                    | SLEB128        |
+                    // | Data.getCStr                       | ReadString     |
                     switch (format)
                     {
                         case DwarfFormat.Address:
@@ -398,6 +411,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                             break;
 
                         case DwarfFormat.GNUAddrIndex:
+                            attributeValue.Type = DwarfAttributeValueType.Address;
+                            attributeValue.Value = debugData.ULEB128();
                             break;
 
                         default:
