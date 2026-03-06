@@ -1277,8 +1277,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 MetadataConditions.ImageIsILOnlyAssembly,
                 MetadataConditions.ImageIsRustBinary
             };
-
-            this.VerifyApplicability(new EnableMicrosoftCompilerSdlSwitch(), notApplicableTo);
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableMicrosoftCompilerSdlSwitch(), notApplicableTo);
+            }
         }
 
         [Fact]
