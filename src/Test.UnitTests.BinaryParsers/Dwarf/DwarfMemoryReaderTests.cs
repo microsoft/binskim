@@ -42,9 +42,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         // ---- Fixed-size integer reads ----
 
         [Theory]
-        [InlineData(new byte[] { 0x42 },                                     0x42ul,               1u)]  // ReadByte
-        [InlineData(new byte[] { 0x34, 0x12 },                               0x1234ul,             2u)]  // ReadUshort
-        [InlineData(new byte[] { 0x78, 0x56, 0x34, 0x12 },                   0x12345678ul,         4u)]  // ReadUint
+        [InlineData(new byte[] { 0x42 }, 0x42ul, 1u)]  // ReadByte
+        [InlineData(new byte[] { 0x34, 0x12 }, 0x1234ul, 2u)]  // ReadUshort
+        [InlineData(new byte[] { 0x78, 0x56, 0x34, 0x12 }, 0x12345678ul, 4u)]  // ReadUint
         [InlineData(new byte[] { 0xEF, 0xCD, 0xAB, 0x90, 0x78, 0x56, 0x34, 0x12 }, 0x1234567890ABCDEFul, 8u)]  // ReadUlong
         public void ReadUlong_WithSize_ReadsLittleEndian(byte[] data, ulong expected, uint size)
         {
@@ -57,8 +57,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         // ---- ReadOffset: 32-bit vs 64-bit ----
 
         [Theory]
-        [InlineData(false, new byte[] { 0x78, 0x56, 0x34, 0x12 },                               0x12345678, 4u)]
-        [InlineData(true,  new byte[] { 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },       8,          8u)]
+        [InlineData(false, new byte[] { 0x78, 0x56, 0x34, 0x12 }, 0x12345678, 4u)]
+        [InlineData(true, new byte[] { 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 8, 8u)]
         public void ReadOffset_ReadsCorrectWidth(bool is64bit, byte[] data, int expected, uint expectedPosition)
         {
             using var reader = new DwarfMemoryReader(data);

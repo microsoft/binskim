@@ -56,7 +56,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             {
                 byte b = (byte)(value & 0x7F);
                 value >>= 7;
-                if (value != 0) b |= 0x80;
+                if (value != 0)
+                {
+                    b |= 0x80;
+                }
+
                 bytes.Add(b);
             } while (value != 0);
             return bytes.ToArray();
@@ -149,7 +153,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             ms.Write(EncodeULEB128(1));
             ms.Write(EncodeULEB128((ulong)tag));
             ms.WriteByte(0); // no children
-            foreach (var (attr, form) in attrForms)
+            foreach ((DwarfAttribute attr, DwarfFormat form) in attrForms)
             {
                 ms.Write(EncodeULEB128((ulong)attr));
                 ms.Write(EncodeULEB128((ulong)form));
@@ -163,7 +167,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Parses a DWARF compilation unit from crafted binary data and returns the first symbol.
         /// </summary>
-        private static DwarfSymbol ParseSingleSymbol(byte[] debugInfoData, byte[] debugAbbrevData, bool isDwarf5 = true, byte[] debugStrData = null)
+        private static DwarfSymbol ParseSingleSymbol(byte[] debugInfoData, byte[] debugAbbrevData, byte[] debugStrData = null)
         {
             using var debugData = new DwarfMemoryReader(debugInfoData);
             using var debugAbbrev = new DwarfMemoryReader(debugAbbrevData);
