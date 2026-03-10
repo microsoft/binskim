@@ -21,10 +21,22 @@ extends:
     - stage: stage1
       displayName: Build And Test
       jobs:
-        - job: linux
+        - job: build
+          strategy:
+            matrix:
+              linux:
+                poolName: guardian-build-infra-linux-x64-dev
+                poolOS: linux
+                buildScript: ./BuildAndTest.sh
+                runComponentGovernance: 'false'
+              windows:
+                poolName: guardian-build-infra-windows-x64-dev
+                poolOS: windows
+                buildScript: BuildAndTest.cmd
+                runComponentGovernance: 'true'
           pool:
-            name: guardian-build-infra-linux-x64-dev
-            os: linux
+            name: $(poolName)
+            os: $(poolOS)
           steps:
           - checkout: self
 
@@ -34,43 +46,37 @@ extends:
               version: "9.0.x"
               packageType: sdk
 
-          - task: Bash@3
-            displayName: "Build and Test"
-            inputs:
-              filePath: "BuildAndTest.sh"
-
-        - job: windows
-          pool:
-            name: guardian-build-infra-windows-x64-dev
-            os: windows
-          steps:
-          - task: UseDotNet@2
-            displayName: .NET Core 9 sdk
-            inputs:
-              version: "9.0.x"
-              packageType: sdk
-
-          - checkout: self
           - task: DotNetCoreCLI@2
+            displayName: "Create nuget.config"
             inputs:
-              command: 'custom'
-              custom: 'new'
-              arguments: 'nuget.config'
+              command: custom
+              custom: new
+              arguments: nuget.config
 
           - task: DotNetCoreCLI@2
+            displayName: "Add BinSkim.Build source"
             inputs:
-              command: 'custom'
-              custom: 'nuget'
-              arguments: 'add source -n BinSkim.Build https://pkgs.dev.azure.com/mseng/1ES/_packaging/BinSkim.Build/nuget/v3/index.json'
+              command: custom
+              custom: nuget
+              arguments: "add source -n BinSkim.Build https://pkgs.dev.azure.com/mseng/1ES/_packaging/BinSkim.Build/nuget/v3/index.json"
 
           - task: DotNetCoreCLI@2
+            displayName: "Disable default nuget source"
             inputs:
-              command: 'custom'
-              custom: 'nuget'
-              arguments: 'disable source nuget'
+              command: custom
+              custom: nuget
+              arguments: "disable source nuget"
+
+          - task: CmdLine@2
+            displayName: "Ensure BuildAndTest.sh is executable (Linux)"
+            condition: eq(variables['poolOS'], 'linux')
+            inputs:
+              script: chmod +x ./BuildAndTest.sh
 
           - task: CmdLine@2
             displayName: "Build and Test"
             inputs:
-              script: "BuildAndTest.cmd"
+              script: $(buildScript)
+
           - task: ComponentGovernanceComponentDetection@0
+            condition: eq(variables['runComponentGovernance'], 'true')
