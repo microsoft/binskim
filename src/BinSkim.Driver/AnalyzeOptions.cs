@@ -59,6 +59,13 @@ namespace Microsoft.CodeAnalysis.IL
         public bool? IgnorePELoadError { get; set; }
 
         [Option(
+            "ignoreBinaryAnalysisErrors",
+            HelpText = "If enabled, BinSkim will not disable a rule or return a failure exit code when "
+                     + "the rule throws an exception on a specific target (e.g. a corrupt or tampered "
+                     + "binary). The rule remains active for subsequent targets.")]
+        public bool? IgnoreBinaryAnalysisErrors { get; set; }
+
+        [Option(
             "disable-telemetry",
             HelpText = "If enabled, BinSkim will disable telemetry.")]
         public bool? DisableTelemetry { get; set; }
