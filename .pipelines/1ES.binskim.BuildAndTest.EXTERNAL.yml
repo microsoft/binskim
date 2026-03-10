@@ -68,6 +68,12 @@ extends:
               arguments: "disable source nuget"
 
           - task: CmdLine@2
+            displayName: "Ensure BuildAndTest.sh is executable (Linux)"
+            condition: eq(variables['poolOS'], 'linux')
+            inputs:
+              script: chmod +x ./BuildAndTest.sh
+
+          - task: CmdLine@2
             displayName: "Build and Test"
             inputs:
               script: $(buildScript)
