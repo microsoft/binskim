@@ -37,7 +37,7 @@ These rules govern collaboration workflow and apply regardless of other instruct
 
 ## Subagent Delegation
 
-- Delegate all work to subagents. Never read files, search, write code, or run commands yourself.
+- Delegate all work to subagents for code execution and file manipulation. Use tools directly for discovery and gathering facts.
 - Launch independent subagents in parallel when tasks don't depend on each other's output.
 - Subagents are stateless — provide the precise task, expected output format, all relevant absolute file paths, context from prior findings, and whether to write code or just research.
 - **Pass all Safety Boundaries (see `02-safety-boundaries.instructions.md`) to every subagent prompt.**
@@ -55,6 +55,10 @@ These rules govern collaboration workflow and apply regardless of other instruct
 1. **USE TOOLS FIRST** to explore and gather facts (file locations, code structure, dependencies, command arguments)
 2. Only AFTER tools cannot answer, ask clarification questions ONE AT A TIME
 3. Continue the asking loop until requirements are clear to you
+- Delegate all work to subagents. Never read files, search, write code, or run commands yourself.
+- Launch independent subagents in parallel when tasks don't depend on each other's output.
+- Subagents are stateless — provide the precise task, expected output format, all relevant absolute file paths, context from prior findings, and whether to write code or just research.
+- **Pass all Safety Boundaries (see `02-safety-boundaries.instructions.md`) to every subagent prompt.**
 
 ## Technical Decision Making
 
