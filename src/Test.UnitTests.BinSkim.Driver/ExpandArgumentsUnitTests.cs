@@ -206,5 +206,35 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             fileSystemMock.Verify(fs => fs.FileReadAllLines(ResponseFileName), Times.Once);
             environmentVariablesMock.Verify(ev => ev.ExpandEnvironmentVariables(ResponseFileName), Times.Once);
         }
+
+        [Fact]
+        public void GenerateArguments_TrimsTrailingHashCommentFromPathLine()
+        {
+            const string ResponseFileName = "Mocked.rsp";
+            string[] args = new[] { "@" + ResponseFileName };
+
+            string[] rspContent = new[]
+            {
+                @"C:\\somePath\\something.exe # comment"
+            };
+
+            SetupTestMocks(
+                ResponseFileName,
+                rspContent,
+                out Mock<IFileSystem> fileSystemMock,
+                out Mock<IEnvironmentVariables> environmentVariablesMock);
+
+            IFileSystem fileSystem = fileSystemMock.Object;
+            IEnvironmentVariables environmentVariables = environmentVariablesMock.Object;
+
+            string[] result = ExpandArguments.GenerateArguments(args, fileSystem, environmentVariables);
+
+            result.Length.Should().Be(1);
+            result[0].Should().Be(@"C:\\somePath\\something.exe");
+
+            fileSystemMock.Verify(fs => fs.PathGetFullPath(ResponseFileName), Times.Once);
+            fileSystemMock.Verify(fs => fs.FileReadAllLines(ResponseFileName), Times.Once);
+            environmentVariablesMock.Verify(ev => ev.ExpandEnvironmentVariables(ResponseFileName), Times.Once);
+        }
     }
 }
