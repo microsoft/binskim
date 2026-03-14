@@ -109,6 +109,30 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         }
 
         [Fact]
+        public void CompilerDataLogger_Write_ShouldIncludeIsASanEnabled_WhenTelemetryIsEnabled()
+        {
+            using BinaryAnalyzerContext context = CreateTestContext();
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger logger);
+
+            var compilerData = new CompilerData
+            {
+                CompilerName = "MSVC",
+                IsASanEnabled = true
+            };
+            logger.Write(context, compilerData);
+
+            // Get the compiler event
+            List<EventTelemetry> events = telemetryEventOutput.OfType<EventTelemetry>().ToList();
+            EventTelemetry compilerEvent = events.FirstOrDefault(e => e.Name == CompilerDataLogger.CompilerEventName);
+
+            compilerEvent.Should().NotBeNull();
+            compilerEvent.Properties.Should().ContainKey("isASanEnabled");
+            compilerEvent.Properties["isASanEnabled"].Should().Be("True");
+        }
+
+        [Fact]
         public void CompilerDataLogger_Constructor_ShouldThrowException_WhenForceIsDisabledAndCsvIsEnabled()
         {
             var fileSystem = new Mock<IFileSystem>();
