@@ -124,6 +124,105 @@ namespace Microsoft.CodeAnalysis.IL
 
         private BinaryAnalyzerContext globalContext;
 
+        protected override ISet<Skimmer<BinaryAnalyzerContext>> InitializeSkimmers(
+            ISet<Skimmer<BinaryAnalyzerContext>> skimmers,
+            BinaryAnalyzerContext globalContext)
+        {
+            skimmers = base.InitializeSkimmers(skimmers, globalContext);
+
+            AnalyzeOptions options = this.currentOptions;
+            if (options == null)
+            {
+                return skimmers;
+            }
+
+            var enableRules = ParseRuleSpecifiers(options.EnableRules);
+            var runOnlyRules = ParseRuleSpecifiers(options.RunOnlyRules);
+
+            if (enableRules.Count == 0 && runOnlyRules.Count == 0)
+            {
+                return skimmers;
+            }
+
+            if (enableRules.Count > 0 && runOnlyRules.Count > 0)
+            {
+                throw new InvalidOperationException(
+                    "Cannot specify both --enable-disabled-rules and --run-only-rules. Use one or the other.");
+            }
+
+            foreach (Skimmer<BinaryAnalyzerContext> skimmer in skimmers)
+            {
+                if (runOnlyRules.Count > 0)
+                {
+                    // --run-only-rules: disable everything, then enable only specified rules.
+                    if (runOnlyRules.TryGetValue(skimmer.Id, out FailureLevel? level))
+                    {
+                        skimmer.DefaultConfiguration.Enabled = true;
+                        if (level.HasValue)
+                        {
+                            skimmer.DefaultConfiguration.Level = level.Value;
+                        }
+                    }
+                    else
+                    {
+                        skimmer.DefaultConfiguration.Enabled = false;
+                    }
+                }
+                else if (enableRules.TryGetValue(skimmer.Id, out FailureLevel? level))
+                {
+                    // --enable-disabled-rules: enable the specified rules (useful for rules disabled by default).
+                    skimmer.DefaultConfiguration.Enabled = true;
+                    if (level.HasValue)
+                    {
+                        skimmer.DefaultConfiguration.Level = level.Value;
+                    }
+                }
+            }
+
+            return skimmers;
+        }
+
+        /// <summary>
+        /// Parses rule specifiers in the format "RuleId" or "RuleId:Level" into a dictionary.
+        /// </summary>
+        internal static Dictionary<string, FailureLevel?> ParseRuleSpecifiers(IEnumerable<string> specifiers)
+        {
+            var result = new Dictionary<string, FailureLevel?>(StringComparer.OrdinalIgnoreCase);
+
+            if (specifiers == null)
+            {
+                return result;
+            }
+
+            foreach (string specifier in specifiers)
+            {
+                if (string.IsNullOrWhiteSpace(specifier))
+                {
+                    continue;
+                }
+
+                string[] parts = specifier.Split(':');
+                string ruleId = parts[0].Trim();
+
+                FailureLevel? level = null;
+                if (parts.Length > 1 && !string.IsNullOrWhiteSpace(parts[1]))
+                {
+                    if (!Enum.TryParse(parts[1].Trim(), ignoreCase: true, out FailureLevel parsed))
+                    {
+                        throw new InvalidOperationException(
+                            $"Invalid level '{parts[1].Trim()}' for rule '{ruleId}'. " +
+                            $"Valid values are: Error, Warning, Note.");
+                    }
+
+                    level = parsed;
+                }
+
+                result[ruleId] = level;
+            }
+
+            return result;
+        }
+
         protected override BinaryAnalyzerContext CreateScanTargetContext(BinaryAnalyzerContext context)
         {
             BinaryAnalyzerContext scanTargetContext = base.CreateScanTargetContext(context);
@@ -332,6 +431,8 @@ namespace Microsoft.CodeAnalysis.IL
         {
             Stopwatch stopwatch = null;
 
+            this.currentOptions = analyzeOptions;
+
             if (analyzeOptions.DisableTelemetry == true)
             {
                 this.Telemetry = null;
@@ -409,5 +510,7 @@ namespace Microsoft.CodeAnalysis.IL
         internal Sarif.SarifVersion UnitTestOutputVersion { get; set; }
 
         private Sdk.Telemetry Telemetry { get; set; }
+
+        private AnalyzeOptions currentOptions;
     }
 }

@@ -71,6 +71,24 @@ namespace Microsoft.CodeAnalysis.IL
         public bool? DisableTelemetry { get; set; }
 
         [Option(
+            "enable-disabled-rules",
+            Separator = ';',
+            HelpText = "Rules to enable that are otherwise disabled by default, expressed as a semicolon-delimited " +
+                       "list enclosed in double quotes. Each entry is RuleId or RuleId:Level where Level is " +
+                       "Error, Warning, or Note. If Level is omitted, the rule's default level is used. " +
+                       "Example: \"BA2032:Note;BA2029\"")]
+        public IEnumerable<string> EnableRules { get; set; } = Array.Empty<string>();
+
+        [Option(
+            "run-only-rules",
+            Separator = ';',
+            HelpText = "Disable all rules and enable only those specified, expressed as a semicolon-delimited " +
+                       "list enclosed in double quotes. Each entry is RuleId or RuleId:Level where Level is " +
+                       "Error, Warning, or Note. If Level is omitted, the rule's default level is used. " +
+                       "Example: \"BA4001;BA2032:Note\"")]
+        public IEnumerable<string> RunOnlyRules { get; set; } = Array.Empty<string>();
+
+        [Option(
             's',
             "statistics",
             HelpText = "Generate timing and other statistics for analysis session.")]
