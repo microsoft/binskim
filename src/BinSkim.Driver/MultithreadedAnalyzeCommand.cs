@@ -184,25 +184,22 @@ namespace Microsoft.CodeAnalysis.IL
             var loadedRuleIds = new HashSet<string>(skimmers.Select(s => s.Id), StringComparer.OrdinalIgnoreCase);
             Dictionary<string, FailureLevel?> specifiers = runOnlyRules.Count > 0 ? runOnlyRules : enableRules;
 
-            foreach (string ruleId in specifiers.Keys)
+            foreach (string ruleId in specifiers.Keys.Where(id => !loadedRuleIds.Contains(id)))
             {
-                if (!loadedRuleIds.Contains(ruleId))
-                {
-                    globalContext.Logger.LogConfigurationNotification(
-                        new Notification
+                globalContext.Logger.LogConfigurationNotification(
+                    new Notification
+                    {
+                        Descriptor = new ReportingDescriptorReference
                         {
-                            Descriptor = new ReportingDescriptorReference
-                            {
-                                Id = Warnings.Wrn999_RuleExplicitlyDisabled,
-                            },
-                            Message = new Message
-                            {
-                                Text = $"Rule '{ruleId}' was specified on the command line but does not " +
-                                       $"match any loaded rule. Verify the rule ID is correct.",
-                            },
-                            Level = FailureLevel.Warning,
-                        });
-                }
+                            Id = Warnings.Wrn999_RuleExplicitlyDisabled,
+                        },
+                        Message = new Message
+                        {
+                            Text = $"Rule '{ruleId}' was specified on the command line but does not " +
+                                   $"match any loaded rule. Verify the rule ID is correct.",
+                        },
+                        Level = FailureLevel.Warning,
+                    });
             }
 
             return skimmers;
