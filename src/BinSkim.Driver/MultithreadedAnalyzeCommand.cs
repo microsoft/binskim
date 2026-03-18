@@ -163,9 +163,10 @@ namespace Microsoft.CodeAnalysis.IL
                             skimmer.DefaultConfiguration.Level = level.Value;
                         }
                     }
-                    else
+                    else if (skimmer.DefaultConfiguration.Enabled)
                     {
                         skimmer.DefaultConfiguration.Enabled = false;
+                        LogRuleExplicitlyDisabled(globalContext, skimmer);
                     }
                 }
                 else if (enableRules.TryGetValue(skimmer.Id, out FailureLevel? level))
@@ -180,6 +181,25 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             return skimmers;
+        }
+
+        private static void LogRuleExplicitlyDisabled(BinaryAnalyzerContext context, Skimmer<BinaryAnalyzerContext> skimmer)
+        {
+            context.Logger.LogConfigurationNotification(
+                new Notification
+                {
+                    Descriptor = new ReportingDescriptorReference
+                    {
+                        Id = Warnings.Wrn999_RuleExplicitlyDisabled,
+                    },
+                    Message = new Message
+                    {
+                        Text = $"Rule '{skimmer.Id}' was explicitly disabled by the user. As result, " +
+                               $"this tool run cannot be used for compliance or other auditing processes " +
+                               $"that require a comprehensive analysis.",
+                    },
+                    Level = FailureLevel.Warning,
+                });
         }
 
         /// <summary>
