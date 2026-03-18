@@ -107,6 +107,15 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             result.Should().ContainKey("BA2032");
         }
 
+        [Fact]
+        public void ParseRuleSpecifiers_NoneLevel_Throws()
+        {
+            Action act = () => MultithreadedAnalyzeCommand.ParseRuleSpecifiers(new[] { "BA2032:None" });
+
+            act.Should().Throw<InvalidOperationException>()
+               .WithMessage("*Invalid*None*BA2032*");
+        }
+
         #endregion
 
         #region InitializeSkimmers
@@ -119,6 +128,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             var skimmers = CreateDefaultSkimmers();
             var context = CreateContext(options);
 
+            // Capture which rules were enabled by default before our override
+            var enabledByDefault = new HashSet<string>(
+                skimmers.Where(s => s.DefaultConfiguration.Enabled).Select(s => s.Id));
+
             command.InitializeGlobalContextFromOptions(options, ref context);
             var result = command.TestInitializeSkimmers(skimmers, context);
 
@@ -127,12 +140,17 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 if (skimmer.Id == "BA2016")
                 {
                     skimmer.DefaultConfiguration.Enabled.Should().BeTrue(
-                        $"rule {skimmer.Id} should be enabled");
+                        $"rule {skimmer.Id} should be enabled (specified in --run-only-rules)");
+                }
+                else if (enabledByDefault.Contains(skimmer.Id))
+                {
+                    skimmer.DefaultConfiguration.Enabled.Should().BeFalse(
+                        $"rule {skimmer.Id} was enabled by default and should be disabled by --run-only-rules");
                 }
                 else
                 {
                     skimmer.DefaultConfiguration.Enabled.Should().BeFalse(
-                        $"rule {skimmer.Id} should be disabled");
+                        $"rule {skimmer.Id} was already disabled by default and should remain disabled");
                 }
             }
         }
@@ -357,6 +375,53 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
         #endregion
 
+        #region Config interaction and edge cases
+
+        [Fact]
+        public void InitializeSkimmers_RunOnlyRules_OverridesConfigFileSettings()
+        {
+            // --run-only-rules should override config-file settings: if config enabled
+            // a rule but it's not in --run-only-rules, it should be disabled.
+            var skimmers = CreateDefaultSkimmers();
+
+            // Simulate a config that enables BA2029 (normally disabled by default)
+            var ba2029 = skimmers.First(s => s.Id == "BA2029");
+            ba2029.DefaultConfiguration.Enabled = true;
+
+            var options = CreateOptions(runOnlyRules: new[] { "BA2016" });
+            var command = CreateCommand(options);
+            var context = CreateContext(options);
+
+            command.InitializeGlobalContextFromOptions(options, ref context);
+            var result = command.TestInitializeSkimmers(skimmers, context);
+
+            result.First(s => s.Id == "BA2029").DefaultConfiguration.Enabled.Should().BeFalse(
+                "--run-only-rules should override config-file enabled state");
+            result.First(s => s.Id == "BA2016").DefaultConfiguration.Enabled.Should().BeTrue();
+        }
+
+        [Fact]
+        public void InitializeSkimmers_NonExistentRuleId_DoesNotThrow()
+        {
+            // Non-existent rule IDs should not throw — they emit a warning instead.
+            var options = CreateOptions(runOnlyRules: new[] { "BA9999" });
+            var command = CreateCommand(options);
+            var skimmers = CreateDefaultSkimmers();
+            var context = CreateContext(options);
+
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            // Should not throw
+            var result = command.TestInitializeSkimmers(skimmers, context);
+
+            // All default-enabled rules should be disabled
+            result.Where(s => s.Id != "BA9999")
+                  .All(s => !s.DefaultConfiguration.Enabled || !s.EnabledByDefault)
+                  .Should().BeTrue();
+        }
+
+        #endregion
+
         #region Helpers
 
         private static AnalyzeOptions CreateOptions(
@@ -417,17 +482,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             public TestableMultithreadedAnalyzeCommand(AnalyzeOptions options) : base(telemetry: null)
             {
-                // Trigger the Run path to store options, without actually running analysis.
-                // We call the base via reflection-free approach: store options directly.
-                this.SetOptions(options);
-            }
-
-            public void SetOptions(AnalyzeOptions options)
-            {
-                // Use reflection to set the private currentOptions field
-                var field = typeof(MultithreadedAnalyzeCommand)
-                    .GetField("currentOptions", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                field.SetValue(this, options);
+                this.currentOptions = options;
             }
 
             public ISet<Skimmer<BinaryAnalyzerContext>> TestInitializeSkimmers(

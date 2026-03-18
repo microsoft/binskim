@@ -180,6 +180,31 @@ namespace Microsoft.CodeAnalysis.IL
                 }
             }
 
+            // Warn about rule IDs in the specifiers that don't match any loaded skimmer.
+            var loadedRuleIds = new HashSet<string>(skimmers.Select(s => s.Id), StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, FailureLevel?> specifiers = runOnlyRules.Count > 0 ? runOnlyRules : enableRules;
+
+            foreach (string ruleId in specifiers.Keys)
+            {
+                if (!loadedRuleIds.Contains(ruleId))
+                {
+                    globalContext.Logger.LogConfigurationNotification(
+                        new Notification
+                        {
+                            Descriptor = new ReportingDescriptorReference
+                            {
+                                Id = Warnings.Wrn999_RuleExplicitlyDisabled,
+                            },
+                            Message = new Message
+                            {
+                                Text = $"Rule '{ruleId}' was specified on the command line but does not " +
+                                       $"match any loaded rule. Verify the rule ID is correct.",
+                            },
+                            Level = FailureLevel.Warning,
+                        });
+                }
+            }
+
             return skimmers;
         }
 
@@ -227,7 +252,8 @@ namespace Microsoft.CodeAnalysis.IL
                 FailureLevel? level = null;
                 if (parts.Length > 1 && !string.IsNullOrWhiteSpace(parts[1]))
                 {
-                    if (!Enum.TryParse(parts[1].Trim(), ignoreCase: true, out FailureLevel parsed))
+                    if (!Enum.TryParse(parts[1].Trim(), ignoreCase: true, out FailureLevel parsed) ||
+                        parsed == FailureLevel.None)
                     {
                         throw new InvalidOperationException(
                             $"Invalid level '{parts[1].Trim()}' for rule '{ruleId}'. " +
@@ -531,6 +557,6 @@ namespace Microsoft.CodeAnalysis.IL
 
         private Sdk.Telemetry Telemetry { get; set; }
 
-        private AnalyzeOptions currentOptions;
+        internal AnalyzeOptions currentOptions;
     }
 }

@@ -237,6 +237,74 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             }
         }
 
+        [Fact]
+        public void RunOnlyRules_WithQuiet_TelemetryOnlyScenario()
+        {
+            // The ASan telemetry use case: --run-only-rules BA4001 --quiet
+            // Should complete successfully with no console errors.
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            string fileName = Path.Combine(Path.GetTempPath(), $"TelemetryOnly_{Guid.NewGuid()}.sarif");
+            try
+            {
+                var options = new AnalyzeOptions
+                {
+                    TargetFileSpecifiers = new[] { GetThisTestAssemblyFilePath() },
+                    OutputFilePath = fileName,
+                    OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                    RunOnlyRules = new[] { "BA4001" },
+                    Quiet = true,
+                    DisableTelemetry = true,
+                };
+
+                var command = new MultithreadedAnalyzeCommand();
+                int exitCode = command.Run(options);
+
+                exitCode.Should().Be(0, "telemetry-only run should succeed");
+
+                var log = SarifLog.Load(fileName);
+                log.Runs[0].Invocations[0].ExecutionSuccessful.Should().BeTrue();
+            }
+            finally
+            {
+                File.Delete(fileName);
+            }
+        }
+
+        [Fact]
+        public void RunOnlyRules_NonExistentRuleId_EmitsWarningInSarif()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            string fileName = Path.Combine(Path.GetTempPath(), $"UnknownRule_{Guid.NewGuid()}.sarif");
+            try
+            {
+                var options = new AnalyzeOptions
+                {
+                    TargetFileSpecifiers = new[] { GetThisTestAssemblyFilePath() },
+                    OutputFilePath = fileName,
+                    OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                    RunOnlyRules = new[] { "BA9999" },
+                    DisableTelemetry = true,
+                };
+
+                var command = new MultithreadedAnalyzeCommand();
+                command.Run(options);
+
+                var log = SarifLog.Load(fileName);
+                var notifications = log.Runs[0].Invocations[0].ToolConfigurationNotifications;
+
+                notifications.Should().Contain(n =>
+                    n.Message.Text.Contains("BA9999") &&
+                    n.Message.Text.Contains("does not match"),
+                    "should warn about non-existent rule ID");
+            }
+            finally
+            {
+                File.Delete(fileName);
+            }
+        }
+
         private static string GetThisTestAssemblyFilePath()
         {
             return typeof(RuleSelectionFunctionalTests).Assembly.Location;
