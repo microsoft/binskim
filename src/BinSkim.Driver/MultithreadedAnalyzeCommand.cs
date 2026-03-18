@@ -126,9 +126,9 @@ namespace Microsoft.CodeAnalysis.IL
 
         protected override ISet<Skimmer<BinaryAnalyzerContext>> InitializeSkimmers(
             ISet<Skimmer<BinaryAnalyzerContext>> skimmers,
-            BinaryAnalyzerContext globalContext)
+            BinaryAnalyzerContext context)
         {
-            skimmers = base.InitializeSkimmers(skimmers, globalContext);
+            skimmers = base.InitializeSkimmers(skimmers, context);
 
             AnalyzeOptions options = this.currentOptions;
             if (options == null)
@@ -166,7 +166,7 @@ namespace Microsoft.CodeAnalysis.IL
                     else if (skimmer.DefaultConfiguration.Enabled)
                     {
                         skimmer.DefaultConfiguration.Enabled = false;
-                        LogRuleExplicitlyDisabled(globalContext, skimmer);
+                        LogRuleExplicitlyDisabled(context, skimmer);
                     }
                 }
                 else if (enableRules.TryGetValue(skimmer.Id, out FailureLevel? level))
@@ -186,7 +186,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             foreach (string ruleId in specifiers.Keys.Where(id => !loadedRuleIds.Contains(id)))
             {
-                globalContext.Logger.LogConfigurationNotification(
+                context.Logger.LogConfigurationNotification(
                     new Notification
                     {
                         Descriptor = new ReportingDescriptorReference
