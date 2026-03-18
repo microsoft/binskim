@@ -77,7 +77,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 command.Run(options);
 
                 var log = SarifLog.Load(fileName);
-                var notifications = log.Runs[0].Invocations[0].ToolConfigurationNotifications;
+                IList<Notification> notifications = log.Runs[0].Invocations[0].ToolConfigurationNotifications;
 
                 notifications.Should().NotBeNullOrEmpty(
                     "WRN999 should be emitted for rules disabled by --run-only-rules");
@@ -337,7 +337,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 command.Run(options);
 
                 var log = SarifLog.Load(fileName);
-                var notifications = log.Runs[0].Invocations[0].ToolConfigurationNotifications;
+                IList<Notification> notifications = log.Runs[0].Invocations[0].ToolConfigurationNotifications;
 
                 notifications.Should().Contain(n =>
                     n.Message.Text.Contains("BA9999") &&

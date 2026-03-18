@@ -136,8 +136,8 @@ namespace Microsoft.CodeAnalysis.IL
                 return skimmers;
             }
 
-            var enableRules = ParseRuleSpecifiers(options.EnableRules);
-            var runOnlyRules = ParseRuleSpecifiers(options.RunOnlyRules);
+            Dictionary<string, FailureLevel?> enableRules = ParseRuleSpecifiers(options.EnableRules);
+            Dictionary<string, FailureLevel?> runOnlyRules = ParseRuleSpecifiers(options.RunOnlyRules);
 
             if (enableRules.Count == 0 && runOnlyRules.Count == 0)
             {
