@@ -55,6 +55,51 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
         }
 
         [Fact]
+        public void RunOnlyRules_EmitsWRN999ForDisabledRules()
+        {
+            // Verify that --run-only-rules emits WRN999 for each enabled-by-default rule
+            // that gets disabled, matching config-file behavior.
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            string fileName = Path.Combine(Path.GetTempPath(), $"WRN999_{Guid.NewGuid()}.sarif");
+            try
+            {
+                var options = new AnalyzeOptions
+                {
+                    TargetFileSpecifiers = new[] { GetThisTestAssemblyFilePath() },
+                    OutputFilePath = fileName,
+                    OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                    RunOnlyRules = new[] { "BA4001" },
+                    DisableTelemetry = true,
+                };
+
+                var command = new MultithreadedAnalyzeCommand();
+                command.Run(options);
+
+                var log = SarifLog.Load(fileName);
+                var notifications = log.Runs[0].Invocations[0].ToolConfigurationNotifications;
+
+                notifications.Should().NotBeNullOrEmpty(
+                    "WRN999 should be emitted for rules disabled by --run-only-rules");
+
+                notifications.Should().Contain(n =>
+                    n.Message.Text.Contains("BA2016") &&
+                    n.Message.Text.Contains("explicitly disabled"),
+                    "BA2016 is enabled by default and should trigger WRN999 when disabled");
+
+                // BA2029 is disabled by default — should NOT have a WRN999
+                notifications.Should().NotContain(n =>
+                    n.Message.Text.Contains("BA2029") &&
+                    n.Message.Text.Contains("explicitly disabled"),
+                    "BA2029 is disabled by default and should not trigger WRN999");
+            }
+            finally
+            {
+                File.Delete(fileName);
+            }
+        }
+
+        [Fact]
         public void DefaultRun_ProducesMultipleRuleResults()
         {
             // Regression test: without new args, analysis should produce results from many rules.
