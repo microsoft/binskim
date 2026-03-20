@@ -156,10 +156,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
         public uint ReadThreeBytes()
         {
-            uint firstTwo = (uint)Marshal.ReadInt16(pointer, (short)Position);
-            Position += 2;
-
-            return (firstTwo << 16) + ReadByte();
+            uint b0 = ReadByte();
+            uint b1 = ReadByte();
+            uint b2 = ReadByte();
+            return b0 | (b1 << 8) | (b2 << 16);
         }
 
         /// <summary>

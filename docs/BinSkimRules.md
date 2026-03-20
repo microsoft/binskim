@@ -309,7 +309,7 @@ For VC projects make sure that ItemDefinitionGroup - Link - BaseAddress property
 
 #### `Pass`: Pass
 
-'{0}' is a 64-bit image with a base address that is >= 4 gigabytes, increasing the effectiveness of Address Space Layout Randomization (which helps prevent attackers from executing security-sensitive code in well-known locations).
+'{0}' is a 64-bit image with a base address that is &gt;= 4 gigabytes, increasing the effectiveness of Address Space Layout Randomization (which helps prevent attackers from executing security-sensitive code in well-known locations).
 
 #### `Error`: Error
 
@@ -356,7 +356,7 @@ This information is typically used to resolve source file when debugging but it 
 This validation is helpful in verifying supply chain integrity. Due to this security focus, it is important that the hashing algorithm used to produce checksums is secure.
 Legacy hashing algorithms, such as MD5 and SHA-1, have been demonstrated to be broken by modern hardware (that is, it is computationally feasible to force hash collisions, in which a common hash is generated from distinct files).
 Using a secure hashing algorithm, such as SHA-256, prevents the possibility of collision attacks, in which the checksum of a malicious file is used to produce a hash that satisfies the system that it is, in fact, the original file processed by the compiler.
-For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '<ChecksumAlgorithm>' project property with 'SHA256' to enable secure source code hashing.
+For managed binaries, pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the '&lt;ChecksumAlgorithm&gt;' project property with 'SHA256' to enable secure source code hashing.
 For native code - use to MSVC 17.0 (14.30.*) or later if possible. For VC projects use PlatformToolset property with 'v143' or later value.
 When using older MSVC versions add /ZH:SHA_256 on cl.exe command line.
 
@@ -376,7 +376,7 @@ The following modules are out of policy:
 
 #### `Managed`: Error
 
-'{0}' is a managed binary compiled with an insecure ({1}) source code hashing algorithm. {1} is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project <ChecksumAlgorithm> property with 'SHA256' to enable secure source code hashing.
+'{0}' is a managed binary compiled with an insecure ({1}) source code hashing algorithm. {1} is subject to collision attacks and its use can compromise supply chain integrity. Pass '-checksumalgorithm:SHA256' on the csc.exe command-line or populate the project &lt;ChecksumAlgorithm&gt; property with 'SHA256' to enable secure source code hashing.
 
 #### `NativeWithInsecureDirectCompilands`: Error
 
@@ -895,7 +895,7 @@ Images should be correctly signed by trusted publishers using cryptographically 
 
 ### Description
 
-Application code which stores sensitive data in memory should be compiled with the Spectre mitigations switch (/Qspectre cl.exe command-line argument or <SpectreMitigation>Spectre</SpectreMitigation> build property).
+Application code which stores sensitive data in memory should be compiled with the Spectre mitigations switch (/Qspectre cl.exe command-line argument or &lt;SpectreMitigation&gt;Spectre&lt;/SpectreMitigation&gt; build property).
 Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache.
 To resolve this issue, ensure that all modules compiled into the binary are compiled with /Qspectre switch on cl.exe command-line.
 You may need to install the 'C++ spectre-mitigated libs' component from the Visual Studio installer if you observe violations against C runtime libraries such as libcmt.lib, libvcruntime.lib, etc.

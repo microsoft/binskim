@@ -92,10 +92,12 @@ namespace Microsoft.CodeAnalysis.IL
             context.SymbolPath = options.SymbolsPath ?? context.SymbolPath;
             context.IgnorePdbLoadError = options.IgnorePdbLoadError != null ? options.IgnorePdbLoadError.Value : context.IgnorePdbLoadError;
             context.IgnorePELoadError = options.IgnorePELoadError != null ? options.IgnorePELoadError.Value : context.IgnorePELoadError;
+            context.IgnoreBinaryAnalysisErrors = options.IgnoreBinaryAnalysisErrors != null ? options.IgnoreBinaryAnalysisErrors.Value : context.IgnoreBinaryAnalysisErrors;
 
             context.DisableTelemetry = options.DisableTelemetry != null ? options.DisableTelemetry.Value : context.DisableTelemetry;
             context.LocalSymbolDirectories = options.LocalSymbolDirectories ?? context.LocalSymbolDirectories;
             context.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
+            context.VerboseErrors = options.Trace.Any();
 
             // Hidden options for test normalization purposes.
             context.EnlistmentRootToNormalize = options.EnlistmentRoot ?? context.EnlistmentRootToNormalize;
@@ -131,13 +133,143 @@ namespace Microsoft.CodeAnalysis.IL
             scanTargetContext.IncludeWixBinaries = context.IncludeWixBinaries;
             scanTargetContext.IgnorePdbLoadError = context.IgnorePdbLoadError;
             scanTargetContext.IgnorePELoadError = context.IgnorePELoadError;
+            scanTargetContext.IgnoreBinaryAnalysisErrors = context.IgnoreBinaryAnalysisErrors;
             scanTargetContext.LocalSymbolDirectories = context.LocalSymbolDirectories;
             scanTargetContext.TracePdbLoads = context.TracePdbLoads;
+            scanTargetContext.VerboseErrors = context.VerboseErrors;
 
             // Command-line provided policy is now initialized. Update context 
             // based on any possible configuration provided in this way.
 
             return scanTargetContext;
+        }
+
+        protected override void AnalyzeTarget(
+            BinaryAnalyzerContext context,
+            IEnumerable<Skimmer<BinaryAnalyzerContext>> skimmers,
+            ISet<string> disabledSkimmers)
+        {
+            if (!context.IgnoreBinaryAnalysisErrors)
+            {
+                base.AnalyzeTarget(context, skimmers, disabledSkimmers);
+                return;
+            }
+
+            // When --ignoreBinaryAnalysisErrors is set, an exception thrown by a rule
+            // does NOT disable that rule for subsequent targets and does NOT
+            // set a fatal RuntimeConditions flag (which would produce a non-zero
+            // exit code).
+
+            foreach (Skimmer<BinaryAnalyzerContext> skimmer in skimmers)
+            {
+                context.CancellationToken.ThrowIfCancellationRequested();
+
+                if (disabledSkimmers.Count > 0)
+                {
+                    lock (disabledSkimmers)
+                    {
+                        if (disabledSkimmers.Contains(skimmer.Id)) { continue; }
+                    }
+                }
+
+                context.Rule = skimmer;
+
+                try
+                {
+                    skimmer.Analyze(context);
+                }
+                catch (Exception ex)
+                {
+                    LogRecoverableRuleException(context, ex, "analyzing");
+
+                    context.RuntimeExceptions ??= new List<Exception>();
+                    context.RuntimeExceptions.Add(ex);
+                }
+            }
+        }
+
+        protected override IEnumerable<Skimmer<BinaryAnalyzerContext>> DetermineApplicabilityForTarget(
+            BinaryAnalyzerContext context,
+            IEnumerable<Skimmer<BinaryAnalyzerContext>> skimmers,
+            ISet<string> disabledSkimmers)
+        {
+            if (!context.IgnoreBinaryAnalysisErrors)
+            {
+                return base.DetermineApplicabilityForTarget(context, skimmers, disabledSkimmers);
+            }
+
+            // When --ignoreBinaryAnalysisErrors is set, an exception thrown during
+            // applicability evaluation does NOT disable the rule for subsequent
+            // targets and does NOT set a fatal RuntimeConditions flag.
+
+            var candidateSkimmers = new List<Skimmer<BinaryAnalyzerContext>>();
+
+            foreach (Skimmer<BinaryAnalyzerContext> skimmer in skimmers)
+            {
+                if (disabledSkimmers.Count > 0)
+                {
+                    lock (disabledSkimmers)
+                    {
+                        if (disabledSkimmers.Contains(skimmer.Id)) { continue; }
+                    }
+                }
+
+                context.Rule = skimmer;
+
+                try
+                {
+                    AnalysisApplicability applicability = skimmer.CanAnalyze(context, out string reasonForNotAnalyzing);
+
+                    switch (applicability)
+                    {
+                        case AnalysisApplicability.NotApplicableToSpecifiedTarget:
+                            Notes.LogNotApplicableToSpecifiedTarget(context, reasonForNotAnalyzing);
+                            break;
+
+                        case AnalysisApplicability.ApplicableToSpecifiedTarget:
+                            candidateSkimmers.Add(skimmer);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogRecoverableRuleException(context, ex, "assessing applicability of");
+                }
+            }
+
+            return candidateSkimmers;
+        }
+
+        private static void LogRecoverableRuleException(
+            BinaryAnalyzerContext context,
+            Exception exception,
+            string phase)
+        {
+            // Log a warning-level notification for visibility. Unlike the default
+            // SDK behavior (Errors.LogUnhandledRuleExceptionAnalyzingTarget), this
+            // does NOT set fatal RuntimeConditions and does NOT add the rule to
+            // the disabledSkimmers set.
+            //
+            // By default only the exception type and message are shown. The full
+            // stack trace is included when any --trace option is specified.
+            bool verbose = context.VerboseErrors;
+
+            string message =
+                $"An exception of type '{exception.GetType().Name}' was raised " +
+                $"{phase} '{context.CurrentTarget.Uri.GetFileName()}' for check " +
+                $"'{context.Rule.Name}' ('{context.Rule.Id}'). The rule remains " +
+                $"enabled for subsequent targets. {exception.GetType().Name}: " +
+                $"{exception.Message}" +
+                (verbose ? $"\n{exception}" : string.Empty);
+
+            context.Logger.LogToolNotification(
+                new Notification
+                {
+                    AssociatedRule = new ReportingDescriptorReference { Id = context.Rule.Id },
+                    Level = FailureLevel.Warning,
+                    Message = new Message { Text = message },
+                },
+                context.Rule);
         }
 
         internal static string ReturnCommonPathRootFromTargetSpecifiersIfOneExists(IEnumerable<string> targetFileSpecifiers)

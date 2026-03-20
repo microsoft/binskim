@@ -20,6 +20,21 @@
 
 ## UNRELEASED
 
+## **v4.4.9.4** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.4]
+* PRF: Enhance argument generation to ignore full-line comments and handle inline comments correctly [1150](https://github.com/microsoft/binskim/pull/1150)
+
+## **v4.4.9.3** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.3]
+* UEE: DWARF5 - fixing bugs in parser [1143](https://github.com/microsoft/binskim/pull/1143)
+* UEE: Eradicate ERR998 [1142](https://github.com/microsoft/binskim/pull/1142)
+* FNS: Fix BA2026 applicability for rust binaries [1141](https://github.com/microsoft/binskim/pull/1141)
+* DEP: Update Sarif.Driver to 4.6.0 [1146](https://github.com/microsoft/binskim/pull/1146/commits)
+
+## **v4.4.9.2** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.2]
+* ADM: fix version propagating [1139](https://github.com/microsoft/binskim/pull/1139)
+
+## **v4.4.9** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9]
+* DEP: add rust compiler identification [1131](https://github.com/microsoft/binskim/pull/1131)
+
 ## **v4.4.8** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.8]
 * FPD: add binaryIsNotRust in metadata conditions [1128](https://github.com/microsoft/binskim/pull/1128)
 

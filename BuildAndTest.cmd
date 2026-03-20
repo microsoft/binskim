@@ -20,6 +20,8 @@ call SetCurrentVersion.cmd
 
 set VERSION_CONSTANTS=%~dp0src\BinaryParsers\VersionConstants.cs
 
+if not "%PRERELEASE%"=="" set PRERELEASE=.%PRERELEASE%
+
 @REM Rewrite VersionConstants.cs
 
 echo // Copyright (c) Microsoft. All rights reserved. Licensed under the MIT>  %VERSION_CONSTANTS%
@@ -29,11 +31,12 @@ echo {>> %VERSION_CONSTANTS%
 echo     public static class VersionConstants>> %VERSION_CONSTANTS%
 echo     {>> %VERSION_CONSTANTS%
 echo         public const string Prerelease = "%PRERELEASE%";>> %VERSION_CONSTANTS%
-echo         public const string AssemblyVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0";>> %VERSION_CONSTANTS%
-echo         public const string FileVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0";>> %VERSION_CONSTANTS%
+echo         public const string AssemblyVersion = "%MAJOR%.%MINOR%.%PATCH%";>> %VERSION_CONSTANTS%
+echo         public const string FileVersion = "%MAJOR%.%MINOR%.%PATCH%";>> %VERSION_CONSTANTS%
 echo         public const string Version = AssemblyVersion + Prerelease;>> %VERSION_CONSTANTS%
 echo     }>> %VERSION_CONSTANTS%
 echo }>> %VERSION_CONSTANTS%
+@REM Prerelease already contains dot if needed
 echo Current Version: %MAJOR%.%MINOR%.%PATCH%%PRERELEASE%
 
 
@@ -63,6 +66,9 @@ call BuildPackages.cmd || goto :ExitFailed
 ::Update BinSkimRules.md to cover any xml changes
 echo Exporting any BinSkim rules
 .\bld\bin\BinSkim.Driver\release\BinSkim.exe export-rules .\docs\BinSkimRules.md
+
+echo Fixing markdown angle brackets
+powershell -Command "$content = [System.IO.File]::ReadAllText('.\docs\BinSkimRules.md'); $content = $content -replace '<', '&lt;' -replace '>', '&gt;'; [System.IO.File]::WriteAllText('.\docs\BinSkimRules.md', $content)"
 
 goto :Exit
 
