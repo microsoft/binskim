@@ -153,12 +153,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     string[] pchOptionSwitches = { "/Yc", "/Yu" };
                     if (omDetails.GetOptionValue(pchOptionSwitches, OrderOfPrecedence.FirstWins, ref pchHeaderFile) == true)
                     {
-                        // Now check to see if a pch file name was specified using /Fp:
-                        string[] pchFileNameOptions = { "/Fp:" };
+                        // Now check to see if a pch file name was specified using /Fp (Name .pch file).
+                        // MSVC stores this as /Fpfilename.pch; some tools may use the /Fp:filename.pch form.
+                        string[] pchFileNameOptions = { "/Fp" };
                         if (omDetails.GetOptionValue(pchFileNameOptions, OrderOfPrecedence.FirstWins, ref pchFileName) != true)
                         {
                             // no pch filename specified, so the filename defaults to the pchHeaderFile with the extension swapped to ".pch"
                             pchFileName = Path.ChangeExtension(pchHeaderFile, "pch");
+                        }
+                        else
+                        {
+                            // Strip leading ':' to normalize both /Fp:filename.pch and /Fpfilename.pch forms.
+                            pchFileName = pchFileName.TrimStart(':');
                         }
                     }
                 }
