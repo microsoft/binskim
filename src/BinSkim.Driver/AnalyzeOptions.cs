@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL
         [Option(
             'h',
             "hashes",
-            HelpText = "Output MD5, SHA1, and SHA-256 hash of analysis targets when emitting SARIF reports.")]
+            HelpText = "(Deprecated) Output SHA1, and SHA-256 hash of analysis targets when emitting SARIF reports.")]
         [Obsolete("Use --insert instead, passing 'Hashes' along with any other references to data to be inserted.")]
         public bool ComputeFileHashes { get; set; }
 
