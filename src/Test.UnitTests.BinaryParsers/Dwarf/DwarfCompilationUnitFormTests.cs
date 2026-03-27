@@ -488,10 +488,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             ((ulong)symbol.Attributes[DwarfAttribute.DeclFile].Value).Should().Be(0x12345678);
         }
 
-        // ---- Abbreviation table terminator handling (DWARF5 spec section 7.5.3) ----
-        // https://dwarfstd.org/doc/DWARF5.pdf#section.7.5.3
-        // "The abbreviations for a given compilation unit end with an entry
-        //  consisting of a 0 byte for the abbreviation code."
+        // Abbreviation table terminator handling (DWARF5 spec 7.5.3)
 
         [Fact]
         public void AbbrevTable_WithNullTerminator_ParsesCorrectly()
@@ -597,11 +594,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void AbbrevTable_RequestingNonExistentCode_DoesNotThrow()
         {
-            // When .debug_info references an abbreviation code not present in the table,
-            // GetDebugDataDescription returns an empty DataDescription. ReadData detects
-            // the empty Attributes and bails out of the compilation unit. This allows
-            // valid DWARF binaries with shared/adjacent abbreviation tables to be parsed
-            // as far as possible without crashing.
+            // Missing abbrev code returns empty DataDescription; ReadData bails out gracefully.
             byte[] abbrevData = BuildAbbrevSingleAttribute(
                 DwarfTag.CompileUnit, DwarfAttribute.Name, DwarfFormat.Data1);
 
@@ -631,14 +624,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void AbbrevTable_NullTerminator_StopsBeforeGarbageData()
         {
-            // Regression test for the original bug: GetDebugDataDescription must stop
-            // at code == 0 (DWARF5 spec 7.5.3) and NOT read past it. If it does,
-            // it will attempt to parse garbage bytes as tag/attributes, corrupt state,
-            // and cause ArgumentNullException on subsequent lookups.
-            //
-            // This test places intentionally invalid data (0xFF bytes) after the
-            // null terminator. If the parser reads past code 0, it will either
-            // throw or produce wrong results.
+            // Parser must stop at code==0 and not read past it into garbage data.
             var abbrev = new MemoryStream();
             // Valid entry: code=1, tag=CompileUnit, no children, attr=(Name, Data1)
             abbrev.Write(EncodeULEB128(1));
@@ -681,12 +667,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_BailsOutOnUnknownAbbrevCode_PreservingValidEntries()
         {
-            // When .debug_info references an abbrev code not in the table,
-            // GetDebugDataDescription returns an empty DataDescription.
-            // ReadData detects empty Attributes and breaks out of the loop,
-            // preserving any DIEs parsed before the unknown code.
-            //
-            // Build abbrev with code=1 only, but .debug_info has code=1 then code=2.
+            // Unknown abbrev code triggers bail-out; DIEs parsed before it are preserved.
             byte[] abbrevData = BuildAbbrevSingleAttribute(
                 DwarfTag.CompileUnit, DwarfAttribute.Name, DwarfFormat.Data1);
 

@@ -148,10 +148,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 DataDescription description = dataDescriptionReader.GetDebugDataDescription(code);
                 var attributes = new Dictionary<DwarfAttribute, DwarfAttributeValue>();
 
-                // Defense-in-depth: bail out if abbreviation code was not found.
-                // Without knowing the attribute descriptions, we can't determine
-                // how many bytes the DIE's data occupies, so we can't skip it
-                // and continue parsing. Stop processing this compilation unit.
+                // Bail out if abbreviation code was not found — we can't skip the DIE without attribute descriptions.
                 if (description.Attributes == null || description.Attributes.Count == 0)
                 {
                     break;
@@ -655,9 +652,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// <param name="findCode">The code to be found.</param>
             public DataDescription GetDebugDataDescription(ulong findCode)
             {
-                // See section 7.5.3 Abbreviations Tables of DWARF5
-                // spec for information on this parsing implementation.
-                // https://dwarfstd.org/doc/DWARF5.pdf#section.7.5.3
+                // DWARF5 spec 7.5.3: https://dwarfstd.org/doc/DWARF5.pdf#section.7.5.3
 
                 if (readDescriptions.TryGetValue(findCode, out DataDescription result))
                 {
@@ -669,10 +664,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 {
                     ulong code = debugDataDescription.ULEB128();
 
-                    // Per DWARF5 spec section 7.5.3: "The abbreviations for a given
-                    // compilation unit end with an entry consisting of a 0 byte for
-                    // the abbreviation code."
-                    // https://dwarfstd.org/doc/DWARF5.pdf#section.7.5.3
+                    // Code 0 is the null terminator for this CU's abbreviation table (DWARF5 spec 7.5.3).
                     if (code == 0 || debugDataDescription.IsEnd)
                     {
                         break;
@@ -730,11 +722,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     }
                 }
 
-                // Abbreviation code not found after scanning this CU's table section.
-                // This can happen with valid DWARF data when a CU's .debug_info
-                // references codes from a shared or adjacent abbreviation table region.
-                // Return an empty DataDescription so ReadData can bail out gracefully
-                // for this compilation unit without crashing.
+                // Code not found — return empty description so ReadData bails out gracefully.
                 return new DataDescription { Attributes = new List<DataDescriptionAttribute>() };
             }
         }
