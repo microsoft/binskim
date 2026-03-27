@@ -20,6 +20,8 @@
 
 ## UNRELEASED
 
+* FPS: BA2025 is not applicable for 32-bit binaries [#1149](https://github.com/microsoft/binskim/issues/1149)
+
 ## **v4.4.9.6** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.6]
 * DEP: Sarif.Driver new version 4.6.0 [1157](https://github.com/microsoft/binskim/pull/1157)
 
