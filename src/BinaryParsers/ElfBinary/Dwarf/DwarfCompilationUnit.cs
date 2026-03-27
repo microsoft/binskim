@@ -731,11 +731,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     }
                 }
 
-                // Abbreviation code not found in the table. This can happen when
-                // the .debug_info references an abbrev code from a different CU's
-                // abbreviation table, or the DWARF data is partially corrupt.
-                // Return a DataDescription with empty Attributes to allow graceful handling.
-                return new DataDescription { Attributes = new List<DataDescriptionAttribute>() };
+                // Abbreviation code not found after scanning the entire table.
+                // This indicates an unrecognized DWARF feature, a corrupt .debug_info
+                // referencing a non-existent code, or a parser limitation.
+                // The exception is handled gracefully by ElfBinary's constructor
+                // (catches all exceptions, sets Valid = false, stores LoadException).
+                throw new NotImplementedException();
             }
         }
     }
