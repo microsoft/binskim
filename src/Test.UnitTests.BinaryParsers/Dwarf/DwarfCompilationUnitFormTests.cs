@@ -625,5 +625,99 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             act.Should().NotThrow("missing abbreviation code should be handled gracefully, not throw");
         }
+
+        [Fact]
+        public void AbbrevTable_NullTerminator_StopsBeforeGarbageData()
+        {
+            // Regression test for the original bug: GetDebugDataDescription must stop
+            // at code == 0 (DWARF5 spec 7.5.3) and NOT read past it. If it does,
+            // it will attempt to parse garbage bytes as tag/attributes, corrupt state,
+            // and cause ArgumentNullException on subsequent lookups.
+            //
+            // This test places intentionally invalid data (0xFF bytes) after the
+            // null terminator. If the parser reads past code 0, it will either
+            // throw or produce wrong results.
+            var abbrev = new MemoryStream();
+            // Valid entry: code=1, tag=CompileUnit, no children, attr=(Name, Data1)
+            abbrev.Write(EncodeULEB128(1));
+            abbrev.Write(EncodeULEB128((ulong)DwarfTag.CompileUnit));
+            abbrev.WriteByte(0); // no children
+            abbrev.Write(EncodeULEB128((ulong)DwarfAttribute.Name));
+            abbrev.Write(EncodeULEB128((ulong)DwarfFormat.Data1));
+            abbrev.WriteByte(0); abbrev.WriteByte(0); // attr terminator
+            // Null terminator — parser MUST stop here
+            abbrev.WriteByte(0);
+            // Garbage data that would corrupt parsing if read
+            for (int i = 0; i < 32; i++) { abbrev.WriteByte(0xFF); }
+            byte[] abbrevData = abbrev.ToArray();
+
+            // Build .debug_info referencing code=1
+            var die = new MemoryStream();
+            die.Write(EncodeULEB128(1));
+            die.WriteByte(0x42); // Name = Data1
+            byte[] dieData = die.ToArray();
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+
+            using var debugData = new DwarfMemoryReader(debugInfo);
+            using var debugAbbrev = new DwarfMemoryReader(abbrevData);
+            using var debugStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+            using var debugLineStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+
+            var stub = new StubDwarfBinary();
+            var cu = new DwarfCompilationUnit(
+                stub, debugData, debugAbbrev, debugStrings, debugLineStrings,
+                new List<int>(), stub.NormalizeAddress);
+
+            // If the parser correctly stopped at code 0, it parsed code=1 normally
+            cu.SymbolsTree.Should().HaveCount(1);
+            cu.SymbolsTree[0].Tag.Should().Be(DwarfTag.CompileUnit);
+            ((ulong)cu.SymbolsTree[0].Attributes[DwarfAttribute.Name].Value).Should().Be(0x42);
+        }
+
+        [Fact]
+        public void ReadData_StopsWhenAbbrevCodeNotFound()
+        {
+            // Regression test for the null guard in ReadData: when
+            // GetDebugDataDescription returns a DataDescription with empty
+            // Attributes (abbrev code not found), ReadData cannot skip the DIE
+            // (it doesn't know the data size without attribute descriptions).
+            // Instead it must stop processing and return what it has so far.
+            //
+            // Build abbrev with code=1 only, but .debug_info has code=1 then code=2.
+            // code=2 is not in the table — ReadData must stop after code=1.
+            byte[] abbrevData = BuildAbbrevSingleAttribute(
+                DwarfTag.CompileUnit, DwarfAttribute.Name, DwarfFormat.Data1);
+
+            var die = new MemoryStream();
+            // DIE 1: code=1 (exists in abbrev) — Name = 0xAA
+            die.Write(EncodeULEB128(1));
+            die.WriteByte(0xAA);
+            // DIE 2: code=2 (NOT in abbrev) — triggers bail-out
+            die.Write(EncodeULEB128(2));
+            die.WriteByte(0xBB);
+            byte[] dieData = die.ToArray();
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+
+            using var debugData = new DwarfMemoryReader(debugInfo);
+            using var debugAbbrev = new DwarfMemoryReader(abbrevData);
+            using var debugStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+            using var debugLineStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+
+            var stub = new StubDwarfBinary();
+
+            // Should not throw — ReadData should stop at the unknown code
+            var cu = new DwarfCompilationUnit(
+                stub, debugData, debugAbbrev, debugStrings, debugLineStrings,
+                new List<int>(), stub.NormalizeAddress);
+
+            // code=1 DIE should still be parsed (it was processed before the bail-out)
+            cu.SymbolsTree.Should().NotBeEmpty();
+            cu.SymbolsTree[0].Tag.Should().Be(DwarfTag.CompileUnit);
+            ((ulong)cu.SymbolsTree[0].Attributes[DwarfAttribute.Name].Value).Should().Be(0xAA);
+        }
     }
 }

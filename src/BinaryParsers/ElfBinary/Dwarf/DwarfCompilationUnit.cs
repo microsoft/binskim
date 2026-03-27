@@ -148,12 +148,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 DataDescription description = dataDescriptionReader.GetDebugDataDescription(code);
                 var attributes = new Dictionary<DwarfAttribute, DwarfAttributeValue>();
 
-                // Defense-in-depth: skip entries with no attribute descriptions.
-                // This shouldn't happen with well-formed DWARF, but guards against
-                // partial/corrupt data or unrecognized abbreviation codes.
+                // Defense-in-depth: bail out if abbreviation code was not found.
+                // Without knowing the attribute descriptions, we can't determine
+                // how many bytes the DIE's data occupies, so we can't skip it
+                // and continue parsing. Stop processing this compilation unit.
                 if (description.Attributes == null || description.Attributes.Count == 0)
                 {
-                    continue;
+                    break;
                 }
 
                 if (description.Attributes.Any(a => a.Attribute == DwarfAttribute.LinkageName && a.Format == DwarfFormat.Strp))
