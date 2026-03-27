@@ -595,13 +595,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         }
 
         [Fact]
-        public void AbbrevTable_RequestingNonExistentCode_ThrowsNotImplementedException()
+        public void AbbrevTable_RequestingNonExistentCode_DoesNotThrow()
         {
             // When .debug_info references an abbreviation code not present in the table,
-            // GetDebugDataDescription throws NotImplementedException. This is handled
-            // gracefully by ElfBinary's constructor (catches all exceptions, sets Valid=false).
-            // The throw ensures the failure is visible and diagnosable rather than silently
-            // producing wrong results.
+            // GetDebugDataDescription returns an empty DataDescription. ReadData detects
+            // the empty Attributes and bails out of the compilation unit. This allows
+            // valid DWARF binaries with shared/adjacent abbreviation tables to be parsed
+            // as far as possible without crashing.
             byte[] abbrevData = BuildAbbrevSingleAttribute(
                 DwarfTag.CompileUnit, DwarfAttribute.Name, DwarfFormat.Data1);
 
@@ -625,8 +625,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 stub, debugData, debugAbbrev, debugStrings, debugLineStrings,
                 new List<int>(), stub.NormalizeAddress);
 
-            act.Should().Throw<NotImplementedException>(
-                "unrecognized abbreviation code should throw, to be caught by ElfBinary constructor");
+            act.Should().NotThrow("missing abbreviation code should be handled gracefully");
         }
 
         [Fact]
@@ -680,12 +679,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         }
 
         [Fact]
-        public void ReadData_ThrowsOnUnknownAbbrevCode_AfterParsingValidEntries()
+        public void ReadData_BailsOutOnUnknownAbbrevCode_PreservingValidEntries()
         {
             // When .debug_info references an abbrev code not in the table,
-            // GetDebugDataDescription throws NotImplementedException (caught
-            // by ElfBinary constructor, setting Valid=false). This ensures the
-            // error is visible rather than silently producing partial results.
+            // GetDebugDataDescription returns an empty DataDescription.
+            // ReadData detects empty Attributes and breaks out of the loop,
+            // preserving any DIEs parsed before the unknown code.
             //
             // Build abbrev with code=1 only, but .debug_info has code=1 then code=2.
             byte[] abbrevData = BuildAbbrevSingleAttribute(
@@ -695,7 +694,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             // DIE 1: code=1 (exists in abbrev) — Name = 0xAA
             die.Write(EncodeULEB128(1));
             die.WriteByte(0xAA);
-            // DIE 2: code=2 (NOT in abbrev) — triggers throw
+            // DIE 2: code=2 (NOT in abbrev) — triggers bail-out
             die.Write(EncodeULEB128(2));
             die.WriteByte(0xBB);
             byte[] dieData = die.ToArray();
@@ -710,12 +709,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             var stub = new StubDwarfBinary();
 
-            Action act = () => new DwarfCompilationUnit(
+            // Should not throw — ReadData bails out on unknown code
+            var cu = new DwarfCompilationUnit(
                 stub, debugData, debugAbbrev, debugStrings, debugLineStrings,
                 new List<int>(), stub.NormalizeAddress);
 
-            act.Should().Throw<NotImplementedException>(
-                "unknown abbreviation code should throw, to be caught by ElfBinary constructor");
+            // code=1 DIE should be preserved from before the bail-out
+            cu.SymbolsTree.Should().NotBeEmpty();
+            cu.SymbolsTree[0].Tag.Should().Be(DwarfTag.CompileUnit);
+            ((ulong)cu.SymbolsTree[0].Attributes[DwarfAttribute.Name].Value).Should().Be(0xAA);
         }
     }
 }

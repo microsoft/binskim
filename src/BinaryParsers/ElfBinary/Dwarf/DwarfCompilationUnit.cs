@@ -675,7 +675,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     // https://dwarfstd.org/doc/DWARF5.pdf#section.7.5.3
                     if (code == 0 || debugDataDescription.IsEnd)
                     {
-                        lastReadPosition = debugDataDescription.Position;
                         break;
                     }
 
@@ -731,12 +730,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     }
                 }
 
-                // Abbreviation code not found after scanning the entire table.
-                // This indicates an unrecognized DWARF feature, a corrupt .debug_info
-                // referencing a non-existent code, or a parser limitation.
-                // The exception is handled gracefully by ElfBinary's constructor
-                // (catches all exceptions, sets Valid = false, stores LoadException).
-                throw new NotImplementedException();
+                // Abbreviation code not found after scanning this CU's table section.
+                // This can happen with valid DWARF data when a CU's .debug_info
+                // references codes from a shared or adjacent abbreviation table region.
+                // Return an empty DataDescription so ReadData can bail out gracefully
+                // for this compilation unit without crashing.
+                return new DataDescription { Attributes = new List<DataDescriptionAttribute>() };
             }
         }
     }
