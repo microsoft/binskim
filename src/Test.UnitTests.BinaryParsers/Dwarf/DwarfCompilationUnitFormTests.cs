@@ -487,5 +487,143 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             ((ulong)symbol.Attributes[DwarfAttribute.DeclLine].Value).Should().Be(0x1234);
             ((ulong)symbol.Attributes[DwarfAttribute.DeclFile].Value).Should().Be(0x12345678);
         }
+
+        // ---- Abbreviation table terminator handling (DWARF5 spec section 7.5.3) ----
+        // https://dwarfstd.org/doc/DWARF5.pdf#section.7.5.3
+        // "The abbreviations for a given compilation unit end with an entry
+        //  consisting of a 0 byte for the abbreviation code."
+
+        [Fact]
+        public void AbbrevTable_WithNullTerminator_ParsesCorrectly()
+        {
+            // Build an abbreviation table with two entries followed by code 0 terminator.
+            // Verify that both entries are parsed and the terminator doesn't corrupt state.
+            var abbrev = new MemoryStream();
+            // Entry 1: code=1, tag=CompileUnit, no children, attr=(Name, Strp)
+            abbrev.Write(EncodeULEB128(1));
+            abbrev.Write(EncodeULEB128((ulong)DwarfTag.CompileUnit));
+            abbrev.WriteByte(0); // no children
+            abbrev.Write(EncodeULEB128((ulong)DwarfAttribute.Name));
+            abbrev.Write(EncodeULEB128((ulong)DwarfFormat.Data1));
+            abbrev.WriteByte(0); abbrev.WriteByte(0); // attr terminator
+            // Entry 2: code=2, tag=Variable, no children, attr=(ByteSize, Data1)
+            abbrev.Write(EncodeULEB128(2));
+            abbrev.Write(EncodeULEB128((ulong)DwarfTag.Variable));
+            abbrev.WriteByte(0); // no children
+            abbrev.Write(EncodeULEB128((ulong)DwarfAttribute.ByteSize));
+            abbrev.Write(EncodeULEB128((ulong)DwarfFormat.Data1));
+            abbrev.WriteByte(0); abbrev.WriteByte(0); // attr terminator
+            // Null terminator — end of abbreviation table for this CU
+            abbrev.WriteByte(0);
+            byte[] abbrevData = abbrev.ToArray();
+
+            // Build .debug_info: CU header + DIE with code=1 (Name=0x42) + DIE with code=2 (ByteSize=0x08)
+            var die = new MemoryStream();
+            die.Write(EncodeULEB128(1)); // abbrev code 1
+            die.WriteByte(0x42);         // Name = Data1
+            die.Write(EncodeULEB128(2)); // abbrev code 2
+            die.WriteByte(0x08);         // ByteSize = Data1
+            byte[] dieData = die.ToArray();
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+
+            using var debugData = new DwarfMemoryReader(debugInfo);
+            using var debugAbbrev = new DwarfMemoryReader(abbrevData);
+            using var debugStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+            using var debugLineStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+
+            var stub = new StubDwarfBinary();
+            var cu = new DwarfCompilationUnit(
+                stub, debugData, debugAbbrev, debugStrings, debugLineStrings,
+                new List<int>(), stub.NormalizeAddress);
+
+            cu.SymbolsTree.Should().HaveCount(2);
+            ((ulong)cu.SymbolsTree[0].Attributes[DwarfAttribute.Name].Value).Should().Be(0x42);
+            ((ulong)cu.SymbolsTree[1].Attributes[DwarfAttribute.ByteSize].Value).Should().Be(0x08);
+        }
+
+        [Fact]
+        public void AbbrevTable_WithTrailingDataAfterTerminator_DoesNotCorruptParsing()
+        {
+            // Simulates a .debug_abbrev section shared by multiple CUs.
+            // After the first CU's null terminator, there's another CU's abbreviation data.
+            // The parser should stop at the terminator and not read into the next CU's data.
+            var abbrev = new MemoryStream();
+            // CU1's abbreviation table
+            abbrev.Write(EncodeULEB128(1));
+            abbrev.Write(EncodeULEB128((ulong)DwarfTag.CompileUnit));
+            abbrev.WriteByte(0); // no children
+            abbrev.Write(EncodeULEB128((ulong)DwarfAttribute.Name));
+            abbrev.Write(EncodeULEB128((ulong)DwarfFormat.Data1));
+            abbrev.WriteByte(0); abbrev.WriteByte(0); // attr terminator
+            // Null terminator for CU1
+            abbrev.WriteByte(0);
+            // CU2's abbreviation table (should not be read by CU1)
+            abbrev.Write(EncodeULEB128(1)); // reuses code=1
+            abbrev.Write(EncodeULEB128((ulong)DwarfTag.Variable)); // different tag
+            abbrev.WriteByte(0);
+            abbrev.Write(EncodeULEB128((ulong)DwarfAttribute.ByteSize));
+            abbrev.Write(EncodeULEB128((ulong)DwarfFormat.Data2)); // different form
+            abbrev.WriteByte(0); abbrev.WriteByte(0);
+            abbrev.WriteByte(0);
+            byte[] abbrevData = abbrev.ToArray();
+
+            // Build .debug_info for CU1 only
+            var die = new MemoryStream();
+            die.Write(EncodeULEB128(1));
+            die.WriteByte(0xAB); // Name = Data1
+            byte[] dieData = die.ToArray();
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+
+            using var debugData = new DwarfMemoryReader(debugInfo);
+            using var debugAbbrev = new DwarfMemoryReader(abbrevData);
+            using var debugStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+            using var debugLineStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+
+            var stub = new StubDwarfBinary();
+            var cu = new DwarfCompilationUnit(
+                stub, debugData, debugAbbrev, debugStrings, debugLineStrings,
+                new List<int>(), stub.NormalizeAddress);
+
+            cu.SymbolsTree.Should().HaveCount(1);
+            // Should use CU1's definition (Data1), not CU2's (Data2)
+            cu.SymbolsTree[0].Tag.Should().Be(DwarfTag.CompileUnit);
+            ((ulong)cu.SymbolsTree[0].Attributes[DwarfAttribute.Name].Value).Should().Be(0xAB);
+        }
+
+        [Fact]
+        public void AbbrevTable_RequestingNonExistentCode_DoesNotThrow()
+        {
+            // Build an abbreviation table with only code=1, but .debug_info references code=99.
+            // The parser should handle the missing code gracefully (skip the DIE) instead of throwing.
+            byte[] abbrevData = BuildAbbrevSingleAttribute(
+                DwarfTag.CompileUnit, DwarfAttribute.Name, DwarfFormat.Data1);
+
+            // Build .debug_info with code=99 (not in abbrev table)
+            var die = new MemoryStream();
+            die.Write(EncodeULEB128(99)); // non-existent abbrev code
+            die.WriteByte(0x42);          // some data
+            byte[] dieData = die.ToArray();
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+
+            using var debugData = new DwarfMemoryReader(debugInfo);
+            using var debugAbbrev = new DwarfMemoryReader(abbrevData);
+            using var debugStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+            using var debugLineStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+
+            var stub = new StubDwarfBinary();
+
+            // Should not throw — the missing code should be handled gracefully
+            Action act = () => new DwarfCompilationUnit(
+                stub, debugData, debugAbbrev, debugStrings, debugLineStrings,
+                new List<int>(), stub.NormalizeAddress);
+
+            act.Should().NotThrow("missing abbreviation code should be handled gracefully, not throw");
+        }
     }
 }
