@@ -148,6 +148,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 DataDescription description = dataDescriptionReader.GetDebugDataDescription(code);
                 var attributes = new Dictionary<DwarfAttribute, DwarfAttributeValue>();
 
+                // Defense-in-depth: skip entries with no attribute descriptions.
+                // This shouldn't happen with well-formed DWARF, but guards against
+                // partial/corrupt data or unrecognized abbreviation codes.
+                if (description.Attributes == null || description.Attributes.Count == 0)
+                {
+                    continue;
+                }
+
                 if (description.Attributes.Any(a => a.Attribute == DwarfAttribute.LinkageName && a.Format == DwarfFormat.Strp))
                 {
                     description.Attributes.RemoveAll(a => a.Attribute == DwarfAttribute.Name);
@@ -648,6 +656,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             {
                 // See section 7.5.3 Abbreviations Tables of DWARF5
                 // spec for information on this parsing implementation.
+                // https://dwarfstd.org/doc/DWARF5.pdf#section.7.5.3
 
                 if (readDescriptions.TryGetValue(findCode, out DataDescription result))
                 {
@@ -659,9 +668,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 {
                     ulong code = debugDataDescription.ULEB128();
 
-                    if (debugDataDescription.IsEnd)
+                    // Per DWARF5 spec section 7.5.3: "The abbreviations for a given
+                    // compilation unit end with an entry consisting of a 0 byte for
+                    // the abbreviation code."
+                    // https://dwarfstd.org/doc/DWARF5.pdf#section.7.5.3
+                    if (code == 0 || debugDataDescription.IsEnd)
                     {
-                        return result;
+                        lastReadPosition = debugDataDescription.Position;
+                        break;
                     }
 
                     DwarfTag tag = (DwarfTag)debugDataDescription.ULEB128();
@@ -716,7 +730,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     }
                 }
 
-                throw new NotImplementedException();
+                // Abbreviation code not found in the table. This can happen when
+                // the .debug_info references an abbrev code from a different CU's
+                // abbreviation table, or the DWARF data is partially corrupt.
+                // Return a DataDescription with empty Attributes to allow graceful handling.
+                return new DataDescription { Attributes = new List<DataDescriptionAttribute>() };
             }
         }
     }
