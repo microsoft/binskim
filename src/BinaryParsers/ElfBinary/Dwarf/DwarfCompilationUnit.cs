@@ -667,7 +667,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     // Code 0 is the null terminator for this CU's abbreviation table (DWARF5 spec 7.5.3).
                     if (code == 0 || debugDataDescription.IsEnd)
                     {
-                        break;
+                        return new DataDescription { Attributes = new List<DataDescriptionAttribute>() };
                     }
 
                     DwarfTag tag = (DwarfTag)debugDataDescription.ULEB128();
@@ -722,8 +722,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     }
                 }
 
-                // Code not found — return empty description so ReadData bails out gracefully.
-                return new DataDescription { Attributes = new List<DataDescriptionAttribute>() };
+                throw new NotImplementedException();
             }
         }
     }
