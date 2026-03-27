@@ -81,11 +81,7 @@ extends:
           - task: ComponentGovernanceComponentDetection@0
             condition: eq(variables['runComponentGovernance'], 'true')
 
-    # ── Stage 2: Trigger internal build with the current commit ──────────
-    # Runs in parallel with BuildAndTest. Queues the internal BinSkimInternal
-    # pipeline with this repo's commit hash so the internal build uses the
-    # same public code. Waits for the internal build to complete and fails
-    # if it fails — blocking the PR merge.
+    # Trigger internal BinSkimInternal pipeline in parallel; block PR if it fails.
     - stage: InternalValidation
       displayName: Internal Validation
       dependsOn: []  # Run in parallel with BuildAndTest
