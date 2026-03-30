@@ -71,6 +71,13 @@ namespace Microsoft.CodeAnalysis.IL
         public bool? DisableTelemetry { get; set; }
 
         [Option(
+            "disable-archive-extraction",
+            HelpText = "If enabled, BinSkim will not extract and scan files inside archive formats " +
+                       "(ZIP, OPC packages, etc.). By default, the SARIF driver recursively extracts " +
+                       "archives up to a depth of 10.")]
+        public bool? DisableArchiveExtraction { get; set; }
+
+        [Option(
             "enable-disabled-rules",
             Separator = ';',
             HelpText = "Rules to enable that are otherwise disabled by default, expressed as a semicolon-delimited " +
