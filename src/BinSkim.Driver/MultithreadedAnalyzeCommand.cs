@@ -95,6 +95,12 @@ namespace Microsoft.CodeAnalysis.IL
             context.IgnoreBinaryAnalysisErrors = options.IgnoreBinaryAnalysisErrors != null ? options.IgnoreBinaryAnalysisErrors.Value : context.IgnoreBinaryAnalysisErrors;
 
             context.DisableTelemetry = options.DisableTelemetry != null ? options.DisableTelemetry.Value : context.DisableTelemetry;
+
+            if (options.DisableArchiveExtraction == true)
+            {
+                context.OpcFileExtensions = new HashSet<string>();
+            }
+
             context.LocalSymbolDirectories = options.LocalSymbolDirectories ?? context.LocalSymbolDirectories;
             context.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
             context.VerboseErrors = options.Trace.Any();

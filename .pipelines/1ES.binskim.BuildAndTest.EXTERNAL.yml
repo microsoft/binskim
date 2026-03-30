@@ -13,24 +13,24 @@ extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
   parameters:
     pool:
-      name: guardian-build-infra-windows-x64-dev
+      name: guardian-build-infra-windows-x64
       os: windows
     featureFlags:
       autoEnableRoslynWithNewRuleset: false
     stages:
-    - stage: stage1
+    - stage: BuildAndTest
       displayName: Build And Test
       jobs:
         - job: build
           strategy:
             matrix:
               linux:
-                poolName: guardian-build-infra-linux-x64-dev
+                poolName: guardian-build-infra-linux-x64
                 poolOS: linux
                 buildScript: ./BuildAndTest.sh
                 runComponentGovernance: 'false'
               windows:
-                poolName: guardian-build-infra-windows-x64-dev
+                poolName: guardian-build-infra-windows-x64
                 poolOS: windows
                 buildScript: BuildAndTest.cmd
                 runComponentGovernance: 'true'
@@ -80,3 +80,77 @@ extends:
 
           - task: ComponentGovernanceComponentDetection@0
             condition: eq(variables['runComponentGovernance'], 'true')
+
+    # Trigger internal BinSkimInternal pipeline in parallel; block PR if it fails.
+    - stage: InternalValidation
+      displayName: Internal Validation
+      dependsOn: []  # Run in parallel with BuildAndTest
+      jobs:
+      - job: TriggerInternalBuild
+        displayName: Trigger and wait for internal build
+        pool:
+          name: guardian-build-infra-windows-x64
+          os: windows
+        steps:
+        - checkout: none
+
+        - task: PowerShell@2
+          displayName: "Queue internal build and wait for result"
+          inputs:
+            targetType: inline
+            pwsh: true
+            script: |
+              $commit = "$(Build.SourceVersion)"
+              $org = "https://dev.azure.com/mseng/"
+              $project = "1ES"
+              $pipelineId = 21327  # 1ES.BuildAndTest.BinskimInternal
+
+              Write-Host "Triggering internal build with BinSkim commit: $commit"
+
+              $headers = @{
+                Authorization  = "Bearer $(System.AccessToken)"
+                "Content-Type" = "application/json"
+              }
+
+              $body = @{
+                templateParameters = @{
+                  binskimCommit = $commit
+                }
+              } | ConvertTo-Json -Depth 5
+
+              $runUrl = "${org}${project}/_apis/pipelines/${pipelineId}/runs?api-version=7.0"
+              $run = Invoke-RestMethod -Uri $runUrl -Method Post -Headers $headers -Body $body
+              $runId = $run.id
+
+              Write-Host "Queued run #$runId"
+              Write-Host "Portal: $($run._links.web.href)"
+
+              # Poll until the run completes
+              $pollInterval = 30
+              $maxWait = 7200  # 2 hours
+              $elapsed = 0
+
+              do {
+                Start-Sleep -Seconds $pollInterval
+                $elapsed += $pollInterval
+
+                $statusUrl = "${org}${project}/_apis/pipelines/${pipelineId}/runs/${runId}?api-version=7.0"
+                $status = Invoke-RestMethod -Uri $statusUrl -Headers $headers
+
+                Write-Host "[$elapsed s] Run #$runId — state: $($status.state), result: $($status.result)"
+
+                if ($status.state -eq "completed") {
+                  if ($status.result -eq "succeeded") {
+                    Write-Host "Internal build succeeded."
+                    exit 0
+                  } else {
+                    Write-Error "Internal build finished with result: $($status.result). See: $($run._links.web.href)"
+                    exit 1
+                  }
+                }
+              } while ($elapsed -lt $maxWait)
+
+              Write-Error "Timed out after ${maxWait}s waiting for internal build. See: $($run._links.web.href)"
+              exit 1
+          env:
+            SYSTEM_ACCESSTOKEN: $(System.AccessToken)

@@ -148,6 +148,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 DataDescription description = dataDescriptionReader.GetDebugDataDescription(code);
                 var attributes = new Dictionary<DwarfAttribute, DwarfAttributeValue>();
 
+                // Bail out if abbreviation code was not found — we can't skip the DIE without attribute descriptions.
+                if (description.Attributes == null || description.Attributes.Count == 0)
+                {
+                    break;
+                }
+
                 if (description.Attributes.Any(a => a.Attribute == DwarfAttribute.LinkageName && a.Format == DwarfFormat.Strp))
                 {
                     description.Attributes.RemoveAll(a => a.Attribute == DwarfAttribute.Name);
@@ -646,8 +652,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// <param name="findCode">The code to be found.</param>
             public DataDescription GetDebugDataDescription(ulong findCode)
             {
-                // See section 7.5.3 Abbreviations Tables of DWARF5
-                // spec for information on this parsing implementation.
+                // DWARF5 spec 7.5.3: https://dwarfstd.org/doc/DWARF5.pdf#section.7.5.3
 
                 if (readDescriptions.TryGetValue(findCode, out DataDescription result))
                 {
@@ -659,9 +664,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 {
                     ulong code = debugDataDescription.ULEB128();
 
-                    if (debugDataDescription.IsEnd)
+                    // Code 0 is the null terminator for this CU's abbreviation table (DWARF5 spec 7.5.3).
+                    if (code == 0 || debugDataDescription.IsEnd)
                     {
-                        return result;
+                        return new DataDescription { Attributes = new List<DataDescriptionAttribute>() };
                     }
 
                     DwarfTag tag = (DwarfTag)debugDataDescription.ULEB128();
