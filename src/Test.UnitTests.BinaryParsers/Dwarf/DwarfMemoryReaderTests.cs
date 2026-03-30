@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 
 using FluentAssertions;
@@ -223,6 +224,73 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             using var reader = new DwarfMemoryReader(new byte[] { 0x42, 0x43 });
 
             reader.Peek().Should().Be(0x42);
+            reader.Position.Should().Be(0);
+        }
+
+        [Fact]
+        public void Peek_WhenPositionAtEnd_ThrowsInvalidOperationException()
+        {
+            using var reader = new DwarfMemoryReader(new byte[] { 0x01 });
+            reader.Position = 1; // exactly at end
+
+            Assert.Throws<InvalidOperationException>(() => reader.Peek());
+            reader.Position.Should().Be(1);
+        }
+
+        [Fact]
+        public void ReadByte_WhenPositionAtEnd_ThrowsInvalidOperationException()
+        {
+            using var reader = new DwarfMemoryReader(new byte[] { 0x01 });
+            reader.Position = 1; // exactly at end
+
+            Assert.Throws<InvalidOperationException>(() => reader.ReadByte());
+            reader.Position.Should().Be(1);
+        }
+
+        [Fact]
+        public void ReadUshort_WhenNotEnoughBytesRemain_ThrowsInvalidOperationException()
+        {
+            using var reader = new DwarfMemoryReader(new byte[] { 0x01 }); // only one byte available
+
+            Assert.Throws<InvalidOperationException>(() => reader.ReadUshort());
+            reader.Position.Should().Be(0);
+        }
+
+        [Fact]
+        public void ReadUint_WhenNotEnoughBytesRemain_ThrowsInvalidOperationException()
+        {
+            using var reader = new DwarfMemoryReader(new byte[] { 0x01, 0x02, 0x03 }); // three bytes
+
+            Assert.Throws<InvalidOperationException>(() => reader.ReadUint());
+            reader.Position.Should().Be(0);
+        }
+
+        [Fact]
+        public void ReadUlong_WhenNotEnoughBytesRemain_ThrowsInvalidOperationException()
+        {
+            using var reader = new DwarfMemoryReader(new byte[] { 0x01, 0x02, 0x03, 0x04 }); // four bytes
+
+            Assert.Throws<InvalidOperationException>(() => reader.ReadUlong());
+            reader.Position.Should().Be(0);
+        }
+
+        [Fact]
+        public void ULEB128_WhenContinuationBitSetButNoMoreBytes_ThrowsInvalidOperationException()
+        {
+            // 0x80 has continuation bit set, but no following byte per DWARF4/5 spec: invalid/truncated sequence.
+            using var reader = new DwarfMemoryReader(new byte[] { 0x80 });
+
+            Assert.Throws<InvalidOperationException>(() => reader.ULEB128());
+            reader.Position.Should().Be(0);
+        }
+
+        [Fact]
+        public void SLEB128_WhenContinuationBitSetButNoMoreBytes_ThrowsInvalidOperationException()
+        {
+            // 0x80 has continuation bit set, but no following byte per DWARF4/5 spec: invalid/truncated sequence.
+            using var reader = new DwarfMemoryReader(new byte[] { 0x80 });
+
+            Assert.Throws<InvalidOperationException>(() => reader.SLEB128());
             reader.Position.Should().Be(0);
         }
     }
