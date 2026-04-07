@@ -17,6 +17,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public const string Gnu = "GNU";
         public const string ClangVersion = "clang version";
         public const string LongUnsignedInt = "long unsigned int";
+        public const string Rust = "rustc";
 
         /// <summary>
         /// Gets all of the symbol entries from an ELF binary and returns it
@@ -53,6 +54,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 && commandline.Contains(ClangVersion, StringComparison.OrdinalIgnoreCase))
             {
                 return DwarfCommandLineType.Clang;
+            }
+            else if (!string.IsNullOrWhiteSpace(commandline)
+                && commandline.StartsWith(Rust, StringComparison.OrdinalIgnoreCase))
+            {
+                return DwarfCommandLineType.Rust;
             }
             else
             {

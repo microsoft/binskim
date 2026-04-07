@@ -85,7 +85,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             WindowsBinaryAndPdbSkimmerBase.s_PdbExceptions.Clear();
             string fileName = Path.Combine(Path.GetTempPath(), "AnalyzeCommand_TelemetryEnableDisableTest.sarif");
-            string pathToTestFile = Path.Combine(PEBinaryTests.TestData, "PE", "Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll");
+            string pathToTestFile = Path.Combine(TestData, "PE", "Native_x64_VS2019_CPlusPlus_DEBUG_DEFAULT.dll");
             var options = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[] {
@@ -138,7 +138,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             string configFileContent = $"<?xml version=\"1.0\" encoding=\"utf-8\"?><Properties><Properties Key=\"CompilerTelemetry.Options\"><Property Key=\"CsvOutputPath\" Value=\"{csvFile}\"/></Properties></Properties>";
             File.WriteAllText(configFile, configFileContent);
 
-            string pathToTestFile = Path.Combine(PEBinaryTests.TestData, "Dwarf", "hello-dwarf5-o2");
+            string pathToTestFile = Path.Combine(TestData, "Dwarf", "hello-dwarf5-o2");
             var options = new AnalyzeOptions
             {
                 TargetFileSpecifiers = new string[] {

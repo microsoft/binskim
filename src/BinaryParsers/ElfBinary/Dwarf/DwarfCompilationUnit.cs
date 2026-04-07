@@ -95,9 +95,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 dwarfBinary.DwarfUnitType = (DwarfUnitType)(debugData.ReadByte());
                 addressSize = debugData.ReadByte();
                 debugDataDescriptionOffset = (uint)debugData.ReadOffset(is64bit);
-                if (dwarfBinary.DwarfUnitType == DwarfUnitType.Skeleton || dwarfBinary.DwarfUnitType == DwarfUnitType.SplitCompile)
+
+                // DWARF5 spec Section 7.5.1.1: some unit types have additional
+                // header fields after debug_abbrev_offset.
+                switch (dwarfBinary.DwarfUnitType)
                 {
-                    debugData.ReadUlong();
+                    case DwarfUnitType.Skeleton:
+                    case DwarfUnitType.SplitCompile:
+                        // dwo_id (8 bytes)
+                        debugData.ReadUlong();
+                        break;
+
+                    case DwarfUnitType.Type:
+                    case DwarfUnitType.SplitType:
+                        // type_signature (8 bytes) + type_offset (4 or 8 bytes)
+                        debugData.ReadUlong();
+                        debugData.ReadOffset(is64bit);
+                        break;
                 }
             }
             else if (version > 0 && version < 5)
@@ -134,6 +148,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 DataDescription description = dataDescriptionReader.GetDebugDataDescription(code);
                 var attributes = new Dictionary<DwarfAttribute, DwarfAttributeValue>();
 
+                // Bail out if abbreviation code was not found — we can't skip the DIE without attribute descriptions.
+                if (description.Attributes == null || description.Attributes.Count == 0)
+                {
+                    break;
+                }
+
                 if (description.Attributes.Any(a => a.Attribute == DwarfAttribute.LinkageName && a.Format == DwarfFormat.Strp))
                 {
                     description.Attributes.RemoveAll(a => a.Attribute == DwarfAttribute.Name);
@@ -148,6 +168,19 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     DwarfAttribute attribute = descriptionAttribute.Attribute;
                     DwarfFormat format = descriptionAttribute.Format;
 
+                    // Form encoding sizes verified against LLVM DWARFFormValue::extractValue and DWARF5 spec Section 7.5.5.
+                    // https://github.com/llvm/llvm-project/blob/main/llvm/lib/DebugInfo/DWARF/DWARFFormValue.cpp
+                    //
+                    // | LLVM method                        | Our method     |
+                    // |------------------------------------|----------------|
+                    // | Data.getU8                         | ReadByte       |
+                    // | Data.getU16                        | ReadUshort     |
+                    // | Data.getU24                        | ReadThreeBytes |
+                    // | Data.getU32 / getRelocatedValue(4) | ReadUint       |
+                    // | Data.getU64 / getRelocatedValue(8) | ReadUlong      |
+                    // | Data.getULEB128                    | ULEB128        |
+                    // | Data.getSLEB128                    | SLEB128        |
+                    // | Data.getCStr                       | ReadString     |
                     switch (format)
                     {
                         case DwarfFormat.Address:
@@ -370,7 +403,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Addrx4:
                             attributeValue.Type = DwarfAttributeValueType.Address;
-                            attributeValue.Offset = debugData.ReadUlong();
+                            attributeValue.Offset = debugData.ReadUint();
                             break;
 
                         case DwarfFormat.Rnglistx:
@@ -380,10 +413,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Loclistx:
                             attributeValue.Type = DwarfAttributeValueType.Loclistx;
-                            attributeValue.Value = (long)debugData.ReadOffset(is64bit);
+                            attributeValue.Value = debugData.ULEB128();
                             break;
 
                         case DwarfFormat.GNUAddrIndex:
+                            attributeValue.Type = DwarfAttributeValueType.Address;
+                            attributeValue.Value = debugData.ULEB128();
                             break;
 
                         default:
@@ -617,8 +652,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             /// <param name="findCode">The code to be found.</param>
             public DataDescription GetDebugDataDescription(ulong findCode)
             {
-                // See section 7.5.3 Abbreviations Tables of DWARF5
-                // spec for information on this parsing implementation.
+                // DWARF5 spec 7.5.3: https://dwarfstd.org/doc/DWARF5.pdf#section.7.5.3
 
                 if (readDescriptions.TryGetValue(findCode, out DataDescription result))
                 {
@@ -630,9 +664,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 {
                     ulong code = debugDataDescription.ULEB128();
 
-                    if (debugDataDescription.IsEnd)
+                    // Code 0 is the null terminator for this CU's abbreviation table (DWARF5 spec 7.5.3).
+                    if (code == 0 || debugDataDescription.IsEnd)
                     {
-                        return result;
+                        return new DataDescription { Attributes = new List<DataDescriptionAttribute>() };
                     }
 
                     DwarfTag tag = (DwarfTag)debugDataDescription.ULEB128();

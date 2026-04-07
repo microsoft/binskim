@@ -7,7 +7,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
 using FluentAssertions;
 
@@ -30,12 +29,12 @@ using Xunit.Abstractions;
 
 namespace Microsoft.CodeAnalysis.IL
 {
-    public class BuiltInRuleFunctionalTests
+    public class BuiltInRuleFunctionalTests : CultureDependantTests
     {
         private readonly ITestOutputHelper testOutputHelper;
         private TelemetryConfiguration telemetryConfiguration;
 
-        public BuiltInRuleFunctionalTests(ITestOutputHelper output)
+        public BuiltInRuleFunctionalTests(ITestOutputHelper output) : base("en-US")
         {
             this.testOutputHelper = output;
         }
@@ -60,8 +59,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
             var sb = new StringBuilder();
-            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;
-            string testFile = Path.Combine(testDirectory, "DotNetCore_win-x86_VS2019_Default.dll");
+            string testFile = Path.Combine(BaselineTestDataDirectory, "DotNetCore_win-x86_VS2019_Default.dll");
 
             SarifLog sarifResult = RunRules(sb, testFile);
 
@@ -189,8 +187,7 @@ namespace Microsoft.CodeAnalysis.IL
 
             List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
             var sb = new StringBuilder();
-            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar;
-            string testFile = Path.Combine(testDirectory, "Native_x64_VS2015_Default.dll");
+            string testFile = Path.Combine(BaselineTestDataDirectory, "Native_x64_VS2015_Default.dll");
 
             SarifLog sarifResult = RunRules(sb, testFile);
 
@@ -370,7 +367,7 @@ namespace Microsoft.CodeAnalysis.IL
         private void BatchRuleRules(string ruleName, Sarif.SarifVersion version, params string[] inputFilters)
         {
             var sb = new StringBuilder();
-            string testDirectory = PEBinaryTests.BaselineTestDataDirectory + Path.DirectorySeparatorChar + ruleName;
+            string testDirectory = Path.Combine(BaselineTestDataDirectory, ruleName);
 
             foreach (string inputFilter in inputFilters)
             {
@@ -423,6 +420,9 @@ namespace Microsoft.CodeAnalysis.IL
                 Directory.CreateDirectory(actualDirectory);
             }
 
+            int index = expectedDirectory.IndexOf(@"\src\Test.FunctionalTests.BinSkim.Driver", StringComparison.OrdinalIgnoreCase);
+            string enlistmentRoot = expectedDirectory.Substring(0, index);
+
             string expectedFileName = Path.Combine(expectedDirectory, fileName + ".sarif");
             string actualFileName = Path.Combine(actualDirectory, fileName + ".sarif");
 
@@ -440,6 +440,7 @@ namespace Microsoft.CodeAnalysis.IL
                 TargetFileSpecifiers = new string[] { inputFileName },
                 Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note },
                 Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.Pass },
+                EnlistmentRoot = enlistmentRoot
             };
 
             command.UnitTestOutputVersion = version;
@@ -451,51 +452,22 @@ namespace Microsoft.CodeAnalysis.IL
 
             var settings = new JsonSerializerSettings()
             {
-                Formatting = Newtonsoft.Json.Formatting.Indented
+                Formatting = Formatting.Indented
             };
 
             string expectedText = File.ReadAllText(expectedFileName);
-            string actualText = File.ReadAllText(actualFileName);
-
-            // Replace repository root absolute path for machine and enlistment independence
-            string repoRoot = Path.GetFullPath(Path.Combine(actualDirectory, "..", "..", "..", ".."));
-            string normalizedRoot = PlatformSpecificHelpers.RunningOnWindows() ? @"Z:" : @"/home/user";
-            actualText = actualText.Replace(repoRoot.Replace(@"\", @"\\"), normalizedRoot);
-            actualText = actualText.Replace(repoRoot.Replace(@"\", @"/"), normalizedRoot);
-
-            // Remove stack traces as they can change due to inlining differences by configuration and runtime.
-            actualText = Regex.Replace(actualText, @"\\r\\n   at [^""]+", "");
-
-            actualText = actualText.Replace(@"""Sarif""", @"""BinSkim""");
-            actualText = actualText.Replace(@"        ""fileVersion"": ""15.0.0""," + Environment.NewLine, string.Empty);
-
-            actualText = Regex.Replace(actualText, @"\s*""product""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""organization""[^\n]+?\n", Environment.NewLine);
-
-            actualText = Regex.Replace(actualText, @"\s*""fullName""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"\s*""semanticVersion""[^\n]+?\n", Environment.NewLine);
-            actualText = Regex.Replace(actualText, @"      ""id""[^,]+,\s+""tool""", @"      ""tool""", RegexOptions.Multiline);
-
-            // Write back the normalized actual text so that the diff command given on failure shows what was actually compared.
-
-            Encoding utf8encoding = new UTF8Encoding(true);
-            using (var textWriter = new StreamWriter(actualFileName, false, utf8encoding))
-            {
-                textWriter.Write(actualText);
-            }
-
-            // Make sure we can successfully deserialize what was just generated
             SarifLog expectedLog = PrereleaseCompatibilityTransformer.UpdateToCurrentVersion(
                                     expectedText,
                                     settings.Formatting,
                                     out expectedText);
 
-            SarifLog actualLog = JsonConvert.DeserializeObject<SarifLog>(actualText, settings);
-
             var visitor = new ResultDiffingVisitor(expectedLog);
 
+            string actualText = File.ReadAllText(actualFileName);
+            SarifLog actualLog = JsonConvert.DeserializeObject<SarifLog>(actualText, settings);
             if (!visitor.Diff(actualLog.Runs[0].Results))
             {
+
                 string errorMessage = "The output of the tool did not match for input {0}.";
                 sb.AppendLine(string.Format(CultureInfo.CurrentCulture, errorMessage, inputFileName));
                 sb.AppendLine("Check differences with:");

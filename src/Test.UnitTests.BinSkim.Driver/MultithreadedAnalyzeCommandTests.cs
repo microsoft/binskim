@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 
 using FluentAssertions;
@@ -31,6 +32,12 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         [Fact]
         public void MultithreadedAnalyzeCommand_ReturnCommonPathRootFromTargetSpecifiersIfOneExists()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // Not applicable. Test cases below are Windows paths.
+                return;
+            }
+
             var testCases = new[]
             {
                 new
@@ -238,6 +245,39 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             var aggregatingLogger = (Sarif.Driver.AggregatingLogger)context.Logger;
             Assert.Empty(aggregatingLogger.Loggers);
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_DisableArchiveExtractionClearsOpcFileExtensions()
+        {
+            var options = new AnalyzeOptions();
+            options.TargetFileSpecifiers = new List<string> { "test.dll" };
+            options.DisableTelemetry = true;
+            options.DisableArchiveExtraction = true;
+            options.OutputFilePath = "test/path/";
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand();
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            context.OpcFileExtensions.Should().BeEmpty(
+                "OpcFileExtensions should be cleared when --disable-archive-extraction is set");
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_DefaultPreservesOpcFileExtensions()
+        {
+            var options = new AnalyzeOptions();
+            options.TargetFileSpecifiers = new List<string> { "test.dll" };
+            options.DisableTelemetry = true;
+            options.OutputFilePath = "test/path/";
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand();
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            context.OpcFileExtensions.Should().NotBeEmpty(
+                "OpcFileExtensions should retain default values when --disable-archive-extraction is not set");
         }
     }
 }

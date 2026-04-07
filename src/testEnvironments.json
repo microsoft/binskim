@@ -1,0 +1,20 @@
+﻿{
+  "version": "1",
+  "environments": [
+    // See https://aka.ms/remotetesting for more details
+    // about how to configure remote environments.
+    // You need to have docker installed and running to use these
+    {
+      "name": "linux-x64",
+      "type": "docker",
+      "dockerImage": "mcr.microsoft.com/dotnet/sdk:9.0",
+      "localRoot": ".."
+    },
+    {
+      "name": "linux-arm64",
+      "type": "docker",
+      "dockerImage": "mcr.microsoft.com/dotnet/sdk:9.0",
+      "localRoot": ".."
+    }
+  ]
+}

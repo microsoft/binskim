@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
                   "index": 0
                 }
               }
@@ -85,7 +85,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
                   "index": 0
                 }
               }
@@ -107,7 +107,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
                   "index": 0
                 }
               }
@@ -128,7 +128,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
                   "index": 0
                 }
               }
@@ -149,7 +149,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
                   "index": 0
                 }
               }
@@ -159,8 +159,7 @@
       ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
           "rules": [
             {
               "id": "BA3001",
@@ -325,10 +324,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3031EnableClangSafeStack"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -339,13 +335,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.pie_executable",
             "index": 0
-          },
-          "hashes": {
-            "md5": "17F6D8A3593C7425FA2BBF70CF00072F",
-            "sha-1": "B87E7344FAD6B5DA109E4CE3C8AD8212351CD0A3",
-            "sha-256": "B628CF96DE88FB2D5D3B3D008F7697EF7767418C9B555623D33E8ECA2735FED6"
           }
         }
       ],

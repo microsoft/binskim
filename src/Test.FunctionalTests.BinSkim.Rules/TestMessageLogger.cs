@@ -16,6 +16,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             this.ErrorTargets = new HashSet<string>();
             this.WarningTargets = new HashSet<string>();
             this.NoteTargets = new HashSet<string>();
+            this.InformationalTargets = new HashSet<string>();
             this.PassTargets = new HashSet<string>();
             this.NotApplicableTargets = new HashSet<string>();
             this.ConfigurationErrorTargets = new HashSet<string>();
@@ -30,6 +31,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public HashSet<string> WarningTargets { get; set; }
 
         public HashSet<string> NoteTargets { get; set; }
+
+        public HashSet<string> InformationalTargets { get; set; }
 
         public HashSet<string> ConfigurationErrorTargets { get; set; }
 
@@ -68,6 +71,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 case ResultKind.NotApplicable:
                 {
                     this.NotApplicableTargets.Add(targetPath);
+                    break;
+                }
+
+                case ResultKind.Informational:
+                {
+                    this.InformationalTargets.Add(targetPath);
                     break;
                 }
 

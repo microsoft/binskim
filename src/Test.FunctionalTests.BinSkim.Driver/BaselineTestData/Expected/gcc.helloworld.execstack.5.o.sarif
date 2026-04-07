@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
                   "index": 0
                 }
               }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
                   "index": 0
                 }
               }
@@ -62,7 +62,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
                   "index": 0
                 }
               }
@@ -85,7 +85,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
                   "index": 0
                 }
               }
@@ -107,7 +107,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
                   "index": 0
                 }
               }
@@ -128,7 +128,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
                   "index": 0
                 }
               }
@@ -150,7 +150,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
                   "index": 0
                 }
               }
@@ -172,7 +172,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
                   "index": 0
                 }
               }
@@ -194,7 +194,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
                   "index": 0
                 }
               }
@@ -204,8 +204,7 @@
       ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
           "rules": [
             {
               "id": "BA3001",
@@ -417,10 +416,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseGccCheckedFunctions"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -431,13 +427,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.helloworld.execstack.5.o",
             "index": 0
-          },
-          "hashes": {
-            "md5": "063A86A9AB1919069750EEE569CF1A33",
-            "sha-1": "48002801F1AD269C6DB7AB24477F4E3CE39E38EE",
-            "sha-256": "C5FFE046062EECE56CFAD3AFE8F974CB40B9337D4237FF0C509987470DD7C04B"
           }
         }
       ],

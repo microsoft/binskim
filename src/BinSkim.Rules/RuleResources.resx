@@ -160,7 +160,7 @@ To resolve this issue, obtain a version of {0} that is newer than version {2}. I
   </data>
   <data name="BA2006_BuildWithSecureTools_Description" xml:space="preserve">
     <value>Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. 
-Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks.</value>
+Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks. Enforces advanced mitigations such as Spectre mitigations, if required by policy.</value>
   </data>
   <data name="BA2006_Error" xml:space="preserve">
     <value>'{0}' was compiled with one or more modules which were not built using minimum required tool versions (compiler version {1}). More recent toolchains contain mitigations that make it more difficult for an attacker to exploit vulnerabilities in programs they produce.

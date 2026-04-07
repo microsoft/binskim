@@ -4,10 +4,9 @@
   <Import Project="..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" />
   <PropertyGroup>
     <RootNamespace>Microsoft.CodeAnalysis.BinSkim.Rules</RootNamespace>
-    <TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
+    <TargetFramework>$(NetCoreVersion)</TargetFramework>
     <OutputType>Library</OutputType>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
-    <Platforms>x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentAssertions" />

@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
                   "index": 0
                 }
               }
@@ -85,7 +85,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
                   "index": 0
                 }
               }
@@ -107,7 +107,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
                   "index": 0
                 }
               }
@@ -129,7 +129,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
                   "index": 0
                 }
               }
@@ -151,7 +151,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
                   "index": 0
                 }
               }
@@ -173,7 +173,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
                   "index": 0
                 }
               }
@@ -195,7 +195,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
                   "index": 0
                 }
               }
@@ -205,8 +205,7 @@
       ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
           "rules": [
             {
               "id": "BA3001",
@@ -418,10 +417,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3030UseGccCheckedFunctions"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -432,13 +428,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/gcc.requiredsymbol.4.o",
             "index": 0
-          },
-          "hashes": {
-            "md5": "CD440A878A783FD3465B10332A0C9D27",
-            "sha-1": "2B4AA452DD15B01C86CB22FF05F86B47AA2D0406",
-            "sha-256": "2BDD9659D2FE35257EB5B2B18980E7C50A66B08AEC1BEDB6D1FD7995C2C16DDB"
           }
         }
       ],

@@ -4,7 +4,6 @@
   <PropertyGroup>
     <RootNamespace>Microsoft.CodeAnalysis.IL.Rules</RootNamespace>
     <TargetFramework>$(NetCoreVersion)</TargetFramework>
-    <Platforms>x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dia2Lib">

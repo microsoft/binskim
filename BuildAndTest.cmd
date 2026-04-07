@@ -6,23 +6,21 @@ SETLOCAL
 @REM %~dp0.nuget\NuGet.exe update -self
 
 set Configuration=%1
-set Platform=x64
 
 if "%Configuration%" EQU "" (
 set Configuration=Release
 )
 
-set NightlyTest=%2
-
 @REM Remove existing build data
 if exist bld (rd /s /q bld)
 
-set NuGetPackageDir=%~dp0src\packages
 set NuGetOutputDirectory=%~dp0bld\bin\nuget\
 
 call SetCurrentVersion.cmd
 
 set VERSION_CONSTANTS=%~dp0src\BinaryParsers\VersionConstants.cs
+
+if not "%PRERELEASE%"=="" set PRERELEASE=.%PRERELEASE%
 
 @REM Rewrite VersionConstants.cs
 
@@ -33,60 +31,50 @@ echo {>> %VERSION_CONSTANTS%
 echo     public static class VersionConstants>> %VERSION_CONSTANTS%
 echo     {>> %VERSION_CONSTANTS%
 echo         public const string Prerelease = "%PRERELEASE%";>> %VERSION_CONSTANTS%
-echo         public const string AssemblyVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0";>> %VERSION_CONSTANTS%
-echo         public const string FileVersion = "%MAJOR%.%MINOR%.%PATCH%" + ".0";>> %VERSION_CONSTANTS%
+echo         public const string AssemblyVersion = "%MAJOR%.%MINOR%.%PATCH%";>> %VERSION_CONSTANTS%
+echo         public const string FileVersion = "%MAJOR%.%MINOR%.%PATCH%";>> %VERSION_CONSTANTS%
 echo         public const string Version = AssemblyVersion + Prerelease;>> %VERSION_CONSTANTS%
 echo     }>> %VERSION_CONSTANTS%
 echo }>> %VERSION_CONSTANTS%
+@REM Prerelease already contains dot if needed
 echo Current Version: %MAJOR%.%MINOR%.%PATCH%%PRERELEASE%
 
 
 ::Restore packages
 echo Restoring packages...
-dotnet restore %~dp0src\BinSkim.sln /p:Configuration=%Configuration% --packages "%NuGetPackageDir%
+dotnet restore %~dp0src\BinSkim.sln
 
 :: Build the solution 
 echo Building solution...
 dotnet build --no-restore /verbosity:minimal %~dp0src\BinSkim.sln /p:Configuration=%Configuration% /filelogger /fileloggerparameters:Verbosity=detailed || goto :ExitFailed
 
-:nightly
-if "%NightlyTest%" EQU "nightly" (
-    echo Running nightly Tests
-    dotnet test %~dp0src\BinSkim.sln --no-build --filter TestCategory=NightlyTest
-    goto :Exit
-)
-
 ::Run unit tests 
-echo Run all multitargeting xunit tests
-call :RunTestProject BinaryParsers Unit || goto :ExitFailed
-call :RunTestProject BinSkim.Rules Unit || goto :ExitFailed
-call :RunTestProject BinSkim.Driver Functional || goto :ExitFailed
-call :RunTestProject BinSkim.Rules Functional  || goto :ExitFailed
+echo Run unit tests
+call :RunTests || goto :ExitFailed
 
 ::Create the BinSkim platform specific publish packages
 echo Creating Platform Specific BinSkim 'Publish' Packages
 call :CreatePublishPackage net9.0 win-x64 || goto :ExitFailed
 call :CreatePublishPackage net9.0 linux-x64 || goto :ExitFailed
+call :CreatePublishPackage net9.0 linux-arm64 || goto :ExitFailed
 call :CreatePublishPackage net9.0 osx-x64 || goto :ExitFailed
 
 ::Build NuGet package
 echo BuildPackages.cmd
 call BuildPackages.cmd || goto :ExitFailed
 
-echo dotnet-format
-dotnet tool update --global dotnet-format
-
 ::Update BinSkimRules.md to cover any xml changes
 echo Exporting any BinSkim rules
-.\bld\bin\x64_Release\Publish\net9.0\win-x64\BinSkim.exe export-rules .\docs\BinSkimRules.md
+.\bld\bin\BinSkim.Driver\release\BinSkim.exe export-rules .\docs\BinSkimRules.md
+
+echo Fixing markdown angle brackets
+powershell -Command "$content = [System.IO.File]::ReadAllText('.\docs\BinSkimRules.md'); $content = $content -replace '<', '&lt;' -replace '>', '&gt;'; [System.IO.File]::WriteAllText('.\docs\BinSkimRules.md', $content)"
 
 goto :Exit
 
-:RunTestProject
-set TestProject=%1
-set TestType=%2
-pushd %~dp0src\Test.%TestType%Tests.%TestProject% && dotnet test --no-build -c %Configuration% && popd
-if "%ERRORLEVEL%" NEQ "0" (echo %TestProject% %TestType% tests execution FAILED.)
+:RunTests
+dotnet test src\BinSkim.sln --no-build -c %Configuration%
+if "%ERRORLEVEL%" NEQ "0" (echo Tests execution FAILED.)
 Exit /B %ERRORLEVEL%
 
 :CreatePublishPackage

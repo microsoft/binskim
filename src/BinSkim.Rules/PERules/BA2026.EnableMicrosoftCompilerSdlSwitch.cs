@@ -3,11 +3,13 @@
 
 using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -61,6 +63,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return notApplicable;
             }
 
+            if (isRustBinary(target.Pdb))
+            {
+                reasonForNotAnalyzing = MetadataConditions.ImageIsRustBinary;
+                return notApplicable;
+            }
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }
@@ -135,6 +142,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 RuleUtilities.BuildResult(ResultKind.NotApplicable, context, null,
                 nameof(RuleResources.BA2026_NotApplicable),
                 context.CurrentTarget.Uri.GetFileName()));
+        }
+
+        public bool isRustBinary(Pdb pdb)
+        {
+            if (pdb == null)
+            {
+                return false;
+            }
+
+            return pdb.CreateObjectModuleIterator()
+                        .Where(omView => omView.Value.GetObjectModuleDetails().WellKnownCompiler == WellKnownCompilers.ClangLLVMRustc)
+                        .Any();
         }
     }
 }

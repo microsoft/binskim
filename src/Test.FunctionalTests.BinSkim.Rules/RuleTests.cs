@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 using Microsoft.CodeAnalysis.IL.Sdk;
@@ -401,7 +402,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
         {
-            string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestData");
+            string testFilesDirectory = GetTestDirectory("Test.FunctionalTests.BinSkim.Driver", "BaselineTestData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -531,6 +532,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 result.Add(Path.Combine(testFilesDirectory, "ARM64_dotnet_CETShadowStack_NotApplicable.exe"));
             }
 
+            if (metadataConditions.Contains(MetadataConditions.ImageIsRustBinary))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "Rust_cargo_+ms-prod_build.exe"));
+            }
             return result;
         }
 
@@ -1269,10 +1274,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 MetadataConditions.ImageIsNativeUniversalWindowsPlatformBinary,
                 MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsILOnlyAssembly
+                MetadataConditions.ImageIsILOnlyAssembly,
+                MetadataConditions.ImageIsRustBinary
             };
-
-            this.VerifyApplicability(new EnableMicrosoftCompilerSdlSwitch(), notApplicableTo);
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableMicrosoftCompilerSdlSwitch(), notApplicableTo);
+            }
         }
 
         [Fact]
