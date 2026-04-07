@@ -248,7 +248,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="size">The size of block.</param>
         public byte[] ReadBlock(ulong size)
         {
-            size = (ulong)Math.Min((float)size, (Data.Length - Position));
+            if (Position >= Data.Length)
+            {
+                return Array.Empty<byte>();
+            }
+
+            size = Math.Min(size, (ulong)(Data.Length - Position));
             byte[] block = new byte[size];
 
             Array.Copy(Data, Position, block, 0, block.Length);

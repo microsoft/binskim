@@ -215,8 +215,10 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             log.Runs[0].Invocations[0].ToolConfigurationNotifications.Count(t => t.Message.Text.Contains("skipped")).Should().BeGreaterThanOrEqualTo(1);
         }
 
-        [Fact]
-        public void AnalyzeCommand_ComputeFileHashes_Works()
+        [Theory]
+        [InlineData("sha-256")]
+        [InlineData("sha-1")]
+        public void AnalyzeCommand_ComputeFileHashes_Works(string expectedHashAlgorithm)
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
@@ -243,7 +245,8 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             command.Run(options);
             var log = SarifLog.Load(fileName);
 
-            log.Runs[0].Artifacts[0].Hashes.Should().HaveCount(3);
+            log.Runs[0].Artifacts[0].Hashes.Should().ContainKey(expectedHashAlgorithm);
+            log.Runs[0].Artifacts[0].Hashes.Should().HaveCount(2);
         }
 
         [Fact]

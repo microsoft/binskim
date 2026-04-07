@@ -154,6 +154,60 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         }
 
         [Fact]
+        public void ReadBlock_WhenPositionAtEnd_ReturnsEmpty()
+        {
+            using var reader = new DwarfMemoryReader(new byte[] { 0x01, 0x02 });
+            reader.Position = 2; // exactly at end
+
+            reader.ReadBlock(5).Should().BeEmpty();
+            reader.Position.Should().Be(2); // position unchanged
+        }
+
+        [Fact]
+        public void ReadBlock_WhenPositionPastEnd_ReturnsEmpty()
+        {
+            using var reader = new DwarfMemoryReader(new byte[] { 0x01, 0x02 });
+            reader.Position = 3; // past end (malformed DWARF scenario)
+
+            reader.ReadBlock(1).Should().BeEmpty();
+            reader.Position.Should().Be(3); // position unchanged
+        }
+
+        [Fact]
+        public void ReadBlock_WhenSizeExceedsRemaining_ClampsToAvailableBytes()
+        {
+            using var reader = new DwarfMemoryReader(new byte[] { 0xAA, 0xBB, 0xCC });
+            reader.Position = 1; // 2 bytes remain
+
+            byte[] result = reader.ReadBlock(10); // request more than available
+            result.Should().Equal(0xBB, 0xCC);
+            reader.Position.Should().Be(3);
+        }
+
+        [Fact]
+        public void ReadBlock_WhenSizeIsOverflowingUlong_ClampsToAvailableBytes()
+        {
+            // Simulates a malformed DWARF entry where endPosition < data.Position,
+            // causing callers like DwarfCommonInformationEntry to pass an underflowed ulong.
+            using var reader = new DwarfMemoryReader(new byte[] { 0x11, 0x22, 0x33 });
+            reader.Position = 1; // 2 bytes remain
+
+            ulong hugeSize = ulong.MaxValue; // underflow sentinel
+            byte[] result = reader.ReadBlock(hugeSize);
+            result.Should().Equal(0x22, 0x33);
+            reader.Position.Should().Be(3);
+        }
+
+        [Fact]
+        public void ReadBlock_WithZeroSize_ReturnsEmptyAndDoesNotAdvancePosition()
+        {
+            using var reader = new DwarfMemoryReader(new byte[] { 0x01, 0x02, 0x03 });
+
+            reader.ReadBlock(0).Should().BeEmpty();
+            reader.Position.Should().Be(0);
+        }
+
+        [Fact]
         public void IsEnd_ReturnsTrueAtEnd()
         {
             using var reader = new DwarfMemoryReader(new byte[] { 0x01 });
