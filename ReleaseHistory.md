@@ -20,7 +20,11 @@
 
 ## UNRELEASED
 
-* FPS: BA2025 is not applicable for 32-bit binaries [#1149](https://github.com/microsoft/binskim/issues/1149)
+## **v4.4.9.7** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.7]
+* UEE: Fix DWARF parser crash on Rust binaries: handle abbreviation table terminator [1161](https://github.com/microsoft/binskim/pull/1161)
+* ADM: Add internal validation stage to external pipeline, switch to production pools [1162](https://github.com/microsoft/binskim/pull/1162)
+* NEW: Add --disable-archive-extraction feature flag [1163](https://github.com/microsoft/binskim/pull/1163)
+* FPS: BA2025 is not applicable for 32-bit binaries [1164](https://github.com/microsoft/binskim/pull/1164)
 
 ## **v4.4.9.6** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.6]
 * DEP: Sarif.Driver new version 4.6.0 [1157](https://github.com/microsoft/binskim/pull/1157)

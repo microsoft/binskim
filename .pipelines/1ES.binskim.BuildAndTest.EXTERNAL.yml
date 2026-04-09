@@ -81,6 +81,65 @@ extends:
           - task: ComponentGovernanceComponentDetection@0
             condition: eq(variables['runComponentGovernance'], 'true')
 
+    # Verify all PRs referenced in this release have been merged to main.
+    - stage: ValidateReleasePRs
+      displayName: Validate Release PRs
+      dependsOn: []
+      jobs:
+      - job: CheckPRsMerged
+        displayName: Check all release PRs are merged
+        pool:
+          name: guardian-build-infra-windows-x64
+          os: windows
+        steps:
+        - checkout: self
+          fetchDepth: 1
+
+        - task: PowerShell@2
+          displayName: "Verify referenced PRs are merged"
+          inputs:
+            targetType: inline
+            pwsh: true
+            script: |
+              # Extract PR numbers from the latest release section in ReleaseHistory.md.
+              $releaseHistory = Get-Content "$(Build.SourcesDirectory)/ReleaseHistory.md" -Raw
+              $versionSections = $releaseHistory -split '(?=## \*\*v)'
+              $latestSection = $versionSections | Where-Object { $_ -match '## \*\*v\d' } | Select-Object -First 1
+              $prNumbers = [regex]::Matches($latestSection, '\[(\d+)\]\(https://github\.com/microsoft/binskim/pull/\d+\)') |
+                ForEach-Object { [int]$_.Groups[1].Value }
+
+              if ($prNumbers.Count -eq 0) {
+                Write-Error "No PR references found in latest release section of ReleaseHistory.md"
+                exit 1
+              }
+
+              Write-Host "PRs referenced in release: $($prNumbers -join ', ')"
+
+              $repo = "microsoft/binskim"
+              $failed = @()
+
+              foreach ($pr in $prNumbers) {
+                $url = "https://api.github.com/repos/$repo/pulls/$pr"
+                $response = Invoke-RestMethod -Uri $url -Headers @{
+                  "Accept" = "application/vnd.github+json"
+                  "User-Agent" = "BinSkim-Release-Validation"
+                }
+
+                if ($response.merged -eq $true) {
+                  Write-Host "✅ PR #$pr — merged"
+                } else {
+                  Write-Host "❌ PR #$pr — state: $($response.state), merged: $($response.merged)"
+                  $failed += $pr
+                }
+              }
+
+              if ($failed.Count -gt 0) {
+                Write-Error "The following PRs are not yet merged: $($failed -join ', '). Merge them before releasing."
+                exit 1
+              }
+
+              Write-Host "All release PRs are merged."
+
     # Trigger internal BinSkimInternal pipeline in parallel; block PR if it fails.
     - stage: InternalValidation
       displayName: Internal Validation
