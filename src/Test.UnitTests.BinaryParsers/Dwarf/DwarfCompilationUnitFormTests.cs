@@ -169,10 +169,18 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         private static DwarfSymbol ParseSingleSymbol(byte[] debugInfoData, byte[] debugAbbrevData, byte[] debugStrData = null)
         {
+            return ParseSingleSymbolWithLineStrings(debugInfoData, debugAbbrevData, debugStrData, new byte[] { 0x00 });
+        }
+
+        /// <summary>
+        /// Parses a DWARF compilation unit with explicit .debug_str and .debug_line_str data.
+        /// </summary>
+        private static DwarfSymbol ParseSingleSymbolWithLineStrings(byte[] debugInfoData, byte[] debugAbbrevData, byte[] debugStrData, byte[] debugLineStrData)
+        {
             using var debugData = new DwarfMemoryReader(debugInfoData);
             using var debugAbbrev = new DwarfMemoryReader(debugAbbrevData);
             using var debugStrings = new DwarfMemoryReader(debugStrData ?? new byte[] { 0x00 });
-            using var debugLineStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+            using var debugLineStrings = new DwarfMemoryReader(debugLineStrData ?? new byte[] { 0x00 });
 
             var stub = new StubDwarfBinary();
             var stringOffsets = new List<int>();
@@ -408,6 +416,332 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             ((ulong)symbol.Attributes[DwarfAttribute.ByteSize].Value).Should().Be(0x99);
         }
 
+        // ---- DWARF4 classic forms: Data*, SData, UData, Address, Block*, String/Strp, Flag*, Ref* ----
+
+        [Fact]
+        public void ReadData_Dwarf4_DataForms_MapToConstant()
+        {
+            // Data1 = 0x11, Data2 = 0x2222, Data4 = 0x33333333, Data8 = 0x4444444444444444
+            byte[] dieData = new byte[]
+            {
+                0x01,                   // abbreviation code
+                0x11,                   // Data1
+                0x22, 0x22,             // Data2
+                0x33, 0x33, 0x33, 0x33, // Data4
+                0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, // Data8
+            };
+
+            byte[] header = BuildDwarf4Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
+                (DwarfAttribute.Location, DwarfFormat.Data1),
+                (DwarfAttribute.ByteSize, DwarfFormat.Data2),
+                (DwarfAttribute.DeclFile, DwarfFormat.Data4),
+                (DwarfAttribute.DeclLine, DwarfFormat.Data8));
+
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev);
+
+            symbol.Attributes[DwarfAttribute.Location].Type.Should().Be(DwarfAttributeValueType.Constant);
+            ((ulong)symbol.Attributes[DwarfAttribute.Location].Value).Should().Be(0x11);
+
+            symbol.Attributes[DwarfAttribute.ByteSize].Type.Should().Be(DwarfAttributeValueType.Constant);
+            ((ulong)symbol.Attributes[DwarfAttribute.ByteSize].Value).Should().Be(0x2222);
+
+            symbol.Attributes[DwarfAttribute.DeclFile].Type.Should().Be(DwarfAttributeValueType.Constant);
+            ((ulong)symbol.Attributes[DwarfAttribute.DeclFile].Value).Should().Be(0x33333333);
+
+            symbol.Attributes[DwarfAttribute.DeclLine].Type.Should().Be(DwarfAttributeValueType.Constant);
+            ((ulong)symbol.Attributes[DwarfAttribute.DeclLine].Value).Should().Be(0x4444444444444444UL);
+        }
+
+        [Fact]
+        public void ReadData_Dwarf4_SDataAndUData_MapToConstant()
+        {
+            // SData = -2, UData = 300
+            byte[] sdata = EncodeULEB128(0x7E);           // SLEB128(-2) payload read via SData
+            byte[] udata = EncodeULEB128(300);            // ULEB128(300)
+
+            byte[] dieData = new byte[] { 0x01 }
+                .Concat(sdata)                            // SData
+                .Concat(udata)                            // UData
+                .ToArray();
+
+            byte[] header = BuildDwarf4Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
+                (DwarfAttribute.LowPc, DwarfFormat.SData),
+                (DwarfAttribute.HighPc, DwarfFormat.UData));
+
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev);
+
+            symbol.Attributes[DwarfAttribute.LowPc].Type.Should().Be(DwarfAttributeValueType.Constant);
+            // Current implementation stores SData as a 32-bit signed value widened to ulong.
+            ((ulong)symbol.Attributes[DwarfAttribute.LowPc].Value).Should().Be(4294967294UL);
+
+            symbol.Attributes[DwarfAttribute.HighPc].Type.Should().Be(DwarfAttributeValueType.Constant);
+            ((ulong)symbol.Attributes[DwarfAttribute.HighPc].Value).Should().Be(300UL);
+        }
+
+        [Fact]
+        public void ReadData_Dwarf4_AddressAndRefForms_MapToAddressAndReference()
+        {
+            // Address: 8-byte value, Ref4: 4-byte offset from CU begin
+            byte[] dieData = new byte[]
+            {
+                0x01,
+                // Address (8 bytes LE)
+                0x78, 0x56, 0x34, 0x12, 0xEF, 0xCD, 0xAB, 0x90,
+                // Ref4 (4 bytes LE) = 0x20 from CU begin (we don't need a real target DIE for this test)
+                0x20, 0x00, 0x00, 0x00,
+            };
+
+            byte[] header = BuildDwarf4Header((uint)dieData.Length, addressSize: 8);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
+                (DwarfAttribute.LowPc, DwarfFormat.Address),
+                (DwarfAttribute.Type, DwarfFormat.Ref4));
+
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev);
+
+            symbol.Attributes[DwarfAttribute.LowPc].Type.Should().Be(DwarfAttributeValueType.Address);
+            ((ulong)symbol.Attributes[DwarfAttribute.LowPc].Value).Should().Be(0x90ABCDEF12345678UL);
+
+            symbol.Attributes[DwarfAttribute.Type].Type.Should().Be(DwarfAttributeValueType.Reference);
+            ((ulong)symbol.Attributes[DwarfAttribute.Type].Value).Should().BeGreaterThan(0UL); // offset from CU begin
+        }
+
+        [Fact]
+        public void ReadData_Dwarf4_BlockAndStringForms_MapToBlockAndString()
+        {
+            // Block: length-prefixed via ULEB128; String: null-terminated inline; Strp: offset into .debug_str
+            byte[] blockPayload = new byte[] { 0xAA, 0xBB };
+            byte[] blockLen = EncodeULEB128((ulong)blockPayload.Length);
+            byte[] inlineString = new byte[] { (byte)'H', (byte)'i', 0x00 };
+
+            byte[] dieData = new byte[] { 0x01 }
+                .Concat(blockLen)            // Block length
+                .Concat(blockPayload)        // Block bytes
+                .Concat(inlineString)        // String
+                .Concat(new byte[] { 0x02, 0x00 }) // Strp: offset 2 into debug_str
+                .ToArray();
+
+            // .debug_str: two bytes of padding, then "World\0"
+            byte[] debugStr = new byte[] { 0x00, 0x00, (byte)'W', (byte)'o', (byte)'r', (byte)'l', (byte)'d', 0x00 };
+
+            byte[] header = BuildDwarf4Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
+                (DwarfAttribute.Location, DwarfFormat.Block),
+                (DwarfAttribute.Name, DwarfFormat.String),
+                (DwarfAttribute.CompDir, DwarfFormat.Strp));
+
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev, debugStr);
+
+            symbol.Attributes[DwarfAttribute.Location].Type.Should().Be(DwarfAttributeValueType.Block);
+            symbol.Attributes[DwarfAttribute.Location].Block.Should().Equal(0xAA, 0xBB);
+
+            symbol.Attributes[DwarfAttribute.Name].Type.Should().Be(DwarfAttributeValueType.String);
+            symbol.Attributes[DwarfAttribute.Name].String.Should().Be("Hi");
+
+            symbol.Attributes[DwarfAttribute.CompDir].Type.Should().Be(DwarfAttributeValueType.String);
+            symbol.Attributes[DwarfAttribute.CompDir].String.Should().Be("World");
+        }
+
+        [Fact]
+        public void ReadData_Dwarf4_FlagForms_MapToFlag()
+        {
+            byte[] dieData = new byte[]
+            {
+                0x01,
+                0x01, // Flag = true
+            };
+
+            byte[] header = BuildDwarf4Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
+                (DwarfAttribute.External, DwarfFormat.Flag),
+                (DwarfAttribute.Declaration, DwarfFormat.FlagPresent));
+
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev);
+
+            symbol.Attributes[DwarfAttribute.External].Type.Should().Be(DwarfAttributeValueType.Flag);
+            symbol.Attributes[DwarfAttribute.External].Flag.Should().BeTrue();
+
+            symbol.Attributes[DwarfAttribute.Declaration].Type.Should().Be(DwarfAttributeValueType.Flag);
+            symbol.Attributes[DwarfAttribute.Declaration].Flag.Should().BeTrue();
+        }
+
+        // ---- DWARF5 newer forms: LineStrp, StrpSup, Strx/Strx1/2/4, GNUStrIndex, Addrx, RefSup*, RefSig8 ----
+
+        [Fact]
+        public void ReadData_LineStrp_ResolvesFromDebugLineStrings()
+        {
+            // .debug_line_str: two bytes padding, then "Line\0"
+            byte[] debugLineStr = new byte[] { 0x00, 0x00, (byte)'L', (byte)'i', (byte)'n', (byte)'e', 0x00 };
+
+            // DIE: abbrev code 1, then 32-bit offset 2 into .debug_line_str
+            byte[] dieData = new byte[]
+            {
+                0x01,
+                0x02, 0x00, 0x00, 0x00,
+            };
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevSingleAttribute(DwarfTag.Variable, DwarfAttribute.Name, DwarfFormat.LineStrp);
+
+            DwarfSymbol symbol = ParseSingleSymbolWithLineStrings(debugInfo, abbrev, new byte[] { 0x00 }, debugLineStr);
+
+            symbol.Attributes[DwarfAttribute.Name].Type.Should().Be(DwarfAttributeValueType.String);
+            symbol.Attributes[DwarfAttribute.Name].String.Should().Be("Line");
+        }
+
+        [Fact]
+        public void ReadData_StrpSup_SetsOffsetAndLeavesValueNull()
+        {
+            byte[] dieData = new byte[]
+            {
+                0x01,
+                0x04, 0x03, 0x02, 0x01, // offset = 0x01020304
+            };
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevSingleAttribute(DwarfTag.Variable, DwarfAttribute.Name, DwarfFormat.StrpSup);
+
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev);
+
+            symbol.Attributes[DwarfAttribute.Name].Type.Should().Be(DwarfAttributeValueType.String);
+            symbol.Attributes[DwarfAttribute.Name].Offset.Should().Be(0x01020304UL);
+            symbol.Attributes[DwarfAttribute.Name].Value.Should().BeNull();
+        }
+
+        [Fact]
+        public void ReadData_StrxAndGnuStrIndex_SetStringOffsets()
+        {
+            // ULEB128(5) then ULEB128(10)
+            byte[] dieData = new byte[]
+            {
+                0x01,
+                0x05,       // Strx index
+                0x0A,       // GNUStrIndex index
+            };
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
+                (DwarfAttribute.Name, DwarfFormat.Strx),
+                (DwarfAttribute.CompDir, DwarfFormat.GNUStrIndex));
+
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev);
+
+            symbol.Attributes[DwarfAttribute.Name].Type.Should().Be(DwarfAttributeValueType.String);
+            symbol.Attributes[DwarfAttribute.Name].Offset.Should().Be(5UL);
+
+            symbol.Attributes[DwarfAttribute.CompDir].Type.Should().Be(DwarfAttributeValueType.String);
+            symbol.Attributes[DwarfAttribute.CompDir].Offset.Should().Be(10UL);
+        }
+
+        [Fact]
+        public void ReadData_StrxFixedWidthForms_SetExpectedOffsets()
+        {
+            byte[] dieData = new byte[]
+            {
+                0x01,
+                0x0A,                   // Strx1 = 10
+                0x22, 0x11,             // Strx2 = 0x1122
+                0x33, 0x22, 0x11,       // Strx3 = 0x112233
+                0x44, 0x33, 0x22, 0x11, // Strx4 = 0x11223344
+            };
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
+                (DwarfAttribute.Name, DwarfFormat.Strx1),
+                (DwarfAttribute.CompDir, DwarfFormat.Strx2),
+                (DwarfAttribute.DeclFile, DwarfFormat.Strx3),
+                (DwarfAttribute.DeclLine, DwarfFormat.Strx4));
+
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev);
+
+            symbol.Attributes[DwarfAttribute.Name].Offset.Should().Be(10UL);
+            symbol.Attributes[DwarfAttribute.CompDir].Offset.Should().Be(0x1122UL);
+            symbol.Attributes[DwarfAttribute.DeclFile].Offset.Should().Be(0x112233UL);
+            symbol.Attributes[DwarfAttribute.DeclLine].Offset.Should().Be(0x11223344UL);
+        }
+
+        [Fact]
+        public void ReadData_Addrx_MapsToAddress()
+        {
+            // ULEB128(7) index; beginPosition offset is added internally, but we only
+            // need to verify that the resulting attribute type is Address.
+            byte[] dieData = new byte[]
+            {
+                0x01,
+                0x07,
+            };
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevSingleAttribute(DwarfTag.Variable, DwarfAttribute.LowPc, DwarfFormat.Addrx);
+
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev);
+
+            symbol.Attributes[DwarfAttribute.LowPc].Type.Should().Be(DwarfAttributeValueType.Address);
+        }
+
+        [Fact]
+        public void ReadData_RefSupForms_SetReferenceOffsets()
+        {
+            byte[] dieData = new byte[]
+            {
+                0x01,
+                0x10, 0x00, 0x00, 0x00,                         // RefSup4 = 16
+                0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // RefSup8 = 32
+            };
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
+                (DwarfAttribute.Specification, DwarfFormat.RefSup4),
+                (DwarfAttribute.Type, DwarfFormat.RefSup8));
+
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev);
+
+            symbol.Attributes[DwarfAttribute.Specification].Type.Should().Be(DwarfAttributeValueType.Reference);
+            symbol.Attributes[DwarfAttribute.Specification].Offset.Should().Be(16UL);
+            symbol.Attributes[DwarfAttribute.Specification].Value.Should().BeNull();
+
+            symbol.Attributes[DwarfAttribute.Type].Type.Should().Be(DwarfAttributeValueType.Reference);
+            symbol.Attributes[DwarfAttribute.Type].Offset.Should().Be(32UL);
+            symbol.Attributes[DwarfAttribute.Type].Value.Should().BeNull();
+        }
+
+        [Fact]
+        public void ReadData_RefSig8_SkipsEightBytesAndMarksInvalid()
+        {
+            byte[] dieData = new byte[]
+            {
+                0x01,
+                // RefSig8 payload (8 bytes)
+                0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88,
+                // Following Data1 attribute
+                0x42,
+            };
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
+                (DwarfAttribute.Type, DwarfFormat.RefSig8),
+                (DwarfAttribute.ByteSize, DwarfFormat.Data1));
+
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev);
+
+            symbol.Attributes[DwarfAttribute.Type].Type.Should().Be(DwarfAttributeValueType.Invalid);
+            symbol.Attributes[DwarfAttribute.ByteSize].Type.Should().Be(DwarfAttributeValueType.Constant);
+            ((ulong)symbol.Attributes[DwarfAttribute.ByteSize].Value).Should().Be(0x42UL);
+        }
+
         // ---- DWARF5 header parsing for DW_UT_type ----
 
         [Fact]
@@ -486,6 +820,95 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             ((ulong)symbol.Attributes[DwarfAttribute.ByteSize].Value).Should().Be(0x77);
             ((ulong)symbol.Attributes[DwarfAttribute.DeclLine].Value).Should().Be(0x1234);
             ((ulong)symbol.Attributes[DwarfAttribute.DeclFile].Value).Should().Be(0x12345678);
+        }
+
+        [Fact]
+        public void EndToEnd_Dwarf4_VariableSymbol_ParsesRepresentativeAttributes()
+        {
+            byte[] nameBytes = new byte[] { (byte)'v', (byte)'a', (byte)'r', 0x00 };
+            byte[] addressBytes = new byte[] { 0x88, 0x77, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11 }; // 0x1122334455667788
+
+            byte[] dieData = new byte[] { 0x01 }
+                .Concat(nameBytes)          // Name: "var"
+                .Concat(addressBytes)       // LowPc: DW_FORM_addr
+                .Concat(new byte[] { 0x10 })// ByteSize: DW_FORM_data1 = 16
+                .Concat(new byte[] { 0x01 })// External: DW_FORM_flag = true
+                .ToArray();
+
+            byte[] header = BuildDwarf4Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
+                (DwarfAttribute.Name, DwarfFormat.String),
+                (DwarfAttribute.LowPc, DwarfFormat.Address),
+                (DwarfAttribute.ByteSize, DwarfFormat.Data1),
+                (DwarfAttribute.External, DwarfFormat.Flag));
+
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev);
+
+            symbol.Tag.Should().Be(DwarfTag.Variable);
+            symbol.Name.Should().Be("var");
+
+            symbol.Attributes[DwarfAttribute.Name].Type.Should().Be(DwarfAttributeValueType.String);
+            symbol.Attributes[DwarfAttribute.Name].String.Should().Be("var");
+
+            symbol.Attributes[DwarfAttribute.LowPc].Type.Should().Be(DwarfAttributeValueType.Address);
+            symbol.Attributes[DwarfAttribute.LowPc].Address.Should().Be(0x1122334455667788UL);
+
+            symbol.Attributes[DwarfAttribute.ByteSize].Type.Should().Be(DwarfAttributeValueType.Constant);
+            ((ulong)symbol.Attributes[DwarfAttribute.ByteSize].Value).Should().Be(0x10UL);
+
+            symbol.Attributes[DwarfAttribute.External].Type.Should().Be(DwarfAttributeValueType.Flag);
+            symbol.Attributes[DwarfAttribute.External].Flag.Should().BeTrue();
+        }
+
+        [Fact]
+        public void EndToEnd_Dwarf5_VariableSymbol_ParsesRepresentativeAttributes()
+        {
+            // .debug_line_str: two bytes padding, then "foo\0"
+            byte[] debugLineStr = new byte[] { 0x00, 0x00, (byte)'f', (byte)'o', (byte)'o', 0x00 };
+
+            byte[] dieData = new byte[]
+            {
+                0x01,                   // abbreviation code
+                0x02, 0x00, 0x00, 0x00, // Name: LineStrp offset = 2
+                0x03,                   // CompDir: Strx1 index = 3
+                0x05,                   // Location: Loclistx = ULEB128(5)
+                0x07,                   // Ranges: Rnglistx = ULEB128(7)
+                0x34, 0x12,             // ByteSize: Data2 = 0x1234
+            };
+
+            byte[] header = BuildDwarf5Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
+                (DwarfAttribute.Name, DwarfFormat.LineStrp),
+                (DwarfAttribute.CompDir, DwarfFormat.Strx1),
+                (DwarfAttribute.Location, DwarfFormat.Loclistx),
+                (DwarfAttribute.Ranges, DwarfFormat.Rnglistx),
+                (DwarfAttribute.ByteSize, DwarfFormat.Data2));
+
+            DwarfSymbol symbol = ParseSingleSymbolWithLineStrings(
+                debugInfo,
+                abbrev,
+                new byte[] { 0x00 }, // .debug_str (unused in this test)
+                debugLineStr);
+
+            symbol.Tag.Should().Be(DwarfTag.Variable);
+            symbol.Name.Should().Be("foo");
+
+            symbol.Attributes[DwarfAttribute.Name].Type.Should().Be(DwarfAttributeValueType.String);
+            symbol.Attributes[DwarfAttribute.Name].String.Should().Be("foo");
+
+            symbol.Attributes[DwarfAttribute.CompDir].Type.Should().Be(DwarfAttributeValueType.String);
+            symbol.Attributes[DwarfAttribute.CompDir].Offset.Should().Be(3UL);
+
+            symbol.Attributes[DwarfAttribute.Location].Type.Should().Be(DwarfAttributeValueType.Loclistx);
+            ((ulong)symbol.Attributes[DwarfAttribute.Location].Value).Should().Be(5UL);
+
+            symbol.Attributes[DwarfAttribute.Ranges].Type.Should().Be(DwarfAttributeValueType.SecOffset);
+            ((ulong)symbol.Attributes[DwarfAttribute.Ranges].Value).Should().Be(7UL);
+
+            symbol.Attributes[DwarfAttribute.ByteSize].Type.Should().Be(DwarfAttributeValueType.Constant);
+            ((ulong)symbol.Attributes[DwarfAttribute.ByteSize].Value).Should().Be(0x1234UL);
         }
 
         // Abbreviation table terminator handling (DWARF5 spec 7.5.3)
