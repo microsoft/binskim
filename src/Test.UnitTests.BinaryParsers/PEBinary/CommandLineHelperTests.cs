@@ -50,6 +50,24 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
+        public void GetOptionValue_FpWithoutColon_MatchesQuotedForm()
+        {
+            // Quoted form: /Fp"path\\to\\MyProject.pch" — value includes surrounding quotes
+            string optionValue = string.Empty;
+            string[] options = { "/Fp" };
+
+            bool found = CommandLineHelper.GetOptionValue(
+                "/ZH:SHA_256 /Yupch.h /Fp\"path\\to\\MyProject.pch\"",
+                options,
+                CommandLineHelper.OrderOfPrecedence.FirstWins,
+                ref optionValue);
+
+            found.Should().BeTrue();
+            // Caller may Trim('"') to normalize the quoted value
+            optionValue.Trim('"').Should().Be(@"path\to\MyProject.pch");
+        }
+
+        [Fact]
         public void GetOptionValue_FpColonPrefix_DoesNotMatchNocolonForm()
         {
             // Documents the original bug: "/Fp:" prefix fails to match /Fpfilename.pch
