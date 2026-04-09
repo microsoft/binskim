@@ -10,6 +10,7 @@ bld/
 bin/
 obj/
 **/packages/*
+src/BinaryParsers/VersionConstants.cs
 src/TestResults/
 src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Actual/
 .local/
