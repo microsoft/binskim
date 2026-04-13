@@ -1123,5 +1123,74 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             cu.SymbolsTree[0].Tag.Should().Be(DwarfTag.CompileUnit);
             ((ulong)cu.SymbolsTree[0].Attributes[DwarfAttribute.Name].Value).Should().Be(0xAA);
         }
+
+        [Fact]
+        public void ReadData_InsertsVoidBaseTypeAndDefaultsPointerTypeToVoid()
+        {
+            // Single DIE using a PointerType abbreviation with only a ByteSize attribute.
+            // DwarfCompilationUnit should:
+            //   - Insert a synthetic "void" base type as a child of the first root symbol.
+            //   - Add a Type attribute to the PointerType symbol pointing to that void type.
+
+            byte[] dieData = new byte[]
+            {
+                0x01, // abbreviation code = 1
+                0x08, // ByteSize = DW_FORM_data1 = 8
+            };
+
+            byte[] header = BuildDwarf4Header((uint)dieData.Length);
+            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] abbrev = BuildAbbrevSingleAttribute(
+                DwarfTag.PointerType,
+                DwarfAttribute.ByteSize,
+                DwarfFormat.Data1);
+
+            using var debugData = new DwarfMemoryReader(debugInfo);
+            using var debugAbbrev = new DwarfMemoryReader(abbrev);
+            using var debugStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+            using var debugLineStrings = new DwarfMemoryReader(new byte[] { 0x00 });
+
+            var stub = new StubDwarfBinary();
+            var cu = new DwarfCompilationUnit(
+                stub,
+                debugData,
+                debugAbbrev,
+                debugStrings,
+                debugLineStrings,
+                new List<int>(),
+                stub.NormalizeAddress);
+
+            cu.SymbolsTree.Should().HaveCount(1);
+            var pointer = cu.SymbolsTree[0];
+            pointer.Tag.Should().Be(DwarfTag.PointerType);
+
+            // Synthetic void base type is inserted as first child.
+            pointer.Children.Should().NotBeNull();
+            pointer.Children.Should().NotBeEmpty();
+            var voidSymbol = pointer.Children[0];
+            voidSymbol.Tag.Should().Be(DwarfTag.BaseType);
+
+            voidSymbol.Attributes.Should().ContainKey(DwarfAttribute.Name);
+            voidSymbol.Attributes[DwarfAttribute.Name].Type.Should().Be(DwarfAttributeValueType.String);
+            voidSymbol.Attributes[DwarfAttribute.Name].String.Should().Be("void");
+
+            voidSymbol.Attributes.Should().ContainKey(DwarfAttribute.ByteSize);
+            voidSymbol.Attributes[DwarfAttribute.ByteSize].Type.Should().Be(DwarfAttributeValueType.Constant);
+            ((ulong)voidSymbol.Attributes[DwarfAttribute.ByteSize].Value).Should().Be(0UL);
+
+            // Pointer keeps its explicit ByteSize attribute.
+            pointer.Attributes.Should().ContainKey(DwarfAttribute.ByteSize);
+            pointer.Attributes[DwarfAttribute.ByteSize].Type.Should().Be(DwarfAttributeValueType.Constant);
+            ((ulong)pointer.Attributes[DwarfAttribute.ByteSize].Value).Should().Be(8UL);
+
+            // And receives a Type attribute that resolves to the synthetic void symbol.
+            pointer.Attributes.Should().ContainKey(DwarfAttribute.Type);
+            var typeAttr = pointer.Attributes[DwarfAttribute.Type];
+            typeAttr.Type.Should().Be(DwarfAttributeValueType.ResolvedReference);
+            typeAttr.Reference.Should().BeSameAs(voidSymbol);
+
+            // NextOffset should advance to the end of the single CU.
+            cu.NextOffset.Should().Be((uint)debugInfo.Length);
+        }
     }
 }
