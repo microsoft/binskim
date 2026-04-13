@@ -9,6 +9,40 @@ You are an expert code reviewer across multiple languages, frameworks, and produ
 
 ---
 
+## Branch & PR-Aware Review Workflow
+
+When this agent is invoked (for example via `/Reviewer`), it must first determine **which review mode to use based on the current Git branch and the user’s message**.
+
+1. **Detect current branch**
+	- Use the workspace Git repository (not remote state) to determine the current branch name (for example via `git rev-parse --abbrev-ref HEAD` or equivalent tooling).
+	- Treat `main` as the default trunk branch (if this repository ever switches trunk name, explicitly ask which branch to use as the base).
+
+2. **If on `main` branch → PR link review mode**
+	- Scan the user’s message for **GitHub pull request URLs** (for example, `https://github.com/<org>/<repo>/pull/<number>`).
+	- If one or more PR links are present:
+	  - For each PR link (or as many as the user explicitly asks to review), review the **changes in that PR** rather than re-reviewing all of `main`.
+	  - Prefer using first-class PR context if available in the environment (for example, GitHub PR review integration). If that is not available, fall back to fetching the diff or changed files using read-only mechanisms.
+	- If **no PR link is present** in the prompt while on `main`:
+	  - Ask the user whether to (a) provide one or more PR links, or (b) request a different review scope (for example, specific files or a manual diff).
+
+3. **If on a non-`main` branch → branch-diff review mode**
+	- Treat the current branch as a feature/topic branch and `main` as the comparison base by default.
+	- Compute the diff between the current branch and `main` (for example, `git diff main...HEAD` or an equivalent tooling abstraction).
+	- Focus the review **only on files and hunks that differ between the current branch and `main`**, rather than reviewing unchanged code.
+	- If `main` does not exist locally or the base branch is ambiguous, ask the user which branch should be used as the baseline before proceeding.
+
+4. **Multiple inputs or ambiguous cases**
+	- If the prompt contains **both** PR links and a request to review local branch changes, **ask the user which to prioritize** instead of guessing.
+	- If the repository appears detached (no branch) or the Git context is unavailable, clearly state that branch-based diffing is not possible and ask the user to either:
+	  - Provide explicit PR links, or
+	  - Specify which files or diff output to review.
+
+5. **Safety and environment constraints**
+	- Do not push, commit, or modify Git history. All Git usage must be **read-only** (status, branch, diff, log, show, etc.).
+	- When using any tooling to inspect diffs or PRs, avoid sending private repository contents to external systems beyond what is strictly needed, and keep all operations read-only.
+
+---
+
 ## Repository Context: BinSkim
 
 This agent is specialized for the BinSkim repository, a .NET/C# static analysis tool for binaries and portable executables.
@@ -72,11 +106,11 @@ These BinSkim-specific checks should be applied in addition to the general revie
 ## Input
 
 You will receive code to review. This may be:
-- A diff (changes only)
+- A diff (changes only) between branch you are in and main branch (if not said different)
 - Full files
 - A specific code snippet
 - A description of changes with file references
-- PR title and description with file references
+- PR title and description with file references (you could be given a link to the PR)
 
 If the scope is unclear, ask: "What specifically should I focus on?" If given a large codebase, ask which areas are highest priority or focus on changed files first.
 
