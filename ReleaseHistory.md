@@ -13,9 +13,97 @@
 - UER => eliminate unhandled exceptions in rules
 - UEE => eliminate unhandled exceptions in engine
 - DEP => upgrade dependency versions
+- DOC => documentation
+- CLN => cleaning solution 
+- ADM => administrative
 - NEW => new feature 
 
 ## UNRELEASED
+
+## **v4.4.9.7** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.7]
+* UEE: Fix DWARF parser crash on Rust binaries: handle abbreviation table terminator [1161](https://github.com/microsoft/binskim/pull/1161)
+* ADM: Add internal validation stage to external pipeline, switch to production pools [1162](https://github.com/microsoft/binskim/pull/1162)
+* NEW: Add --disable-archive-extraction feature flag [1163](https://github.com/microsoft/binskim/pull/1163)
+* FPS: BA2025 is not applicable for 32-bit binaries [1164](https://github.com/microsoft/binskim/pull/1164)
+
+## **v4.4.9.6** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.6]
+* DEP: Sarif.Driver new version 4.6.0 [1157](https://github.com/microsoft/binskim/pull/1157)
+
+## **v4.4.9.5** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.5]
+* NEW: Add --enable-disabled-rules and --run-only-rules CLI arguments [1153](https://github.com/microsoft/binskim/pull/1153)
+* PRF: Fix ReadBlock() method to handle end of data for DWARF5[1154](https://github.com/microsoft/binskim/pull/1154/)
+
+## **v4.4.9.4** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.4]
+* PRF: Enhance argument generation to ignore full-line comments and handle inline comments correctly [1150](https://github.com/microsoft/binskim/pull/1150)
+
+## **v4.4.9.3** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.3]
+* UEE: DWARF5 - fixing bugs in parser [1143](https://github.com/microsoft/binskim/pull/1143)
+* UEE: Eradicate ERR998 [1142](https://github.com/microsoft/binskim/pull/1142)
+* FNS: Fix BA2026 applicability for rust binaries [1141](https://github.com/microsoft/binskim/pull/1141)
+* DEP: Update Sarif.Driver to 4.6.0 [1146](https://github.com/microsoft/binskim/pull/1146/commits)
+
+## **v4.4.9.2** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.2]
+* ADM: fix version propagating [1139](https://github.com/microsoft/binskim/pull/1139)
+
+## **v4.4.9** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9]
+* DEP: add rust compiler identification [1131](https://github.com/microsoft/binskim/pull/1131)
+
+## **v4.4.8** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.8]
+* FPD: add binaryIsNotRust in metadata conditions [1128](https://github.com/microsoft/binskim/pull/1128)
+
+* NEW : adding posibility to build for Arm64 [1127](https://github.com/microsoft/binskim/pull/1127)
+
+* FPD: BA2026 - isNotApplicable for Rust  [1124](https://github.com/microsoft/binskim/pull/1124)
+
+* ADM: updating piepline [1126](https://github.com/microsoft/binskim/pull/1126)
+
+* PRF: update build baselines [1106](https://github.com/microsoft/binskim/pull/1106)
+
+* DOC: update documentation about BA2006  [1080](https://github.com/microsoft/binskim/pull/1080)
+
+
+
+
+## **v4.4.7** [NuGet Package](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.7)
+* NEW: add posibility to test Infromational outpiut from rule [1122](https://github.com/microsoft/binskim/pull/1122)
+
+* FPS: BA2025 is not applicable for Arm64EC [1120](https://github.com/microsoft/binskim/pull/1120), [1121](https://github.com/microsoft/binskim/pull/1121)
+
+* New: add default case to managedPlatform [1114](https://github.com/microsoft/binskim/pull/1114)
+* PRF: check if metadataReader is not null - fix failing ERR998 [1110](https://github.com/microsoft/binskim/pull/1110)
+* NEW: adding culture enforcement to tests which depends on culture setting [1113](https://github.com/microsoft/binskim/pull/1113)
+
+* NEW: 
+    - Stop Using Platforms/Platform and rely on RuntimeIdentifier only.
+    - Use ArtifactsPath to move output directories. Projects were building to the same directory and this is risky and not really supported.
+    - Replace hack to overwrite files in microsoft.diagnostics.tracing.tracevent with a lesser hack to exclude the conflicting files in the build.
+    - Stop using local package directory that looks to have been just for (3).
+    - Disable CandidateAssemblyFile resolution, which was a long part of debugging the conflict with traceevent. This should be really have been off by default and it reminds to go disable it in our other repos.
+    - Don't set RuntimeIdentifiers in every project, it is only needed in the root exe project and putting it everywhere is triggering more project builds than necessary.
+    - Use TargetFramework instead of TargetFrameworks (plural) since there's only one TFM. Make build output folders tidier and speeds up the build.
+    - Remove unused x86 FCIBs and unused CommandLine.dll FCIB.
+    - Don't set SelfContained on exe project. Let the publish do this. Speeds up iteration time in IDE.
+    - Remove workaround in BuildAndTest.sh for bug fixed in 2017.
+    - Don't pass configuration to dotnet restore, it is a cross-configuration operation.
+    - Consolidate test API to locate files into one place. A Shared\TestHelpers.cs is injected into each test project for this. Also, remove P2P references between tests that were just to get this helper API from PEBinaryTests. That was not done consistently and many other times the helpers were manually copied around.
+    - Remove xunit.runner.console references. xunit.runner.visualstudio is sufficient for dotnet test on the command line.
+    - Use dotnet format built into the SDK and fix a few formatting issues it flagged. This is done because one of my changes ran into bug in old dotnet-format.
+    - Delete unused Test.ConcurrencyTests project that was not in solution and no longer builds successfully.
+    - Delete "nightly" test option from BuildAndTest.cmd that only would have run tests from (15) that don't exist.
+    - Make BuildAndTest.sh and BuildAndTest.cmd run all tests in sln. One project, Test.UnitTests.BinSkim.Driver was missing.
+    - Make BuildAndTest.shm more like BuildAndTest.cmd: take Configuration argument and don't try to run tests if build fails.
+    - Fix test failures on Linux.
+    [1112](https://github.com/microsoft/binskim/pull/1112)
+
+* ADM: delete obsolete  pipeline [1086](https://github.com/microsoft/binskim/pull/1086)
+* ADM: delete obsolete piepline [1103](https://github.com/microsoft/binskim/pull/1103)
+* FNS: supress sha1 for codeQL [1089](https://github.com/microsoft/binskim/pull/1089)
+* ADM: update external pipeline yml [1088](https://github.com/microsoft/binskim/pull/1088)
+* NEW: update yml pipelines [1084](https://github.com/microsoft/binskim/pull/1084)
+* NEW:prepare environment variables for the AnalysisSummary object in the ExtractAnalysisSummary_WithoutBuildPipelineInfo test. : [1083](https://github.com/microsoft/binskim/pull/1083)
+
+## **v4.4.6** 
+* DEP: ...
 
 ## **v4.4.4**
 * DEP: Update destination folder for MsDiaLib, after their update [#1079](https://github.com/microsoft/binskim/pull/1079)

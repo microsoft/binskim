@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
@@ -18,7 +18,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
                   "index": 0
                 }
               }
@@ -40,7 +40,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
                   "index": 0
                 }
               }
@@ -62,7 +62,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
                   "index": 0
                 }
               }
@@ -84,7 +84,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
                   "index": 0
                 }
               }
@@ -106,7 +106,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
                   "index": 0
                 }
               }
@@ -127,7 +127,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
                   "index": 0
                 }
               }
@@ -148,7 +148,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
                   "index": 0
                 }
               }
@@ -158,8 +158,7 @@
       ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
           "rules": [
             {
               "id": "BA3001",
@@ -324,10 +323,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3031EnableClangSafeStack"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -338,13 +334,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.no_stack_protector",
             "index": 0
-          },
-          "hashes": {
-            "md5": "70856162BFDB775364758AD369AB447D",
-            "sha-1": "9854D5B06DE4D77D6F93E24E9D1FB4CCF0DCBE5B",
-            "sha-256": "675499E2D38945515C1B5B0F9DBEE05675F67F2D0CA597BAD3695981C67B1333"
           }
         }
       ],

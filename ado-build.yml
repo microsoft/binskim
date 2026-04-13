@@ -1,0 +1,65 @@
+pr:
+  - "*"
+
+jobs:
+  - job: linux
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+      - checkout: self
+
+      - task: UseDotNet@2
+        displayName: .NET Core 9 sdk
+        inputs:
+          version: "9.0.x"
+          packageType: sdk
+
+      - task: Bash@3
+        displayName: "Build and Test"
+        inputs:
+          filePath: "BuildAndTest.sh"
+          failOnStderr: true
+
+  - job: windows
+    pool:
+      vmImage: "windows-latest"
+    steps:
+      - task: UseDotNet@2
+        displayName: .NET Core 9 sdk
+        inputs:
+          version: "9.0.x"
+          packageType: sdk
+
+      - checkout: self
+
+      - task: CmdLine@2
+        displayName: "Build and Test"
+        inputs:
+          script: "BuildAndTest.cmd"
+
+      - task: ComponentGovernanceComponentDetection@0
+
+  - job: mac
+    pool:
+      vmImage: "macOS-latest"
+    steps:
+      - task: UseDotNet@2
+        displayName: .NET Core 9 sdk
+        inputs:
+          version: "9.0.x"
+          packageType: sdk
+
+      - checkout: self
+
+      - task: Bash@3
+        displayName: "Build and Test"
+        inputs:
+          filePath: "BuildAndTest.sh"
+          failOnStderr: true
+
+      - task: Bash@3
+        displayName: "Run BinSkim"
+        inputs:
+          targetType: "inline"
+          script: "dotnet bld/bin/BinSkim.Driver/release_osx-x64/BinSkim.dll analyze src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.*"
+
