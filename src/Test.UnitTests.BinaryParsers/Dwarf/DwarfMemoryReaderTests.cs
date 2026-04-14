@@ -1,12 +1,9 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
+using System;
 using System.Collections.Generic;
-
 using FluentAssertions;
-
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
-
 using Xunit;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
@@ -224,7 +221,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             reader.Peek().Should().Be(0x42);
             reader.Position.Should().Be(0);
-        }
         }
 
         [Fact]
