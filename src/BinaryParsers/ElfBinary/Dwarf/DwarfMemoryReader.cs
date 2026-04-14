@@ -5,6 +5,7 @@ using System;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
