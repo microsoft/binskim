@@ -5,6 +5,7 @@ using System;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
@@ -64,7 +65,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         {
             if (bytesToRead > (uint)Data.Length || Position > (uint)Data.Length - bytesToRead)
             {
-                throw new InvalidOperationException("Attempted to read past end of DWARF data buffer.");
+                throw new DwarfBufferOverreadException(Position, bytesToRead, Data.Length);
             }
         }
 
@@ -139,9 +140,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 Position += (uint)result.Length + 1;
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is ArgumentException || ex is AccessViolationException)
             {
-                throw new InvalidOperationException("Failed to read string from memory.", ex);
+                throw new DwarfBufferOverreadException(Position, 1, Data.Length);
             }
         }
 
@@ -219,11 +220,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public ulong ULEB128()
         {
-            uint startPosition = Position;
-
             if (Position >= Data.Length)
             {
-                throw new InvalidOperationException("Attempted to read past end of DWARF data buffer.");
+                throw new DwarfBufferOverreadException(Position, 1, Data.Length);
             }
 
             ulong x = 0;
@@ -233,8 +232,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             {
                 if (Position >= Data.Length)
                 {
-                    Position = startPosition;
-                    throw new InvalidOperationException("Attempted to read past end of DWARF data buffer.");
+                    throw new DwarfBufferOverreadException(Position, 1, Data.Length);
                 }
 
                 byte b = Data[Position];
@@ -251,8 +249,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             if (Position >= Data.Length)
             {
-                Position = startPosition;
-                throw new InvalidOperationException("Attempted to read past end of DWARF data buffer.");
+                throw new DwarfBufferOverreadException(Position, 1, Data.Length);
             }
 
             x |= (uint)(Data[Position] << shift);
@@ -265,11 +262,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public uint SLEB128()
         {
-            uint startPosition = Position;
-
             if (Position >= Data.Length)
             {
-                throw new InvalidOperationException("Attempted to read past end of DWARF data buffer.");
+                throw new DwarfBufferOverreadException(Position, 1, Data.Length);
             }
 
             int x = 0;
@@ -279,8 +274,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             {
                 if (Position >= Data.Length)
                 {
-                    Position = startPosition;
-                    throw new InvalidOperationException("Attempted to read past end of DWARF data buffer.");
+                    throw new DwarfBufferOverreadException(Position, 1, Data.Length);
                 }
 
                 byte b = Data[Position];
@@ -297,8 +291,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             if (Position >= Data.Length)
             {
-                Position = startPosition;
-                throw new InvalidOperationException("Attempted to read past end of DWARF data buffer.");
+                throw new DwarfBufferOverreadException(Position, 1, Data.Length);
             }
 
             byte last = Data[Position];
