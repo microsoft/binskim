@@ -24,6 +24,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// managed and native code require PDBs for the native case but not
         /// for managed.
         /// </summary>
+        [Obsolete("This property is no longer used. IL-only managed assemblies no longer trigger "
+            + "ERR997. Rules that require PDB for managed assemblies should check for null PDB "
+            + "in their AnalyzePortableExecutableAndPdb implementation.")]
         public virtual bool EnforcePdbLoadForManagedAssemblies => true;
 
         public virtual bool LogPdbLoadException => true;
@@ -51,8 +54,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 if (target.Pdb == null &&
                     (!target.PE.IsManaged ||
-                      target.PE.IsMixedMode ||
-                      EnforcePdbLoadForManagedAssemblies))
+                      target.PE.IsMixedMode))
                 {
                     LogExceptionLoadingPdb(context, target.PdbParseException, target.PdbLoadTrace?.ToString());
                     return;
