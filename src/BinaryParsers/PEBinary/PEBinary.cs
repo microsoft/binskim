@@ -9,6 +9,7 @@ using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
+using Microsoft.Win32.SafeHandles;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
@@ -120,10 +121,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             try
             {
-                using (FileStream fs = File.OpenRead(Path.GetFullPath(uri.LocalPath)))
-                {
-                    return PE.CheckPEMagicBytes(fs);
-                }
+                string fullPath = Path.GetFullPath(uri.LocalPath);
+                using SafeFileHandle handle = File.OpenHandle(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                Span<byte> header = stackalloc byte[2];
+                int bytesRead = RandomAccess.Read(handle, header, 0);
+                return bytesRead == 2 && header[0] == (byte)'M' && header[1] == (byte)'Z';
             }
             catch (IOException) { return false; }
             catch (ArgumentException) { return false; }
