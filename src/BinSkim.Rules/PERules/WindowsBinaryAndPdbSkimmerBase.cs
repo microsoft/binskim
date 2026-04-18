@@ -19,15 +19,14 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     public abstract class WindowsBinaryAndPdbSkimmerBase : WindowsBinarySkimmerBase
     {
         /// <summary>
-        /// Gets a property indicating whether the rule should require that PDBs
-        /// can be located for managed assemblies. Some checks that inspect both
-        /// managed and native code require PDBs for the native case but not
-        /// for managed.
+        /// Gets a property indicating whether the rule requires that PDBs
+        /// can be located for IL-only managed assemblies. Defaults to false
+        /// because most rules only need PDBs for native/mixed-mode code.
+        /// Rules that need PDB data for IL-only managed assemblies should
+        /// override this to return true so that ERR997 fires and the rule
+        /// body is skipped when the PDB cannot be loaded.
         /// </summary>
-        [Obsolete("This property is no longer used. IL-only managed assemblies no longer trigger "
-            + "ERR997. Rules that require PDB for managed assemblies should check for null PDB "
-            + "in their AnalyzePortableExecutableAndPdb implementation.")]
-        public virtual bool EnforcePdbLoadForManagedAssemblies => true;
+        public virtual bool RequiresPdbForManagedAssemblies => false;
 
         public virtual bool LogPdbLoadException => true;
 
@@ -52,9 +51,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (LogPdbLoadException)
             {
-                if (target.Pdb == null &&
-                    (!target.PE.IsManaged ||
-                      target.PE.IsMixedMode))
+                bool targetRequiresPdb = !target.PE.IsManaged || target.PE.IsMixedMode || this.RequiresPdbForManagedAssemblies;
+
+                if (target.Pdb == null && targetRequiresPdb && !target.PE.IsManagedResourceOnly)
                 {
                     LogExceptionLoadingPdb(context, target.PdbParseException, target.PdbLoadTrace?.ToString());
                     return;
