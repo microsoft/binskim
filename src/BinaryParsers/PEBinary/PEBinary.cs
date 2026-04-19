@@ -111,6 +111,25 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             this.DisposePortableExecutableData();
         }
 
+        /// <summary>
+        /// Attempts to construct a PEBinary. Returns null if the file is not a valid PE.
+        /// </summary>
+        public static PEBinary TryLoadBinary(
+            Uri uri,
+            string symbolPath = null,
+            string localSymbolDirectories = null,
+            bool tracePdbLoad = false)
+        {
+            var binary = new PEBinary(uri, symbolPath, localSymbolDirectories, tracePdbLoad);
+            if (binary.Valid)
+            {
+                return binary;
+            }
+
+            binary.Dispose();
+            return null;
+        }
+
         public static bool CanLoadBinary(Uri uri)
         {
             // TODO: replace this with an actual sniff of PDB binary data.
