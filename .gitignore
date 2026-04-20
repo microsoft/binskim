@@ -12,6 +12,7 @@ obj/
 **/packages/*
 src/TestResults/
 src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Actual/
+src/BinaryParsers/VersionConstants.cs
 .local/
 *.user
 *.log
