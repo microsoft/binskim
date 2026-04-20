@@ -438,7 +438,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             using var compressedStream = new MemoryStream(contents, headerSize, contents.Length - headerSize, writable: false);
             using var zlibStream = new ZLibStream(compressedStream, CompressionMode.Decompress);
-            using var decompressedStream = uncompressedSize <= int.MaxValue
+            using MemoryStream decompressedStream = uncompressedSize <= int.MaxValue
                 ? new MemoryStream((int)uncompressedSize)
                 : new MemoryStream();
 
