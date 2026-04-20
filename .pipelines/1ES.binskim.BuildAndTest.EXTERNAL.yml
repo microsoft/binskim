@@ -2,6 +2,9 @@ name: BuildAndTestBinskim
 trigger:
   - "*"
 
+pr:
+  - "*"
+
 resources:
   repositories:
   - repository: 1ESPipelineTemplates
