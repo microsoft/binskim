@@ -22,8 +22,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// Gets a property indicating whether the rule should require that PDBs
         /// can be located for managed assemblies. Some checks that inspect both
         /// managed and native code require PDBs for the native case but not
-        /// for managed. Defaults to false so that IL-only managed assemblies
-        /// (which typically have no PDB) do not trigger ERR997.
+        /// for managed.
         /// </summary>
         public virtual bool EnforcePdbLoadForManagedAssemblies => false;
 
