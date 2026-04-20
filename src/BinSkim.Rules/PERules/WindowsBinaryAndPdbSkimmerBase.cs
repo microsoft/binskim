@@ -50,11 +50,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (LogPdbLoadException)
             {
-                bool targetRequiresPdb = !target.PE.IsManaged || target.PE.IsMixedMode || this.EnforcePdbLoadForManagedAssemblies;
-
-                targetRequiresPdb = targetRequiresPdb && !target.PE.IsManagedResourceOnly;
-
-                if (target.Pdb == null && targetRequiresPdb)
+                if (target.Pdb == null &&
+                    !target.PE.IsManagedResourceOnly &&
+                    (!target.PE.IsManaged ||
+                      target.PE.IsMixedMode ||
+                      EnforcePdbLoadForManagedAssemblies))
                 {
                     LogExceptionLoadingPdb(context, target.PdbParseException, target.PdbLoadTrace?.ToString());
                     return;
