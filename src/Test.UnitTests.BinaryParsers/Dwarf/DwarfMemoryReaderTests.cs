@@ -292,5 +292,40 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             Assert.Throws<DwarfBufferOverreadException>(() => reader.SLEB128());
             reader.Position.Should().Be(1);
         }
+
+        // ---- EnsureAvailable: bytesToRead > Data.Length (buffer too small for the read type) ----
+
+        [Theory]
+        [MemberData(nameof(BufferTooSmallForReadTestData))]
+        public void Read_WhenBufferSmallerThanReadSize_ThrowsDwarfBufferOverreadException(byte[] data, Action<DwarfMemoryReader> readAction)
+        {
+            // Hits first condition of EnsureAvailable: bytesToRead > (uint)Data.Length.
+            // Position is 0, so only the size-vs-length check can trigger.
+            using var reader = new DwarfMemoryReader(data);
+
+            Assert.Throws<DwarfBufferOverreadException>(() => readAction(reader));
+            reader.Position.Should().Be(0);
+        }
+
+        public static IEnumerable<object[]> BufferTooSmallForReadTestData => new[]
+        {
+            new object[] { Array.Empty<byte>(),              (Action<DwarfMemoryReader>)(r => r.Peek()) },       // Peek needs 1, buffer has 0
+            new object[] { Array.Empty<byte>(),              (Action<DwarfMemoryReader>)(r => r.ReadByte()) },   // ReadByte needs 1, buffer has 0
+            new object[] { new byte[] { 0x01 },              (Action<DwarfMemoryReader>)(r => r.ReadUshort()) }, // ReadUshort needs 2, buffer has 1
+            new object[] { new byte[] { 0x01, 0x02 },       (Action<DwarfMemoryReader>)(r => r.ReadUint()) },   // ReadUint needs 4, buffer has 2
+            new object[] { new byte[] { 0x01, 0x02, 0x03 }, (Action<DwarfMemoryReader>)(r => r.ReadUlong()) },  // ReadUlong needs 8, buffer has 3
+        };
+
+        [Fact]
+        public void ReadUint_WhenPositionIsZeroAndBufferTooSmall_ThrowsDwarfBufferOverreadException()
+        {
+            // Position is explicitly 0; buffer has 2 bytes but ReadUint needs 4.
+            // This isolates the first condition: bytesToRead (4) > Data.Length (2).
+            using var reader = new DwarfMemoryReader(new byte[] { 0x01, 0x02 });
+            reader.Position = 0;
+
+            Assert.Throws<DwarfBufferOverreadException>(() => reader.ReadUint());
+            reader.Position.Should().Be(0);
+        }
     }
 }
