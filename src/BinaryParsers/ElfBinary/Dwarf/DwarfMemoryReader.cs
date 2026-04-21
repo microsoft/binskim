@@ -6,8 +6,6 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 
-using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
-
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 {
     /// <summary>
@@ -170,6 +168,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
         public uint ReadThreeBytes()
         {
+            EnsureAvailable(3);
             uint b0 = ReadByte();
             uint b1 = ReadByte();
             uint b2 = ReadByte();
@@ -221,11 +220,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public ulong ULEB128()
         {
-            if (Position >= Data.Length)
-            {
-                throw new DwarfBufferOverreadException(Position, 1, Data.Length);
-            }
-
             ulong x = 0;
             int shift = 0;
 
@@ -248,11 +242,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 Position++;
             }
 
-            if (Position >= Data.Length)
-            {
-                throw new DwarfBufferOverreadException(Position, 1, Data.Length);
-            }
-
             x |= (uint)(Data[Position] << shift);
             Position++;
             return x;
@@ -263,11 +252,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public uint SLEB128()
         {
-            if (Position >= Data.Length)
-            {
-                throw new DwarfBufferOverreadException(Position, 1, Data.Length);
-            }
-
             int x = 0;
             int shift = 0;
 
@@ -288,11 +272,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 x |= (b & 0x7f) << shift;
                 shift += 7;
                 Position++;
-            }
-
-            if (Position >= Data.Length)
-            {
-                throw new DwarfBufferOverreadException(Position, 1, Data.Length);
             }
 
             byte last = Data[Position];

@@ -256,7 +256,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         }
 
         [Fact]
-        public void ReadUint_WhenNotEnoughBytesRemain_ThrowsInvalidOperationException()
+        public void ReadUint_WhenNotEnoughBytesRemain_ThrowsDwarfBufferOverreadException()
         {
             using var reader = new DwarfMemoryReader(new byte[] { 0x01, 0x02, 0x03 }); // three bytes
 
