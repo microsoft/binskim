@@ -133,6 +133,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public string ReadString()
         {
+           if(Position >= Data.Length)
+            {
+                throw new DwarfBufferOverreadException(Position, 1, Data.Length);
+            }
             try
             {
                 string result = Marshal.PtrToStringAnsi((nint)(pointer + Position));
