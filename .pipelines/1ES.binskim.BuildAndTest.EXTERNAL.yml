@@ -17,7 +17,7 @@ extends:
       os: windows
     featureFlags:
       autoEnableRoslynWithNewRuleset: false
-      sbomtoolkitSdpEnabled: true   # we don't use SBOMB in the pipeline => no need to install it
+      sbomtoolkitSdpEnabled: false   # we don't use SBOMB in the pipeline => no need to install it
     stages:
     - stage: BuildAndTest
       displayName: Build And Test
