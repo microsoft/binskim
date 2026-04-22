@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 using FluentAssertions;
 
@@ -325,6 +326,54 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             reader.Position = 0;
 
             Assert.Throws<DwarfBufferOverreadException>(() => reader.ReadUint());
+            reader.Position.Should().Be(0);
+        }
+
+        // ---- ReadStructure<T> ----
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private struct TestTwoFieldStruct
+        {
+            public short A;
+            public int B;
+        }
+
+        [Fact]
+        public void ReadStructure_ReadsFieldsAndThrowsWhenExhausted()
+        {
+            // short A = 0x0201, int B = 0x06050403
+            using var reader = new DwarfMemoryReader(new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 });
+
+            TestTwoFieldStruct multi = reader.ReadStructure<TestTwoFieldStruct>();
+            multi.A.Should().Be(0x0201);
+            multi.B.Should().Be(0x06050403);
+            reader.Position.Should().Be(6);
+
+            // 0 bytes remain — struct needs 4
+            Assert.Throws<DwarfBufferOverreadException>(() => reader.ReadStructure<int>());
+            reader.Position.Should().Be(6);
+        }
+
+        [Fact]
+        public void ReadStructure_WithPosition_ReadsAtOffsetAndRestoresPosition()
+        {
+            using var reader = new DwarfMemoryReader(new byte[] { 0xFF, 0xFF, 0x0A, 0x00, 0x00, 0x00 });
+            reader.Position = 1;
+
+            int result = reader.ReadStructure<int>(2);
+
+            result.Should().Be(0x0A);
+            reader.Position.Should().Be(1);
+        }
+
+        [Theory]
+        [InlineData(4u)]   // exactly at end
+        [InlineData(14u)]  // past end
+        public void ReadStructure_WithPosition_WhenPositionAtOrPastEnd_ReturnsDefault(uint position)
+        {
+            using var reader = new DwarfMemoryReader(new byte[] { 0x01, 0x02, 0x03, 0x04 });
+
+            reader.ReadStructure<int>(position).Should().Be(0);
             reader.Position.Should().Be(0);
         }
     }
