@@ -71,6 +71,7 @@ namespace Microsoft.CodeAnalysis.IL
 
                     // AnalyzeOptions
                     case "--ignorePdbLoadError":
+                    case "--disable-archive-extraction":
                     {
                         if (!EvaluatesToTrueOrFalse(next))
                         {

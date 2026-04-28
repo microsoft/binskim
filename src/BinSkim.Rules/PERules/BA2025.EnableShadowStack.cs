@@ -82,6 +82,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return notApplicable;
             }
 
+            if (portableExecutable.PEHeaders.PEHeader.Magic != PEMagic.PE32Plus)
+            {
+                // CET Shadow Stack is only supported on 64-bit binaries.
+                reasonForNotAnalyzing = MetadataConditions.ImageIsNot64BitBinary;
+                return notApplicable;
+            }
+
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
         }

@@ -20,6 +20,28 @@
 
 ## UNRELEASED
 
+## **v4.4.9.7** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.7]
+* UEE: Fix DWARF parser crash on Rust binaries: handle abbreviation table terminator [1161](https://github.com/microsoft/binskim/pull/1161)
+* ADM: Add internal validation stage to external pipeline, switch to production pools [1162](https://github.com/microsoft/binskim/pull/1162)
+* NEW: Add --disable-archive-extraction feature flag [1163](https://github.com/microsoft/binskim/pull/1163)
+* FPS: BA2025 is not applicable for 32-bit binaries [1164](https://github.com/microsoft/binskim/pull/1164)
+
+## **v4.4.9.6** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.6]
+* DEP: Sarif.Driver new version 4.6.0 [1157](https://github.com/microsoft/binskim/pull/1157)
+
+## **v4.4.9.5** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.5]
+* NEW: Add --enable-disabled-rules and --run-only-rules CLI arguments [1153](https://github.com/microsoft/binskim/pull/1153)
+* PRF: Fix ReadBlock() method to handle end of data for DWARF5[1154](https://github.com/microsoft/binskim/pull/1154/)
+
+## **v4.4.9.4** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.4]
+* PRF: Enhance argument generation to ignore full-line comments and handle inline comments correctly [1150](https://github.com/microsoft/binskim/pull/1150)
+
+## **v4.4.9.3** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.3]
+* UEE: DWARF5 - fixing bugs in parser [1143](https://github.com/microsoft/binskim/pull/1143)
+* UEE: Eradicate ERR998 [1142](https://github.com/microsoft/binskim/pull/1142)
+* FNS: Fix BA2026 applicability for rust binaries [1141](https://github.com/microsoft/binskim/pull/1141)
+* DEP: Update Sarif.Driver to 4.6.0 [1146](https://github.com/microsoft/binskim/pull/1146/commits)
+
 ## **v4.4.9.2** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.2]
 * ADM: fix version propagating [1139](https://github.com/microsoft/binskim/pull/1139)
 

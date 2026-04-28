@@ -156,10 +156,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
         public uint ReadThreeBytes()
         {
-            uint firstTwo = (uint)Marshal.ReadInt16(pointer, (short)Position);
-            Position += 2;
-
-            return (firstTwo << 16) + ReadByte();
+            uint b0 = ReadByte();
+            uint b1 = ReadByte();
+            uint b2 = ReadByte();
+            return b0 | (b1 << 8) | (b2 << 16);
         }
 
         /// <summary>
@@ -248,7 +248,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="size">The size of block.</param>
         public byte[] ReadBlock(ulong size)
         {
-            size = (ulong)Math.Min((float)size, (Data.Length - Position));
+            if (Position >= Data.Length)
+            {
+                return Array.Empty<byte>();
+            }
+
+            size = Math.Min(size, (ulong)(Data.Length - Position));
             byte[] block = new byte[size];
 
             Array.Copy(Data, Position, block, 0, block.Length);
