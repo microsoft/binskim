@@ -235,7 +235,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "moduleName", compilerData.ModuleName ?? string.Empty },
                 { "moduleLibrary", (compilerData.ModuleName == compilerData.ModuleLibrary ? string.Empty : compilerData.ModuleLibrary ?? string.Empty) },
                 { "hash", fileHash },
-                { "error", string.Empty }
+                { "error", string.Empty },
+                { "sourceLinkJson", compilerData.SourceLinkJson ?? string.Empty },
             };
 
             if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))

@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -82,6 +84,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (target.PE.IsManaged)
             {
+                string sourceLinkJson = GetSourceLinkJson(target, pdb);
+
                 var record = new CompilerData
                 {
                     BinaryType = "PE",
@@ -95,6 +99,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     CompilerBackEndVersion = target.PE.LinkerVersion.ToString(),
                     CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
                     AssemblyReferences = string.Join(';', target.PE.GetAssemblyReferenceStrings()),
+                    SourceLinkJson = sourceLinkJson,
                 };
 
                 if (!records.ContainsKey(record))
@@ -137,6 +142,31 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             foreach (KeyValuePair<CompilerData, ObjectModuleDetails> kv in records)
             {
                 context.CompilerDataLogger.Write(context, kv.Key);
+            }
+        }
+
+        /// <summary>
+        /// Extracts the raw SourceLink JSON from the PDB, if available.
+        /// </summary>
+        private static string GetSourceLinkJson(PEBinary target, Pdb pdb)
+        {
+            try
+            {
+                if (pdb.FileType == PdbFileType.Portable)
+                {
+                    return target.PE.ManagedPdbGetSourceLinkDocument(pdb);
+                }
+                else
+                {
+                    IEnumerable<string> docs = pdb.WindowsPdbGetSourceLinkDocuments();
+                    return docs?.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                // SourceLink extraction is best-effort — never fail the analysis.
+                Trace.WriteLine($"SourceLink extraction failed: {ex.Message}");
+                return null;
             }
         }
     }

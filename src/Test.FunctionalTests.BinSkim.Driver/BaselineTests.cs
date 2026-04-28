@@ -49,6 +49,52 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         [Fact]
+        public void Driver_ShouldEmitSourceLinkJson_ForManagedBinaryWithSourceLink()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows())
+            {
+                return;
+            }
+
+            List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
+            string testFile = Path.Combine(BaselineTestDataDirectory, "CSharp_PortablePdb_SourceLink.dll");
+            string outputFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.sarif");
+
+            try
+            {
+                using var telemetry = new Sdk.Telemetry(this.telemetryConfiguration);
+                var command = new MultithreadedAnalyzeCommand(telemetry);
+                var options = new AnalyzeOptions
+                {
+                    OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                    Recurse = false,
+                    OutputFilePath = outputFile,
+                    ConfigurationFilePath = "default",
+                    SarifOutputVersion = Sarif.SarifVersion.Current,
+                    TargetFileSpecifiers = new string[] { testFile },
+                    Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note },
+                    Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.Pass },
+                };
+
+                command.Run(options);
+
+                var compilerEvents = sendItems
+                    .OfType<EventTelemetry>()
+                    .Where(e => e.Name == CompilerDataLogger.CompilerEventName)
+                    .ToList();
+
+                compilerEvents.Should().NotBeEmpty("BA4001 should emit at least one CompilerInformation event for a managed binary");
+                compilerEvents.First().Properties.Should().ContainKey("sourceLinkJson");
+                compilerEvents.First().Properties["sourceLinkJson"].Should().NotBeNullOrEmpty(
+                    "a binary built with SourceLink enabled should have non-empty sourceLinkJson in telemetry");
+            }
+            finally
+            {
+                if (File.Exists(outputFile)) { File.Delete(outputFile); }
+            }
+        }
+
+        [Fact]
         public void Driver_ShouldLogCompilerTelemetryEvents_Managed()
         {
             // We cannot load the .dll on Unix.
