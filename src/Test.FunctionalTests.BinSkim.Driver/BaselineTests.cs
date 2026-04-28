@@ -57,7 +57,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
-            string testFile = Path.Combine(BaselineTestDataDirectory, "CSharp_PortablePdb_SourceLink.dll");
+            string testFile = Path.Combine(SourceLinkTestDataDirectory, "CSharp_PortablePdb_SourceLink.dll");
             string outputFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.sarif");
 
             try
