@@ -151,8 +151,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>
         /// Extracts the raw SourceLink JSON from the PDB, if available.
         /// Attempts extraction for all PDB types — portable PDBs (managed) and
-        /// Windows PDBs (MSVC native). Non-MSVC native binaries will simply
-        /// return null without an extra object-module iteration.
+        /// Windows PDBs (native). Returns null if no SourceLink data is found.
         /// </summary>
         private string GetSourceLinkJson(BinaryAnalyzerContext context, PEBinary target, Pdb pdb)
         {
@@ -164,8 +163,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
                 else
                 {
+                    // Windows PDB SourceLink may be split across multiple
+                    // sourcelink$n streams — concatenate them to reconstruct
+                    // the full JSON document.
                     IEnumerable<string> docs = pdb.WindowsPdbGetSourceLinkDocuments();
-                    return docs?.FirstOrDefault();
+                    return docs == null ? null : string.Concat(docs);
                 }
             }
             catch (Exception ex)
