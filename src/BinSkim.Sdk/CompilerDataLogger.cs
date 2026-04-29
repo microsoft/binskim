@@ -61,7 +61,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal const string SourceLinkJson = "sourceLinkJson";
         internal const string SourceLinkJsonId = "sourceLinkJsonId";
         internal const string SourceLinkJsonEventName = "SourceLinkJsonInformation";
-        internal const string ChunkedSourceLinkJson = "chunkedsourceLinkJson";
 
         // This object is required to synchronize multi-threaded writes
         // to the CSV writer only. The AppInsights client is already
