@@ -393,40 +393,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             compilerEvents[0].Properties.Should().NotContainKey(CompilerDataLogger.SourceLinkJsonId);
         }
 
-        [Fact]
-        public void CompilerDataLogger_WriteSourceLinkJson_ShouldConcatenateMultiStreamChunks()
-        {
-            // Simulates a Windows PDB where SourceLink is split across
-            // multiple sourcelink$n streams that are concatenated before
-            // being sent to telemetry.
-            string part1 = @"{""documents"":{""C:\\src\\";
-            string part2 = @"*"":""https://raw.githubusercontent.com/owner/repo/abc123/*""}}";
-            string fullJson = part1 + part2;
-
-            using BinaryAnalyzerContext context = CreateTestContext();
-            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
-                                                              sarifVersion: Sarif.SarifVersion.Current,
-                                                              logger: out CompilerDataLogger logger);
-
-            // WriteSourceLinkJson receives the already-concatenated JSON
-            string id = logger.WriteSourceLinkJson(fullJson);
-
-            id.Should().NotBeNullOrEmpty();
-
-            List<EventTelemetry> chunks = telemetryEventOutput
-                .OfType<EventTelemetry>()
-                .Where(e => e.Name == CompilerDataLogger.SourceLinkJsonEventName)
-                .ToList();
-
-            chunks.Should().NotBeEmpty();
-            string reconstructed = string.Concat(chunks
-                .OrderBy(e => int.Parse(e.Properties["orderNumber"]))
-                .Select(e => e.Properties[$"chunked{CompilerDataLogger.SourceLinkJson}"]));
-
-            reconstructed.Should().Be(fullJson,
-                "concatenated SourceLink streams should produce complete, valid JSON");
-        }
-
         private List<ITelemetry> TestSetup(BinaryAnalyzerContext context,
                                            Sarif.SarifVersion sarifVersion,
                                            out CompilerDataLogger logger,

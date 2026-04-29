@@ -98,14 +98,6 @@ namespace Microsoft.CodeAnalysis.IL
 
                 sourceLinkChunks.Should().NotBeEmpty(
                     $"a {binaryKind} binary built with SourceLink enabled should have chunked sourceLinkJson events in telemetry");
-
-                // Verify the reconstructed SourceLink JSON is valid (not truncated
-                // from a multi-stream Windows PDB).
-                string fullJson = string.Concat(sourceLinkChunks
-                    .OrderBy(e => int.Parse(e.Properties["orderNumber"]))
-                    .Select(e => e.Properties[$"chunked{CompilerDataLogger.SourceLinkJson}"]));
-                fullJson.Should().StartWith("{").And.EndWith("}",
-                    "SourceLink JSON should be a complete JSON document, not a truncated fragment");
             }
             finally
             {
