@@ -81,7 +81,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 targetLastAccessDateUtc = string.Empty;
             }
 
+            // Extract SourceLink once per target/PDB and send chunked event once.
+            // All compiler records share the same sourceLinkJsonId correlation key.
             string sourceLinkJson = GetSourceLinkJson(context, target, pdb);
+            string sourceLinkJsonId = context.CompilerDataLogger.WriteSourceLinkJson(sourceLinkJson);
 
             if (target.PE.IsManaged)
             {
@@ -98,7 +101,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     CompilerBackEndVersion = target.PE.LinkerVersion.ToString(),
                     CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
                     AssemblyReferences = string.Join(';', target.PE.GetAssemblyReferenceStrings()),
-                    SourceLinkJson = sourceLinkJson,
+                    SourceLinkJsonId = sourceLinkJsonId,
                 };
 
                 if (!records.ContainsKey(record))
@@ -129,7 +132,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         TargetLastModifiedDateUtc = targetLastAccessDateUtc,
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
-                        SourceLinkJson = sourceLinkJson,
+                        SourceLinkJsonId = sourceLinkJsonId,
                     };
 
                     if (!records.ContainsKey(record))
@@ -147,15 +150,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         /// <summary>
         /// Extracts the raw SourceLink JSON from the PDB, if available.
-        /// SourceLink is only supported for managed binaries and MSVC-compiled native binaries.
+        /// Attempts extraction for all PDB types — portable PDBs (managed) and
+        /// Windows PDBs (MSVC native). Non-MSVC native binaries will simply
+        /// return null without an extra object-module iteration.
         /// </summary>
         private string GetSourceLinkJson(BinaryAnalyzerContext context, PEBinary target, Pdb pdb)
         {
-            if (!target.PE.IsManaged && !target.PE.IsTargetCompiledWithMsvc(pdb))
-            {
-                return null;
-            }
-
             try
             {
                 if (pdb.FileType == PdbFileType.Portable)
@@ -180,7 +180,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         {
                             Text = $"SourceLink extraction failed for '{fileName}': {ex.Message}",
                         },
-                        Level = FailureLevel.Warning,
+                        Level = FailureLevel.Note,
                     });
                 return null;
             }

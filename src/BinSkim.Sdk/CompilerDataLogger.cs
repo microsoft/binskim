@@ -242,15 +242,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "error", string.Empty },
             };
 
-            if (!string.IsNullOrWhiteSpace(compilerData.SourceLinkJson))
+            if (!string.IsNullOrWhiteSpace(compilerData.SourceLinkJsonId))
             {
-                string sourceLinkJsonId = Guid.NewGuid().ToString();
-                properties.Add(SourceLinkJsonId, sourceLinkJsonId);
-
-                SendChunkedContent(SourceLinkJsonEventName,
-                                   sourceLinkJsonId,
-                                   SourceLinkJson,
-                                   compilerData.SourceLinkJson);
+                properties.Add(SourceLinkJsonId, compilerData.SourceLinkJsonId);
             }
 
             if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
@@ -377,6 +371,28 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { $"chunked{contentName}", chunkedContent },
                 });
             }
+        }
+
+        /// <summary>
+        /// Sends SourceLink JSON as chunked telemetry events and returns the
+        /// correlation ID. Returns null if telemetry is not configured or the
+        /// input is empty.
+        /// </summary>
+        internal string WriteSourceLinkJson(string sourceLinkJson)
+        {
+            if (this.telemetryClient == null || string.IsNullOrWhiteSpace(sourceLinkJson))
+            {
+                return null;
+            }
+
+            string sourceLinkJsonId = Guid.NewGuid().ToString();
+
+            SendChunkedContent(SourceLinkJsonEventName,
+                               sourceLinkJsonId,
+                               SourceLinkJson,
+                               sourceLinkJson);
+
+            return sourceLinkJsonId;
         }
 
         internal int CalculateChunkedContentSize(int contentLength)

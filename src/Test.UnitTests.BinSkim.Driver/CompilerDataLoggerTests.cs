@@ -342,18 +342,18 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         }
 
         [Fact]
-        public void CompilerDataLogger_Write_ShouldEmitSourceLinkJson_WhenPresent()
+        public void CompilerDataLogger_Write_ShouldEmitSourceLinkJsonId_WhenPresent()
         {
             using BinaryAnalyzerContext context = CreateTestContext();
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
                                                               sarifVersion: Sarif.SarifVersion.Current,
                                                               logger: out CompilerDataLogger logger);
 
-            string expectedSourceLink = @"{""documents"":{""C:\\src\\*"":""https://raw.githubusercontent.com/owner/repo/abc123/*""}}";
+            string expectedId = Guid.NewGuid().ToString();
             var compilerData = new CompilerData
             {
                 CompilerName = ".NET Compiler",
-                SourceLinkJson = expectedSourceLink,
+                SourceLinkJsonId = expectedId,
             };
 
             logger.Write(context, compilerData);
@@ -365,20 +365,11 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             compilerEvents.Count.Should().Be(1);
             compilerEvents[0].Properties.Should().ContainKey(CompilerDataLogger.SourceLinkJsonId);
-
-            string sourceLinkJsonId = compilerEvents[0].Properties[CompilerDataLogger.SourceLinkJsonId];
-            List<EventTelemetry> sourceLinkChunks = telemetryEventOutput
-                .OfType<EventTelemetry>()
-                .Where(e => e.Name == CompilerDataLogger.SourceLinkJsonEventName
-                         && e.Properties[$"{CompilerDataLogger.SourceLinkJson}Id"] == sourceLinkJsonId)
-                .ToList();
-
-            sourceLinkChunks.Should().NotBeEmpty();
-            sourceLinkChunks[0].Properties[$"chunked{CompilerDataLogger.SourceLinkJson}"].Should().Be(expectedSourceLink);
+            compilerEvents[0].Properties[CompilerDataLogger.SourceLinkJsonId].Should().Be(expectedId);
         }
 
         [Fact]
-        public void CompilerDataLogger_Write_ShouldNotEmitSourceLinkJsonChunks_WhenNull()
+        public void CompilerDataLogger_Write_ShouldNotEmitSourceLinkJsonId_WhenNull()
         {
             using BinaryAnalyzerContext context = CreateTestContext();
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
@@ -388,7 +379,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             var compilerData = new CompilerData
             {
                 CompilerName = ".NET Compiler",
-                SourceLinkJson = null,
+                SourceLinkJsonId = null,
             };
 
             logger.Write(context, compilerData);
@@ -400,13 +391,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             compilerEvents.Count.Should().Be(1);
             compilerEvents[0].Properties.Should().NotContainKey(CompilerDataLogger.SourceLinkJsonId);
-
-            List<EventTelemetry> sourceLinkChunks = telemetryEventOutput
-                .OfType<EventTelemetry>()
-                .Where(e => e.Name == CompilerDataLogger.SourceLinkJsonEventName)
-                .ToList();
-
-            sourceLinkChunks.Should().BeEmpty();
         }
 
         private List<ITelemetry> TestSetup(BinaryAnalyzerContext context,
