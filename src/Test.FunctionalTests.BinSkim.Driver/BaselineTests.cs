@@ -86,9 +86,18 @@ namespace Microsoft.CodeAnalysis.IL
                     .ToList();
 
                 compilerEvents.Should().NotBeEmpty($"BA4001 should emit at least one CompilerInformation event for a {binaryKind} binary");
-                compilerEvents.First().Properties.Should().ContainKey("sourceLinkJson");
-                compilerEvents.First().Properties["sourceLinkJson"].Should().NotBeNullOrEmpty(
-                    $"a {binaryKind} binary built with SourceLink enabled should have non-empty sourceLinkJson in telemetry");
+                compilerEvents.First().Properties.Should().ContainKey(CompilerDataLogger.SourceLinkJsonId,
+                    $"a {binaryKind} binary with SourceLink should have a sourceLinkJsonId correlation key");
+
+                string sourceLinkJsonId = compilerEvents.First().Properties[CompilerDataLogger.SourceLinkJsonId];
+                var sourceLinkChunks = sendItems
+                    .OfType<EventTelemetry>()
+                    .Where(e => e.Name == CompilerDataLogger.SourceLinkJsonEventName
+                             && e.Properties[$"{CompilerDataLogger.SourceLinkJson}Id"] == sourceLinkJsonId)
+                    .ToList();
+
+                sourceLinkChunks.Should().NotBeEmpty(
+                    $"a {binaryKind} binary built with SourceLink enabled should have chunked sourceLinkJson events in telemetry");
             }
             finally
             {

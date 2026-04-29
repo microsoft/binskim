@@ -364,12 +364,21 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 .ToList();
 
             compilerEvents.Count.Should().Be(1);
-            compilerEvents[0].Properties.Should().ContainKey("sourceLinkJson");
-            compilerEvents[0].Properties["sourceLinkJson"].Should().Be(expectedSourceLink);
+            compilerEvents[0].Properties.Should().ContainKey(CompilerDataLogger.SourceLinkJsonId);
+
+            string sourceLinkJsonId = compilerEvents[0].Properties[CompilerDataLogger.SourceLinkJsonId];
+            List<EventTelemetry> sourceLinkChunks = telemetryEventOutput
+                .OfType<EventTelemetry>()
+                .Where(e => e.Name == CompilerDataLogger.SourceLinkJsonEventName
+                         && e.Properties[$"{CompilerDataLogger.SourceLinkJson}Id"] == sourceLinkJsonId)
+                .ToList();
+
+            sourceLinkChunks.Should().NotBeEmpty();
+            sourceLinkChunks[0].Properties[$"chunked{CompilerDataLogger.SourceLinkJson}"].Should().Be(expectedSourceLink);
         }
 
         [Fact]
-        public void CompilerDataLogger_Write_ShouldEmitEmptySourceLinkJson_WhenNull()
+        public void CompilerDataLogger_Write_ShouldNotEmitSourceLinkJsonChunks_WhenNull()
         {
             using BinaryAnalyzerContext context = CreateTestContext();
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
@@ -390,8 +399,14 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 .ToList();
 
             compilerEvents.Count.Should().Be(1);
-            compilerEvents[0].Properties.Should().ContainKey("sourceLinkJson");
-            compilerEvents[0].Properties["sourceLinkJson"].Should().Be(string.Empty);
+            compilerEvents[0].Properties.Should().NotContainKey(CompilerDataLogger.SourceLinkJsonId);
+
+            List<EventTelemetry> sourceLinkChunks = telemetryEventOutput
+                .OfType<EventTelemetry>()
+                .Where(e => e.Name == CompilerDataLogger.SourceLinkJsonEventName)
+                .ToList();
+
+            sourceLinkChunks.Should().BeEmpty();
         }
 
         private List<ITelemetry> TestSetup(BinaryAnalyzerContext context,

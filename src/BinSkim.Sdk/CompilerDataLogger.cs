@@ -58,6 +58,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal const string AssemblyReferencesId = "assemblyReferencesId";
         internal const string NumberOfBinaryAnalyzed = "numberOfBinaryAnalyzed";
         internal const string ChunkedAssemblyReferences = "chunkedassemblyReferences";
+        internal const string SourceLinkJson = "sourceLinkJson";
+        internal const string SourceLinkJsonId = "sourceLinkJsonId";
+        internal const string SourceLinkJsonEventName = "SourceLinkJsonInformation";
+        internal const string ChunkedSourceLinkJson = "chunkedsourceLinkJson";
 
         // This object is required to synchronize multi-threaded writes
         // to the CSV writer only. The AppInsights client is already
@@ -236,8 +240,18 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "moduleLibrary", (compilerData.ModuleName == compilerData.ModuleLibrary ? string.Empty : compilerData.ModuleLibrary ?? string.Empty) },
                 { "hash", fileHash },
                 { "error", string.Empty },
-                { "sourceLinkJson", compilerData.SourceLinkJson ?? string.Empty },
             };
+
+            if (!string.IsNullOrWhiteSpace(compilerData.SourceLinkJson))
+            {
+                string sourceLinkJsonId = Guid.NewGuid().ToString();
+                properties.Add(SourceLinkJsonId, sourceLinkJsonId);
+
+                SendChunkedContent(SourceLinkJsonEventName,
+                                   sourceLinkJsonId,
+                                   SourceLinkJson,
+                                   compilerData.SourceLinkJson);
+            }
 
             if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
             {

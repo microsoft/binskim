@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -82,7 +81,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 targetLastAccessDateUtc = string.Empty;
             }
 
-            string sourceLinkJson = GetSourceLinkJson(target, pdb);
+            string sourceLinkJson = GetSourceLinkJson(context, target, pdb);
 
             if (target.PE.IsManaged)
             {
@@ -150,7 +149,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// Extracts the raw SourceLink JSON from the PDB, if available.
         /// SourceLink is only supported for managed binaries and MSVC-compiled native binaries.
         /// </summary>
-        private static string GetSourceLinkJson(PEBinary target, Pdb pdb)
+        private string GetSourceLinkJson(BinaryAnalyzerContext context, PEBinary target, Pdb pdb)
         {
             if (!target.PE.IsManaged && !target.PE.IsTargetCompiledWithMsvc(pdb))
             {
@@ -172,7 +171,17 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             catch (Exception ex)
             {
                 // SourceLink extraction is best-effort — never fail the analysis.
-                Trace.WriteLine($"SourceLink extraction failed: {ex.Message}");
+                string fileName = context.CurrentTarget?.Uri?.GetFileName() ?? "unknown";
+                context.Logger.LogConfigurationNotification(
+                    new Notification
+                    {
+                        Descriptor = new ReportingDescriptorReference { Id = Id },
+                        Message = new Message
+                        {
+                            Text = $"SourceLink extraction failed for '{fileName}': {ex.Message}",
+                        },
+                        Level = FailureLevel.Warning,
+                    });
                 return null;
             }
         }
