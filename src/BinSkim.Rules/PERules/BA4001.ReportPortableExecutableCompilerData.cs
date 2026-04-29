@@ -82,10 +82,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 targetLastAccessDateUtc = string.Empty;
             }
 
+            string sourceLinkJson = GetSourceLinkJson(target, pdb);
+
             if (target.PE.IsManaged)
             {
-                string sourceLinkJson = GetSourceLinkJson(target, pdb);
-
                 var record = new CompilerData
                 {
                     BinaryType = "PE",
@@ -130,6 +130,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         TargetLastModifiedDateUtc = targetLastAccessDateUtc,
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
+                        SourceLinkJson = sourceLinkJson,
                     };
 
                     if (!records.ContainsKey(record))
@@ -147,9 +148,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         /// <summary>
         /// Extracts the raw SourceLink JSON from the PDB, if available.
+        /// SourceLink is only supported for managed binaries and MSVC-compiled native binaries.
         /// </summary>
         private static string GetSourceLinkJson(PEBinary target, Pdb pdb)
         {
+            if (!target.PE.IsManaged && !target.PE.IsTargetCompiledWithMsvc(pdb))
+            {
+                return null;
+            }
+
             try
             {
                 if (pdb.FileType == PdbFileType.Portable)

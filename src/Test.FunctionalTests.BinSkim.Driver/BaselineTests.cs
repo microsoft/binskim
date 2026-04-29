@@ -48,8 +48,10 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
-        [Fact]
-        public void Driver_ShouldEmitSourceLinkJson_ForManagedBinaryWithSourceLink()
+        [Theory]
+        [InlineData("CSharp_PortablePdb_SourceLink.dll", "managed")]
+        [InlineData("CPlusPlus_SourceLink.exe", "native MSVC")]
+        public void Driver_ShouldEmitSourceLinkJson_ForBinaryWithSourceLink(string binaryFileName, string binaryKind)
         {
             if (!PlatformSpecificHelpers.RunningOnWindows())
             {
@@ -57,7 +59,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
-            string testFile = Path.Combine(SourceLinkTestDataDirectory, "CSharp_PortablePdb_SourceLink.dll");
+            string testFile = Path.Combine(SourceLinkTestDataDirectory, binaryFileName);
             string outputFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.sarif");
 
             try
@@ -83,10 +85,10 @@ namespace Microsoft.CodeAnalysis.IL
                     .Where(e => e.Name == CompilerDataLogger.CompilerEventName)
                     .ToList();
 
-                compilerEvents.Should().NotBeEmpty("BA4001 should emit at least one CompilerInformation event for a managed binary");
+                compilerEvents.Should().NotBeEmpty($"BA4001 should emit at least one CompilerInformation event for a {binaryKind} binary");
                 compilerEvents.First().Properties.Should().ContainKey("sourceLinkJson");
                 compilerEvents.First().Properties["sourceLinkJson"].Should().NotBeNullOrEmpty(
-                    "a binary built with SourceLink enabled should have non-empty sourceLinkJson in telemetry");
+                    $"a {binaryKind} binary built with SourceLink enabled should have non-empty sourceLinkJson in telemetry");
             }
             finally
             {
