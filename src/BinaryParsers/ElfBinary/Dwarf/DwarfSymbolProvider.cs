@@ -159,11 +159,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             while (!debugLineReader.IsEnd)
             {
-                var program =
-                    new DwarfLineNumberProgram(dwarfVersion,
-                                               debugLineReader,
-                                               debugStringsReader,
-                                               addressNormalizer);
+                DwarfLineNumberProgram program;
+                try
+                {
+                    program =
+                        new DwarfLineNumberProgram(dwarfVersion,
+                                                   debugLineReader,
+                                                   debugStringsReader,
+                                                   addressNormalizer);
+                }
+                catch (InvalidOperationException)
+                {
+                    // Malformed or truncated line-number program; the reader
+                    // position is no longer reliable so stop parsing further.
+                    break;
+                }
 
                 if (program.Files == null)
                 {
@@ -284,12 +294,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             using (var debugFrameReader = new DwarfMemoryReader(debugFrame))
             {
-                entries.AddRange(DwarfCommonInformationEntry.ParseAll(debugFrameReader, input.DefaultAddressSize));
+                try
+                {
+                    entries.AddRange(DwarfCommonInformationEntry.ParseAll(debugFrameReader, input.DefaultAddressSize));
+                }
+                catch (InvalidOperationException)
+                {
+                    // Malformed or truncated .debug_frame data; continue with
+                    // whatever entries were successfully parsed so far.
+                }
             }
 
             using (var ehFrameReader = new DwarfMemoryReader(ehFrame))
             {
-                entries.AddRange(DwarfExceptionHandlingCommonInformationEntry.ParseAll(ehFrameReader, input));
+                try
+                {
+                    entries.AddRange(DwarfExceptionHandlingCommonInformationEntry.ParseAll(ehFrameReader, input));
+                }
+                catch (InvalidOperationException)
+                {
+                    // Malformed or truncated .eh_frame data; continue with
+                    // whatever entries were successfully parsed so far.
+                }
             }
 
             return entries;
