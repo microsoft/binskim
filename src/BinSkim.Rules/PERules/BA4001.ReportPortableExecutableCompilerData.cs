@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.IO;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -80,6 +81,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 targetLastAccessDateUtc = string.Empty;
             }
 
+            // Extract SourceLink once per target/PDB and send chunked event once.
+            // All compiler records share the same sourceLinkJsonId correlation key.
+            string sourceLinkJson = GetSourceLinkJson(context, target, pdb);
+            string sourceLinkJsonId = context.CompilerDataLogger.WriteSourceLinkJson(sourceLinkJson);
+
             if (target.PE.IsManaged)
             {
                 var record = new CompilerData
@@ -95,6 +101,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     CompilerBackEndVersion = target.PE.LinkerVersion.ToString(),
                     CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
                     AssemblyReferences = string.Join(';', target.PE.GetAssemblyReferenceStrings()),
+                    SourceLinkJsonId = sourceLinkJsonId,
                 };
 
                 if (!records.ContainsKey(record))
@@ -125,6 +132,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         TargetLastModifiedDateUtc = targetLastAccessDateUtc,
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
+                        SourceLinkJsonId = sourceLinkJsonId,
                     };
 
                     if (!records.ContainsKey(record))
@@ -137,6 +145,44 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             foreach (KeyValuePair<CompilerData, ObjectModuleDetails> kv in records)
             {
                 context.CompilerDataLogger.Write(context, kv.Key);
+            }
+        }
+
+        /// <summary>
+        /// Extracts the raw SourceLink JSON from the PDB, if available.
+        /// Attempts extraction for all PDB types — portable PDBs (managed) and
+        /// Windows PDBs (MSVC native). Non-MSVC native binaries will simply
+        /// return null without an extra object-module iteration.
+        /// </summary>
+        private string GetSourceLinkJson(BinaryAnalyzerContext context, PEBinary target, Pdb pdb)
+        {
+            try
+            {
+                if (pdb.FileType == PdbFileType.Portable)
+                {
+                    return target.PE.ManagedPdbGetSourceLinkDocument(pdb);
+                }
+                else
+                {
+                    IEnumerable<string> docs = pdb.WindowsPdbGetSourceLinkDocuments();
+                    return docs?.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                // SourceLink extraction is best-effort — never fail the analysis.
+                string fileName = context.CurrentTarget?.Uri?.GetFileName() ?? "unknown";
+                context.Logger.LogConfigurationNotification(
+                    new Notification
+                    {
+                        Descriptor = new ReportingDescriptorReference { Id = Id },
+                        Message = new Message
+                        {
+                            Text = $"SourceLink extraction failed for '{fileName}': {ex.Message}",
+                        },
+                        Level = FailureLevel.Note,
+                    });
+                return null;
             }
         }
     }
