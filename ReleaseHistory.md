@@ -19,6 +19,10 @@
 - NEW => new feature 
 
 ## UNRELEASED
+
+## **4.4.9.9**[https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.9]
+* DEP: Update dependency version
+
 ## **v4.4.9.8** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.8]
 * UEE: DWARF memory reader exception handeling [1167](https://github.com/microsoft/binskim/pull/1167)
 * NEW: Added extraction of SourceLink for compiler information events [1182](https://github.com/microsoft/binskim/pull/1182)
