@@ -36,7 +36,32 @@ namespace Microsoft.CodeAnalysis.IL
 
         public override IEnumerable<Assembly> DefaultPluginAssemblies
         {
-            get => new Assembly[] { typeof(MarkImageAsNXCompatible).Assembly };
+            get
+            {
+                var assemblies = new List<Assembly> { typeof(MarkImageAsNXCompatible).Assembly };
+                
+                // Try to load internal rules if available and not disabled by environment variable
+                if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("BINSKIM_DISABLE_INTERNAL_RULES_AUTOLOAD")))
+                {
+                    try
+                    {
+                        // Try loading from the same directory as this exe
+                        string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
+                        if (!string.IsNullOrEmpty(exePath))
+                        {
+                            string dllPath = Path.Combine(Path.GetDirectoryName(exePath), "BinSkim.Rules.Internal.dll");
+                            if (File.Exists(dllPath))
+                            {
+                                Assembly internalRulesAsm = Assembly.LoadFrom(dllPath);
+                                assemblies.Add(internalRulesAsm);
+                            }
+                        }
+                    }
+                    catch { } // Silently ignore if internal rules unavailable
+                }
+                
+                return assemblies;
+            }
             set => throw new InvalidOperationException();
         }
 

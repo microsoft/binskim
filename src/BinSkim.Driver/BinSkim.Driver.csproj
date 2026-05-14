@@ -56,4 +56,11 @@
       <CustomToolNamespace>Microsoft.CodeAnalysis.IL</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
+  <!-- Copy internal rules DLL to output if available (graceful fallback for standalone builds) -->
+  <Target Name="CopyInternalRulesDllIfAvailable" AfterTargets="Build">
+    <ItemGroup>
+      <InternalRulesDll Include="..\..\..\BinSkim.Rules.Internal\bin\$(Configuration)\net9.0\BinSkim.Rules.Internal.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(InternalRulesDll)" DestinationFolder="$(OutputPath)" ContinueOnError="true" />
+  </Target>
 </Project>
