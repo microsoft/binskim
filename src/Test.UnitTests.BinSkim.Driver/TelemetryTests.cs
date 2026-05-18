@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         [Fact]
         public void Telemetry_TelemetryClientShouldBeNullIfEnvironmentVariablesNotSet()
         {
-            using var telemetry = new IL.Sdk.Telemetry();
+            using var telemetry = new IL.Sdk.Telemetry((TelemetryConfiguration)null);
             telemetry.TelemetryClient.Should().BeNull();
         }
 
