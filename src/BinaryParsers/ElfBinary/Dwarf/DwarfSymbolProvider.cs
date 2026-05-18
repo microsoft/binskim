@@ -93,24 +93,47 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             }
 
             debugDataReader.Position = offset;
-            return new DwarfCompilationUnit(dwarfBinary,
-                                            debugDataReader,
-                                            debugDataDescriptionReader,
-                                            debugStringsReader,
-                                            debugLineStringsReader,
-                                            debugStringOffsetsReader,
-                                            addressNormalizer);
+            try
+            {
+                return new DwarfCompilationUnit(dwarfBinary,
+                                                debugDataReader,
+                                                debugDataDescriptionReader,
+                                                debugStringsReader,
+                                                debugLineStringsReader,
+                                                debugStringOffsetsReader,
+                                                addressNormalizer);
+            }
+            catch (InvalidOperationException)
+            {
+                // Malformed or truncated DWARF data at this offset; treat as no more
+                // compilation units instead of failing the entire analysis.
+                return null;
+            }
         }
 
         internal static List<int> ParseDebugStringOffsets(byte[] debugStringOffsets, bool is64bit)
         {
+            if (debugStringOffsets == null || debugStringOffsets.Length == 0)
+            {
+                return new List<int>();
+            }
+
             using var debugStringOffsetsReader = new DwarfMemoryReader(debugStringOffsets);
             var stringOffsets = new List<int>();
 
             while (!debugStringOffsetsReader.IsEnd)
             {
-                int offset = debugStringOffsetsReader.ReadOffset(is64bit);
-                stringOffsets.Add(offset);
+                try
+                {
+                    int offset = debugStringOffsetsReader.ReadOffset(is64bit);
+                    stringOffsets.Add(offset);
+                }
+                catch (InvalidOperationException)
+                {
+                    // Truncated DWARF string offset table; stop reading further
+                    // entries and return what we've successfully parsed.
+                    break;
+                }
             }
 
             return stringOffsets;
@@ -136,11 +159,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             while (!debugLineReader.IsEnd)
             {
-                var program =
-                    new DwarfLineNumberProgram(dwarfVersion,
-                                               debugLineReader,
-                                               debugStringsReader,
-                                               addressNormalizer);
+                DwarfLineNumberProgram program;
+                try
+                {
+                    program =
+                        new DwarfLineNumberProgram(dwarfVersion,
+                                                   debugLineReader,
+                                                   debugStringsReader,
+                                                   addressNormalizer);
+                }
+                catch (InvalidOperationException)
+                {
+                    // Malformed or truncated line-number program; the reader
+                    // position is no longer reliable so stop parsing further.
+                    break;
+                }
 
                 if (program.Files == null)
                 {
@@ -261,12 +294,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             using (var debugFrameReader = new DwarfMemoryReader(debugFrame))
             {
-                entries.AddRange(DwarfCommonInformationEntry.ParseAll(debugFrameReader, input.DefaultAddressSize));
+                try
+                {
+                    entries.AddRange(DwarfCommonInformationEntry.ParseAll(debugFrameReader, input.DefaultAddressSize));
+                }
+                catch (InvalidOperationException)
+                {
+                    // Malformed or truncated .debug_frame data; continue with
+                    // whatever entries were successfully parsed so far.
+                }
             }
 
             using (var ehFrameReader = new DwarfMemoryReader(ehFrame))
             {
-                entries.AddRange(DwarfExceptionHandlingCommonInformationEntry.ParseAll(ehFrameReader, input));
+                try
+                {
+                    entries.AddRange(DwarfExceptionHandlingCommonInformationEntry.ParseAll(ehFrameReader, input));
+                }
+                catch (InvalidOperationException)
+                {
+                    // Malformed or truncated .eh_frame data; continue with
+                    // whatever entries were successfully parsed so far.
+                }
             }
 
             return entries;
