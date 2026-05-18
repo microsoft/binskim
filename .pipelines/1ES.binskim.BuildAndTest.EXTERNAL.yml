@@ -38,16 +38,56 @@ extends:
             name: $(poolName)
             os: $(poolOS)
           steps:
+          # Pre-flight on Linux agents: capacity gate. Runs as the first step in our
+          # portion of the pipeline (after template-injected setup steps that consume
+          # disk). If less than 6 GB is free, mark the leg SucceededWithIssues and
+          # skip the remaining steps so a sticky agent-disk problem doesn't surface
+          # as a real test failure. We deliberately do NOT attempt in-job cleanup of
+          # shared paths (e.g. /tmp, /var/tmp) or the Docker daemon: those are shared
+          # with other processes/tasks on the agent, and wiping them mid-job risks
+          # breaking concurrent work in unpredictable ways. Persistent disk pressure
+          # on this pool should be addressed at the agent-image / pool level.
+          - task: Bash@3
+            displayName: "Pre-flight: disk capacity gate (Linux)"
+            condition: eq(variables['poolOS'], 'linux')
+            inputs:
+              targetType: inline
+              script: |
+                set -u
+                avail_kb=$(df --output=avail "$(Agent.WorkFolder)" | tail -1 | tr -d ' ')
+                min_kb=6291456  # 6 GB
+
+                fmt_size() {
+                  local kb=${1:-0}
+                  if [ "$kb" -ge 1048576 ]; then
+                    awk -v k="$kb" 'BEGIN { printf "%.2f GB", k/1048576 }'
+                  else
+                    awk -v k="$kb" 'BEGIN { printf "%.0f MB", k/1024 }'
+                  fi
+                }
+
+                avail_h=$(fmt_size "$avail_kb")
+                min_h=$(fmt_size "$min_kb")
+                echo "Available on $(Agent.WorkFolder): ${avail_h} (required: ${min_h})"
+                if [ "${avail_kb:-0}" -lt "$min_kb" ]; then
+                  echo "##vso[task.logissue type=warning]Insufficient disk on Linux agent (${avail_h} available, ${min_h} required); skipping remaining steps for this leg."
+                  echo "##vso[task.setvariable variable=skipLinux]true"
+                  echo "##vso[task.complete result=SucceededWithIssues;]"
+                fi
+
           - checkout: self
+            condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
 
           - task: UseDotNet@2
             displayName: .NET Core 9 sdk
+            condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
             inputs:
               version: "9.0.x"
               packageType: sdk
 
           - task: DotNetCoreCLI@2
             displayName: "Create nuget.config"
+            condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
             inputs:
               command: custom
               custom: new
@@ -55,6 +95,7 @@ extends:
 
           - task: DotNetCoreCLI@2
             displayName: "Add BinSkim.Build source"
+            condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
             inputs:
               command: custom
               custom: nuget
@@ -62,6 +103,7 @@ extends:
 
           - task: DotNetCoreCLI@2
             displayName: "Disable default nuget source"
+            condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
             inputs:
               command: custom
               custom: nuget
@@ -69,17 +111,18 @@ extends:
 
           - task: CmdLine@2
             displayName: "Ensure BuildAndTest.sh is executable (Linux)"
-            condition: eq(variables['poolOS'], 'linux')
+            condition: and(succeeded(), eq(variables['poolOS'], 'linux'), ne(variables['skipLinux'], 'true'))
             inputs:
               script: chmod +x ./BuildAndTest.sh
 
           - task: CmdLine@2
             displayName: "Build and Test"
+            condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
             inputs:
               script: $(buildScript)
 
           - task: ComponentGovernanceComponentDetection@0
-            condition: eq(variables['runComponentGovernance'], 'true')
+            condition: and(succeeded(), eq(variables['runComponentGovernance'], 'true'), ne(variables['skipLinux'], 'true'))
 
     # Verify all PRs referenced in this release have been merged to main.
     - stage: ValidateReleasePRs

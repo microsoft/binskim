@@ -341,6 +341,58 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             compilerDataLogger.CreateCsvOutputFile(csvFilePath: null, overwriteExistingCsv: false);
         }
 
+        [Fact]
+        public void CompilerDataLogger_Write_ShouldEmitSourceLinkJsonId_WhenPresent()
+        {
+            using BinaryAnalyzerContext context = CreateTestContext();
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger logger);
+
+            string expectedId = Guid.NewGuid().ToString();
+            var compilerData = new CompilerData
+            {
+                CompilerName = ".NET Compiler",
+                SourceLinkJsonId = expectedId,
+            };
+
+            logger.Write(context, compilerData);
+
+            List<EventTelemetry> compilerEvents = telemetryEventOutput
+                .OfType<EventTelemetry>()
+                .Where(e => e.Name == CompilerDataLogger.CompilerEventName)
+                .ToList();
+
+            compilerEvents.Count.Should().Be(1);
+            compilerEvents[0].Properties.Should().ContainKey(CompilerDataLogger.SourceLinkJsonId);
+            compilerEvents[0].Properties[CompilerDataLogger.SourceLinkJsonId].Should().Be(expectedId);
+        }
+
+        [Fact]
+        public void CompilerDataLogger_Write_ShouldNotEmitSourceLinkJsonId_WhenNull()
+        {
+            using BinaryAnalyzerContext context = CreateTestContext();
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger logger);
+
+            var compilerData = new CompilerData
+            {
+                CompilerName = ".NET Compiler",
+                SourceLinkJsonId = null,
+            };
+
+            logger.Write(context, compilerData);
+
+            List<EventTelemetry> compilerEvents = telemetryEventOutput
+                .OfType<EventTelemetry>()
+                .Where(e => e.Name == CompilerDataLogger.CompilerEventName)
+                .ToList();
+
+            compilerEvents.Count.Should().Be(1);
+            compilerEvents[0].Properties.Should().NotContainKey(CompilerDataLogger.SourceLinkJsonId);
+        }
+
         private List<ITelemetry> TestSetup(BinaryAnalyzerContext context,
                                            Sarif.SarifVersion sarifVersion,
                                            out CompilerDataLogger logger,
