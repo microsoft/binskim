@@ -237,6 +237,36 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
         }
 
         [Fact]
+        public void DecompressSectionContents_Elf32CompressedSection_Decompresses()
+        {
+            byte[] originalContents = Encoding.ASCII.GetBytes("dwarf-v5-go-section");
+
+            byte[] compressedContents;
+            using (var compressedStream = new MemoryStream())
+            {
+                using (var zlibStream = new ZLibStream(compressedStream, CompressionLevel.SmallestSize, leaveOpen: true))
+                {
+                    zlibStream.Write(originalContents, 0, originalContents.Length);
+                }
+
+                compressedContents = compressedStream.ToArray();
+            }
+
+            using var sectionStream = new MemoryStream();
+            using (var writer = new BinaryWriter(sectionStream, Encoding.ASCII, leaveOpen: true))
+            {
+                writer.Write((uint)1);
+                writer.Write((uint)originalContents.Length);
+                writer.Write((uint)1);
+                writer.Write(compressedContents);
+            }
+
+            byte[] decompressedContents = ElfBinary.DecompressSectionContents(sectionStream.ToArray(), is64bit: false);
+
+            decompressedContents.Should().Equal(originalContents);
+        }
+
+        [Fact]
         public void ValidateDwarfV4_WithO2_Split_DebugFileExists()
         {
             // dwotest.cpp compiled using: gcc -Wall -O2 -g -gdwarf-4 dwotest.cpp -gsplit-dwarf -o dwotest.gcc.4.o
