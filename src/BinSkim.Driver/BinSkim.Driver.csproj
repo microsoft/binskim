@@ -56,4 +56,11 @@
       <CustomToolNamespace>Microsoft.CodeAnalysis.IL</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
+
+  <Target Name="Set-Version" BeforeTargets="GetAssemblyVersion" Condition="'$(Configuration)' != 'Release'">
+    <PropertyGroup>
+      <Version>$(Version)-$([System.DateTime]::UtcNow.ToString('yyyyMMddhhmmss'))</Version>
+    </PropertyGroup>
+  </Target>
+
 </Project>

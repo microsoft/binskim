@@ -5,6 +5,27 @@
     <EnableImplicitNoneItems>false</EnableImplicitNoneItems>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <BinSkimVersionMajor>4</BinSkimVersionMajor>
+    <BinSkimVersionMinor>4</BinSkimVersionMinor>
+    <BinSkimVersionPatch>9</BinSkimVersionPatch>
+    <BinSkimVersionPrerelease>9</BinSkimVersionPrerelease>
+    <BinSkimVersion>$(BinSkimVersionMajor).$(BinSkimVersionMinor).$(BinSkimVersionPatch).$(BinSkimVersionPrerelease)</BinSkimVersion>
+    <Version>$(BinSkimVersion)</Version>
+    <AssemblyVersion>$(BinSkimVersionMajor).$(BinSkimVersionMinor).$(BinSkimVersionPatch)</AssemblyVersion>
+    <FileVersion>$(BinSkimVersionMajor).$(BinSkimVersionMinor).$(BinSkimVersionPatch)</FileVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <!-- Disable auto-generation of attributes that are manually set in AssemblyInfo.cs files -->
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyTrademarkAttribute>false</GenerateAssemblyTrademarkAttribute>
+    <GenerateAssemblyCultureAttribute>false</GenerateAssemblyCultureAttribute>
+  </PropertyGroup>
+
   <ItemGroup Condition="$(MSBuildProjectName.StartsWith('Test'))">
     <Compile Include="$(MSBuildThisFileDirectory)Shared\TestHelpers.cs" />
   </ItemGroup>
