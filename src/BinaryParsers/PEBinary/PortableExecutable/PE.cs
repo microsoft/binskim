@@ -860,13 +860,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public string ManagedPdbGetSourceLinkDocument(Pdb pdb)
         {
-            if (!TryGetPortablePdbMetadataReader(pdb, out MetadataReader pdbMetadataReader))
-            {
-                return null;
-            }
-
-            BlobReader sourceLinkReader = GetCustomDebugInformationReader(pdbMetadataReader, EntityHandle.ModuleDefinition, SourceLinkKind);
-            return sourceLinkReader.Length == 0 ? null : sourceLinkReader.ReadUTF8(sourceLinkReader.Length);
+            return ReadPortablePdbMetadata(
+                pdb,
+                pdbMetadataReader =>
+                {
+                    BlobReader sourceLinkReader = GetCustomDebugInformationReader(pdbMetadataReader, EntityHandle.ModuleDefinition, SourceLinkKind);
+                    return sourceLinkReader.Length == 0 ? null : sourceLinkReader.ReadUTF8(sourceLinkReader.Length);
+                },
+                defaultValue: null);
         }
 
         public IEnumerable<string> GetAssemblyReferenceStrings()
@@ -886,42 +887,64 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb(Pdb pdb)
         {
-            if (!TryGetPortablePdbMetadataReader(pdb, out MetadataReader pdbMetadataReader))
-            {
-                return ChecksumAlgorithmType.Unknown;
-            }
+            return ReadPortablePdbMetadata(
+                pdb,
+                pdbMetadataReader =>
+                {
+                    foreach (Document doc in pdbMetadataReader.Documents.Select(document => pdbMetadataReader.GetDocument(document)))
+                    {
+                        Guid hashGuid = pdbMetadataReader.GetGuid(doc.HashAlgorithm);
+                        return GetChecksumAlgorithmType(hashGuid);
+                    }
 
-            foreach (Document doc in pdbMetadataReader.Documents.Select(document => pdbMetadataReader.GetDocument(document)))
-            {
-                Guid hashGuid = pdbMetadataReader.GetGuid(doc.HashAlgorithm);
-                return GetChecksumAlgorithmType(hashGuid);
-            }
-
-            return ChecksumAlgorithmType.Unknown;
+                    return ChecksumAlgorithmType.Unknown;
+                },
+                defaultValue: ChecksumAlgorithmType.Unknown);
         }
 
-        private bool TryGetPortablePdbMetadataReader(Pdb pdb, out MetadataReader pdbMetadataReader)
+        private T ReadPortablePdbMetadata<T>(Pdb pdb, Func<MetadataReader, T> readOperation, T defaultValue)
         {
+            MetadataReaderProvider pdbProvider = null;
+            Stream pdbStream = null;
+
             if (!this.peReader.TryOpenAssociatedPortablePdb(
-                this.FileName,
-                filePath => File.Exists(filePath) ? File.OpenRead(filePath) : null,
-                out MetadataReaderProvider pdbProvider,
-                out _))
+                    this.FileName,
+                    filePath =>
+                    {
+                        if (!File.Exists(filePath))
+                        {
+                            return null;
+                        }
+
+                        pdbStream = File.OpenRead(filePath);
+                        return pdbStream;
+                    },
+                    out pdbProvider,
+                    out _))
             {
                 if (File.Exists(pdb.PdbLocation))
                 {
-                    pdbProvider = MetadataReaderProvider.FromPortablePdbStream(File.OpenRead(pdb.PdbLocation));
+                    pdbStream?.Dispose();
+                    pdbStream = File.OpenRead(pdb.PdbLocation);
+                    pdbProvider = MetadataReaderProvider.FromPortablePdbStream(pdbStream);
                 }
 
                 if (pdbProvider == null)
                 {
-                    pdbMetadataReader = null;
-                    return false;
+                    return defaultValue;
                 }
             }
 
-            pdbMetadataReader = pdbProvider.GetMetadataReader();
-            return true;
+            try
+            {
+                MetadataReader pdbMetadataReader = pdbProvider.GetMetadataReader();
+                return readOperation(pdbMetadataReader);
+            }
+            finally
+            {
+                pdbProvider?.Dispose();
+                pdbStream?.Dispose();
+            }
         }
 
         private ChecksumAlgorithmType ChecksumAlgorithmForFullPdb(Pdb pdb)
