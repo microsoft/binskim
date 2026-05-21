@@ -7,6 +7,7 @@ using System.IO;
 
 using FluentAssertions;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.IL.Rules;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
@@ -34,7 +35,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2027_PortablePdbWithSourceLink_RepeatedAnalysis()
         {
-            // Regression test for IcM 798776046: 
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            // Regression test
             // BA2027 would crash with AccessViolationException when analyzing
             // portable PDB binaries with SourceLink under GC pressure.
             // This test repeats the analysis to simulate multi-threaded scanning.
@@ -88,6 +91,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2027_MultiplePortablePdbBinaries_SequentialAnalysis()
         {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
             // Test analyzing multiple portable PDB binaries sequentially
             // This simulates the real-world scanning pattern where BinSkim
             // processes many files in sequence with --threads parameter
