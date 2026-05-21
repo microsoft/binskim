@@ -137,7 +137,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 for (int i = 0; i < 10; i++)
                 {
                     // Allocate memory to increase GC pressure
-                    var temp = new byte[1024 * 100];
+                    byte[] temp = new byte[1024 * 100];
 
                     string sourceLink = peBinary.PE.ManagedPdbGetSourceLinkDocument(pdb);
 
