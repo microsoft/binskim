@@ -64,7 +64,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             for (int iteration = 0; iteration < 10; iteration++)
             {
                 context = CreateContextForTarget(logger, binaryPath);
-                
+
                 if (!context.IsValidAnalysisTarget)
                 {
                     continue;
@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // processes many files in sequence with --threads parameter
 
             string testDataDir = GetFunctionalTestDataPath("BA2027.EnableSourceLink", "Pass");
-            
+
             if (!Directory.Exists(testDataDir))
             {
                 return;

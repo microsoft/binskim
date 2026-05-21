@@ -36,9 +36,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             // Test that repeated SourceLink extractions don't cause memory corruption
             // This exercises the lifetime fix by calling the read operation multiple times
             // in quick succession to verify proper disposal between calls.
-            
+
             string binaryPath = Path.Combine(BaselineTestDataDirectory, "CSharp_PortablePdb_SourceLink.dll");
-            
+
             if (!File.Exists(binaryPath))
             {
                 // Skip if test data is not available
@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             using (var peBinary = new PEBinary(new Uri(binaryPath)))
             {
-                var pdb = peBinary.Pdb;
+                Pdb pdb = peBinary.Pdb;
                 if (pdb == null || pdb.FileType != PdbFileType.Portable)
                 {
                     return;
@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 for (int i = 0; i < 5; i++)
                 {
                     string sourceLink = peBinary.PE.ManagedPdbGetSourceLinkDocument(pdb);
-                    
+
                     // Should consistently get a valid result or null, not crash
                     if (sourceLink != null)
                     {
@@ -79,9 +79,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             // Test that repeated checksum algorithm extractions don't cause memory corruption
             // This exercises the lifetime fix for the checksum extraction path
-            
+
             string binaryPath = Path.Combine(BaselineTestDataDirectory, "CSharp_PortablePdb_SourceLink.dll");
-            
+
             if (!File.Exists(binaryPath))
             {
                 return;
@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             using (var peBinary = new PEBinary(new Uri(binaryPath)))
             {
-                var pdb = peBinary.Pdb;
+                Pdb pdb = peBinary.Pdb;
                 if (pdb == null || pdb.FileType != PdbFileType.Portable)
                 {
                     return;
@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 for (int i = 0; i < 5; i++)
                 {
                     ChecksumAlgorithmType checksum = peBinary.PE.ManagedPdbSourceFileChecksumAlgorithm(pdb.FileType, pdb);
-                    
+
                     // Should get a valid result, not crash
                     checksum.Should().NotBe(ChecksumAlgorithmType.Unknown);
 
@@ -116,9 +116,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             // Test that repeated reads with high GC pressure don't cause AV
             // This simulates the real-world scenario where BinSkim runs with --threads 10
             // and scans ~30k files, triggering Gen0 GC between reads
-            
+
             string binaryPath = Path.Combine(BaselineTestDataDirectory, "CSharp_PortablePdb_SourceLink.dll");
-            
+
             if (!File.Exists(binaryPath))
             {
                 return;
@@ -126,7 +126,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             using (var peBinary = new PEBinary(new Uri(binaryPath)))
             {
-                var pdb = peBinary.Pdb;
+                Pdb pdb = peBinary.Pdb;
                 if (pdb == null || pdb.FileType != PdbFileType.Portable)
                 {
                     return;
@@ -138,9 +138,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 {
                     // Allocate memory to increase GC pressure
                     var temp = new byte[1024 * 100];
-                    
+
                     string sourceLink = peBinary.PE.ManagedPdbGetSourceLinkDocument(pdb);
-                    
+
                     // Verify we got results without crashing
                     // (may be null if binary doesn't have SourceLink, but should not AV)
                     if (sourceLink != null)
@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             // Test that accessing a binary with missing PDB doesn't crash
             string binaryPath = Path.Combine(BaselineTestDataDirectory, "CSharp_PortablePdb_SourceLink.dll");
-            
+
             if (!File.Exists(binaryPath))
             {
                 return;
@@ -168,8 +168,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             using (var peBinary = new PEBinary(new Uri(binaryPath)))
             {
-                var pdb = peBinary.Pdb;
-                
+                Pdb pdb = peBinary.Pdb;
+
                 if (pdb == null || pdb.FileType != PdbFileType.Portable)
                 {
                     return;
@@ -177,7 +177,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                 // Extract SourceLink from the actual PDB (should not crash)
                 string sourceLink = peBinary.PE.ManagedPdbGetSourceLinkDocument(pdb);
-                
+
                 // Should return a value or null gracefully, not crash
                 // Just verify no exception was thrown
             }
@@ -188,9 +188,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             // Test that FileStream objects are properly disposed
             // This prevents file locks that would cause "file in use" errors on Windows
-            
+
             string binaryPath = Path.Combine(BaselineTestDataDirectory, "CSharp_PortablePdb_SourceLink.dll");
-            
+
             if (!File.Exists(binaryPath))
             {
                 return;
@@ -198,7 +198,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             using (var peBinary = new PEBinary(new Uri(binaryPath)))
             {
-                var pdb = peBinary.Pdb;
+                Pdb pdb = peBinary.Pdb;
                 if (pdb == null || pdb.FileType != PdbFileType.Portable)
                 {
                     return;
@@ -206,14 +206,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                 // Extract SourceLink (should open and dispose FileStream properly)
                 string sourceLink = peBinary.PE.ManagedPdbGetSourceLinkDocument(pdb);
-                
+
                 // After the call completes, the PDB file should not be locked
                 // Try to open it again to verify no lock exists
                 // (this only works on Windows, but the try/catch handles it)
                 try
                 {
                     // If we can open the file for exclusive access, it wasn't locked
-                    using (var stream = File.Open(pdb.PdbLocation, FileMode.Open, FileAccess.Read, FileShare.None))
+                    using (FileStream stream = File.Open(pdb.PdbLocation, FileMode.Open, FileAccess.Read, FileShare.None))
                     {
                         // Successfully opened with exclusive access - no lock held
                     }
