@@ -891,13 +891,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 pdb,
                 pdbMetadataReader =>
                 {
-                    foreach (Document doc in pdbMetadataReader.Documents.Select(document => pdbMetadataReader.GetDocument(document)))
+                    DocumentHandle firstHandle = pdbMetadataReader.Documents.FirstOrDefault();
+                    if (firstHandle.IsNil)
                     {
-                        Guid hashGuid = pdbMetadataReader.GetGuid(doc.HashAlgorithm);
-                        return GetChecksumAlgorithmType(hashGuid);
+                        return ChecksumAlgorithmType.Unknown;
                     }
 
-                    return ChecksumAlgorithmType.Unknown;
+                    Document doc = pdbMetadataReader.GetDocument(firstHandle);
+                    Guid hashGuid = pdbMetadataReader.GetGuid(doc.HashAlgorithm);
+                    return GetChecksumAlgorithmType(hashGuid);
                 },
                 defaultValue: ChecksumAlgorithmType.Unknown);
         }
@@ -935,15 +937,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 }
             }
 
-            try
+            using (pdbProvider)
+            using (pdbStream)
             {
                 MetadataReader pdbMetadataReader = pdbProvider.GetMetadataReader();
                 return readOperation(pdbMetadataReader);
-            }
-            finally
-            {
-                pdbProvider?.Dispose();
-                pdbStream?.Dispose();
             }
         }
 
