@@ -34,6 +34,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         internal SafePointer pImage; // pointer to the beginning of the file in memory
         private readonly MetadataReader metadataReader;
 
+        // Portable PDB state — opened lazily on first access, owned for the PE's lifetime,
+        // disposed in Dispose(). Keeping the provider rooted prevents the GC from collecting
+        // it while MetadataReader/BlobReader still point into its memory (IcM 798776046).
+        private MetadataReaderProvider portablePdbProvider;
+        private Stream portablePdbStream;
+        private MetadataReader portablePdbMetadataReader;
+        private bool portablePdbInitialized;
+
         // https://github.com/dotnet/runtime/blob/main/docs/design/specs/PortablePdb-Metadata.md#source-link-c-and-vb-compilers
         private static readonly Guid SourceLinkKind = new Guid("CC110556-A091-4D38-9FEC-25AB9A351A6A");
 
@@ -90,6 +98,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public void Dispose()
         {
+            if (this.portablePdbProvider != null)
+            {
+                this.portablePdbProvider.Dispose();
+                this.portablePdbProvider = null;
+            }
+
+            if (this.portablePdbStream != null)
+            {
+                this.portablePdbStream.Dispose();
+                this.portablePdbStream = null;
+            }
+
+            this.portablePdbMetadataReader = null;
+
             if (this.peReader != null)
             {
                 this.peReader.Dispose();
@@ -860,14 +882,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public string ManagedPdbGetSourceLinkDocument(Pdb pdb)
         {
-            return ReadPortablePdbMetadata(
-                pdb,
-                pdbMetadataReader =>
-                {
-                    BlobReader sourceLinkReader = GetCustomDebugInformationReader(pdbMetadataReader, EntityHandle.ModuleDefinition, SourceLinkKind);
-                    return sourceLinkReader.Length == 0 ? null : sourceLinkReader.ReadUTF8(sourceLinkReader.Length);
-                },
-                defaultValue: null);
+            MetadataReader reader = GetPortablePdbMetadataReader(pdb);
+            if (reader == null)
+            {
+                return null;
+            }
+
+            BlobReader sourceLinkReader = GetCustomDebugInformationReader(reader, EntityHandle.ModuleDefinition, SourceLinkKind);
+            return sourceLinkReader.Length == 0 ? null : sourceLinkReader.ReadUTF8(sourceLinkReader.Length);
         }
 
         public IEnumerable<string> GetAssemblyReferenceStrings()
@@ -887,27 +909,36 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb(Pdb pdb)
         {
-            return ReadPortablePdbMetadata(
-                pdb,
-                pdbMetadataReader =>
-                {
-                    DocumentHandle firstHandle = pdbMetadataReader.Documents.FirstOrDefault();
-                    if (firstHandle.IsNil)
-                    {
-                        return ChecksumAlgorithmType.Unknown;
-                    }
+            MetadataReader reader = GetPortablePdbMetadataReader(pdb);
+            if (reader == null)
+            {
+                return ChecksumAlgorithmType.Unknown;
+            }
 
-                    Document doc = pdbMetadataReader.GetDocument(firstHandle);
-                    Guid hashGuid = pdbMetadataReader.GetGuid(doc.HashAlgorithm);
-                    return GetChecksumAlgorithmType(hashGuid);
-                },
-                defaultValue: ChecksumAlgorithmType.Unknown);
+            DocumentHandle firstHandle = reader.Documents.FirstOrDefault();
+            if (firstHandle.IsNil)
+            {
+                return ChecksumAlgorithmType.Unknown;
+            }
+
+            Document doc = reader.GetDocument(firstHandle);
+            Guid hashGuid = reader.GetGuid(doc.HashAlgorithm);
+            return GetChecksumAlgorithmType(hashGuid);
         }
 
-        private T ReadPortablePdbMetadata<T>(Pdb pdb, Func<MetadataReader, T> readOperation, T defaultValue)
+        /// <summary>
+        /// Lazily opens the portable PDB and caches the MetadataReader for the PE's lifetime.
+        /// The provider and backing stream are stored as fields and disposed in PE.Dispose(),
+        /// preventing the GC lifetime bug (IcM 798776046) and the FileStream leak.
+        /// </summary>
+        private MetadataReader GetPortablePdbMetadataReader(Pdb pdb)
         {
-            MetadataReaderProvider pdbProvider = null;
-            Stream pdbStream = null;
+            if (this.portablePdbInitialized)
+            {
+                return this.portablePdbMetadataReader;
+            }
+
+            this.portablePdbInitialized = true;
 
             if (!this.peReader.TryOpenAssociatedPortablePdb(
                     this.FileName,
@@ -918,31 +949,27 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                             return null;
                         }
 
-                        pdbStream = File.OpenRead(filePath);
-                        return pdbStream;
+                        this.portablePdbStream = File.OpenRead(filePath);
+                        return this.portablePdbStream;
                     },
-                    out pdbProvider,
+                    out this.portablePdbProvider,
                     out _))
             {
-                if (File.Exists(pdb.PdbLocation))
+                if (pdb != null && File.Exists(pdb.PdbLocation))
                 {
-                    pdbStream?.Dispose();
-                    pdbStream = File.OpenRead(pdb.PdbLocation);
-                    pdbProvider = MetadataReaderProvider.FromPortablePdbStream(pdbStream);
+                    this.portablePdbStream?.Dispose();
+                    this.portablePdbStream = File.OpenRead(pdb.PdbLocation);
+                    this.portablePdbProvider = MetadataReaderProvider.FromPortablePdbStream(this.portablePdbStream);
                 }
 
-                if (pdbProvider == null)
+                if (this.portablePdbProvider == null)
                 {
-                    return defaultValue;
+                    return null;
                 }
             }
 
-            using (pdbProvider)
-            using (pdbStream)
-            {
-                MetadataReader pdbMetadataReader = pdbProvider.GetMetadataReader();
-                return readOperation(pdbMetadataReader);
-            }
+            this.portablePdbMetadataReader = this.portablePdbProvider.GetMetadataReader();
+            return this.portablePdbMetadataReader;
         }
 
         private ChecksumAlgorithmType ChecksumAlgorithmForFullPdb(Pdb pdb)
