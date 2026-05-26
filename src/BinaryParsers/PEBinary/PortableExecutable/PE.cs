@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -62,7 +63,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 this.IsPEFile = true;
 
-                this.pImage = new SafePointer(this.peReader.GetEntireImage().GetContent().ToBuilder().ToArray());
+                this.pImage = new SafePointer(ImmutableCollectionsMarshal.AsArray(this.peReader.GetEntireImage().GetContent()));
 
                 if (this.IsManaged)
                 {
@@ -321,32 +322,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     return this.sha1Hash;
                 }
 
-                // processing buffer
-                byte[] buffer = new byte[4096];
-
-                // create the hash object
-                using (var sha1 = SHA1.Create()) //CodeQL [SM02196] File checksum for diagnostic dump command (non-cryptographic use)
-                {
-                    // open the input file
-                    using (var fs = new FileStream(this.FileName, FileMode.Open, FileAccess.Read))
-                    {
-                        int readBytes = -1;
-
-                        // pump the file through the hash
-                        do
-                        {
-                            readBytes = fs.Read(buffer, 0, buffer.Length);
-
-                            sha1.TransformBlock(buffer, 0, readBytes, buffer, 0);
-                        } while (readBytes > 0);
-
-                        // need to call this to finalize the calculations
-                        sha1.TransformFinalBlock(buffer, 0, readBytes);
-                    }
-
-                    // get the string representation
-                    this.sha1Hash = BitConverter.ToString(sha1.Hash).Replace("-", "");
-                }
+                byte[] hash = this.pImage.array != null
+                    ? SHA1.HashData(this.pImage.array) //CodeQL [SM02196] File checksum for diagnostic dump command (non-cryptographic use)
+                    : SHA1.HashData(File.ReadAllBytes(this.FileName)); //CodeQL [SM02196]
+                this.sha1Hash = BitConverter.ToString(hash).Replace("-", "");
 
                 return this.sha1Hash;
             }
@@ -363,7 +342,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 {
                     return this.sha256Hash;
                 }
-                this.sha256Hash = ComputeSha256Hash(this.FileName);
+
+                byte[] checksum = this.pImage.array != null
+                    ? SHA256.HashData(this.pImage.array)
+                    : SHA256.HashData(File.ReadAllBytes(this.FileName));
+                this.sha256Hash = BitConverter.ToString(checksum).Replace("-", string.Empty);
 
                 return this.sha256Hash;
             }
