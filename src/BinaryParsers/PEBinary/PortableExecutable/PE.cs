@@ -957,7 +957,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                         this.portablePdbStream = File.OpenRead(filePath);
                         return this.portablePdbStream;
                     },
-                    },
                     out this.portablePdbProvider,
                     out _))
             {
