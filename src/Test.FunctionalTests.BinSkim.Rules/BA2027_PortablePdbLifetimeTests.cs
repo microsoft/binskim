@@ -112,7 +112,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string sourceDll = Path.Combine(TestDataDirectory, "CSharp_PortablePdb_SourceLink.dll");
             string sourcePdb = Path.Combine(TestDataDirectory, "CSharp_PortablePdb_SourceLink.pdb");
 
-            if (!File.Exists(sourceDll) || !File.Exists(sourcePdb)) { return; }
+            File.Exists(sourceDll).Should().BeTrue(
+                because: "BA2027 PortablePdb test fixture must be deployed to FunctionalTestData.");
+            File.Exists(sourcePdb).Should().BeTrue(
+                because: "BA2027 PortablePdb test fixture must be deployed to FunctionalTestData.");
 
             string tempDir = Path.Combine(Path.GetTempPath(), "BinSkim_PdbLifetime_" + Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(tempDir);
