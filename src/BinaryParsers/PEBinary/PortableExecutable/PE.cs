@@ -942,6 +942,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
             if (!this.peReader.TryOpenAssociatedPortablePdb(
                     this.FileName,
+                    // PEReader may invoke this callback multiple times with candidate paths.
+                    // It disposes any returned stream it rejects, and takes ownership of the
+                    // accepted stream via the out provider. We track the latest returned stream
+                    // in a field so PE.Dispose() releases it deterministically; double-dispose
+                    // is safe because FileStream.Dispose is idempotent.
                     filePath =>
                     {
                         if (!File.Exists(filePath))
@@ -951,6 +956,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                         this.portablePdbStream = File.OpenRead(filePath);
                         return this.portablePdbStream;
+                    },
                     },
                     out this.portablePdbProvider,
                     out _))
