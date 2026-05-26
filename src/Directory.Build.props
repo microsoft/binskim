@@ -1,5 +1,16 @@
 <Project>
-  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <!-- Submodule's own version (used when built standalone) -->
+  <PropertyGroup>
+    <AssemblyVersion>4.4.9</AssemblyVersion>
+    <BinSkimVersion>$(AssemblyVersion).94</BinSkimVersion>
+    <Version>$(BinSkimVersion)</Version>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+  </PropertyGroup>
+
+  <!-- When built as part of BinSkimInternal, parent overrides version above -->
+  <Import Condition="Exists($([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../')))"
+          Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
   <PropertyGroup>
     <ArtifactsPath>$(MSBuildThisFileDirectory)..\bld</ArtifactsPath>
