@@ -20,6 +20,15 @@
 
 ## UNRELEASED
 
+## **4.4.9.9**[https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.9]
+* DEP: Update dependency version
+
+## **v4.4.9.8** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.8]
+* UEE: DWARF memory reader exception handeling [1167](https://github.com/microsoft/binskim/pull/1167)
+* NEW: Added extraction of SourceLink for compiler information events [1182](https://github.com/microsoft/binskim/pull/1182)
+* PRF: Add Linux agent disk capacity pre-flight gate 1183](https://github.com/microsoft/binskim/pull/1183)
+* ADM: Add Reviewer prompt for code review agent with guidelines and responses [1168](https://github.com/microsoft/binskim/pull/1168)
+
 ## **v4.4.9.7** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.7]
 * UEE: Fix DWARF parser crash on Rust binaries: handle abbreviation table terminator [1161](https://github.com/microsoft/binskim/pull/1161)
 * ADM: Add internal validation stage to external pipeline, switch to production pools [1162](https://github.com/microsoft/binskim/pull/1162)
