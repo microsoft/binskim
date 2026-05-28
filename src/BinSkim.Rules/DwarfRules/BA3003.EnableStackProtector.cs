@@ -151,7 +151,26 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (binary is ElfBinary elf)
             {
                 var validGccCommandLineInfos = new List<DwarfCompileCommandLineInfo>();
-                foreach (DwarfCompileCommandLineInfo info in binary.CommandLineInfos)
+
+                // Some real-world ELF binaries contain DWARF producer entries that
+                // the DWARF parser does not yet understand (for example, newer
+                // DW_FORM_* values emitted by recent toolchains, or string-form
+                // references whose backing section the parser can't resolve).
+                // In those cases binary.CommandLineInfos throws, which currently
+                // aborts BA3003 entirely for the target via ERR998. Treat such
+                // failures as "no DWARF compile-unit information available" so
+                // the rule can fall back to the symbol-table heuristic below.
+                List<DwarfCompileCommandLineInfo> commandLineInfos;
+                try
+                {
+                    commandLineInfos = binary.CommandLineInfos;
+                }
+                catch (Exception)
+                {
+                    commandLineInfos = new List<DwarfCompileCommandLineInfo>();
+                }
+
+                foreach (DwarfCompileCommandLineInfo info in commandLineInfos)
                 {
                     if (ElfUtility.GetDwarfCommandLineType(info.CommandLine) != DwarfCommandLineType.Gcc)
                     {
