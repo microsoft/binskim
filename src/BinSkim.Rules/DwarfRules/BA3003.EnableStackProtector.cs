@@ -160,12 +160,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 // aborts BA3003 entirely for the target via ERR998. Treat such
                 // failures as "no DWARF compile-unit information available" so
                 // the rule can fall back to the symbol-table heuristic below.
+                //
+                // The DWARF parser code paths reachable from CommandLineInfos
+                // can throw any of InvalidOperationException, NotImplementedException,
+                // ArgumentException, DwarfBufferOverreadException, and bare
+                // System.Exception (see DwarfCompilationUnit / DwarfMemoryReader /
+                // DwarfCommonInformationEntry). Because some call sites throw the
+                // base Exception type directly, we cannot narrow this catch any
+                // further without re-introducing the ERR998 abort for inputs the
+                // parser doesn't yet recognise.
                 List<DwarfCompileCommandLineInfo> commandLineInfos;
                 try
                 {
                     commandLineInfos = binary.CommandLineInfos;
                 }
+#pragma warning disable CA1031 // Do not catch general exception types -- intentional, see comment above.
                 catch (Exception)
+#pragma warning restore CA1031
                 {
                     commandLineInfos = new List<DwarfCompileCommandLineInfo>();
                 }
