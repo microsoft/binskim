@@ -522,7 +522,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 .Concat(blockLen)            // Block length
                 .Concat(blockPayload)        // Block bytes
                 .Concat(inlineString)        // String
-                .Concat(new byte[] { 0x02, 0x00 }) // Strp: offset 2 into debug_str
+                .Concat(new byte[] { 0x02, 0x00, 0x00, 0x00 }) // Strp: 4-byte offset 2 into debug_str
                 .ToArray();
 
             // .debug_str: two bytes of padding, then "World\0"

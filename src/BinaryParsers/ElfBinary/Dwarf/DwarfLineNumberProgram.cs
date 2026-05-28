@@ -657,7 +657,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             int directoryIndex = (int)debugLine.ULEB128();
             ulong lastModified = debugLine.ULEB128();
             ulong length = debugLine.ULEB128();
-            string directory = (directoryIndex > 0 && directoryIndex <= directories.Count - 1) ? directories[directoryIndex - 1] : null;
+            string directory = (directoryIndex > 0 && directoryIndex <= directories.Count) ? directories[directoryIndex - 1] : null;
             string path;
 
             path = string.IsNullOrEmpty(directory) || Path.IsPathRooted(name) ? name : Path.Combine(directory, name);
