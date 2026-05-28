@@ -298,5 +298,281 @@ namespace Microsoft.CodeAnalysis.IL
 
             return fullPath;
         }
+
+        /// <summary>
+        /// Resolves a path into the BinaryParsers unit test data directory.
+        /// </summary>
+        private static string GetBinaryParsersTestDataPath(params string[] relativeParts)
+        {
+            string assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string testDataRoot = Path.GetFullPath(
+                Path.Combine(assemblyDir, "..", "..", "..", "..", "src",
+                    "Test.UnitTests.BinaryParsers", "TestData"));
+            string fullPath = Path.Combine(new[] { testDataRoot }.Concat(relativeParts).ToArray());
+
+            if (!File.Exists(fullPath) && !Directory.Exists(fullPath))
+            {
+                throw new FileNotFoundException(
+                    $"BinaryParsers test data not found at: {fullPath}");
+            }
+
+            return fullPath;
+        }
+
+        #region ELF Binary Analysis
+
+        [Fact]
+        public async Task Analyze_ElfBinary_ExitsWithZero()
+        {
+            string elfBinary = GetFunctionalTestDataPath(
+                "BA3006.EnableNonExecutableStack", "Pass", "gcc.helloworld.noexecstack.5.o");
+            string sarifOutput = Path.Combine(_tempDir, "elf-output.sarif");
+
+            BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
+            {
+                "analyze",
+                elfBinary,
+                "-o", sarifOutput,
+                "--kind", "Fail;Pass;NotApplicable",
+                "--level", "Error;Warning;Note",
+            });
+
+            result.ExitCode.Should().Be(0,
+                $"BinSkim should analyze ELF binaries successfully.\nStdOut: {result.StdOut}\nStdErr: {result.StdErr}");
+        }
+
+        [Fact]
+        public async Task Analyze_ElfBinary_ProducesValidSarif()
+        {
+            string elfBinary = GetFunctionalTestDataPath(
+                "BA3001.EnablePositionIndependentExecutable", "Pass", "gcc.pie_executable");
+            string sarifOutput = Path.Combine(_tempDir, "elf-sarif.sarif");
+
+            BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
+            {
+                "analyze",
+                elfBinary,
+                "-o", sarifOutput,
+                "--kind", "Fail;Pass;NotApplicable",
+                "--level", "Error;Warning;Note",
+            });
+
+            result.ExitCode.Should().Be(0,
+                $"BinSkim should complete ELF analysis.\nStdErr: {result.StdErr}");
+
+            SarifLog sarifLog = result.LoadSarifLog();
+            sarifLog.Should().NotBeNull();
+            sarifLog.Runs.Should().HaveCount(1);
+            sarifLog.Runs[0].Tool.Driver.Name.Should().Be("BinSkim");
+            sarifLog.Runs[0].Results.Should().NotBeEmpty(
+                "ELF rules should produce results for a valid ELF executable");
+        }
+
+        [Fact]
+        public async Task Analyze_ElfBinary_KnownFail_ReportsElfRule()
+        {
+            string failBinary = GetFunctionalTestDataPath(
+                "BA3006.EnableNonExecutableStack", "Fail", "gcc.helloworld.execstack.5.o");
+            string sarifOutput = Path.Combine(_tempDir, "elf-fail.sarif");
+
+            BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
+            {
+                "analyze",
+                failBinary,
+                "-o", sarifOutput,
+                "--run-only-rules", "BA3006",
+                "--kind", "Fail",
+                "--level", "Error;Warning;Note",
+            });
+
+            result.ExitCode.Should().Be(0,
+                $"BinSkim should complete analysis.\nStdErr: {result.StdErr}");
+
+            SarifLog sarifLog = result.LoadSarifLog();
+            sarifLog.Should().NotBeNull();
+            sarifLog.Runs[0].Results.Should().Contain(
+                r => r.RuleId == "BA3006" && r.Level == FailureLevel.Error,
+                "BA3006 should fire an error for an ELF binary with executable stack");
+        }
+
+        [Fact]
+        public async Task Analyze_ElfBinary_KnownPass_ReportsPass()
+        {
+            string passBinary = GetFunctionalTestDataPath(
+                "BA3001.EnablePositionIndependentExecutable", "Pass", "gcc.pie_executable");
+            string sarifOutput = Path.Combine(_tempDir, "elf-pass.sarif");
+
+            BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
+            {
+                "analyze",
+                passBinary,
+                "-o", sarifOutput,
+                "--run-only-rules", "BA3001",
+                "--kind", "Fail;Pass",
+                "--level", "Error;Warning;Note",
+            });
+
+            result.ExitCode.Should().Be(0,
+                $"BinSkim should complete analysis.\nStdErr: {result.StdErr}");
+
+            SarifLog sarifLog = result.LoadSarifLog();
+            sarifLog.Should().NotBeNull();
+            sarifLog.Runs[0].Results.Should().Contain(
+                r => r.RuleId == "BA3001" && r.Level == FailureLevel.None,
+                "BA3001 should pass for a PIE executable");
+        }
+
+        #endregion
+
+        #region Multi-target and Glob
+
+        [Fact]
+        public async Task Analyze_MultipleTargets_ScansAll()
+        {
+            string target1 = BinSkimRunner.GetBinSkimDllPath();
+            string target2 = GetFunctionalTestDataPath(
+                "BA2016.MarkImageAsNXCompatible", "Fail", "ManagedFail.dll");
+            string sarifOutput = Path.Combine(_tempDir, "multi.sarif");
+
+            BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
+            {
+                "analyze",
+                target1,
+                target2,
+                "-o", sarifOutput,
+                "--kind", "Fail;Pass;NotApplicable",
+                "--level", "Error;Warning;Note",
+            });
+
+            result.ExitCode.Should().Be(0,
+                $"BinSkim should handle multiple targets.\nStdErr: {result.StdErr}");
+
+            SarifLog sarifLog = result.LoadSarifLog();
+            sarifLog.Should().NotBeNull();
+
+            // Results should reference both target files
+            var targetUris = sarifLog.Runs[0].Results
+                .Select(r => r.Locations?.FirstOrDefault()?.PhysicalLocation?.ArtifactLocation?.Uri?.ToString() ?? "")
+                .Distinct()
+                .ToList();
+
+            targetUris.Should().HaveCountGreaterThan(1,
+                "results should come from multiple target binaries");
+        }
+
+        [Fact]
+        public async Task Analyze_Recurse_FindsNestedBinaries()
+        {
+            // Set up a temp directory tree with binaries
+            string subDir = Path.Combine(_tempDir, "nested");
+            Directory.CreateDirectory(subDir);
+
+            string source = BinSkimRunner.GetBinSkimDllPath();
+            string copy1 = Path.Combine(_tempDir, "top.dll");
+            string copy2 = Path.Combine(subDir, "nested.dll");
+            File.Copy(source, copy1);
+            File.Copy(source, copy2);
+
+            string sarifOutput = Path.Combine(_tempDir, "recurse.sarif");
+
+            BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
+            {
+                "analyze",
+                Path.Combine(_tempDir, "*.dll"),
+                "-o", sarifOutput,
+                "--recurse", "True",
+                "--kind", "Fail;Pass;NotApplicable",
+                "--level", "Error;Warning;Note",
+            });
+
+            result.ExitCode.Should().Be(0,
+                $"BinSkim should recurse directories.\nStdErr: {result.StdErr}");
+
+            SarifLog sarifLog = result.LoadSarifLog();
+            sarifLog.Should().NotBeNull();
+
+            var analyzedFiles = sarifLog.Runs[0].Results
+                .Select(r => r.Locations?.FirstOrDefault()?.PhysicalLocation?.ArtifactLocation?.Uri?.ToString() ?? "")
+                .Distinct()
+                .ToList();
+
+            analyzedFiles.Should().HaveCountGreaterThan(1,
+                "recurse should find binaries in subdirectories");
+        }
+
+        #endregion
+
+        #region Rich Return Code
+
+        [Fact]
+        public async Task Analyze_RichReturnCode_InvalidTarget_ReturnsRuntimeConditions()
+        {
+            string nonExistentTarget = Path.Combine(_tempDir, "does_not_exist.dll");
+
+            BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
+            {
+                "analyze",
+                nonExistentTarget,
+                "--rich-return-code",
+            });
+
+            // With rich return code, the exit code encodes RuntimeConditions flags
+            result.ExitCode.Should().NotBe(0,
+                "rich return code should return non-zero for invalid targets");
+            result.ExitCode.Should().NotBe(1,
+                "rich return code should return a RuntimeConditions bitmask, not simple 1");
+        }
+
+        #endregion
+
+        #region Local Symbol Directories
+
+        [Fact]
+        public async Task Analyze_LocalSymbolDirectories_AcceptsOption()
+        {
+            string elfBinary = GetBinaryParsersTestDataPath("Dwarf", "hello-dwarf4-o2");
+            string sarifOutput = Path.Combine(_tempDir, "symdir.sarif");
+
+            BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
+            {
+                "analyze",
+                elfBinary,
+                "-o", sarifOutput,
+                "--local-symbol-directories", _tempDir,
+                "--kind", "Fail;Pass;NotApplicable",
+                "--level", "Error;Warning;Note",
+            });
+
+            result.ExitCode.Should().Be(0,
+                $"BinSkim should accept --local-symbol-directories.\nStdErr: {result.StdErr}");
+        }
+
+        #endregion
+
+        #region Trace Output
+
+        [Fact]
+        public async Task Analyze_TraceTargetsScanned_ProducesTraceOutput()
+        {
+            string targetBinary = BinSkimRunner.GetBinSkimDllPath();
+            string sarifOutput = Path.Combine(_tempDir, "trace.sarif");
+
+            BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
+            {
+                "analyze",
+                targetBinary,
+                "-o", sarifOutput,
+                "--trace", "TargetsScanned;ResultsSummary",
+            });
+
+            result.ExitCode.Should().Be(0,
+                $"BinSkim should accept trace flags.\nStdErr: {result.StdErr}");
+
+            string combined = result.StdOut + result.StdErr;
+            combined.Should().NotBeNullOrWhiteSpace(
+                "trace output should produce console output");
+        }
+
+        #endregion
     }
 }
