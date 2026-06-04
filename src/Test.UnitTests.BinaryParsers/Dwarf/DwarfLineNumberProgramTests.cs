@@ -19,26 +19,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     /// </summary>
     public class DwarfLineNumberProgramTests
     {
-        /// <summary>
-        /// Helper to encode an unsigned LEB128 value into bytes.
-        /// Copied from DwarfCompilationUnitFormTests to keep tests self-contained.
-        /// </summary>
-        private static byte[] EncodeULEB128(ulong value)
-        {
-            var bytes = new List<byte>();
-            do
-            {
-                byte b = (byte)(value & 0x7F);
-                value >>= 7;
-                if (value != 0)
-                {
-                    b |= 0x80;
-                }
-
-                bytes.Add(b);
-            } while (value != 0);
-            return bytes.ToArray();
-        }
+        private static byte[] EncodeULEB128(ulong value) => DwarfTestHelpers.EncodeULEB128(value);
 
         [Fact]
         public void Constructor_WithUnitLengthLessOrEqualToOne_ReturnsNullFiles()
@@ -270,30 +251,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
         #region Helpers
 
-        /// <summary>
-        /// Encode a signed LEB128 value into bytes.
-        /// </summary>
-        private static byte[] EncodeSLEB128(int value)
-        {
-            var bytes = new List<byte>();
-            bool more = true;
-            while (more)
-            {
-                byte b = (byte)(value & 0x7F);
-                value >>= 7;
-                if ((value == 0 && (b & 0x40) == 0) || (value == -1 && (b & 0x40) != 0))
-                {
-                    more = false;
-                }
-                else
-                {
-                    b |= 0x80;
-                }
-
-                bytes.Add(b);
-            }
-            return bytes.ToArray();
-        }
+        private static byte[] EncodeSLEB128(int value) => DwarfTestHelpers.EncodeSLEB128(value);
 
         /// <summary>
         /// Builds a minimal DWARF4 .debug_line section and returns the parsed program.

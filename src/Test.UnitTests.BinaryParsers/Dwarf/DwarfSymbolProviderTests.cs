@@ -47,26 +47,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             public void Dispose() { }
         }
 
-        /// <summary>
-        /// Helper to encode an unsigned LEB128 value into bytes.
-        /// Copied from DwarfCompilationUnitFormTests / DwarfLineNumberProgramTests to keep tests self-contained.
-        /// </summary>
-        private static byte[] EncodeULEB128(ulong value)
-        {
-            var bytes = new List<byte>();
-            do
-            {
-                byte b = (byte)(value & 0x7F);
-                value >>= 7;
-                if (value != 0)
-                {
-                    b |= 0x80;
-                }
-
-                bytes.Add(b);
-            } while (value != 0);
-            return bytes.ToArray();
-        }
+        private static byte[] EncodeULEB128(ulong value) => DwarfTestHelpers.EncodeULEB128(value);
 
         // ---- ParseDebugStringOffsets ----
 
