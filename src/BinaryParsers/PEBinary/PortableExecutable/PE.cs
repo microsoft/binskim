@@ -921,8 +921,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 return this.portablePdbMetadataReader;
             }
 
-            this.portablePdbInitialized = true;
-
             if (!this.peReader.TryOpenAssociatedPortablePdb(
                     this.FileName,
                     // PEReader may invoke this callback multiple times with candidate paths.
@@ -952,11 +950,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 if (this.portablePdbProvider == null)
                 {
+                    this.portablePdbInitialized = true;
                     return null;
                 }
             }
 
             this.portablePdbMetadataReader = this.portablePdbProvider.GetMetadataReader();
+            this.portablePdbInitialized = true;
             return this.portablePdbMetadataReader;
         }
 
