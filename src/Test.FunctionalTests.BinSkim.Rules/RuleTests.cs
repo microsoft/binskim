@@ -26,68 +26,91 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             this.testOutputHelper = output;
         }
 
+        private enum ExpectedOutcome
+        {
+            Pass,
+            Fail
+        }
+
         private void VerifyPass(
             BinarySkimmer skimmer,
             IEnumerable<string> additionalTestFiles = null,
-            bool useDefaultPolicy = false,
-            bool bypassExtensionValidation = false,
-            bool ignoreNoteTargets = false)
+            bool useDefaultPolicy = false)
         {
-            this.Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: true, bypassExtensionValidation: bypassExtensionValidation, ignoreNoteTargets: ignoreNoteTargets);
+            this.Verify(
+                skimmer,
+                ExpectedOutcome.Pass,
+                expectedLevel: FailureLevel.None,
+                additionalTestFiles: additionalTestFiles,
+                useDefaultPolicy: useDefaultPolicy);
         }
 
         private void VerifyFail(
             BinarySkimmer skimmer,
             IEnumerable<string> additionalTestFiles = null,
-            bool useDefaultPolicy = false,
-            bool bypassExtensionValidation = false,
-            bool ignoreNoteTargets = false)
+            bool useDefaultPolicy = false)
         {
-            this.Verify(skimmer, additionalTestFiles, useDefaultPolicy, expectToPass: false, bypassExtensionValidation: bypassExtensionValidation, ignoreNoteTargets: ignoreNoteTargets);
+            this.Verify(
+                skimmer,
+                ExpectedOutcome.Fail,
+                expectedLevel: FailureLevel.None,
+                additionalTestFiles: additionalTestFiles,
+                useDefaultPolicy: useDefaultPolicy);
         }
+
+        private static readonly HashSet<string> ExcludedTestFileExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".pdb" };
 
         private void Verify(
             BinarySkimmer skimmer,
-            IEnumerable<string> additionalTestFiles,
-            bool useDefaultPolicy,
-            bool expectToPass,
-            bool bypassExtensionValidation = false,
-            bool ignoreNoteTargets = false)
+            ExpectedOutcome expectedOutcome,
+            FailureLevel expectedLevel = FailureLevel.None,
+            ResultKind expectedKind = ResultKind.None,
+            IEnumerable<string> additionalTestFiles = null,
+            bool useDefaultPolicy = false,
+            string outcomeSubdirectory = null)
         {
-            var targets = new List<string>();
             string ruleName = skimmer.GetType().Name;
-            string testFilesDirectory = GetTestDirectoryFor(ruleName);
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
-            testFilesDirectory = Path.Combine(testFilesDirectory, expectToPass ? "Pass" : "Fail");
+            string outcomeDir = expectedOutcome == ExpectedOutcome.Pass ? "Pass" : "Fail";
+            string testFilesDirectory = Path.Combine(
+                Environment.CurrentDirectory,
+                "FunctionalTestData",
+                GetTestDirectoryFor(ruleName),
+                outcomeSubdirectory != null ? Path.Combine(outcomeDir, outcomeSubdirectory) : outcomeDir);
 
-            Assert.True(Directory.Exists(testFilesDirectory), $"Test directory '{testFilesDirectory}' should exist.");
+            Assert.True(Directory.Exists(testFilesDirectory),
+                $"Test directory '{testFilesDirectory}' should exist.");
 
-            foreach (string target in Directory.GetFiles(testFilesDirectory, "*", SearchOption.AllDirectories))
+            string[] allFiles = Directory.GetFiles(testFilesDirectory, "*", SearchOption.AllDirectories);
+            var targets = new List<string>();
+
+            foreach (string target in allFiles)
             {
-                if (bypassExtensionValidation || MultithreadedAnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
+                if (!ExcludedTestFileExtensions.Contains(Path.GetExtension(target)))
                 {
                     targets.Add(target);
                 }
             }
 
+            int excludedCount = allFiles.Length - targets.Count;
+            Assert.True(targets.Count > 0,
+                $"All {allFiles.Length} file(s) in '{testFilesDirectory}' were excluded by extension filter " +
+                $"(excluded: {string.Join(", ", ExcludedTestFileExtensions)}).");
+
+            if (excludedCount > 0)
+            {
+                this.testOutputHelper.WriteLine(
+                    $"[Info] {excludedCount} file(s) excluded by extension filter (e.g. .pdb). " +
+                    $"Analyzing {targets.Count} of {allFiles.Length} files.");
+            }
+
             if (additionalTestFiles != null)
             {
-                foreach (string additionalTestFile in additionalTestFiles)
-                {
-                    targets.Add(additionalTestFile);
-                }
+                targets.AddRange(additionalTestFiles);
             }
 
-            var context = new BinaryAnalyzerContext();
             var logger = new TestMessageLogger();
-            context.Logger = logger;
-            PropertiesDictionary policy = null;
-
-            if (useDefaultPolicy)
-            {
-                policy = new PropertiesDictionary();
-            }
-            context.Policy = policy;
+            PropertiesDictionary policy = useDefaultPolicy ? new PropertiesDictionary() : null;
+            var context = new BinaryAnalyzerContext { Logger = logger, Policy = policy };
 
             skimmer.Initialize(context);
 
@@ -107,75 +130,70 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 skimmer.Analyze(context);
             }
 
-            var failTargets = new HashSet<string>(logger.ErrorTargets.Union(logger.WarningTargets));
-            var passTargets = new HashSet<string>(logger.PassTargets);
-
-            if (logger.NoteTargets.Count > 0)
-            {
-                if (ignoreNoteTargets)
-                {
-                    // If a same target has both warning/error and note result.
-                    passTargets.UnionWith(logger.NoteTargets.Except(failTargets));
-                }
-                else
-                {
-                    failTargets.UnionWith(logger.NoteTargets);
-                }
-            }
-
-            HashSet<string> expected = expectToPass ? passTargets : failTargets;
-            HashSet<string> other = expectToPass ? failTargets : passTargets;
-            HashSet<string> configErrors = logger.ConfigurationErrorTargets;
-
-            string expectedText = expectToPass ? "success" : "failure";
-            string actualText = expectToPass ? "failed" : "succeeded";
             var sb = new StringBuilder();
 
             foreach (string target in targets)
             {
-                if (expected.Contains(target))
-                {
-                    expected.Remove(target);
-                    continue;
-                }
-                bool missingEntirely = !other.Contains(target);
+                string fileName = Path.GetFileName(target);
 
-                if (missingEntirely &&
-                    !expectToPass &&
-                    target.Contains("Pdb") &&
-                    configErrors.Contains(target))
+                switch (expectedOutcome)
                 {
-                    missingEntirely = false;
-                    configErrors.Remove(target);
-                    continue;
-                }
+                    case ExpectedOutcome.Pass:
+                    {
+                        if (!logger.PassTargets.Contains(target))
+                        {
+                            string actual = GetActualOutcome(logger, target);
+                            sb.AppendLine(
+                                $"Expected '{skimmer.Id}:{ruleName}' Pass (Kind={expectedKind}) " +
+                                $"for '{fileName}' but got: {actual}");
+                        }
 
-                if (missingEntirely)
-                {
-                    // Generates message such as the following:
-                    // "Expected 'BA2025:EnableShadowStack' success but saw no result at all for file: Native_x64_CETShadowStack_Disabled.exe"
-                    sb.AppendLine(
-                        string.Format(
-                            "Expected '{0}:{1}' {2} but saw no result at all for file: {3}",
-                            skimmer.Id,
-                            ruleName,
-                            expectedText,
-                            Path.GetFileName(target)));
-                }
-                else
-                {
-                    other.Remove(target);
+                        break;
+                    }
 
-                    // Generates message such as the following:
-                    // "Expected 'BA2025:EnableShadowStack' success but check failed for: Native_x64_CETShadowStack_Disabled.exe"
-                    sb.AppendLine(
-                        string.Format(
-                            "Expected '{0}:{1}' {2} but check {3} for: {4}",
-                            skimmer.Id,
-                            ruleName,
-                            expectedText,
-                            actualText,
-                            Path.GetFileName(target)));
+                    case ExpectedOutcome.Fail:
+                    {
+                        bool found;
+
+                        if (expectedLevel == FailureLevel.None)
+                        {
+                            // Accept any failure level (backwards compat).
+                            found = logger.ErrorTargets.Contains(target) ||
+                                    logger.WarningTargets.Contains(target) ||
+                                    logger.NoteTargets.Contains(target);
+                        }
+                        else
+                        {
+                            // Check specific failure level.
+                            found = expectedLevel switch
+                            {
+                                FailureLevel.Error => logger.ErrorTargets.Contains(target),
+                                FailureLevel.Warning => logger.WarningTargets.Contains(target),
+                                FailureLevel.Note => logger.NoteTargets.Contains(target),
+                                _ => false
+                            };
+                        }
+
+                        if (!found)
+                        {
+                            // Allow config errors for PDB-related targets (backwards compat).
+                            if (target.Contains("Pdb") && logger.ConfigurationErrorTargets.Contains(target))
+                            {
+                                break;
+                            }
+
+                            string actual = GetActualOutcome(logger, target);
+                            string levelText = expectedLevel == FailureLevel.None
+                                ? "any failure"
+                                : expectedLevel.ToString();
+
+                            sb.AppendLine(
+                                $"Expected '{skimmer.Id}:{ruleName}' Fail (Level={levelText}) " +
+                                $"for '{fileName}' but got: {actual}");
+                        }
+
+                        break;
+                    }
                 }
             }
 
@@ -185,8 +203,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             Assert.Equal(0, sb.Length);
-            Assert.Empty(expected);
-            Assert.Empty(other);
+        }
+
+        private static string GetActualOutcome(TestMessageLogger logger, string target)
+        {
+            if (logger.PassTargets.Contains(target)) return "Pass";
+            if (logger.ErrorTargets.Contains(target)) return "Error";
+            if (logger.WarningTargets.Contains(target)) return "Warning";
+            if (logger.NoteTargets.Contains(target)) return "Note";
+            if (logger.ConfigurationErrorTargets.Contains(target)) return "ConfigurationError";
+            return "no result";
         }
 
         private static string GetTestDirectoryFor(string ruleName)
@@ -297,7 +323,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             HashSet<string> applicabilityConditions,
             AnalysisApplicability expectedApplicability = AnalysisApplicability.NotApplicableToSpecifiedTarget,
             bool useDefaultPolicy = false,
-            bool bypassExtensionValidation = false,
             string expectedReasonForNotAnalyzing = null)
         {
             string ruleName = skimmer.GetType().Name;
@@ -311,7 +336,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 foreach (string target in Directory.GetFiles(testFilesDirectory, "*", SearchOption.AllDirectories))
                 {
-                    if (bypassExtensionValidation || MultithreadedAnalyzeCommand.ValidAnalysisFileExtensions.Contains(Path.GetExtension(target)))
+                    if (!ExcludedTestFileExtensions.Contains(Path.GetExtension(target)))
                     {
                         targets.Add(target);
                     }
@@ -548,7 +573,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2001_LoadImageAboveFourGigabyteAddress_Fail()
         {
-            this.VerifyFail(new LoadImageAboveFourGigabyteAddress());
+            this.Verify(new LoadImageAboveFourGigabyteAddress(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -582,8 +607,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(
+                this.Verify(
                     new DoNotIncorporateVulnerableDependencies(),
+                    ExpectedOutcome.Fail,
+                    expectedLevel: FailureLevel.Error,
                     useDefaultPolicy: true);
             }
             else
@@ -628,11 +655,37 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void BA2004_EnableSecureSourceCodeHashing_Fail()
+        public void BA2004_EnableSecureSourceCodeHashing_Fail_Error()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new EnableSecureSourceCodeHashing(), useDefaultPolicy: true);
+                // Managed assemblies with insecure hashing and native binaries with
+                // directly insecure object files emit Error.
+                this.Verify(
+                    new EnableSecureSourceCodeHashing(),
+                    ExpectedOutcome.Fail,
+                    expectedLevel: FailureLevel.Error,
+                    useDefaultPolicy: true,
+                    outcomeSubdirectory: "Error");
+            }
+            else
+            {
+                VerifyThrows<PlatformNotSupportedException>(new DoNotDisableStackProtectionForFunctions(), useDefaultPolicy: true);
+            }
+        }
+
+        [Fact]
+        public void BA2004_EnableSecureSourceCodeHashing_Fail_Warning()
+        {
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                // Native binaries that link insecure static libraries emit Warning.
+                this.Verify(
+                    new EnableSecureSourceCodeHashing(),
+                    ExpectedOutcome.Fail,
+                    expectedLevel: FailureLevel.Warning,
+                    useDefaultPolicy: true,
+                    outcomeSubdirectory: "Warning");
             }
             else
             {
@@ -645,7 +698,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new DoNotShipVulnerableBinaries(), useDefaultPolicy: true);
+                this.Verify(new DoNotShipVulnerableBinaries(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error, useDefaultPolicy: true);
             }
             else
             {
@@ -704,8 +757,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(
+                this.Verify(
                     new BuildWithSecureTools(),
+                    ExpectedOutcome.Fail,
+                    expectedLevel: FailureLevel.Error,
                     useDefaultPolicy: true);
             }
             else
@@ -745,8 +800,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(
+                this.Verify(
                     new EnableCriticalCompilerWarnings(),
+                    ExpectedOutcome.Fail,
+                    expectedLevel: FailureLevel.Error,
                     useDefaultPolicy: true);
             }
             else
@@ -794,8 +851,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2008_EnableControlFlowGuard_Fail()
         {
-            this.VerifyFail(
+            this.Verify(
                 new EnableControlFlowGuard(),
+                ExpectedOutcome.Fail,
+                expectedLevel: FailureLevel.Error,
                 useDefaultPolicy: true);
         }
 
@@ -824,7 +883,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2009_EnableAddressSpaceLayoutRandomization_Fail()
         {
-            this.VerifyFail(new EnableAddressSpaceLayoutRandomization());
+            this.Verify(new EnableAddressSpaceLayoutRandomization(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -849,7 +908,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2010_DoNotMarkImportsSectionAsExecutable_Fail()
         {
-            this.VerifyFail(new DoNotMarkImportsSectionAsExecutable());
+            this.Verify(new DoNotMarkImportsSectionAsExecutable(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -882,7 +941,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new EnableStackProtection());
+                this.Verify(new EnableStackProtection(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
             }
             else
             {
@@ -907,7 +966,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2012_DoNotModifyStackProtectionCookie_Fail()
         {
-            this.VerifyFail(new DoNotModifyStackProtectionCookie());
+            this.Verify(new DoNotModifyStackProtectionCookie(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -955,8 +1014,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(
+                this.Verify(
                     new InitializeStackProtection(),
+                    ExpectedOutcome.Fail,
+                    expectedLevel: FailureLevel.Error,
                     useDefaultPolicy: true);
             }
             else
@@ -1010,9 +1071,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     MetadataConditions.CouldNotLoadPdb,
                 };
 
-                this.VerifyFail(
+                this.Verify(
                     new DoNotDisableStackProtectionForFunctions(),
-                    GetTestFilesMatchingConditions(failureConditions),
+                    ExpectedOutcome.Fail,
+                    expectedLevel: FailureLevel.Error,
+                    additionalTestFiles: GetTestFilesMatchingConditions(failureConditions),
                     useDefaultPolicy: true);
             }
             else
@@ -1057,7 +1120,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2015_EnableHighEntropyVirtualAddresses_Fail()
         {
-            this.VerifyFail(new EnableHighEntropyVirtualAddresses());
+            this.Verify(new EnableHighEntropyVirtualAddresses(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1082,7 +1145,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2016_MarkImageAsNXCompatible_Fail()
         {
-            this.VerifyFail(new MarkImageAsNXCompatible());
+            this.Verify(new MarkImageAsNXCompatible(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1109,7 +1172,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2018_EnableSafeSEH_Fail()
         {
-            this.VerifyFail(new EnableSafeSEH());
+            this.Verify(new EnableSafeSEH(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1134,7 +1197,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2019_DoNotMarkWritableSectionsAsShared_Fail()
         {
-            this.VerifyFail(new DoNotMarkWritableSectionsAsShared());
+            this.Verify(new DoNotMarkWritableSectionsAsShared(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1157,7 +1220,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA2021_DoNotMarkWritableSectionsAsExecutable_Fail()
         {
-            this.VerifyFail(new DoNotMarkWritableSectionsAsExecutable());
+            this.Verify(new DoNotMarkWritableSectionsAsExecutable(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1177,7 +1240,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new SignSecurely());
+                this.Verify(new SignSecurely(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
             }
             else
             {
@@ -1218,7 +1281,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new EnableSpectreMitigations(), useDefaultPolicy: true);
+                this.Verify(new EnableSpectreMitigations(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Warning, useDefaultPolicy: true);
             }
         }
 
@@ -1236,7 +1299,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new EnableShadowStack(), useDefaultPolicy: true);
+                this.Verify(new EnableShadowStack(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Warning, useDefaultPolicy: true);
             }
         }
 
@@ -1263,7 +1326,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new EnableMicrosoftCompilerSdlSwitch(), useDefaultPolicy: true);
+                this.Verify(new EnableMicrosoftCompilerSdlSwitch(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Warning, useDefaultPolicy: true);
             }
         }
 
@@ -1297,7 +1360,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                this.VerifyFail(new EnableSourceLink());
+                this.Verify(new EnableSourceLink(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Warning);
             }
         }
 
@@ -1340,13 +1403,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA3001_EnablePositionIndependentExecutable_Pass()
         {
-            this.VerifyPass(new EnablePositionIndependentExecutable(), bypassExtensionValidation: true);
+            this.VerifyPass(new EnablePositionIndependentExecutable());
         }
 
         [Fact]
         public void BA3001_EnablePositionIndependentExecutable_Fail()
         {
-            this.VerifyFail(new EnablePositionIndependentExecutable(), bypassExtensionValidation: true);
+            this.Verify(new EnablePositionIndependentExecutable(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1358,13 +1421,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA3002_DoNotMarkStackAsExecutable_Pass()
         {
-            this.VerifyPass(new DoNotMarkStackAsExecutable(), bypassExtensionValidation: true);
+            this.VerifyPass(new DoNotMarkStackAsExecutable());
         }
 
         [Fact]
         public void BA3002_DoNotMarkStackAsExecutable_Fail()
         {
-            this.VerifyFail(new DoNotMarkStackAsExecutable(), bypassExtensionValidation: true);
+            this.Verify(new DoNotMarkStackAsExecutable(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1376,79 +1439,79 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA3003_EnableStackProtector_Pass()
         {
-            this.VerifyPass(new EnableStackProtector(), bypassExtensionValidation: true);
+            this.VerifyPass(new EnableStackProtector());
         }
 
         [Fact]
         public void BA3003_EnableStackProtector_Fail()
         {
-            this.VerifyFail(new EnableStackProtector(), bypassExtensionValidation: true);
+            this.Verify(new EnableStackProtector(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
         public void BA3003_EnableStackProtector_NotApplicable()
         {
-            this.VerifyApplicability(new EnableStackProtector(), new HashSet<string>(), bypassExtensionValidation: true);
+            this.VerifyApplicability(new EnableStackProtector(), new HashSet<string>());
         }
 
         [Fact]
         public void BA3004_GenerateRequiredSymbolFormat_Pass()
         {
-            this.VerifyPass(new GenerateRequiredSymbolFormat(), bypassExtensionValidation: true);
+            this.VerifyPass(new GenerateRequiredSymbolFormat());
         }
 
         [Fact]
         public void BA3004_GenerateRequiredSymbolFormat_Fail()
         {
-            this.VerifyFail(new GenerateRequiredSymbolFormat(), bypassExtensionValidation: true);
+            this.Verify(new GenerateRequiredSymbolFormat(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
         public void BA3005_EnableStackClashProtection_Pass()
         {
-            this.VerifyPass(new EnableStackClashProtection(), bypassExtensionValidation: true);
+            this.VerifyPass(new EnableStackClashProtection());
         }
 
         [Fact]
         public void BA3005_EnableStackClashProtection_Fail()
         {
-            this.VerifyFail(new EnableStackClashProtection(), bypassExtensionValidation: true);
+            this.Verify(new EnableStackClashProtection(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
         public void BA3005_EnableStackClashProtection_NotApplicable()
         {
-            this.VerifyApplicability(new EnableStackClashProtection(), new HashSet<string>(), bypassExtensionValidation: true);
+            this.VerifyApplicability(new EnableStackClashProtection(), new HashSet<string>());
         }
 
         [Fact]
         public void BA3006_EnableNonExecutableStack_Pass()
         {
-            this.VerifyPass(new EnableNonExecutableStack(), bypassExtensionValidation: true);
+            this.VerifyPass(new EnableNonExecutableStack());
         }
 
         [Fact]
         public void BA3006_EnableNonExecutableStack_Fail()
         {
-            this.VerifyFail(new EnableNonExecutableStack(), bypassExtensionValidation: true);
+            this.Verify(new EnableNonExecutableStack(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
         public void BA3006_EnableNonExecutableStack_NotApplicable()
         {
-            this.VerifyApplicability(new EnableNonExecutableStack(), new HashSet<string>(), bypassExtensionValidation: true);
+            this.VerifyApplicability(new EnableNonExecutableStack(), new HashSet<string>());
         }
 
         [Fact]
         public void BA3010_EnableReadOnlyRelocations_Pass()
         {
-            this.VerifyPass(new EnableReadOnlyRelocations(), bypassExtensionValidation: true);
+            this.VerifyPass(new EnableReadOnlyRelocations());
         }
 
         [Fact]
         public void BA3010_EnableReadOnlyRelocations_Fail()
         {
-            this.VerifyFail(new EnableReadOnlyRelocations(), bypassExtensionValidation: true);
+            this.Verify(new EnableReadOnlyRelocations(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1460,13 +1523,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA3011_EnableBindNow_Pass()
         {
-            this.VerifyPass(new EnableBindNow(), bypassExtensionValidation: true);
+            this.VerifyPass(new EnableBindNow());
         }
 
         [Fact]
         public void BA3011_EnableBindNow_Fail()
         {
-            this.VerifyFail(new EnableBindNow(), bypassExtensionValidation: true);
+            this.Verify(new EnableBindNow(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1478,13 +1541,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA3030_UseGccCheckedFunctions_Pass()
         {
-            this.VerifyPass(new UseGccCheckedFunctions(), bypassExtensionValidation: true);
+            this.VerifyPass(new UseGccCheckedFunctions());
         }
 
         [Fact]
         public void BA3030_UseGccCheckedFunctions_Fail()
         {
-            this.VerifyFail(new UseGccCheckedFunctions(), bypassExtensionValidation: true);
+            this.Verify(new UseGccCheckedFunctions(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1496,13 +1559,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA3031_EnableClangSafeStack_Pass()
         {
-            this.VerifyPass(new EnableClangSafeStack(), bypassExtensionValidation: true);
+            this.VerifyPass(new EnableClangSafeStack());
         }
 
         [Fact]
         public void BA3031_EnableClangSafeStack_Fail()
         {
-            this.VerifyFail(new EnableClangSafeStack(), bypassExtensionValidation: true);
+            this.Verify(new EnableClangSafeStack(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1514,13 +1577,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA5001_EnablePositionIndependentExecutableMachO_Pass()
         {
-            this.VerifyPass(new EnablePositionIndependentExecutableMachO(), bypassExtensionValidation: true);
+            this.VerifyPass(new EnablePositionIndependentExecutableMachO());
         }
 
         [Fact]
         public void BA5001_EnablePositionIndependentExecutableMachO_Fail()
         {
-            this.VerifyFail(new EnablePositionIndependentExecutableMachO(), bypassExtensionValidation: true);
+            this.Verify(new EnablePositionIndependentExecutableMachO(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1532,13 +1595,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [Fact]
         public void BA5002_DoNotAllowExecutableStack_Pass()
         {
-            this.VerifyPass(new DoNotAllowExecutableStack(), bypassExtensionValidation: true);
+            this.VerifyPass(new DoNotAllowExecutableStack());
         }
 
         [Fact]
         public void BA5002_DoNotAllowExecutableStack_Fail()
         {
-            this.VerifyFail(new DoNotAllowExecutableStack(), bypassExtensionValidation: true);
+            this.Verify(new DoNotAllowExecutableStack(), ExpectedOutcome.Fail, expectedLevel: FailureLevel.Error);
         }
 
         [Fact]
@@ -1552,15 +1615,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                // Every PDB parsing rule should return an error if a PDB can't be located.
-                // Be sure to delete this code (and remove passing the 'failureConditions`
-                // arguments to 'VerifyFail' if not implementing a PDB crawling check.
-                var failureConditions = new HashSet<string>
-                {
-                    MetadataConditions.CouldNotLoadPdb
-                };
-                this.VerifyFail(
+                this.Verify(
                     new DisableIncrementalLinkingInReleaseBuilds(),
+                    ExpectedOutcome.Fail,
+                    expectedLevel: FailureLevel.Warning,
                     useDefaultPolicy: true);
             }
             else
@@ -1597,15 +1655,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                // Every PDB parsing rule should return an error if a PDB can't be located.
-                // Be sure to delete this code (and remove passing the 'failureConditions`
-                // arguments to 'VerifyFail' if not implementing a PDB crawling check.
-                var failureConditions = new HashSet<string>
-                {
-                    MetadataConditions.CouldNotLoadPdb
-                };
-                this.VerifyFail(
+                this.Verify(
                     new EliminateDuplicateStrings(),
+                    ExpectedOutcome.Fail,
+                    expectedLevel: FailureLevel.Warning,
                     useDefaultPolicy: true);
             }
             else
@@ -1642,15 +1695,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                // Every PDB parsing rule should return an error if a PDB can't be located.
-                // Be sure to delete this code (and remove passing the 'failureConditions`
-                // arguments to 'VerifyFail' if not implementing a PDB crawling check.
-                var failureConditions = new HashSet<string>
-                {
-                    MetadataConditions.CouldNotLoadPdb
-                };
-                this.VerifyFail(
+                this.Verify(
                     new EnableComdatFolding(),
+                    ExpectedOutcome.Fail,
+                    expectedLevel: FailureLevel.Warning,
                     useDefaultPolicy: true);
             }
             else
@@ -1687,15 +1735,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                // Every PDB parsing rule should return an error if a PDB can't be located.
-                // Be sure to delete this code (and remove passing the 'failureConditions`
-                // arguments to 'VerifyFail' if not implementing a PDB crawling check.
-                var failureConditions = new HashSet<string>
-                {
-                    MetadataConditions.CouldNotLoadPdb
-                };
-                this.VerifyFail(
+                this.Verify(
                     new EnableOptimizeReferences(),
+                    ExpectedOutcome.Fail,
+                    expectedLevel: FailureLevel.Warning,
                     useDefaultPolicy: true);
             }
             else
@@ -1732,15 +1775,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
             {
-                // Every PDB parsing rule should return an error if a PDB can't be located.
-                // Be sure to delete this code (and remove passing the 'failureConditions`
-                // arguments to 'VerifyFail' if not implementing a PDB crawling check.
-                var failureConditions = new HashSet<string>
-                {
-                    MetadataConditions.CouldNotLoadPdb
-                };
-                this.VerifyFail(
+                this.Verify(
                     new EnableLinkTimeCodeGeneration(),
+                    ExpectedOutcome.Fail,
+                    expectedLevel: FailureLevel.Warning,
                     useDefaultPolicy: true);
             }
             else
