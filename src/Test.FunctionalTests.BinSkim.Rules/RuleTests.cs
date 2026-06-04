@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 useDefaultPolicy: useDefaultPolicy);
         }
 
-        private static readonly HashSet<string> ExcludedTestFileExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".pdb" };
+        private static readonly HashSet<string> ExcludedTestFileExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".pdb", ".ilk", ".txt", ".dsym" };
 
         private void Verify(
             BinarySkimmer skimmer,
