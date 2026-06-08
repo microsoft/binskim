@@ -1317,7 +1317,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             this.VerifyApplicabililtyByConditionsOnly(
                 skimmer: new EnableShadowStack(),
-                applicabilityConditions: notApplicableArm64,
+                applicabilityConditions: notApplicableArm,
                 expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArmBinary);
         }
 
