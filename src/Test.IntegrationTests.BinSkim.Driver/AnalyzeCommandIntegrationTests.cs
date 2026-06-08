@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.IL
         public async Task Analyze_SelfScan_ProducesValidSarif()
         {
             string targetBinary = BinSkimRunner.GetBinSkimDllPath();
-            string sarifOutput = Path.Combine(_tempDir, "output.sarif");
+            string sarifOutput = Path.Join(_tempDir, "output.sarif");
 
             BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
             {
