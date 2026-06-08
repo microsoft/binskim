@@ -2,8 +2,8 @@
 @ECHO off
 SETLOCAL
 
-if "%Configuration%" EQU "" (
-set Configuration=Release
+if "%Configuration%"=="" (
+    set Configuration=Release
 )
 
 REM Get version from MSBuild properties (single source of truth: Directory.Build.props)
