@@ -60,9 +60,16 @@ namespace Microsoft.CodeAnalysis.IL
 
             if (!File.Exists(binSkimDll))
             {
+                // Fall back to debug build.
+                binSkimDll = Path.GetFullPath(
+                    Path.Combine(assemblyDir, "..", "..", "BinSkim.Driver", "debug", "BinSkim.dll"));
+            }
+
+            if (!File.Exists(binSkimDll))
+            {
                 throw new FileNotFoundException(
-                    $"BinSkim.dll not found at expected path: {binSkimDll}. " +
-                    "Ensure the BinSkim.Driver project has been built in Release configuration.");
+                    $"BinSkim.dll not found at expected path (checked both release and debug): {binSkimDll}. " +
+                    "Ensure the BinSkim.Driver project has been built.");
             }
 
             return binSkimDll;

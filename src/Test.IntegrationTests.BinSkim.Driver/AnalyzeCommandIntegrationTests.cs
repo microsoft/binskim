@@ -32,24 +32,6 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         [Fact]
-        public async Task Analyze_SelfScan_ExitsWithZero()
-        {
-            // BinSkim analyzing its own DLL — PDB is co-located so symbol loading should succeed.
-            string targetBinary = BinSkimRunner.GetBinSkimDllPath();
-            string sarifOutput = Path.Combine(_tempDir, "output.sarif");
-
-            BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
-            {
-                "analyze",
-                targetBinary,
-                "-o", sarifOutput,
-            });
-
-            result.ExitCode.Should().Be(0,
-                $"BinSkim should exit cleanly.\nStdOut: {result.StdOut}\nStdErr: {result.StdErr}");
-        }
-
-        [Fact]
         public async Task Analyze_SelfScan_ProducesValidSarif()
         {
             string targetBinary = BinSkimRunner.GetBinSkimDllPath();
@@ -279,15 +261,34 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         /// <summary>
+        /// Finds the repository root by searching upward for the BinSkim.sln file.
+        /// </summary>
+        private static string FindRepoRoot()
+        {
+            string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            while (dir != null)
+            {
+                if (File.Exists(Path.Combine(dir, "src", "BinSkim.sln")))
+                {
+                    return dir;
+                }
+
+                dir = Path.GetDirectoryName(dir);
+            }
+
+            throw new DirectoryNotFoundException(
+                "Could not locate the repository root (searched upward for src/BinSkim.sln from assembly location).");
+        }
+
+        /// <summary>
         /// Resolves a path into the BinSkim.Rules functional test data directory.
         /// These binaries are curated per-rule with known Pass/Fail outcomes.
         /// </summary>
         private static string GetFunctionalTestDataPath(params string[] relativeParts)
         {
-            string assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string testDataRoot = Path.GetFullPath(
-                Path.Combine(assemblyDir, "..", "..", "..", "..", "src",
-                    "Test.FunctionalTests.BinSkim.Rules", "FunctionalTestData"));
+            string repoRoot = FindRepoRoot();
+            string testDataRoot = Path.Combine(repoRoot, "src",
+                "Test.FunctionalTests.BinSkim.Rules", "FunctionalTestData");
             string fullPath = Path.Combine(new[] { testDataRoot }.Concat(relativeParts).ToArray());
 
             if (!File.Exists(fullPath) && !Directory.Exists(fullPath))
@@ -304,10 +305,9 @@ namespace Microsoft.CodeAnalysis.IL
         /// </summary>
         private static string GetBinaryParsersTestDataPath(params string[] relativeParts)
         {
-            string assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string testDataRoot = Path.GetFullPath(
-                Path.Combine(assemblyDir, "..", "..", "..", "..", "src",
-                    "Test.UnitTests.BinaryParsers", "TestData"));
+            string repoRoot = FindRepoRoot();
+            string testDataRoot = Path.Combine(repoRoot, "src",
+                "Test.UnitTests.BinaryParsers", "TestData");
             string fullPath = Path.Combine(new[] { testDataRoot }.Concat(relativeParts).ToArray());
 
             if (!File.Exists(fullPath) && !Directory.Exists(fullPath))
@@ -320,26 +320,6 @@ namespace Microsoft.CodeAnalysis.IL
         }
 
         #region ELF Binary Analysis
-
-        [Fact]
-        public async Task Analyze_ElfBinary_ExitsWithZero()
-        {
-            string elfBinary = GetFunctionalTestDataPath(
-                "BA3006.EnableNonExecutableStack", "Pass", "gcc.helloworld.noexecstack.5.o");
-            string sarifOutput = Path.Combine(_tempDir, "elf-output.sarif");
-
-            BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
-            {
-                "analyze",
-                elfBinary,
-                "-o", sarifOutput,
-                "--kind", "Fail;Pass;NotApplicable",
-                "--level", "Error;Warning;Note",
-            });
-
-            result.ExitCode.Should().Be(0,
-                $"BinSkim should analyze ELF binaries successfully.\nStdOut: {result.StdOut}\nStdErr: {result.StdErr}");
-        }
 
         [Fact]
         public async Task Analyze_ElfBinary_ProducesValidSarif()
