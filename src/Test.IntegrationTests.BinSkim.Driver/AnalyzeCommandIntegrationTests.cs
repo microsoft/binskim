@@ -112,8 +112,8 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public async Task Analyze_NoValidTargets_ExitsWithNonZero()
         {
-            string nonExistentTarget = Path.Combine(_tempDir, "does_not_exist.dll");
-            string sarifOutput = Path.Combine(_tempDir, "output.sarif");
+            string nonExistentTarget = Path.Join(_tempDir, "does_not_exist.dll");
+            string sarifOutput = Path.Join(_tempDir, "output.sarif");
 
             BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
             {
