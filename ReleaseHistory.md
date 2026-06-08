@@ -19,6 +19,13 @@
 - NEW => new feature 
 
 ## UNRELEASED
+## **4.4.9.91** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.9]
+* NEW: Update building application logic + setting version [1190](https://github.com/microsoft/binskim/pull/1190)
+
+* PRF: Reduce redundant file I/O and memory copies in PE loading to give ~20% speedup [1177](https://github.com/microsoft/binskim/pull/1177)
+
+* UEE: Fix portable PDB metadata lifetime to prevent AccessViolationException during SourceLink extraction [1188](https://github.com/microsoft/binskim/pull/1188)
+
 
 ## **4.4.9.9**[https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.9]
 * DEP: Update dependency version
