@@ -48,6 +48,63 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
+        [Theory]
+        [InlineData("CSharp_PortablePdb_SourceLink.dll", "managed")]
+        [InlineData("CPlusPlus_SourceLink.exe", "native MSVC")]
+        public void Driver_ShouldEmitSourceLinkJson_ForBinaryWithSourceLink(string binaryFileName, string binaryKind)
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows())
+            {
+                return;
+            }
+
+            List<ITelemetry> sendItems = CompilerTelemetryTestSetup();
+            string testFile = Path.Combine(SourceLinkTestDataDirectory, binaryFileName);
+            string outputFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.sarif");
+
+            try
+            {
+                using var telemetry = new Sdk.Telemetry(this.telemetryConfiguration);
+                var command = new MultithreadedAnalyzeCommand(telemetry);
+                var options = new AnalyzeOptions
+                {
+                    OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                    Recurse = false,
+                    OutputFilePath = outputFile,
+                    ConfigurationFilePath = "default",
+                    SarifOutputVersion = Sarif.SarifVersion.Current,
+                    TargetFileSpecifiers = new string[] { testFile },
+                    Level = new List<FailureLevel> { FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note },
+                    Kind = new List<ResultKind> { ResultKind.Fail, ResultKind.Pass },
+                };
+
+                command.Run(options);
+
+                var compilerEvents = sendItems
+                    .OfType<EventTelemetry>()
+                    .Where(e => e.Name == CompilerDataLogger.CompilerEventName)
+                    .ToList();
+
+                compilerEvents.Should().NotBeEmpty($"BA4001 should emit at least one CompilerInformation event for a {binaryKind} binary");
+                compilerEvents.First().Properties.Should().ContainKey(CompilerDataLogger.SourceLinkJsonId,
+                    $"a {binaryKind} binary with SourceLink should have a sourceLinkJsonId correlation key");
+
+                string sourceLinkJsonId = compilerEvents.First().Properties[CompilerDataLogger.SourceLinkJsonId];
+                var sourceLinkChunks = sendItems
+                    .OfType<EventTelemetry>()
+                    .Where(e => e.Name == CompilerDataLogger.SourceLinkJsonEventName
+                             && e.Properties[$"{CompilerDataLogger.SourceLinkJson}Id"] == sourceLinkJsonId)
+                    .ToList();
+
+                sourceLinkChunks.Should().NotBeEmpty(
+                    $"a {binaryKind} binary built with SourceLink enabled should have chunked sourceLinkJson events in telemetry");
+            }
+            finally
+            {
+                if (File.Exists(outputFile)) { File.Delete(outputFile); }
+            }
+        }
+
         [Fact]
         public void Driver_ShouldLogCompilerTelemetryEvents_Managed()
         {

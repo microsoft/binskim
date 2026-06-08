@@ -279,5 +279,148 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             context.OpcFileExtensions.Should().NotBeEmpty(
                 "OpcFileExtensions should retain default values when --disable-archive-extraction is not set");
         }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_SetsSymbolPath()
+        {
+            var options = new AnalyzeOptions();
+            options.TargetFileSpecifiers = new List<string> { "test.dll" };
+            options.DisableTelemetry = true;
+            options.OutputFilePath = "test/path/";
+            options.SymbolsPath = @"C:\symbols";
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand();
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            context.SymbolPath.Should().Be(@"C:\symbols");
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_SetsIgnorePdbLoadError()
+        {
+            var options = new AnalyzeOptions();
+            options.TargetFileSpecifiers = new List<string> { "test.dll" };
+            options.DisableTelemetry = true;
+            options.OutputFilePath = "test/path/";
+            options.IgnorePdbLoadError = true;
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand();
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            context.IgnorePdbLoadError.Should().BeTrue();
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_SetsIgnorePELoadError()
+        {
+            var options = new AnalyzeOptions();
+            options.TargetFileSpecifiers = new List<string> { "test.dll" };
+            options.DisableTelemetry = true;
+            options.OutputFilePath = "test/path/";
+            options.IgnorePELoadError = true;
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand();
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            context.IgnorePELoadError.Should().BeTrue();
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_SetsIgnoreBinaryAnalysisErrors()
+        {
+            var options = new AnalyzeOptions();
+            options.TargetFileSpecifiers = new List<string> { "test.dll" };
+            options.DisableTelemetry = true;
+            options.OutputFilePath = "test/path/";
+            options.IgnoreBinaryAnalysisErrors = true;
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand();
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            context.IgnoreBinaryAnalysisErrors.Should().BeTrue();
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_MaxFileSizeDefaultsToMaxValue()
+        {
+            var options = new AnalyzeOptions();
+            options.TargetFileSpecifiers = new List<string> { "test.dll" };
+            options.DisableTelemetry = true;
+            options.OutputFilePath = "test/path/";
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand();
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            context.MaxFileSizeInKilobytes.Should().Be(long.MaxValue);
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_MaxFileSizeHonorsOption()
+        {
+            var options = new AnalyzeOptions();
+            options.TargetFileSpecifiers = new List<string> { "test.dll" };
+            options.DisableTelemetry = true;
+            options.OutputFilePath = "test/path/";
+            options.MaxFileSizeInKilobytes = 1024;
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand();
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            context.MaxFileSizeInKilobytes.Should().Be(1024);
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_ValidAnalysisFileExtensions_ContainsExpectedExtensions()
+        {
+            MultithreadedAnalyzeCommand.ValidAnalysisFileExtensions.Should().Contain(".dll");
+            MultithreadedAnalyzeCommand.ValidAnalysisFileExtensions.Should().Contain(".exe");
+            MultithreadedAnalyzeCommand.ValidAnalysisFileExtensions.Should().Contain(".sys");
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_ValidAnalysisFileExtensions_DoesNotContainUnexpectedExtensions()
+        {
+            MultithreadedAnalyzeCommand.ValidAnalysisFileExtensions.Should().NotContain(".txt");
+            MultithreadedAnalyzeCommand.ValidAnalysisFileExtensions.Should().NotContain(".pdf");
+            MultithreadedAnalyzeCommand.ValidAnalysisFileExtensions.Should().NotContain(".cs");
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_Run_NullTargetFileSpecifiers_ThrowsArgumentNullException()
+        {
+            var command = new MultithreadedAnalyzeCommand();
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = null,
+                DisableTelemetry = true
+            };
+
+            Action act = () => command.Run(options);
+
+            act.Should().Throw<ArgumentNullException>()
+                .Where(e => e.Message.Contains("TargetFileSpecifiers"));
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_Run_EmptyTargetFileSpecifiers_ThrowsArgumentNullException()
+        {
+            var command = new MultithreadedAnalyzeCommand();
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new List<string>(),
+                DisableTelemetry = true
+            };
+
+            Action act = () => command.Run(options);
+
+            act.Should().Throw<ArgumentNullException>()
+                .Where(e => e.Message.Contains("TargetFileSpecifiers"));
+        }
     }
 }
