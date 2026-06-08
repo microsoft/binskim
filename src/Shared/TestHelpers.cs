@@ -22,6 +22,8 @@ namespace Microsoft.CodeAnalysis.BinSkim
 
         internal static string BaselineTestDataDirectory = GetTestDirectory("Test.FunctionalTests.BinSkim.Driver", "BaselineTestData");
 
+        internal static string SourceLinkTestDataDirectory = GetTestDirectory("Test.FunctionalTests.BinSkim.Driver", "SourceLinkTestData");
+
         internal static string GetTestDirectory(params string[] relativeDirectories)
         {
             string relativeDirectory = Path.Combine(relativeDirectories);

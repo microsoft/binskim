@@ -10,7 +10,3 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Test.FunctionalTests.BinSkim.Driver")]
 [assembly: InternalsVisibleTo("Test.FunctionalTests.BinSkim.Rules")]
 [assembly: InternalsVisibleTo("Test.UnitTests.BinSkim.Driver")]
-
-[assembly: AssemblyVersion(Microsoft.CodeAnalysis.IL.VersionConstants.AssemblyVersion)]
-[assembly: AssemblyFileVersion(Microsoft.CodeAnalysis.IL.VersionConstants.FileVersion)]
-[assembly: AssemblyInformationalVersion(Microsoft.CodeAnalysis.IL.VersionConstants.Version)]
