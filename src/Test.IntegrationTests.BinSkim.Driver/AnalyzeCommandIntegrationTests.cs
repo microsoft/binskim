@@ -57,7 +57,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             string failBinary = GetFunctionalTestDataPath(
                 "BA2016.MarkImageAsNXCompatible", "Fail", "ManagedFail.dll");
-            string sarifOutput = Path.Combine(_tempDir, "fail-output.sarif");
+            string sarifOutput = Path.Join(_tempDir, "fail-output.sarif");
 
             BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
             {
