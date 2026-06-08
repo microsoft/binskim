@@ -222,7 +222,7 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public async Task ExportRules_ProducesValidSarifOutput()
         {
-            string outputPath = Path.Combine(_tempDir, "rules.sarif");
+            string outputPath = Path.Join(_tempDir, "rules.sarif");
 
             BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
             {
