@@ -56,13 +56,13 @@ namespace Microsoft.CodeAnalysis.IL
         {
             string assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string binSkimDll = Path.GetFullPath(
-                Path.Combine(assemblyDir, "..", "..", "BinSkim.Driver", "release", "BinSkim.dll"));
+                Path.Join(assemblyDir, "..", "..", "BinSkim.Driver", "release", "BinSkim.dll"));
 
             if (!File.Exists(binSkimDll))
             {
                 // Fall back to debug build.
                 binSkimDll = Path.GetFullPath(
-                    Path.Combine(assemblyDir, "..", "..", "BinSkim.Driver", "debug", "BinSkim.dll"));
+                    Path.Join(assemblyDir, "..", "..", "BinSkim.Driver", "debug", "BinSkim.dll"));
             }
 
             if (!File.Exists(binSkimDll))
