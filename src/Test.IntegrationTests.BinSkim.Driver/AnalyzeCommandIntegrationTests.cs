@@ -84,7 +84,7 @@ namespace Microsoft.CodeAnalysis.IL
         public async Task Analyze_RunOnlyRules_FiltersToSpecifiedRule()
         {
             string targetBinary = BinSkimRunner.GetBinSkimDllPath();
-            string sarifOutput = Path.Combine(_tempDir, "filtered.sarif");
+            string sarifOutput = Path.Join(_tempDir, "filtered.sarif");
 
             BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
             {
