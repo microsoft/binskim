@@ -2,6 +2,10 @@
 @ECHO off
 SETLOCAL
 
+if "%Configuration%" EQU "" (
+set Configuration=Release
+)
+
 REM Get version from MSBuild properties (single source of truth: Directory.Build.props)
 for /f %%v in ('dotnet msbuild %~dp0src\BinSkim.Driver\BinSkim.Driver.csproj --getProperty:Version --nologo 2^>nul') do set VERSION=%%v
 
