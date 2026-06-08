@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.IL
 
         public AnalyzeCommandIntegrationTests()
         {
-            _tempDir = Path.Combine(Path.GetTempPath(), "BinSkimIntegration", Guid.NewGuid().ToString("N"));
+            _tempDir = Path.Join(Path.GetTempPath(), "BinSkimIntegration", Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(_tempDir);
         }
 
