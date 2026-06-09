@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             DwarfCommonInformationEntry[] entries = DwarfCommonInformationEntry.ParseAll(reader, defaultAddressSize: 8);
 
             entries.Should().HaveCount(1);
-            var entry = entries[0];
+            DwarfCommonInformationEntry entry = entries[0];
 
             entry.Version.Should().Be(3);
             entry.Augmentation.Should().Be("x");
@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             DwarfCommonInformationEntry[] entries = DwarfCommonInformationEntry.ParseAll(reader, defaultAddressSize: 8);
 
             entries.Should().HaveCount(1);
-            var entry = entries[0];
+            DwarfCommonInformationEntry entry = entries[0];
 
             entry.Version.Should().Be(3);
             entry.Augmentation.Should().BeEmpty();
@@ -180,7 +180,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             DwarfCommonInformationEntry[] entries = DwarfCommonInformationEntry.ParseAll(reader, defaultAddressSize: 4);
 
             entries.Should().HaveCount(1);
-            var entry = entries[0];
+            DwarfCommonInformationEntry entry = entries[0];
 
             entry.Version.Should().Be(4);
             entry.Augmentation.Should().BeEmpty();
@@ -280,7 +280,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             DwarfCommonInformationEntry[] entries = DwarfCommonInformationEntry.ParseAll(reader, defaultAddressSize: 8);
 
             entries.Should().HaveCount(1);
-            var entry = entries[0];
+            DwarfCommonInformationEntry entry = entries[0];
 
             entry.AddressSize.Should().Be(8);
             entry.FrameDescriptionEntries.Should().HaveCount(1);

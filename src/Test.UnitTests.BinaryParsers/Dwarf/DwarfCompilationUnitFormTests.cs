@@ -1143,13 +1143,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 stub.NormalizeAddress);
 
             cu.SymbolsTree.Should().HaveCount(1);
-            var pointer = cu.SymbolsTree[0];
+            DwarfSymbol pointer = cu.SymbolsTree[0];
             pointer.Tag.Should().Be(DwarfTag.PointerType);
 
             // Synthetic void base type is inserted as first child.
             pointer.Children.Should().NotBeNull();
             pointer.Children.Should().NotBeEmpty();
-            var voidSymbol = pointer.Children[0];
+            DwarfSymbol voidSymbol = pointer.Children[0];
             voidSymbol.Tag.Should().Be(DwarfTag.BaseType);
 
             voidSymbol.Attributes.Should().ContainKey(DwarfAttribute.Name);
@@ -1167,7 +1167,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             // And receives a Type attribute that resolves to the synthetic void symbol.
             pointer.Attributes.Should().ContainKey(DwarfAttribute.Type);
-            var typeAttr = pointer.Attributes[DwarfAttribute.Type];
+            DwarfAttributeValue typeAttr = pointer.Attributes[DwarfAttribute.Type];
             typeAttr.Type.Should().Be(DwarfAttributeValueType.ResolvedReference);
             typeAttr.Reference.Should().BeSameAs(voidSymbol);
 

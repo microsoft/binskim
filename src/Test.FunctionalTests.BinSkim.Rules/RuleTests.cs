@@ -207,11 +207,31 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static string GetActualOutcome(TestMessageLogger logger, string target)
         {
-            if (logger.PassTargets.Contains(target)) return "Pass";
-            if (logger.ErrorTargets.Contains(target)) return "Error";
-            if (logger.WarningTargets.Contains(target)) return "Warning";
-            if (logger.NoteTargets.Contains(target)) return "Note";
-            if (logger.ConfigurationErrorTargets.Contains(target)) return "ConfigurationError";
+            if (logger.PassTargets.Contains(target))
+            {
+                return "Pass";
+            }
+
+            if (logger.ErrorTargets.Contains(target))
+            {
+                return "Error";
+            }
+
+            if (logger.WarningTargets.Contains(target))
+            {
+                return "Warning";
+            }
+
+            if (logger.NoteTargets.Contains(target))
+            {
+                return "Note";
+            }
+
+            if (logger.ConfigurationErrorTargets.Contains(target))
+            {
+                return "ConfigurationError";
+            }
+
             return "no result";
         }
 

@@ -114,11 +114,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             program.Files.Should().NotBeNull();
             program.Files.Should().HaveCount(1);
 
-            var file = program.Files[0];
+            DwarfFileInformation file = program.Files[0];
             file.Name.Should().Be("file.c");
             file.Lines.Should().HaveCount(1);
 
-            var line = file.Lines[0];
+            DwarfLineInformation line = file.Lines[0];
             line.File.Should().BeSameAs(file);
             line.Line.Should().Be(1u);          // initial line
             line.Column.Should().Be(0ul);       // default column
@@ -235,7 +235,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             program.Files.Should().NotBeNull();
             program.Files.Should().HaveCount(1);
 
-            var file = program.Files[0];
+            DwarfFileInformation file = program.Files[0];
             file.Name.Should().Be("foo.c");
             file.Directory.Should().Be("dir");
             // Path combines directory and name; we only check that both segments appear.
@@ -243,7 +243,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             file.Path.Should().Contain("dir");
 
             file.Lines.Should().HaveCount(1);
-            var line = file.Lines[0];
+            DwarfLineInformation line = file.Lines[0];
             line.File.Should().BeSameAs(file);
             line.Line.Should().Be(1u);
             line.Address.Should().Be(0u);
@@ -382,7 +382,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 bw.Write((byte)0);   // lineBase
                 bw.Write((byte)1);   // lineRange
                 bw.Write((byte)13);  // opcodeBase
-                for (int i = 1; i < 13; i++) bw.Write((byte)0);
+                for (int i = 1; i < 13; i++)
+                {
+                    bw.Write((byte)0);
+                }
             }
 
             byte[] bodyBytes = body.ToArray();
@@ -445,7 +448,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_AdvancePc_AdvancesAddressByOperandTimesMinInstructionLength()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)DwarfLineNumberStandardOpcode.AdvancePc);
                 bw.Write(EncodeULEB128(5));
@@ -460,7 +463,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_AdvanceLine_PositiveValue_IncrementsLine()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)DwarfLineNumberStandardOpcode.AdvanceLine);
                 bw.Write(EncodeSLEB128(10));
@@ -474,7 +477,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_AdvanceLine_NegativeAfterPositive_DecrementsLine()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)DwarfLineNumberStandardOpcode.AdvanceLine);
                 bw.Write(EncodeSLEB128(20));
@@ -492,7 +495,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_SetFile_SwitchesToSecondFile()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 // SetFile to file 2 (1-based index)
                 bw.Write((byte)DwarfLineNumberStandardOpcode.SetFile);
@@ -509,7 +512,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_SetColumn_SetsColumnOnEmittedLine()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)DwarfLineNumberStandardOpcode.SetColumn);
                 bw.Write(EncodeULEB128(42));
@@ -524,7 +527,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         {
             // With opcodeBase=13, lineRange=14, minInstrLen=1:
             // advance = (255 - 13) / 14 = 17
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)DwarfLineNumberStandardOpcode.ConstAddPc);
                 bw.Write((byte)DwarfLineNumberStandardOpcode.Copy);
@@ -536,7 +539,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_FixedAdvancePc_AddsUshortToAddress()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)DwarfLineNumberStandardOpcode.FixedAdvancePc);
                 bw.Write((ushort)256);
@@ -553,7 +556,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_SetAddress_SetsAddressToValue()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 WriteSetAddress(bw, 0x2000);
                 bw.Write((byte)DwarfLineNumberStandardOpcode.Copy);
@@ -565,7 +568,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_EndSequence_EmitsLineAndResetsState()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)DwarfLineNumberStandardOpcode.AdvanceLine);
                 bw.Write(EncodeSLEB128(5));
@@ -587,7 +590,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_SetAddress_WhenZero_UsesLastAddressFromPreviousEndSequence()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 WriteSetAddress(bw, 0x5000);
                 WriteEndSequence(bw);
@@ -603,7 +606,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_DefineFile_AddsAndSwitchesToNewFile()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 // Extended: DefineFile
                 bw.Write((byte)0x00); // extended marker
@@ -637,7 +640,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             //   operationAdvance = 7 / 12 = 0
             //   lineAdvance = -3 + (7 % 12) = -3 + 7 = 4
             // Result: address=0, line=1+4=5
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)20); // special opcode
             }, lineBase: -3, lineRange: 12);
@@ -655,7 +658,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             //   operationAdvance = 8 / 4 = 2
             //   lineAdvance = 0 + (8 % 4) = 0
             // address = 2 * 2 = 4, line = 1
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)21);
             }, lineBase: 0, lineRange: 4, minimumInstructionLength: 2);
@@ -670,7 +673,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             // lineBase=0, lineRange=4, opcodeBase=13, minInstrLen=1
             // Opcode 17: adjusted=4, opAdvance=1, lineAdv=0. addr=1, line=1.
             // Opcode 17: adjusted=4, opAdvance=1, lineAdv=0. addr=2, line=1.
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)17);
                 bw.Write((byte)17);
@@ -688,7 +691,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_Dwarf4_MultipleDirectories_ResolvesFilePaths()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)DwarfLineNumberStandardOpcode.Copy);
             }, fileNames: null, directories: new[] { "src", "lib" });
@@ -707,7 +710,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 bw.Write((byte)0);
                 bw.Write((byte)1);
                 bw.Write((byte)13);
-                for (int i = 1; i < 13; i++) bw.Write((byte)0);
+                for (int i = 1; i < 13; i++)
+                {
+                    bw.Write((byte)0);
+                }
 
                 // Directories
                 bw.Write(System.Text.Encoding.UTF8.GetBytes("src"));
@@ -754,7 +760,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_Dwarf4_MultipleFiles_LinesAssignedToCorrectFile()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)DwarfLineNumberStandardOpcode.Copy); // line on file 1
                 bw.Write((byte)DwarfLineNumberStandardOpcode.SetFile);
@@ -769,7 +775,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         [Fact]
         public void ReadData_NormalizationAppliedToAllLinesAcrossFiles()
         {
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 WriteSetAddress(bw, 0x100);
                 bw.Write((byte)DwarfLineNumberStandardOpcode.Copy);
@@ -788,7 +794,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public void ReadData_Dwarf3_ParsesWithoutMaxOperationsPerInstruction()
         {
             // DWARF3: no maxOperationsPerInstruction field in header.
-            var program = BuildDwarf4Program(bw =>
+            DwarfLineNumberProgram program = BuildDwarf4Program(bw =>
             {
                 bw.Write((byte)DwarfLineNumberStandardOpcode.Copy);
             }, dwarfVersion: 3);
