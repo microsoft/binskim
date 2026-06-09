@@ -326,7 +326,7 @@ namespace Microsoft.CodeAnalysis.IL
         {
             string elfBinary = GetFunctionalTestDataPath(
                 "BA3001.EnablePositionIndependentExecutable", "Pass", "gcc.pie_executable");
-            string sarifOutput = Path.Combine(_tempDir, "elf-sarif.sarif");
+            string sarifOutput = Path.Join(_tempDir, "elf-sarif.sarif");
 
             BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
             {
