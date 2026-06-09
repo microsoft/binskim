@@ -535,7 +535,7 @@ namespace Microsoft.CodeAnalysis.IL
         public async Task Analyze_TraceTargetsScanned_ProducesTraceOutput()
         {
             string targetBinary = BinSkimRunner.GetBinSkimDllPath();
-            string sarifOutput = Path.Combine(_tempDir, "trace.sarif");
+            string sarifOutput = Path.Join(_tempDir, "trace.sarif");
 
             BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
             {
