@@ -511,7 +511,7 @@ namespace Microsoft.CodeAnalysis.IL
         public async Task Analyze_LocalSymbolDirectories_AcceptsOption()
         {
             string elfBinary = GetBinaryParsersTestDataPath("Dwarf", "hello-dwarf4-o2");
-            string sarifOutput = Path.Combine(_tempDir, "symdir.sarif");
+            string sarifOutput = Path.Join(_tempDir, "symdir.sarif");
 
             BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
             {
