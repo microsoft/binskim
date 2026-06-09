@@ -287,9 +287,9 @@ namespace Microsoft.CodeAnalysis.IL
         private static string GetFunctionalTestDataPath(params string[] relativeParts)
         {
             string repoRoot = FindRepoRoot();
-            string testDataRoot = Path.Combine(repoRoot, "src",
+            string testDataRoot = Path.Join(repoRoot, "src",
                 "Test.FunctionalTests.BinSkim.Rules", "FunctionalTestData");
-            string fullPath = Path.Combine(new[] { testDataRoot }.Concat(relativeParts).ToArray());
+            string fullPath = Path.Join(new[] { testDataRoot }.Concat(relativeParts).ToArray());
 
             if (!File.Exists(fullPath) && !Directory.Exists(fullPath))
             {
@@ -306,9 +306,9 @@ namespace Microsoft.CodeAnalysis.IL
         private static string GetBinaryParsersTestDataPath(params string[] relativeParts)
         {
             string repoRoot = FindRepoRoot();
-            string testDataRoot = Path.Combine(repoRoot, "src",
+            string testDataRoot = Path.Join(repoRoot, "src",
                 "Test.UnitTests.BinaryParsers", "TestData");
-            string fullPath = Path.Combine(new[] { testDataRoot }.Concat(relativeParts).ToArray());
+            string fullPath = Path.Join(new[] { testDataRoot }.Concat(relativeParts).ToArray());
 
             if (!File.Exists(fullPath) && !Directory.Exists(fullPath))
             {
