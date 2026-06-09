@@ -458,7 +458,7 @@ namespace Microsoft.CodeAnalysis.IL
             BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
             {
                 "analyze",
-                Path.Combine(_tempDir, "*.dll"),
+                Path.Join(_tempDir, "*.dll"),
                 "-o", sarifOutput,
                 "--recurse", "True",
                 "--kind", "Fail;Pass;NotApplicable",
