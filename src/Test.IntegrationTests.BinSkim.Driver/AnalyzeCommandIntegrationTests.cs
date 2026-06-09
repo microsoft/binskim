@@ -243,7 +243,7 @@ namespace Microsoft.CodeAnalysis.IL
         [Fact]
         public async Task ExportConfig_ProducesValidJsonOutput()
         {
-            string outputPath = Path.Combine(_tempDir, "config.json");
+            string outputPath = Path.Join(_tempDir, "config.json");
 
             BinSkimRunResult result = await BinSkimRunner.RunAsync(new[]
             {
