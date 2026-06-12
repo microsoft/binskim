@@ -19,6 +19,9 @@
 - NEW => new feature 
 
 ## UNRELEASED
+## **4.4.9.11** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.11]
+* DEP: Update dependency version
+
 ## **4.4.9.10** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.10]
 * NEW: Update building application logic + setting version [1190](https://github.com/microsoft/binskim/pull/1190)
 
