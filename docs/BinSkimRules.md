@@ -924,7 +924,7 @@ Can cause some perf degradations, so should not be used when not needed.
 {0}' was compiled with one or more modules with a toolset that supports /Qspectre but a compiland `RawCommandLine` value is missing and the rule is therefore not able to determine if `/Qspectre` is specified.
 The likely cause is that the code was linked to a static library with no debug information.  It is not known whether code generation mitigations for speculative execution side-channel attack (Spectre) vulnerabilities was enabled.
 Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache.
-To resolve the issue, ensure that the static library pdb is availble or compile static library code with /Z7 switch which makes symbols to be included in .obj.
+To resolve the issue, ensure that the static library pdb is available or compile static library code with /Z7 switch which makes symbols to be included in .obj.
 For VC projects use ItemDefinitionGroup - ClCompile - DebugInformationFormat property with 'ProgramDatabase' (/Zi) or 'OldStyle' (/Z7) value.
 
 #### `SpectreMitigationUnknownNoCommandLine`: Warning
