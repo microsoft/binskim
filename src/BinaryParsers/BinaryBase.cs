@@ -39,7 +39,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     byte[] hash = SHA256.HashData(File.ReadAllBytes(this.TargetUri.LocalPath));
                     this.sha256Hash = BitConverter.ToString(hash).Replace("-", string.Empty);
                 }
-                catch
+                catch (IOException)
+                {
+                    this.sha256Hash = string.Empty;
+                }
+                catch (UnauthorizedAccessException)
                 {
                     this.sha256Hash = string.Empty;
                 }
