@@ -17,6 +17,7 @@ extends:
       os: windows
     featureFlags:
       autoEnableRoslynWithNewRuleset: false
+      sdlSdpEnabled: false
     stages:
     - stage: BuildAndTest
       displayName: Build And Test
