@@ -22,7 +22,6 @@
 
 ## **v4.4.9.12** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.12]
 * FIX: Populate file hash in CompilerDataLogger telemetry (was always empty) [1199](https://github.com/microsoft/binskim/pull/1199)
-* FPS: Suppress ERR997 for IL-only managed assemblies [1174](https://github.com/microsoft/binskim/pull/1174)
 
 ## **4.4.9.11** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.11]
 * DEP: Update dependency version
