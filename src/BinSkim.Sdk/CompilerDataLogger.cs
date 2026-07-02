@@ -209,7 +209,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public void Write(BinaryAnalyzerContext context, CompilerData compilerData)
         {
-            string fileHash = context.Hashes?.Sha256;
+            string fileHash = compilerData.FileHash ?? context.Hashes?.Sha256;
             string filePath = string.IsNullOrWhiteSpace(RootPathToElide)
                 ? context.CurrentTarget.Uri?.LocalPath
                 : context.CurrentTarget.Uri?.LocalPath.Replace(RootPathToElide, string.Empty);

@@ -58,6 +58,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
+            string fileHash = target.PE.SHA256Hash;
 
             if (pdb == null)
             {
@@ -102,6 +103,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
                     AssemblyReferences = string.Join(';', target.PE.GetAssemblyReferenceStrings()),
                     SourceLinkJsonId = sourceLinkJsonId,
+                    FileHash = fileHash,
                 };
 
                 if (!records.ContainsKey(record))
@@ -133,6 +135,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
                         SourceLinkJsonId = sourceLinkJsonId,
+                        FileHash = fileHash,
                     };
 
                     if (!records.ContainsKey(record))

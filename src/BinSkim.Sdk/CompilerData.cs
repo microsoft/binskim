@@ -23,6 +23,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public string CompilerBackEndVersion { get; set; }
         public string CompilerFrontEndVersion { get; set; }
         public string SourceLinkJsonId { get; set; }
+        public string FileHash { get; set; }
 
         public override string ToString()
         {
