@@ -12,6 +12,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     public interface IDwarfBinary : IDisposable
     {
         /// <summary>
+        /// Gets the SHA-256 hash of the binary file.
+        /// </summary>
+        string SHA256Hash { get; }
+
+        /// <summary>
         /// The version of Dwarf used.
         /// </summary>
         int DwarfVersion { get; set; }

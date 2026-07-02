@@ -68,6 +68,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
         }
 
+        public override string SHA256Hash => this.PE.SHA256Hash;
+
         public static void ClearLocalSymbolDirectoriesCache()
         {
             lock (sync)

@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// <summary>
         /// Gets the SHA-256 hash of the binary file. Computed once and cached.
         /// </summary>
-        public string SHA256Hash
+        public virtual string SHA256Hash
         {
             get
             {

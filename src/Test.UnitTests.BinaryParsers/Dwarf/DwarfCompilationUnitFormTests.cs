@@ -25,6 +25,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         // Minimal IDwarfBinary stub needed by DwarfCompilationUnit constructor.
         private class StubDwarfBinary : IDwarfBinary
         {
+            public string SHA256Hash { get; } = string.Empty;
             public int DwarfVersion { get; set; }
             public DwarfUnitType DwarfUnitType { get; set; }
             public byte[] DebugData { get; } = Array.Empty<byte>();
