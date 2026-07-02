@@ -5,9 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
@@ -56,7 +54,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             IDwarfBinary binary = context.DwarfBinary();
-            string fileHash = ComputeSha256Hash(context.CurrentTarget.Uri.LocalPath);
+            string fileHash = ((BinaryBase)binary).SHA256Hash;
 
             if (binary is ElfBinary)
             {
@@ -118,19 +116,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     processedRecords.Add(record);
                     context.CompilerDataLogger.Write(context, record);
                 }
-            }
-        }
-
-        private static string ComputeSha256Hash(string filePath)
-        {
-            try
-            {
-                byte[] hash = SHA256.HashData(File.ReadAllBytes(filePath));
-                return BitConverter.ToString(hash).Replace("-", string.Empty);
-            }
-            catch
-            {
-                return null;
             }
         }
     }
