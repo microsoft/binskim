@@ -19,6 +19,10 @@
 - NEW => new feature 
 
 ## UNRELEASED
+
+## **v4.4.9.12** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.12]
+* ADM: Fix pipeline - disable sdlSdp and use service connection for internal build trigger [1201](https://github.com/microsoft/binskim/pull/1201)
+
 ## **4.4.9.11** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.11]
 * DEP: Update dependency version
 
