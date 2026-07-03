@@ -17,6 +17,7 @@ extends:
       os: windows
     featureFlags:
       autoEnableRoslynWithNewRuleset: false
+      sdlSdpEnabled: false
     stages:
     - stage: BuildAndTest
       displayName: Build And Test
@@ -196,12 +197,14 @@ extends:
         steps:
         - checkout: none
 
-        - task: PowerShell@2
+        - task: AzureCLI@2
           displayName: "Queue internal build and wait for result"
           inputs:
-            targetType: inline
-            pwsh: true
-            script: |
+            azureSubscription: binskim-internal-pipeline-runner
+            scriptType: pscore
+            scriptLocation: inlineScript
+            inlineScript: |
+              $token = az account get-access-token --resource 499b84ac-1321-427f-aa17-267ca6975798 --query accessToken -o tsv
               $commit = "$(Build.SourceVersion)"
               $org = "https://dev.azure.com/mseng/"
               $project = "1ES"
@@ -210,7 +213,7 @@ extends:
               Write-Host "Triggering internal build with BinSkim commit: $commit"
 
               $headers = @{
-                Authorization  = "Bearer $(System.AccessToken)"
+                Authorization  = "Bearer $token"
                 "Content-Type" = "application/json"
               }
 
@@ -254,5 +257,3 @@ extends:
 
               Write-Error "Timed out after ${maxWait}s waiting for internal build. See: $($run._links.web.href)"
               exit 1
-          env:
-            SYSTEM_ACCESSTOKEN: $(System.AccessToken)
