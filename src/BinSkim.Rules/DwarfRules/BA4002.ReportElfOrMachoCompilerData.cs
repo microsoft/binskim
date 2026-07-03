@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
 
             IDwarfBinary binary = context.DwarfBinary();
-            string fileHash = binary.SHA256Hash;
+            string fileHash = context.IncludeTelemetryFileHash ? binary.SHA256Hash : null;
 
             if (binary is ElfBinary)
             {

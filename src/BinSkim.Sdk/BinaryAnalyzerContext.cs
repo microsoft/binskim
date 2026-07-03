@@ -106,6 +106,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             set => this.Policy.SetProperty(BinaryParsersProperties.DisableTelemetry, value);
         }
 
+        public bool IncludeTelemetryFileHash
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.IncludeTelemetryFileHash) != false;
+            set => this.Policy.SetProperty(BinaryParsersProperties.IncludeTelemetryFileHash, value);
+        }
+
         public bool IncludeWixBinaries
         {
             get => this.Policy?.GetProperty(BinaryParsersProperties.IncludeWixBinaries) == true;

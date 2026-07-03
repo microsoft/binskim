@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
-            string fileHash = target.PE.SHA256Hash;
+            string fileHash = context.IncludeTelemetryFileHash ? target.PE.SHA256Hash : null;
 
             if (pdb == null)
             {
