@@ -18,15 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
         with:
           dotnet-version: 9.0.x
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@b8d3b6e8af63cde30bdc382c0bc28114f4346c88 # v2.28.1
         with:
           queries: security-and-quality
           languages: csharp
@@ -57,5 +57,5 @@ jobs:
           --no-restore
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@b8d3b6e8af63cde30bdc382c0bc28114f4346c88 # v2.28.1
 # Built with ❤ by [Pipeline Foundation](https://pipeline.foundation)

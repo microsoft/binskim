@@ -12,6 +12,8 @@ updates:
     # reviewers:
     #   - reviewer_one
 
+    cooldown:
+      default-days: 7
   - package-ecosystem: 'gitsubmodule'
     directory: ''
     open-pull-requests-limit: 10
