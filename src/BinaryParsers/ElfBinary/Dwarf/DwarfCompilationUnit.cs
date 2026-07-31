@@ -37,6 +37,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                     DwarfMemoryReader debugLineStrings,
                                     IList<int> debugStringOffsets,
                                     NormalizeAddressDelegate addressNormalizer)
+            : this(dwarfBinary,
+                   debugData,
+                   debugDataDescription,
+                   (IDwarfStringReader)debugStrings,
+                   debugLineStrings,
+                   debugStringOffsets,
+                   addressNormalizer)
+        {
+        }
+
+        internal DwarfCompilationUnit(IDwarfBinary dwarfBinary,
+                                    DwarfMemoryReader debugData,
+                                    DwarfMemoryReader debugDataDescription,
+                                    IDwarfStringReader debugStrings,
+                                    DwarfMemoryReader debugLineStrings,
+                                    IList<int> debugStringOffsets,
+                                    NormalizeAddressDelegate addressNormalizer)
         {
             ReadData(dwarfBinary,
                      debugData,
@@ -73,7 +90,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         private void ReadData(IDwarfBinary dwarfBinary,
                               DwarfMemoryReader debugData,
                               DwarfMemoryReader debugDataDescription,
-                              DwarfMemoryReader debugStrings,
+                              IDwarfStringReader debugStrings,
                               DwarfMemoryReader debugLineStrings,
                               IList<int> debugStringOffsets,
                               NormalizeAddressDelegate addressNormalizer)

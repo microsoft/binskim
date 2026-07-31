@@ -23,10 +23,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     {
         public ElfBinary(Uri uri, string localSymbolDirectories = null, bool forceComprehensiveParsing = false) : base(uri)
         {
+            this.path = Path.GetFullPath(uri.LocalPath);
             try
             {
-                string path = Path.GetFullPath(uri.LocalPath);
-                ELF = ELFReader.Load<ulong>(path);
+                ELF = ELFReader.Load<ulong>(this.path);
 
                 Compilers = ElfUtility.GetELFCompilers(this.ELF);
 
@@ -56,25 +56,31 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 PublicSymbols = publicSymbols;
                 SectionRegions = ELF.Sections.Where(s => s.LoadAddress > 0).OrderBy(s => s.LoadAddress).ToArray();
 
-                CompilationUnits = new Lazy<List<DwarfCompilationUnit>>(()
-                    => LoadDebug(DwarfSymbolProvider.ParseAllCompilationUnits(this,
-                                                                              DebugData,
-                                                                              DebugDataDescription,
-                                                                              DebugDataStrings,
-                                                                              DebugLineStrings,
-                                                                              DebugStringOffsets,
-                                                                              NormalizeAddress),
-                                                                              localSymbolDirectories));
+                CompilationUnits = new Lazy<List<DwarfCompilationUnit>>(() =>
+                {
+                    using IDwarfStringReader debugStrings = CreateDebugStringsReader();
+                    return LoadDebug(DwarfSymbolProvider.ParseAllCompilationUnits(this,
+                                                                                  DebugData,
+                                                                                  DebugDataDescription,
+                                                                                  debugStrings,
+                                                                                  DebugLineStrings,
+                                                                                  DebugStringOffsets,
+                                                                                  NormalizeAddress),
+                                                                                  localSymbolDirectories);
+                });
 
                 commandLineInfos = new Lazy<List<DwarfCompileCommandLineInfo>>(()
                     => DwarfSymbolProvider.ParseAllCommandLineInfos(CompilationUnits.Value));
 
-                LineNumberPrograms = new Lazy<IReadOnlyList<DwarfLineNumberProgram>>(()
-                    => DwarfSymbolProvider.ParseLineNumberPrograms(this,
-                                                                   DebugLine,
-                                                                   DebugDataStrings,
-                                                                   DebugLineStrings,
-                                                                   NormalizeAddress));
+                LineNumberPrograms = new Lazy<IReadOnlyList<DwarfLineNumberProgram>>(() =>
+                {
+                    using IDwarfStringReader debugStrings = CreateDebugStringsReader();
+                    return DwarfSymbolProvider.ParseLineNumberPrograms(this,
+                                                                       DebugLine,
+                                                                       debugStrings,
+                                                                       DebugLineStrings,
+                                                                       NormalizeAddress);
+                });
 
                 CommonInformationEntries = new Lazy<IReadOnlyList<DwarfCommonInformationEntry>>(()
                     => DwarfSymbolProvider.ParseCommonInformationEntries(DebugFrame, EhFrame, new DwarfExceptionHandlingFrameParsingInput(this)));
@@ -390,6 +396,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             return Array.Empty<byte>();
         }
 
+        private IDwarfStringReader CreateDebugStringsReader()
+        {
+            Section<ulong> section = ELF.Sections
+                .OfType<Section<ulong>>()
+                .FirstOrDefault(candidate => candidate.Name == SectionName.DebugStr ||
+                                             candidate.Name == SectionName.DebugStr + ".dwo");
+
+            if (section != null && section.Size > int.MaxValue)
+            {
+                return new DwarfFileStringReader(this.path, section.Offset, section.Size);
+            }
+
+            return new DwarfMemoryReader(DebugDataStrings);
+        }
+
         /// <summary>
         /// Gets the section address after loading into memory.
         /// </summary>
@@ -523,6 +544,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         private readonly Lazy<List<DwarfCompileCommandLineInfo>> commandLineInfos;
+
+        private readonly string path;
 
         private DebugFileType debugFileType = DebugFileType.Unknown;
 
