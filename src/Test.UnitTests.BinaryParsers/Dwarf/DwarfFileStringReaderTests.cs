@@ -63,6 +63,28 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             reader.ReadString(1).Should().BeEmpty();
         }
 
+        [Fact]
+        public void FileBackedReader_IsDisabledWhenThresholdIsNotSpecified()
+        {
+            ElfBinary.ShouldUseFileBackedDwarfStringReader(
+                sectionSize: (ulong)int.MaxValue + 1,
+                fileReadThreshold: null).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(1023, 1024, false)]
+        [InlineData(1024, 1024, true)]
+        [InlineData(1025, 1024, true)]
+        public void FileBackedReader_UsesConfiguredThreshold(
+            ulong sectionSize,
+            ulong fileReadThreshold,
+            bool expected)
+        {
+            ElfBinary.ShouldUseFileBackedDwarfStringReader(
+                sectionSize,
+                fileReadThreshold).Should().Be(expected);
+        }
+
         private sealed class SparseReadStream : Stream
         {
             internal SparseReadStream(long length, IReadOnlyDictionary<long, byte> contents)

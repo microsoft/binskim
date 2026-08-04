@@ -21,9 +21,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     /// </summary>
     public class ElfBinary : BinaryBase, IDwarfBinary
     {
-        public ElfBinary(Uri uri, string localSymbolDirectories = null, bool forceComprehensiveParsing = false) : base(uri)
+        public ElfBinary(Uri uri,
+                         string localSymbolDirectories = null,
+                         bool forceComprehensiveParsing = false,
+                         ulong? dwarfStringSectionFileReadThreshold = null) : base(uri)
         {
             this.path = Path.GetFullPath(uri.LocalPath);
+            this.dwarfStringSectionFileReadThreshold = dwarfStringSectionFileReadThreshold;
             try
             {
                 ELF = ELFReader.Load<ulong>(this.path);
@@ -403,12 +407,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 .FirstOrDefault(candidate => candidate.Name == SectionName.DebugStr ||
                                              candidate.Name == SectionName.DebugStr + ".dwo");
 
-            if (section != null && section.Size > int.MaxValue)
+            if (section != null && ShouldUseFileBackedDwarfStringReader(
+                section.Size,
+                this.dwarfStringSectionFileReadThreshold))
             {
                 return new DwarfFileStringReader(this.path, section.Offset, section.Size);
             }
 
             return new DwarfMemoryReader(DebugDataStrings);
+        }
+
+        internal static bool ShouldUseFileBackedDwarfStringReader(
+            ulong sectionSize,
+            ulong? fileReadThreshold)
+        {
+            return fileReadThreshold.HasValue && sectionSize >= fileReadThreshold.Value;
         }
 
         /// <summary>
@@ -491,7 +504,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     }
                     else
                     {
-                        var dwoBinary = new ElfBinary(debugFileUri);
+                        var dwoBinary = new ElfBinary(
+                            debugFileUri,
+                            dwarfStringSectionFileReadThreshold: this.dwarfStringSectionFileReadThreshold);
 
                         if (dwoBinary != null && dwoBinary.CompilationUnits.Value.Count > 0)
                         {
@@ -542,6 +557,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             return currentCompilationUnits;
         }
+
+        private readonly ulong? dwarfStringSectionFileReadThreshold;
 
         private readonly Lazy<List<DwarfCompileCommandLineInfo>> commandLineInfos;
 
