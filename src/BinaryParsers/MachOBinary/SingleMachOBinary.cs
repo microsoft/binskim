@@ -84,11 +84,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     byte[] debugData = this.LoadSection(SECTIONNAME_DEBUG_LINE);
                     byte[] debugStrings = this.LoadSection(SECTIONNAME_DEBUG_STR);
                     byte[] debugLineStrings = this.LoadSection(SECTIONNAME_DEBUG_LINE_STR);
+                    using var debugStringsReader = new DwarfMemoryReader(debugStrings);
 
                     lineNumberPrograms =
                         DwarfSymbolProvider.ParseLineNumberPrograms(this,
                                                                     debugData,
-                                                                    debugStrings,
+                                                                    debugStringsReader,
                                                                     debugLineStrings,
                                                                     NormalizeAddress);
                 }
@@ -225,11 +226,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             byte[] debugAbbrev = this.LoadSection(SECTIONNAME_DEBUG_ABBREV);
             byte[] debugLineStr = this.LoadSection(SECTIONNAME_DEBUG_LINE_STR);
             byte[] debugStrOffsets = this.LoadSection(SECTIONNAME_DEBUG_STR_OFFS);
+            using var debugStringsReader = new DwarfMemoryReader(debugStr);
 
             return DwarfSymbolProvider.ParseAllCompilationUnits(this,
                                                                 debugData,
                                                                 debugAbbrev,
-                                                                debugStr,
+                                                                debugStringsReader,
                                                                 debugLineStr,
                                                                 debugStrOffsets,
                                                                 NormalizeAddress);

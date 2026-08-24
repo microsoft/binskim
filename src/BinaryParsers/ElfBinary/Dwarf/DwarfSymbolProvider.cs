@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         internal static List<DwarfCompilationUnit> ParseAllCompilationUnits(IDwarfBinary dwarfBinary,
                                                                             byte[] debugData,
                                                                             byte[] debugDataDescription,
-                                                                            byte[] debugStrings,
+                                                                            IDwarfStringReader debugStrings,
                                                                             byte[] debugLineStrings,
                                                                             byte[] debugStringOffsets,
                                                                             NormalizeAddressDelegate addressNormalizer)
@@ -76,14 +76,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         internal static DwarfCompilationUnit ParseOneCompilationUnitByOffset(IDwarfBinary dwarfBinary,
                                                                              byte[] debugData,
                                                                              byte[] debugDataDescription,
-                                                                             byte[] debugStrings,
+                                                                             IDwarfStringReader debugStrings,
                                                                              byte[] debugLineStrings,
                                                                              byte[] debugStringOffsets,
                                                                              NormalizeAddressDelegate addressNormalizer,
                                                                              uint offset)
         {
             using var debugDataReader = new DwarfMemoryReader(debugData);
-            using var debugStringsReader = new DwarfMemoryReader(debugStrings);
             using var debugLineStringsReader = new DwarfMemoryReader(debugLineStrings);
             using var debugDataDescriptionReader = new DwarfMemoryReader(debugDataDescription);
             IList<int> debugStringOffsetsReader = ParseDebugStringOffsets(debugStringOffsets, dwarfBinary.Is64bit);
@@ -98,7 +97,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 return new DwarfCompilationUnit(dwarfBinary,
                                                 debugDataReader,
                                                 debugDataDescriptionReader,
-                                                debugStringsReader,
+                                                debugStrings,
                                                 debugLineStringsReader,
                                                 debugStringOffsetsReader,
                                                 addressNormalizer);
@@ -146,13 +145,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
         internal static List<DwarfLineNumberProgram> ParseLineNumberPrograms(IDwarfBinary dwarfBinary,
                                                                              byte[] debugLine,
-                                                                             byte[] debugStrings,
+                                                                             IDwarfStringReader debugStrings,
                                                                              byte[] debugLineStrings,
                                                                              NormalizeAddressDelegate addressNormalizer)
         {
             int dwarfVersion = dwarfBinary.DwarfVersion;
             using var debugLineReader = new DwarfMemoryReader(debugLine);
-            using var debugStringsReader = new DwarfMemoryReader(debugStrings);
             using var debugLineStringsReader = new DwarfMemoryReader(debugLineStrings);
 
             var programs = new List<DwarfLineNumberProgram>();
@@ -165,7 +163,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                     program =
                         new DwarfLineNumberProgram(dwarfVersion,
                                                    debugLineReader,
-                                                   debugStringsReader,
+                                                   debugStrings,
                                                    addressNormalizer);
                 }
                 catch (InvalidOperationException)
