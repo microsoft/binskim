@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+using ELFSharp.ELF.Segments;
+
 using FluentAssertions;
 
 using Microsoft.CodeAnalysis.BinaryParsers.Dwarf;
@@ -294,5 +296,261 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             binaryNotFound.DebugFileType.Should().Be(DebugFileType.FromDwo);
             binaryNotFound.GetLanguage().Should().Be(DwarfLanguage.Unknown);
         }
+
+        #region CanLoadBinary
+
+        [Fact]
+        public void CanLoadBinary_ValidElfFile_ReturnsTrue()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            ElfBinary.CanLoadBinary(new Uri(fileName)).Should().BeTrue();
+        }
+
+        [Fact]
+        public void CanLoadBinary_PeFile_ReturnsFalse()
+        {
+            string fileName = Path.Combine(TestData, "PE/DeterministicBuild/clangcl.14.pe.c.codeview.pdbpagesize_16384.exe");
+            ElfBinary.CanLoadBinary(new Uri(fileName)).Should().BeFalse();
+        }
+
+        [Fact]
+        public void CanLoadBinary_NonExistentFile_ReturnsFalse()
+        {
+            string fileName = Path.Combine(TestData, "NonExistent/does_not_exist.bin");
+            ElfBinary.CanLoadBinary(new Uri(fileName)).Should().BeFalse();
+        }
+
+        [Fact]
+        public void CanLoadBinary_ZeroByteFile_ReturnsFalse()
+        {
+            string fileName = Path.Combine(TestData, "Invalid/ZeroByte/WORKSPACE");
+            ElfBinary.CanLoadBinary(new Uri(fileName)).Should().BeFalse();
+        }
+
+        #endregion
+
+        #region Error Handling
+
+        [Fact]
+        public void Constructor_InvalidElfFile_SetsValidFalse()
+        {
+            // A zero-byte file cannot be a valid ELF
+            string fileName = Path.Combine(TestData, "Invalid/ZeroByte/WORKSPACE");
+            var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeFalse();
+            binary.LoadException.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void Constructor_PeFile_SetsValidFalse()
+        {
+            string fileName = Path.Combine(TestData, "PE/DeterministicBuild/clangcl.14.pe.c.codeview.pdbpagesize_16384.exe");
+            var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeFalse();
+            binary.LoadException.Should().NotBeNull();
+        }
+
+        #endregion
+
+        #region GetSegmentFlags
+
+        [Fact]
+        public void GetSegmentFlags_GnuStack_ReturnsFlags()
+        {
+            // A full binary with debug should have a GNU_STACK segment
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+
+            SegmentFlags? flags = binary.GetSegmentFlags(ElfSegmentType.PT_GNU_STACK);
+            flags.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void GetSegmentFlags_NonExistentSegment_ReturnsNull()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+
+            // PT_SHLIB is reserved and not used in practice
+            SegmentFlags? flags = binary.GetSegmentFlags(ElfSegmentType.PT_SHLIB);
+            flags.Should().BeNull();
+        }
+
+        #endregion
+
+        #region GetSymbolTableFiles
+
+        [Fact]
+        public void GetSymbolTableFiles_BinaryWithSymbols_ReturnsEntries()
+        {
+            // The full debug-included binary should have a symbol table with file entries
+            string fileName = Path.Combine(TestData, "Dwarf/DebugFileType/BinaryDirectory/gcc.objcopy.stripall.addgnudebuglink.full");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+
+            List<ELFSharp.ELF.Sections.SymbolEntry<ulong>> files = binary.GetSymbolTableFiles();
+            files.Should().NotBeNull();
+            files.Count.Should().BeGreaterThan(0);
+        }
+
+        [Fact]
+        public void GetSymbolTableFiles_StrippedBinary_ReturnsEmptyList()
+        {
+            // A stripped binary has no symbol table
+            string fileName = Path.Combine(TestData, "Dwarf/DebugFileType/BinaryDirectory/gcc.objcopy.stripall.addgnudebuglink.nolink");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+
+            List<ELFSharp.ELF.Sections.SymbolEntry<ulong>> files = binary.GetSymbolTableFiles();
+            files.Should().NotBeNull();
+            files.Should().BeEmpty();
+        }
+
+        #endregion
+
+        #region NormalizeAddress
+
+        [Fact]
+        public void NormalizeAddress_AddressInAllocatableSection_NormalizesCorrectly()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+
+            // The text section address should be valid
+            ulong textAddr = binary.TextSectionAddress;
+            textAddr.Should().NotBe(ulong.MaxValue);
+
+            // NormalizeAddress should not throw and should return a value
+            ulong normalized = binary.NormalizeAddress(binary.ELF.Sections
+                .First(s => s.Name == ".text").LoadAddress);
+            normalized.Should().BeGreaterThan(0UL);
+        }
+
+        [Fact]
+        public void NormalizeAddress_ZeroAddress_ReturnsOffsetFromCodeSegment()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+
+            // Address 0 is not in any section, so falls through to default path
+            ulong normalized = binary.NormalizeAddress(0);
+            // Should subtract CodeSegmentOffset (which wraps around for 0)
+            normalized.Should().Be(0UL - binary.CodeSegmentOffset);
+        }
+
+        #endregion
+
+        #region Properties
+
+        [Fact]
+        public void PublicSymbols_ValidBinary_ContainsSymbols()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+            binary.PublicSymbols.Should().NotBeNull();
+            binary.PublicSymbols.Count.Should().BeGreaterThan(0);
+        }
+
+        [Fact]
+        public void Is64bit_64BitBinary_ReturnsTrue()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+            binary.Is64bit.Should().BeTrue();
+        }
+
+        [Fact]
+        public void TextSectionAddress_ValidBinary_ReturnsNonMaxValue()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+            binary.TextSectionAddress.Should().NotBe(ulong.MaxValue);
+        }
+
+        [Fact]
+        public void DataSectionAddress_ValidBinary_ReturnsNonMaxValue()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+            binary.DataSectionAddress.Should().NotBe(ulong.MaxValue);
+        }
+
+        [Fact]
+        public void EhFrameAddress_ValidBinary_ReturnsNonMaxValue()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+            binary.EhFrameAddress.Should().NotBe(ulong.MaxValue);
+        }
+
+        [Fact]
+        public void CodeSegmentOffset_ValidBinary_IsAccessible()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+            // CodeSegmentOffset is derived from ProgramHeader segment; value depends on binary layout
+            // Just verify it's accessible without throwing
+            binary.CodeSegmentOffset.Should().BeGreaterThanOrEqualTo(0UL);
+        }
+
+        [Fact]
+        public void IsDebugOnlyFile_FullBinary_ReturnsFalse()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+            binary.IsDebugOnlyFile.Should().BeFalse();
+        }
+
+        [Fact]
+        public void IsDebugOnlyFile_DebugOnlyFile_ReturnsTrue()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/DebugFileType/AnotherLocalSymbolDirectory/gcc.objcopy.stripall.addgnudebuglink.dbg");
+            using var binary = new ElfBinary(new Uri(fileName));
+            binary.Valid.Should().BeTrue();
+            binary.IsDebugOnlyFile.Should().BeTrue();
+        }
+
+        #endregion
+
+        #region ForceComprehensiveParsing
+
+        [Fact]
+        public void Constructor_ForceComprehensiveParsing_LoadsAllLazyProperties()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName), forceComprehensiveParsing: true);
+            binary.Valid.Should().BeTrue();
+
+            // When forceComprehensiveParsing is true, all lazy properties should already be evaluated
+            binary.CompilationUnits.IsValueCreated.Should().BeTrue();
+            binary.LineNumberPrograms.IsValueCreated.Should().BeTrue();
+            binary.CommonInformationEntries.IsValueCreated.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Constructor_WithoutForceComprehensiveParsing_LazyPropertiesNotLoaded()
+        {
+            string fileName = Path.Combine(TestData, "Dwarf/hello-dwarf4-o2");
+            using var binary = new ElfBinary(new Uri(fileName), forceComprehensiveParsing: false);
+            binary.Valid.Should().BeTrue();
+
+            // Without forcing, lazy properties should not be evaluated yet
+            binary.CompilationUnits.IsValueCreated.Should().BeFalse();
+            binary.LineNumberPrograms.IsValueCreated.Should().BeFalse();
+            binary.CommonInformationEntries.IsValueCreated.Should().BeFalse();
+        }
+
+        #endregion
     }
 }
