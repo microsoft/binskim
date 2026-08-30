@@ -4,8 +4,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 using FluentAssertions;
 
@@ -201,6 +203,67 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             binary.DwarfVersion.Should().Be(5);
             binary.Compilers.Any(c => c.FullDescription.Contains("rustc"));
             binary.GetLanguage().Should().Be(DwarfLanguage.Rust);
+        }
+
+        [Fact]
+        public void DecompressSectionContents_Elf64CompressedSection_Decompresses()
+        {
+            byte[] originalContents = Encoding.ASCII.GetBytes("dwarf-v5-go-section");
+
+            byte[] compressedContents;
+            using (var compressedStream = new MemoryStream())
+            {
+                using (var zlibStream = new ZLibStream(compressedStream, CompressionLevel.SmallestSize, leaveOpen: true))
+                {
+                    zlibStream.Write(originalContents, 0, originalContents.Length);
+                }
+
+                compressedContents = compressedStream.ToArray();
+            }
+
+            using var sectionStream = new MemoryStream();
+            using (var writer = new BinaryWriter(sectionStream, Encoding.ASCII, leaveOpen: true))
+            {
+                writer.Write((uint)1);
+                writer.Write((uint)0);
+                writer.Write((ulong)originalContents.Length);
+                writer.Write((ulong)1);
+                writer.Write(compressedContents);
+            }
+
+            byte[] decompressedContents = ElfBinary.DecompressSectionContents(sectionStream.ToArray(), is64bit: true);
+
+            decompressedContents.Should().Equal(originalContents);
+        }
+
+        [Fact]
+        public void DecompressSectionContents_Elf32CompressedSection_Decompresses()
+        {
+            byte[] originalContents = Encoding.ASCII.GetBytes("dwarf-v5-go-section");
+
+            byte[] compressedContents;
+            using (var compressedStream = new MemoryStream())
+            {
+                using (var zlibStream = new ZLibStream(compressedStream, CompressionLevel.SmallestSize, leaveOpen: true))
+                {
+                    zlibStream.Write(originalContents, 0, originalContents.Length);
+                }
+
+                compressedContents = compressedStream.ToArray();
+            }
+
+            using var sectionStream = new MemoryStream();
+            using (var writer = new BinaryWriter(sectionStream, Encoding.ASCII, leaveOpen: true))
+            {
+                writer.Write((uint)1);
+                writer.Write((uint)originalContents.Length);
+                writer.Write((uint)1);
+                writer.Write(compressedContents);
+            }
+
+            byte[] decompressedContents = ElfBinary.DecompressSectionContents(sectionStream.ToArray(), is64bit: false);
+
+            decompressedContents.Should().Equal(originalContents);
         }
 
         [Fact]
