@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="addressNormalizer">Normalize address delegate (<see cref="NormalizeAddressDelegate"/>)</param>
         internal DwarfLineNumberProgram(int dwarfVersion,
                                         DwarfMemoryReader debugLine,
-                                        DwarfMemoryReader debugStrings,
+                                        IDwarfStringReader debugStrings,
                                         NormalizeAddressDelegate addressNormalizer)
         {
             Files = ReadData(dwarfVersion, debugLine, debugStrings, addressNormalizer);
@@ -179,7 +179,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <returns>List of file information.</returns>
         private static List<DwarfFileInformation> ReadData(int dwarfVersion,
                                                            DwarfMemoryReader debugLine,
-                                                           DwarfMemoryReader debugStrings,
+                                                           IDwarfStringReader debugStrings,
                                                            NormalizeAddressDelegate addressNormalizer)
         {
             // Read header
@@ -532,7 +532,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             return files;
         }
 
-        private static string ParsePathValue(DwarfFormat format, bool is64bit, DwarfMemoryReader debugLine, DwarfMemoryReader debugStrings)
+        private static string ParsePathValue(DwarfFormat format, bool is64bit, DwarfMemoryReader debugLine, IDwarfStringReader debugStrings)
         {
             switch (format)
             {

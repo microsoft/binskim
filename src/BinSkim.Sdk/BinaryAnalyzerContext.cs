@@ -25,7 +25,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                                                           this.SymbolPath,
                                                           this.LocalSymbolDirectories,
                                                           this.TracePdbLoads,
-                                                          this.ComprehensiveBinaryParsing);
+                                                          this.ComprehensiveBinaryParsing,
+                                                          this.DwarfStringSectionFileReadThreshold);
 
                 return this.iBinary;
             }
@@ -50,6 +51,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         }
 
         public bool TracePdbLoads { get; set; }
+
+        public ulong? DwarfStringSectionFileReadThreshold { get; set; }
 
         public string SymbolPath
         {

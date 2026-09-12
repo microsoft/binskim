@@ -49,6 +49,12 @@ namespace Microsoft.CodeAnalysis.IL
         public string LocalSymbolDirectories { get; internal set; }
 
         [Option(
+            "dwarf-string-read-threshold",
+            HelpText = "Use file-backed reads for DWARF string sections whose size is at least this many bytes. " +
+                       "By default, DWARF string sections are loaded into memory.")]
+        public ulong? DwarfStringSectionFileReadThreshold { get; set; }
+
+        [Option(
             "ignorePdbLoadError",
             HelpText = "If enabled, BinSkim won't break if we have a 'PdbLoadingException'.")]
         public bool? IgnorePdbLoadError { get; set; }
