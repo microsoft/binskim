@@ -116,6 +116,36 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                .WithMessage("*Invalid*None*BA2032*");
         }
 
+        [Fact]
+        public void ParseRuleSpecifiers_RuleIdWithEmptyLevel_ReturnsNullLevel()
+        {
+            Dictionary<string, FailureLevel?> result = MultithreadedAnalyzeCommand.ParseRuleSpecifiers(
+                new[] { "BA2001:" });
+
+            result.Should().ContainKey("BA2001");
+            result["BA2001"].Should().BeNull();
+        }
+
+        [Fact]
+        public void ParseRuleSpecifiers_RuleIdWithWhitespaceLevel_ReturnsNullLevel()
+        {
+            Dictionary<string, FailureLevel?> result = MultithreadedAnalyzeCommand.ParseRuleSpecifiers(
+                new[] { "BA2001:  " });
+
+            result.Should().ContainKey("BA2001");
+            result["BA2001"].Should().BeNull();
+        }
+
+        [Fact]
+        public void ParseRuleSpecifiers_TrimsWhitespaceFromRuleIdAndLevel()
+        {
+            Dictionary<string, FailureLevel?> result = MultithreadedAnalyzeCommand.ParseRuleSpecifiers(
+                new[] { " BA2001 : Error " });
+
+            result.Should().ContainKey("BA2001");
+            result["BA2001"].Should().Be(FailureLevel.Error);
+        }
+
         #endregion
 
         #region InitializeSkimmers

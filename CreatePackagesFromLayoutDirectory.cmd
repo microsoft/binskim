@@ -1,3 +1,6 @@
+::This cmd script is depracated and can be deleted - before deletion make sure you update both releasing pipelines to call BuildAndTest.cmd instead of this script.
+:: https://dev.azure.com/mseng/1ES/_releaseDefinition?definitionId=392&_a=definition-tasks&environmentId=741
+:: https://dev.azure.com/mseng/1ES/_release?view=all&_a=releases&definitionId=150
 ::Build NuGet packages step
 @ECHO off
 SETLOCAL

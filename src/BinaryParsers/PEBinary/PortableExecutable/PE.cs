@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
@@ -34,6 +35,14 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         internal SafePointer pImage; // pointer to the beginning of the file in memory
         private readonly MetadataReader metadataReader;
 
+        // Portable PDB state — opened lazily on first access, owned for the PE's lifetime,
+        // disposed in Dispose(). Keeping the provider rooted prevents the GC from collecting
+        // it while MetadataReader/BlobReader still point into its memory (IcM 798776046).
+        private MetadataReaderProvider portablePdbProvider;
+        private Stream portablePdbStream;
+        private MetadataReader portablePdbMetadataReader;
+        private bool portablePdbInitialized;
+
         // https://github.com/dotnet/runtime/blob/main/docs/design/specs/PortablePdb-Metadata.md#source-link-c-and-vb-compilers
         private static readonly Guid SourceLinkKind = new Guid("CC110556-A091-4D38-9FEC-25AB9A351A6A");
 
@@ -54,7 +63,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
                 this.IsPEFile = true;
 
-                this.pImage = new SafePointer(this.peReader.GetEntireImage().GetContent().ToBuilder().ToArray());
+                this.pImage = new SafePointer(ImmutableCollectionsMarshal.AsArray(this.peReader.GetEntireImage().GetContent()));
 
                 if (this.IsManaged)
                 {
@@ -90,6 +99,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public void Dispose()
         {
+            if (this.portablePdbProvider != null)
+            {
+                this.portablePdbProvider.Dispose();
+                this.portablePdbProvider = null;
+            }
+
+            if (this.portablePdbStream != null)
+            {
+                this.portablePdbStream.Dispose();
+                this.portablePdbStream = null;
+            }
+
+            this.portablePdbMetadataReader = null;
+
             if (this.peReader != null)
             {
                 this.peReader.Dispose();
@@ -299,32 +322,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                     return this.sha1Hash;
                 }
 
-                // processing buffer
-                byte[] buffer = new byte[4096];
-
-                // create the hash object
-                using (var sha1 = SHA1.Create()) //CodeQL [SM02196] File checksum for diagnostic dump command (non-cryptographic use)
-                {
-                    // open the input file
-                    using (var fs = new FileStream(this.FileName, FileMode.Open, FileAccess.Read))
-                    {
-                        int readBytes = -1;
-
-                        // pump the file through the hash
-                        do
-                        {
-                            readBytes = fs.Read(buffer, 0, buffer.Length);
-
-                            sha1.TransformBlock(buffer, 0, readBytes, buffer, 0);
-                        } while (readBytes > 0);
-
-                        // need to call this to finalize the calculations
-                        sha1.TransformFinalBlock(buffer, 0, readBytes);
-                    }
-
-                    // get the string representation
-                    this.sha1Hash = BitConverter.ToString(sha1.Hash).Replace("-", "");
-                }
+                byte[] hash = this.pImage.array != null
+                    ? SHA1.HashData(this.pImage.array) //CodeQL [SM02196] File checksum for diagnostic dump command (non-cryptographic use)
+                    : SHA1.HashData(File.ReadAllBytes(this.FileName)); //CodeQL [SM02196]
+                this.sha1Hash = BitConverter.ToString(hash).Replace("-", "");
 
                 return this.sha1Hash;
             }
@@ -341,7 +342,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
                 {
                     return this.sha256Hash;
                 }
-                this.sha256Hash = ComputeSha256Hash(this.FileName);
+
+                byte[] checksum = this.pImage.array != null
+                    ? SHA256.HashData(this.pImage.array)
+                    : SHA256.HashData(File.ReadAllBytes(this.FileName));
+                this.sha256Hash = BitConverter.ToString(checksum).Replace("-", string.Empty);
 
                 return this.sha256Hash;
             }
@@ -860,12 +865,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public string ManagedPdbGetSourceLinkDocument(Pdb pdb)
         {
-            if (!TryGetPortablePdbMetadataReader(pdb, out MetadataReader pdbMetadataReader))
+            MetadataReader reader = GetPortablePdbMetadataReader(pdb);
+            if (reader == null)
             {
                 return null;
             }
 
-            BlobReader sourceLinkReader = GetCustomDebugInformationReader(pdbMetadataReader, EntityHandle.ModuleDefinition, SourceLinkKind);
+            BlobReader sourceLinkReader = GetCustomDebugInformationReader(reader, EntityHandle.ModuleDefinition, SourceLinkKind);
             return sourceLinkReader.Length == 0 ? null : sourceLinkReader.ReadUTF8(sourceLinkReader.Length);
         }
 
@@ -886,42 +892,72 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         private ChecksumAlgorithmType ChecksumAlgorithmForPortablePdb(Pdb pdb)
         {
-            if (!TryGetPortablePdbMetadataReader(pdb, out MetadataReader pdbMetadataReader))
+            MetadataReader reader = GetPortablePdbMetadataReader(pdb);
+            if (reader == null)
             {
                 return ChecksumAlgorithmType.Unknown;
             }
 
-            foreach (Document doc in pdbMetadataReader.Documents.Select(document => pdbMetadataReader.GetDocument(document)))
+            DocumentHandle firstHandle = reader.Documents.FirstOrDefault();
+            if (firstHandle.IsNil)
             {
-                Guid hashGuid = pdbMetadataReader.GetGuid(doc.HashAlgorithm);
-                return GetChecksumAlgorithmType(hashGuid);
+                return ChecksumAlgorithmType.Unknown;
             }
 
-            return ChecksumAlgorithmType.Unknown;
+            Document doc = reader.GetDocument(firstHandle);
+            Guid hashGuid = reader.GetGuid(doc.HashAlgorithm);
+            return GetChecksumAlgorithmType(hashGuid);
         }
 
-        private bool TryGetPortablePdbMetadataReader(Pdb pdb, out MetadataReader pdbMetadataReader)
+        /// <summary>
+        /// Lazily opens the portable PDB and caches the MetadataReader for the PE's lifetime.
+        /// The provider and backing stream are stored as fields and disposed in PE.Dispose(),
+        /// preventing the GC lifetime bug (IcM 798776046) and the FileStream leak.
+        /// </summary>
+        private MetadataReader GetPortablePdbMetadataReader(Pdb pdb)
         {
-            if (!this.peReader.TryOpenAssociatedPortablePdb(
-                this.FileName,
-                filePath => File.Exists(filePath) ? File.OpenRead(filePath) : null,
-                out MetadataReaderProvider pdbProvider,
-                out _))
+            if (this.portablePdbInitialized)
             {
-                if (File.Exists(pdb.PdbLocation))
+                return this.portablePdbMetadataReader;
+            }
+
+            if (!this.peReader.TryOpenAssociatedPortablePdb(
+                    this.FileName,
+                    // PEReader may invoke this callback multiple times with candidate paths.
+                    // It disposes any returned stream it rejects, and takes ownership of the
+                    // accepted stream via the out provider. We track the latest returned stream
+                    // in a field so PE.Dispose() releases it deterministically; double-dispose
+                    // is safe because FileStream.Dispose is idempotent.
+                    filePath =>
+                    {
+                        if (!File.Exists(filePath))
+                        {
+                            return null;
+                        }
+
+                        this.portablePdbStream = File.OpenRead(filePath);
+                        return this.portablePdbStream;
+                    },
+                    out this.portablePdbProvider,
+                    out _))
+            {
+                if (pdb != null && File.Exists(pdb.PdbLocation))
                 {
-                    pdbProvider = MetadataReaderProvider.FromPortablePdbStream(File.OpenRead(pdb.PdbLocation));
+                    this.portablePdbStream?.Dispose();
+                    this.portablePdbStream = File.OpenRead(pdb.PdbLocation);
+                    this.portablePdbProvider = MetadataReaderProvider.FromPortablePdbStream(this.portablePdbStream);
                 }
 
-                if (pdbProvider == null)
+                if (this.portablePdbProvider == null)
                 {
-                    pdbMetadataReader = null;
-                    return false;
+                    this.portablePdbInitialized = true;
+                    return null;
                 }
             }
 
-            pdbMetadataReader = pdbProvider.GetMetadataReader();
-            return true;
+            this.portablePdbMetadataReader = this.portablePdbProvider.GetMetadataReader();
+            this.portablePdbInitialized = true;
+            return this.portablePdbMetadataReader;
         }
 
         private ChecksumAlgorithmType ChecksumAlgorithmForFullPdb(Pdb pdb)
