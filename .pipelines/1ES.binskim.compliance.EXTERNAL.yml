@@ -43,9 +43,9 @@ extends:
       - job: Compliance
         steps:
         - task: UseDotNet@2
-          displayName: 'Use .NET Core sdk 9'
+          displayName: 'Use .NET 10 SDK'
           inputs:
-              version: 9.x
+              version: 10.x
         - task: BatchScript@1
           displayName: 'Run script BuildAndTest.cmd' 
           inputs:
@@ -56,7 +56,7 @@ extends:
           inputs:
             toolVersion: Exact
             exactToolVersion: 4.3.1
-            AnalyzeTargetGlob: '$(Build.SourcesDirectory)/src/binskim/bld/bin/AnyCPU_Release/net9.0/**/*.dll;$(Build.SourcesDirectory)/src/binskim/bld/bin/AnyCPU_Release/net9.0/**/*.exe'
+            AnalyzeTargetGlob: '$(Build.SourcesDirectory)/src/binskim/bld/bin/BinSkim.Driver/release/**/*.dll;$(Build.SourcesDirectory)/src/binskim/bld/bin/BinSkim.Driver/release/**/*.exe'
             AnalyzeSymPath: 'Cache*$(Build.SourcesDirectory)\symbols;Srv*http://symweb'
             AnalyzeHashes: true
             AnalyzeStatistics: true
@@ -70,4 +70,3 @@ extends:
           continueOnError: true
         - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
           displayName: 'Publish Security Analysis Logs'
-

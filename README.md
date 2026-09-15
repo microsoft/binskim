@@ -27,7 +27,7 @@ If you only want to run the Binskim tool without installing anything, then you c
 1. Download BinSkim from **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**
 2. Rename the file extension from .nupkg to .zip (ie. via commandline: `rename microsoft.codeanalysis.binskim.x.y.z.nupkg microsoft.codeanalysis.binskim.x.y.z.zip`)
 3. Unzip
-4. Executable files are now available in the OS specific folder within _tools\netcoreapp3.1_ (ie. linux-x64, win-x64, and osx-x64).
+4. Executable files are available in the OS-specific folder under `tools\net9.0` (for example, `linux-x64`, `win-x64`, or `osx-x64`). The `net9.0` package folder name is retained for compatibility; the contained self-contained executables target .NET 10.
 5. Navigate to this location to invoke the executable:
     - Windows: `binskim.exe analyze c:\bld\*.dll --recurse true --output MyRun.sarif`
     - Linux/Unix: `./BinSkim analyze /someDirectory/testBinary -o MyRun.sarif`

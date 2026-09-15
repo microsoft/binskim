@@ -86,10 +86,10 @@ extends:
             condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
 
           - task: UseDotNet@2
-            displayName: .NET Core 9 sdk
+            displayName: .NET 10 SDK
             condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
             inputs:
-              version: "9.0.x"
+              version: "10.0.x"
               packageType: sdk
 
           - task: DotNetCoreCLI@2
