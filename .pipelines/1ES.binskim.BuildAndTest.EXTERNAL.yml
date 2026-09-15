@@ -2,6 +2,11 @@ name: BuildAndTestBinskim
 trigger:
   - "*"
 
+# GitHub CodeQL validates pull requests, and the dedicated ADO compliance
+# pipeline retains 1ES CodeQL coverage on main.
+variables:
+  Codeql.SkipTaskAutoInjection: true
+
 resources:
   repositories:
   - repository: 1ESPipelineTemplates
@@ -77,6 +82,7 @@ extends:
                 fi
 
           - checkout: self
+            fetchDepth: 1
             condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
 
           - task: UseDotNet@2
