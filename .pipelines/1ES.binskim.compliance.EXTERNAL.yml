@@ -54,8 +54,6 @@ extends:
         - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@4
           displayName: 'Run BinSkim '
           inputs:
-            toolVersion: Exact
-            exactToolVersion: 4.4.9
             AnalyzeSymPath: 'Cache*$(Build.SourcesDirectory)\symbols;Srv*http://symweb'
             AnalyzeHashes: true
             AnalyzeStatistics: true
