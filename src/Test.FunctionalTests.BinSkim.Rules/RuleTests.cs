@@ -5,14 +5,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
+using Microsoft.Win32;
 
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
@@ -93,17 +96,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             foreach (string target in targets)
             {
                 context = CreateContext(logger, policy, target);
-
-                if (!context.IsValidAnalysisTarget) { continue; }
-
-                context.Rule = skimmer;
-
-                if (skimmer.CanAnalyze(context, out string reasonForNotAnalyzing) != AnalysisApplicability.ApplicableToSpecifiedTarget)
+                try
                 {
-                    continue;
-                }
+                    if (!context.IsValidAnalysisTarget) { continue; }
 
-                skimmer.Analyze(context);
+                    context.Rule = skimmer;
+
+                    if (skimmer.CanAnalyze(context, out string reasonForNotAnalyzing) != AnalysisApplicability.ApplicableToSpecifiedTarget)
+                    {
+                        continue;
+                    }
+
+                    skimmer.Analyze(context);
+                }
+                finally
+                {
+                    context.Dispose();
+                }
             }
 
             var failTargets = new HashSet<string>(logger.ErrorTargets.Union(logger.WarningTargets));
@@ -401,7 +410,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         private static HashSet<string> GetTestFilesMatchingConditions(HashSet<string> metadataConditions)
         {
-            string testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "BaselineTestData");
+            string testFilesDirectory = GetTestDirectory("Test.FunctionalTests.BinSkim.Driver", "BaselineTestData");
 
             Assert.True(Directory.Exists(testFilesDirectory));
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -531,6 +540,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 result.Add(Path.Combine(testFilesDirectory, "ARM64_dotnet_CETShadowStack_NotApplicable.exe"));
             }
 
+            if (metadataConditions.Contains(MetadataConditions.ImageIsRustBinary))
+            {
+                result.Add(Path.Combine(testFilesDirectory, "Rust_cargo_+ms-prod_build.exe"));
+            }
             return result;
         }
 
@@ -1193,6 +1206,49 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2022_SignSecurely_LongPath_Pass()
+        {
+            const int maxPath = 260;
+
+            if (!OperatingSystem.IsWindows()) { return; }
+
+            const string fileSystemKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem";
+            if (!Equals(Registry.GetValue(fileSystemKey, "LongPathsEnabled", defaultValue: 0), 1))
+            {
+                throw SkipException.ForSkip("Windows long-path support is not enabled.");
+            }
+
+            string kernel32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
+            kernel32Path = Path.Combine(kernel32Path, "kernel32.dll");
+
+            string tempRoot = Path.Combine(Path.GetTempPath(), $"{nameof(BA2022_SignSecurely_LongPath_Pass)}-{Guid.NewGuid():N}");
+            string longDirectory = tempRoot;
+            string targetFile = "";
+
+            try
+            {
+                do
+                {
+                    longDirectory = Path.Combine(longDirectory, new string('a', 32));
+                    targetFile = Path.Combine(longDirectory, Path.GetFileName(kernel32Path));
+                } while (targetFile.Length <= maxPath);
+
+                Directory.CreateDirectory(longDirectory);
+                File.Copy(kernel32Path, targetFile);
+
+                Assert.True(targetFile.Length > maxPath);
+                this.VerifyPass(new SignSecurely(), additionalTestFiles: new[] { targetFile });
+            }
+            finally
+            {
+                if (Directory.Exists(tempRoot))
+                {
+                    Directory.Delete(tempRoot, recursive: true);
+                }
+            }
+        }
+
+        [Fact]
         public void BA2022_SignSecurely_NotApplicable()
         {
             var applicableTo = new HashSet<string> { MetadataConditions.ImageIsNotSigned };
@@ -1269,10 +1325,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             {
                 MetadataConditions.ImageIsNativeUniversalWindowsPlatformBinary,
                 MetadataConditions.ImageIsResourceOnlyBinary,
-                MetadataConditions.ImageIsILOnlyAssembly
+                MetadataConditions.ImageIsILOnlyAssembly,
+                MetadataConditions.ImageIsRustBinary
             };
-
-            this.VerifyApplicability(new EnableMicrosoftCompilerSdlSwitch(), notApplicableTo);
+            if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())
+            {
+                this.VerifyApplicability(new EnableMicrosoftCompilerSdlSwitch(), notApplicableTo);
+            }
         }
 
         [Fact]

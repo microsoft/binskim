@@ -7,6 +7,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     {
         Gcc,
         Clang,
+        Rust,
         Unknown
     }
 }

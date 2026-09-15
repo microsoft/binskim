@@ -122,7 +122,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             };
             var compilerOptions = new PropertiesDictionary
             {
-                { "CsvOutputPath", @"C:\temp\" }
+                { "CsvOutputPath", Path.GetTempPath() }
             };
 
             context.Policy = new PropertiesDictionary
@@ -141,7 +141,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         {
             var fileSystem = new Mock<IFileSystem>();
             fileSystem.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
-            using BinaryAnalyzerContext context = CreateTestContext(forceOverwrite: true, targetUriPath: @"C:\temp\");
+            using BinaryAnalyzerContext context = CreateTestContext(forceOverwrite: true, targetUriPath: Path.GetTempPath());
             using var compilerDataLogger = new CompilerDataLogger(GetExampleSarifPath(Sarif.SarifVersion.Current),
                                                                   Sarif.SarifVersion.Current,
                                                                   context,
@@ -234,7 +234,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         [Fact]
         public void CompilerDataLogger_Dispose_ShouldNotLogSummaryIfDisabled()
         {
-            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
+            string sarifLogPath = Path.Combine(BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
             var fileSystem = new Mock<IFileSystem>();
             using BinaryAnalyzerContext context = CreateTestContext();
 
@@ -289,7 +289,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         [Fact]
         public void CompilerDataLogger_WriteException_ShouldLogExecutionExceptions()
         {
-            string sarifLogPath = Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
+            string sarifLogPath = Path.Combine(BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
             using BinaryAnalyzerContext context = CreateTestContext();
             List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
                                                               sarifVersion: Sarif.SarifVersion.Current,
@@ -341,6 +341,58 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             compilerDataLogger.CreateCsvOutputFile(csvFilePath: null, overwriteExistingCsv: false);
         }
 
+        [Fact]
+        public void CompilerDataLogger_Write_ShouldEmitSourceLinkJsonId_WhenPresent()
+        {
+            using BinaryAnalyzerContext context = CreateTestContext();
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger logger);
+
+            string expectedId = Guid.NewGuid().ToString();
+            var compilerData = new CompilerData
+            {
+                CompilerName = ".NET Compiler",
+                SourceLinkJsonId = expectedId,
+            };
+
+            logger.Write(context, compilerData);
+
+            List<EventTelemetry> compilerEvents = telemetryEventOutput
+                .OfType<EventTelemetry>()
+                .Where(e => e.Name == CompilerDataLogger.CompilerEventName)
+                .ToList();
+
+            compilerEvents.Count.Should().Be(1);
+            compilerEvents[0].Properties.Should().ContainKey(CompilerDataLogger.SourceLinkJsonId);
+            compilerEvents[0].Properties[CompilerDataLogger.SourceLinkJsonId].Should().Be(expectedId);
+        }
+
+        [Fact]
+        public void CompilerDataLogger_Write_ShouldNotEmitSourceLinkJsonId_WhenNull()
+        {
+            using BinaryAnalyzerContext context = CreateTestContext();
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger logger);
+
+            var compilerData = new CompilerData
+            {
+                CompilerName = ".NET Compiler",
+                SourceLinkJsonId = null,
+            };
+
+            logger.Write(context, compilerData);
+
+            List<EventTelemetry> compilerEvents = telemetryEventOutput
+                .OfType<EventTelemetry>()
+                .Where(e => e.Name == CompilerDataLogger.CompilerEventName)
+                .ToList();
+
+            compilerEvents.Count.Should().Be(1);
+            compilerEvents[0].Properties.Should().NotContainKey(CompilerDataLogger.SourceLinkJsonId);
+        }
+
         private List<ITelemetry> TestSetup(BinaryAnalyzerContext context,
                                            Sarif.SarifVersion sarifVersion,
                                            out CompilerDataLogger logger,
@@ -379,7 +431,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
         private BinaryAnalyzerContext CreateTestContext(bool forceOverwrite = false, string outputPath = null, string targetUriPath = null)
         {
-            string csvOutputPath = outputPath ?? @$"C:\temp\{Guid.NewGuid()}.csv";
+            string csvOutputPath = outputPath ?? Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.csv");
             targetUriPath = targetUriPath ?? TargetUriPath;
 
             var context = new BinaryAnalyzerContext()
@@ -758,7 +810,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         public static string GetExampleSarifPath(Sarif.SarifVersion sarifVersion)
         {
             return sarifVersion == Sarif.SarifVersion.Current
-                ? Path.Combine(PEBinaryTests.BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath)
+                ? Path.Combine(BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath)
                 : Path.Combine(GetTestDirectory("Test.UnitTests.BinSkim.Driver"), "Samples", "Native_x86_VS2019_SDL_Enabled_Sarif.v1.0.0.sarif");
         }
 

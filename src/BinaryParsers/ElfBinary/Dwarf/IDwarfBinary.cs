@@ -14,12 +14,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// The version of Dwarf used.
         /// </summary>
-        public int DwarfVersion { get; set; }
+        int DwarfVersion { get; set; }
 
         /// <summary>
         /// Unit type of Dwarf used.
         /// </summary>
-        public DwarfUnitType DwarfUnitType { get; set; }
+        DwarfUnitType DwarfUnitType { get; set; }
 
         /// <summary>
         /// Gets the debug data.
@@ -95,12 +95,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Gets or sets the CommandLineInfos.
         /// </summary>
-        public List<DwarfCompileCommandLineInfo> CommandLineInfos { get; }
+        List<DwarfCompileCommandLineInfo> CommandLineInfos { get; }
 
         /// <summary>
         /// Gets language from dwarf CompilationUnits.
         /// </summary>
         /// <returns>Dwarf language.</returns>
-        public DwarfLanguage GetLanguage();
+        DwarfLanguage GetLanguage();
     }
 }

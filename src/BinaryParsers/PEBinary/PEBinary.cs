@@ -9,6 +9,7 @@ using System.Text;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
+using Microsoft.Win32.SafeHandles;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers
 {
@@ -110,6 +111,25 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             this.DisposePortableExecutableData();
         }
 
+        /// <summary>
+        /// Attempts to construct a PEBinary. Returns null if the file is not a valid PE.
+        /// </summary>
+        public static PEBinary TryLoadBinary(
+            Uri uri,
+            string symbolPath = null,
+            string localSymbolDirectories = null,
+            bool tracePdbLoad = false)
+        {
+            var binary = new PEBinary(uri, symbolPath, localSymbolDirectories, tracePdbLoad);
+            if (binary.Valid)
+            {
+                return binary;
+            }
+
+            binary.Dispose();
+            return null;
+        }
+
         public static bool CanLoadBinary(Uri uri)
         {
             // TODO: replace this with an actual sniff of PDB binary data.
@@ -120,10 +140,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             try
             {
-                using (FileStream fs = File.OpenRead(Path.GetFullPath(uri.LocalPath)))
-                {
-                    return PE.CheckPEMagicBytes(fs);
-                }
+                string fullPath = Path.GetFullPath(uri.LocalPath);
+                using SafeFileHandle handle = File.OpenHandle(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                Span<byte> header = stackalloc byte[2];
+                int bytesRead = RandomAccess.Read(handle, header, 0);
+                return bytesRead == 2 && header[0] == (byte)'M' && header[1] == (byte)'Z';
             }
             catch (IOException) { return false; }
             catch (ArgumentException) { return false; }

@@ -19,6 +19,19 @@ extends:
   parameters:
     customBuildTags:
     - 1ES.PT.ViaStartRight
+    sdl:
+      severity: Error
+      sourceAnalysisPool: pool-1espt-mseng
+      codeql:
+        compiled:
+          enabled: true
+      binskim:
+        enabled: true
+        scanOutputDirectoryOnly: true
+        severity: Warning
+        analyzeTargetGlob: "+:file|**\\*.dll;+:file|**\\*.dll;-:f|**/Test.*/**/*.exe;-:f|**/Test.*/**/*.dll;-:f|**/packages/**/*.exe;-:f|**/packages/**/*.dll;"
+      spmi:
+        enabled: true
     pool:
       name: pool-1espt-mseng
       image: pool-1espt-mseng-image

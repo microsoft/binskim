@@ -27,6 +27,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bld\bin\x64_$configuration$\net9.0\BinaryParsers.dll" target="lib\net9.0" />
+    <file src="bld\bin\BinaryParsers\$configuration$\BinaryParsers.dll" target="lib\net9.0" />
   </files>
 </package>

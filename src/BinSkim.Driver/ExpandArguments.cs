@@ -50,9 +50,16 @@ namespace Microsoft.CodeAnalysis.IL
             {
                 string responseFilePath = responseFileLine;
 
-                // Ignore comments from response file lines
+                // Ignore full-line comments and trim inline comments that are preceded by whitespace.
+                // This ensures that paths containing a '#' character (e.g., C#) are not truncated.
+                string trimmedLine = responseFileLine.TrimStart();
+                if (trimmedLine.StartsWith("#", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
                 int commentIndex = responseFileLine.IndexOf('#');
-                if (commentIndex >= 0)
+                if (commentIndex > 0 && char.IsWhiteSpace(responseFileLine[commentIndex - 1]))
                 {
                     responseFilePath = responseFileLine.Substring(0, commentIndex);
                 }

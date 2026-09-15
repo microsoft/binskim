@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json",
   "version": "2.1.0",
   "runs": [
@@ -19,7 +19,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
                   "index": 0
                 }
               }
@@ -41,7 +41,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
                   "index": 0
                 }
               }
@@ -63,7 +63,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
                   "index": 0
                 }
               }
@@ -85,7 +85,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
                   "index": 0
                 }
               }
@@ -107,7 +107,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
                   "index": 0
                 }
               }
@@ -128,7 +128,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
                   "index": 0
                 }
               }
@@ -149,7 +149,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
+                  "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
                   "index": 0
                 }
               }
@@ -159,8 +159,7 @@
       ],
       "tool": {
         "driver": {
-          "name": "testhost",
-          "version": "15.0.0.0",
+          "name": "BinSkim",
           "rules": [
             {
               "id": "BA3001",
@@ -325,10 +324,7 @@
               },
               "helpUri": "https://github.com/microsoft/binskim/blob/main/docs/BinSkimRules.md#rule-BA3031EnableClangSafeStack"
             }
-          ],
-          "properties": {
-            "comments": "A security and correctness analyzer for portable executable and MSIL formats."
-          }
+          ]
         }
       },
       "invocations": [
@@ -339,13 +335,8 @@
       "artifacts": [
         {
           "location": {
-            "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
+            "uri": "src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/clang.shared_library.so",
             "index": 0
-          },
-          "hashes": {
-            "md5": "83EBA64D285AD1AB64BA27842960220E",
-            "sha-1": "7F58072C003103D24FA43C6F382B4A8644B400E5",
-            "sha-256": "9FE60C0B55670071C5C76E65EE2DE9FC9ABE037EC2B3A64BE46D4B8330E36525"
           }
         }
       ],

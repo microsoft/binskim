@@ -2,10 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., build.netcore.props))\build.netcore.props" />
   <PropertyGroup>
-    <TargetFrameworks>$(NetCoreVersion)</TargetFrameworks>
+    <TargetFramework>$(NetCoreVersion)</TargetFramework>
     <OutputType>Library</OutputType>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
-    <Platforms>x64</Platforms>
   </PropertyGroup>
   <PropertyGroup>
     <RunSettingsFilePath>$(MSBuildProjectDirectory)\BaselineTests.runsettings</RunSettingsFilePath>
@@ -20,10 +19,6 @@
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="System.Collections.Immutable" />
     <PackageReference Include="xunit" />
-    <PackageReference Include="xunit.runner.console">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -35,9 +30,7 @@
     <ProjectReference Include="..\BinSkim.Driver\BinSkim.Driver.csproj" />
     <ProjectReference Include="..\BinSkim.Rules\BinSkim.Rules.csproj" />
     <ProjectReference Include="..\BinSkim.Sdk\BinSkim.Sdk.csproj" />
-    <ProjectReference Include="..\Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj" />
     <ProjectReference Include="..\Test.UnitTests.BinSkim.Driver\Test.UnitTests.BinSkim.Driver.csproj" />
-    <ProjectReference Include="..\Test.UnitTests.BinSkim.Rules\Test.UnitTests.BinSkim.Rules.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BaselineTestData\**\*">

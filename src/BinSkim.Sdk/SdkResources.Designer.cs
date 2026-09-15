@@ -169,6 +169,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is Arm64EC binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsArm64ECBinary {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsArm64ECBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is an ARM binary.
         /// </summary>
         internal static string MetadataCondition_ImageIsArmBinary {
@@ -228,15 +237,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageIsDotNetNativeBootstrapExe {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsDotNetNativeBootstrapExe", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to image is non Windows .NET assembly.
-        /// </summary>
-        internal static string MetadataCondition_ImageIsNonWindowsDotNetAssembly {
-            get {
-                return ResourceManager.GetString("MetadataCondition_ImageIsNonWindowsDotNetAssembly", resourceCulture);
             }
         }
         
@@ -304,6 +304,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is a non-Windows .NET R2R or NativeAOT assembly.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNonWindowsDotNetAssembly {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNonWindowsDotNetAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is not a 32-bit binary.
         /// </summary>
         internal static string MetadataCondition_ImageIsNot32BitBinary {
@@ -367,6 +376,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to image is not rust binary.
+        /// </summary>
+        internal static string MetadataCondition_ImageIsNotRustBinary {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsNotRustBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to image is not signed .
         /// </summary>
         internal static string MetadataCondition_ImageIsNotSigned {
@@ -399,6 +417,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk {
         internal static string MetadataCondition_ImageIsResourceOnlyBinary {
             get {
                 return ResourceManager.GetString("MetadataCondition_ImageIsResourceOnlyBinary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Looks up a localized string similar to image is a Rust binary..
+        /// </summary>
+        internal static string MetadataCondition_ImageIsRustBinary {
+            get {
+                return ResourceManager.GetString("MetadataCondition_ImageIsRustBinary", resourceCulture);
             }
         }
         

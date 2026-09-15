@@ -87,6 +87,19 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             set => this.Policy.SetProperty(BinaryParsersProperties.IgnorePELoadError, value);
         }
 
+        public bool IgnoreBinaryAnalysisErrors
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.IgnoreBinaryAnalysisErrors) == true;
+            set => this.Policy.SetProperty(BinaryParsersProperties.IgnoreBinaryAnalysisErrors, value);
+        }
+
+        /// <summary>
+        /// When true, exception stack traces are included in warning messages
+        /// logged by the --ignoreBinaryAnalysisErrors feature. Set to true
+        /// when the user specifies any --trace option.
+        /// </summary>
+        public bool VerboseErrors { get; set; }
+
         public bool DisableTelemetry
         {
             get => this.Policy?.GetProperty(BinaryParsersProperties.DisableTelemetry) == true;
@@ -97,6 +110,16 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             get => this.Policy?.GetProperty(BinaryParsersProperties.IncludeWixBinaries) == true;
             set => this.Policy.SetProperty(BinaryParsersProperties.IncludeWixBinaries, value);
+        }
+
+
+        // This property is used to normalize paths in analysis results in
+        // test baseline files. When non-null, this also triggers other SARIF
+        // log stabilization, such as eliding certain version strings.
+        public string EnlistmentRootToNormalize
+        {
+            get => this.Policy?.GetProperty(BinaryParsersProperties.EnlistmentRootToNormalize);
+            set => this.Policy.SetProperty(BinaryParsersProperties.EnlistmentRootToNormalize, value);
         }
 
         internal bool disposed = false;

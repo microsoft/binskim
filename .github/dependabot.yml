@@ -6,6 +6,8 @@ updates:
     open-pull-requests-limit: 10
     schedule:
       interval: 'weekly'
+    cooldown:
+      default-days: 7
     # target-branch: 'develop'
     # assignees:
     #   - assignee_one

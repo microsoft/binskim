@@ -401,26 +401,6 @@
           ]
         },
         {
-          "ruleId": "BA2025",
-          "ruleIndex": 17,
-          "message": {
-            "id": "Warning",
-            "arguments": [
-              "Native_x86_VS2019_SDL_Enabled.exe"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "file:///Z:/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Native_x86_VS2019_SDL_Enabled.exe",
-                  "index": 0
-                }
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "BA2026",
           "ruleIndex": 18,
           "kind": "pass",

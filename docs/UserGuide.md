@@ -56,6 +56,8 @@ The **`analyze`** command supports the following additional arguments:
 | **`--level`** | Failure levels, expressed as a semicolon-delimited list enclosed in double quotes, that is used to filter the scan results. Valid values: Error, Warning and Note. |
 | **`--kind`** | Result kinds, expressed as a semicolon-delimited list enclosed in double quotes, that is used to filter the scan results. Valid values: Fail (for literal scan results), Pass, Review, Open, NotApplicable and Informational. |
 | **`--baseline`** | A Sarif file to be used as baseline. |
+| **`--enable-disabled-rules`** | Rules to enable that are otherwise disabled by default, expressed as a semicolon-delimited list enclosed in double quotes. Each entry is `RuleId` or `RuleId:Level` where Level is Error, Warning, or Note. If Level is omitted, the rule's default level is used. Example: `"BA2032:Note;BA2029"` |
+| **`--run-only-rules`** | Disable all rules and enable only those specified, expressed as a semicolon-delimited list enclosed in double quotes. Each entry is `RuleId` or `RuleId:Level` where Level is Error, Warning, or Note. If Level is omitted, the rule's default level is used. Example: `"BA4001;BA2032:Note"` |
 | **`-v, --sarif-output-version`** | (Default: Current) The SARIF version of the output log file. Valid values are OneZeroZero and Current |
 
 In addition to the named arguments above, BinSkim accepts one or more specifiers to a file, directory, or filter pattern that resolves to one or more binaries to analyze. Arguments can include wild cards, relative paths (in which case the file or directory path is resolved relative to the current working directory), and environment variables.

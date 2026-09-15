@@ -58,6 +58,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal const string AssemblyReferencesId = "assemblyReferencesId";
         internal const string NumberOfBinaryAnalyzed = "numberOfBinaryAnalyzed";
         internal const string ChunkedAssemblyReferences = "chunkedassemblyReferences";
+        internal const string SourceLinkJson = "sourceLinkJson";
+        internal const string SourceLinkJsonId = "sourceLinkJsonId";
+        internal const string SourceLinkJsonEventName = "SourceLinkJsonInformation";
 
         // This object is required to synchronize multi-threaded writes
         // to the CSV writer only. The AppInsights client is already
@@ -235,8 +238,13 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 { "moduleName", compilerData.ModuleName ?? string.Empty },
                 { "moduleLibrary", (compilerData.ModuleName == compilerData.ModuleLibrary ? string.Empty : compilerData.ModuleLibrary ?? string.Empty) },
                 { "hash", fileHash },
-                { "error", string.Empty }
+                { "error", string.Empty },
             };
+
+            if (!string.IsNullOrWhiteSpace(compilerData.SourceLinkJsonId))
+            {
+                properties.Add(SourceLinkJsonId, compilerData.SourceLinkJsonId);
+            }
 
             if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
             {
@@ -362,6 +370,28 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     { $"chunked{contentName}", chunkedContent },
                 });
             }
+        }
+
+        /// <summary>
+        /// Sends SourceLink JSON as chunked telemetry events and returns the
+        /// correlation ID. Returns null if telemetry is not configured or the
+        /// input is empty.
+        /// </summary>
+        internal string WriteSourceLinkJson(string sourceLinkJson)
+        {
+            if (this.telemetryClient == null || string.IsNullOrWhiteSpace(sourceLinkJson))
+            {
+                return null;
+            }
+
+            string sourceLinkJsonId = Guid.NewGuid().ToString();
+
+            SendChunkedContent(SourceLinkJsonEventName,
+                               sourceLinkJsonId,
+                               SourceLinkJson,
+                               sourceLinkJson);
+
+            return sourceLinkJsonId;
         }
 
         internal int CalculateChunkedContentSize(int contentLength)

@@ -17,11 +17,15 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                                                 bool tracePdbLoad = false,
                                                 bool forceComprehensiveParsing = false)
         {
-            if (PEBinary.CanLoadBinary(uri))
+            // TryLoadBinary avoids the separate CanLoadBinary sniff,
+            // eliminating a redundant file open for every PE file.
+            IBinary binary = PEBinary.TryLoadBinary(uri, symbolPath, localSymbolDirectories, tracePdbLoad);
+            if (binary != null)
             {
-                return new PEBinary(uri, symbolPath, localSymbolDirectories, tracePdbLoad);
+                return binary;
             }
-            else if (ElfBinary.CanLoadBinary(uri))
+
+            if (ElfBinary.CanLoadBinary(uri))
             {
                 return new ElfBinary(uri, localSymbolDirectories, forceComprehensiveParsing);
             }

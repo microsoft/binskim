@@ -59,9 +59,41 @@ namespace Microsoft.CodeAnalysis.IL
         public bool? IgnorePELoadError { get; set; }
 
         [Option(
+            "ignoreBinaryAnalysisErrors",
+            HelpText = "If enabled, BinSkim will not disable a rule or return a failure exit code when "
+                     + "the rule throws an exception on a specific target (e.g. a corrupt or tampered "
+                     + "binary). The rule remains active for subsequent targets.")]
+        public bool? IgnoreBinaryAnalysisErrors { get; set; }
+
+        [Option(
             "disable-telemetry",
             HelpText = "If enabled, BinSkim will disable telemetry.")]
         public bool? DisableTelemetry { get; set; }
+
+        [Option(
+            "disable-archive-extraction",
+            HelpText = "If enabled, BinSkim will not extract and scan files inside archive formats " +
+                       "(ZIP, OPC packages, etc.). By default, the SARIF driver recursively extracts " +
+                       "archives up to a depth of 10.")]
+        public bool? DisableArchiveExtraction { get; set; }
+
+        [Option(
+            "enable-disabled-rules",
+            Separator = ';',
+            HelpText = "Rules to enable that are otherwise disabled by default, expressed as a semicolon-delimited " +
+                       "list enclosed in double quotes. Each entry is RuleId or RuleId:Level where Level is " +
+                       "Error, Warning, or Note. If Level is omitted, the rule's default level is used. " +
+                       "Example: \"BA2032:Note;BA2029\"")]
+        public IEnumerable<string> EnableRules { get; set; } = Array.Empty<string>();
+
+        [Option(
+            "run-only-rules",
+            Separator = ';',
+            HelpText = "Disable all rules and enable only those specified, expressed as a semicolon-delimited " +
+                       "list enclosed in double quotes. Each entry is RuleId or RuleId:Level where Level is " +
+                       "Error, Warning, or Note. If Level is omitted, the rule's default level is used. " +
+                       "Example: \"BA4001;BA2032:Note\"")]
+        public IEnumerable<string> RunOnlyRules { get; set; } = Array.Empty<string>();
 
         [Option(
             's',
@@ -73,8 +105,15 @@ namespace Microsoft.CodeAnalysis.IL
         [Option(
             'h',
             "hashes",
-            HelpText = "Output MD5, SHA1, and SHA-256 hash of analysis targets when emitting SARIF reports.")]
+            HelpText = "Output SHA1, and SHA-256 hash of analysis targets when emitting SARIF reports.")]
         [Obsolete("Use --insert instead, passing 'Hashes' along with any other references to data to be inserted.")]
         public bool ComputeFileHashes { get; set; }
+
+
+        // Hidden option for test normalization purposes.
+        [Option("enlistment-root",
+                HelpText = "BinSkim enlistment root. Used for normalizing test outputs.",
+                Hidden = true)]
+        public string EnlistmentRoot { get; set; }
     }
 }
