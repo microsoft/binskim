@@ -9,6 +9,12 @@
     </security>
   </trustInfo>
 
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings>
+      <longPathAware xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">true</longPathAware>
+    </windowsSettings>
+  </application>
+
   <file name="msdia140.dll">
     <comClass description="Debug Information Accessor" clsid="{E6756135-1E65-4D17-8576-610761398C3C}" threadingModel = "Both"/>
   </file>
