@@ -15,7 +15,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                                                 string symbolPath = null,
                                                 string localSymbolDirectories = null,
                                                 bool tracePdbLoad = false,
-                                                bool forceComprehensiveParsing = false)
+                                                bool forceComprehensiveParsing = false,
+                                                ulong? dwarfStringSectionFileReadThreshold = null)
         {
             // TryLoadBinary avoids the separate CanLoadBinary sniff,
             // eliminating a redundant file open for every PE file.
@@ -27,7 +28,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
             if (ElfBinary.CanLoadBinary(uri))
             {
-                return new ElfBinary(uri, localSymbolDirectories, forceComprehensiveParsing);
+                return new ElfBinary(uri,
+                                     localSymbolDirectories,
+                                     forceComprehensiveParsing,
+                                     dwarfStringSectionFileReadThreshold);
             }
             else if (MachOBinary.CanLoadBinary(uri))
             {

@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     /// Simple memory reader that provides specific functionality to read DWARF streams.
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    public class DwarfMemoryReader : IDisposable
+    public class DwarfMemoryReader : IDwarfStringReader
     {
         /// <summary>
         /// The pinned data

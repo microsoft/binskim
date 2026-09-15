@@ -102,6 +102,7 @@ namespace Microsoft.CodeAnalysis.IL
             }
 
             context.LocalSymbolDirectories = options.LocalSymbolDirectories ?? context.LocalSymbolDirectories;
+            context.DwarfStringSectionFileReadThreshold = options.DwarfStringSectionFileReadThreshold;
             context.TracePdbLoads = options.Trace.Contains(nameof(Traces.PdbLoad));
             context.VerboseErrors = options.Trace.Any();
 
@@ -283,6 +284,7 @@ namespace Microsoft.CodeAnalysis.IL
             scanTargetContext.IgnorePELoadError = context.IgnorePELoadError;
             scanTargetContext.IgnoreBinaryAnalysisErrors = context.IgnoreBinaryAnalysisErrors;
             scanTargetContext.LocalSymbolDirectories = context.LocalSymbolDirectories;
+            scanTargetContext.DwarfStringSectionFileReadThreshold = context.DwarfStringSectionFileReadThreshold;
             scanTargetContext.TracePdbLoads = context.TracePdbLoads;
             scanTargetContext.VerboseErrors = context.VerboseErrors;
 
