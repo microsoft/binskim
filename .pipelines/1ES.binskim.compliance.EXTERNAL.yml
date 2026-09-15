@@ -55,8 +55,7 @@ extends:
           displayName: 'Run BinSkim '
           inputs:
             toolVersion: Exact
-            exactToolVersion: 4.3.1
-            AnalyzeTargetGlob: '$(Build.SourcesDirectory)/src/binskim/bld/bin/BinSkim.Driver/release/**/*.dll;$(Build.SourcesDirectory)/src/binskim/bld/bin/BinSkim.Driver/release/**/*.exe'
+            exactToolVersion: 4.4.9
             AnalyzeSymPath: 'Cache*$(Build.SourcesDirectory)\symbols;Srv*http://symweb'
             AnalyzeHashes: true
             AnalyzeStatistics: true
