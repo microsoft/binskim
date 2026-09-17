@@ -9,9 +9,9 @@ jobs:
       - checkout: self
 
       - task: UseDotNet@2
-        displayName: .NET Core 9 sdk
+        displayName: .NET 10 SDK
         inputs:
-          version: "9.0.x"
+          version: "10.0.x"
           packageType: sdk
 
       - task: Bash@3
@@ -25,9 +25,9 @@ jobs:
       vmImage: "windows-latest"
     steps:
       - task: UseDotNet@2
-        displayName: .NET Core 9 sdk
+        displayName: .NET 10 SDK
         inputs:
-          version: "9.0.x"
+          version: "10.0.x"
           packageType: sdk
 
       - checkout: self
@@ -44,9 +44,9 @@ jobs:
       vmImage: "macOS-latest"
     steps:
       - task: UseDotNet@2
-        displayName: .NET Core 9 sdk
+        displayName: .NET 10 SDK
         inputs:
-          version: "9.0.x"
+          version: "10.0.x"
           packageType: sdk
 
       - checkout: self
@@ -62,4 +62,3 @@ jobs:
         inputs:
           targetType: "inline"
           script: "dotnet bld/bin/BinSkim.Driver/release_osx-x64/BinSkim.dll analyze src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.*"
-
