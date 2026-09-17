@@ -376,6 +376,42 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         }
 
         [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_DwarfStringFileReadIsOptIn()
+        {
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new List<string> { "test.dll" },
+                DisableTelemetry = true,
+                OutputFilePath = "test/path/",
+            };
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand();
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            context.DwarfStringSectionFileReadThreshold.Should().BeNull();
+        }
+
+        [Fact]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_SetsDwarfStringFileReadThreshold()
+        {
+            const ulong threshold = 2UL * 1024 * 1024 * 1024;
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new List<string> { "test.dll" },
+                DisableTelemetry = true,
+                OutputFilePath = "test/path/",
+                DwarfStringSectionFileReadThreshold = threshold,
+            };
+            var context = new BinaryAnalyzerContext();
+
+            var command = new MultithreadedAnalyzeCommand();
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            context.DwarfStringSectionFileReadThreshold.Should().Be(threshold);
+        }
+
+        [Fact]
         public void MultithreadedAnalyzeCommand_ValidAnalysisFileExtensions_ContainsExpectedExtensions()
         {
             MultithreadedAnalyzeCommand.ValidAnalysisFileExtensions.Should().Contain(".dll");
