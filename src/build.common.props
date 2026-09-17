@@ -42,7 +42,7 @@
   
   <PropertyGroup>
     <BinSkimVerboseOutput>false</BinSkimVerboseOutput>
-    <BinSkimExePath>$(SolutionDir)..\bld\bin\$(Platform)_$(Configuration)\$(TargetFramework)\binskim.exe</BinSkimExePath>
+    <BinSkimExePath>$(ArtifactsPath)\bin\BinSkim.Driver\$([System.String]::Copy('$(Configuration)').ToLowerInvariant())\BinSkim.exe</BinSkimExePath>
   </PropertyGroup>
   
   <Import Project="BinSkim.targets" Condition="'$(RunBinSkim)'=='true'"/>
