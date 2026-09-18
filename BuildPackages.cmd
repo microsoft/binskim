@@ -14,8 +14,10 @@ if "%VERSION%"=="" (
     goto :ExitFailed
 )
 
-%~dp0.nuget\NuGet.exe pack %~dp0src\Nuget\BinSkim.nuspec -Properties configuration=%Configuration%;version=%VERSION% -Verbosity Quiet -BasePath %~dp0 -OutputDirectory %~dp0bld\bin\Nuget || goto :ExitFailed
-%~dp0.nuget\NuGet.exe pack %~dp0src\Nuget\BinaryParsers.nuspec -Properties configuration=%Configuration%;version=%VERSION% -Verbosity Quiet -BasePath %~dp0 -OutputDirectory %~dp0bld\bin\Nuget || goto :ExitFailed
+dotnet pack "%~dp0src\Nuget\BinSkim.Package.csproj" --configuration %Configuration% --output "%~dp0bld\bin\Nuget" --nologo --verbosity quiet || goto :ExitFailed
+dotnet pack "%~dp0src\Nuget\BinaryParsers.Package.csproj" --configuration %Configuration% --output "%~dp0bld\bin\Nuget" --nologo --verbosity quiet || goto :ExitFailed
+
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0src\Nuget\ValidatePackages.ps1" -PackageDirectory "%~dp0bld\bin\Nuget" -Version "%VERSION%" || goto :ExitFailed
 
 goto Exit
 

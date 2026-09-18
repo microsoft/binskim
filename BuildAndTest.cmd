@@ -1,10 +1,5 @@
 @echo off
 SETLOCAL
-@REM Uncomment this line to update nuget.exe
-@REM Doing so can break SLN build (which uses nuget.exe to
-@REM create a nuget package for binskim) so must opt-in
-@REM %~dp0.nuget\NuGet.exe update -self
-
 set Configuration=%1
 
 if "%Configuration%" EQU "" (
@@ -37,7 +32,7 @@ call :CreatePublishPackage net9.0 osx-x64 || goto :ExitFailed
 
 ::Build NuGet package
 echo BuildPackages.cmd
-call BuildPackages.cmd || goto :ExitFailed
+call "%~dp0BuildPackages.cmd" || goto :ExitFailed
 
 ::Update BinSkimRules.md to cover any xml changes
 echo Exporting any BinSkim rules

@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\build.netcore.props" />
+
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreVersion)</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <IsPackable>true</IsPackable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+    <PackageId>Microsoft.CodeAnalysis.BinSkim</PackageId>
+    <Title>Microsoft BinSkim Binary Analysis Security Tool</Title>
+    <Authors>Microsoft</Authors>
+    <PackageOwners>Microsoft,TSE-SecurityTools</PackageOwners>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageDescription>A correctness and security checker for Windows portable executables and Linux ELF binaries. BinSkim scans binaries to ensure they have been compiled in a secure way, e.g., by opting into data execution prevention, address layout randomization and other features.</PackageDescription>
+    <PackageSummary>A correctness and security checker for Windows portable executables and Linux ELF binaries.</PackageSummary>
+    <PackageReleaseNotes>Version $(Version) of BinSkim</PackageReleaseNotes>
+    <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
+    <PackageLicenseUrl>https://github.com/microsoft/binskim/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/microsoft/binskim</PackageProjectUrl>
+    <PackageTags>binary analysis binskim binscope security portable executable linkable format sdl devops devsecops</PackageTags>
+    <PackageIconUrl>https://go.microsoft.com/fwlink/?linkid=2008940</PackageIconUrl>
+    <NoWarn>$(NoWarn);NU5048;NU5125</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\bld\publish\BinSkim.Driver\$(Configuration)_win-x64\**\*" Pack="true" PackagePath="tools\$(TargetFramework)\win-x64\" />
+    <None Include="..\..\bld\publish\BinSkim.Driver\$(Configuration)_linux-x64\**\*" Pack="true" PackagePath="tools\$(TargetFramework)\linux-x64\" />
+    <None Include="..\..\bld\publish\BinSkim.Driver\$(Configuration)_linux-arm64\**\*" Pack="true" PackagePath="tools\$(TargetFramework)\linux-arm64\" />
+    <None Include="..\..\bld\publish\BinSkim.Driver\$(Configuration)_osx-x64\**\*" Pack="true" PackagePath="tools\$(TargetFramework)\osx-x64\" />
+    <None Include="..\..\ReleaseHistory.md" Pack="true" PackagePath="tools\" />
+    <None Include="..\BinaryParsers\**\*.cs" Pack="true" PackagePath="src\BinaryParsers\" />
+    <None Include="..\BinSkim.Driver\**\*.cs" Pack="true" PackagePath="src\BinSkim.Driver\" />
+    <None Include="..\BinSkim.Rules\**\*.cs" Pack="true" PackagePath="src\BinSkim.Rules\" />
+    <None Include="..\BinSkim.Sdk\**\*.cs" Pack="true" PackagePath="src\BinSkim.Sdk\" />
+  </ItemGroup>
+</Project>

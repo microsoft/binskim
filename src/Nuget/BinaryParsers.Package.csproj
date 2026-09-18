@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\build.netcore.props" />
+
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreVersion)</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+    <IsPackable>true</IsPackable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+    <PackageId>Microsoft.Binary.Parsers</PackageId>
+    <Title>Microsoft Binary Parsers</Title>
+    <Authors>Microsoft</Authors>
+    <PackageOwners>Microsoft,TSE-SecurityTools</PackageOwners>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageDescription>A library that contains binary parsers for Windows portable executables and Linux ELF binaries.</PackageDescription>
+    <PackageSummary>A library that contains binary parsers for Windows portable executables and Linux ELF binaries.</PackageSummary>
+    <PackageReleaseNotes>Version $(Version) of BinSkim</PackageReleaseNotes>
+    <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
+    <PackageLicenseUrl>https://github.com/microsoft/binskim/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/microsoft/binskim</PackageProjectUrl>
+    <PackageTags>binary analysis binskim binscope security portable executable linkable format sdl devops devsecops</PackageTags>
+    <PackageIconUrl>https://go.microsoft.com/fwlink/?linkid=2008940</PackageIconUrl>
+    <NoWarn>$(NoWarn);NU5048;NU5125</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Sarif.Driver" />
+    <PackageReference Include="ELFSharp" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="System.Reflection.Metadata" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\bld\bin\BinaryParsers\$(Configuration)\BinaryParsers.dll" Pack="true" PackagePath="lib\$(TargetFramework)\" />
+  </ItemGroup>
+</Project>
