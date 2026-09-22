@@ -1,28 +1,30 @@
-!CRITICAL! BEFORE DOING ANYTHING: At the start of EVERY session, you MUST read the following files:
-1. 00-base-rules.instructions.md, 01-memory-bank.instructions.md, 02-safety-boundaries.instructions.md, .memory-bank/activeContext.md, .memory-bank/learnings.md
-2. Any other files referenced by those files or located in .memory-bank/ folder.
+# BinSkim implementation guidance
 
-<instructions>
+Use `README.md` for the repository overview and build entry point. Use `docs\RuleContributions.md` for the complete rule development workflow.
 
-## Required Reading (Every Session)
+## Repository layout
 
-**At the START of each new chat session**, read these in order:
+- `src\BinSkim.Driver` contains the command-line application.
+- `src\BinSkim.Rules` contains analysis rules, rule identifiers, and rule resources.
+- `src\BinSkim.Sdk` contains shared analysis abstractions.
+- `src\BinaryParsers` contains binary format parsing.
+- The `src\Test.*` projects contain the corresponding unit and functional tests.
+- `docs` contains user guidance, rule documentation, contribution guidance, and test shells.
 
-### 1. Base Rules (CRITICAL)
-- [00-base-rules.instructions.md](00-base-rules.instructions.md) — Collaboration workflow (always applies)
+## Rule changes
 
-### 2. Memory Bank
-- [01-memory-bank.instructions.md](01-memory-bank.instructions.md)
-- [activeContext.md](../.memory-bank/activeContext.md)
-- [learnings.md](../.memory-bank/learnings.md)
+- Keep the rule implementation, `RuleIds.cs`, `RuleResources.resx`, functional tests, test assets, and generated rule documentation aligned.
+- Do not edit generated resource designer files directly.
+- Follow the platform-specific rule and test layout documented in `docs\RuleContributions.md`.
+- Review generated SARIF baselines when rule applicability, messages, or output changes.
 
-### 3. Safety Boundaries
-- [02-safety-boundaries.instructions.md](02-safety-boundaries.instructions.md) — Git, file, and external system guardrails
+## Parser and driver changes
 
-### 4. Feature Instructions
-- [03-feature.instructions.md](03-feature.instructions.md) — Project-specific guidelines for new features
-</instructions>
+- Treat input binaries as untrusted and potentially malformed.
+- Preserve behavior across supported operating systems, architectures, and binary formats.
+- For command-line changes, consider compatibility of arguments, exit codes, and SARIF output.
 
-# Project-Specific Guidelines
+## Validation
 
-
+- Run the smallest affected test project while iterating.
+- Use `BuildAndTest.cmd` for full validation. It restores, builds, tests, publishes platform packages, creates NuGet packages, and regenerates `docs\BinSkimRules.md`.
