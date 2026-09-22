@@ -12,7 +12,7 @@
 [CmdletBinding()]
 param(
     [string]
-    $BinSkimFolder = "..\bld\bin\x64_Release\net9.0",
+    $BinSkimFolder = "..\bld\bin\BinSkim.Driver\release",
 
     [string]
     $SessionName = "stress",
