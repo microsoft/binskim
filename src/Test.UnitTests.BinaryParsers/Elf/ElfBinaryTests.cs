@@ -294,7 +294,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
         private static byte[] CreateCompressedSectionContents(byte[] compressedContents, ulong uncompressedSize, bool is64bit, Endianess endianess)
         {
             int headerSize = is64bit ? 24 : 12;
-            var contents = new byte[headerSize + compressedContents.Length];
+            byte[] contents = new byte[headerSize + compressedContents.Length];
 
             if (endianess == Endianess.LittleEndian)
             {
