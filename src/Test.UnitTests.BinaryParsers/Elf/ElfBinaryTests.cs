@@ -2,12 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+
+using ELFSharp;
 
 using FluentAssertions;
 
@@ -205,8 +208,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
             binary.GetLanguage().Should().Be(DwarfLanguage.Rust);
         }
 
-        [Fact]
-        public void DecompressSectionContents_Elf64CompressedSection_Decompresses()
+        [Theory]
+        [InlineData(Endianess.LittleEndian)]
+        [InlineData(Endianess.BigEndian)]
+        public void DecompressSectionContents_Elf64CompressedSection_Decompresses(Endianess endianess)
         {
             byte[] originalContents = Encoding.ASCII.GetBytes("dwarf-v5-go-section");
 
@@ -221,23 +226,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
                 compressedContents = compressedStream.ToArray();
             }
 
-            using var sectionStream = new MemoryStream();
-            using (var writer = new BinaryWriter(sectionStream, Encoding.ASCII, leaveOpen: true))
-            {
-                writer.Write((uint)1);
-                writer.Write((uint)0);
-                writer.Write((ulong)originalContents.Length);
-                writer.Write((ulong)1);
-                writer.Write(compressedContents);
-            }
+            byte[] sectionContents = CreateCompressedSectionContents(compressedContents, (ulong)originalContents.Length, is64bit: true, endianess: endianess);
 
-            byte[] decompressedContents = ElfBinary.DecompressSectionContents(sectionStream.ToArray(), is64bit: true);
+            byte[] decompressedContents = ElfBinary.DecompressSectionContents(sectionContents, is64bit: true, endianess: endianess);
 
             decompressedContents.Should().Equal(originalContents);
         }
 
-        [Fact]
-        public void DecompressSectionContents_Elf32CompressedSection_Decompresses()
+        [Theory]
+        [InlineData(Endianess.LittleEndian)]
+        [InlineData(Endianess.BigEndian)]
+        public void DecompressSectionContents_Elf32CompressedSection_Decompresses(Endianess endianess)
         {
             byte[] originalContents = Encoding.ASCII.GetBytes("dwarf-v5-go-section");
 
@@ -252,18 +251,84 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
                 compressedContents = compressedStream.ToArray();
             }
 
-            using var sectionStream = new MemoryStream();
-            using (var writer = new BinaryWriter(sectionStream, Encoding.ASCII, leaveOpen: true))
-            {
-                writer.Write((uint)1);
-                writer.Write((uint)originalContents.Length);
-                writer.Write((uint)1);
-                writer.Write(compressedContents);
-            }
+            byte[] sectionContents = CreateCompressedSectionContents(compressedContents, (ulong)originalContents.Length, is64bit: false, endianess: endianess);
 
-            byte[] decompressedContents = ElfBinary.DecompressSectionContents(sectionStream.ToArray(), is64bit: false);
+            byte[] decompressedContents = ElfBinary.DecompressSectionContents(sectionContents, is64bit: false, endianess: endianess);
 
             decompressedContents.Should().Equal(originalContents);
+        }
+
+        [Theory]
+        [InlineData(false, Endianess.LittleEndian, false)]
+        [InlineData(false, Endianess.BigEndian, false)]
+        [InlineData(true, Endianess.LittleEndian, false)]
+        [InlineData(true, Endianess.BigEndian, false)]
+        [InlineData(true, Endianess.LittleEndian, true)]
+        [InlineData(true, Endianess.BigEndian, true)]
+        public void DecompressSectionContents_UncompressedSizeExceedsArrayMaxLength_Throws(bool is64bit, Endianess endianess, bool sizeExceeds32Bits)
+        {
+            byte[] originalContents = Encoding.ASCII.GetBytes("dwarf-v5-go-section");
+
+            byte[] compressedContents;
+            using (var compressedStream = new MemoryStream())
+            {
+                using (var zlibStream = new ZLibStream(compressedStream, CompressionLevel.SmallestSize, leaveOpen: true))
+                {
+                    zlibStream.Write(originalContents, 0, originalContents.Length);
+                }
+
+                compressedContents = compressedStream.ToArray();
+            }
+
+            // Keep the low 32 bits equal to the payload length to catch truncated ELF64 size reads.
+            ulong uncompressedSize = sizeExceeds32Bits
+                ? (1UL << 32) + (ulong)originalContents.Length
+                : (ulong)Array.MaxLength + 1;
+            byte[] sectionContents = CreateCompressedSectionContents(compressedContents, uncompressedSize, is64bit, endianess);
+
+            Action decompress = () => ElfBinary.DecompressSectionContents(sectionContents, is64bit, endianess);
+
+            decompress.Should().Throw<InvalidDataException>();
+        }
+
+        private static byte[] CreateCompressedSectionContents(byte[] compressedContents, ulong uncompressedSize, bool is64bit, Endianess endianess)
+        {
+            int headerSize = is64bit ? 24 : 12;
+            var contents = new byte[headerSize + compressedContents.Length];
+
+            if (endianess == Endianess.LittleEndian)
+            {
+                BinaryPrimitives.WriteUInt32LittleEndian(contents.AsSpan(0, sizeof(uint)), 1);
+
+                if (is64bit)
+                {
+                    BinaryPrimitives.WriteUInt64LittleEndian(contents.AsSpan(8, sizeof(ulong)), uncompressedSize);
+                    BinaryPrimitives.WriteUInt64LittleEndian(contents.AsSpan(16, sizeof(ulong)), 1);
+                }
+                else
+                {
+                    BinaryPrimitives.WriteUInt32LittleEndian(contents.AsSpan(4, sizeof(uint)), checked((uint)uncompressedSize));
+                    BinaryPrimitives.WriteUInt32LittleEndian(contents.AsSpan(8, sizeof(uint)), 1);
+                }
+            }
+            else
+            {
+                BinaryPrimitives.WriteUInt32BigEndian(contents.AsSpan(0, sizeof(uint)), 1);
+
+                if (is64bit)
+                {
+                    BinaryPrimitives.WriteUInt64BigEndian(contents.AsSpan(8, sizeof(ulong)), uncompressedSize);
+                    BinaryPrimitives.WriteUInt64BigEndian(contents.AsSpan(16, sizeof(ulong)), 1);
+                }
+                else
+                {
+                    BinaryPrimitives.WriteUInt32BigEndian(contents.AsSpan(4, sizeof(uint)), checked((uint)uncompressedSize));
+                    BinaryPrimitives.WriteUInt32BigEndian(contents.AsSpan(8, sizeof(uint)), 1);
+                }
+            }
+
+            compressedContents.CopyTo(contents, headerSize);
+            return contents;
         }
 
         [Fact]

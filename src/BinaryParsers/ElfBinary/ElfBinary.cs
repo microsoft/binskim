@@ -9,6 +9,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 
+using ELFSharp;
 using ELFSharp.ELF;
 using ELFSharp.ELF.Sections;
 using ELFSharp.ELF.Segments;
@@ -400,7 +401,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 if (section.Name == sectionName + ".dwo" || section.Name == sectionName)
                 {
-                    return GetSectionContents(section, Is64bit);
+                    return GetSectionContents(section, Is64bit, ELF.Endianess);
                 }
             }
 
@@ -432,16 +433,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             return fileReadThreshold.HasValue && sectionSize >= fileReadThreshold.Value;
         }
 
-        internal static byte[] GetSectionContents(ISection section, bool is64bit)
+        internal static byte[] GetSectionContents(ISection section, bool is64bit, Endianess endianess)
         {
             byte[] contents = section.GetContents();
 
             return IsCompressedSection(section)
-                ? DecompressSectionContents(contents, is64bit)
+                ? DecompressSectionContents(contents, is64bit, endianess)
                 : contents;
         }
 
-        internal static byte[] DecompressSectionContents(byte[] contents, bool is64bit)
+        internal static byte[] DecompressSectionContents(byte[] contents, bool is64bit, Endianess endianess)
         {
             if (contents.Length == 0)
             {
@@ -455,7 +456,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 throw new InvalidOperationException("Compressed ELF section header is truncated.");
             }
 
-            uint compressionType = BinaryPrimitives.ReadUInt32LittleEndian(contents.AsSpan(0, sizeof(uint)));
+            uint compressionType = ReadUInt32(contents.AsSpan(0, sizeof(uint)), endianess);
 
             if (compressionType == ZstdCompressionType)
             {
@@ -468,14 +469,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
 
             ulong uncompressedSize = is64bit
-                ? BinaryPrimitives.ReadUInt64LittleEndian(contents.AsSpan(8, sizeof(ulong)))
-                : BinaryPrimitives.ReadUInt32LittleEndian(contents.AsSpan(4, sizeof(uint)));
+                ? ReadUInt64(contents.AsSpan(8, sizeof(ulong)), endianess)
+                : ReadUInt32(contents.AsSpan(4, sizeof(uint)), endianess);
+
+            if (uncompressedSize > (ulong)Array.MaxLength)
+            {
+                throw new InvalidDataException("Uncompressed ELF section size exceeds the maximum array length.");
+            }
 
             using var compressedStream = new MemoryStream(contents, headerSize, contents.Length - headerSize, writable: false);
             using var zlibStream = new ZLibStream(compressedStream, CompressionMode.Decompress);
-            using MemoryStream decompressedStream = uncompressedSize <= int.MaxValue
-                ? new MemoryStream((int)uncompressedSize)
-                : new MemoryStream();
+            using var decompressedStream = new MemoryStream((int)uncompressedSize);
 
             zlibStream.CopyTo(decompressedStream);
 
@@ -487,6 +491,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
 
             return decompressedContents;
+        }
+
+        private static uint ReadUInt32(ReadOnlySpan<byte> contents, Endianess endianess)
+        {
+            return endianess == Endianess.LittleEndian
+                ? BinaryPrimitives.ReadUInt32LittleEndian(contents)
+                : BinaryPrimitives.ReadUInt32BigEndian(contents);
+        }
+
+        private static ulong ReadUInt64(ReadOnlySpan<byte> contents, Endianess endianess)
+        {
+            return endianess == Endianess.LittleEndian
+                ? BinaryPrimitives.ReadUInt64LittleEndian(contents)
+                : BinaryPrimitives.ReadUInt64BigEndian(contents);
         }
 
         private static bool IsCompressedSection(ISection section)
