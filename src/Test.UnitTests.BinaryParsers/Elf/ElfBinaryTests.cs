@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 
 using ELFSharp;
+using ELFSharp.ELF.Sections;
 
 using FluentAssertions;
 
@@ -195,6 +196,45 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Elf
                 .Should()
                 .OnlyContain(x => x.CommandLine.Contains("O2"));
             binary.GetLanguage().Should().Be(DwarfLanguage.C11);
+        }
+
+        [Theory]
+        [InlineData("hello-dwarf4-o2-compressed", 4, DwarfLanguage.C99, null)]
+        [InlineData("hello-dwarf4-o2-compressed", 4, DwarfLanguage.C99, 0UL)]
+        [InlineData("hello-dwarf5-o2-compressed", 5, DwarfLanguage.C11, null)]
+        [InlineData("hello-dwarf5-o2-compressed", 5, DwarfLanguage.C11, 0UL)]
+        public void ValidateDwarf_WithCompressedSections(
+            string fileName,
+            int expectedVersion,
+            DwarfLanguage expectedLanguage,
+            ulong? fileReadThreshold)
+        {
+            // Compressed copies of the existing ELF fixtures, generated with GNU binutils 2.42:
+            // x86_64-linux-gnu-objcopy --compress-debug-sections=zlib-gabi hello-dwarf4-o2 hello-dwarf4-o2-compressed
+            // x86_64-linux-gnu-objcopy --compress-debug-sections=zlib-gabi hello-dwarf5-o2 hello-dwarf5-o2-compressed
+            string filePath = Path.Combine(TestData, "Dwarf", fileName);
+            using var binary = new ElfBinary(new Uri(filePath), dwarfStringSectionFileReadThreshold: fileReadThreshold);
+            string originalFilePath = Path.Combine(TestData, "Dwarf", $"hello-dwarf{expectedVersion}-o2");
+            using var originalBinary = new ElfBinary(new Uri(originalFilePath));
+
+            binary.LoadException.Should().BeNull();
+            binary.Valid.Should().BeTrue();
+            binary.ELF.Sections
+                .OfType<Section<ulong>>()
+                .Where(section => section.Name == ".debug_info" || section.Name == ".debug_str")
+                .Should().HaveCount(2)
+                .And.OnlyContain(section => (section.RawFlags & 0x800UL) != 0); // SHF_COMPRESSED
+
+            // A zero threshold must still decode compressed strings instead of reading raw file offsets.
+            binary.DwarfVersion.Should().Be(expectedVersion);
+            binary.DebugFileType.Should().Be(DebugFileType.DebugIncluded);
+            binary.DebugFileLoaded.Should().BeTrue();
+            binary.GetLanguage().Should().Be(expectedLanguage);
+            binary.CommandLineInfos
+                .Where(info => info.Language != DwarfLanguage.Unknown)
+                .Should().NotBeEmpty()
+                .And.OnlyContain(info => info.CommandLine.Contains("O2"));
+            binary.DebugLine.Should().NotBeEmpty().And.Equal(originalBinary.DebugLine);
         }
 
         [Fact]
