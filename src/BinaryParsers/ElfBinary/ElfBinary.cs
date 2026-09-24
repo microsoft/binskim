@@ -2,11 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 
+using ELFSharp;
 using ELFSharp.ELF;
 using ELFSharp.ELF.Sections;
 using ELFSharp.ELF.Segments;
@@ -21,6 +24,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
     /// </summary>
     public class ElfBinary : BinaryBase, IDwarfBinary
     {
+        // ELF section flag bit for SHF_COMPRESSED.
+        private const ulong CompressedSectionFlag = 0x800UL;
+        private const uint ZlibCompressionType = 1;
+        private const uint ZstdCompressionType = 2;
+
         public ElfBinary(Uri uri,
                          string localSymbolDirectories = null,
                          bool forceComprehensiveParsing = false,
@@ -393,7 +401,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 if (section.Name == sectionName + ".dwo" || section.Name == sectionName)
                 {
-                    return section.GetContents();
+                    return GetSectionContents(section, Is64bit, ELF.Endianess);
                 }
             }
 
@@ -407,7 +415,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 .FirstOrDefault(candidate => candidate.Name == SectionName.DebugStr ||
                                              candidate.Name == SectionName.DebugStr + ".dwo");
 
-            if (section != null && ShouldUseFileBackedDwarfStringReader(
+            // File offsets cannot address strings inside a compressed section.
+            if (section != null && !IsCompressedSection(section) && ShouldUseFileBackedDwarfStringReader(
                 section.Size,
                 this.dwarfStringSectionFileReadThreshold))
             {
@@ -422,6 +431,86 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             ulong? fileReadThreshold)
         {
             return fileReadThreshold.HasValue && sectionSize >= fileReadThreshold.Value;
+        }
+
+        internal static byte[] GetSectionContents(ISection section, bool is64bit, Endianess endianess)
+        {
+            byte[] contents = section.GetContents();
+
+            return IsCompressedSection(section)
+                ? DecompressSectionContents(contents, is64bit, endianess)
+                : contents;
+        }
+
+        internal static byte[] DecompressSectionContents(byte[] contents, bool is64bit, Endianess endianess)
+        {
+            if (contents.Length == 0)
+            {
+                return contents;
+            }
+
+            int headerSize = is64bit ? 24 : 12;
+
+            if (contents.Length < headerSize)
+            {
+                throw new InvalidOperationException("Compressed ELF section header is truncated.");
+            }
+
+            uint compressionType = ReadUInt32(contents.AsSpan(0, sizeof(uint)), endianess);
+
+            if (compressionType == ZstdCompressionType)
+            {
+                throw new NotSupportedException("ELF zstd-compressed sections are not supported on this runtime target because there is no built-in Zstandard stream to decode them.");
+            }
+
+            if (compressionType != ZlibCompressionType)
+            {
+                throw new NotSupportedException($"Unsupported ELF compression type: {compressionType}.");
+            }
+
+            ulong uncompressedSize = is64bit
+                ? ReadUInt64(contents.AsSpan(8, sizeof(ulong)), endianess)
+                : ReadUInt32(contents.AsSpan(4, sizeof(uint)), endianess);
+
+            if (uncompressedSize > (ulong)Array.MaxLength)
+            {
+                throw new InvalidDataException("Uncompressed ELF section size exceeds the maximum array length.");
+            }
+
+            using var compressedStream = new MemoryStream(contents, headerSize, contents.Length - headerSize, writable: false);
+            using var zlibStream = new ZLibStream(compressedStream, CompressionMode.Decompress);
+            using var decompressedStream = new MemoryStream((int)uncompressedSize);
+
+            zlibStream.CopyTo(decompressedStream);
+
+            byte[] decompressedContents = decompressedStream.ToArray();
+
+            if ((ulong)decompressedContents.LongLength != uncompressedSize)
+            {
+                throw new InvalidOperationException("Compressed ELF section size does not match the ELF header.");
+            }
+
+            return decompressedContents;
+        }
+
+        private static uint ReadUInt32(ReadOnlySpan<byte> contents, Endianess endianess)
+        {
+            return endianess == Endianess.LittleEndian
+                ? BinaryPrimitives.ReadUInt32LittleEndian(contents)
+                : BinaryPrimitives.ReadUInt32BigEndian(contents);
+        }
+
+        private static ulong ReadUInt64(ReadOnlySpan<byte> contents, Endianess endianess)
+        {
+            return endianess == Endianess.LittleEndian
+                ? BinaryPrimitives.ReadUInt64LittleEndian(contents)
+                : BinaryPrimitives.ReadUInt64BigEndian(contents);
+        }
+
+        private static bool IsCompressedSection(ISection section)
+        {
+            return section is Section<ulong> elfSection
+                && (elfSection.RawFlags & CompressedSectionFlag) != 0;
         }
 
         /// <summary>
