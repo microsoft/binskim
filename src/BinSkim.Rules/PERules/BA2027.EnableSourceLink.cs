@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Composition;
+using System.IO;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
@@ -75,7 +76,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            if (!HasSourceLink(context))
+            if (!TryHasSourceLink(context, out bool hasSourceLink))
+            {
+                return;
+            }
+
+            if (!hasSourceLink)
             {
                 // The PDB for '{0}' does not contain SourceLink information, compromising
                 // frictionless source-driven debugging and increasing latency of security
@@ -106,22 +112,37 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         }
 
-        private static bool HasSourceLink(BinaryAnalyzerContext context)
+        private static bool TryHasSourceLink(BinaryAnalyzerContext context, out bool hasSourceLink)
         {
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
 
-            // We're just checking for the presence of SourceLink document(s),
-            // not whether they can be read.
-            if (pdb.FileType == PdbFileType.Portable)
+            try
             {
-                string sourceLinkDocument = target.PE.ManagedPdbGetSourceLinkDocument(pdb);
-                return !string.IsNullOrEmpty(sourceLinkDocument);
+                // We're just checking for the presence of SourceLink document(s),
+                // not whether they can be read.
+                if (pdb.FileType == PdbFileType.Portable)
+                {
+                    string sourceLinkDocument = target.PE.ManagedPdbGetSourceLinkDocument(pdb);
+                    hasSourceLink = !string.IsNullOrEmpty(sourceLinkDocument);
+                }
+                else
+                {
+                    IEnumerable<string> sourceLinkDocuments = pdb.WindowsPdbGetSourceLinkDocuments();
+                    hasSourceLink = sourceLinkDocuments != null && sourceLinkDocuments.Any();
+                }
+
+                return true;
             }
-            else
+            catch (FileNotFoundException)
             {
-                IEnumerable<string> sourceLinkDocuments = pdb.WindowsPdbGetSourceLinkDocuments();
-                return sourceLinkDocuments != null && sourceLinkDocuments.Any();
+                hasSourceLink = false;
+                return false;
+            }
+            catch (DirectoryNotFoundException)
+            {
+                hasSourceLink = false;
+                return false;
             }
         }
     }
