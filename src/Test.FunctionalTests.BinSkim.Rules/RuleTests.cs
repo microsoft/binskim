@@ -1353,7 +1353,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void BA2027_EnableSourceLink_PdbRemovedAfterResolution_DoesNotThrow()
+        public void BA2027_EnableSourceLink_PdbUnavailableDuringAnalysis_LogsPdbLoadError()
         {
             if (!BinaryParsers.PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
@@ -1373,7 +1373,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             File.Copy(Path.Combine(sourceDirectory, Path.GetFileName(pdbPath)), pdbPath);
 
             var logger = new TestMessageLogger();
-            BinaryAnalyzerContext context = CreateContext(logger, policy: null, targetPath);
+            var policy = new PropertiesDictionary();
+            BinaryAnalyzerContext context = CreateContext(logger, policy, targetPath);
+            context.IgnorePdbLoadError = true;
             var skimmer = new EnableSourceLink();
 
             try
@@ -1391,6 +1393,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Assert.Null(Record.Exception(() => skimmer.Analyze(context)));
                 Assert.Empty(logger.PassTargets);
                 Assert.Empty(logger.WarningTargets);
+                Assert.Contains(targetPath, logger.ConfigurationErrorTargets);
+                Assert.Equal(RuntimeConditions.None, context.RuntimeErrors);
             }
             finally
             {
