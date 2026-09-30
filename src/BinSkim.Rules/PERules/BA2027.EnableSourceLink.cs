@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Composition;
+using System.IO;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.BinaryParsers;
@@ -75,7 +76,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 return;
             }
 
-            if (!HasSourceLink(context))
+            int sourceLinkDocumentCount;
+            try
+            {
+                sourceLinkDocumentCount = GetSourceLinkDocumentCount(context);
+            }
+            catch (FileNotFoundException ex)
+            {
+                LogPdbUnavailable(context, ex);
+                return;
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                LogPdbUnavailable(context, ex);
+                return;
+            }
+
+            if (sourceLinkDocumentCount == 0)
             {
                 // The PDB for '{0}' does not contain SourceLink information, compromising
                 // frictionless source-driven debugging and increasing latency of security
@@ -106,7 +123,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         }
 
-        private static bool HasSourceLink(BinaryAnalyzerContext context)
+        private static int GetSourceLinkDocumentCount(BinaryAnalyzerContext context)
         {
             PEBinary target = context.PEBinary();
             Pdb pdb = target.Pdb;
@@ -116,13 +133,19 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (pdb.FileType == PdbFileType.Portable)
             {
                 string sourceLinkDocument = target.PE.ManagedPdbGetSourceLinkDocument(pdb);
-                return !string.IsNullOrEmpty(sourceLinkDocument);
+                return string.IsNullOrEmpty(sourceLinkDocument) ? 0 : 1;
             }
-            else
-            {
-                IEnumerable<string> sourceLinkDocuments = pdb.WindowsPdbGetSourceLinkDocuments();
-                return sourceLinkDocuments != null && sourceLinkDocuments.Any();
-            }
+
+            IEnumerable<string> sourceLinkDocuments = pdb.WindowsPdbGetSourceLinkDocuments();
+            return sourceLinkDocuments?.Count() ?? 0;
+        }
+
+        private static void LogPdbUnavailable(BinaryAnalyzerContext context, IOException exception)
+        {
+            LogExceptionLoadingPdb(
+                context,
+                new PdbException(exception.Message, exception),
+                pdbLoadTrace: null);
         }
     }
 }
