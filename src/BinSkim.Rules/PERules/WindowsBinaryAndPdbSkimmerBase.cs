@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// managed and native code require PDBs for the native case but not
         /// for managed.
         /// </summary>
-        public virtual bool EnforcePdbLoadForManagedAssemblies => true;
+        public virtual bool EnforcePdbLoadForManagedAssemblies => false;
 
         public virtual bool LogPdbLoadException => true;
 
@@ -50,6 +50,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (LogPdbLoadException)
             {
                 if (target.Pdb == null &&
+                    !target.PE.IsManagedResourceOnly &&
                     (!target.PE.IsManaged ||
                       target.PE.IsMixedMode ||
                       EnforcePdbLoadForManagedAssemblies))
