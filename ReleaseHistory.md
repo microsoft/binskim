@@ -20,6 +20,13 @@
 
 ## UNRELEASED
 
+## **v4.4.9.13**
+* FPS: Fix BA2022 signature verification for long target paths [1215](https://github.com/microsoft/binskim/pull/1215)
+* FPS: Fix `/Fp` option parsing in BA2004 secure source code hashing analysis [1092](https://github.com/microsoft/binskim/pull/1092)
+* NEW: Support DWARF string sections larger than 2 GB [1216](https://github.com/microsoft/binskim/pull/1216)
+* NEW: Support compressed DWARF sections in ELF binaries [1179](https://github.com/microsoft/binskim/pull/1179)
+* UER: Report PDBs that become unavailable during BA2027 analysis [1238](https://github.com/microsoft/binskim/pull/1238)
+
 ## **v4.4.9.12** [https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/4.4.9.12]
 * ADM: Fix pipeline - disable sdlSdp and use service connection for internal build trigger [1201](https://github.com/microsoft/binskim/pull/1201)
 
