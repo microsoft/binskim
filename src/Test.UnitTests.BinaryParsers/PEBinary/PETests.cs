@@ -2,12 +2,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 using FluentAssertions;
 
 using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 
 using Xunit;
 
@@ -214,6 +218,51 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             {
                 File.Delete(tempFile);
             }
+        }
+
+        [Fact]
+        public void ManagedPdbGetDocumentPaths_ReturnsPortablePdbDocuments()
+        {
+            string filePath = Path.Combine(
+                TestData,
+                "PE",
+                "Managed_x64_VS2022_CSharp_Net70_Default.dll");
+
+            using var peBinary = new PEBinary(new Uri(filePath));
+
+            peBinary.Pdb.Should().NotBeNull();
+            peBinary.Pdb.FileType.Should().Be(PdbFileType.Portable);
+            peBinary.PE.ManagedPdbGetDocumentPaths(peBinary.Pdb)
+                .Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public void CreateSourceFileIterator_WithoutCompiland_ReturnsNativePdbDocuments()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows())
+            {
+                return;
+            }
+
+            string filePath = Path.Combine(
+                TestData,
+                "PE",
+                "Determinism",
+                "OK",
+                "CPlusPlus_SourceLink.exe");
+
+            using var peBinary = new PEBinary(new Uri(filePath));
+            var sourceFiles = new List<string>();
+
+            peBinary.Pdb.Should().NotBeNull();
+            foreach (DisposableEnumerableView<SourceFile> sourceFileView in peBinary.Pdb.CreateSourceFileIterator())
+            {
+                sourceFiles.Add(sourceFileView.Value.FileName);
+            }
+
+            sourceFiles.Should().NotBeEmpty();
+            sourceFiles.Distinct(StringComparer.OrdinalIgnoreCase)
+                .Should().HaveSameCount(sourceFiles);
         }
     }
 }

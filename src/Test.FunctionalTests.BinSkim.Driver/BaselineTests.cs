@@ -23,6 +23,7 @@ using Microsoft.CodeAnalysis.Sarif.Readers;
 using Microsoft.CodeAnalysis.Sarif.Writers;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 using Xunit;
 using Xunit.Abstractions;
@@ -98,6 +99,30 @@ namespace Microsoft.CodeAnalysis.IL
 
                 sourceLinkChunks.Should().NotBeEmpty(
                     $"a {binaryKind} binary built with SourceLink enabled should have chunked sourceLinkJson events in telemetry");
+
+                compilerEvents.First().Properties.Should().ContainKey(CompilerDataLogger.SourceLinkAttributionId,
+                    $"a {binaryKind} binary with SourceLink should have a sourceLinkAttributionId correlation key");
+
+                string attributionId = compilerEvents.First().Properties[CompilerDataLogger.SourceLinkAttributionId];
+                List<EventTelemetry> attributionChunks = sendItems
+                    .OfType<EventTelemetry>()
+                    .Where(e => e.Name == CompilerDataLogger.SourceLinkAttributionEventName
+                             && e.Properties[CompilerDataLogger.SourceLinkAttributionId] == attributionId)
+                    .OrderBy(e => int.Parse(e.Properties["orderNumber"], CultureInfo.InvariantCulture))
+                    .ToList();
+
+                attributionChunks.Should().NotBeEmpty(
+                    $"a {binaryKind} binary built with SourceLink enabled should have aggregated SourceLink attribution telemetry");
+
+                string attributionJson = string.Concat(
+                    attributionChunks.Select(e => e.Properties[$"chunked{CompilerDataLogger.SourceLinkAttribution}"]));
+                JObject attribution = JObject.Parse(attributionJson);
+
+                attribution.Value<int>("processedDocumentCount").Should().BeGreaterThan(0);
+                attribution.Value<bool>("isComplete").Should().BeTrue();
+                attribution.Value<int>("matchedDocumentCount").Should().BeGreaterThan(0);
+                attribution["repositories"].Should().BeOfType<JArray>()
+                    .Which.Should().NotBeEmpty();
             }
             finally
             {

@@ -14,6 +14,8 @@ using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
+using Newtonsoft.Json;
+
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
@@ -85,6 +87,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             // All compiler records share the same sourceLinkJsonId correlation key.
             string sourceLinkJson = GetSourceLinkJson(context, target, pdb);
             string sourceLinkJsonId = context.CompilerDataLogger.WriteSourceLinkJson(sourceLinkJson);
+            string sourceLinkAttribution = sourceLinkJsonId == null
+                ? null
+                : GetSourceLinkAttribution(context, target, pdb, sourceLinkJson);
+            string sourceLinkAttributionId = context.CompilerDataLogger.WriteSourceLinkAttribution(sourceLinkAttribution);
 
             if (target.PE.IsManaged)
             {
@@ -102,6 +108,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     CompilerFrontEndVersion = target.PE.LinkerVersion.ToString(),
                     AssemblyReferences = string.Join(';', target.PE.GetAssemblyReferenceStrings()),
                     SourceLinkJsonId = sourceLinkJsonId,
+                    SourceLinkAttributionId = sourceLinkAttributionId,
                 };
 
                 if (!records.ContainsKey(record))
@@ -133,6 +140,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         CompilerBackEndVersion = omDetails.CompilerBackEndVersion.ToString(),
                         CompilerFrontEndVersion = omDetails.CompilerFrontEndVersion.ToString(),
                         SourceLinkJsonId = sourceLinkJsonId,
+                        SourceLinkAttributionId = sourceLinkAttributionId,
                     };
 
                     if (!records.ContainsKey(record))
@@ -148,10 +156,58 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
+        private string GetSourceLinkAttribution(
+            BinaryAnalyzerContext context,
+            PEBinary target,
+            Pdb pdb,
+            string sourceLinkJson)
+        {
+            if (string.IsNullOrWhiteSpace(sourceLinkJson))
+            {
+                return null;
+            }
+
+            try
+            {
+                SourceLinkAttributionData attribution = SourceLinkAttributionCalculator.Calculate(
+                    sourceLinkJson,
+                    GetPdbDocumentPaths(target, pdb),
+                    context.CompilerDataLogger.BuildPipelineInfo);
+
+                return JsonConvert.SerializeObject(attribution, Formatting.None);
+            }
+            catch (Exception ex)
+            {
+                LogSourceLinkNotification(
+                    context,
+                    $"SourceLink attribution failed for '{context.CurrentTarget?.Uri?.GetFileName() ?? "unknown"}': {ex.Message}");
+                return null;
+            }
+        }
+
+        private static IEnumerable<string> GetPdbDocumentPaths(PEBinary target, Pdb pdb)
+        {
+            if (pdb.FileType == PdbFileType.Portable)
+            {
+                foreach (string documentPath in target.PE.ManagedPdbGetDocumentPaths(pdb))
+                {
+                    yield return documentPath;
+                }
+
+                yield break;
+            }
+
+            foreach (DisposableEnumerableView<SourceFile> sourceFileView in pdb.CreateSourceFileIterator())
+            {
+                yield return sourceFileView.Value.FileName;
+            }
+        }
+
         /// <summary>
-        /// Extracts the raw SourceLink JSON from the PDB, if available.
+        /// Extracts SourceLink JSON from the PDB, if available.
         /// Attempts extraction for all PDB types — portable PDBs (managed) and
-        /// Windows PDBs (MSVC native). Non-MSVC native binaries will simply
+        /// Windows PDBs (MSVC native). Multiple native SourceLink streams are
+        /// merged into one document map. Non-MSVC native binaries will simply
         /// return null without an extra object-module iteration.
         /// </summary>
         private string GetSourceLinkJson(BinaryAnalyzerContext context, PEBinary target, Pdb pdb)
@@ -164,26 +220,29 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 }
                 else
                 {
-                    IEnumerable<string> docs = pdb.WindowsPdbGetSourceLinkDocuments();
-                    return docs?.FirstOrDefault();
+                    return SourceLinkAttributionCalculator.MergeSourceLinkJsonDocuments(
+                        pdb.WindowsPdbGetSourceLinkDocuments());
                 }
             }
             catch (Exception ex)
             {
                 // SourceLink extraction is best-effort — never fail the analysis.
-                string fileName = context.CurrentTarget?.Uri?.GetFileName() ?? "unknown";
-                context.Logger.LogConfigurationNotification(
-                    new Notification
-                    {
-                        Descriptor = new ReportingDescriptorReference { Id = Id },
-                        Message = new Message
-                        {
-                            Text = $"SourceLink extraction failed for '{fileName}': {ex.Message}",
-                        },
-                        Level = FailureLevel.Note,
-                    });
+                LogSourceLinkNotification(
+                    context,
+                    $"SourceLink extraction failed for '{context.CurrentTarget?.Uri?.GetFileName() ?? "unknown"}': {ex.Message}");
                 return null;
             }
+        }
+
+        private void LogSourceLinkNotification(BinaryAnalyzerContext context, string message)
+        {
+            context.Logger.LogConfigurationNotification(
+                new Notification
+                {
+                    Descriptor = new ReportingDescriptorReference { Id = Id },
+                    Message = new Message { Text = message },
+                    Level = FailureLevel.Note,
+                });
         }
     }
 }

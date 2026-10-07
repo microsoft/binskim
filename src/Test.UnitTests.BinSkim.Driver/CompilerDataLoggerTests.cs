@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -391,6 +392,59 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
 
             compilerEvents.Count.Should().Be(1);
             compilerEvents[0].Properties.Should().NotContainKey(CompilerDataLogger.SourceLinkJsonId);
+        }
+
+        [Fact]
+        public void CompilerDataLogger_Write_ShouldEmitSourceLinkAttributionId_WhenPresent()
+        {
+            using BinaryAnalyzerContext context = CreateTestContext();
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger logger);
+
+            string expectedId = Guid.NewGuid().ToString();
+            var compilerData = new CompilerData
+            {
+                CompilerName = ".NET Compiler",
+                SourceLinkAttributionId = expectedId,
+            };
+
+            logger.Write(context, compilerData);
+
+            EventTelemetry compilerEvent = telemetryEventOutput
+                .OfType<EventTelemetry>()
+                .Single(e => e.Name == CompilerDataLogger.CompilerEventName);
+
+            compilerEvent.Properties.Should().ContainKey(CompilerDataLogger.SourceLinkAttributionId);
+            compilerEvent.Properties[CompilerDataLogger.SourceLinkAttributionId].Should().Be(expectedId);
+        }
+
+        [Fact]
+        public void CompilerDataLogger_WriteSourceLinkAttribution_ShouldSendChunkedContent()
+        {
+            using BinaryAnalyzerContext context = CreateTestContext();
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger logger);
+
+            string attribution = "{\"classification\":\"BuildRepositoryOnly\"}";
+            CompilerDataLogger.s_chunkSize = SmallChunkSize;
+            int expectedChunkCount = logger.CalculateChunkedContentSize(attribution.Length);
+
+            string attributionId = logger.WriteSourceLinkAttribution(attribution);
+
+            List<EventTelemetry> attributionEvents = telemetryEventOutput
+                .OfType<EventTelemetry>()
+                .Where(e => e.Name == CompilerDataLogger.SourceLinkAttributionEventName)
+                .OrderBy(e => int.Parse(e.Properties["orderNumber"], CultureInfo.InvariantCulture))
+                .ToList();
+
+            attributionEvents.Should().HaveCount(expectedChunkCount);
+            attributionEvents.Should().OnlyContain(e =>
+                e.Properties[CompilerDataLogger.SourceLinkAttributionId] == attributionId);
+            string reconstructed = string.Concat(
+                attributionEvents.Select(e => e.Properties[$"chunked{CompilerDataLogger.SourceLinkAttribution}"]));
+            reconstructed.Should().Be(attribution);
         }
 
         private List<ITelemetry> TestSetup(BinaryAnalyzerContext context,

@@ -61,6 +61,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal const string SourceLinkJson = "sourceLinkJson";
         internal const string SourceLinkJsonId = "sourceLinkJsonId";
         internal const string SourceLinkJsonEventName = "SourceLinkJsonInformation";
+        internal const string SourceLinkAttribution = "sourceLinkAttribution";
+        internal const string SourceLinkAttributionId = "sourceLinkAttributionId";
+        internal const string SourceLinkAttributionEventName = "SourceLinkAttributionInformation";
 
         // This object is required to synchronize multi-threaded writes
         // to the CSV writer only. The AppInsights client is already
@@ -82,6 +85,8 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public bool Enabled => this.telemetryClient != null || this.writer != null;
 
         public string RootPathToElide { get; set; }
+
+        internal AnalysisSummary BuildPipelineInfo { get; }
 
         // We retain the hash-code of the context that was used to initialize this
         // instance. This data is subsequently used to determine what analysis
@@ -111,12 +116,18 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             this.OwningContextHashCode = context.GetHashCode();
             this.symbolPath = context.SymbolPath;
             this.telemetryClient = telemetry?.TelemetryClient;
+            this.BuildPipelineInfo = new AnalysisSummary();
 
             if (!context.DisableTelemetry)
             {
                 bool forceOverwrite = context.ForceOverwrite;
                 string csvFilePath = context.Policy.GetProperty(CsvOutputPath);
                 CreateCsvOutputFile(csvFilePath, forceOverwrite);
+            }
+
+            if (this.telemetryClient != null)
+            {
+                AnalysisSummaryExtractor.UpdateBuildPipelineInfo(this.BuildPipelineInfo);
             }
 
             // If the user has configured compiler telemetry collection, then we require analysis results
@@ -244,6 +255,11 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             if (!string.IsNullOrWhiteSpace(compilerData.SourceLinkJsonId))
             {
                 properties.Add(SourceLinkJsonId, compilerData.SourceLinkJsonId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(compilerData.SourceLinkAttributionId))
+            {
+                properties.Add(SourceLinkAttributionId, compilerData.SourceLinkAttributionId);
             }
 
             if (!string.IsNullOrWhiteSpace(compilerData.CommandLine))
@@ -392,6 +408,27 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                                sourceLinkJson);
 
             return sourceLinkJsonId;
+        }
+
+        /// <summary>
+        /// Sends aggregated SourceLink attribution as chunked telemetry events and
+        /// returns the correlation ID.
+        /// </summary>
+        internal string WriteSourceLinkAttribution(string sourceLinkAttribution)
+        {
+            if (this.telemetryClient == null || string.IsNullOrWhiteSpace(sourceLinkAttribution))
+            {
+                return null;
+            }
+
+            string sourceLinkAttributionId = Guid.NewGuid().ToString();
+
+            SendChunkedContent(SourceLinkAttributionEventName,
+                               sourceLinkAttributionId,
+                               SourceLinkAttribution,
+                               sourceLinkAttribution);
+
+            return sourceLinkAttributionId;
         }
 
         internal int CalculateChunkedContentSize(int contentLength)

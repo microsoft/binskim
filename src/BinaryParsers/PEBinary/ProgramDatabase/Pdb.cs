@@ -178,7 +178,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
         public DisposableEnumerable<SourceFile> CreateSourceFileIterator(Symbol inObjectModule)
         {
-            return new DisposableEnumerable<SourceFile>(this.CreateSourceFileIteratorImpl(inObjectModule.UnderlyingSymbol));
+            return new DisposableEnumerable<SourceFile>(this.CreateSourceFileIteratorImpl(inObjectModule?.UnderlyingSymbol));
         }
 
         private IEnumerable<SourceFile> CreateSourceFileIteratorImpl(IDiaSymbol inObjectModule)

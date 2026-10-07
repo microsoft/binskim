@@ -19,6 +19,7 @@
 - NEW => new feature 
 
 ## UNRELEASED
+* NEW: Emit aggregated PDB-document SourceLink attribution with compiler telemetry.
 
 ## **v4.4.9.13**
 * FPS: Fix BA2022 signature verification for long target paths [1215](https://github.com/microsoft/binskim/pull/1215)

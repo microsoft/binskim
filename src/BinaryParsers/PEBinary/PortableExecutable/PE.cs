@@ -875,6 +875,21 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             return sourceLinkReader.Length == 0 ? null : sourceLinkReader.ReadUTF8(sourceLinkReader.Length);
         }
 
+        public IEnumerable<string> ManagedPdbGetDocumentPaths(Pdb pdb)
+        {
+            MetadataReader reader = GetPortablePdbMetadataReader(pdb);
+            if (reader == null)
+            {
+                yield break;
+            }
+
+            foreach (DocumentHandle handle in reader.Documents)
+            {
+                Document document = reader.GetDocument(handle);
+                yield return reader.GetString(document.Name);
+            }
+        }
+
         public IEnumerable<string> GetAssemblyReferenceStrings()
         {
             if (this.IsManaged && this.metadataReader != null)
