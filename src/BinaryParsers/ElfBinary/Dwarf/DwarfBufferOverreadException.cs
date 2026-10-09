@@ -11,11 +11,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
     public class DwarfBufferOverreadException : InvalidOperationException
     {
         public DwarfBufferOverreadException(uint position, uint requestedBytes, int bufferLength)
+            : this(position, requestedBytes, (long)bufferLength)
+        {
+        }
+
+        internal DwarfBufferOverreadException(uint position, uint requestedBytes, long bufferLength)
             : base("Attempted to read past end of DWARF data buffer.")
         {
             Position = position;
             RequestedBytes = requestedBytes;
-            BufferLength = bufferLength;
+            BufferLength = (int)Math.Min(bufferLength, int.MaxValue);
+            LongBufferLength = bufferLength;
         }
 
         /// <summary>
@@ -29,8 +35,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public uint RequestedBytes { get; }
 
         /// <summary>
-        /// Gets the total length of the underlying buffer.
+        /// Gets the length capped at Int32.MaxValue for compatibility with array-backed readers.
         /// </summary>
         public int BufferLength { get; }
+
+        /// <summary>
+        /// Gets the full length of the underlying array or file-backed section.
+        /// </summary>
+        public long LongBufferLength { get; }
     }
 }
