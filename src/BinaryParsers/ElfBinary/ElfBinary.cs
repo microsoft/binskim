@@ -70,9 +70,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                 CompilationUnits = new Lazy<List<DwarfCompilationUnit>>(() =>
                 {
+                    using DwarfMemoryReader debugData = CreateDebugDataReader();
                     using IDwarfStringReader debugStrings = CreateDebugStringsReader();
                     return LoadDebug(DwarfSymbolProvider.ParseAllCompilationUnits(this,
-                                                                                  DebugData,
+                                                                                  debugData,
                                                                                   DebugDataDescription,
                                                                                   debugStrings,
                                                                                   DebugLineStrings,
@@ -406,6 +407,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             }
 
             return Array.Empty<byte>();
+        }
+
+        private DwarfMemoryReader CreateDebugDataReader()
+        {
+            Section<ulong> section = ELF.Sections
+                .OfType<Section<ulong>>()
+                .FirstOrDefault(candidate => candidate.Name == SectionName.DebugInfo ||
+                                             candidate.Name == SectionName.DebugInfo + ".dwo");
+
+            // Compressed sections must continue through the existing decompression path.
+            if (section != null && section.Type != SectionType.NoBits &&
+                !IsCompressedSection(section) && section.Size > (ulong)Array.MaxLength)
+            {
+                return new DwarfMemoryReader(this.path, section.Offset, section.Size);
+            }
+
+            return new DwarfMemoryReader(DebugData);
         }
 
         private IDwarfStringReader CreateDebugStringsReader()

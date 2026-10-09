@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Reflection;
-using System.Runtime.ExceptionServices;
+using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
 
 namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
@@ -24,22 +24,76 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         private IntPtr pointer;
 
+        private MemoryMappedFile mappedFile;
+        private MemoryMappedViewAccessor mappedView;
+        private bool mappedPointerAcquired;
+        private bool disposed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DwarfMemoryReader"/> class.
         /// </summary>
         /// <param name="data">The data.</param>
         public DwarfMemoryReader(byte[] data)
         {
-            Data = data;
+            Data = data ?? throw new ArgumentNullException(nameof(data));
+            Length = data.LongLength;
             Position = 0;
             pinnedData = GCHandle.Alloc(data, GCHandleType.Pinned);
             pointer = pinnedData.AddrOfPinnedObject();
         }
 
         /// <summary>
+        /// Maps a read-only section without allocating a byte array for its contents.
+        /// DWARF offsets in this parser are unsigned 32-bit section-relative offsets.
+        /// </summary>
+        internal unsafe DwarfMemoryReader(string path, ulong sectionOffset, ulong sectionSize)
+        {
+            if (sectionSize > uint.MaxValue)
+            {
+                throw new NotSupportedException("DWARF sections larger than the unsigned 32-bit offset range are not supported.");
+            }
+
+            Data = Array.Empty<byte>();
+            Length = (long)sectionSize;
+            var stream = File.OpenRead(path);
+            try
+            {
+                if (sectionOffset > (ulong)stream.Length || sectionSize > (ulong)stream.Length - sectionOffset)
+                {
+                    throw new InvalidDataException("DWARF section extends past the end of the file.");
+                }
+
+                if (sectionSize == 0)
+                {
+                    stream.Dispose();
+                    return;
+                }
+
+                mappedFile = MemoryMappedFile.CreateFromFile(stream, null, 0,
+                    MemoryMappedFileAccess.Read, HandleInheritability.None, leaveOpen: false);
+                mappedView = mappedFile.CreateViewAccessor((long)sectionOffset, Length, MemoryMappedFileAccess.Read);
+                byte* mappedPointer = null;
+                mappedView.SafeMemoryMappedViewHandle.AcquirePointer(ref mappedPointer);
+                mappedPointerAcquired = true;
+                pointer = (IntPtr)(mappedPointer + mappedView.PointerOffset);
+            }
+            catch
+            {
+                Dispose();
+                stream.Dispose();
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Gets the data buffer.
         /// </summary>
         public byte[] Data { get; private set; }
+
+        /// <summary>
+        /// Gets the section length, including for file-backed sections larger than Int32.MaxValue.
+        /// </summary>
+        public long Length { get; }
 
         /// <summary>
         /// Gets or sets the current position in the stream.
@@ -56,15 +110,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         {
             get
             {
-                return Position >= Data.Length;
+                return Position >= Length;
             }
         }
 
         private void EnsureAvailable(uint bytesToRead)
         {
-            if (bytesToRead > (uint)Data.Length || Position > (uint)Data.Length - bytesToRead)
+            ObjectDisposedException.ThrowIf(disposed, this);
+            if (bytesToRead > Length || Position > Length - bytesToRead)
             {
-                throw new DwarfBufferOverreadException(Position, bytesToRead, Data.Length);
+                throw new DwarfBufferOverreadException(Position, bytesToRead, Length);
             }
         }
 
@@ -73,8 +128,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public void Dispose()
         {
-            pinnedData.Free();
+            if (disposed)
+            {
+                return;
+            }
+
+            if (mappedPointerAcquired)
+            {
+                mappedView.SafeMemoryMappedViewHandle.ReleasePointer();
+            }
+            mappedView?.Dispose();
+            mappedFile?.Dispose();
+            if (pinnedData.IsAllocated)
+            {
+                pinnedData.Free();
+            }
             pointer = IntPtr.Zero;
+            disposed = true;
         }
 
         /// <summary>
@@ -83,7 +153,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public byte Peek()
         {
             EnsureAvailable(1);
-            return Data[Position];
+            return Marshal.ReadByte((nint)(pointer + Position));
         }
 
         /// <summary>
@@ -133,20 +203,16 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         public string ReadString()
         {
-            if (Position >= Data.Length)
+            EnsureAvailable(1);
+            uint start = Position;
+            while (Position < Length && Peek() != 0)
             {
-                throw new DwarfBufferOverreadException(Position, 1, Data.Length);
+                Position++;
             }
-            try
-            {
-                string result = Marshal.PtrToStringAnsi((nint)(pointer + Position));
-                Position += (uint)result.Length + 1;
-                return result;
-            }
-            catch (Exception ex) when (ex is ArgumentException || ex is AccessViolationException)
-            {
-                throw new DwarfBufferOverreadException(Position, 1, Data.Length);
-            }
+            EnsureAvailable(1); // A string must terminate within this section, not the next one.
+            string result = Marshal.PtrToStringAnsi((nint)(pointer + start), checked((int)(Position - start)));
+            Position++;
+            return result;
         }
 
         /// <summary>
@@ -155,7 +221,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public byte ReadByte()
         {
             EnsureAvailable(1);
-            return Data[Position++];
+            return Marshal.ReadByte((nint)(pointer + Position++));
         }
 
         /// <summary>
@@ -164,7 +230,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public ushort ReadUshort()
         {
             EnsureAvailable(2);
-            ushort result = (ushort)Marshal.ReadInt16(pointer, (int)Position);
+            ushort result = (ushort)Marshal.ReadInt16((nint)(pointer + Position));
 
             Position += 2;
             return result;
@@ -185,7 +251,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public uint ReadUint()
         {
             EnsureAvailable(4);
-            uint result = (uint)Marshal.ReadInt32(pointer, (int)Position);
+            uint result = (uint)Marshal.ReadInt32((nint)(pointer + Position));
 
             Position += 4;
             return result;
@@ -197,7 +263,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         public ulong ReadUlong()
         {
             EnsureAvailable(8);
-            ulong result = (ulong)Marshal.ReadInt64(pointer, (int)Position);
+            ulong result = (ulong)Marshal.ReadInt64((nint)(pointer + Position));
 
             Position += 8;
             return result;
@@ -229,12 +295,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             while (true)
             {
-                if (Position >= Data.Length)
-                {
-                    throw new DwarfBufferOverreadException(Position, 1, Data.Length);
-                }
-
-                byte b = Data[Position];
+                byte b = Peek();
 
                 if ((b & 0x80) == 0)
                 {
@@ -246,7 +307,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 Position++;
             }
 
-            x |= (uint)(Data[Position] << shift);
+            x |= (uint)(Peek() << shift);
             Position++;
             return x;
         }
@@ -261,12 +322,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             while (true)
             {
-                if (Position >= Data.Length)
-                {
-                    throw new DwarfBufferOverreadException(Position, 1, Data.Length);
-                }
-
-                byte b = Data[Position];
+                byte b = Peek();
 
                 if ((b & 0x80) == 0)
                 {
@@ -278,7 +334,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 Position++;
             }
 
-            byte last = Data[Position];
+            byte last = Peek();
             x |= last << shift;
             if ((last & 0x40) != 0)
             {
@@ -294,15 +350,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="size">The size of block.</param>
         public byte[] ReadBlock(ulong size)
         {
-            if (Position >= Data.Length)
+            ObjectDisposedException.ThrowIf(disposed, this);
+            if (Position >= Length)
             {
                 return Array.Empty<byte>();
             }
 
-            size = Math.Min(size, (ulong)(Data.Length - Position));
+            size = Math.Min(size, (ulong)(Length - Position));
+            if (size > (ulong)Array.MaxLength)
+            {
+                throw new InvalidOperationException("A single DWARF block exceeds the maximum array length.");
+            }
             byte[] block = new byte[size];
 
-            Array.Copy(Data, Position, block, 0, block.Length);
+            Marshal.Copy((nint)(pointer + Position), block, 0, block.Length);
             Position += (uint)block.Length;
             return block;
         }
@@ -314,7 +375,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="position">The position.</param>
         public byte[] ReadBlock(uint size, uint position)
         {
-            if (position < 0 || position >= Data.Length)
+            if (position >= Length)
             {
                 return Array.Empty<byte>();
             }
@@ -332,7 +393,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="position">The position.</param>
         public string ReadString(uint position)
         {
-            if (position >= Data.Length)
+            if (position >= Length)
             {
                 return string.Empty;
             }
@@ -350,7 +411,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="position">The position.</param>
         public uint ReadUint(uint position)
         {
-            if (position < 0 || position >= Data.Length)
+            if (position >= Length)
             {
                 return 0;
             }
@@ -369,7 +430,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <param name="position">The position.</param>
         public T ReadStructure<T>(uint position)
         {
-            if (position < 0 || position >= Data.Length)
+            if (position >= Length)
             {
                 return default;
             }
