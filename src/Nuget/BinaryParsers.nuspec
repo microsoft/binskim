@@ -11,7 +11,7 @@
     <summary>A library that contains binary parsers for Windows portable executables and Linux ELF binaries.</summary>
     <releaseNotes>Version $version$ of BinSkim</releaseNotes>
     <copyright>© Microsoft Corporation. All rights reserved.</copyright>
-    <licenseUrl>https://github.com/microsoft/binskim/blob/master/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/microsoft/binskim/blob/main/LICENSE</licenseUrl>
     <projectUrl>https://github.com/microsoft/binskim</projectUrl>
     <tags>binary analysis binskim binscope security portable executable linkable format sdl devops devsecops</tags>
     <iconUrl>https://go.microsoft.com/fwlink/?linkid=2008940</iconUrl>

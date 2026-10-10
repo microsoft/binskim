@@ -7,13 +7,13 @@
     <authors>Microsoft</authors>
     <owners>Microsoft,TSE-SecurityTools</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A correctness and security checker for Windows portable executables and Linux ELF binaries. BinSkim scans binaries to ensure they have been compiled in a secure way, e.g., by opting into data execution prevention, address layout randomization and other features. </description>
-    <summary>A correctness and security checker for Windows portable executables and Linux ELF binaries.</summary>
+    <description>A correctness and security checker for Windows Portable Executable (PE), Linux ELF, and macOS Mach-O binaries. BinSkim scans binaries for secure compiler and linker settings and other security-relevant characteristics.</description>
+    <summary>A correctness and security checker for PE, ELF, and Mach-O binaries.</summary>
     <releaseNotes>Version $version$ of BinSkim</releaseNotes>
     <copyright>© Microsoft Corporation. All rights reserved.</copyright>    
-    <licenseUrl>https://github.com/microsoft/binskim/blob/master/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/microsoft/binskim/blob/main/LICENSE</licenseUrl>
     <projectUrl>https://github.com/microsoft/binskim</projectUrl>
-    <tags>binary analysis binskim binscope security portable executable linkable format sdl devops devsecops</tags>
+    <tags>binary analysis binskim binscope security pe elf macho portable executable executable linkable format sdl devops devsecops</tags>
     <iconUrl>https://go.microsoft.com/fwlink/?linkid=2008940</iconUrl>
   </metadata>
   <files>
