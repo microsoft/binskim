@@ -81,19 +81,25 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             try
             {
-                string[] commentData = NullTermAsciiToStrings(commentSection.GetContents());
-                var compilers = new ElfCompiler[commentData.Length];
-                for (int i = 0; i < commentData.Length; i++)
-                {
-                    compilers[i] = new ElfCompiler(commentData[i]);
-                }
-                return compilers;
+                return GetELFCompilers(commentSection.GetContents());
             }
             // Catch cases when the .comment section is not formatted the way we expect it to be.
             catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
             {
                 return new ElfCompiler[] { new ElfCompiler(string.Empty) };
             }
+        }
+
+        internal static ElfCompiler[] GetELFCompilers(byte[] commentData)
+        {
+            ElfCompiler[] compilers = NullTermAsciiToStrings(commentData)
+                .Where(description => !string.IsNullOrEmpty(description))
+                .Select(description => new ElfCompiler(description))
+                .ToArray();
+
+            return compilers.Length > 0
+                ? compilers
+                : new ElfCompiler[] { new ElfCompiler(string.Empty) };
         }
 
         /// <summary>
