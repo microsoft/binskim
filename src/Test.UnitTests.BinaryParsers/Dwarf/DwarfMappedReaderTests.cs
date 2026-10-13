@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             const ulong sectionOffset = 17; // Also exercise an unaligned mapping offset.
             const ulong sectionSize = (ulong)int.MaxValue + 128;
             using var file = new TemporarySparseFile();
-            using (var stream = File.OpenWrite(file.Path))
+            using (FileStream stream = File.OpenWrite(file.Path))
             {
                 stream.SetLength((long)(sectionOffset + sectionSize));
                 stream.Position = (long)sectionOffset + position;
@@ -130,7 +130,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             file.MarkSparse();
 
             ulong sectionSize = (ulong)int.MaxValue + 128;
-            using (var stream = File.Open(file.Path, FileMode.Open, FileAccess.ReadWrite))
+            using (FileStream stream = File.Open(file.Path, FileMode.Open, FileAccess.ReadWrite))
             using (var reader = new BinaryReader(stream, Encoding.UTF8, leaveOpen: true))
             using (var writer = new BinaryWriter(stream, Encoding.UTF8, leaveOpen: true))
             {
@@ -168,7 +168,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             byte[] debugInfo = original.DebugData;
             const uint offset = (uint)int.MaxValue + 16;
             using var file = new TemporarySparseFile();
-            using (var stream = File.OpenWrite(file.Path))
+            using (FileStream stream = File.OpenWrite(file.Path))
             {
                 stream.SetLength((long)offset + debugInfo.Length);
                 stream.Position = offset;
@@ -204,7 +204,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             {
                 if (OperatingSystem.IsWindows())
                 {
-                    using var stream = File.OpenWrite(Path);
+                    using FileStream stream = File.OpenWrite(Path);
                     if (!DeviceIoControl(stream.SafeFileHandle, 0x000900C4, IntPtr.Zero, 0, IntPtr.Zero, 0,
                         out _, IntPtr.Zero))
                     {

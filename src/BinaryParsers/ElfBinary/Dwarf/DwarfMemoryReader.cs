@@ -24,9 +24,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// </summary>
         private IntPtr pointer;
 
-        private MemoryMappedFile mappedFile;
-        private MemoryMappedViewAccessor mappedView;
-        private bool mappedPointerAcquired;
+        private readonly MemoryMappedFile mappedFile;
+        private readonly MemoryMappedViewAccessor mappedView;
+        private readonly bool mappedPointerAcquired;
         private bool disposed;
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
             Data = Array.Empty<byte>();
             Length = (long)sectionSize;
-            var stream = File.OpenRead(path);
+            FileStream stream = File.OpenRead(path);
             try
             {
                 if (sectionOffset > (ulong)stream.Length || sectionSize > (ulong)stream.Length - sectionOffset)
