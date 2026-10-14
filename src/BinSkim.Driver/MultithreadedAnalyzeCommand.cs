@@ -299,6 +299,14 @@ namespace Microsoft.CodeAnalysis.IL
             IEnumerable<Skimmer<BinaryAnalyzerContext>> skimmers,
             ISet<string> disabledSkimmers)
         {
+            // Sarif.Driver 5 defaults to SHA-256 only, but BinSkim's --hashes contract emits both hashes.
+            if (context.DataToInsert.HasFlag(OptionallyEmittedData.Hashes))
+            {
+                context.Logger.FileRegionsCache = new FileRegionsCache(
+                    fileSystem: context.FileSystem,
+                    hashAlgorithms: HashAlgorithms.Sha1 | HashAlgorithms.Sha256);
+            }
+
             if (!context.IgnoreBinaryAnalysisErrors)
             {
                 base.AnalyzeTarget(context, skimmers, disabledSkimmers);
