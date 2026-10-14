@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 using FluentAssertions;
 
@@ -43,6 +44,38 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         public void NullTermAsciiToStrings_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => ElfUtility.NullTermAsciiToStrings(null));
+        }
+
+        [Fact]
+        public void GetELFCompilers_IgnoresLeadingNullByte()
+        {
+            const string rustDescription = "rustc version 1.95.0 (ed80dadd6a 2026-06-18) (1.95.0-ms-20260618.5+ed80dadd6a)";
+            const string linkerDescription = "Linker: LLD 22.1.2";
+            var commentData = new List<byte> { 0 };
+            commentData.AddRange(Encoding.ASCII.GetBytes(rustDescription));
+            commentData.Add(0);
+            commentData.AddRange(Encoding.ASCII.GetBytes(linkerDescription));
+            commentData.Add(0);
+
+            ElfCompiler[] compilers = ElfUtility.GetELFCompilers(commentData.ToArray());
+
+            compilers.Should().HaveCount(2);
+            compilers[0].Compiler.Should().Be(ElfCompilerType.Rust);
+            compilers[0].Version.Should().Be(new Version(1, 95, 0));
+            compilers[0].FullDescription.Should().Be(rustDescription);
+            compilers[1].Compiler.Should().Be(ElfCompilerType.Unknown);
+            compilers[1].FullDescription.Should().Be(linkerDescription);
+        }
+
+        [Theory]
+        [InlineData(new byte[] { 0 })]
+        [InlineData(new byte[] { 0, 0 })]
+        public void GetELFCompilers_EmptyCommentsReturnUnknownCompiler(byte[] commentData)
+        {
+            ElfCompiler[] compilers = ElfUtility.GetELFCompilers(commentData);
+
+            compilers.Should().ContainSingle();
+            compilers[0].Compiler.Should().Be(ElfCompilerType.Unknown);
         }
     }
 }
