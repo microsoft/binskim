@@ -29,8 +29,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
         private readonly Lazy<Symbol> globalScope;
         private bool restrictReferenceAndOriginalPathAccess;
         private PdbFileType pdbFileType;
+        private const string s_windowsMSFZSignature = "Microsoft MSFZ Container";
         private const string s_windowsPdbSignature = "Microsoft C/C++ MSF 7.00\r\n\x001ADS\x0000\x0000\x0000";
         private const string s_portablePdbSignature = "BSJB";
+        public static readonly ImmutableArray<byte> WindowsMSFZSignature = ImmutableArray.Create(Encoding.ASCII.GetBytes(s_windowsMSFZSignature));
         public static readonly ImmutableArray<byte> WindowsPdbSignature = ImmutableArray.Create(Encoding.ASCII.GetBytes(s_windowsPdbSignature));
         public static readonly ImmutableArray<byte> PortablePdbSignature = ImmutableArray.Create(Encoding.ASCII.GetBytes(s_portablePdbSignature));
 
@@ -129,6 +131,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
                 if (WindowsPdbSignature.AsSpan().SequenceEqual(span.Slice(0, WindowsPdbSignature.Length)))
                 {
                     this.pdbFileType = PdbFileType.Windows;
+                }
+                else if (WindowsMSFZSignature.AsSpan().SequenceEqual(span.Slice(0, WindowsMSFZSignature.Length)))
+                {
+                    this.pdbFileType = PdbFileType.WindowsMSFZ;
                 }
                 else if (PortablePdbSignature.AsSpan().SequenceEqual(span.Slice(0, PortablePdbSignature.Length)))
                 {
