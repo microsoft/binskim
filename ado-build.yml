@@ -9,10 +9,17 @@ jobs:
       - checkout: self
 
       - task: UseDotNet@2
-        displayName: .NET Core 9 sdk
+        displayName: .NET 9 runtime
         inputs:
           version: "9.0.x"
+          packageType: runtime
+
+      - task: UseDotNet@2
+        displayName: .NET SDK from global.json
+        inputs:
           packageType: sdk
+          useGlobalJson: true
+          workingDirectory: $(Build.SourcesDirectory)
 
       - task: Bash@3
         displayName: "Build and Test"
@@ -20,22 +27,49 @@ jobs:
           filePath: "BuildAndTest.sh"
           failOnStderr: true
 
+      - task: PublishTestResults@2
+        displayName: Publish MTP test results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: VSTest
+          testResultsFiles: '$(Build.SourcesDirectory)/bld/TestResults/**/*.trx'
+          failTaskOnFailedTests: true
+          failTaskOnMissingResultsFile: true
+          mergeTestResults: true
+
   - job: windows
     pool:
       vmImage: "windows-latest"
     steps:
+      - checkout: self
+
       - task: UseDotNet@2
-        displayName: .NET Core 9 sdk
+        displayName: .NET 9 runtime
         inputs:
           version: "9.0.x"
-          packageType: sdk
+          packageType: runtime
 
-      - checkout: self
+      - task: UseDotNet@2
+        displayName: .NET SDK from global.json
+        inputs:
+          packageType: sdk
+          useGlobalJson: true
+          workingDirectory: $(Build.SourcesDirectory)
 
       - task: CmdLine@2
         displayName: "Build and Test"
         inputs:
           script: "BuildAndTest.cmd"
+
+      - task: PublishTestResults@2
+        displayName: Publish MTP test results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: VSTest
+          testResultsFiles: '$(Build.SourcesDirectory)/bld/TestResults/**/*.trx'
+          failTaskOnFailedTests: true
+          failTaskOnMissingResultsFile: true
+          mergeTestResults: true
 
       - task: ComponentGovernanceComponentDetection@0
 
@@ -43,13 +77,20 @@ jobs:
     pool:
       vmImage: "macOS-latest"
     steps:
+      - checkout: self
+
       - task: UseDotNet@2
-        displayName: .NET Core 9 sdk
+        displayName: .NET 9 runtime
         inputs:
           version: "9.0.x"
-          packageType: sdk
+          packageType: runtime
 
-      - checkout: self
+      - task: UseDotNet@2
+        displayName: .NET SDK from global.json
+        inputs:
+          packageType: sdk
+          useGlobalJson: true
+          workingDirectory: $(Build.SourcesDirectory)
 
       - task: Bash@3
         displayName: "Build and Test"
@@ -57,9 +98,18 @@ jobs:
           filePath: "BuildAndTest.sh"
           failOnStderr: true
 
+      - task: PublishTestResults@2
+        displayName: Publish MTP test results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: VSTest
+          testResultsFiles: '$(Build.SourcesDirectory)/bld/TestResults/**/*.trx'
+          failTaskOnFailedTests: true
+          failTaskOnMissingResultsFile: true
+          mergeTestResults: true
+
       - task: Bash@3
         displayName: "Run BinSkim"
         inputs:
           targetType: "inline"
           script: "dotnet bld/bin/BinSkim.Driver/release_osx-x64/BinSkim.dll analyze src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/macho.*"
-

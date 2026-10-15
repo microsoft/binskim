@@ -43,13 +43,30 @@ extends:
       - job: Compliance
         steps:
         - task: UseDotNet@2
-          displayName: 'Use .NET Core sdk 9'
+          displayName: 'Use .NET 9 runtime'
           inputs:
-              version: 9.x
+            packageType: runtime
+            version: 9.0.x
+        - task: UseDotNet@2
+          displayName: '.NET SDK from global.json'
+          inputs:
+            packageType: sdk
+            useGlobalJson: true
+            workingDirectory: $(Build.SourcesDirectory)
         - task: BatchScript@1
           displayName: 'Run script BuildAndTest.cmd' 
           inputs:
             filename: BuildAndTest.cmd
+
+        - task: PublishTestResults@2
+          displayName: Publish MTP test results
+          condition: succeededOrFailed()
+          inputs:
+            testResultsFormat: VSTest
+            testResultsFiles: '$(Build.SourcesDirectory)/bld/TestResults/**/*.trx'
+            failTaskOnFailedTests: true
+            failTaskOnMissingResultsFile: true
+            mergeTestResults: true
 
         - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@4
           displayName: 'Run BinSkim '
@@ -70,4 +87,3 @@ extends:
           continueOnError: true
         - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
           displayName: 'Publish Security Analysis Logs'
-
