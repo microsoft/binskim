@@ -1,61 +1,115 @@
-# Making a BinSkim Rule Contribution
+# Contributing a BinSkim rule
 
-1. File a (or locate an existing) BinSkim issue that serves as the specification for the rule.
-2. Create shell rule.
-3. Prepare test assets for the rule.
-4. Author standard unit tests.
-5. Implement the analysis.
-6. Review impact of new analysis on test set and update baselines if necessary.
+A rule contribution starts with an agreed specification and ends with implementation, focused tests, representative test binaries, reviewed SARIF baselines, and regenerated rule documentation.
 
-----
+## Start with a rule specification
 
-## File or locate a rule request
+Open or locate a [rule request](https://github.com/microsoft/binskim/issues/new?template=rule-request.md) before implementation. The specification should define:
 
-- Create a rule request issue in the BinSkim repository by clicking `New issue` and selecting the `Rule request` template (or just click [here](https://github.com/microsoft/binskim/issues/new?assignees=&labels=rule-request&template=rule-request.md&title=%5BRULE+REQUEST%5D+Concise+description+of+new+analysis)).
-- The issue templates contains additional guidance for authoring a complete rule specification.
-- Continue to work with a repository maintainer to iron out details in implementation, etc.
-- Rules marked with the `approved` label are ready to implement.
-- See the [CET shadow stack compatibility](https://github.com/microsoft/binskim/issues/277) rule specification for an example.
+- The rule ID and friendly name.
+- The supported binary formats and platforms.
+- Applicable and non-applicable targets.
+- Pass, failure, and other user-facing messages.
+- The security or correctness outcome and recommended remediation.
+- Any configurable policy and its default behavior.
 
-## Create shell rule for implementation
+Resolve specification questions with a maintainer before encoding them in resources or tests. The issue is the source of truth for the intended behavior.
 
-1. Create a new rule id constant for the check in the [RuleIds](https://github.com/microsoft/binskim/blob/main/src/BinSkim.Rules/RuleIds.cs) class. The name of the property should match the rule friendly name, e.g. `EnableControlEnforcementTechnologyShadowStack` and its value should be the rule identifier, e.g., `BA2025`.
-2. Open [RuleResources](https://github.com/microsoft/binskim/blob/main/src/BinSkim.Rules/RuleResources.resx) and create new user-facing strings for pass and fail conditions. By convention, these strings follow a naming schema that includes the rule identifier, the failure level and an optional additional description of the pass or fail condition, all separated by an underscore, e.g., `BA2025_Pass` and `BA2025_Error`. The string values should be retrieved from the approved rule specific/issue. You can start rules development with placeholder values, obviously.
-3. Add the rule description from the specification issue to a string named as RULEID_FRIENDLYNAME_Decription, e.g., `BA2025_EnableControlEnforcementTechnologyShadowStack_Description`. Again, you can use a placeholder if this text is still under refinement.
-4. Open the shell rule starter code in [BAXXXX.RuleFriendlyName.cs](BAXXXX.RuleFriendlyName.cs) and save a copy to either the [ELFRules] or [PERules] directory, depending on the target platform for the check. Rename the file on save to conform to the actual assigned rule id and friendly rule name, e.g., `BA2025.EnableControlEnforcementTechnologyShadowStack`.
-5. Find/Replace all occurrences of `BAXXXX` in this file with the rule id.
-6. Find/Replace all occurrences of `RULEFRIENDLYNAME` in this file with the rule name.
+## Choose a representative rule
 
-## Prepare test assets
+Do not start from a generic rule template. Find a maintained rule with the same binary format, metadata requirements, and platform constraints:
 
-- Every rule should be tested against binaries that explicitly fail the check as well as binaries designed to pass.
-- Both passing and failing binaries should be updated with other security mitigations. I.e., the goal is for test binaries to be entirely clean in the `pass` case and to only fire results for the new check in the `rule` case.
-- Create a directory in the rules functional test directory that matches the rule id and friendly name, separated with a dot character, e.g. [BA2025.EnableControlEnforcementTechnologyShadowStack](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestData/BA2025.EnableControlEnforcementTechnologyShadowStack).
-- Create directories named [Pass](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestData/BA2025.EnableControlEnforcementTechnologyShadowStack/Pass) and [Fail](https://github.com/microsoft/binskim/tree/main/src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestData/BA2025.EnableControlEnforcementTechnologyShadowStack/Fail) in this directory and copy relevant secure and vulnerable test binaries to their respective location.
-By convention, test binary names indicate their language, bittedness/processor, toolchain, and kind, with each attribute separated by an underscore. `Native_x64_VS2019_Console.exe`, for example, indicates a C++ Intel 64-bit console application compiled by the Microsoft Visual Studio 2019 toolchain.
-- In some cases, it may be useful to create a specific binary to test proper return of the BinSkim `notApplicable` result (which indicates that the binary itself is not a relevant candidate for analysis). For many checks, the standard BinSkim "zoo" of test binaries can be used to verify proper enforcement of applicability.
+| Scenario | Representative implementation |
+| --- | --- |
+| PE metadata without PDB data | [`PERules\BA2029.EnableIntegrityCheck.cs`](../src/BinSkim.Rules/PERules/BA2029.EnableIntegrityCheck.cs) |
+| PE metadata with PDB data | [`PERules\BA2027.EnableSourceLink.cs`](../src/BinSkim.Rules/PERules/BA2027.EnableSourceLink.cs) |
+| ELF structure | [`ElfRules\BA3001.EnablePositionIndependentExecutable.cs`](../src/BinSkim.Rules/ElfRules/BA3001.EnablePositionIndependentExecutable.cs) |
+| ELF or Mach-O DWARF data | [`DwarfRules\BA3003.EnableStackProtector.cs`](../src/BinSkim.Rules/DwarfRules/BA3003.EnableStackProtector.cs) |
+| Mach-O structure | [`MachORules\BA5001.EnablePositionIndependentExecutable.cs`](../src/BinSkim.Rules/MachORules/BA5001.EnablePositionIndependentExecutable.cs) |
 
-## Author standard unit tests
+Use the platform-specific base class and parser abstractions already used by the nearest rule. Input binaries are untrusted and may be malformed, truncated, or internally inconsistent.
 
-1. Open [RuleTestShells.cs](RuleTestShells.cs) and copy the three shell methods into the actual BinSkim [RuleTests.cs](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Rules/RuleTests.cs) file.
-2. Replace `BAXXX` and `RULEFRIENDLYNAME` in the test methods with the actual rule id and friendly name, leaving method names such as `BA2025_EnableControlEnforcementTechnologyShadowStack_Pass`.
-3. Update the test methods, as per the code comments, to properly configure analysis. This mostly entails configuring checks to understand the applicability of a check to various binary conditions (e.g., whether the binary is 32-bit, an MSIL image, etc.).
-4. Open the test explorer window and type your rule id and name prefix in the search field, e.g. `BA2025_EnableControlEnforcementTechnologyShadowStack`. You should be able to see your three tests. If you run them, they should fail. :)
+## Add rule metadata
 
-## Author baseline tests
+1. Add the friendly-name constant and assigned ID to [`RuleIds.cs`](../src/BinSkim.Rules/RuleIds.cs).
+2. Add the full description and result messages to [`RuleResources.resx`](../src/BinSkim.Rules/RuleResources.resx), following the naming pattern of adjacent rules.
+3. Do not edit `RuleResources.Designer.cs`. The resource designer regenerates it from the `.resx` file.
+4. Add the rule class under `PERules`, `ElfRules`, `DwarfRules`, or `MachORules`.
+5. Export the rule as a skimmer and reporting descriptor, then expose its ID, full description, and message resource names.
 
-How does BinSkim baseline test work?
+Implement `IOptionsProvider` only when the rule has configurable policy. Override default enablement only when the specification requires it.
 
-The binaries to be tested are added in [BaselineTestData](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) folder,
-when the baseline test run it will dynamically generate .SARIF files in the `Actual` folder under it, and compare to [Expected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Expected) folder when the test is running in Windows, or [NonWindowsExpected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/NonWindowsExpected) folder otherwise.
-`Actual` folder is not checked in.
+## Implement applicability and analysis
 
-1. Prepare test binary with the same naming convention provided in above section [## Prepare test assets](#prepare-test-assets).
-2. Add test binary to [BaselineTestData](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData) folder.
-3. In Windows, use PowerShell and `cd` to folder `\src\Test.FunctionalTests.BinSkim.Driver`, run `.\UpdateBaselines.ps1`. 
-This will create the corresponding .SARIF file in [Expected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Expected) folder.
-Verify all new or updated .SARIF files if the results are correct.
-4. In Linux (or Windows Subsystem for Linux), `cd` to folder `/src/Test.FunctionalTests.BinSkim.Driver`, run `./UpdateBaselines.sh`. 
-This will create the corresponding .SARIF file in [NonWindowsExpected](https://github.com/microsoft/binskim/blob/main/src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/NonWindowsExpected) folder.
-Verify all new or updated .SARIF files if the results are correct.
-5. Include all new and updated files in your PR. This includes the new binary file itself, the expected .SARIF file for Windows, and the expected .SARIF file for non-Windows. If there are also any updates to the existing .SARIF files for existing binaries, verify the changes are correct and include them in the PR as well.
+Keep applicability separate from analysis:
+
+- Applicability should reject every target that the rule cannot evaluate reliably.
+- Return an existing `MetadataConditions` reason where one describes the observed condition.
+- Add a new metadata condition only when existing reasons are not accurate.
+- Analysis should emit results only after applicability succeeds.
+- Use the shared result-building and logging helpers so SARIF output remains consistent.
+
+Preserve behavior across supported operating systems and architectures. A rule that depends on Windows APIs or Windows PDB parsing must expose that platform constraint through the existing base classes and tests.
+
+## Prepare functional test assets
+
+Rule test assets live under [`FunctionalTestData`](../src/Test.FunctionalTests.BinSkim.Rules/FunctionalTestData) in a directory named `RuleId.FriendlyName`, matching the rule ID and class name.
+
+Add the applicable subdirectories:
+
+- `Pass` contains binaries that satisfy the rule.
+- `Fail` contains binaries that produce the intended warning or error.
+- `NotApplicable` contains rule-specific binaries that exercise applicability boundaries. Shared applicability fixtures may be reused where appropriate.
+
+Passing and failing binaries should differ only in conditions relevant to the rule. Enable unrelated mitigations so a fixture does not introduce noise into broader test runs.
+
+Check in the fixture source and a deterministic build script beside newly added binaries whenever possible. The build path should identify the required toolchain, architecture, configuration, and meaningful compiler or linker options. If exact reproduction depends on external state such as a signing certificate or unavailable toolchain, document that constraint in the affected rule directory rather than recording an unverified historical recipe.
+
+## Add functional rule tests
+
+Add focused methods to [`RuleTests.cs`](../src/Test.FunctionalTests.BinSkim.Rules/RuleTests.cs). Its helpers derive the test-data directory from the rule class name and `RuleIds` entry.
+
+- Use `VerifyPass` for the `Pass` directory.
+- Use `VerifyFail` for the `Fail` directory.
+- Use `VerifyApplicability` or the condition-specific helper for applicability boundaries.
+- Use platform guards for rules that cannot execute on every test platform.
+- Add dedicated tests for behavior that the directory-driven helpers cannot express, such as parser failures or files removed during analysis.
+
+Run the affected test project with a filter for the rule ID while iterating:
+
+```console
+dotnet test src/Test.FunctionalTests.BinSkim.Rules/Test.FunctionalTests.BinSkim.Rules.csproj -c Release --filter "FullyQualifiedName~RULE_ID"
+```
+
+## Review driver baselines
+
+Changes to rule applicability, messages, levels, or output can affect the driver SARIF baselines under [`BaselineTestData`](../src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData).
+
+From `src\Test.FunctionalTests.BinSkim.Driver`, regenerate the platform baseline:
+
+```powershell
+.\UpdateBaselines.ps1
+```
+
+```bash
+./UpdateBaselines.sh
+```
+
+Windows expectations are stored under `Expected`. Non-Windows expectations are stored under `NonWindowsExpected`. Review every changed SARIF file and include only intentional output changes.
+
+## Regenerate rule documentation
+
+`BuildAndTest.cmd` performs the full Windows validation workflow and regenerates [`BinSkimRules.md`](BinSkimRules.md) from rule metadata. Review the generated diff whenever descriptions, messages, levels, default enablement, or configuration change.
+
+Do not edit generated rule documentation directly.
+
+## Completion checklist
+
+- The approved rule specification matches the implementation.
+- Rule IDs, resources, implementation, and generated documentation agree.
+- Applicability covers all unsupported target conditions.
+- Pass, fail, and relevant non-applicable cases have representative assets.
+- Test-asset provenance is recorded beside the assets.
+- Focused rule tests pass on supported platforms.
+- Windows and non-Windows baseline changes are intentional.
+- Full validation completes successfully.
