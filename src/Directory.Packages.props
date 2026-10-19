@@ -13,8 +13,8 @@
     <PackageVersion Include="Moq" Version="4.21.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="Sarif.Driver" Version="4.6.0" />
-    <PackageVersion Include="System.Composition" Version="10.0.12" />
+    <PackageVersion Include="System.Composition" Version="10.0.13" />
     <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
   </ItemGroup>
 </Project>
