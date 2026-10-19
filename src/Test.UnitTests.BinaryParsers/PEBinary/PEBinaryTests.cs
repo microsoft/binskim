@@ -226,6 +226,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
+            PEBinary.ClearLocalSymbolDirectoriesCache();
             string fileName = Path.Combine(TestData, "PE/Native_x64.dll");
             using (var peBinary = new PEBinary(new Uri(fileName), localSymbolDirectories: Path.Combine(TestData, "SymbolsFolder")))
             {

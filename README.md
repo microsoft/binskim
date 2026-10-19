@@ -6,8 +6,14 @@ This repository contains the source code for BinSkim, a Portable Executable (PE)
 
 1. Fork the repository -- **[Need Help?](https://help.github.com/articles/fork-a-repo/)**
 2. Read the **[Rule Contributions Guide](./docs/RuleContributions.md)**
-3. Load and compile `src\BinSkim.sln` to develop changes for contribution.
+3. Install the .NET SDK selected by `global.json` and the .NET 9 runtime, then load and compile `src\BinSkim.sln` to develop changes for contribution.
 4. Execute BuildAndTest.cmd at the root of the enlistment to validate before submitting a PR.
+
+Tests use xUnit v3 with Microsoft.Testing.Platform (MTP), selected by `global.json`.
+Run `dotnet test --solution src\BinSkim.sln` on Windows, or `./BuildAndTest.sh` on Linux/macOS.
+The build scripts write TRX reports to `bld\TestResults`; to generate reports manually, add
+`--report-trx --results-directory bld\TestResults`. MTP options are passed directly,
+for example `dotnet test --solution src\BinSkim.sln --filter-class '*RulePropertyTests'`.
 
 ### Submit Pull Requests
 
