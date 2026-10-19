@@ -1353,6 +1353,57 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2027_EnableSourceLink_PdbUnavailableDuringAnalysis_LogsPdbLoadError()
+        {
+            if (!BinaryParsers.PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            string sourceDirectory = Path.Combine(
+                Environment.CurrentDirectory,
+                "FunctionalTestData",
+                "BA2027.EnableSourceLink",
+                "Pass");
+            string tempDirectory = Path.Combine(
+                Path.GetTempPath(),
+                "BinSkim_BA2027_" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempDirectory);
+
+            string targetPath = Path.Combine(tempDirectory, "CPlusPlus_SourceLink.exe");
+            string pdbPath = Path.Combine(tempDirectory, "CPlusPlus_SourceLink.pdb");
+            File.Copy(Path.Combine(sourceDirectory, Path.GetFileName(targetPath)), targetPath);
+            File.Copy(Path.Combine(sourceDirectory, Path.GetFileName(pdbPath)), pdbPath);
+
+            var logger = new TestMessageLogger();
+            var policy = new PropertiesDictionary();
+            BinaryAnalyzerContext context = CreateContext(logger, policy, targetPath);
+            context.IgnorePdbLoadError = true;
+            var skimmer = new EnableSourceLink();
+
+            try
+            {
+                skimmer.Initialize(context);
+                context.Rule = skimmer;
+
+                Assert.Equal(
+                    AnalysisApplicability.ApplicableToSpecifiedTarget,
+                    skimmer.CanAnalyze(context, out _));
+                Assert.NotNull(context.PEBinary().Pdb);
+
+                File.Delete(pdbPath);
+
+                Assert.Null(Record.Exception(() => skimmer.Analyze(context)));
+                Assert.Empty(logger.PassTargets);
+                Assert.Empty(logger.WarningTargets);
+                Assert.Contains(targetPath, logger.ConfigurationErrorTargets);
+                Assert.Equal(RuntimeConditions.None, context.RuntimeErrors);
+            }
+            finally
+            {
+                context.Dispose();
+                Directory.Delete(tempDirectory, recursive: true);
+            }
+        }
+
+        [Fact]
         public void BA2027_EnableSourceLink_NotApplicable()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())

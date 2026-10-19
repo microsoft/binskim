@@ -17,7 +17,7 @@
     <iconUrl>https://go.microsoft.com/fwlink/?linkid=2008940</iconUrl>
     <dependencies>
       <group targetFramework=".NET9.0">
-        <dependency id="Sarif.Driver" version="5.7.0" exclude="Build,Analyzers" />
+        <dependency id="Sarif.Driver" version="5.8.0" exclude="Build,Analyzers" />
         <dependency id="ELFSharp" version="2.17.3" exclude="Build,Analyzers" />
         <dependency id="Newtonsoft.Json" version="13.0.3" exclude="Build,Analyzers" />
         <dependency id="System.Collections.Immutable" version="9.0.0" exclude="Build,Analyzers" />
