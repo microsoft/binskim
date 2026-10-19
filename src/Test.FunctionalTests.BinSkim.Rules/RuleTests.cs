@@ -8,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -916,6 +918,85 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         public void BA2012_DoNotModifyStackProtectionCookie_Fail()
         {
             this.VerifyFail(new DoNotModifyStackProtectionCookie());
+        }
+
+        [Theory]
+        [InlineData(false, 0x0000u, 4, null, FailureLevel.Error)]
+        [InlineData(true, 0x0000u, 4, null, FailureLevel.Error)]
+        [InlineData(false, 0x0100u, 4, null, FailureLevel.Error)]
+        [InlineData(true, 0x0100u, 4, null, FailureLevel.Error)]
+        [InlineData(false, 0x0800u, 4, null, FailureLevel.Warning)]
+        [InlineData(true, 0x0800u, 4, null, FailureLevel.Warning)]
+        [InlineData(false, 0x0900u, 4, null, FailureLevel.Warning)]
+        [InlineData(true, 0x0900u, 4, null, FailureLevel.Warning)]
+        [InlineData(false, 0x0800u, 0, null, FailureLevel.Error)]
+        [InlineData(true, 0x0800u, 0, null, FailureLevel.Error)]
+        [InlineData(false, 0x0800u, 3, null, FailureLevel.Error)]
+        [InlineData(true, 0x0800u, 3, null, FailureLevel.Error)]
+        [InlineData(false, 0x0800u, 4, 0ul, FailureLevel.Error)]
+        [InlineData(true, 0x0800u, 4, 0ul, FailureLevel.Error)]
+        [InlineData(false, 0x0800u, 4, 0xBB40E64Eul, FailureLevel.None)]
+        [InlineData(true, 0x0800u, 4, 0x2B992DDFA232ul, FailureLevel.None)]
+        public void BA2012_DoNotModifyStackProtectionCookie_GuardFlags(
+            bool is64Bit, uint guardFlags, int guardFlagsBytes, ulong? cookieValue, FailureLevel expectedLevel)
+        {
+            string targetPath = Path.Combine(
+                Environment.CurrentDirectory,
+                "FunctionalTestData",
+                "BA2008.EnableControlFlowGuard",
+                "Pass",
+                is64Bit ? "Native_x64_VS2015_ControlFlowGuardEnabled.dll" : "Native_x86_VS2015_ControlFlowGuardEnabled.exe");
+
+            var logger = new TestMessageLogger();
+            using BinaryAnalyzerContext context = CreateContext(logger, null, targetPath);
+            Assert.True(context.IsValidAnalysisTarget);
+
+            PE pe = context.PEBinary().PE;
+            Assert.Equal(is64Bit, pe.Is64Bit);
+
+            byte[] imageBytes = pe.ImageBytes;
+            SafePointer loadConfigVA = pe.RVA2VA(new SafePointer(imageBytes, pe.PEHeaders.PEHeader.LoadConfigTableDirectory.RelativeVirtualAddress));
+            ImageHeader loadConfig = is64Bit
+                ? new ImageLoadConfigDirectory64(pe.PEHeaders.PEHeader, loadConfigVA)
+                : new ImageLoadConfigDirectory32(pe.PEHeaders.PEHeader, loadConfigVA);
+            int guardFlagsField = is64Bit
+                ? (int)ImageLoadConfigDirectory64.Fields.GuardFlags
+                : (int)ImageLoadConfigDirectory32.Fields.GuardFlags;
+            int securityCookieField = is64Bit
+                ? (int)ImageLoadConfigDirectory64.Fields.SecurityCookie
+                : (int)ImageLoadConfigDirectory32.Fields.SecurityCookie;
+            int guardFlagsOffset = loadConfig.GetFieldOffset(guardFlagsField);
+
+            BitConverter.GetBytes(guardFlagsOffset + guardFlagsBytes).CopyTo(imageBytes, loadConfigVA.Address);
+            BitConverter.GetBytes(guardFlags).CopyTo(imageBytes, loadConfigVA.Address + guardFlagsOffset);
+
+            if (cookieValue.HasValue)
+            {
+                ulong cookieVA = is64Bit
+                    ? (ulong)loadConfig.GetField(securityCookieField)
+                    : (uint)loadConfig.GetField(securityCookieField);
+                int cookieRVA = checked((int)(cookieVA - pe.PEHeaders.PEHeader.ImageBase));
+                SafePointer cookiePointer = pe.RVA2VA(new SafePointer(imageBytes, cookieRVA));
+                byte[] cookieBytes = is64Bit
+                    ? BitConverter.GetBytes(cookieValue.Value)
+                    : BitConverter.GetBytes(checked((uint)cookieValue.Value));
+                cookieBytes.CopyTo(imageBytes, cookiePointer.Address);
+            }
+            else
+            {
+                Array.Clear(imageBytes, loadConfigVA.Address + loadConfig.GetFieldOffset(securityCookieField), loadConfig.GetFieldSize(securityCookieField));
+            }
+
+            var skimmer = new DoNotModifyStackProtectionCookie();
+            context.Rule = skimmer;
+            skimmer.Initialize(context);
+            Assert.Equal(AnalysisApplicability.ApplicableToSpecifiedTarget, skimmer.CanAnalyze(context, out _));
+            skimmer.Analyze(context);
+
+            Assert.Equal(expectedLevel == FailureLevel.Error, logger.ErrorTargets.Contains(targetPath));
+            Assert.Equal(expectedLevel == FailureLevel.Warning, logger.WarningTargets.Contains(targetPath));
+            Assert.Equal(expectedLevel == FailureLevel.None, logger.PassTargets.Contains(targetPath));
+            Assert.Empty(logger.ConfigurationErrorTargets);
         }
 
         [Fact]
