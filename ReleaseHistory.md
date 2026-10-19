@@ -19,6 +19,7 @@
 - NEW => new feature 
 
 ## UNRELEASED
+* DEP: Update Sarif.Driver to 5.8.0 while preserving SHA-1 and SHA-256 hash output [1227](https://github.com/microsoft/binskim/pull/1227)
 
 ## **v4.4.9.13**
 * FPS: Fix BA2022 signature verification for long target paths [1215](https://github.com/microsoft/binskim/pull/1215)
