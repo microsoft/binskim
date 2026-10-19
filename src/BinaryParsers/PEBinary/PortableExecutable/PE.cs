@@ -858,7 +858,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public ChecksumAlgorithmType ManagedPdbSourceFileChecksumAlgorithm(PdbFileType pdbFileType, Pdb pdb)
         {
-            return pdbFileType == PdbFileType.Windows
+            return pdbFileType is PdbFileType.Windows or PdbFileType.WindowsMSFZ
                 ? ChecksumAlgorithmForFullPdb(pdb)
                 : ChecksumAlgorithmForPortablePdb(pdb);
         }
