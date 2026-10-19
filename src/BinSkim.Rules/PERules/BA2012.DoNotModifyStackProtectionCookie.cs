@@ -17,6 +17,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
     public class DoNotModifyStackProtectionCookie : PEBinarySkimmerBase
     {
+        private const uint IMAGE_GUARD_SECURITY_COOKIE_UNUSED = 0x0800;
+
         /// <summary>
         /// BA2012
         /// </summary>
@@ -136,7 +138,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!foundCookieSection)
             {
-                this.LogCouldNotLocateCookie(context);
+                FailureLevel failureLevel = GetMissingCookieFailureLevel(loadConfigVA,
+                    (int)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.Size),
+                    loadConfig.GetFieldOffset((int)ImageLoadConfigDirectory64.Fields.GuardFlags));
+                this.LogCouldNotLocateCookie(context, failureLevel);
                 return false;
             }
 
@@ -196,7 +201,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (!foundCookieSection)
             {
-                this.LogCouldNotLocateCookie(context);
+                FailureLevel failureLevel = GetMissingCookieFailureLevel(loadConfigVA,
+                    (int)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.Size),
+                    loadConfig.GetFieldOffset((int)ImageLoadConfigDirectory32.Fields.GuardFlags));
+                this.LogCouldNotLocateCookie(context, failureLevel);
                 return false;
             }
 
@@ -262,12 +270,24 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     context.PEBinary().PE.Packer.ToString()));
         }
 
-        private void LogCouldNotLocateCookie(BinaryAnalyzerContext context)
+        private static FailureLevel GetMissingCookieFailureLevel(SafePointer loadConfigVA, int loadConfigSize, int guardFlagsOffset)
+        {
+            // The PE data directory can retain its legacy size even when the load config includes GuardFlags.
+            int guardFlagsEnd = guardFlagsOffset + sizeof(uint);
+            uint guardFlags = loadConfigSize >= guardFlagsEnd && (loadConfigVA + guardFlagsEnd - 1).IsValid
+                ? (uint)(loadConfigVA + guardFlagsOffset)
+                : 0;
+            return (guardFlags & IMAGE_GUARD_SECURITY_COOKIE_UNUSED) != 0
+                ? FailureLevel.Warning
+                : FailureLevel.Error;
+        }
+
+        private void LogCouldNotLocateCookie(BinaryAnalyzerContext context, FailureLevel failureLevel)
         {
             // '{0}' is a C or C++ binary that enables the stack protection feature 
             // but the security cookie could not be located. The binary may be corrupted.
             context.Logger.Log(this,
-                RuleUtilities.BuildResult(FailureLevel.Error, context, null,
+                RuleUtilities.BuildResult(failureLevel, context, null,
                     nameof(RuleResources.BA2012_Error_CouldNotLocateCookie),
                     context.CurrentTarget.Uri.GetFileName()));
         }

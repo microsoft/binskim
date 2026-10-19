@@ -30,6 +30,12 @@ By default, BinSkim will only look for a PDB alongside the binary under analysis
 3. **Enable tracing**: you can enable the `--trace PdbLoad` argument as of BinSkim version 1.7.0 in order to capture BinSkim's PDB path probing logic. When enabled, BinSkim will show every file path that's examine in order to locate a PDB.
 4. **Rerun analysis**: Retrieving a PDB from a symbol server is an inherently unreliable operation, as the server may not be available or may simply fail a specific request. If your PDB failures are for 3rd party PDBs retrieved from a symbol and are intermittent, this may be the problem.
 
+## BA2012.DoNotModifyStackProtectionCookie
+
+The `CouldNotLocateCookie` diagnostic is an error when BinSkim cannot locate the stack protection cookie. For 32-bit and 64-bit PE binaries whose load configuration sets `IMAGE_GUARD_SECURITY_COOKIE_UNUSED`, this diagnostic is downgraded to a warning because the binary declares that the security cookie is unused.
+
+Missing or incomplete guard flags do not trigger this downgrade. A cookie that is located but has a modified value remains an error, even when `IMAGE_GUARD_SECURITY_COOKIE_UNUSED` is set.
+
 ## BA2024.EnableSpectreMitigations
 
 *Example message*:
