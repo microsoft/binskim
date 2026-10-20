@@ -133,7 +133,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 return;
             }
 
-            if (mappedPointerAcquired)
+            if (mappedPointerAcquired && mappedView != null)
             {
                 mappedView.SafeMemoryMappedViewHandle.ReleasePointer();
             }

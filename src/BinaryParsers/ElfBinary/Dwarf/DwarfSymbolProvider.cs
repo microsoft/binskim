@@ -60,7 +60,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                                                   addressNormalizer,
                                                                   offset);
 
-                if (compilationUnit?.Symbols.Any() != true)
+                if (compilationUnit == null || !compilationUnit.Symbols.Any())
                 {
                     return returnValue;
                 }

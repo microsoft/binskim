@@ -118,6 +118,37 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         }
 
         [Fact]
+        public void ArrayReader_HandlesRepeatedDisposalWithoutMappedView()
+        {
+            using var reader = new DwarfMemoryReader(new byte[] { 1 });
+            reader.ReadByte().Should().Be(1);
+
+            reader.Dispose();
+            reader.Dispose();
+
+            Assert.Throws<ObjectDisposedException>(() => reader.ReadByte());
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void CompilationUnits_EmptyDebugInfoReturnsNoUnits(bool useMappedReader)
+        {
+            string originalPath = System.IO.Path.Combine(ElfBinaryTests.TestData,
+                "Dwarf/DebugFileType/BinaryDirectory/gcc.objcopy.stripall.addgnudebuglink.full");
+            using var binary = new ElfBinary(new Uri(originalPath));
+            using var file = new TemporarySparseFile();
+            using DwarfMemoryReader data = useMappedReader
+                ? new DwarfMemoryReader(file.Path, 0, 0)
+                : new DwarfMemoryReader(Array.Empty<byte>());
+            using var strings = new DwarfMemoryReader(binary.DebugDataStrings);
+
+            DwarfSymbolProvider.ParseAllCompilationUnits(binary, data, binary.DebugDataDescription,
+                strings, binary.DebugLineStrings, binary.DebugStringOffsets, binary.NormalizeAddress)
+                .Should().BeEmpty();
+        }
+
+        [Fact]
         public void ElfBinary_ParsesOversizedDebugInfoWithoutDiscardingCompilationUnits()
         {
             string originalPath = System.IO.Path.Combine(ElfBinaryTests.TestData,
