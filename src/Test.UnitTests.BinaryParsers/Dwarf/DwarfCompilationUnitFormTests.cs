@@ -190,62 +190,35 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             return cu.SymbolsTree[0];
         }
 
-        // ---- DW_FORM_addrx4: should read exactly 4 bytes ----
-        // Note: addrx forms set Type=Address but store to Offset (not Value).
-        // The post-processing in ReadData calls addressNormalizer(value.Address)
-        // which dereferences Value and throws NRE when Value is null.
-        // This is a pre-existing issue: addrx1-4 indices are not yet resolved
-        // to actual addresses. We test byte consumption indirectly through
-        // DwarfMemoryReader.ReadUint/ReadThreeBytes unit tests and by verifying
-        // the multi-form alignment test with non-Address forms below.
+        // ---- DW_FORM_addrx*: indices are stored in Offset (unresolved), Value stays null ----
+        // The parser must consume the exact byte width, keep following attributes
+        // aligned, and not crash in post-processing.
 
-        [Fact]
-        public void ReadData_Addrx4_ConsumesExactlyFourBytes()
+        [Theory]
+        [InlineData(DwarfFormat.Addrx1, new byte[] { 0x78 }, 0x78UL)]
+        [InlineData(DwarfFormat.Addrx2, new byte[] { 0x78, 0x56 }, 0x5678UL)]
+        [InlineData(DwarfFormat.Addrx3, new byte[] { 0xAB, 0xCD, 0xEF }, 0xEFCDABUL)]
+        [InlineData(DwarfFormat.Addrx4, new byte[] { 0x78, 0x56, 0x34, 0x12 }, 0x12345678UL)]
+        [InlineData(DwarfFormat.Addrx, new byte[] { 0xE5, 0x8E, 0x26 }, 624485UL)]
+        public void ReadData_AddrxForms_ConsumeExactWidthAndPreserveAlignment(DwarfFormat form, byte[] encoded, ulong expectedIndex)
         {
-            // Place addrx4 first, then Data1 sentinel.
-            // The Data1 attribute is parsed before post-processing runs.
-            // We verify that the parser reads the correct bytes by putting
-            // the sentinel value at byte offset 4 (not 8) after the addrx.
-            byte[] dieData = new byte[]
-            {
-                0x01,                           // abbreviation code = 1
-                0x78, 0x56, 0x34, 0x12,         // addrx4 = 0x12345678 (4 bytes LE)
-                0x42,                            // Data1 sentinel = 0x42
-            };
+            byte[] dieData = new byte[] { 0x01 }
+                .Concat(encoded)
+                .Concat(new byte[] { 0x42 }) // Data1 sentinel
+                .ToArray();
 
-            byte[] header = BuildDwarf5Header((uint)dieData.Length);
-            byte[] debugInfo = header.Concat(dieData).ToArray();
+            byte[] debugInfo = BuildDwarf5Header((uint)dieData.Length).Concat(dieData).ToArray();
             byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
-                (DwarfAttribute.LowPc, DwarfFormat.Addrx4),
+                (DwarfAttribute.LowPc, form),
                 (DwarfAttribute.ByteSize, DwarfFormat.Data1));
 
-            // Post-processing will throw NRE on the Address attribute
-            // because addrx4 stores to Offset (not Value). This is a
-            // known pre-existing issue. We verify the parse phase works:
-            Action act = () => ParseSingleSymbol(debugInfo, abbrev);
-            act.Should().Throw<NullReferenceException>();
-        }
+            DwarfSymbol symbol = ParseSingleSymbol(debugInfo, abbrev);
 
-        [Fact]
-        public void ReadData_Addrx3_ConsumesExactlyThreeBytes()
-        {
-            // Same pattern as addrx4: the post-processing crashes but
-            // the parsing phase correctly consumes 3 bytes.
-            byte[] dieData = new byte[]
-            {
-                0x01,
-                0xAB, 0xCD, 0xEF,       // addrx3 = 0xEFCDAB
-                0x99,                    // Data1 sentinel = 0x99
-            };
-
-            byte[] header = BuildDwarf5Header((uint)dieData.Length);
-            byte[] debugInfo = header.Concat(dieData).ToArray();
-            byte[] abbrev = BuildAbbrevMultipleAttributes(DwarfTag.Variable,
-                (DwarfAttribute.LowPc, DwarfFormat.Addrx3),
-                (DwarfAttribute.ByteSize, DwarfFormat.Data1));
-
-            Action act = () => ParseSingleSymbol(debugInfo, abbrev);
-            act.Should().Throw<NullReferenceException>();
+            DwarfAttributeValue lowPc = symbol.Attributes[DwarfAttribute.LowPc];
+            lowPc.Type.Should().Be(DwarfAttributeValueType.Address);
+            lowPc.Offset.Should().Be(expectedIndex);
+            lowPc.Value.Should().BeNull();
+            ((ulong)symbol.Attributes[DwarfAttribute.ByteSize].Value).Should().Be(0x42);
         }
 
         // ---- DW_FORM_loclistx: should read ULEB128, not fixed 4/8 bytes ----
