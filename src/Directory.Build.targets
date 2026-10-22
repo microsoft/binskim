@@ -8,20 +8,24 @@
     <DeployDia Condition="'$(OutputType)' != 'Exe' and !$(MSBuildProjectName.StartsWith('Test'))">false</DeployDia>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(OutputType)' == 'Exe' or $(MSBuildProjectName.StartsWith('Test'))">
+    <PackageDownload Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="[$(DiaNativePackageVersion)]" />
+  </ItemGroup>
+
   <ItemGroup Condition="'$(DeployDia)' == 'true'">
+    <MsDiaLibs Include="$(NuGetPackageRoot)microsoft.diagnostics.tracing.traceevent\$(DiaNativePackageVersion)\build\native\amd64\msdia140.dll" Link="msdia140.dll" />
     <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\x64\*" />
     <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\msdia140.dll.manifest" />
     <MsRuntime Include="$(MSBuildThisFileDirectory)..\refs\runtime\*" />
     <None Include="@(MsDiaLibs);@(MsRuntime)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup> 
 
-  <!-- Microsoft.Diagnostics.Tracing.TraceEvent contains DIA assets that conflict with ..\refs\* above. -->
-  <!-- This target excludes those assets from compilation and deployment. -->
+  <!-- Exclude managed TraceEvent's DIA assets, except the explicitly selected native DLL. -->
   <Target Name="ExcludeTraceEventDiaAssets" AfterTargets="ResolvePackageAssets">
     <ItemGroup>
       <_RuntimeDiaItemsToExclude Include="@(RuntimeCopyLocalItems)" Condition="'%(RuntimeCopyLocalItems.Filename)' == 'Dia2Lib'" />
       <_CompileDiaItemsToExclude Include="@(ResolvedCompileFileDefinitions)" Condition="'%(ResolvedCompileFileDefinitions.Filename)' == 'Dia2Lib'" />
-      <_NoneDiaItemsToExclude Include="@(None)" Condition="$([MSBuild]::ValueOrDefault('%(None.FullPath)', '').Contains('microsoft.diagnostics.tracing.traceevent'))" />
+      <_NoneDiaItemsToExclude Include="@(None)" Exclude="@(MsDiaLibs)" Condition="$([MSBuild]::ValueOrDefault('%(None.FullPath)', '').Contains('microsoft.diagnostics.tracing.traceevent'))" />
       <RuntimeCopyLocalItems Remove="@(_RuntimeDiaItemsToExclude)" />
       <ResolvedCompileFileDefinitions Remove="@(_CompileDiaItemsToExclude)" />
       <None Remove="@(_NoneDiaItemsToExclude)" />

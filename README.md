@@ -9,6 +9,13 @@ This repository contains the source code for BinSkim, a Portable Executable (PE)
 3. Load and compile `src\BinSkim.sln` to develop changes for contribution.
 4. Execute BuildAndTest.cmd at the root of the enlistment to validate before submitting a PR.
 
+Windows x64 builds restore `msdia140.dll` from a pinned `PackageDownload` of
+`Microsoft.Diagnostics.Tracing.TraceEvent`. The native-only package version is
+defined in `src\Directory.Packages.props`; it does not change the managed
+TraceEvent dependency or import that package's build assets. No Visual Studio
+installation or COM registration is required. See
+[the runtime notices](./src/BinSkim.Driver/README.txt) for provenance and licensing.
+
 ### Submit Pull Requests
 
 1. Run `BuildAndTest.cmd` at the root of the enlistment to ensure that all tests pass, release build succeeds, and NuGet packages are created
