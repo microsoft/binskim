@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         [InlineData("Determinism/OK/msfz/CPlusPlus_SourceLink.pdb", true)]
         [InlineData("clangcl.14.pe.c.codeview.pdbpagesize_8192.exe.pdb", false)]
         [InlineData("Native_x64_RustC_Rust_debuginfo2_v1.59.0.pdb", false)]
-        public void Dia_CapturesNativeContract(string fixture, bool requireSourceLink)
+        public void Dia_ReadsRequiredNativeMetadata(string fixture, bool requireSourceLink)
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
@@ -110,25 +110,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 snapshot["Segments"].Should().NotBeEmpty();
                 snapshot["SectionContributions"].Should().NotBeEmpty();
             }
+        }
 
-            string directory = Environment.GetEnvironmentVariable("BINSKIM_DIA_SNAPSHOTS");
-            if (!string.IsNullOrEmpty(directory))
-            {
-                using Process process = Process.GetCurrentProcess();
-                ProcessModule module = process.Modules.Cast<ProcessModule>()
-                    .Single(item => item.ModuleName.Equals("msdia140.dll", StringComparison.OrdinalIgnoreCase));
-                string expectedDll = Path.Combine(AppContext.BaseDirectory, "msdia140.dll");
-                Path.GetFullPath(module.FileName).Should().BeEquivalentTo(Path.GetFullPath(expectedDll));
+        [Fact]
+        public void Dia_LoadsTheConfiguredNativeLibrary()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
-                Directory.CreateDirectory(directory);
-                File.WriteAllText(Path.Combine(directory, fixture.Replace('/', '_') + ".json"),
-                    JsonSerializer.Serialize(new
-                    {
-                        NativeDll = module.FileName,
-                        NativeVersion = module.FileVersionInfo.FileVersion,
-                        Data = snapshot
-                    }, new JsonSerializerOptions { WriteIndented = true }));
-            }
+            using var pdb = new Pdb(pdbPath: SourceLinkPdbPath);
+            pdb.GlobalScope.Should().NotBeNull();
+
+            string expectedDll = DiaCandidatePath ?? Path.Combine(AppContext.BaseDirectory, "msdia140.dll");
+            using Process process = Process.GetCurrentProcess();
+            process.Modules.Cast<ProcessModule>().Should().Contain(module =>
+                Path.GetFullPath(module.FileName).Equals(Path.GetFullPath(expectedDll), StringComparison.OrdinalIgnoreCase));
         }
 
         [Fact]
