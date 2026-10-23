@@ -9,11 +9,15 @@ This repository contains the source code for BinSkim, a Portable Executable (PE)
 3. Load and compile `src\BinSkim.sln` to develop changes for contribution.
 4. Execute BuildAndTest.cmd at the root of the enlistment to validate before submitting a PR.
 
-Windows x64 builds restore `msdia140.dll` from a pinned `PackageDownload` of
-`Microsoft.Diagnostics.Tracing.TraceEvent`. The native-only package version is
-defined in `src\Directory.Packages.props`; it does not change the managed
-TraceEvent dependency or import that package's build assets. No Visual Studio
-installation or COM registration is required. See
+Builds that deploy Windows x64 DIA download `Microsoft.VisualCpp.DIA.SDK` from
+the public Visual Studio Stable distribution. The version, immutable download URL
+and SHA-256 hashes of the VSIX and native DLL are pinned in
+`src\Directory.Packages.props`. MSBuild caches and verifies the SDK in each
+project's intermediate directory before deploying only `msdia140.dll`. A clean
+build needs access to `download.visualstudio.microsoft.com`; it does not need
+Visual Studio or COM registration. Non-Windows builds do not download the SDK
+unless publishing for `win-x64`. The SDK contains no managed `Dia2Lib.dll`, so
+the existing interop assembly and managed TraceEvent dependency are unchanged. See
 [the runtime notices](./src/BinSkim.Driver/README.txt) for provenance and licensing.
 
 ### Comparing native DIA versions
