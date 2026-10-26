@@ -86,13 +86,6 @@ extends:
             condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
 
           - task: UseDotNet@2
-            displayName: .NET 9 runtime
-            condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
-            inputs:
-              version: "9.0.x"
-              packageType: runtime
-
-          - task: UseDotNet@2
             displayName: .NET SDK from global.json
             condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
             inputs:

@@ -43,11 +43,6 @@ extends:
       - job: Compliance
         steps:
         - task: UseDotNet@2
-          displayName: 'Use .NET 9 runtime'
-          inputs:
-            packageType: runtime
-            version: 9.0.x
-        - task: UseDotNet@2
           displayName: '.NET SDK from global.json'
           inputs:
             packageType: sdk
@@ -71,9 +66,6 @@ extends:
         - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@4
           displayName: 'Run BinSkim '
           inputs:
-            toolVersion: Exact
-            exactToolVersion: 4.3.1
-            AnalyzeTargetGlob: '$(Build.SourcesDirectory)/src/binskim/bld/bin/AnyCPU_Release/net9.0/**/*.dll;$(Build.SourcesDirectory)/src/binskim/bld/bin/AnyCPU_Release/net9.0/**/*.exe'
             AnalyzeSymPath: 'Cache*$(Build.SourcesDirectory)\symbols;Srv*http://symweb'
             AnalyzeHashes: true
             AnalyzeStatistics: true

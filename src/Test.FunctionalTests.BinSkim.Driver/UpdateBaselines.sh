@@ -11,7 +11,7 @@ BuildTool ()
 {
     # Linux specific for now.
     echo "Building BinSkim..."
-    dotnet build $PROJECT -c Release --framework net9.0 --runtime linux-x64
+    dotnet build $PROJECT -c Release --framework net10.0 --runtime linux-x64
 }
 
 RunBaseline () 

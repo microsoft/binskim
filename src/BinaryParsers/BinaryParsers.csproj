@@ -9,9 +9,6 @@
   <ItemGroup>
     <PackageReference Include="ELFSharp" />
     <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="System.Collections.Immutable" />
-    <PackageReference Include="System.Reflection.Metadata" />
-    <PackageReference Include="System.Security.Cryptography.Algorithms" />
     <PackageReference Include="Sarif.Driver" />
   </ItemGroup>
   <ItemGroup>
