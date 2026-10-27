@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -149,13 +150,57 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         }
 
         [Fact]
-        public void ElfBinary_ParsesOversizedDebugInfoWithoutDiscardingCompilationUnits()
+        public void CompilationUnits_InvalidMappedUnitLengthPreservesParsedUnits()
         {
             string originalPath = System.IO.Path.Combine(ElfBinaryTests.TestData,
                 "Dwarf/DebugFileType/BinaryDirectory/gcc.objcopy.stripall.addgnudebuglink.full");
+            using var binary = new ElfBinary(new Uri(originalPath));
+            DwarfCompilationUnit expectedUnit = binary.CompilationUnits.Value[0];
+            using var file = new TemporarySparseFile();
+            using (FileStream stream = File.OpenWrite(file.Path))
+            {
+                stream.Write(binary.DebugData, 0, checked((int)expectedUnit.NextOffset));
+                using var writer = new BinaryWriter(stream);
+                writer.Write(16u); // No payload follows this declared unit length.
+            }
+
+            using var data = new DwarfMemoryReader(file.Path, 0, expectedUnit.NextOffset + (ulong)sizeof(uint));
+            using var abbreviations = new DwarfMemoryReader(binary.DebugDataDescription);
+            using var strings = new DwarfMemoryReader(binary.DebugDataStrings);
+            using var lineStrings = new DwarfMemoryReader(binary.DebugLineStrings);
+
+            data.Position = expectedUnit.NextOffset;
+            InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() =>
+                new DwarfCompilationUnit(binary, data, abbreviations, strings, lineStrings,
+                    DwarfSymbolProvider.ParseDebugStringOffsets(binary.DebugStringOffsets, binary.Is64bit),
+                    binary.NormalizeAddress));
+            exception.Message.Should().Be("DWARF compilation unit extends past the end of the section.");
+
+            data.Position = 0;
+            List<DwarfCompilationUnit> compilationUnits = DwarfSymbolProvider.ParseAllCompilationUnits(binary, data,
+                binary.DebugDataDescription, strings, binary.DebugLineStrings,
+                binary.DebugStringOffsets, binary.NormalizeAddress);
+
+            compilationUnits.Should().ContainSingle();
+            compilationUnits[0].NextOffset.Should().Be(expectedUnit.NextOffset);
+            compilationUnits[0].Symbols.Should().HaveCount(expectedUnit.Symbols.Count());
+            compilationUnits[0].SymbolsTree[0].Tag.Should().Be(expectedUnit.SymbolsTree[0].Tag);
+            compilationUnits[0].SymbolsTree[0].Attributes[DwarfAttribute.Producer].String
+                .Should().Be(expectedUnit.SymbolsTree[0].Attributes[DwarfAttribute.Producer].String);
+            data.Position.Should().Be(expectedUnit.NextOffset + sizeof(uint));
+        }
+
+        [Theory]
+        [InlineData("Dwarf/DebugFileType/BinaryDirectory/gcc.objcopy.stripall.addgnudebuglink.full", ".debug_info")]
+        [InlineData("Dwarf/DebugFileType/AnotherLocalSymbolDirectory/gcc.gsplitdwarf.5.dwo", ".debug_info.dwo")]
+        public void ElfBinary_ParsesOversizedDebugInfoWithoutDiscardingCompilationUnits(string relativePath, string sectionName)
+        {
+            string originalPath = System.IO.Path.Combine(ElfBinaryTests.TestData, relativePath);
             using var original = new ElfBinary(new Uri(originalPath));
             original.Valid.Should().BeTrue();
+            original.Is64bit.Should().BeTrue();
             byte[] originalDebugInfo = original.DebugData;
+            original.CompilationUnits.Value.Should().NotBeEmpty();
             using var file = new TemporarySparseFile();
             File.Copy(originalPath, file.Path, overwrite: true);
             file.MarkSparse();
@@ -169,7 +214,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 ulong tableOffset = reader.ReadUInt64();
                 stream.Position = 0x3A;
                 ushort entrySize = reader.ReadUInt16();
-                int sectionIndex = original.ELF.Sections.ToList().FindIndex(section => section.Name == ".debug_info");
+                int sectionIndex = original.ELF.Sections.ToList().FindIndex(section => section.Name == sectionName);
                 sectionIndex.Should().BeGreaterThan(0);
                 ulong newOffset = (ulong)stream.Length;
                 stream.SetLength((long)(newOffset + sectionSize));
@@ -185,8 +230,12 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             oversized.IsDebugOnlyFile.Should().Be(original.IsDebugOnlyFile);
             oversized.DebugFileType.Should().Be(original.DebugFileType);
             oversized.CompilationUnits.Value.Should().HaveCount(original.CompilationUnits.Value.Count);
-            oversized.CommandLineInfos.Select(info => info.CommandLine)
-                .Should().Equal(original.CommandLineInfos.Select(info => info.CommandLine));
+            oversized.CompilationUnits.Value.Select(unit => unit.NextOffset)
+                .Should().Equal(original.CompilationUnits.Value.Select(unit => unit.NextOffset));
+            oversized.CompilationUnits.Value.Select(unit => unit.Symbols.Count())
+                .Should().Equal(original.CompilationUnits.Value.Select(unit => unit.Symbols.Count()));
+            oversized.CommandLineInfos.Should().BeEquivalentTo(original.CommandLineInfos,
+                options => options.WithStrictOrdering());
             oversized.GetLanguage().Should().Be(original.GetLanguage());
         }
 
