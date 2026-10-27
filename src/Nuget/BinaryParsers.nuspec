@@ -16,17 +16,14 @@
     <tags>binary analysis binskim binscope security portable executable linkable format sdl devops devsecops</tags>
     <iconUrl>https://go.microsoft.com/fwlink/?linkid=2008940</iconUrl>
     <dependencies>
-      <group targetFramework=".NET9.0">
+      <group targetFramework=".NET10.0">
         <dependency id="Sarif.Driver" version="4.5.4" exclude="Build,Analyzers" />
         <dependency id="ELFSharp" version="2.17.3" exclude="Build,Analyzers" />
         <dependency id="Newtonsoft.Json" version="13.0.3" exclude="Build,Analyzers" />
-        <dependency id="System.Collections.Immutable" version="9.0.0" exclude="Build,Analyzers" />
-        <dependency id="System.Reflection.Metadata" version="9.0.0" exclude="Build,Analyzers" />
-        <dependency id="System.Security.Cryptography.Algorithms" version="4.3.1" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="bld\bin\BinaryParsers\$configuration$\BinaryParsers.dll" target="lib\net9.0" />
+    <file src="bld\bin\BinaryParsers\$configuration$\BinaryParsers.dll" target="lib\net10.0" />
   </files>
 </package>
