@@ -44,6 +44,9 @@ namespace Microsoft.CodeAnalysis.IL
         {
             base.InitializeOutputs(context);
 
+            // AnalysisTargets are logged during enumeration, before AnalyzeTarget initializes its cache.
+            InitializeHashCache(context);
+
             if (!string.IsNullOrEmpty(context.EnlistmentRootToNormalize))
             {
                 var aggregatingLogger = (AggregatingLogger)context.Logger;
@@ -54,6 +57,17 @@ namespace Microsoft.CodeAnalysis.IL
                         aggregatingLogger.Loggers[i] = new NormalizingSarifLogger(sarifLogger, context.EnlistmentRootToNormalize);
                     }
                 }
+            }
+        }
+
+        private static void InitializeHashCache(BinaryAnalyzerContext context)
+        {
+            // Sarif.Driver 5 defaults to SHA-256 only, but BinSkim's --hashes contract emits both hashes.
+            if (context.DataToInsert.HasFlag(OptionallyEmittedData.Hashes))
+            {
+                context.Logger.FileRegionsCache = new FileRegionsCache(
+                    fileSystem: context.FileSystem,
+                    hashAlgorithms: HashAlgorithms.Sha1 | HashAlgorithms.Sha256);
             }
         }
 
@@ -299,6 +313,8 @@ namespace Microsoft.CodeAnalysis.IL
             IEnumerable<Skimmer<BinaryAnalyzerContext>> skimmers,
             ISet<string> disabledSkimmers)
         {
+            InitializeHashCache(context);
+
             if (!context.IgnoreBinaryAnalysisErrors)
             {
                 base.AnalyzeTarget(context, skimmers, disabledSkimmers);
