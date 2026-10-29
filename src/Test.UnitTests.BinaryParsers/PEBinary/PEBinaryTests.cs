@@ -217,8 +217,17 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
-            Action action = () => { IDiaDataSource source = ProgramDatabase.MsdiaComWrapper.GetDiaSource(); };
-            action.Should().NotThrow();
+            IDiaDataSource source = MsdiaComWrapper.GetDiaSource();
+            try
+            {
+                source.Should().NotBeNull();
+                IDiaDataSource3 rawDataSource = (IDiaDataSource3)source;
+                rawDataSource.Should().NotBeNull();
+            }
+            finally
+            {
+                ResourceReleaser.Release(source);
+            }
         }
 
         [Fact]

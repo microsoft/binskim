@@ -8,15 +8,39 @@
     <DeployDia Condition="'$(OutputType)' != 'Exe' and !$(MSBuildProjectName.StartsWith('Test'))">false</DeployDia>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(DeployDia)' == 'true'">
+    <!-- Per-project intermediates avoid races between projects in parallel builds. -->
+    <_DiaNativeRoot>$(IntermediateOutputPath)dia\$(DiaNativePackageVersion)</_DiaNativeRoot>
+    <_DiaNativePackage>$(_DiaNativeRoot)\Microsoft.VisualCpp.DIA.SDK.vsix</_DiaNativePackage>
+    <_DiaNativeDll>$(_DiaNativeRoot)\msdia140.dll</_DiaNativeDll>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(DeployDia)' == 'true'">
+    <!-- SDK timestamps need not increase when changing the pinned version. -->
+    <None Include="$(_DiaNativeDll)" Link="msdia140.dll" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
     <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\x64\*" />
     <MsDiaLibs Include="$(MSBuildThisFileDirectory)..\refs\msdia140.dll.manifest" />
     <MsRuntime Include="$(MSBuildThisFileDirectory)..\refs\runtime\*" />
     <None Include="@(MsDiaLibs);@(MsRuntime)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup> 
 
-  <!-- Microsoft.Diagnostics.Tracing.TraceEvent contains DIA assets that conflict with ..\refs\* above. -->
-  <!-- This target excludes those assets from compilation and deployment. -->
+  <Target Name="PrepareNativeDia" BeforeTargets="AssignTargetPaths"
+          Condition="'$(DeployDia)' == 'true' and '$(DesignTimeBuild)' != 'true'">
+    <DownloadFile SourceUrl="$(DiaNativePackageUrl)" DestinationFolder="$(_DiaNativeRoot)"
+                  DestinationFileName="Microsoft.VisualCpp.DIA.SDK.vsix"
+                  Condition="!Exists('$(_DiaNativePackage)')" />
+    <VerifyFileHash File="$(_DiaNativePackage)" Hash="$(DiaNativePackageSha256)" Algorithm="SHA256" />
+    <Unzip SourceFiles="$(_DiaNativePackage)" DestinationFolder="$(_DiaNativeRoot)\sdk" SkipUnchangedFiles="true" />
+    <ItemGroup>
+      <_DiaNativeFile Include="$(_DiaNativeRoot)\sdk\Contents\*\bin\amd64\msdia140.dll" />
+    </ItemGroup>
+    <Error Condition="'@(_DiaNativeFile->Count())' != '1'"
+           Text="The DIA SDK package must contain exactly one AMD64 msdia140.dll." />
+    <VerifyFileHash File="@(_DiaNativeFile)" Hash="$(DiaNativeDllSha256)" Algorithm="SHA256" />
+    <Copy SourceFiles="@(_DiaNativeFile)" DestinationFiles="$(_DiaNativeDll)" />
+  </Target>
+
+  <!-- Exclude managed TraceEvent's native and interop assets. -->
   <Target Name="ExcludeTraceEventDiaAssets" AfterTargets="ResolvePackageAssets">
     <ItemGroup>
       <_RuntimeDiaItemsToExclude Include="@(RuntimeCopyLocalItems)" Condition="'%(RuntimeCopyLocalItems.Filename)' == 'Dia2Lib'" />

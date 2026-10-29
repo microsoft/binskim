@@ -11,13 +11,59 @@
 
 global using static Microsoft.CodeAnalysis.BinSkim.TestHelpers;
 
+using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.CodeAnalysis.BinSkim
 {
     internal static class TestHelpers
     {
+        internal static string DiaCandidatePath { get; private set; }
+
+        [ModuleInitializer]
+        internal static void ConfigureNativeDia()
+        {
+            string candidate = Environment.GetEnvironmentVariable("BINSKIM_DIA_CANDIDATE");
+            if (string.IsNullOrEmpty(candidate))
+            {
+                return;
+            }
+            if (!OperatingSystem.IsWindows())
+            {
+                throw new PlatformNotSupportedException("Native DIA validation requires Windows.");
+            }
+
+            DiaCandidatePath = Path.GetFullPath(candidate);
+            if (!File.Exists(DiaCandidatePath))
+            {
+                throw new FileNotFoundException("The candidate DIA DLL does not exist.", DiaCandidatePath);
+            }
+
+            // Test assemblies can reference each other; register once before any DIA import binds.
+            Assembly binaryParsers = typeof(BinaryParsers.PEBinary).Assembly;
+            lock (binaryParsers)
+            {
+                const string registrationKey = "BinSkim.Test.DiaCandidatePath";
+                if (AppContext.GetData(registrationKey) is string registered)
+                {
+                    if (!registered.Equals(DiaCandidatePath, StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new InvalidOperationException("Test assemblies configured different candidate DIA DLLs.");
+                    }
+                    return;
+                }
+
+                NativeLibrary.SetDllImportResolver(binaryParsers,
+                    (name, assembly, searchPath) => name.Equals("msdia140.dll", StringComparison.OrdinalIgnoreCase)
+                        ? NativeLibrary.Load(DiaCandidatePath)
+                        : IntPtr.Zero);
+                AppContext.SetData(registrationKey, DiaCandidatePath);
+            }
+        }
+
         internal static string TestData = GetTestDirectory("Test.UnitTests.BinaryParsers", "TestData");
 
         internal static string BaselineTestDataDirectory = GetTestDirectory("Test.FunctionalTests.BinSkim.Driver", "BaselineTestData");
