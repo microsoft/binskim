@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
     public class BA2027_PortablePdbLifetimeTests
     {
         private static readonly string TestDataDirectory = Path.Combine(
-            Environment.CurrentDirectory,
+            AppContext.BaseDirectory,
             "FunctionalTestData",
             "BA2027.EnableSourceLink",
             "Pass");

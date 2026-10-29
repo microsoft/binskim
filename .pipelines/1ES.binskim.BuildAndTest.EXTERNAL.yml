@@ -86,11 +86,12 @@ extends:
             condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
 
           - task: UseDotNet@2
-            displayName: .NET 10 SDK
+            displayName: .NET SDK from global.json
             condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
             inputs:
-              version: "10.0.x"
               packageType: sdk
+              useGlobalJson: true
+              workingDirectory: $(Build.SourcesDirectory)
 
           - task: DotNetCoreCLI@2
             displayName: "Create nuget.config"
@@ -127,6 +128,16 @@ extends:
             condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
             inputs:
               script: $(buildScript)
+
+          - task: PublishTestResults@2
+            displayName: Publish MTP test results
+            condition: and(succeededOrFailed(), ne(variables['skipLinux'], 'true'))
+            inputs:
+              testResultsFormat: VSTest
+              testResultsFiles: '$(Build.SourcesDirectory)/bld/TestResults/**/*.trx'
+              failTaskOnFailedTests: true
+              failTaskOnMissingResultsFile: true
+              mergeTestResults: true
 
           - task: ComponentGovernanceComponentDetection@0
             condition: and(succeeded(), eq(variables['runComponentGovernance'], 'true'), ne(variables['skipLinux'], 'true'))

@@ -43,13 +43,25 @@ extends:
       - job: Compliance
         steps:
         - task: UseDotNet@2
-          displayName: 'Use .NET 10 SDK'
+          displayName: '.NET SDK from global.json'
           inputs:
-              version: 10.x
+            packageType: sdk
+            useGlobalJson: true
+            workingDirectory: $(Build.SourcesDirectory)
         - task: BatchScript@1
           displayName: 'Run script BuildAndTest.cmd' 
           inputs:
             filename: BuildAndTest.cmd
+
+        - task: PublishTestResults@2
+          displayName: Publish MTP test results
+          condition: succeededOrFailed()
+          inputs:
+            testResultsFormat: VSTest
+            testResultsFiles: '$(Build.SourcesDirectory)/bld/TestResults/**/*.trx'
+            failTaskOnFailedTests: true
+            failTaskOnMissingResultsFile: true
+            mergeTestResults: true
 
         - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@4
           displayName: 'Run BinSkim '
