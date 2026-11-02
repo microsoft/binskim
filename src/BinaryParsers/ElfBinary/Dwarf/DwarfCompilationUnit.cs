@@ -399,7 +399,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Addrx:
                             attributeValue.Type = DwarfAttributeValueType.Address;
-                            attributeValue.Value = debugData.ULEB128() + (ulong)beginPosition;
+                            attributeValue.Offset = debugData.ULEB128();
                             break;
 
                         // NOTE: we don't resolve any of these new DWARF5 address values yet.
@@ -540,8 +540,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                                     value.Value = reference;
                                 }
                             }
-                            else if (value.Type == DwarfAttributeValueType.Address)
+                            else if (value.Type == DwarfAttributeValueType.Address && value.Value != null)
                             {
+                                // Unresolved indexed addresses (addrx*) have no Value to normalize.
                                 value.Value = addressNormalizer(value.Address);
                             }
                         }
