@@ -8,6 +8,7 @@ using System.Linq;
 
 using FluentAssertions;
 
+using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 using Microsoft.CodeAnalysis.Sarif.Driver;
 
@@ -38,6 +39,26 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             GetCompilandSummary(msfzPdb).Should().Equal(GetCompilandSummary(windowsPdb));
             GetSourceFileSummary(msfzPdb).Should().Equal(GetSourceFileSummary(windowsPdb));
             msfzPdb.WindowsPdbGetSourceLinkDocuments().Should().Equal(windowsPdb.WindowsPdbGetSourceLinkDocuments());
+        }
+
+        [Fact]
+        public void ManagedPdbSourceFileChecksumAlgorithm_MsfzEncoding_PreservesAlgorithm()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            const string fileName = "Managed_x64_VS2022_CSharp_Net48_Default";
+            string directory = Path.Combine(PEBinaryTests.TestData, "PE");
+            using var pe = new PE(Path.Combine(directory, fileName + ".exe"));
+            using var windowsPdb = new Pdb(Path.Combine(directory, fileName + ".pdb"), traceLoads: true);
+            using var msfzPdb = new Pdb(Path.Combine(directory, "msfz", fileName + ".pdb"), traceLoads: true);
+
+            pe.IsManaged.Should().BeTrue();
+            windowsPdb.FileType.Should().Be(PdbFileType.Windows);
+            msfzPdb.FileType.Should().Be(PdbFileType.WindowsMSFZ);
+
+            ChecksumAlgorithmType expected = pe.ManagedPdbSourceFileChecksumAlgorithm(windowsPdb.FileType, windowsPdb);
+            expected.Should().NotBe(ChecksumAlgorithmType.Unknown);
+            pe.ManagedPdbSourceFileChecksumAlgorithm(msfzPdb.FileType, msfzPdb).Should().Be(expected);
         }
 
         private static IEnumerable<string> GetCompilandSummary(Pdb pdb)

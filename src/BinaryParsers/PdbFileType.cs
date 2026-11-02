@@ -19,13 +19,13 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         Windows,
 
         /// <summary>
-        /// Windows MSFZ specific format.
-        /// </summary>
-        WindowsMSFZ,
-
-        /// <summary>
         /// Portable OS format.
         /// </summary>
         Portable,
+
+        /// <summary>
+        /// Windows MSFZ specific format.
+        /// </summary>
+        WindowsMSFZ,
     }
 }
