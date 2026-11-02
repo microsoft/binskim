@@ -3,6 +3,11 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <NoWarn>$(NoWarn);NU1507</NoWarn>
+    <!-- Official VS Stable native SDK; independent of managed package references. -->
+    <DiaNativePackageVersion>14.51.36257</DiaNativePackageVersion>
+    <DiaNativePackageUrl>https://download.visualstudio.microsoft.com/download/pr/fedfadc0-2ddc-42f8-afa2-24eda4792a5f/a99bd36306e536b80662c064cc76e0e143d20bc58832fa3e82ec79fecf9cefb7/Microsoft.VisualCpp.DIA.SDK.vsix</DiaNativePackageUrl>
+    <DiaNativePackageSha256>A99BD36306E536B80662C064CC76E0E143D20BC58832FA3E82EC79FECF9CEFB7</DiaNativePackageSha256>
+    <DiaNativeDllSha256>55E1CE73E8FFD54C88A75C0FDCB11A56DF4BA0F80949CF585741855E9E4181AA</DiaNativeDllSha256>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="CommandLineParser" Version="2.9.1" />
