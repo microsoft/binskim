@@ -42,6 +42,48 @@ or binary compatibility of a replacement managed `Dia2Lib.dll`.
 1. Run `BuildAndTest.cmd` at the root of the enlistment to ensure that all tests pass, release build succeeds, and NuGet packages are created
 2. Submit a Pull Request to the 'develop' branch -- **[Need Help?](https://help.github.com/articles/about-pull-requests/)**
 
+## Official releases
+
+`.pipelines/1ES.binskim.release.EXTERNAL.yml` is the manually queued 1ESPT
+official replacement for classic release definition 392. It builds and tests the
+selected source, signs first-party and third-party binaries, repacks and signs
+both NuGet packages, and publishes only the signed pipeline artifact to nuget.org.
+The parser library is signed separately from the runtime payloads before packing.
+Version numbers come from MSBuild; the pipeline does not change source versions,
+create GitHub releases, or tag commits.
+
+Before registering or running this pipeline, an administrator must:
+
+1. Create the ADO environment `BinSkim.Public.Release` with a required
+   **BinSkim-TM approval**, self-approval disabled, an exclusive lock, and branch
+   control allowing only protected production branches. Authorize only the new
+   release pipeline. Approval checks live on the environment, not in YAML; do not
+   activate the pipeline without them.
+2. Create and authorize the private variable group `BinSkim.Release.Signing`
+   containing `EsrpServiceConnection`, `EsrpManagedIdentityClientId`,
+   `EsrpTenantId`, `EsrpClientId`, `EsrpKeyVaultName`, and
+   `EsrpRequestSigningCertificateName`. Reuse the existing signing account and
+   key codes. Follow the [1ESPT ESRP v6 signing guidance](https://eng.ms/docs/coreai/devdiv/one-engineering-system-1es/1es-docs/1es-pipeline-templates/features/signing)
+   to verify that the WIF service connection's managed identity is associated
+   with the ESRP account and can read the request-signing certificate.
+   The managed-identity client ID and ESRP account client ID are distinct inputs.
+3. Create and authorize the private variable group `BinSkim.Public.Release` with
+   the existing nuget.org `ApiKey` marked **secret**. It is scoped to the publish
+   stage, not the build/signing stage. Never put its value in YAML.
+4. Authorize the template repository, agent pool, restore feeds, signing service
+   connection, and both variable groups for this pipeline. Apply production-branch
+   checks to the signing connection and both variable groups as well, so a
+   development-branch run cannot bypass the environment by changing its YAML.
+
+The pipeline uses `EsrpCodeSigning@6` and a production `releaseJob` deployment
+consuming a declared pipeline-artifact input. The publish job performs no source
+checkout, rebuild, or repack after approval. Keep the classic release enabled
+until the YAML path has been validated and an explicit cutover is approved.
+For validation without publishing, use an ADO pipeline preview, or skip the
+`Publish` stage in a manually queued validation run; signing still requires its
+normal service authorization. Do not register pipelines or change approvals as
+part of a source-only migration PR.
+
 ## For Users
 
 1. Download BinSkim from **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**

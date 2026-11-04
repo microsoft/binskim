@@ -1,0 +1,44 @@
+parameters:
+- name: folderPath
+  type: string
+- name: pattern
+  type: string
+- name: operations
+  type: object
+
+steps:
+- pwsh: |
+    $ErrorActionPreference = 'Stop'
+    $patterns = $env:SIGNING_PATTERNS.Split(',') | ForEach-Object { $_.Trim() }
+    $targets = @(Get-ChildItem -LiteralPath $env:SIGNING_FOLDER -Recurse -File | Where-Object {
+      $name = $_.Name
+      @($patterns | Where-Object { $name -like $_ }).Count -gt 0
+    })
+    if ($targets.Count -eq 0) {
+      throw "No release signing targets were found in $env:SIGNING_FOLDER."
+    }
+    Write-Host "Signing and verifying $($targets.Count) release files."
+  displayName: Require release signing targets
+  env:
+    SIGNING_FOLDER: ${{ parameters.folderPath }}
+    SIGNING_PATTERNS: ${{ parameters.pattern }}
+
+- task: EsrpCodeSigning@6
+  displayName: ESRP sign and verify release files
+  inputs:
+    ConnectedServiceName: $(EsrpServiceConnection)
+    AppRegistrationClientId: $(EsrpManagedIdentityClientId)
+    AppRegistrationTenantId: $(EsrpTenantId)
+    useMsiAuthentication: true
+    EsrpClientId: $(EsrpClientId)
+    AuthAKVName: $(EsrpKeyVaultName)
+    AuthSignCertName: $(EsrpRequestSigningCertificateName)
+    FolderPath: ${{ parameters.folderPath }}
+    Pattern: ${{ parameters.pattern }}
+    ConditionalSigning: true
+    ServiceEndpointUrl: https://api.esrp.microsoft.com/api/v2
+    signConfigType: inlineSignParams
+    inlineOperation: ${{ convertToJson(parameters.operations) }}
+    SessionTimeout: '60'
+    MaxConcurrency: '50'
+    MaxRetryAttempts: '5'

@@ -1,0 +1,269 @@
+name: Release-$(Date:yyyyMMdd)$(Rev:.r)
+trigger: none
+pr: none
+
+variables:
+- group: BinSkim.Release.Signing
+- name: packageDirectory
+  value: $(Build.SourcesDirectory)\bld\bin\Nuget
+
+resources:
+  repositories:
+  - repository: 1ESPipelineTemplates
+    type: git
+    name: 1ESPipelineTemplates/1ESPipelineTemplates
+    ref: refs/tags/release
+
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
+  parameters:
+    pool:
+      name: guardian-build-infra-windows-x64
+      os: windows
+    featureFlags:
+      autoEnableRoslynWithNewRuleset: false
+    sdl:
+      sourceAnalysisPool: guardian-build-infra-windows-x64
+      binskim:
+        scanOutputDirectoryOnly: true
+      codeql:
+        compiled:
+          enabled: true
+    stages:
+    - stage: BuildAndSign
+      displayName: Build, test and sign public packages
+      jobs:
+      - job: BuildRelease
+        timeoutInMinutes: 120
+        templateContext:
+          outputs:
+          - output: pipelineArtifact
+            artifactName: BinSkimPublicReleasePackages
+            targetPath: $(Build.ArtifactStagingDirectory)\ReleasePackages
+        steps:
+        - checkout: self
+          fetchDepth: 1
+
+        - pwsh: |
+            if ($env:BUILD_REASON -ne 'Manual') {
+              throw 'Release pipelines must be started manually.'
+            }
+          displayName: Require a manual release run
+
+        - task: UseDotNet@2
+          displayName: Install .NET 8 for ESRP
+          inputs:
+            packageType: sdk
+            version: 8.0.x
+
+        - task: UseDotNet@2
+          displayName: Install .NET 10 SDK
+          inputs:
+            packageType: sdk
+            version: 10.0.x
+
+        - task: NuGetAuthenticate@1
+
+        - task: CmdLine@2
+          displayName: Build, test and publish all runtime payloads
+          inputs:
+            script: BuildAndTest.cmd
+            workingDirectory: $(Build.SourcesDirectory)
+
+        - pwsh: |
+            $ErrorActionPreference = 'Stop'
+            $version = @(dotnet msbuild src\BinSkim.Driver\BinSkim.Driver.csproj --getProperty:Version --nologo)
+            if ($LASTEXITCODE -ne 0) {
+              throw "Reading the package version failed with exit code $LASTEXITCODE."
+            }
+            if ($version.Count -ne 1 -or $version[0].Trim() -notmatch '^\d+\.\d+\.\d+(?:\.\d+)?(?:-[0-9A-Za-z.-]+)?$') {
+              throw 'MSBuild must return exactly one valid package version.'
+            }
+            $version = $version[0].Trim()
+            Write-Host "##vso[task.setvariable variable=packageVersion;isOutput=true]$version"
+            Write-Host "##vso[build.updatebuildnumber]v$version"
+          name: SetVersion
+          displayName: Read the release version from MSBuild
+          workingDirectory: $(Build.SourcesDirectory)
+          env:
+            DOTNET_NOLOGO: '1'
+
+        - template: /.pipelines/templates/SignReleaseFiles.yml@self
+          parameters:
+            folderPath: $(Build.SourcesDirectory)\bld\publish
+            pattern: BinaryParsers.dll,BinSkim.dll,BinSkim.exe,BinSkim.Rules.dll,BinSkim.Sdk.dll,dia2lib.dll,Sarif.Driver.dll,Sarif.dll,msdia140.dll
+            operations:
+            - keyCode: CP-230012
+              operationCode: SigntoolSign
+              parameters:
+                OpusName: Microsoft
+                OpusInfo: http://www.microsoft.com
+                FileDigest: /fd "SHA256"
+                PageHash: /NPH
+                TimeStamp: /tr "http://rfc3161.gtm.corp.microsoft.com/TSS/HttpTspServer" /td sha256
+              toolName: sign
+              toolVersion: '1.0'
+            - keyCode: CP-230012
+              operationCode: SigntoolVerify
+              parameters: {}
+              toolName: sign
+              toolVersion: '1.0'
+
+        - template: /.pipelines/templates/SignReleaseFiles.yml@self
+          parameters:
+            folderPath: $(Build.SourcesDirectory)\bld\bin\BinaryParsers\release
+            pattern: BinaryParsers.dll
+            operations:
+            - keyCode: CP-230012
+              operationCode: SigntoolSign
+              parameters:
+                OpusName: Microsoft
+                OpusInfo: http://www.microsoft.com
+                FileDigest: /fd "SHA256"
+                PageHash: /NPH
+                TimeStamp: /tr "http://rfc3161.gtm.corp.microsoft.com/TSS/HttpTspServer" /td sha256
+              toolName: sign
+              toolVersion: '1.0'
+            - keyCode: CP-230012
+              operationCode: SigntoolVerify
+              parameters: {}
+              toolName: sign
+              toolVersion: '1.0'
+
+        - template: /.pipelines/templates/SignReleaseFiles.yml@self
+          parameters:
+            folderPath: $(Build.SourcesDirectory)\bld\publish
+            pattern: ELFSharp.dll,CommandLine.dll,Humanizer.dll,Newtonsoft.Json.dll
+            operations:
+            - keyCode: CP-231522
+              operationCode: SigntoolSign
+              parameters:
+                OpusName: Microsoft
+                OpusInfo: http://www.microsoft.com
+                Append: /as
+                FileDigest: /fd "SHA256"
+                PageHash: /NPH
+                TimeStamp: /tr "http://rfc3161.gtm.corp.microsoft.com/TSS/HttpTspServer" /td sha256
+              toolName: sign
+              toolVersion: '1.0'
+            - keyCode: CP-231522
+              operationCode: SigntoolVerify
+              parameters: {}
+              toolName: sign
+              toolVersion: '1.0'
+
+        - task: 2b1a8da8-b8eb-4e7f-bec1-b7e738c6213b@1
+          displayName: Validate signed runtime payloads
+          inputs:
+            Path: $(Build.SourcesDirectory)\bld\publish
+            PolicyType: AzureSecurityPack
+            ExcludePassesFromLog: true
+            FailIfNoTargetsFound: true
+            ToolVersion: Latest
+
+        - task: CmdLine@2
+          displayName: Repack the signed binaries
+          inputs:
+            script: BuildPackages.cmd
+            workingDirectory: $(Build.SourcesDirectory)
+
+        - template: /.pipelines/templates/SignReleaseFiles.yml@self
+          parameters:
+            folderPath: $(packageDirectory)
+            pattern: Microsoft.Binary.Parsers.*.nupkg,Microsoft.CodeAnalysis.BinSkim.*.nupkg
+            operations:
+            - keyCode: CP-401405
+              operationCode: NuGetSign
+              parameters: {}
+              toolName: sign
+              toolVersion: '1.0'
+            - keyCode: CP-401405
+              operationCode: NuGetVerify
+              parameters: {}
+              toolName: sign
+              toolVersion: '1.0'
+
+        - pwsh: |
+            $ErrorActionPreference = 'Stop'
+            Add-Type -AssemblyName System.IO.Compression.FileSystem
+            $packageIds = @('Microsoft.Binary.Parsers', 'Microsoft.CodeAnalysis.BinSkim')
+            New-Item -ItemType Directory -Path $env:RELEASE_DROP -Force | Out-Null
+            foreach ($packageId in $packageIds) {
+              $path = Join-Path $env:PACKAGE_DIRECTORY "$packageId.$env:PACKAGE_VERSION.nupkg"
+              $archive = [System.IO.Compression.ZipFile]::OpenRead($path)
+              try {
+                if ($null -eq $archive.GetEntry('.signature.p7s')) {
+                  throw "The signed package is missing its signature: $path"
+                }
+                $entry = @($archive.Entries | Where-Object { $_.FullName.EndsWith('.nuspec') })
+                if ($entry.Count -ne 1) {
+                  throw "Expected one nuspec in $path."
+                }
+                $reader = [System.IO.StreamReader]::new($entry[0].Open())
+                try { [xml] $nuspec = $reader.ReadToEnd() }
+                finally { $reader.Dispose() }
+                $metadata = $nuspec.SelectSingleNode("/*[local-name()='package']/*[local-name()='metadata']")
+                if ($metadata.id -ne $packageId -or $metadata.version -ne $env:PACKAGE_VERSION) {
+                  throw "Package identity or version does not match the release: $path"
+                }
+              }
+              finally { $archive.Dispose() }
+              Copy-Item -LiteralPath $path -Destination $env:RELEASE_DROP
+            }
+            if (@(Get-ChildItem -LiteralPath $env:RELEASE_DROP -Filter *.nupkg).Count -ne $packageIds.Count) {
+              throw 'The release artifact contains an unexpected set of packages.'
+            }
+          displayName: Stage only the signed release packages
+          env:
+            PACKAGE_DIRECTORY: $(packageDirectory)
+            PACKAGE_VERSION: $(SetVersion.packageVersion)
+            RELEASE_DROP: $(Build.ArtifactStagingDirectory)\ReleasePackages
+
+    - stage: Publish
+      displayName: Approve and publish to nuget.org
+      dependsOn: BuildAndSign
+      lockBehavior: sequential
+      variables:
+      - group: BinSkim.Public.Release
+      - name: packageVersion
+        value: $[stageDependencies.BuildAndSign.BuildRelease.outputs['SetVersion.packageVersion']]
+      jobs:
+      - deployment: PublishPackages
+        displayName: Publish approved public packages
+        environment: BinSkim.Public.Release
+        templateContext:
+          type: releaseJob
+          isProduction: true
+          inputs:
+          - input: pipelineArtifact
+            artifactName: BinSkimPublicReleasePackages
+            targetPath: $(Pipeline.Workspace)\ReleasePackages
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - pwsh: |
+                  if ([string]::IsNullOrWhiteSpace($env:NUGET_API_KEY) -or $env:NUGET_API_KEY -match '^\$\([^)]+\)$') {
+                    throw 'Configure the secret ApiKey in the BinSkim.Public.Release variable group.'
+                  }
+                displayName: Require publishing credentials
+                env:
+                  NUGET_API_KEY: $(ApiKey)
+
+              - task: NuGetCommand@2
+                displayName: Publish Microsoft.Binary.Parsers
+                inputs:
+                  command: custom
+                  arguments: >-
+                    push "$(Pipeline.Workspace)\ReleasePackages\Microsoft.Binary.Parsers.$(packageVersion).nupkg"
+                    -Source https://api.nuget.org/v3/index.json
+                    -ApiKey "$(ApiKey)" -NonInteractive
+
+              - task: NuGetCommand@2
+                displayName: Publish Microsoft.CodeAnalysis.BinSkim
+                inputs:
+                  command: custom
+                  arguments: >-
+                    push "$(Pipeline.Workspace)\ReleasePackages\Microsoft.CodeAnalysis.BinSkim.$(packageVersion).nupkg"
+                    -Source https://api.nuget.org/v3/index.json
+                    -ApiKey "$(ApiKey)" -NonInteractive
