@@ -37,6 +37,23 @@ classic-PDB/MSFZ equivalence. No PowerShell wrapper or second test framework is
 required. This checks BinSkim's exercised contracts, not every DIA SDK interface
 or binary compatibility of a replacement managed `Dia2Lib.dll`.
 
+### Validating symbol-server behavior
+
+The Windows C# `SymsrvTests` exercise real DIA-to-symsrv loading using loopback
+HTTP servers and indexed file stores. They cover cache hits and offline reuse,
+local-symbol precedence, server fallback, redirects, classic/MSFZ metadata, and
+rejection of HTTP errors or invalid PDBs. Existing test assets are reused; no
+external network, credentials, SDK installation or machine proxy changes are
+required.
+
+```powershell
+dotnet test src\Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj -c Release --filter FullyQualifiedName~SymsrvTests
+```
+
+HTTP 401/403 failure tests do not validate authenticated retrieval. Corporate
+authentication, real proxies and the supported Windows-image matrix still need
+integration/canary validation.
+
 ### Submit Pull Requests
 
 1. Run `BuildAndTest.cmd` at the root of the enlistment to ensure that all tests pass, release build succeeds, and NuGet packages are created
