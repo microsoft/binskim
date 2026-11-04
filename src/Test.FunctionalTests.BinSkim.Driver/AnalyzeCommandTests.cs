@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 
 using FluentAssertions;
@@ -247,6 +248,59 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
 
             log.Runs[0].Artifacts[0].Hashes.Should().ContainKey(expectedHashAlgorithm);
             log.Runs[0].Artifacts[0].Hashes.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public void AnalyzeCommand_InsertHashesAndAnalysisTargets_EmitsBothHashes()
+        {
+            string fileName = Path.Combine(
+                Path.GetDirectoryName(GetThisTestAssemblyFilePath()),
+                "AnalyzeCommand_InsertHashesAndAnalysisTargets_EmitsBothHashes.sarif");
+            string[] targetFilePaths =
+            {
+                Path.Combine(TestData, "PE", "Managed_x64_VS2022_CSharp_Net48_Default.exe"),
+                Path.Combine(TestData, "PE", "Managed_x64_VS2022_CSharp_NetCore31_Default.dll"),
+            };
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = targetFilePaths,
+                OutputFilePath = fileName,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                DataToInsert = new[] { OptionallyEmittedData.Hashes, OptionallyEmittedData.AnalysisTargets },
+                Threads = 2,
+            };
+            var command = new MultithreadedAnalyzeCommand();
+
+            try
+            {
+                command.Run(options).Should().Be(0);
+                var log = SarifLog.Load(fileName);
+                var analysisTargets = log.Runs[0].Artifacts
+                    .Where(artifact => artifact.Roles.HasFlag(ArtifactRoles.AnalysisTarget))
+                    .ToList();
+
+                analysisTargets.Should().HaveCount(targetFilePaths.Length);
+                analysisTargets.Select(artifact => artifact.Location.Uri.GetFilePath())
+                    .Should().BeEquivalentTo(targetFilePaths);
+
+                using (new AssertionScope())
+                {
+                    foreach (Artifact artifact in analysisTargets)
+                    {
+                        byte[] contents = File.ReadAllBytes(artifact.Location.Uri.GetFilePath());
+                        var expectedHashes = new Dictionary<string, string>
+                        {
+                            ["sha-1"] = Convert.ToHexString(SHA1.HashData(contents)),
+                            ["sha-256"] = Convert.ToHexString(SHA256.HashData(contents)),
+                        };
+                        artifact.Hashes.Should().BeEquivalentTo(expectedHashes);
+                    }
+                }
+            }
+            finally
+            {
+                File.Delete(fileName);
+            }
         }
 
         [Fact]
