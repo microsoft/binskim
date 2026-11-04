@@ -54,6 +54,43 @@ HTTP 401/403 failure tests do not validate authenticated retrieval. Corporate
 authentication, real proxies and the supported Windows-image matrix still need
 integration/canary validation.
 
+### Live symbol-server integration
+
+The functional driver's `SymbolServerIntegrationTests` use the production
+DIA/symsrv path to download matching PDBs into a new, empty cache and then reload
+from that cache without the remote server. They assert the target's CodeView
+identity, the downloaded file's location and content hash, and the actual native
+DLLs loaded. A successful process exit alone is not the test oracle. Public
+Windows symbols may be stripped; private cases additionally require full symbols
+and compiler metadata.
+
+These network tests are explicitly skipped in normal local/offline runs. On a
+Windows agent with permitted outbound HTTPS, run the anonymous Microsoft public
+symbol-server case with:
+
+```powershell
+dotnet test src\Test.FunctionalTests.BinSkim.Driver\Test.FunctionalTests.BinSkim.Driver.csproj -c Release --filter Category=LiveSymbolServer --environment BINSKIM_RUN_LIVE_SYMBOL_TESTS=true --blame-hang --blame-hang-timeout 180s
+```
+
+The ADO build pipeline exposes `runLiveSymbolServerTests` for this check; enable
+it only on network-enabled agents. An enabled test fails on retrieval errors
+instead of interpreting blocked network access as success.
+
+Private servers use `BINSKIM_RUN_PRIVATE_SYMBOL_TESTS=true` and a runtime-only
+JSON file named by `BINSKIM_SYMBOL_SERVER_TEST_CONFIG`. Its array entries contain
+`Name` (a non-sensitive alias), `ServerUrl` (HTTPS, no user information or query
+string), and `BinaryPath` (a controlled PE whose full PDB is on that server).
+Missing or empty configuration fails an enabled test. Do not commit this file,
+private endpoints, customer binaries, credentials, PATs, SAS tokens or
+authorization headers.
+
+Run private cases only in protected, network-enabled pipelines using an
+authorized managed/workload identity or another approved authorization method,
+with the native symbol client's credential provider configured by the agent.
+The tests do not acquire, accept, persist or print credentials. Anonymous public
+access does not prove private authentication; public and private cases are
+independently enabled.
+
 ### Submit Pull Requests
 
 1. Run `BuildAndTest.cmd` at the root of the enlistment to ensure that all tests pass, release build succeeds, and NuGet packages are created

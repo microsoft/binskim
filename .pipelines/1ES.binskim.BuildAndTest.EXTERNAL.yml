@@ -2,6 +2,12 @@ name: BuildAndTestBinskim
 trigger:
   - "*"
 
+parameters:
+  - name: runLiveSymbolServerTests
+    type: boolean
+    default: false
+    displayName: "Run public symbol-server integration on network-enabled Windows agents"
+
 # GitHub CodeQL validates pull requests, and the dedicated ADO compliance
 # pipeline retains 1ES CodeQL coverage on main.
 variables:
@@ -127,6 +133,17 @@ extends:
             condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
             inputs:
               script: $(buildScript)
+
+          - task: DotNetCoreCLI@2
+            displayName: "Live public symbol-server integration"
+            condition: and(succeeded(), eq(variables['poolOS'], 'windows'), ${{ eq(parameters.runLiveSymbolServerTests, true) }})
+            inputs:
+              command: test
+              projects: src/Test.FunctionalTests.BinSkim.Driver/Test.FunctionalTests.BinSkim.Driver.csproj
+              arguments: --no-build -c Release --filter Category=LiveSymbolServer --blame-hang --blame-hang-timeout 180s
+            env:
+              BINSKIM_RUN_LIVE_SYMBOL_TESTS: "true"
+              BINSKIM_RUN_PRIVATE_SYMBOL_TESTS: "false"
 
           - task: ComponentGovernanceComponentDetection@0
             condition: and(succeeded(), eq(variables['runComponentGovernance'], 'true'), ne(variables['skipLinux'], 'true'))
