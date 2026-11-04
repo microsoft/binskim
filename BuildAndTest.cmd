@@ -18,7 +18,7 @@ set NuGetOutputDirectory=%~dp0bld\bin\nuget\
 
 ::Restore packages
 echo Restoring packages...
-dotnet restore %~dp0src\BinSkim.sln
+dotnet restore %~dp0src\BinSkim.sln || goto :ExitFailed
 
 :: Build the solution 
 echo Building solution...
@@ -49,7 +49,7 @@ powershell -Command "$content = [System.IO.File]::ReadAllText('.\docs\BinSkimRul
 goto :Exit
 
 :RunTests
-dotnet test src\BinSkim.sln --no-build -c %Configuration%
+dotnet test --solution src\BinSkim.sln --no-build -c %Configuration% --report-trx --results-directory "%~dp0bld\TestResults"
 if "%ERRORLEVEL%" NEQ "0" (echo Tests execution FAILED.)
 Exit /B %ERRORLEVEL%
 

@@ -19,6 +19,14 @@
     <EnableImplicitNoneItems>false</EnableImplicitNoneItems>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(MSBuildProjectName.StartsWith('Test'))">
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <!-- Match the driver's long-path support and registration-free DIA activation in test apphosts. -->
+    <ApplicationManifest>$(MSBuildThisFileDirectory)BinSkim.Driver\app.manifest</ApplicationManifest>
+    <!-- Tests call the self-contained driver's APIs rather than launching its executable. -->
+    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
+  </PropertyGroup>
+
   <ItemGroup Condition="$(MSBuildProjectName.StartsWith('Test'))">
     <Compile Include="$(MSBuildThisFileDirectory)Shared\TestHelpers.cs" />
   </ItemGroup>
