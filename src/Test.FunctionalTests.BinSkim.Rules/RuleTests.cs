@@ -925,10 +925,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         [InlineData(true, 0x0000u, 4, null, FailureLevel.Error)]
         [InlineData(false, 0x0100u, 4, null, FailureLevel.Error)]
         [InlineData(true, 0x0100u, 4, null, FailureLevel.Error)]
-        [InlineData(false, 0x0800u, 4, null, FailureLevel.Warning)]
-        [InlineData(true, 0x0800u, 4, null, FailureLevel.Warning)]
-        [InlineData(false, 0x0900u, 4, null, FailureLevel.Warning)]
-        [InlineData(true, 0x0900u, 4, null, FailureLevel.Warning)]
+        [InlineData(false, 0x0800u, 4, null, FailureLevel.None)]
+        [InlineData(true, 0x0800u, 4, null, FailureLevel.None)]
+        [InlineData(false, 0x0900u, 4, null, FailureLevel.None)]
+        [InlineData(true, 0x0900u, 4, null, FailureLevel.None)]
         [InlineData(false, 0x0800u, 0, null, FailureLevel.Error)]
         [InlineData(true, 0x0800u, 0, null, FailureLevel.Error)]
         [InlineData(false, 0x0800u, 3, null, FailureLevel.Error)]
@@ -994,8 +994,52 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             skimmer.Analyze(context);
 
             Assert.Equal(expectedLevel == FailureLevel.Error, logger.ErrorTargets.Contains(targetPath));
-            Assert.Equal(expectedLevel == FailureLevel.Warning, logger.WarningTargets.Contains(targetPath));
-            Assert.Equal(expectedLevel == FailureLevel.None, logger.PassTargets.Contains(targetPath));
+            Assert.Empty(logger.WarningTargets);
+            Assert.Equal(expectedLevel == FailureLevel.None && cookieValue.HasValue, logger.PassTargets.Contains(targetPath));
+            Assert.Equal(expectedLevel == FailureLevel.None && !cookieValue.HasValue, logger.NotApplicableTargets.Contains(targetPath));
+            Assert.Empty(logger.ConfigurationErrorTargets);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void BA2012_DoNotModifyStackProtectionCookie_UnusedCookieBinary(bool is64Bit)
+        {
+            string targetPath = Path.Combine(
+                Environment.CurrentDirectory,
+                "FunctionalTestData",
+                "BA2012.DoNotModifyStackProtectionCookie",
+                "UnusedCookie",
+                is64Bit ? "Native_x64_VS2022_UnusedSecurityCookie.exe" : "Native_x86_VS2022_UnusedSecurityCookie.exe");
+            var logger = new TestMessageLogger();
+            using BinaryAnalyzerContext context = CreateContext(logger, null, targetPath);
+            Assert.True(context.IsValidAnalysisTarget);
+
+            PE pe = context.PEBinary().PE;
+            Assert.Equal(is64Bit, pe.Is64Bit);
+            SafePointer loadConfigVA = pe.RVA2VA(new SafePointer(pe.ImageBytes, pe.PEHeaders.PEHeader.LoadConfigTableDirectory.RelativeVirtualAddress));
+            ImageHeader loadConfig = is64Bit
+                ? new ImageLoadConfigDirectory64(pe.PEHeaders.PEHeader, loadConfigVA)
+                : new ImageLoadConfigDirectory32(pe.PEHeaders.PEHeader, loadConfigVA);
+            ulong cookieVA = is64Bit
+                ? (ulong)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.SecurityCookie)
+                : (uint)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.SecurityCookie);
+            uint guardFlags = is64Bit
+                ? (uint)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.GuardFlags)
+                : (uint)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.GuardFlags);
+            Assert.Equal(0ul, cookieVA);
+            Assert.NotEqual(0u, guardFlags & 0x0800u);
+
+            var skimmer = new DoNotModifyStackProtectionCookie();
+            context.Rule = skimmer;
+            skimmer.Initialize(context);
+            Assert.Equal(AnalysisApplicability.ApplicableToSpecifiedTarget, skimmer.CanAnalyze(context, out _));
+            skimmer.Analyze(context);
+
+            Assert.Contains(targetPath, logger.NotApplicableTargets);
+            Assert.Empty(logger.ErrorTargets);
+            Assert.Empty(logger.WarningTargets);
+            Assert.Empty(logger.PassTargets);
             Assert.Empty(logger.ConfigurationErrorTargets);
         }
 

@@ -32,9 +32,11 @@ By default, BinSkim will only look for a PDB alongside the binary under analysis
 
 ## BA2012.DoNotModifyStackProtectionCookie
 
-The `CouldNotLocateCookie` diagnostic is an error when BinSkim cannot locate the stack protection cookie. For 32-bit and 64-bit PE binaries whose load configuration sets `IMAGE_GUARD_SECURITY_COOKIE_UNUSED`, this diagnostic is downgraded to a warning because the binary declares that the security cookie is unused.
+The `CouldNotLocateCookie` diagnostic is an error when BinSkim cannot locate the stack protection cookie. For 32-bit and 64-bit PE binaries whose load configuration sets `IMAGE_GUARD_SECURITY_COOKIE_UNUSED`, BinSkim instead reports `SecurityCookieUnused` as not applicable because the binary declares that the security cookie is unused.
 
-Missing or incomplete guard flags do not trigger this downgrade. A cookie that is located but has a modified value remains an error, even when `IMAGE_GUARD_SECURITY_COOKIE_UNUSED` is set.
+Missing or incomplete guard flags do not trigger this exemption. A cookie that is located but has a modified value remains an error, even when `IMAGE_GUARD_SECURITY_COOKIE_UNUSED` is set.
+
+The native reproducers in `src\Test.FunctionalTests.BinSkim.Rules\FunctionalTestData\BA2012.DoNotModifyStackProtectionCookie\UnusedCookie` have no CRT startup or stack-protected functions. Their load configurations declare the cookie unused and leave its address zero. Run `BuildUnusedSecurityCookie.cmd` from both x86 and x64 Visual Studio 2022 Native Tools command prompts to rebuild them from `UnusedSecurityCookie.c`; no post-link binary patching is required.
 
 ## BA2024.EnableSpectreMitigations
 
