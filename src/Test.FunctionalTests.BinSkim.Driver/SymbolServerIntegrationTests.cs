@@ -21,8 +21,6 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
 {
     public class SymbolServerIntegrationTests
     {
-        private const string PublicOptIn = "BINSKIM_RUN_LIVE_SYMBOL_TESTS";
-        private const string PrivateOptIn = "BINSKIM_RUN_PRIVATE_SYMBOL_TESTS";
         private const string PrivateConfiguration = "BINSKIM_SYMBOL_SERVER_TEST_CONFIG";
         private readonly ITestOutputHelper output;
 
@@ -31,8 +29,9 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             this.output = output;
         }
 
-        [LiveSymbolServerFact]
+        [WindowsFact]
         [Trait("Category", "LiveSymbolServer")]
+        [Trait("Requires", "Network")]
         public void Pdb_DownloadsMatchingSymbolsFromMicrosoftPublicServer()
         {
             string binaryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "ntdll.dll");
@@ -42,13 +41,14 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 requirePrivateSymbols: false);
         }
 
-        [LiveSymbolServerFact(privateServer: true)]
+        [WindowsFact]
         [Trait("Category", "LiveSymbolServer")]
+        [Trait("Requires", "PrivateSymbolServer")]
         public void Pdb_DownloadsMatchingSymbolsFromConfiguredPrivateServers()
         {
             string configurationPath = Environment.GetEnvironmentVariable(PrivateConfiguration);
             configurationPath.Should().NotBeNullOrWhiteSpace(
-                $"enabled private integration tests require {PrivateConfiguration}");
+                $"selected private integration tests require {PrivateConfiguration}");
             File.Exists(configurationPath).Should().BeTrue("the protected server configuration must exist");
 
             var options = new JsonSerializerOptions
@@ -57,7 +57,7 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
                 UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow
             };
             ServerCase[] servers = JsonSerializer.Deserialize<ServerCase[]>(File.ReadAllText(configurationPath), options);
-            servers.Should().NotBeNullOrEmpty("enabled private tests must not silently run zero server cases");
+            servers.Should().NotBeNullOrEmpty("selected private tests must not silently run zero server cases");
 
             foreach (ServerCase server in servers)
             {
@@ -163,18 +163,13 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             output.WriteLine($"{name}: version={FileVersionInfo.GetVersionInfo(path).FileVersion}; SHA256={hash}");
         }
 
-        private sealed class LiveSymbolServerFactAttribute : FactAttribute
+        private sealed class WindowsFactAttribute : FactAttribute
         {
-            public LiveSymbolServerFactAttribute(bool privateServer = false)
+            public WindowsFactAttribute()
             {
-                string variable = privateServer ? PrivateOptIn : PublicOptIn;
                 if (!OperatingSystem.IsWindows())
                 {
                     Skip = "Native symbol-server integration requires Windows.";
-                }
-                else if (!string.Equals(Environment.GetEnvironmentVariable(variable), "true", StringComparison.OrdinalIgnoreCase))
-                {
-                    Skip = $"Set {variable}=true on an authorized, network-enabled agent to run live symbol-server tests.";
                 }
             }
         }

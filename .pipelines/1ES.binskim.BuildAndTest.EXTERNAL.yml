@@ -2,12 +2,6 @@ name: BuildAndTestBinskim
 trigger:
   - "*"
 
-parameters:
-  - name: runLiveSymbolServerTests
-    type: boolean
-    default: false
-    displayName: "Run public symbol-server integration on network-enabled Windows agents"
-
 # GitHub CodeQL validates pull requests, and the dedicated ADO compliance
 # pipeline retains 1ES CodeQL coverage on main.
 variables:
@@ -40,11 +34,13 @@ extends:
                 poolName: guardian-build-infra-linux-x64
                 poolOS: linux
                 buildScript: ./BuildAndTest.sh
+                testCaseFilter: "Category!=LiveSymbolServer"
                 runComponentGovernance: 'false'
               windows:
                 poolName: guardian-build-infra-windows-x64
                 poolOS: windows
                 buildScript: BuildAndTest.cmd
+                testCaseFilter: "Requires!=PrivateSymbolServer"
                 runComponentGovernance: 'true'
           pool:
             name: $(poolName)
@@ -133,17 +129,19 @@ extends:
             condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
             inputs:
               script: $(buildScript)
-
-          - task: DotNetCoreCLI@2
-            displayName: "Live public symbol-server integration"
-            condition: and(succeeded(), eq(variables['poolOS'], 'windows'), ${{ eq(parameters.runLiveSymbolServerTests, true) }})
-            inputs:
-              command: test
-              projects: src/Test.FunctionalTests.BinSkim.Driver/Test.FunctionalTests.BinSkim.Driver.csproj
-              arguments: --no-build -c Release --filter Category=LiveSymbolServer --blame-hang --blame-hang-timeout 180s
             env:
-              BINSKIM_RUN_LIVE_SYMBOL_TESTS: "true"
-              BINSKIM_RUN_PRIVATE_SYMBOL_TESTS: "false"
+              VSTestTestCaseFilter: $(testCaseFilter)
+
+          - task: PublishTestResults@2
+            displayName: "Publish Windows test results"
+            condition: and(succeededOrFailed(), eq(variables['poolOS'], 'windows'))
+            inputs:
+              testResultsFormat: VSTest
+              testResultsFiles: "**/*.trx"
+              testRunTitle: "Build And Test (windows)"
+              mergeTestResults: true
+              failTaskOnFailedTests: true
+              failTaskOnMissingResultsFile: true
 
           - task: ComponentGovernanceComponentDetection@0
             condition: and(succeeded(), eq(variables['runComponentGovernance'], 'true'), ne(variables['skipLinux'], 'true'))

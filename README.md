@@ -47,7 +47,7 @@ external network, credentials, SDK installation or machine proxy changes are
 required.
 
 ```powershell
-dotnet test src\Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj -c Release --filter FullyQualifiedName~SymsrvTests
+dotnet test src\Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj -c Release --filter FullyQualifiedName~SymsrvTests --blame-hang --blame-hang-timeout 180s
 ```
 
 HTTP 401/403 failure tests do not validate authenticated retrieval. Corporate
@@ -64,23 +64,40 @@ DLLs loaded. A successful process exit alone is not the test oracle. Public
 Windows symbols may be stripped; private cases additionally require full symbols
 and compiler metadata.
 
-These network tests are explicitly skipped in normal local/offline runs. On a
-Windows agent with permitted outbound HTTPS, run the anonymous Microsoft public
-symbol-server case with:
+Both cases have `Category=LiveSymbolServer`. The anonymous public case has
+`Requires=Network`; configured private cases have `Requires=PrivateSymbolServer`.
+The functional test project's default `VSTestTestCaseFilter` excludes live cases
+from normal local/offline runs. An explicit test filter overrides that default.
+This default is not in `.runsettings`, which would combine it with the requested
+filter and still exclude live cases. On Windows with permitted outbound HTTPS,
+run the public case with:
 
 ```powershell
-dotnet test src\Test.FunctionalTests.BinSkim.Driver\Test.FunctionalTests.BinSkim.Driver.csproj -c Release --filter Category=LiveSymbolServer --environment BINSKIM_RUN_LIVE_SYMBOL_TESTS=true --blame-hang --blame-hang-timeout 180s
+dotnet test src\Test.FunctionalTests.BinSkim.Driver\Test.FunctionalTests.BinSkim.Driver.csproj -c Release --filter "Category=LiveSymbolServer&Requires!=PrivateSymbolServer" --logger trx --blame-hang --blame-hang-timeout 180s
 ```
 
-The ADO build pipeline exposes `runLiveSymbolServerTests` for this check; enable
-it only on network-enabled agents. An enabled test fails on retrieval errors
-instead of interpreting blocked network access as success.
+The ADO Windows `Build and Test` step sets the standard MSBuild
+`VSTestTestCaseFilter` property to `Requires!=PrivateSymbolServer`, so the public
+case runs with the normal solution tests, not in a separate opt-in step.
+Windows test results are published, and `BuildAndTest.cmd` bounds native hangs
+at 180 seconds per test. The Linux job excludes live cases because DIA/symsrv
+retrieval requires Windows. Only explicitly selected non-Windows cases skip;
+selected Windows cases fail on retrieval errors instead of treating blocked
+network access as success.
 
-Private servers use `BINSKIM_RUN_PRIVATE_SYMBOL_TESTS=true` and a runtime-only
-JSON file named by `BINSKIM_SYMBOL_SERVER_TEST_CONFIG`. Its array entries contain
+Private cases are excluded from normal CI. Select them explicitly in a protected
+Windows pipeline with:
+
+```powershell
+dotnet test src\Test.FunctionalTests.BinSkim.Driver\Test.FunctionalTests.BinSkim.Driver.csproj -c Release --filter "Requires=PrivateSymbolServer" --logger trx --blame-hang --blame-hang-timeout 180s
+```
+
+The agent supplies a runtime-only JSON file named by
+`BINSKIM_SYMBOL_SERVER_TEST_CONFIG`. Its array entries contain
 `Name` (a non-sensitive alias), `ServerUrl` (HTTPS, no user information or query
 string), and `BinaryPath` (a controlled PE whose full PDB is on that server).
-Missing or empty configuration fails an enabled test. Do not commit this file,
+Missing or empty configuration fails a selected test; it does not skip.
+Do not commit this file,
 private endpoints, customer binaries, credentials, PATs, SAS tokens or
 authorization headers.
 
@@ -88,8 +105,16 @@ Run private cases only in protected, network-enabled pipelines using an
 authorized managed/workload identity or another approved authorization method,
 with the native symbol client's credential provider configured by the agent.
 The tests do not acquire, accept, persist or print credentials. Anonymous public
-access does not prove private authentication; public and private cases are
-independently enabled.
+access does not prove private authentication.
+
+For a native dependency upgrade, repeat the deterministic suite and applicable
+live filters from separate baseline and candidate builds. Keep their TRX results
+and record each dependency's source version and SHA-256. The live test records
+the versions and hashes of the DLLs actually loaded, and its matching-PDB/cache
+assertions must pass for each candidate. Use a fresh test process per build;
+after deploying a candidate, use `--no-build` to avoid replacing its test output.
+This matrix validates exercised behavior, not every native API, authenticated
+service, proxy configuration or supported Windows image.
 
 ### Submit Pull Requests
 
