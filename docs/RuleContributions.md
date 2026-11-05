@@ -63,6 +63,8 @@ Add the applicable subdirectories:
 
 Passing and failing binaries should differ only in conditions relevant to the rule. Enable unrelated mitigations so a fixture does not introduce noise into broader test runs.
 
+Existing fixture build recipes are retained in [Functional test build scripts](FunctionalTestBuildScripts.md). When adding source and build instructions beside an existing asset, move its recipe there and replace the old entry with a link.
+
 Check in the fixture source and a deterministic build script beside newly added binaries whenever possible. The build path should identify the required toolchain, architecture, configuration, and meaningful compiler or linker options. If exact reproduction depends on external state such as a signing certificate or unavailable toolchain, document that constraint in the affected rule directory rather than recording an unverified historical recipe.
 
 ## Add functional rule tests

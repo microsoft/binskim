@@ -10,7 +10,7 @@ To run BinSkim without adding it as a project dependency:
 
 1. Download the `.nupkg` file from NuGet.
 2. Extract the package as a ZIP archive.
-3. Under `tools/net9.0`, select the directory matching the operating system and architecture where BinSkim will run.
+3. Under `tools`, select the directory matching the operating system and architecture where BinSkim will run. The package layout is defined in [`BinSkim.nuspec`](../src/Nuget/BinSkim.nuspec).
 
 | Runtime identifier | Platform | Executable |
 | --- | --- | --- |
