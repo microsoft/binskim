@@ -10,7 +10,7 @@ bld/
 bin/
 obj/
 **/packages/*
-src/TestResults/
+**/TestResults/
 src/Test.FunctionalTests.BinSkim.Driver/BaselineTestData/Actual/
 .local/
 *.user
