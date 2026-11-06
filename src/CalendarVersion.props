@@ -1,0 +1,28 @@
+<Project>
+  <PropertyGroup>
+    <BinSkimBuildTimestampUtc Condition="'$(BinSkimBuildTimestampUtc)' == ''">$([System.DateTime]::UtcNow.ToString('yyyyMMddHHmmss'))</BinSkimBuildTimestampUtc>
+    <BinSkimBuildAlias Condition="'$(BinSkimBuildAlias)' == ''">$([System.Environment]::UserName)</BinSkimBuildAlias>
+    <_BinSkimAlias>$([System.Text.RegularExpressions.Regex]::Replace('$(BinSkimBuildAlias)', '[^0-9A-Za-z-]', '-').Trim('-').ToLowerInvariant())</_BinSkimAlias>
+    <_BinSkimYear>$([System.DateTime]::ParseExact('$(BinSkimBuildTimestampUtc)', 'yyyyMMddHHmmss', null).ToString('yy'))</_BinSkimYear>
+    <_BinSkimDay>$([System.DateTime]::ParseExact('$(BinSkimBuildTimestampUtc)', 'yyyyMMddHHmmss', null).DayOfYear.ToString('000'))</_BinSkimDay>
+    <_BinSkimDate>$([System.Int32]::Parse('$(_BinSkimYear)$(_BinSkimDay)'))</_BinSkimDate>
+    <_BinSkimMajor>$([System.Version]::Parse('$(AssemblyVersion)').Major)</_BinSkimMajor>
+    <_BinSkimMinor>$([System.Version]::Parse('$(AssemblyVersion)').Minor)</_BinSkimMinor>
+    <_BinSkimBranchLeaf>$(BUILD_SOURCEBRANCHNAME)</_BinSkimBranchLeaf>
+    <_BinSkimBranchLeaf Condition="'$(SYSTEM_PULLREQUEST_SOURCEBRANCH)' != ''">$([System.IO.Path]::GetFileName('$(SYSTEM_PULLREQUEST_SOURCEBRANCH)'))</_BinSkimBranchLeaf>
+    <_BinSkimBranchLeaf>$([System.Text.RegularExpressions.Regex]::Replace('$(_BinSkimBranchLeaf)', '[^0-9A-Za-z-]', '-').Trim('-').ToLowerInvariant())</_BinSkimBranchLeaf>
+    <_BinSkimSuffix>-$(_BinSkimAlias)-$(BinSkimBuildTimestampUtc.Substring(8, 6))</_BinSkimSuffix>
+    <_BinSkimSuffix Condition="'$(TF_BUILD)' == 'True'">-$(_BinSkimBranchLeaf)-$(BUILD_BUILDID)</_BinSkimSuffix>
+    <BinSkimVersion>$(_BinSkimMajor).$(_BinSkimMinor).$(_BinSkimDate).1$(_BinSkimSuffix)</BinSkimVersion>
+    <BinSkimVersion Condition="'$(TF_BUILD)' == 'True' and '$(BinSkimOfficialVersion)' != ''">$(BinSkimOfficialVersion)</BinSkimVersion>
+    <Version>$(BinSkimVersion)</Version>
+  </PropertyGroup>
+  <Target Name="ValidateBinSkimCalendarVersion" BeforeTargets="PrepareForBuild;Pack">
+    <Error Condition="'$(TF_BUILD)' != 'True' and '$(_BinSkimAlias)' == ''"
+           Text="Set BinSkimBuildAlias to a non-empty package-safe developer alias." />
+    <Error Condition="'$(TF_BUILD)' == 'True' and '$(BinSkimOfficialVersion)' == '' and '$(BUILD_BUILDID)' == ''"
+           Text="Non-release CI builds require BUILD_BUILDID for their prerelease version." />
+    <Error Condition="'$(TF_BUILD)' == 'True' and '$(BinSkimOfficialVersion)' == '' and '$(_BinSkimBranchLeaf)' == ''"
+           Text="Non-release CI builds require a package-safe source branch name." />
+  </Target>
+</Project>
