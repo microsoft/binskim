@@ -39,82 +39,52 @@ or binary compatibility of a replacement managed `Dia2Lib.dll`.
 
 ### Validating symbol-server behavior
 
-The Windows C# `SymsrvTests` exercise real DIA-to-symsrv loading using loopback
-HTTP servers and indexed file stores. They cover cache hits and offline reuse,
-local-symbol precedence, server fallback, redirects, classic/MSFZ metadata, and
-rejection of HTTP errors or invalid PDBs. Existing test assets are reused; no
-external network, credentials, SDK installation or machine proxy changes are
-required.
+[`SymsrvTests`](./src/Test.UnitTests.BinaryParsers/PEBinary/SymsrvTests.cs)
+exercise DIA/symsrv using self-contained symbol stores on Windows. No external
+network or credentials are required.
 
 ```powershell
 dotnet test src\Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj -c Release --filter FullyQualifiedName~SymsrvTests --blame-hang --blame-hang-timeout 180s
 ```
 
-HTTP 401/403 failure tests do not validate authenticated retrieval. Corporate
-authentication, real proxies and the supported Windows-image matrix still need
-integration/canary validation.
-
 ### Live symbol-server integration
 
-The functional driver's `SymbolServerIntegrationTests` use the production
-DIA/symsrv path to download matching PDBs into a new, empty cache and then reload
-from that cache without the remote server. They assert the target's CodeView
-identity, the downloaded file's location and content hash, and the actual native
-DLLs loaded. A successful process exit alone is not the test oracle. Public
-Windows symbols may be stripped; private cases additionally require full symbols
-and compiler metadata.
+[`SymbolServerIntegrationTests`](./src/Test.FunctionalTests.BinSkim.Driver/SymbolServerIntegrationTests.cs)
+cover real servers and require Windows with permitted outbound HTTPS.
 
-Both cases have `Category=LiveSymbolServer`. The anonymous public case has
-`Requires=Network`; configured private cases have `Requires=PrivateSymbolServer`.
-The functional test project's default `VSTestTestCaseFilter` excludes live cases
-from normal local/offline runs. An explicit test filter overrides that default.
-This default is not in `.runsettings`, which would combine it with the requested
-filter and still exclude live cases. On Windows with permitted outbound HTTPS,
-run the public case with:
+Local runs exclude `Category=LiveSymbolServer` by default; explicit filters
+select live cases. Windows CI runs the public case (`Requires=Network`) inside
+`Build and Test`, excluding private cases (`Requires=PrivateSymbolServer`).
+Linux CI excludes live cases.
+
+Run the public case with:
 
 ```powershell
 dotnet test src\Test.FunctionalTests.BinSkim.Driver\Test.FunctionalTests.BinSkim.Driver.csproj -c Release --filter "Category=LiveSymbolServer&Requires!=PrivateSymbolServer" --logger trx --blame-hang --blame-hang-timeout 180s
 ```
 
-The ADO Windows `Build and Test` step sets the standard MSBuild
-`VSTestTestCaseFilter` property to `Requires!=PrivateSymbolServer`, so the public
-case runs with the normal solution tests, not in a separate opt-in step.
-Windows test results are published, and `BuildAndTest.cmd` bounds native hangs
-at 180 seconds per test. The Linux job excludes live cases because DIA/symsrv
-retrieval requires Windows. Only explicitly selected non-Windows cases skip;
-selected Windows cases fail on retrieval errors instead of treating blocked
-network access as success.
-
-Private cases are excluded from normal CI. Select them explicitly in a protected
-Windows pipeline with:
+Run private cases only on a protected, network-enabled Windows agent with an
+authorized managed/workload identity or another approved authorization method.
+The agent must configure the native symbol client's credential provider.
+Select private cases with:
 
 ```powershell
 dotnet test src\Test.FunctionalTests.BinSkim.Driver\Test.FunctionalTests.BinSkim.Driver.csproj -c Release --filter "Requires=PrivateSymbolServer" --logger trx --blame-hang --blame-hang-timeout 180s
 ```
 
-The agent supplies a runtime-only JSON file named by
-`BINSKIM_SYMBOL_SERVER_TEST_CONFIG`. Its array entries contain
-`Name` (a non-sensitive alias), `ServerUrl` (HTTPS, no user information or query
-string), and `BinaryPath` (a controlled PE whose full PDB is on that server).
-Missing or empty configuration fails a selected test; it does not skip.
-Do not commit this file,
-private endpoints, customer binaries, credentials, PATs, SAS tokens or
-authorization headers.
+Set `BINSKIM_SYMBOL_SERVER_TEST_CONFIG` to a protected runtime JSON file.
+Each array entry supplies `Name` (a non-sensitive alias), `ServerUrl` (HTTPS, no
+user information or query string), and `BinaryPath` (a controlled PE whose full
+PDB is on that server). Missing or empty configuration fails a selected test
+rather than skipping it. Do not commit this file, private endpoints, customer
+binaries or credentials/tokens.
+Public access and HTTP 401/403 rejection do not prove private authentication.
 
-Run private cases only in protected, network-enabled pipelines using an
-authorized managed/workload identity or another approved authorization method,
-with the native symbol client's credential provider configured by the agent.
-The tests do not acquire, accept, persist or print credentials. Anonymous public
-access does not prove private authentication.
-
-For a native dependency upgrade, repeat the deterministic suite and applicable
-live filters from separate baseline and candidate builds. Keep their TRX results
-and record each dependency's source version and SHA-256. The live test records
-the versions and hashes of the DLLs actually loaded, and its matching-PDB/cache
-assertions must pass for each candidate. Use a fresh test process per build;
-after deploying a candidate, use `--no-build` to avoid replacing its test output.
-This matrix validates exercised behavior, not every native API, authenticated
-service, proxy configuration or supported Windows image.
+For native upgrades, compare baseline and candidate builds in fresh test
+processes, retaining TRX results and native version/hash diagnostics. Use
+`--no-build` after deploying a candidate to preserve its test output. Private
+authentication, proxies and the supported Windows-image matrix need separate
+integration/canary coverage.
 
 ### Submit Pull Requests
 
