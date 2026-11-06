@@ -1,9 +1,5 @@
 @echo off
 SETLOCAL
-if not defined BinSkimBuildTimestampUtc (
-    for /f %%t in ('powershell -NoProfile -Command "[DateTime]::UtcNow.ToString('yyyyMMddHHmmss')"') do set BinSkimBuildTimestampUtc=%%t
-)
-if not defined BinSkimBuildTimestampUtc exit /b 1
 @REM Uncomment this line to update nuget.exe
 @REM Doing so can break SLN build (which uses nuget.exe to
 @REM create a nuget package for binskim) so must opt-in
