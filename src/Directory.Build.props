@@ -21,7 +21,7 @@
   <Import Condition="Exists($([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../')))"
           Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
-  <Target Name="ValidateBinSkimCalendarVersion" BeforeTargets="PrepareForBuild;Pack"
+  <Target Name="ValidatePackageVersion" BeforeTargets="PrepareForBuild;Pack"
           Condition="'$(TF_BUILD)' == 'True' and '$(BinSkimOfficialVersion)' == ''">
     <Error Condition="'$(BUILD_BUILDID)' == '' or ('$(BUILD_SOURCEBRANCHNAME)' == '' and '$(SYSTEM_PULLREQUEST_SOURCEBRANCH)' == '')"
            Text="Non-release CI builds require a source branch and BUILD_BUILDID." />
