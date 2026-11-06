@@ -2,8 +2,7 @@
 
   <!-- Submodule's own version (used when built standalone) -->
   <PropertyGroup>
-    <AssemblyVersion>4.4.9</AssemblyVersion>
-    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <VersionPrefix>4.4</VersionPrefix>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
@@ -15,7 +14,9 @@
     <BinSkimBuildTimestampUtc Condition="'$(BinSkimBuildTimestampUtc)' == ''">$([System.DateTime]::UtcNow.ToString('yyyyMMddHHmmss'))</BinSkimBuildTimestampUtc>
     <_BinSkimYear>$(BinSkimBuildTimestampUtc.Substring(2, 2))</_BinSkimYear>
     <_BinSkimDayOfYear>$([System.DateTime]::ParseExact('$(BinSkimBuildTimestampUtc)', 'yyyyMMddHHmmss', null).DayOfYear.ToString('000'))</_BinSkimDayOfYear>
-    <VersionPrefix>$([System.Version]::Parse('$(AssemblyVersion)').ToString(2)).$([System.Int32]::Parse('$(_BinSkimYear)$(_BinSkimDayOfYear)')).1</VersionPrefix>
+    <VersionPrefix>$([System.Version]::Parse('$(VersionPrefix)').ToString(2)).$([System.Int32]::Parse('$(_BinSkimYear)$(_BinSkimDayOfYear)')).1</VersionPrefix>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+    <FileVersion>$(VersionPrefix)</FileVersion>
     <VersionSuffix>$([System.Environment]::UserName)-$(BinSkimBuildTimestampUtc.Substring(8, 6))</VersionSuffix>
     <VersionSuffix Condition="'$(TF_BUILD)' == 'True'">$(BUILD_SOURCEBRANCHNAME)-$(BUILD_BUILDID)</VersionSuffix>
     <VersionSuffix Condition="'$(TF_BUILD)' == 'True' and '$(SYSTEM_PULLREQUEST_SOURCEBRANCH)' != ''">$([System.IO.Path]::GetFileName('$(SYSTEM_PULLREQUEST_SOURCEBRANCH)'))-$(BUILD_BUILDID)</VersionSuffix>
