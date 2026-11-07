@@ -568,21 +568,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 {
                     Dictionary<DwarfAttribute, DwarfAttributeValue> attributes = symbol.Attributes as Dictionary<DwarfAttribute, DwarfAttributeValue>;
 
-                    if (attributes != null)
+                    if (attributes != null &&
+                        attributes.TryGetValue(DwarfAttribute.Specification, out DwarfAttributeValue specificationValue) &&
+                        specificationValue.Type == DwarfAttributeValueType.ResolvedReference)
                     {
-                        if (attributes.TryGetValue(DwarfAttribute.Specification, out DwarfAttributeValue specificationValue) && specificationValue.Type == DwarfAttributeValueType.ResolvedReference)
-                        {
-                            DwarfSymbol reference = specificationValue.Reference;
-                            Dictionary<DwarfAttribute, DwarfAttributeValue> referenceAttributes = reference.Attributes as Dictionary<DwarfAttribute, DwarfAttributeValue>;
+                        DwarfSymbol reference = specificationValue.Reference;
+                        Dictionary<DwarfAttribute, DwarfAttributeValue> referenceAttributes = reference.Attributes as Dictionary<DwarfAttribute, DwarfAttributeValue>;
 
-                            if (referenceAttributes != null)
+                        if (referenceAttributes != null)
+                        {
+                            foreach (KeyValuePair<DwarfAttribute, DwarfAttributeValue> kvp in attributes)
                             {
-                                foreach (KeyValuePair<DwarfAttribute, DwarfAttributeValue> kvp in attributes)
+                                if (kvp.Key != DwarfAttribute.Specification)
                                 {
-                                    if (kvp.Key != DwarfAttribute.Specification)
-                                    {
-                                        referenceAttributes[kvp.Key] = kvp.Value;
-                                    }
+                                    referenceAttributes[kvp.Key] = kvp.Value;
                                 }
                             }
                         }

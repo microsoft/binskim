@@ -67,6 +67,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// <summary>The default stack cookie.</summary>
         public const ulong DefaultCookieX64 = 0x00002B992DDFA232;
 
-        public static ImmutableHashSet<uint> DefaultCookiesX86 = new HashSet<uint>(new uint[] { 0xBB40E64E, 0x0000BB40 }).ToImmutableHashSet();
+        public static readonly ImmutableHashSet<uint> DefaultCookiesX86 = new HashSet<uint>(new uint[] { 0xBB40E64E, 0x0000BB40 }).ToImmutableHashSet();
     }
 }

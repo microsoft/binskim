@@ -151,11 +151,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     // Check to see if the object was compiled using /Yc or /Yu for precompiled headers
                     string[] pchOptionSwitches = { "/Yc", "/Yu" };
-                    if (omDetails.GetOptionValue(pchOptionSwitches, OrderOfPrecedence.FirstWins, ref pchHeaderFile) == true)
+                    if (omDetails.GetOptionValue(pchOptionSwitches, OrderOfPrecedence.FirstWins, ref pchHeaderFile))
                     {
                         // Now check to see if a pch file name was specified using /Fp:
                         string[] pchFileNameOptions = { "/Fp" };
-                        if (omDetails.GetOptionValue(pchFileNameOptions, OrderOfPrecedence.FirstWins, ref pchFileName) != true)
+                        if (!omDetails.GetOptionValue(pchFileNameOptions, OrderOfPrecedence.FirstWins, ref pchFileName))
                         {
                             // no pch filename specified, so the filename defaults to the pchHeaderFile with the extension swapped to ".pch"
                             pchFileName = Path.ChangeExtension(pchHeaderFile, "pch");
