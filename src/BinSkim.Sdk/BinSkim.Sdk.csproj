@@ -8,7 +8,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights" />
     <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="System.Collections.Immutable" />
     <PackageReference Include="Sarif.Driver" />
   </ItemGroup>
   <ItemGroup>

@@ -30,14 +30,14 @@ call :RunTests || goto :ExitFailed
 
 ::Create the BinSkim platform specific publish packages
 echo Creating Platform Specific BinSkim 'Publish' Packages
-call :CreatePublishPackage net9.0 win-x64 || goto :ExitFailed
-call :CreatePublishPackage net9.0 linux-x64 || goto :ExitFailed
-call :CreatePublishPackage net9.0 linux-arm64 || goto :ExitFailed
-call :CreatePublishPackage net9.0 osx-x64 || goto :ExitFailed
+call :CreatePublishPackage net10.0 win-x64 || goto :ExitFailed
+call :CreatePublishPackage net10.0 linux-x64 || goto :ExitFailed
+call :CreatePublishPackage net10.0 linux-arm64 || goto :ExitFailed
+call :CreatePublishPackage net10.0 osx-x64 || goto :ExitFailed
 
 ::Build NuGet package
 echo BuildPackages.cmd
-call BuildPackages.cmd || goto :ExitFailed
+call "%~dp0BuildPackages.cmd" || goto :ExitFailed
 
 ::Update BinSkimRules.md to cover any xml changes
 echo Exporting any BinSkim rules

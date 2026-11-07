@@ -7,13 +7,13 @@
     {
       "name": "linux-x64",
       "type": "docker",
-      "dockerImage": "mcr.microsoft.com/dotnet/sdk:9.0",
+      "dockerImage": "mcr.microsoft.com/dotnet/sdk:10.0",
       "localRoot": ".."
     },
     {
       "name": "linux-arm64",
       "type": "docker",
-      "dockerImage": "mcr.microsoft.com/dotnet/sdk:9.0",
+      "dockerImage": "mcr.microsoft.com/dotnet/sdk:10.0",
       "localRoot": ".."
     }
   ]

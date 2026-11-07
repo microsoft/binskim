@@ -3,6 +3,6 @@
   <Import Project="$(MSBuildThisFileDirectory)build.common.props" />
 
   <PropertyGroup>    
-    <NetCoreVersion>net9.0</NetCoreVersion>  
+    <NetCoreVersion>net10.0</NetCoreVersion>
   </PropertyGroup>
 </Project>

@@ -9,6 +9,34 @@ This repository contains the source code for BinSkim, a Portable Executable (PE)
 3. Load and compile `src\BinSkim.sln` to develop changes for contribution.
 4. Execute BuildAndTest.cmd at the root of the enlistment to validate before submitting a PR.
 
+Builds that deploy Windows x64 DIA download `Microsoft.VisualCpp.DIA.SDK` from
+the public Visual Studio Stable distribution. The version, immutable download URL
+and SHA-256 hashes of the VSIX and native DLL are pinned in
+`src\Directory.Packages.props`. MSBuild caches and verifies the SDK in each
+project's intermediate directory before deploying only `msdia140.dll`. A clean
+build needs access to `download.visualstudio.microsoft.com`; it does not need
+Visual Studio or COM registration. Non-Windows builds do not download the SDK
+unless publishing for `win-x64`. The SDK contains no managed `Dia2Lib.dll`, so
+the existing interop assembly and managed TraceEvent dependency are unchanged. See
+[the runtime notices](./src/BinSkim.Driver/README.txt) for provenance and licensing.
+
+### Validating native DIA versions
+
+The C# tests validate the pinned SDK DLL by default. On Windows x64, run the same
+tests against a trusted candidate DLL with the standard .NET test runner:
+
+```powershell
+dotnet test src\BinSkim.sln -c Release --environment "BINSKIM_DIA_CANDIDATE=C:\candidate\msdia140.dll"
+```
+
+Test-only native-library resolution selects the candidate for BinaryParsers'
+in-process DIA calls without replacing build outputs or changing the production
+loader. The xUnit tests check compiler options, function security flags, source
+checksums, Source Link streams, segments and section contributions, including
+classic-PDB/MSFZ equivalence. No PowerShell wrapper or second test framework is
+required. This checks BinSkim's exercised contracts, not every DIA SDK interface
+or binary compatibility of a replacement managed `Dia2Lib.dll`.
+
 ### Submit Pull Requests
 
 1. Run `BuildAndTest.cmd` at the root of the enlistment to ensure that all tests pass, release build succeeds, and NuGet packages are created
@@ -27,7 +55,7 @@ If you only want to run the Binskim tool without installing anything, then you c
 1. Download BinSkim from **[NuGet](https://www.nuget.org/packages/Microsoft.CodeAnalysis.BinSkim/)**
 2. Rename the file extension from .nupkg to .zip (ie. via commandline: `rename microsoft.codeanalysis.binskim.x.y.z.nupkg microsoft.codeanalysis.binskim.x.y.z.zip`)
 3. Unzip
-4. Executable files are now available in the OS specific folder within _tools\netcoreapp3.1_ (ie. linux-x64, win-x64, and osx-x64).
+4. Executable files are available directly under the OS-specific folder in `tools` (for example, `tools\linux-x64`, `tools\win-x64`, or `tools\osx-x64`).
 5. Navigate to this location to invoke the executable:
     - Windows: `binskim.exe analyze c:\bld\*.dll --recurse true --output MyRun.sarif`
     - Linux/Unix: `./BinSkim analyze /someDirectory/testBinary -o MyRun.sarif`
