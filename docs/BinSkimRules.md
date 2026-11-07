@@ -640,6 +640,10 @@ NOTE: the modified cookie value detected was: {1}
 
 '{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted.
 
+#### `SecurityCookieUnused`: NotApplicable
+
+'{0}' was not evaluated for check 'DoNotModifyStackProtectionCookie' because the security cookie could not be located and the load configuration declares it unused (IMAGE_GUARD_SECURITY_COOKIE_UNUSED).
+
 #### `InvalidSecurityCookieOffset`: Warning
 
 '{0}' appears to be a packed C or C++ binary that reports a security cookie offset that exceeds the size of the packed file. Use of the stack protector (/GS) feature therefore could not be verified. The file was possibly packed by: {1}.
