@@ -203,22 +203,22 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
         /// <summary>
         /// Deafult address size that should be used.
         /// </summary>
-        public byte DefaultAddressSize;
+        public readonly byte DefaultAddressSize;
 
         /// <summary>
         /// Address of the .eh_frame section when loaded into memory.
         /// </summary>
-        public ulong PcRelativeAddress;
+        public readonly ulong PcRelativeAddress;
 
         /// <summary>
         /// Address of the .text section when loaded into memory.
         /// </summary>
-        public ulong TextAddress;
+        public readonly ulong TextAddress;
 
         /// <summary>
         /// Address of the .data section when loaded into memory.
         /// </summary>
-        public ulong DataAddress;
+        public readonly ulong DataAddress;
     }
 
     /// <summary>

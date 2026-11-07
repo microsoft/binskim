@@ -579,22 +579,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(debugFileName))
+            // Load from gnu_debuglink
+            if (string.IsNullOrWhiteSpace(debugFileName) &&
+                SectionExistsAndHasBits(SectionName.GnuDebugLink, out Section<ulong> debugLinkSection))
             {
-                // Load from gnu_debuglink
-                if (SectionExistsAndHasBits(SectionName.GnuDebugLink, out Section<ulong> debugLinkSection))
+                byte[] debugLinkSectionContents = debugLinkSection.GetContents();
+
+                if (debugLinkSectionContents != null && debugLinkSectionContents.Length > 0)
                 {
-                    byte[] debugLinkSectionContents = debugLinkSection.GetContents();
+                    string debuglinkFileName = Encoding.ASCII.GetString(debugLinkSectionContents.TakeWhile(x => x != 0).ToArray());
 
-                    if (debugLinkSectionContents != null && debugLinkSectionContents.Length > 0)
+                    if (!string.IsNullOrWhiteSpace(debuglinkFileName))
                     {
-                        string debuglinkFileName = Encoding.ASCII.GetString(debugLinkSectionContents.TakeWhile(x => x != 0).ToArray());
-
-                        if (!string.IsNullOrWhiteSpace(debuglinkFileName))
-                        {
-                            debugFileName = debuglinkFileName;
-                            DebugFileType = DebugFileType.FromDebuglink;
-                        }
+                        debugFileName = debuglinkFileName;
+                        DebugFileType = DebugFileType.FromDebuglink;
                     }
                 }
             }
