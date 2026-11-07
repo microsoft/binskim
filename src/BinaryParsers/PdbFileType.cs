@@ -22,5 +22,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         /// Portable OS format.
         /// </summary>
         Portable,
+
+        /// <summary>
+        /// Windows MSFZ specific format.
+        /// </summary>
+        WindowsMSFZ,
     }
 }
