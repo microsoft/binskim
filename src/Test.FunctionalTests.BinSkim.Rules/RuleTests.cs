@@ -1206,6 +1206,40 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2022_SignSecurely_Sha1AndSha256_Pass()
+        {
+            if (!BinaryParsers.PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            string targetPath = Path.Combine(
+                Environment.CurrentDirectory,
+                "FunctionalTestData",
+                "BA2022.SignSecurely",
+                "Pass",
+                "Sha1AndSha256SignedUntrustedRoot.exe");
+            var logger = new TestMessageLogger();
+            using BinaryAnalyzerContext context = CreateContext(logger, null, targetPath);
+            var skimmer = new SignSecurely();
+            skimmer.Initialize(context);
+            context.Rule = skimmer;
+
+            Assert.True(context.IsValidAnalysisTarget);
+            Assert.Equal(AnalysisApplicability.ApplicableToSpecifiedTarget, skimmer.CanAnalyze(context, out _));
+
+            skimmer.Analyze(context);
+
+            Result result = Assert.Single(logger.Results);
+            Assert.Equal(ResultKind.Pass, result.Kind);
+            Assert.Equal("Pass", result.Message.Id);
+            Assert.Equal(2, result.Message.Arguments.Count);
+            Assert.Contains(
+                "Cryptographically weak signatures: [digest algorithm: 'sha1NoSign'",
+                result.Message.Arguments[1]);
+            Assert.Contains(
+                "Cryptographically strong signatures: [digest algorithm: 'sha256NoSign'",
+                result.Message.Arguments[1]);
+        }
+
+        [Fact]
         public void BA2022_SignSecurely_LongPath_Pass()
         {
             const int maxPath = 260;
