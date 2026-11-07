@@ -102,6 +102,8 @@ namespace Microsoft.CodeAnalysis.IL
                 ? options.MaxFileSizeInKilobytes.Value
                 : long.MaxValue;
 
+            ValidateSymbolPath(options.SymbolsPath, context);
+
             // Update context object based on command-line parameters.
             context.SymbolPath = options.SymbolsPath ?? context.SymbolPath;
             context.IgnorePdbLoadError = options.IgnorePdbLoadError != null ? options.IgnorePdbLoadError.Value : context.IgnorePdbLoadError;
@@ -141,6 +143,32 @@ namespace Microsoft.CodeAnalysis.IL
 
             this.globalContext = context;
             return context;
+        }
+
+        private void ValidateSymbolPath(string symbolPath, BinaryAnalyzerContext context)
+        {
+            if (!string.IsNullOrEmpty(symbolPath) &&
+                !symbolPath.Contains('*') &&
+                !symbolPath.Contains(';') &&
+                context.FileSystem.FileExists(symbolPath))
+            {
+                context.RuntimeErrors |= RuntimeConditions.InvalidCommandLineOption;
+                context.Logger.LogConfigurationNotification(
+                    new Notification
+                    {
+                        Descriptor = new ReportingDescriptorReference
+                        {
+                            Id = "ERR997.InvalidSymbolPath",
+                        },
+                        Message = new Message
+                        {
+                            Text = $"The --sympath value '{symbolPath}' points to a file. " +
+                                   "Specify the directory containing the symbols or a symbol search path instead.",
+                        },
+                        Level = FailureLevel.Error,
+                    });
+                ThrowExitApplicationException(ExitReason.InvalidCommandLineOption);
+            }
         }
 
         private BinaryAnalyzerContext globalContext;
