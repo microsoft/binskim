@@ -19,7 +19,20 @@
 - NEW => new feature 
 
 ## UNRELEASED
+
+## **v4.4.9.14**
+* DEP: Upgrade BinSkim to .NET 10 [1223](https://github.com/microsoft/binskim/pull/1223)
 * DEP: Update Sarif.Driver to 5.8.0 while preserving SHA-1 and SHA-256 hash output [1227](https://github.com/microsoft/binskim/pull/1227)
+* DEP: Acquire native DIA from a pinned Visual Studio Stable SDK [1256](https://github.com/microsoft/binskim/pull/1256)
+* DEP: Update System.Collections.Immutable, System.Reflection.Metadata, and System.Composition to 10.0.14 [1259](https://github.com/microsoft/binskim/pull/1259), [1258](https://github.com/microsoft/binskim/pull/1258)
+* NEW: Support MSFZ-compressed Windows PDBs [1263](https://github.com/microsoft/binskim/pull/1263)
+* NEW: Support uncompressed DWARF debug-info sections larger than 2 GB [1262](https://github.com/microsoft/binskim/pull/1262)
+* UEE: Fix DWARF 5 indexed-address handling [1260](https://github.com/microsoft/binskim/pull/1260)
+* FPS: Handle leading null bytes in ELF compiler metadata [1246](https://github.com/microsoft/binskim/pull/1246)
+* FPS: Report BA2012 as not applicable when a missing security cookie is marked unused [1254](https://github.com/microsoft/binskim/pull/1254)
+* FCR: Correct BA2022 algorithm reporting for dual-signed binaries [1269](https://github.com/microsoft/binskim/pull/1269)
+* NEW: Reject file paths passed to `--sympath` with a clear configuration error [1268](https://github.com/microsoft/binskim/pull/1268)
+* ADM: Add native symbol-server retrieval regression tests [1264](https://github.com/microsoft/binskim/pull/1264)
 
 ## **v4.4.9.13**
 * FPS: Fix BA2022 signature verification for long target paths [1215](https://github.com/microsoft/binskim/pull/1215)
