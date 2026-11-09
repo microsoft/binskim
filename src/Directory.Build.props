@@ -2,7 +2,7 @@
 
   <!-- Submodule's own version (used when built standalone) -->
   <PropertyGroup>
-    <VersionPrefix>4.4</VersionPrefix>
+    <VersionPrefix>4.5</VersionPrefix>
     <BinSkimBuildTimestampUtc Condition="'$(BinSkimBuildTimestampUtc)' == ''">$([System.DateTime]::UtcNow.ToString('yyyyMMddHHmmss'))</BinSkimBuildTimestampUtc>
     <_BinSkimYear>$(BinSkimBuildTimestampUtc.Substring(2, 2))</_BinSkimYear>
     <_BinSkimDayOfYear>$([System.DateTime]::ParseExact('$(BinSkimBuildTimestampUtc)', 'yyyyMMddHHmmss', null).DayOfYear.ToString('000'))</_BinSkimDayOfYear>
