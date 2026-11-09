@@ -24,6 +24,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public RuntimeConditions RuntimeErrors { get; set; }
 
+        public List<Result> Results { get; } = new List<Result>();
+
         public HashSet<string> PassTargets { get; set; }
 
         public HashSet<string> ErrorTargets { get; set; }
@@ -54,6 +56,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public void Log(ReportingDescriptor rule, Result result, int? extensionIndex = null)
         {
+            this.Results.Add(result);
             this.RecordTestResult(result.Kind, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
             this.RecordTestResult(result.Level, result.Locations.First().PhysicalLocation.ArtifactLocation.Uri.LocalPath);
         }

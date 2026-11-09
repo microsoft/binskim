@@ -139,7 +139,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                         // We cannot retrieve algorithm id and cert info for images that fail
                         // the stringent WinTrustVerify security check. We therefore start
                         // a new call chain with looser validation criteria.
-                        winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.Normal);
+                        winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.Normal, i);
                         Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
 
                         if (this.GetSignerHashAlgorithms(context, winTrustData, out hashAlgorithm, out hashEncryptionAlgorithm))
@@ -427,24 +427,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             winTrustData.StateAction = Native.StateAction.WTD_STATEACTION_VERIFY;
             winTrustData.hWVTStateData = IntPtr.Zero; // This value set by API call
 
+            Native.SignatureSettingsFlags flags = kind == WinTrustDataKind.SignatureCount
+                ? Native.SignatureSettingsFlags.WSS_GET_SECONDARY_SIG_COUNT
+                : Native.SignatureSettingsFlags.WSS_VERIFY_SPECIFIC;
+
+            var signatureSettings = new Native.WINTRUST_SIGNATURE_SETTINGS
+            {
+                cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_SIGNATURE_SETTINGS)),
+                dwIndex = signatureIndex,
+                dwFlags = flags,
+                cSecondarySigs = 0,
+                dwVerifiedSigIndex = 0
+            };
+
             if (kind != WinTrustDataKind.Normal)
             {
-                Native.SignatureSettingsFlags flags = Native.SignatureSettingsFlags.WSS_GET_SECONDARY_SIG_COUNT;
-
-                if (kind == WinTrustDataKind.EnforcePolicy)
-                {
-                    flags = Native.SignatureSettingsFlags.WSS_VERIFY_SPECIFIC;
-                }
-
-                var signatureSettings = new Native.WINTRUST_SIGNATURE_SETTINGS
-                {
-                    cbStruct = (uint)Marshal.SizeOf(typeof(Native.WINTRUST_SIGNATURE_SETTINGS)),
-                    dwIndex = signatureIndex,
-                    dwFlags = flags,
-                    cSecondarySigs = 0,
-                    dwVerifiedSigIndex = 0
-                };
-
                 var policy = new Native.CERT_STRONG_SIGN_PARA
                 {
                     cbStruct = (uint)Marshal.SizeOf(typeof(Native.CERT_STRONG_SIGN_PARA)),
@@ -454,10 +451,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 signatureSettings.pCryptoPolicy = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Native.CERT_STRONG_SIGN_PARA)));
                 Marshal.StructureToPtr(policy, signatureSettings.pCryptoPolicy, false);
-
-                winTrustData.pSignatureSettings = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Native.WINTRUST_SIGNATURE_SETTINGS)));
-                Marshal.StructureToPtr(signatureSettings, winTrustData.pSignatureSettings, false);
             }
+
+            winTrustData.pSignatureSettings = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Native.WINTRUST_SIGNATURE_SETTINGS)));
+            Marshal.StructureToPtr(signatureSettings, winTrustData.pSignatureSettings, false);
 
             return winTrustData;
         }
