@@ -49,7 +49,7 @@ powershell -Command "$content = [System.IO.File]::ReadAllText('.\docs\BinSkimRul
 goto :Exit
 
 :RunTests
-dotnet test src\BinSkim.sln --no-build -c %Configuration%
+dotnet test src\BinSkim.sln --no-build -c %Configuration% --logger trx --logger "console;verbosity=normal" --blame-hang --blame-hang-timeout 180s
 if "%ERRORLEVEL%" NEQ "0" (echo Tests execution FAILED.)
 Exit /B %ERRORLEVEL%
 
