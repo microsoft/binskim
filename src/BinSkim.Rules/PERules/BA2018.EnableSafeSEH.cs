@@ -107,7 +107,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (seHandlerSize < 72)
             {
                 // contains an unexpectedly small load configuration table {size 0}
-                string seHandlerSizeText = string.Format(RuleResources.BA2018_Error_LoadConfigurationIsTooSmall, seHandlerSize.ToString());
+                string seHandlerSizeText = string.Format(RuleResources.BA2018_Error_LoadConfigurationIsTooSmall, seHandlerSize);
 
                 context.Logger.Log(this,
                     RuleUtilities.BuildResult(FailureLevel.Error, context, null,

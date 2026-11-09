@@ -58,14 +58,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 try
                 {
                     Match versionStr = versionRegex.Match(fullDescription);
-                    if (versionStr.Success)
-                    {
-                        this.Version = new Version(versionStr.Value);
-                    }
-                    else
-                    {
-                        this.Version = new Version(0, 0, 0, 0);
-                    }
+                    this.Version = versionStr.Success
+                        ? new Version(versionStr.Value)
+                        : new Version(0, 0, 0, 0);
                 }
                 catch (FormatException) // Version we recovered wasn't well formed.
                 {

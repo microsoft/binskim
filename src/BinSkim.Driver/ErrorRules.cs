@@ -7,7 +7,7 @@ namespace Microsoft.CodeAnalysis.IL
 {
     internal static class ErrorRules
     {
-        public static ReportingDescriptor InvalidPE = new ReportingDescriptor()
+        public static readonly ReportingDescriptor InvalidPE = new ReportingDescriptor()
         {
             Id = "BA1001",
             Name = nameof(InvalidPE),

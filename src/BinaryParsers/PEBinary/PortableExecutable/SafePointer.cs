@@ -9,9 +9,9 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 {
     public struct SafePointer
     {
-        internal byte[] array;
+        internal readonly byte[] array;
         internal int index;
-        internal Stream stream;
+        internal readonly Stream stream;
 
         // constructors
         public SafePointer(byte[] bytearray)
