@@ -98,7 +98,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             // Read header
             uint beginPosition = debugData.Position;
             ulong length = debugData.ReadLength(out bool is64bit);
-            uint endPosition = debugData.Position + (uint)length;
+            if (length > (ulong)(debugData.Length - debugData.Position))
+            {
+                throw new InvalidOperationException("DWARF compilation unit extends past the end of the section.");
+            }
+            uint endPosition = checked(debugData.Position + (uint)length);
             NextOffset = endPosition;
             ushort version = debugData.ReadUshort();
 
@@ -212,7 +216,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Block1:
                             attributeValue.Type = DwarfAttributeValueType.Block;
-                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            if (debugData.Position < debugData.Length)
                             {
                                 attributeValue.Value = debugData.ReadBlock(debugData.ReadByte());
                             }
@@ -230,7 +234,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Data1:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            if (debugData.Position < debugData.Length)
                             {
                                 attributeValue.Value = (ulong)debugData.ReadByte();
                             }
@@ -248,7 +252,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Data8:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            if (debugData.Position < debugData.Length)
                             {
                                 attributeValue.Value = debugData.ReadUlong();
                             }
@@ -256,7 +260,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Data16:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            if (debugData.Position < debugData.Length)
                             {
                                 attributeValue.Value = debugData.ReadBlock(16);
                             }
@@ -564,21 +568,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
                 {
                     Dictionary<DwarfAttribute, DwarfAttributeValue> attributes = symbol.Attributes as Dictionary<DwarfAttribute, DwarfAttributeValue>;
 
-                    if (attributes != null)
+                    if (attributes != null &&
+                        attributes.TryGetValue(DwarfAttribute.Specification, out DwarfAttributeValue specificationValue) &&
+                        specificationValue.Type == DwarfAttributeValueType.ResolvedReference)
                     {
-                        if (attributes.TryGetValue(DwarfAttribute.Specification, out DwarfAttributeValue specificationValue) && specificationValue.Type == DwarfAttributeValueType.ResolvedReference)
-                        {
-                            DwarfSymbol reference = specificationValue.Reference;
-                            Dictionary<DwarfAttribute, DwarfAttributeValue> referenceAttributes = reference.Attributes as Dictionary<DwarfAttribute, DwarfAttributeValue>;
+                        DwarfSymbol reference = specificationValue.Reference;
+                        Dictionary<DwarfAttribute, DwarfAttributeValue> referenceAttributes = reference.Attributes as Dictionary<DwarfAttribute, DwarfAttributeValue>;
 
-                            if (referenceAttributes != null)
+                        if (referenceAttributes != null)
+                        {
+                            foreach (KeyValuePair<DwarfAttribute, DwarfAttributeValue> kvp in attributes)
                             {
-                                foreach (KeyValuePair<DwarfAttribute, DwarfAttributeValue> kvp in attributes)
+                                if (kvp.Key != DwarfAttribute.Specification)
                                 {
-                                    if (kvp.Key != DwarfAttribute.Specification)
-                                    {
-                                        referenceAttributes[kvp.Key] = kvp.Value;
-                                    }
+                                    referenceAttributes[kvp.Key] = kvp.Value;
                                 }
                             }
                         }

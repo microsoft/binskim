@@ -186,9 +186,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
             }
         }
 
-        public bool Is64Bit => this.PEHeaders.PEHeader != null
-                    ? this.PEHeaders.PEHeader.Magic == PEMagic.PE32Plus
-                    : false;
+        public bool Is64Bit => this.PEHeaders.PEHeader != null &&
+                               this.PEHeaders.PEHeader.Magic == PEMagic.PE32Plus;
 
         public IEnumerable<DebugDirectoryEntry> DebugDirectories
         {
@@ -688,9 +687,8 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
         /// <summary>
         /// Returns true if the binary is built for XBox
         /// </summary>
-        public bool IsXBox => this.PEHeaders.PEHeader != null
-                    ? this.PEHeaders.PEHeader.Subsystem == System.Reflection.PortableExecutable.Subsystem.Xbox
-                    : false;
+        public bool IsXBox => this.PEHeaders.PEHeader != null &&
+                              this.PEHeaders.PEHeader.Subsystem == System.Reflection.PortableExecutable.Subsystem.Xbox;
 
         public bool IsBoot
         {
@@ -858,7 +856,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable
 
         public ChecksumAlgorithmType ManagedPdbSourceFileChecksumAlgorithm(PdbFileType pdbFileType, Pdb pdb)
         {
-            return pdbFileType == PdbFileType.Windows
+            return pdbFileType is PdbFileType.Windows or PdbFileType.WindowsMSFZ
                 ? ChecksumAlgorithmForFullPdb(pdb)
                 : ChecksumAlgorithmForPortablePdb(pdb);
         }

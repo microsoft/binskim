@@ -43,6 +43,55 @@ classic-PDB/MSFZ equivalence. No PowerShell wrapper or second test framework is
 required. This checks BinSkim's exercised contracts, not every DIA SDK interface
 or binary compatibility of a replacement managed `Dia2Lib.dll`.
 
+### Validating symbol-server behavior
+
+[`SymsrvTests`](./src/Test.UnitTests.BinaryParsers/PEBinary/SymsrvTests.cs)
+exercise DIA/symsrv using self-contained symbol stores on Windows. No external
+network or credentials are required.
+
+```powershell
+dotnet test src\Test.UnitTests.BinaryParsers\Test.UnitTests.BinaryParsers.csproj -c Release --filter FullyQualifiedName~SymsrvTests --blame-hang --blame-hang-timeout 180s
+```
+
+### Live symbol-server integration
+
+[`SymbolServerIntegrationTests`](./src/Test.FunctionalTests.BinSkim.Driver/SymbolServerIntegrationTests.cs)
+cover real servers and require Windows with permitted outbound HTTPS.
+
+Local runs exclude `Category=LiveSymbolServer` by default; explicit filters
+select live cases. Windows CI runs the public case (`Requires=Network`) inside
+`Build and Test`, excluding private cases (`Requires=PrivateSymbolServer`).
+Linux CI excludes live cases.
+
+Run the public case with:
+
+```powershell
+dotnet test src\Test.FunctionalTests.BinSkim.Driver\Test.FunctionalTests.BinSkim.Driver.csproj -c Release --filter "Category=LiveSymbolServer&Requires!=PrivateSymbolServer" --logger trx --blame-hang --blame-hang-timeout 180s
+```
+
+Run private cases only on a protected, network-enabled Windows agent with an
+authorized managed/workload identity or another approved authorization method.
+The agent must configure the native symbol client's credential provider.
+Select private cases with:
+
+```powershell
+dotnet test src\Test.FunctionalTests.BinSkim.Driver\Test.FunctionalTests.BinSkim.Driver.csproj -c Release --filter "Requires=PrivateSymbolServer" --logger trx --blame-hang --blame-hang-timeout 180s
+```
+
+Set `BINSKIM_SYMBOL_SERVER_TEST_CONFIG` to a protected runtime JSON file.
+Each array entry supplies `Name` (a non-sensitive alias), `ServerUrl` (HTTPS, no
+user information or query string), and `BinaryPath` (a controlled PE whose full
+PDB is on that server). Missing or empty configuration fails a selected test
+rather than skipping it. Do not commit this file, private endpoints, customer
+binaries or credentials/tokens.
+Public access and HTTP 401/403 rejection do not prove private authentication.
+
+For native upgrades, compare baseline and candidate builds in fresh test
+processes, retaining TRX results and native version/hash diagnostics. Use
+`--no-build` after deploying a candidate to preserve its test output. Private
+authentication, proxies and the supported Windows-image matrix need separate
+integration/canary coverage.
+
 ### Submit Pull Requests
 
 1. Run `BuildAndTest.cmd` at the root of the enlistment to ensure that all tests pass, release build succeeds, and NuGet packages are created

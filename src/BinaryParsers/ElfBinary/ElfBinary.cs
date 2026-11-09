@@ -70,9 +70,10 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
                 CompilationUnits = new Lazy<List<DwarfCompilationUnit>>(() =>
                 {
+                    using DwarfMemoryReader debugData = CreateDebugDataReader();
                     using IDwarfStringReader debugStrings = CreateDebugStringsReader();
                     return LoadDebug(DwarfSymbolProvider.ParseAllCompilationUnits(this,
-                                                                                  DebugData,
+                                                                                  debugData,
                                                                                   DebugDataDescription,
                                                                                   debugStrings,
                                                                                   DebugLineStrings,
@@ -408,6 +409,23 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
             return Array.Empty<byte>();
         }
 
+        private DwarfMemoryReader CreateDebugDataReader()
+        {
+            Section<ulong> section = ELF.Sections
+                .OfType<Section<ulong>>()
+                .FirstOrDefault(candidate => candidate.Name == SectionName.DebugInfo ||
+                                             candidate.Name == SectionName.DebugInfo + ".dwo");
+
+            // Compressed sections must continue through the existing decompression path.
+            if (section != null && section.Type != SectionType.NoBits &&
+                !IsCompressedSection(section) && section.Size > (ulong)Array.MaxLength)
+            {
+                return new DwarfMemoryReader(this.path, section.Offset, section.Size);
+            }
+
+            return new DwarfMemoryReader(DebugData);
+        }
+
         private IDwarfStringReader CreateDebugStringsReader()
         {
             Section<ulong> section = ELF.Sections
@@ -561,22 +579,20 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(debugFileName))
+            // Load from gnu_debuglink
+            if (string.IsNullOrWhiteSpace(debugFileName) &&
+                SectionExistsAndHasBits(SectionName.GnuDebugLink, out Section<ulong> debugLinkSection))
             {
-                // Load from gnu_debuglink
-                if (SectionExistsAndHasBits(SectionName.GnuDebugLink, out Section<ulong> debugLinkSection))
+                byte[] debugLinkSectionContents = debugLinkSection.GetContents();
+
+                if (debugLinkSectionContents != null && debugLinkSectionContents.Length > 0)
                 {
-                    byte[] debugLinkSectionContents = debugLinkSection.GetContents();
+                    string debuglinkFileName = Encoding.ASCII.GetString(debugLinkSectionContents.TakeWhile(x => x != 0).ToArray());
 
-                    if (debugLinkSectionContents != null && debugLinkSectionContents.Length > 0)
+                    if (!string.IsNullOrWhiteSpace(debuglinkFileName))
                     {
-                        string debuglinkFileName = Encoding.ASCII.GetString(debugLinkSectionContents.TakeWhile(x => x != 0).ToArray());
-
-                        if (!string.IsNullOrWhiteSpace(debuglinkFileName))
-                        {
-                            debugFileName = debuglinkFileName;
-                            DebugFileType = DebugFileType.FromDebuglink;
-                        }
+                        debugFileName = debuglinkFileName;
+                        DebugFileType = DebugFileType.FromDebuglink;
                     }
                 }
             }

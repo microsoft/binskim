@@ -667,12 +667,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                 // Validate--we should not have overlapping ranges.
                 // This intentionally allows for overlap of 1 version, as 'end' is not inclusive.
-                if (i < compilerVersionToMitigation.Count - 1)
+                if (i < compilerVersionToMitigation.Count - 1 &&
+                    compilerVersionToMitigation[i].MaximumSupportedVersion > compilerVersionToMitigation[i + 1].MinimalSupportedVersion)
                 {
-                    if (compilerVersionToMitigation[i].MaximumSupportedVersion > compilerVersionToMitigation[i + 1].MinimalSupportedVersion)
-                    {
-                        throw new InvalidOperationException(RuleResources.BA2024_InitializationException);
-                    }
+                    throw new InvalidOperationException(RuleResources.BA2024_InitializationException);
                 }
             }
         }

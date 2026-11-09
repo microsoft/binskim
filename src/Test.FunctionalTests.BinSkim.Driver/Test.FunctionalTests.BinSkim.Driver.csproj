@@ -7,6 +7,11 @@
     <IsPackable>false</IsPackable>
     <TargetLatestRuntimePatch>True</TargetLatestRuntimePatch>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunSettingsFilePath>$(MSBuildProjectDirectory)\BaselineTests.runsettings</RunSettingsFilePath>
+    <VSTestTestCaseFilter Condition="'$(VSTestTestCaseFilter)' == ''">Category!=LiveSymbolServer</VSTestTestCaseFilter>
+    <TestingPlatformCommandLineArguments Condition="'$(TestingPlatformCommandLineArguments)' == ''">--filter &quot;$(VSTestTestCaseFilter)&quot;</TestingPlatformCommandLineArguments>
+  </PropertyGroup>
   <ItemGroup>
     <RuntimeHostConfigurationOption Include="System.Globalization.UseNls" Value="true" />
   </ItemGroup>

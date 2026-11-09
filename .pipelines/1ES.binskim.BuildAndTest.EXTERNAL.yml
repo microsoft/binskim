@@ -34,11 +34,13 @@ extends:
                 poolName: guardian-build-infra-linux-x64
                 poolOS: linux
                 buildScript: ./BuildAndTest.sh
+                testCaseFilter: "Category!=LiveSymbolServer"
                 runComponentGovernance: 'false'
               windows:
                 poolName: guardian-build-infra-windows-x64
                 poolOS: windows
                 buildScript: BuildAndTest.cmd
+                testCaseFilter: "Requires!=PrivateSymbolServer"
                 runComponentGovernance: 'true'
           pool:
             name: $(poolName)
@@ -128,6 +130,19 @@ extends:
             condition: and(succeeded(), ne(variables['skipLinux'], 'true'))
             inputs:
               script: $(buildScript)
+            env:
+              VSTestTestCaseFilter: $(testCaseFilter)
+
+          - task: PublishTestResults@2
+            displayName: "Publish Windows test results"
+            condition: and(succeededOrFailed(), eq(variables['poolOS'], 'windows'))
+            inputs:
+              testResultsFormat: VSTest
+              testResultsFiles: "**/*.trx"
+              testRunTitle: "Build And Test (windows)"
+              mergeTestResults: true
+              failTaskOnFailedTests: true
+              failTaskOnMissingResultsFile: true
 
           - task: PublishTestResults@2
             displayName: Publish MTP test results
