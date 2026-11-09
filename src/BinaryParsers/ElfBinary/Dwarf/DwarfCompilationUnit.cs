@@ -98,7 +98,11 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
             // Read header
             uint beginPosition = debugData.Position;
             ulong length = debugData.ReadLength(out bool is64bit);
-            uint endPosition = debugData.Position + (uint)length;
+            if (length > (ulong)(debugData.Length - debugData.Position))
+            {
+                throw new InvalidOperationException("DWARF compilation unit extends past the end of the section.");
+            }
+            uint endPosition = checked(debugData.Position + (uint)length);
             NextOffset = endPosition;
             ushort version = debugData.ReadUshort();
 
@@ -212,7 +216,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Block1:
                             attributeValue.Type = DwarfAttributeValueType.Block;
-                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            if (debugData.Position < debugData.Length)
                             {
                                 attributeValue.Value = debugData.ReadBlock(debugData.ReadByte());
                             }
@@ -230,7 +234,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Data1:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            if (debugData.Position < debugData.Length)
                             {
                                 attributeValue.Value = (ulong)debugData.ReadByte();
                             }
@@ -248,7 +252,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Data8:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            if (debugData.Position < debugData.Length)
                             {
                                 attributeValue.Value = debugData.ReadUlong();
                             }
@@ -256,7 +260,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.Dwarf
 
                         case DwarfFormat.Data16:
                             attributeValue.Type = DwarfAttributeValueType.Constant;
-                            if (debugData.Position + 1 <= debugData.Data.Length)
+                            if (debugData.Position < debugData.Length)
                             {
                                 attributeValue.Value = debugData.ReadBlock(16);
                             }
