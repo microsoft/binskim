@@ -278,6 +278,9 @@ NOTE: the modified cookie value detected was: {1}</value>
   <data name="BA2012_Error_CouldNotLocateCookie" xml:space="preserve">
     <value>'{0}' is a C or C++binary that enables the stack protection feature but the security cookie could not be located. The binary may be corrupted.</value>
   </data>
+  <data name="BA2012_NotApplicable_SecurityCookieUnused" xml:space="preserve">
+    <value>'{0}' was not evaluated for check 'DoNotModifyStackProtectionCookie' because the security cookie could not be located and the load configuration declares it unused (IMAGE_GUARD_SECURITY_COOKIE_UNUSED).</value>
+  </data>
   <data name="BA2012_Pass" xml:space="preserve">
     <value>'{0}' is a C or C++ binary built with the buffer security feature that properly preserves the stack protecter cookie. This has the effect of enabling a significant increase in entropy provided by the operating system over that produced by the C runtime start-up code.</value>
   </data>

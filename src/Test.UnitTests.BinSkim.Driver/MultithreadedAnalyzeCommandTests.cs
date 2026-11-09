@@ -12,7 +12,11 @@ using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.CodeAnalysis.IL;
 using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.CodeAnalysis.Sarif.Writers;
+
+using Moq;
 
 using Xunit;
 
@@ -310,6 +314,79 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
             command.InitializeGlobalContextFromOptions(options, ref context);
 
             context.IgnorePdbLoadError.Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData("symbols.pdb", false)]
+        [InlineData("symbols.pdb", true)]
+        [InlineData(@"C:\symbols\symbols.pdb", true)]
+        public void MultithreadedAnalyzeCommand_Run_RejectsSymbolFilePath(string symbolPath, bool richReturnCode)
+        {
+            var fileSystem = new Mock<IFileSystem>();
+            fileSystem.Setup(f => f.FileExists(symbolPath)).Returns(true);
+            var logger = new Mock<IAnalysisLogger>();
+            var context = new BinaryAnalyzerContext
+            {
+                FileSystem = fileSystem.Object,
+                Logger = logger.Object,
+            };
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new[] { "test.dll" },
+                DisableTelemetry = true,
+                SymbolsPath = symbolPath,
+                RichReturnCode = richReturnCode,
+            };
+            var command = new MultithreadedAnalyzeCommand();
+
+            int result = command.Run(options, ref context);
+
+            result.Should().Be(1);
+            context.RuntimeErrors.Should().Be(RuntimeConditions.InvalidCommandLineOption);
+            logger.Verify(l => l.LogConfigurationNotification(
+                It.Is<Notification>(n =>
+                    n.Descriptor.Id == "ERR997.InvalidSymbolPath" &&
+                    n.Level == FailureLevel.Error &&
+                    n.Message.Text == $"The --sympath value '{symbolPath}' points to a file. " +
+                                      "Specify the directory containing the symbols or a symbol search path instead.")),
+                Times.Once);
+            fileSystem.Verify(f => f.FileExists(symbolPath), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("symbols")]
+        [InlineData(@"C:\symbols")]
+        [InlineData("missing.pdb")]
+        [InlineData("SRV*https://msdl.microsoft.com/download/symbols")]
+        [InlineData(@"Cache*C:\symbols;SRV*https://msdl.microsoft.com/download/symbols")]
+        [InlineData(@"C:\symbols;D:\symbols")]
+        [InlineData("symbols;symbols.pdb")]
+        public void MultithreadedAnalyzeCommand_InitializeGlobalContextFromOptions_PreservesSymbolSearchPath(string symbolPath)
+        {
+            var fileSystem = new Mock<IFileSystem>();
+            var context = new BinaryAnalyzerContext
+            {
+                FileSystem = fileSystem.Object,
+            };
+            string originalSymbolPath = context.SymbolPath;
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new[] { "test.dll" },
+                DisableTelemetry = true,
+                SymbolsPath = symbolPath,
+            };
+            var command = new MultithreadedAnalyzeCommand();
+
+            command.InitializeGlobalContextFromOptions(options, ref context);
+
+            context.SymbolPath.Should().Be(symbolPath ?? originalSymbolPath);
+            context.RuntimeErrors.Should().Be(RuntimeConditions.None);
+            bool isPlainPath = !string.IsNullOrEmpty(symbolPath) &&
+                               !symbolPath.Contains('*') &&
+                               !symbolPath.Contains(';');
+            fileSystem.Verify(f => f.FileExists(symbolPath), isPlainPath ? Times.Once() : Times.Never());
         }
 
         [Fact]
