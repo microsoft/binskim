@@ -91,6 +91,30 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         }
 
         [Theory]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("\t")]
+        public void GenerateArguments_IgnoresBlankLinesInResponseFile(string blankLine)
+        {
+            const string ResponseFileName = "Mocked.rsp";
+            string[] args = new[] { "analyze", "@" + ResponseFileName };
+            string[] rspContent = new[] { blankLine, "first.dll", blankLine, "second.dll", blankLine };
+
+            SetupTestMocks(
+                ResponseFileName,
+                rspContent,
+                out Mock<IFileSystem> fileSystemMock,
+                out Mock<IEnvironmentVariables> environmentVariablesMock);
+
+            string[] result = ExpandArguments.GenerateArguments(
+                args,
+                fileSystemMock.Object,
+                environmentVariablesMock.Object);
+
+            result.Should().Equal("analyze", "first.dll", "second.dll");
+        }
+
+        [Theory]
         [InlineData(new[] { "/b", "/c:val /d", "# Random Comment", "   /e   " }, new[] { "/a", "/b", "/c:val", "/d", "/e", "/f" })]
         [InlineData(new[] { "/b", "/c:val /d #Another Comment", "   /e   " }, new[] { "/a", "/b", "/c:val", "/d", "/e", "/f" })]
         public void GenerateArguments_TrimCommentsFromResponseFileContents(string[] rspContent, string[] expected)
