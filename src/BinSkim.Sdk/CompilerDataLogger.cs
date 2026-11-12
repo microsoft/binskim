@@ -365,7 +365,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 this.telemetryClient.TrackEvent(eventName, properties: new Dictionary<string, string>
                 {
                     { $"{contentName}Id", contentId },
-                    { "orderNumber", (i + 1).ToString() },
+                    { "orderNumber", (i / s_chunkSize + 1).ToString() },
                     { "totalNumber", size.ToString() },
                     { $"chunked{contentName}", chunkedContent },
                 });
