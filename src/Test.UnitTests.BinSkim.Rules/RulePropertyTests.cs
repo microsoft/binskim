@@ -70,6 +70,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     ["MinimumCompilerVersion"] = minimumCompilerVersion,
                     ["MinimumXboxCompilerVersion"] = minimumXboxCompilerVersion
                 },
+                cacheDescription: false,
                 persistToSettingsContainer: true);
             StringToVersionMap expected = new PropertiesDictionary().GetProperty(BuildWithSecureTools.MinimumToolVersions);
             expected["MinimumCompilerVersion"] = minimumCompilerVersion;
@@ -94,6 +95,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     [nameof(Language.C)] = minimumCompilerVersion
                 },
+                cacheDescription: false,
                 persistToSettingsContainer: true);
             StringToVersionMap expected = new PropertiesDictionary().GetProperty(BuildWithSecureTools.MinimumToolVersions);
             expected[nameof(Language.C)] = minimumCompilerVersion;
