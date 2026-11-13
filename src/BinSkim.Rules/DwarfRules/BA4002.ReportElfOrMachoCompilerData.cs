@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 
@@ -15,17 +14,16 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
-    public class ReportElfOrMachoCompilerData : DwarfSkimmerBase, IOptionsProvider
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
+    public class ReportElfOrMachoCompilerData : DwarfSkimmerBase
     {
         /// <summary>
-        /// BA4002. This reporting rule writes compiler data to AppInsights and 
-        /// a CSV file (if configured) for every compilation unit that's scanned.
+        /// BA4002. This reporting rule writes compiler data to AppInsights for every compilation unit that's scanned.
         /// </summary>
         public override string Id => RuleIds.ReportElfOrMachoCompilerData;
 
         /// <summary>
-        /// This rule emits CSV data to the console
+        /// This rule reports data to AppInsights
         /// for every compiler/language/version combination that's observed.
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA4002_ReportELFCompilerData_Description };
@@ -36,14 +34,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             reasonForNotAnalyzing = null;
             return AnalysisApplicability.ApplicableToSpecifiedTarget;
-        }
-
-        public IEnumerable<IOption> GetOptions()
-        {
-            return new List<IOption>
-            {
-                CompilerDataLogger.CsvOutputPath,
-            }.ToImmutableArray();
         }
 
         public override void Analyze(BinaryAnalyzerContext context)

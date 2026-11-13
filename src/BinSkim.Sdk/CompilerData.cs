@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     public struct CompilerData
@@ -23,10 +21,5 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public string CompilerBackEndVersion { get; set; }
         public string CompilerFrontEndVersion { get; set; }
         public string SourceLinkJsonId { get; set; }
-
-        public override string ToString()
-        {
-            return $"{CompilerName},{CompilerBackEndVersion},{CompilerFrontEndVersion},{FileVersion},{BinaryType},{Language},{DebuggingFileName},{DebuggingFileGuid},{DebuggingFileLastModifiedDateUtc},{TargetLastModifiedDateUtc},{CommandLine},{Dialect},{ModuleName},{(ModuleLibrary == ModuleName ? string.Empty : ModuleLibrary)},{AssemblyReferences}";
-        }
     }
 }

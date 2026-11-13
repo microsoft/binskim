@@ -606,7 +606,7 @@ The following modules are out of policy:
     <value>'{0}' is a managed assembly that was compiled with toolchain ({1}) that supports all security features that must be enabled by policy.</value>
   </data>
   <data name="BA4001_ReportPECompilerData_Description" xml:space="preserve">
-    <value>This rule emits CSV data to the console for every compiler/language/version combination that's observed in any PDB-linked compiland.</value>
+    <value>This rule reports data to Application Insights for every compiler/language/version combination that's observed in any PDB-linked compiland.</value>
   </data>
   <data name="BA2025_EnableShadowStack_Description" xml:space="preserve">
     <value>Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature that provides capabilities to defend against return-oriented programming (ROP) based malware attacks. Note: older versions of .NET are not compatible with CET/shadow stack technology. If your native process loads older managed assemblies (.NET 6 or earlier), unhandled exceptions in those components may not be handled properly and may cause your process to crash.</value>
@@ -649,7 +649,7 @@ Modules did not meet the criteria: {1}</value>
     <value>The non-executable stack flag was present, so '{0}' is protected.</value>
   </data>
   <data name="BA4002_ReportELFCompilerData_Description" xml:space="preserve">
-    <value>This rule emits CSV data to the console for every compiler/language/version combination that's observed.</value>
+    <value>This rule reports data to Application Insights for every compiler/language/version combination that's observed.</value>
   </data>
   <data name="BA2026_EnableAdditionalSecurityChecks_Description" xml:space="preserve">
     <value>/sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. By default, /sdl is off. /sdl- disables the additional security checks.</value>
