@@ -1,4 +1,6 @@
-# Build Scripts
+# Test asset build recipes
+
+These historical recipes record how existing test binaries were built. They may require older toolchains or source files that are not checked in. Keep each recipe until equivalent source and build instructions are checked in beside the affected assets. For new fixtures, follow [Prepare functional test assets](RuleContributions.md#prepare-functional-test-assets).
 
 This file records scripts used to compile the test files, in alphabetical order.
 Base scenario is a simple hello world program built with different parameters for testing purpose.

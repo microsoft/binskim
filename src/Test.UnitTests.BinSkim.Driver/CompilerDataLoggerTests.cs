@@ -32,6 +32,37 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         private const int SmallChunkSize = 10;
         private const string TestExceptionMessage = "TestException";
 
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(10, 1)]
+        [InlineData(11, 2)]
+        [InlineData(35, 4)]
+        public void CompilerDataLogger_SendChunkedContent_ShouldPreserveChunkOrderAndContent(
+            int contentLength, int expectedChunkCount)
+        {
+            int originalChunkSize = CompilerDataLogger.s_chunkSize;
+            try
+            {
+                CompilerDataLogger.s_chunkSize = SmallChunkSize;
+                using BinaryAnalyzerContext context = CreateTestContext();
+                List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                                  sarifVersion: Sarif.SarifVersion.Current,
+                                                                  logger: out CompilerDataLogger logger);
+
+                string content = "0123456789ABCDEFGHIJklmnopqrstUVWXY".Substring(0, contentLength);
+                logger.SendChunkedContent("ChunkedContent", "content-id", "content", content);
+
+                List<EventTelemetry> chunkEvents = telemetryEventOutput.OfType<EventTelemetry>().ToList();
+                chunkEvents.Select(e => e.Properties["orderNumber"]).Should()
+                    .Equal(Enumerable.Range(1, expectedChunkCount).Select(n => n.ToString()));
+                string.Concat(chunkEvents.Select(e => e.Properties["chunkedcontent"])).Should().Be(content);
+            }
+            finally
+            {
+                CompilerDataLogger.s_chunkSize = originalChunkSize;
+            }
+        }
+
         [Fact]
         public void CompilerDataLogger_Write_ShouldSendAssemblyReferencesInChunks_WhenTelemetryIsEnabled()
         {

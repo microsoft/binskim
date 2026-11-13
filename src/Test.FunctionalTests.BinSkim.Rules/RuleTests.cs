@@ -8,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
+using Microsoft.CodeAnalysis.BinaryParsers;
+using Microsoft.CodeAnalysis.BinaryParsers.PortableExecutable;
 using Microsoft.CodeAnalysis.IL.Sdk;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Driver;
@@ -291,6 +293,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> targets = GetTestFilesMatchingConditions(applicabilityConditions);
 
+            Assert.NotEmpty(targets);
+            Assert.All(targets, target =>
+            {
+                using BinaryAnalyzerContext context = CreateContext(new TestMessageLogger(), null, target);
+                Assert.True(context.IsValidAnalysisTarget, $"Test target '{target}' should be valid.");
+            });
+
             VerifyApplicabilityResults(
                 skimmer,
                 targets,
@@ -529,15 +538,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 result.Add(Path.Combine(testFilesDirectory, "DotnetNative_x86_VS2019_UniversalApp.exe"));
             }
 
+            string shadowStackTestFilesDirectory = GetTestDirectory(
+                "Test.FunctionalTests.BinSkim.Rules",
+                "FunctionalTestData",
+                GetTestDirectoryFor(nameof(EnableShadowStack)),
+                "NotApplicable");
+
             if (metadataConditions.Contains(MetadataConditions.ImageIsArmBinary))
             {
-                result.Add(Path.Combine(testFilesDirectory, "ARM_CETShadowStack_NotApplicable.exe"));
+                result.Add(Path.Combine(shadowStackTestFilesDirectory, "ARM_CETShadowStack_NotApplicable.exe"));
             }
 
             if (metadataConditions.Contains(MetadataConditions.ImageIsArm64BitBinary))
             {
-                result.Add(Path.Combine(testFilesDirectory, "ARM64_CETShadowStack_NotApplicable.exe"));
-                result.Add(Path.Combine(testFilesDirectory, "ARM64_dotnet_CETShadowStack_NotApplicable.exe"));
+                result.Add(Path.Combine(shadowStackTestFilesDirectory, "ARM64_CETShadowStack_NotApplicable.exe"));
+                result.Add(Path.Combine(shadowStackTestFilesDirectory, "ARM64_dotnet_CETShadowStack_NotApplicable.exe"));
             }
 
             if (metadataConditions.Contains(MetadataConditions.ImageIsRustBinary))
@@ -918,6 +933,129 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             this.VerifyFail(new DoNotModifyStackProtectionCookie());
         }
 
+        [Theory]
+        [InlineData(false, 0x0000u, 4, null, FailureLevel.Error)]
+        [InlineData(true, 0x0000u, 4, null, FailureLevel.Error)]
+        [InlineData(false, 0x0100u, 4, null, FailureLevel.Error)]
+        [InlineData(true, 0x0100u, 4, null, FailureLevel.Error)]
+        [InlineData(false, 0x0800u, 4, null, FailureLevel.None)]
+        [InlineData(true, 0x0800u, 4, null, FailureLevel.None)]
+        [InlineData(false, 0x0900u, 4, null, FailureLevel.None)]
+        [InlineData(true, 0x0900u, 4, null, FailureLevel.None)]
+        [InlineData(false, 0x0800u, 0, null, FailureLevel.Error)]
+        [InlineData(true, 0x0800u, 0, null, FailureLevel.Error)]
+        [InlineData(false, 0x0800u, 3, null, FailureLevel.Error)]
+        [InlineData(true, 0x0800u, 3, null, FailureLevel.Error)]
+        [InlineData(false, 0x0800u, 4, 0ul, FailureLevel.Error)]
+        [InlineData(true, 0x0800u, 4, 0ul, FailureLevel.Error)]
+        [InlineData(false, 0x0800u, 4, 0xBB40E64Eul, FailureLevel.None)]
+        [InlineData(true, 0x0800u, 4, 0x2B992DDFA232ul, FailureLevel.None)]
+        public void BA2012_DoNotModifyStackProtectionCookie_GuardFlags(
+            bool is64Bit, uint guardFlags, int guardFlagsBytes, ulong? cookieValue, FailureLevel expectedLevel)
+        {
+            string targetPath = Path.Combine(
+                Environment.CurrentDirectory,
+                "FunctionalTestData",
+                "BA2008.EnableControlFlowGuard",
+                "Pass",
+                is64Bit ? "Native_x64_VS2015_ControlFlowGuardEnabled.dll" : "Native_x86_VS2015_ControlFlowGuardEnabled.exe");
+
+            var logger = new TestMessageLogger();
+            using BinaryAnalyzerContext context = CreateContext(logger, null, targetPath);
+            Assert.True(context.IsValidAnalysisTarget);
+
+            PE pe = context.PEBinary().PE;
+            Assert.Equal(is64Bit, pe.Is64Bit);
+
+            byte[] imageBytes = pe.ImageBytes;
+            SafePointer loadConfigVA = pe.RVA2VA(new SafePointer(imageBytes, pe.PEHeaders.PEHeader.LoadConfigTableDirectory.RelativeVirtualAddress));
+            ImageHeader loadConfig = is64Bit
+                ? new ImageLoadConfigDirectory64(pe.PEHeaders.PEHeader, loadConfigVA)
+                : new ImageLoadConfigDirectory32(pe.PEHeaders.PEHeader, loadConfigVA);
+            int guardFlagsField = is64Bit
+                ? (int)ImageLoadConfigDirectory64.Fields.GuardFlags
+                : (int)ImageLoadConfigDirectory32.Fields.GuardFlags;
+            int securityCookieField = is64Bit
+                ? (int)ImageLoadConfigDirectory64.Fields.SecurityCookie
+                : (int)ImageLoadConfigDirectory32.Fields.SecurityCookie;
+            int guardFlagsOffset = loadConfig.GetFieldOffset(guardFlagsField);
+
+            BitConverter.GetBytes(guardFlagsOffset + guardFlagsBytes).CopyTo(imageBytes, loadConfigVA.Address);
+            BitConverter.GetBytes(guardFlags).CopyTo(imageBytes, loadConfigVA.Address + guardFlagsOffset);
+
+            if (cookieValue.HasValue)
+            {
+                ulong cookieVA = is64Bit
+                    ? (ulong)loadConfig.GetField(securityCookieField)
+                    : (uint)loadConfig.GetField(securityCookieField);
+                int cookieRVA = checked((int)(cookieVA - pe.PEHeaders.PEHeader.ImageBase));
+                SafePointer cookiePointer = pe.RVA2VA(new SafePointer(imageBytes, cookieRVA));
+                byte[] cookieBytes = is64Bit
+                    ? BitConverter.GetBytes(cookieValue.Value)
+                    : BitConverter.GetBytes(checked((uint)cookieValue.Value));
+                cookieBytes.CopyTo(imageBytes, cookiePointer.Address);
+            }
+            else
+            {
+                Array.Clear(imageBytes, loadConfigVA.Address + loadConfig.GetFieldOffset(securityCookieField), loadConfig.GetFieldSize(securityCookieField));
+            }
+
+            var skimmer = new DoNotModifyStackProtectionCookie();
+            context.Rule = skimmer;
+            skimmer.Initialize(context);
+            Assert.Equal(AnalysisApplicability.ApplicableToSpecifiedTarget, skimmer.CanAnalyze(context, out _));
+            skimmer.Analyze(context);
+
+            Assert.Equal(expectedLevel == FailureLevel.Error, logger.ErrorTargets.Contains(targetPath));
+            Assert.Empty(logger.WarningTargets);
+            Assert.Equal(expectedLevel == FailureLevel.None && cookieValue.HasValue, logger.PassTargets.Contains(targetPath));
+            Assert.Equal(expectedLevel == FailureLevel.None && !cookieValue.HasValue, logger.NotApplicableTargets.Contains(targetPath));
+            Assert.Empty(logger.ConfigurationErrorTargets);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void BA2012_DoNotModifyStackProtectionCookie_UnusedCookieBinary(bool is64Bit)
+        {
+            string targetPath = Path.Combine(
+                Environment.CurrentDirectory,
+                "FunctionalTestData",
+                "BA2012.DoNotModifyStackProtectionCookie",
+                "UnusedCookie",
+                is64Bit ? "Native_x64_VS2022_UnusedSecurityCookie.exe" : "Native_x86_VS2022_UnusedSecurityCookie.exe");
+            var logger = new TestMessageLogger();
+            using BinaryAnalyzerContext context = CreateContext(logger, null, targetPath);
+            Assert.True(context.IsValidAnalysisTarget);
+
+            PE pe = context.PEBinary().PE;
+            Assert.Equal(is64Bit, pe.Is64Bit);
+            SafePointer loadConfigVA = pe.RVA2VA(new SafePointer(pe.ImageBytes, pe.PEHeaders.PEHeader.LoadConfigTableDirectory.RelativeVirtualAddress));
+            ImageHeader loadConfig = is64Bit
+                ? new ImageLoadConfigDirectory64(pe.PEHeaders.PEHeader, loadConfigVA)
+                : new ImageLoadConfigDirectory32(pe.PEHeaders.PEHeader, loadConfigVA);
+            ulong cookieVA = is64Bit
+                ? (ulong)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.SecurityCookie)
+                : (uint)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.SecurityCookie);
+            uint guardFlags = is64Bit
+                ? (uint)loadConfig.GetField(ImageLoadConfigDirectory64.Fields.GuardFlags)
+                : (uint)loadConfig.GetField(ImageLoadConfigDirectory32.Fields.GuardFlags);
+            Assert.Equal(0ul, cookieVA);
+            Assert.NotEqual(0u, guardFlags & 0x0800u);
+
+            var skimmer = new DoNotModifyStackProtectionCookie();
+            context.Rule = skimmer;
+            skimmer.Initialize(context);
+            Assert.Equal(AnalysisApplicability.ApplicableToSpecifiedTarget, skimmer.CanAnalyze(context, out _));
+            skimmer.Analyze(context);
+
+            Assert.Contains(targetPath, logger.NotApplicableTargets);
+            Assert.Empty(logger.ErrorTargets);
+            Assert.Empty(logger.WarningTargets);
+            Assert.Empty(logger.PassTargets);
+            Assert.Empty(logger.ConfigurationErrorTargets);
+        }
+
         [Fact]
         public void BA2012_DoNotModifyStackProtectionCookie_NotApplicable()
         {
@@ -1206,6 +1344,40 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
+        public void BA2022_SignSecurely_Sha1AndSha256_Pass()
+        {
+            if (!BinaryParsers.PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            string targetPath = Path.Combine(
+                Environment.CurrentDirectory,
+                "FunctionalTestData",
+                "BA2022.SignSecurely",
+                "Pass",
+                "Sha1AndSha256SignedUntrustedRoot.exe");
+            var logger = new TestMessageLogger();
+            using BinaryAnalyzerContext context = CreateContext(logger, null, targetPath);
+            var skimmer = new SignSecurely();
+            skimmer.Initialize(context);
+            context.Rule = skimmer;
+
+            Assert.True(context.IsValidAnalysisTarget);
+            Assert.Equal(AnalysisApplicability.ApplicableToSpecifiedTarget, skimmer.CanAnalyze(context, out _));
+
+            skimmer.Analyze(context);
+
+            Result result = Assert.Single(logger.Results);
+            Assert.Equal(ResultKind.Pass, result.Kind);
+            Assert.Equal("Pass", result.Message.Id);
+            Assert.Equal(2, result.Message.Arguments.Count);
+            Assert.Contains(
+                "Cryptographically weak signatures: [digest algorithm: 'sha1NoSign'",
+                result.Message.Arguments[1]);
+            Assert.Contains(
+                "Cryptographically strong signatures: [digest algorithm: 'sha256NoSign'",
+                result.Message.Arguments[1]);
+        }
+
+        [Fact]
         public void BA2022_SignSecurely_LongPath_Pass()
         {
             const int maxPath = 260;
@@ -1305,7 +1477,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             this.VerifyApplicabililtyByConditionsOnly(
                 skimmer: new EnableShadowStack(),
-                applicabilityConditions: notApplicableArm64,
+                applicabilityConditions: notApplicableArm,
                 expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArmBinary);
         }
 
