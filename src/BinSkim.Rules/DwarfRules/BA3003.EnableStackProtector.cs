@@ -159,6 +159,27 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     }
                     validGccCommandLineInfos.Add(info);
                 }
+
+                // If the binary's only DWARF producer is rustc, the GCC
+                // stack-protector heuristic does not apply: rustc enables stack
+                // protection via LLVM and does not emit __stack_chk_fail /
+                // __stack_chk_guard symbols, so the symbol-table fallback below
+                // would false-flag every Rust binary as missing stack-protector.
+                // Report NotApplicable in that case.
+                if (validGccCommandLineInfos.Count == 0
+                    && elf.Compilers != null
+                    && elf.Compilers.Any(c => c.Compiler == ElfCompilerType.Rust)
+                    && !elf.Compilers.Any(c => c.Compiler == ElfCompilerType.GCC))
+                {
+                    context.Logger.Log(this,
+                        RuleUtilities.BuildResult(ResultKind.NotApplicable, context, null,
+                            nameof(RuleResources.NotApplicable_InvalidMetadata),
+                            context.CurrentTarget.Uri.GetFileName(),
+                            this.Name,
+                            "binary was produced by rustc; the GCC stack-protector heuristic does not apply"));
+                    return;
+                }
+
                 if (validGccCommandLineInfos.Count > 0)
                 {
                     // Check using DWARF info
