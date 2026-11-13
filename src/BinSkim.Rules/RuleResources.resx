@@ -329,15 +329,18 @@ If the additional code inserted by the stack protector has been shown in profili
   </data>
   <data name="BA2015_EnableHighEntropyVirtualAddresses_Description" xml:space="preserve">
     <value>Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities.
-To resolve this issue, don't set /HIGHENTROPYV:NO on link.exe command line and allow it to be enabled by default. </value>
+To resolve this issue, don't set /HIGHENTROPYVA:NO on link.exe command line and allow it to be enabled by default.
+For C# .NET Framework executables, set &lt;HighEntropyVA&gt;true&lt;/HighEntropyVA&gt; in a &lt;PropertyGroup&gt; in the .csproj file.</value>
   </data>
   <data name="BA2015_Error_NeitherHighEntropyVANorLargeAddressAware" xml:space="preserve">
     <value>'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
-To resolve this issue, don't set /HIGHENTROPYVA:NO and /LARGEADDRESSAWARE:NO on link.exe command line and allow then to be enabled by default.</value>
+To resolve this issue, don't set /HIGHENTROPYVA:NO and /LARGEADDRESSAWARE:NO on link.exe command line and allow then to be enabled by default.
+For C# .NET Framework executables, set &lt;HighEntropyVA&gt;true&lt;/HighEntropyVA&gt; in a &lt;PropertyGroup&gt; in the .csproj file. The binary must also be marked as LargeAddressAware.</value>
   </data>
   <data name="BA2015_Error_NoHighEntropyVA" xml:space="preserve">
     <value>'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
-To resolve this issue, don't set /HIGHENTROPYVA:NO on link.exe command line and allow it to be enabled by default. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.)</value>
+To resolve this issue, don't set /HIGHENTROPYVA:NO on link.exe command line and allow it to be enabled by default. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.)
+For C# .NET Framework executables, set &lt;HighEntropyVA&gt;true&lt;/HighEntropyVA&gt; in a &lt;PropertyGroup&gt; in the .csproj file.</value>
   </data>
   <data name="BA2015_Error_NoLargeAddressAware" xml:space="preserve">
     <value>'{0}' does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
