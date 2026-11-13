@@ -25,10 +25,5 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         public string ProjectId { get; set; }
         public string RepositoryName { get; set; }
         public string RepositoryId { get; set; }
-
-        public override string ToString()
-        {
-            return $"{this.ToolName},{this.ToolVersion},{this.NormalizedPath},{this.SymbolPath},{this.FileAnalyzed},{this.FileNotAnalyzed},{this.StartTimeUtc},{this.EndTimeUtc},{this.TimeConsumed},{this.BuildDefinitionId},{this.BuildDefinitionName},{this.BuildRunId}";
-        }
     }
 }

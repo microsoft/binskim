@@ -9,6 +9,10 @@ using System.Reflection;
 
 using FluentAssertions;
 
+using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
+using Microsoft.CodeAnalysis.IL.Sdk;
+using Microsoft.CodeAnalysis.Sarif;
+
 using Xunit;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -48,6 +52,57 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 Assert.Fail(string.Format("Please examine if the following rules should enable 'LogPdbLoadException': {0}",
                                           string.Join(", ", unexpectedLogPdbLoadExceptionRules.Select(skimmer => skimmer.Moniker))));
             }
+        }
+
+        [Fact]
+        public void BuildWithSecureTools_Initialize_PartialPolicyRestoresMissingDefaults()
+        {
+            using var context = new BinaryAnalyzerContext
+            {
+                Policy = new PropertiesDictionary()
+            };
+            var minimumCompilerVersion = new Version(1, 2, 3, 4);
+            var minimumXboxCompilerVersion = new Version(5, 6, 7, 8);
+            context.Policy.SetProperty(
+                BuildWithSecureTools.MinimumToolVersions,
+                new StringToVersionMap
+                {
+                    ["MinimumCompilerVersion"] = minimumCompilerVersion,
+                    ["MinimumXboxCompilerVersion"] = minimumXboxCompilerVersion
+                },
+                cacheDescription: false,
+                persistToSettingsContainer: true);
+            StringToVersionMap expected = new PropertiesDictionary().GetProperty(BuildWithSecureTools.MinimumToolVersions);
+            expected["MinimumCompilerVersion"] = minimumCompilerVersion;
+            expected["MinimumXboxCompilerVersion"] = minimumXboxCompilerVersion;
+
+            new BuildWithSecureTools().Initialize(context);
+
+            context.Policy.GetProperty(BuildWithSecureTools.MinimumToolVersions).Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public void BuildWithSecureTools_Initialize_PreservesExplicitCompilerVersion()
+        {
+            using var context = new BinaryAnalyzerContext
+            {
+                Policy = new PropertiesDictionary()
+            };
+            var minimumCompilerVersion = new Version(1, 2, 3, 4);
+            context.Policy.SetProperty(
+                BuildWithSecureTools.MinimumToolVersions,
+                new StringToVersionMap
+                {
+                    [nameof(Language.C)] = minimumCompilerVersion
+                },
+                cacheDescription: false,
+                persistToSettingsContainer: true);
+            StringToVersionMap expected = new PropertiesDictionary().GetProperty(BuildWithSecureTools.MinimumToolVersions);
+            expected[nameof(Language.C)] = minimumCompilerVersion;
+
+            new BuildWithSecureTools().Initialize(context);
+
+            context.Policy.GetProperty(BuildWithSecureTools.MinimumToolVersions).Should().BeEquivalentTo(expected);
         }
 
         private static WindowsBinaryAndPdbSkimmerBase[] GetAllWindowsBinaryAndPdbSkimmers(string rulesAssemblyName)

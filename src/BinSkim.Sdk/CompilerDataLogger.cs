@@ -18,8 +18,8 @@ using Newtonsoft.Json;
 namespace Microsoft.CodeAnalysis.IL.Sdk
 {
     /// <summary>
-    /// This class sends compiler data to AppInsights and/or persists the information
-    /// to a CSV file. This information is used to produce manifests of compiler 
+    /// This class sends compiler data to AppInsights.
+    /// This information is used to produce manifests of compiler
     /// versions and other data that are useful to verify the provenance of
     /// code compiled into a project or service.
     /// 
@@ -62,13 +62,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         internal const string SourceLinkJsonId = "sourceLinkJsonId";
         internal const string SourceLinkJsonEventName = "SourceLinkJsonInformation";
 
-        // This object is required to synchronize multi-threaded writes
-        // to the CSV writer only. The AppInsights client is already
-        // thread-safe.
-        private readonly object syncRoot;
-
-        // Data for persisting telemetry to AppInsights and/or a CSV file.
-        internal StreamWriter writer;
         private readonly TelemetryClient telemetryClient;
 
         // We currently generate telemetry (such as exceptions that occurred during
@@ -79,7 +72,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         private readonly IFileSystem fileSystem;
         private readonly string symbolPath;
 
-        public bool Enabled => this.telemetryClient != null || this.writer != null;
+        public bool Enabled => this.telemetryClient != null;
 
         public string RootPathToElide { get; set; }
 
@@ -90,10 +83,10 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         // on the context GetHashCode() value remaining stable during analysis.
         public int OwningContextHashCode { get; internal set; }
 
-        public static PerLanguageOption<string> CsvOutputPath { get; } =
+        private static PerLanguageOption<string> LegacyCsvOutputPath { get; } =
             new PerLanguageOption<string>(
-                "CompilerTelemetry", nameof(CsvOutputPath), defaultValue: () => string.Empty,
-                "An output path to which compiler data will be persisted as CSV, e.g., 'c:\\telemetry.csv'.");
+                "CompilerTelemetry", "CsvOutputPath", defaultValue: () => string.Empty,
+                "Unsupported legacy CSV export option.");
 
         public static PerLanguageOption<string> RootPathToElideProperty { get; } =
             new PerLanguageOption<string>(
@@ -102,7 +95,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public CompilerDataLogger(string sarifOutputFilePath, Sarif.SarifVersion sarifVersion, BinaryAnalyzerContext context, IFileSystem fileSystem = null, Telemetry telemetry = null)
         {
-            this.syncRoot = new object();
+            if (!string.IsNullOrEmpty(context.Policy.GetProperty(LegacyCsvOutputPath)))
+            {
+                throw new InvalidOperationException(
+                    "CSV export has been removed. Remove CsvOutputPath from CompilerTelemetry.Options.");
+            }
+
             this.fileSystem = fileSystem ?? new FileSystem();
 
             this.sarifOutputFilePath = sarifOutputFilePath;
@@ -111,13 +109,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             this.OwningContextHashCode = context.GetHashCode();
             this.symbolPath = context.SymbolPath;
             this.telemetryClient = telemetry?.TelemetryClient;
-
-            if (!context.DisableTelemetry)
-            {
-                bool forceOverwrite = context.ForceOverwrite;
-                string csvFilePath = context.Policy.GetProperty(CsvOutputPath);
-                CreateCsvOutputFile(csvFilePath, forceOverwrite);
-            }
 
             // If the user has configured compiler telemetry collection, then we require analysis results
             // are persisted to a disk-based log file (to produce the telemetry 'summary' data persisted
@@ -131,34 +122,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                     "Analysis results must currently be persisted to a log file (using " +
                     "the --output argument) to generate compiler telemetry data.");
             }
-        }
-
-        internal void CreateCsvOutputFile(string csvFilePath, bool overwriteExistingCsv)
-        {
-            if (string.IsNullOrWhiteSpace(csvFilePath))
-            {
-                return;
-            }
-
-            if (fileSystem.FileExists(csvFilePath))
-            {
-                if (!overwriteExistingCsv)
-                {
-                    throw new InvalidOperationException($"Output file exists and force overwrite was not specified: {csvFilePath}");
-                }
-
-                fileSystem.FileDelete(csvFilePath);
-            }
-
-            string directoryName = Path.GetDirectoryName(csvFilePath);
-
-            if (!Directory.Exists(directoryName))
-            {
-                Directory.CreateDirectory(directoryName);
-            }
-
-            this.writer = new StreamWriter(new FileStream(csvFilePath, FileMode.OpenOrCreate));
-            PrintHeader();
         }
 
         public static string RetrieveEnvironmentVariable(string name)
@@ -186,35 +149,12 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
             return string.Empty;
         }
 
-        private void PrintHeader()
-        {
-            string header = "" +
-                "Target,Compiler Name,Compiler BackEnd Version,Compiler FrontEnd Version," +
-                "File Version,Binary Type,Language,Debugging FileName,Debugging FileGuid," +
-                "Debugging FileLastModifiedDateUTC, Target LastModifiedDateUTC, Command Line," +
-                "Dialect,Module Name,Module Library,Hash,Error";
-
-            WriteToCsv(header);
-        }
-
-        private void WriteToCsv(string line)
-        {
-            if (this.writer == null) { return; }
-
-            lock (this.syncRoot)
-            {
-                this.writer.WriteLine(line);
-            }
-        }
-
         public void Write(BinaryAnalyzerContext context, CompilerData compilerData)
         {
             string fileHash = context.Hashes?.Sha256;
             string filePath = string.IsNullOrWhiteSpace(RootPathToElide)
                 ? context.CurrentTarget.Uri?.LocalPath
                 : context.CurrentTarget.Uri?.LocalPath.Replace(RootPathToElide, string.Empty);
-
-            WriteToCsv($"{filePath},{compilerData},{fileHash},");
 
             if (this.telemetryClient == null)
             {
@@ -281,8 +221,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 ? context.CurrentTarget.Uri?.LocalPath.Replace(RootPathToElide, string.Empty)
                 : context.CurrentTarget.Uri?.LocalPath;
 
-            WriteToCsv($"{filePath},,,,,,,,,,,,,{fileHash},{errorMessage}");
-
             if (this.telemetryClient == null)
             {
                 return;
@@ -312,8 +250,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         public void WriteException(ExecutionException exception, AnalysisSummary summary)
         {
-            this.writer?.WriteLine(exception.ToString());
-
             if (this.telemetryClient != null)
             {
                 this.telemetryClient.TrackException(exception, new Dictionary<string, string>
@@ -326,8 +262,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
         internal void Summarize(AnalysisSummary summary)
         {
-            WriteToCsv(summary.ToString());
-
             if (this.telemetryClient == null)
             {
                 return;
@@ -365,7 +299,7 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
                 this.telemetryClient.TrackEvent(eventName, properties: new Dictionary<string, string>
                 {
                     { $"{contentName}Id", contentId },
-                    { "orderNumber", (i + 1).ToString() },
+                    { "orderNumber", (i / s_chunkSize + 1).ToString() },
                     { "totalNumber", size.ToString() },
                     { $"chunked{contentName}", chunkedContent },
                 });
@@ -451,10 +385,6 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
 
             // Generate the last of our published telemetry data.
             WriteSummaryData();
-
-            // Flush and close output to our csv file, if present.
-            this.writer?.Dispose();
-            this.writer = null;
         }
     }
 }

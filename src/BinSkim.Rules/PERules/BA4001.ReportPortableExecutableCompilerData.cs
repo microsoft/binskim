@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Composition;
 using System.IO;
 using System.Linq;
@@ -16,32 +15,23 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
 {
-    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor)), Export(typeof(IOptionsProvider))]
-    public class ReportPECompilerData : WindowsBinaryAndPdbSkimmerBase, IOptionsProvider
+    [Export(typeof(Skimmer<BinaryAnalyzerContext>)), Export(typeof(ReportingDescriptor))]
+    public class ReportPECompilerData : WindowsBinaryAndPdbSkimmerBase
     {
         /// <summary>
-        /// BA4001. This reporting rule writes compiler data to AppInsights and 
-        /// a CSV file (if configured) for every compilation unit that's scanned.
+        /// BA4001. This reporting rule writes compiler data to AppInsights for every compilation unit that's scanned.
         /// </summary>
         public override string Id => RuleIds.ReportPortableExecutableCompilerData;
 
         public override bool LogPdbLoadException => false;
 
         /// <summary>
-        /// This rule emits CSV data to the console for every compiler/language/version
+        /// This rule reports data to AppInsights for every compiler/language/version
         /// combination that's observed in any PDB-linked compiland.
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA4001_ReportPECompilerData_Description };
 
         protected override ICollection<string> MessageResourceNames => Array.Empty<string>();
-
-        public IEnumerable<IOption> GetOptions()
-        {
-            return new List<IOption>
-            {
-                CompilerDataLogger.CsvOutputPath,
-            }.ToImmutableArray();
-        }
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {
