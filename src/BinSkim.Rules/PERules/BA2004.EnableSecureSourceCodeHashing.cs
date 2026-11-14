@@ -173,7 +173,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     {
                         if (isMsvc)
                         {
-                            // We know of 3 scenarios where this occurs today:
+                            // We know of 4 scenarios where this occurs today:
                             // If we encounter one of these, we should continue the loop to the next SourceFile,
                             // else fallthrough to the other checks for normal processing and errors.
 
@@ -194,6 +194,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                             else if (sf.FileName.EndsWith(".pch"))
                             {
                                 // Precompiled headers currently does not emit hash.
+                                continue;
+                            }
+                            else if (target.PE.IsMixedMode &&
+                                     (sf.FileName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase) ||
+                                      sf.FileName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ||
+                                      sf.FileName.EndsWith(".netmodule", StringComparison.OrdinalIgnoreCase)))
+                            {
+                                // C++/CLI records referenced managed assemblies and modules
+                                // as source files without checksums.
                                 continue;
                             }
                         }

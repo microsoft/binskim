@@ -292,6 +292,13 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             HashSet<string> targets = GetTestFilesMatchingConditions(applicabilityConditions);
 
+            Assert.NotEmpty(targets);
+            Assert.All(targets, target =>
+            {
+                using BinaryAnalyzerContext context = CreateContext(new TestMessageLogger(), null, target);
+                Assert.True(context.IsValidAnalysisTarget, $"Test target '{target}' should be valid.");
+            });
+
             VerifyApplicabilityResults(
                 skimmer,
                 targets,
@@ -530,15 +537,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 result.Add(Path.Combine(testFilesDirectory, "DotnetNative_x86_VS2019_UniversalApp.exe"));
             }
 
+            string shadowStackTestFilesDirectory = GetTestDirectory(
+                "Test.FunctionalTests.BinSkim.Rules",
+                "FunctionalTestData",
+                GetTestDirectoryFor(nameof(EnableShadowStack)),
+                "NotApplicable");
+
             if (metadataConditions.Contains(MetadataConditions.ImageIsArmBinary))
             {
-                result.Add(Path.Combine(testFilesDirectory, "ARM_CETShadowStack_NotApplicable.exe"));
+                result.Add(Path.Combine(shadowStackTestFilesDirectory, "ARM_CETShadowStack_NotApplicable.exe"));
             }
 
             if (metadataConditions.Contains(MetadataConditions.ImageIsArm64BitBinary))
             {
-                result.Add(Path.Combine(testFilesDirectory, "ARM64_CETShadowStack_NotApplicable.exe"));
-                result.Add(Path.Combine(testFilesDirectory, "ARM64_dotnet_CETShadowStack_NotApplicable.exe"));
+                result.Add(Path.Combine(shadowStackTestFilesDirectory, "ARM64_CETShadowStack_NotApplicable.exe"));
+                result.Add(Path.Combine(shadowStackTestFilesDirectory, "ARM64_dotnet_CETShadowStack_NotApplicable.exe"));
             }
 
             if (metadataConditions.Contains(MetadataConditions.ImageIsRustBinary))
@@ -1463,7 +1476,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             this.VerifyApplicabililtyByConditionsOnly(
                 skimmer: new EnableShadowStack(),
-                applicabilityConditions: notApplicableArm64,
+                applicabilityConditions: notApplicableArm,
                 expectedReasonForNotAnalyzing: MetadataConditions.ImageIsArmBinary);
         }
 
