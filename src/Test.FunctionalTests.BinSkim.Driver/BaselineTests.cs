@@ -25,7 +25,6 @@ using Microsoft.CodeAnalysis.Sarif.Writers;
 using Newtonsoft.Json;
 
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Microsoft.CodeAnalysis.IL
 {
