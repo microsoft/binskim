@@ -23,6 +23,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableAddressSpaceLayoutRandomization;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2009_Title
+        };
+
         /// <summary>
         /// Binaries should linked as DYNAMICBASE in order to be eligible for relocation
         /// by Address Space Layout Randomization (ASLR). ASLR is an important

@@ -24,6 +24,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.DoNotModifyStackProtectionCookie;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2012_Title
+        };
+
         /// <summary>
         /// Application code should not interfere with the stack protector. The stack
         /// protector (/GS) is a security feature of the compiler which makes it more

@@ -26,6 +26,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EliminateDuplicateStrings;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA6002_Title
+        };
+
         /// <summary>
         /// The /GF compiler option, also known as Eliminate Duplicate Strings or String Pooling, will combine identical strings
         /// in a program to a single readonly copy. This can significantly reduce binary size for programs with many string resources.

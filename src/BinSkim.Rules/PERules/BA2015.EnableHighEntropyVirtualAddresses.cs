@@ -22,6 +22,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableHighEntropyVirtualAddresses;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2015_Title
+        };
+
         /// <summary>
         /// Binaries should be marked as high entropy Address Space Layout Randomization
         /// (ASLR) compatible. High entropy allows ASLR to be more effective in

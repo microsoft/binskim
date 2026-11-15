@@ -26,6 +26,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableLinkTimeCodeGeneration;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA6006_Title
+        };
+
         /// <summary>
         /// Enabling Link Time Code Generation (LTCG) performs whole-program optimization, which is able to better optimize code across
         /// translation units. LTCG is also a prerequisite for Profile-Guided Optimization (PGO) which can further improve performance.

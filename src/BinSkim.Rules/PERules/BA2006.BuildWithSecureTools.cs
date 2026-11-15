@@ -25,6 +25,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.BuildWithSecureTools;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2006_Title
+        };
+
         /// <summary>
         /// Application code should be compiled with the most up-to-date tool sets
         /// possible to take advantage of the most current compile-time security

@@ -24,6 +24,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.DoNotShipVulnerableBinaries;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2005_Title
+        };
+
         /// <summary>
         /// Do not ship obsolete libraries for which there are known security vulnerabilities.
         /// </summary>

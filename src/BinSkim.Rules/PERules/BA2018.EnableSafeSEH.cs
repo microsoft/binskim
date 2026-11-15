@@ -21,6 +21,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableSafeSEH;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2018_Title
+        };
+
         /// <summary>
         /// X86 binaries should enable the SafeSEH mitigation in order to minimize
         /// exploitable memory corruption issues. SafeSEH makes it more difficult

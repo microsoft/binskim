@@ -22,6 +22,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.SignSecurely;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2022_Title
+        };
+
         /// <summary>
         /// Images should be correctly signed by trusted publishers using
         /// cryptographically secure signature algorithms. This rule

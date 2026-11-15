@@ -104,6 +104,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.UseGccCheckedFunctions;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA3030_Title
+        };
+
         /// <summary>
         /// The stack protector ensures that all functions that use buffers over a certain size will
         //  use a stack cookie(and check it) to prevent stack based buffer overflows, exiting if stack

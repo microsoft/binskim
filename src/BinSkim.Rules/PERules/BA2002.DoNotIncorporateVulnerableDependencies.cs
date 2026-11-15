@@ -24,6 +24,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.DoNotIncorporateVulnerableDependencies;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2002_Title
+        };
+
         /// <summary>
         /// Binaries should not take dependencies on other code with known security vulnerabilities.
         /// </summary>

@@ -37,6 +37,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableSpectreMitigations;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2024_Title
+        };
+
         /// <summary>
         /// Application code should be compiled with the most up-to-date toolsets possible
         /// in order to take advantage of the most current compile-time security features.
