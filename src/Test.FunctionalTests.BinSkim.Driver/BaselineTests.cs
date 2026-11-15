@@ -48,6 +48,30 @@ namespace Microsoft.CodeAnalysis.IL
             }
         }
 
+        [Fact]
+        public void Driver_MachOUniversalBinaryProducesExpectedResults()
+        {
+            string testFile = Path.Combine(BaselineTestDataDirectory, "macho.clang-gcc.fat.o");
+            using var binary = new MachOBinary(new Uri(testFile));
+
+            binary.MachOs.Should().HaveCount(2);
+
+            string actualFileName = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.sarif");
+            try
+            {
+                var differences = new StringBuilder();
+                SarifLog actualLog = this.RunRules(differences, testFile, actualFileName: actualFileName);
+
+                differences.ToString().Should().BeEmpty();
+                actualLog.Runs[0].Invocations[0].ExecutionSuccessful.Should().BeTrue();
+                actualLog.Runs[0].Results.Should().NotBeEmpty();
+            }
+            finally
+            {
+                File.Delete(actualFileName);
+            }
+        }
+
         [Theory]
         [InlineData("CSharp_PortablePdb_SourceLink.dll", "managed")]
         [InlineData("CPlusPlus_SourceLink.exe", "native MSVC")]
@@ -458,7 +482,11 @@ namespace Microsoft.CodeAnalysis.IL
             Assert.Equal(0, sb.Length);
         }
 
-        private SarifLog RunRules(StringBuilder sb, string inputFileName, Sarif.SarifVersion version = Sarif.SarifVersion.Current)
+        private SarifLog RunRules(
+            StringBuilder sb,
+            string inputFileName,
+            Sarif.SarifVersion version = Sarif.SarifVersion.Current,
+            string actualFileName = null)
         {
             string fileName = Path.GetFileName(inputFileName);
             string actualDirectory = Path.Combine(Path.GetDirectoryName(inputFileName), "Actual");
@@ -477,11 +505,10 @@ namespace Microsoft.CodeAnalysis.IL
                 Directory.CreateDirectory(actualDirectory);
             }
 
-            int index = expectedDirectory.IndexOf(@"\src\Test.FunctionalTests.BinSkim.Driver", StringComparison.OrdinalIgnoreCase);
-            string enlistmentRoot = expectedDirectory.Substring(0, index);
+            string enlistmentRoot = Path.GetFullPath(Path.Combine(BaselineTestDataDirectory, "..", "..", ".."));
 
             string expectedFileName = Path.Combine(expectedDirectory, fileName + ".sarif");
-            string actualFileName = Path.Combine(actualDirectory, fileName + ".sarif");
+            actualFileName ??= Path.Combine(actualDirectory, fileName + ".sarif");
 
             using var telemetry = new Sdk.Telemetry(this.telemetryConfiguration);
             var command = new MultithreadedAnalyzeCommand(telemetry);
