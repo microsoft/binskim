@@ -9,9 +9,9 @@ updates:
     cooldown:
       default-days: 7
     groups:
-      github-actions:
+      codeql-action:
         patterns:
-          - '*'
+          - 'github/codeql-action/*'
     # target-branch: 'develop'
     # assignees:
     #   - assignee_one
@@ -33,14 +33,7 @@ updates:
     directory: 'src'
     open-pull-requests-limit: 10
     schedule:
-      interval: 'weekly'
-    groups:
-      nuget-minor-and-patch:
-        patterns:
-          - '*'
-        update-types:
-          - 'minor'
-          - 'patch'
+      interval: 'daily'
     # target-branch: 'develop'
     # assignees:
     #   - assignee_one
