@@ -154,8 +154,8 @@ extends:
       - job: CheckPRsMerged
         displayName: Check all release PRs are merged
         pool:
-          name: guardian-build-infra-windows-x64
-          os: windows
+          name: guardian-build-infra-linux-x64
+          os: linux
         steps:
         - checkout: self
           fetchDepth: 1
@@ -213,8 +213,8 @@ extends:
       - job: TriggerInternalBuild
         displayName: Trigger and wait for internal build
         pool:
-          name: guardian-build-infra-windows-x64
-          os: windows
+          name: guardian-build-infra-linux-x64
+          os: linux
         steps:
         - checkout: none
 
