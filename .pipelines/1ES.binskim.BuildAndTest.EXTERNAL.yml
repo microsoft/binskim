@@ -1,6 +1,14 @@
 name: BuildAndTestBinskim
+# Every branch must stay included: this CI trigger also provides the pull
+# request check. Batching collapses pushes that arrive during a running build.
 trigger:
-  - "*"
+  batch: true
+  branches:
+    include:
+    - "*"
+  paths:
+    exclude:
+    - .github
 
 # GitHub CodeQL validates pull requests, and the dedicated ADO compliance
 # pipeline retains 1ES CodeQL coverage on main.
