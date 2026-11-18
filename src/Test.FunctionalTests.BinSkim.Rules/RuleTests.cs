@@ -16,7 +16,6 @@ using Microsoft.CodeAnalysis.Sarif.Driver;
 using Microsoft.Win32;
 
 using Xunit;
-using Xunit.Abstractions;
 using Xunit.Sdk;
 
 namespace Microsoft.CodeAnalysis.IL.Rules
@@ -61,7 +60,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var targets = new List<string>();
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = GetTestDirectoryFor(ruleName);
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
+            testFilesDirectory = Path.Combine(AppContext.BaseDirectory, "FunctionalTestData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, expectToPass ? "Pass" : "Fail");
 
             Assert.True(Directory.Exists(testFilesDirectory), $"Test directory '{testFilesDirectory}' should exist.");
@@ -235,7 +234,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             string ruleName = skimmer.GetType().Name;
 
             string baseFilesDirectory = GetTestDirectoryFor(ruleName);
-            baseFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", baseFilesDirectory);
+            baseFilesDirectory = Path.Combine(AppContext.BaseDirectory, "FunctionalTestData", baseFilesDirectory);
 
             string[] testFilesDirectories =
                 new string[]
@@ -319,7 +318,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         {
             string ruleName = skimmer.GetType().Name;
             string testFilesDirectory = GetTestDirectoryFor(ruleName);
-            testFilesDirectory = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", testFilesDirectory);
+            testFilesDirectory = Path.Combine(AppContext.BaseDirectory, "FunctionalTestData", testFilesDirectory);
             testFilesDirectory = Path.Combine(testFilesDirectory, "NotApplicable");
 
             HashSet<string> targets = GetTestFilesMatchingConditions(applicabilityConditions);
@@ -1530,7 +1529,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             if (!BinaryParsers.PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
             string sourceDirectory = Path.Combine(
-                Environment.CurrentDirectory,
+                AppContext.BaseDirectory,
                 "FunctionalTestData",
                 "BA2027.EnableSourceLink",
                 "Pass");
