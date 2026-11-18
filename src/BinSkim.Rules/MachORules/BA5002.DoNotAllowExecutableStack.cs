@@ -20,6 +20,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.DoNotAllowExecutableStack;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA5002_Title
+        };
+
         /// <summary>
         /// This checks if a binary has an executable stack; an
         /// executable stack allows attackers to redirect code flow

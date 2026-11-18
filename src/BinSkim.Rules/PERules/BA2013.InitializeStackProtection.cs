@@ -22,6 +22,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.InitializeStackProtection;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2013_Title
+        };
+
         /// <summary>
         /// Binaries should properly initialize the stack protector (/GS) in order
         /// to increase the difficulty of exploiting stack buffer overflow memory

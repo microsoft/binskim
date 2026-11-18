@@ -21,6 +21,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.LoadImageAboveFourGigabyteAddress;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2001_Title
+        };
+
         /// <summary>
         /// 64-bit images should have a preferred base address above the 4GB boundary in
         /// order to prevent triggering an Address Space Layout Randomization (ASLR)

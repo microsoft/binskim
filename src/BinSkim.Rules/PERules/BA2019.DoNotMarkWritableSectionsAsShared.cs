@@ -21,6 +21,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.DoNotMarkWritableSectionsAsShared;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2019_Title
+        };
+
         /// <summary>
         /// PE sections should not be marked as both writable and executable. This condition
         /// makes it easier for an attacker to exploit memory corruption vulnerabilities, as

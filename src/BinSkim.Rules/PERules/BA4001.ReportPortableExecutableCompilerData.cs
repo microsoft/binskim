@@ -23,6 +23,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.ReportPortableExecutableCompilerData;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA4001_Title
+        };
+
         public override bool LogPdbLoadException => false;
 
         /// <summary>
@@ -31,7 +36,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA4001_ReportPECompilerData_Description };
 
-        protected override ICollection<string> MessageResourceNames => Array.Empty<string>();
+        protected override ICollection<string> MessageResourceNames => new string[]
+        {
+            nameof(RuleResources.NotApplicable_InvalidMetadata)
+        };
 
         public override AnalysisApplicability CanAnalyzePE(PEBinary target, BinaryAnalyzerContext context, out string reasonForNotAnalyzing)
         {

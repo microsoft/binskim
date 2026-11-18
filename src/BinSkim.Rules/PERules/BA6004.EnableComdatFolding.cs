@@ -26,6 +26,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableComdatFolding;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA6004_Title
+        };
+
         /// <summary>
         /// COMDAT folding can significantly reduce binary size by combining functions which generate identical machine code into a
         /// single copy in the final binary.

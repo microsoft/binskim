@@ -23,6 +23,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableStackProtection;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2011_Title
+        };
+
         /// <summary>
         /// Binaries should be built with the stack protector buffer security
         /// feature (/GS) enabled in order to increase the difficulty of

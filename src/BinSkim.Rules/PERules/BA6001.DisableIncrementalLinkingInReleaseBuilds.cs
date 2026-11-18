@@ -26,6 +26,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.DisableIncrementalLinkingInReleaseBuilds;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA6001_Title
+        };
+
         /// <summary>
         /// Incremental linking support increases binary size and can reduce runtime performance. Fully optimized 
         /// release builds should not specify incremental linking.

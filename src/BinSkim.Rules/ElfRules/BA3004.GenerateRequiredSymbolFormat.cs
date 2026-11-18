@@ -19,6 +19,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.GenerateRequiredSymbolFormat;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA3004_Title
+        };
+
         /// <summary>
         /// This check ensures that debugging dwarf version used is 5.
         /// The dwarf version 5 contains more information and should be used.

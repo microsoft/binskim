@@ -25,6 +25,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableMicrosoftCompilerSdlSwitch;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2026_Title
+        };
+
         /// <summary>
         /// /sdl enables a superset of the baseline security checks provided by /GS and overrides /GS-. 
         /// By default, /sdl is off. /sdl- disables the additional security checks.
@@ -37,6 +42,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         protected override ICollection<string> MessageResourceNames => new string[] {
             nameof(RuleResources.BA2026_Pass),
             nameof(RuleResources.BA2026_Warning),
+            nameof(RuleResources.BA2026_NotApplicable),
             nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 

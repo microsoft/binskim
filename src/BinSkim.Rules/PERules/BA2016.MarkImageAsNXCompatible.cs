@@ -21,6 +21,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.MarkImageAsNXCompatible;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2016_Title
+        };
+
         /// <summary>
         /// Binaries should be marked as NX compatible in order to help prevent
         /// execution of untrusted data as code. The NXCompat bit, also known

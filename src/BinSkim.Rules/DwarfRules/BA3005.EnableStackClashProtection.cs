@@ -22,6 +22,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableStackClashProtection;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA3005_Title
+        };
+
         /// <summary>
         /// This check ensures that stack clash protection is enabled. 
         /// Each program running on a computer uses a special memory region called the stack. 

@@ -21,6 +21,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableIntegrityCheck;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2029_Title
+        };
+
         /// <summary>
         /// Binaries that are loaded by certain Windows features must (and device drivers should) 
         /// opt into Windows validation of their digital signatures by setting the /INTEGRITYCHECK 

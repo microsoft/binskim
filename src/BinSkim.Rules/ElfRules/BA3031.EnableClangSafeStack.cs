@@ -28,6 +28,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableClangSafeStack;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA3031_Title
+        };
+
         /// <summary>
         /// The SafeStack instrumentation pass protects programs by implementing two separate program stacks, 
         /// one for return addresses and local variables, and the other for everything else.
