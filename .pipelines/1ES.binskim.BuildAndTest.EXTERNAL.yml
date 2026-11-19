@@ -2,8 +2,7 @@ name: BuildAndTestBinskim
 trigger:
   - "*"
 
-# GitHub CodeQL validates pull requests, and the dedicated ADO compliance
-# pipeline retains 1ES CodeQL coverage on main.
+# CodeQL runs in the GitHub Actions workflow (.github/workflows/codeql-analysis.yml).
 variables:
   Codeql.SkipTaskAutoInjection: true
 
