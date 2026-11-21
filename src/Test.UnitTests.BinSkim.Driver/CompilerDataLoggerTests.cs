@@ -308,6 +308,36 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
         }
 
         [Fact]
+        public void CompilerDataLogger_WriteException_ShouldElideRootPath_WhenConfigured()
+        {
+            using BinaryAnalyzerContext context = CreateTestContext();
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger compilerDataLogger);
+            compilerDataLogger.RootPathToElide = @"c:\";
+
+            compilerDataLogger.WriteException(context: context, errorMessage: TestExceptionMessage);
+
+            telemetryEventOutput.OfType<EventTelemetry>().Single().Properties["target"].Should().Be("file.dll");
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void CompilerDataLogger_WriteException_ShouldLogFullPath_WhenRootPathIsAbsent(string rootPathToElide)
+        {
+            using BinaryAnalyzerContext context = CreateTestContext();
+            List<ITelemetry> telemetryEventOutput = TestSetup(context: context,
+                                                              sarifVersion: Sarif.SarifVersion.Current,
+                                                              logger: out CompilerDataLogger compilerDataLogger);
+            compilerDataLogger.RootPathToElide = rootPathToElide;
+
+            compilerDataLogger.WriteException(context: context, errorMessage: TestExceptionMessage);
+
+            telemetryEventOutput.OfType<EventTelemetry>().Single().Properties["target"].Should().Be(TargetUriPath);
+        }
+
+        [Fact]
         public void CompilerDataLogger_WriteException_ShouldLogExecutionExceptions()
         {
             string sarifLogPath = Path.Combine(BaselineTestDataDirectory, ExpectedFolder, SampleSarifPath);
