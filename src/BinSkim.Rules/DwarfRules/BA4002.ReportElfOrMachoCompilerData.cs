@@ -47,19 +47,23 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
             if (binary is ElfBinary)
             {
-                this.WriteCompilerData(context, binary.CommandLineInfos, binary.Compilers);
+                this.WriteCompilerData(context, binary.CommandLineInfos, binary.Compilers, "ELF");
             }
 
             if (binary is MachOBinary machO)
             {
                 machO.MachOs.ToList().ForEach
                 (
-                    machO => this.WriteCompilerData(context, machO.CommandLineInfos, machO.Compilers)
+                    machO => this.WriteCompilerData(context, machO.CommandLineInfos, machO.Compilers, "Mach-O")
                 );
             }
         }
 
-        private void WriteCompilerData(BinaryAnalyzerContext context, List<DwarfCompileCommandLineInfo> commandLineInfos, ICompiler[] compilers)
+        private void WriteCompilerData(
+            BinaryAnalyzerContext context,
+            List<DwarfCompileCommandLineInfo> commandLineInfos,
+            ICompiler[] compilers,
+            string binaryType)
         {
             var processedRecords = new HashSet<CompilerData>();
 
@@ -85,7 +89,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                 {
                     var record = new CompilerData
                     {
-                        BinaryType = "ELF",
+                        BinaryType = binaryType,
                         ModuleName = info.FileName,
                         Dialect = info.GetDialect(),
                         ModuleLibrary = string.Empty,
