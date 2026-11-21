@@ -334,10 +334,15 @@ namespace Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase
 
             try
             {
-                // GetEnumerator() fails in netcoreapp2.0--need to iterate without foreach.
-                for (uint i = 0; i < (uint)enumSectionContribs.Count; i++)
+                // Item(i) is very slow on large PDBs, so walk the table sequentially.
+                while (true)
                 {
-                    IDiaSectionContrib sectionContrib = enumSectionContribs.Item(i);
+                    enumSectionContribs.Next(1, out IDiaSectionContrib sectionContrib, out uint fetched);
+                    if (fetched != 1)
+                    {
+                        break;
+                    }
+
                     try
                     {
                         if (sectionContrib.execute != 0)
