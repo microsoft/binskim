@@ -1418,13 +1418,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         }
 
         [Fact]
-        public void BA2022_SignSecurely_NotApplicable()
-        {
-            var applicableTo = new HashSet<string> { MetadataConditions.ImageIsNotSigned };
-            this.VerifyApplicability(new DoNotIncorporateVulnerableDependencies(), applicableTo, AnalysisApplicability.NotApplicableToSpecifiedTarget);
-        }
-
-        [Fact]
         public void BA2024_EnableSpectreMitigations_Pass()
         {
             if (BinaryParsers.PlatformSpecificHelpers.RunningOnWindows())

@@ -149,6 +149,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
                     case CryptoError.TRUST_E_NOSIGNATURE:
                     {
                         Notes.LogNotApplicableToSpecifiedTarget(context, MetadataConditions.ImageIsNotSigned);
+                        this.InvokeCloseAction(winTrustData);
                         return false;
                     }
 
