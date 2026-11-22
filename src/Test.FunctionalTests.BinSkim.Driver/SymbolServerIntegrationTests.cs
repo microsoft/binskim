@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection.PortableExecutable;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -15,7 +16,6 @@ using FluentAssertions;
 using Microsoft.CodeAnalysis.BinaryParsers.ProgramDatabase;
 
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Microsoft.CodeAnalysis.BinSkim.Driver
 {
@@ -163,9 +163,12 @@ namespace Microsoft.CodeAnalysis.BinSkim.Driver
             output.WriteLine($"{name}: version={FileVersionInfo.GetVersionInfo(path).FileVersion}; SHA256={hash}");
         }
 
-        private sealed class WindowsFactAttribute : FactAttribute
+        public sealed class WindowsFactAttribute : FactAttribute
         {
-            public WindowsFactAttribute()
+            public WindowsFactAttribute(
+                [CallerFilePath] string sourceFilePath = null,
+                [CallerLineNumber] int sourceLineNumber = -1)
+                : base(sourceFilePath, sourceLineNumber)
             {
                 if (!OperatingSystem.IsWindows())
                 {

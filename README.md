@@ -38,6 +38,10 @@ On Linux and macOS, `BuildAndTest.sh` runs the test suite. It does not perform t
 
 Use the [rule contribution guide](docs/RuleContributions.md) for rule changes. For other changes, open or locate a relevant [GitHub issue](https://github.com/microsoft/binskim/issues) and keep the implementation focused on that scenario.
 
+Tests use xUnit v3 with Microsoft.Testing.Platform (MTP), selected by `global.json`.
+Run `dotnet test --solution src/BinSkim.sln` to execute the test suite. MTP options
+are passed directly, for example `dotnet test --solution src/BinSkim.sln --filter-class '*RulePropertyTests'`.
+
 ### Windows DIA dependency
 
 Builds that deploy Windows x64 DIA download `Microsoft.VisualCpp.DIA.SDK` from

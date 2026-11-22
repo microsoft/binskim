@@ -9,10 +9,11 @@ jobs:
       - checkout: self
 
       - task: UseDotNet@2
-        displayName: .NET 10 SDK
+        displayName: .NET SDK from global.json
         inputs:
-          version: "10.0.x"
           packageType: sdk
+          useGlobalJson: true
+          workingDirectory: $(Build.SourcesDirectory)
 
       - task: Bash@3
         displayName: "Build and Test"
@@ -20,22 +21,45 @@ jobs:
           filePath: "BuildAndTest.sh"
           failOnStderr: true
 
+      - task: PublishTestResults@2
+        displayName: Publish MTP test results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: VSTest
+          testResultsFiles: '$(Build.SourcesDirectory)/bld/TestResults/**/*.trx'
+          failTaskOnFailedTests: true
+          failTaskOnMissingResultsFile: true
+          mergeTestResults: true
+
   - job: windows
     pool:
       vmImage: "windows-latest"
     steps:
-      - task: UseDotNet@2
-        displayName: .NET 10 SDK
-        inputs:
-          version: "10.0.x"
-          packageType: sdk
-
       - checkout: self
+
+      - task: UseDotNet@2
+
+      - task: UseDotNet@2
+        displayName: .NET SDK from global.json
+        inputs:
+          packageType: sdk
+          useGlobalJson: true
+          workingDirectory: $(Build.SourcesDirectory)
 
       - task: CmdLine@2
         displayName: "Build and Test"
         inputs:
           script: "BuildAndTest.cmd"
+
+      - task: PublishTestResults@2
+        displayName: Publish MTP test results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: VSTest
+          testResultsFiles: '$(Build.SourcesDirectory)/bld/TestResults/**/*.trx'
+          failTaskOnFailedTests: true
+          failTaskOnMissingResultsFile: true
+          mergeTestResults: true
 
       - task: ComponentGovernanceComponentDetection@0
 
@@ -43,19 +67,32 @@ jobs:
     pool:
       vmImage: "macOS-latest"
     steps:
-      - task: UseDotNet@2
-        displayName: .NET 10 SDK
-        inputs:
-          version: "10.0.x"
-          packageType: sdk
-
       - checkout: self
+
+      - task: UseDotNet@2
+
+      - task: UseDotNet@2
+        displayName: .NET SDK from global.json
+        inputs:
+          packageType: sdk
+          useGlobalJson: true
+          workingDirectory: $(Build.SourcesDirectory)
 
       - task: Bash@3
         displayName: "Build and Test"
         inputs:
           filePath: "BuildAndTest.sh"
           failOnStderr: true
+
+      - task: PublishTestResults@2
+        displayName: Publish MTP test results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: VSTest
+          testResultsFiles: '$(Build.SourcesDirectory)/bld/TestResults/**/*.trx'
+          failTaskOnFailedTests: true
+          failTaskOnMissingResultsFile: true
+          mergeTestResults: true
 
       - task: Bash@3
         displayName: "Run BinSkim"
