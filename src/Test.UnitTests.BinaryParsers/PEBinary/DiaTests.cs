@@ -113,6 +113,56 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
         }
 
         [Fact]
+        public void Dia_ExecutableCompilandMembershipMatchesSectionContributions()
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            // DIA symbol IDs are session-local, so compare compiland names.
+            var expected = new HashSet<string>(StringComparer.Ordinal);
+            ForEachDiaTable(SourceLinkPdbPath, (session, table) =>
+            {
+                if (table is not IDiaEnumSectionContribs contributionTable) { return; }
+
+                for (uint item = 0; item < contributionTable.Count; item++)
+                {
+                    IDiaSectionContrib contribution = contributionTable.Item(item);
+                    try
+                    {
+                        if (contribution.execute == 0)
+                        {
+                            continue;
+                        }
+
+                        session.symbolById(contribution.compilandId, out IDiaSymbol compiland);
+                        try
+                        {
+                            expected.Add(compiland.name);
+                        }
+                        finally { ResourceReleaser.Release(compiland); }
+                    }
+                    finally { ResourceReleaser.Release(contribution); }
+                }
+            });
+
+            expected.Should().NotBeEmpty();
+
+            using var pdb = new Pdb(pdbPath: SourceLinkPdbPath);
+            var actual = new HashSet<string>(StringComparer.Ordinal);
+            var moduleNames = new HashSet<string>(StringComparer.Ordinal);
+            foreach (DisposableEnumerableView<Symbol> moduleView in pdb.CreateObjectModuleIterator())
+            {
+                Symbol module = moduleView.Value;
+                moduleNames.Add(module.Name).Should().BeTrue("each object module must have a unique name");
+                if (pdb.CompilandWithIdIsInExecutableSectionContrib(module.SymIndexId))
+                {
+                    actual.Add(module.Name);
+                }
+            }
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
         public void Dia_LoadsTheConfiguredNativeLibrary()
         {
             if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
@@ -196,6 +246,65 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
 
             var segments = new List<string>();
             var contributions = new List<string>();
+            ForEachDiaTable(path, (_, table) =>
+            {
+                if (table is IDiaEnumSegments segmentTable)
+                {
+                    for (uint item = 0; item < segmentTable.Count; item++)
+                    {
+                        IDiaSegment segment = segmentTable.Item(item);
+                        try
+                        {
+                            segments.Add(JsonSerializer.Serialize(new
+                            {
+                                segment.addressSection,
+                                segment.length,
+                                segment.read,
+                                segment.write,
+                                segment.execute,
+                                Writable = pdb.IsSegmentWithIdWritable(segment.addressSection)
+                            }));
+                        }
+                        finally { ResourceReleaser.Release(segment); }
+                    }
+                }
+                if (table is IDiaEnumSectionContribs contributionTable)
+                {
+                    for (uint item = 0; item < contributionTable.Count; item++)
+                    {
+                        IDiaSectionContrib contribution = contributionTable.Item(item);
+                        try
+                        {
+                            contributions.Add(JsonSerializer.Serialize(new
+                            {
+                                contribution.compilandId,
+                                contribution.addressSection,
+                                contribution.addressOffset,
+                                contribution.length,
+                                contribution.read,
+                                contribution.write,
+                                contribution.execute
+                            }));
+                        }
+                        finally { ResourceReleaser.Release(contribution); }
+                    }
+                }
+            });
+
+            return new SortedDictionary<string, string[]>(StringComparer.Ordinal)
+            {
+                ["Identity"] = new[] { pdb.GlobalScope.Guid.ToString(), pdb.IsStripped.ToString() },
+                ["Compilands"] = compilands.OrderBy(value => value, StringComparer.Ordinal).ToArray(),
+                ["Sources"] = sources.OrderBy(value => value, StringComparer.Ordinal).ToArray(),
+                ["Functions"] = functions.OrderBy(value => value, StringComparer.Ordinal).ToArray(),
+                ["SourceLink"] = pdb.WindowsPdbGetSourceLinkDocuments().OrderBy(value => value, StringComparer.Ordinal).ToArray(),
+                ["Segments"] = segments.OrderBy(value => value, StringComparer.Ordinal).ToArray(),
+                ["SectionContributions"] = contributions.OrderBy(value => value, StringComparer.Ordinal).ToArray()
+            };
+        }
+
+        private static void ForEachDiaTable(string path, Action<IDiaSession, IDiaTable> action)
+        {
             IDiaDataSource sourceData = MsdiaComWrapper.GetDiaSource();
             IDiaSession session = null;
             IDiaEnumTables tables = null;
@@ -209,47 +318,7 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                     IDiaTable table = tables.Item(index);
                     try
                     {
-                        if (table is IDiaEnumSegments segmentTable)
-                        {
-                            for (uint item = 0; item < segmentTable.Count; item++)
-                            {
-                                IDiaSegment segment = segmentTable.Item(item);
-                                try
-                                {
-                                    segments.Add(JsonSerializer.Serialize(new
-                                    {
-                                        segment.addressSection,
-                                        segment.length,
-                                        segment.read,
-                                        segment.write,
-                                        segment.execute,
-                                        Writable = pdb.IsSegmentWithIdWritable(segment.addressSection)
-                                    }));
-                                }
-                                finally { ResourceReleaser.Release(segment); }
-                            }
-                        }
-                        if (table is IDiaEnumSectionContribs contributionTable)
-                        {
-                            for (uint item = 0; item < contributionTable.Count; item++)
-                            {
-                                IDiaSectionContrib contribution = contributionTable.Item(item);
-                                try
-                                {
-                                    contributions.Add(JsonSerializer.Serialize(new
-                                    {
-                                        contribution.compilandId,
-                                        contribution.addressSection,
-                                        contribution.addressOffset,
-                                        contribution.length,
-                                        contribution.read,
-                                        contribution.write,
-                                        contribution.execute
-                                    }));
-                                }
-                                finally { ResourceReleaser.Release(contribution); }
-                            }
-                        }
+                        action(session, table);
                     }
                     finally { ResourceReleaser.Release(table); }
                 }
@@ -260,17 +329,6 @@ namespace Microsoft.CodeAnalysis.BinaryParsers
                 if (session != null) { ResourceReleaser.Release(session); }
                 ResourceReleaser.Release(sourceData);
             }
-
-            return new SortedDictionary<string, string[]>(StringComparer.Ordinal)
-            {
-                ["Identity"] = new[] { pdb.GlobalScope.Guid.ToString(), pdb.IsStripped.ToString() },
-                ["Compilands"] = compilands.OrderBy(value => value, StringComparer.Ordinal).ToArray(),
-                ["Sources"] = sources.OrderBy(value => value, StringComparer.Ordinal).ToArray(),
-                ["Functions"] = functions.OrderBy(value => value, StringComparer.Ordinal).ToArray(),
-                ["SourceLink"] = pdb.WindowsPdbGetSourceLinkDocuments().OrderBy(value => value, StringComparer.Ordinal).ToArray(),
-                ["Segments"] = segments.OrderBy(value => value, StringComparer.Ordinal).ToArray(),
-                ["SectionContributions"] = contributions.OrderBy(value => value, StringComparer.Ordinal).ToArray()
-            };
         }
     }
 }
