@@ -179,5 +179,52 @@ namespace Microsoft.CodeAnalysis.BinSkim.Rules
                 File.Delete(sarifFile);
             }
         }
+
+        [Theory]
+        [InlineData("Dwarf/hello-dwarf5-o2", "ELF", false)]
+        [InlineData("macho.gcc-lib.nostackclashprotect.o", "Mach-O", true)]
+        [InlineData("macho.clang-gcc.fat.o", "Mach-O", true)]
+        public void Telemetry_ReportElfOrMachoCompilerData_ShouldReportBinaryType(
+            string binaryFile,
+            string expectedBinaryType,
+            bool useBaselineTestData)
+        {
+            if (!PlatformSpecificHelpers.RunningOnWindows()) { return; }
+
+            var telemetryEvents = new List<ITelemetry>();
+            var telemetryConfiguration = new TelemetryConfiguration
+            {
+                ConnectionString = $"InstrumentationKey={Guid.NewGuid()}",
+                TelemetryChannel = new StubTelemetryChannel { OnSend = telemetryEvents.Add },
+            };
+            using var telemetry = new IL.Sdk.Telemetry(telemetryConfiguration);
+            string sarifFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.sarif");
+            string testDataDirectory = useBaselineTestData ? BaselineTestDataDirectory : TestData;
+            string testFile = Path.Combine(testDataDirectory, binaryFile);
+            var options = new AnalyzeOptions
+            {
+                TargetFileSpecifiers = new[] { testFile },
+                OutputFilePath = sarifFile,
+                OutputFileOptions = new[] { FilePersistenceOptions.ForceOverwrite },
+                DataToInsert = new[] { OptionallyEmittedData.Hashes },
+            };
+
+            try
+            {
+                var command = new MultithreadedAnalyzeCommand(telemetry);
+                command.Run(options);
+
+                List<EventTelemetry> compilerEvents = telemetryEvents.OfType<EventTelemetry>()
+                    .Where(e => e.Name == CompilerDataLogger.CompilerEventName)
+                    .ToList();
+                compilerEvents.Should().NotBeEmpty();
+                compilerEvents.Select(e => e.Properties["binaryType"])
+                    .Should().OnlyContain(binaryType => binaryType == expectedBinaryType);
+            }
+            finally
+            {
+                File.Delete(sarifFile);
+            }
+        }
     }
 }
