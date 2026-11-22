@@ -78,21 +78,10 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             var goodAlgorithms = new List<Tuple<string, string>>();
 
             algorithmsText = null;
+            winTrustData = default;
             action = Native.ActionGenericVerifyV2;
 
             uint signatureCount = 1;
-
-            // First, we retrieve the signature count
-            winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.SignatureCount);
-            Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
-
-            if (winTrustData.pSignatureSettings != IntPtr.Zero)
-            {
-                Native.WINTRUST_SIGNATURE_SETTINGS signatureSettings = Marshal.PtrToStructure<Native.WINTRUST_SIGNATURE_SETTINGS>(winTrustData.pSignatureSettings);
-                signatureCount = signatureSettings.cSecondarySigs + 1; // Total count primary + cSecondary
-            }
-
-            this.InvokeCloseAction(winTrustData);
 
             // First, we will invoke the basic verification on all returned
             // signatures. Note that currently this code path does not reach across
@@ -103,9 +92,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             for (uint i = 0; i < signatureCount; i++)
             {
                 string hashAlgorithm, hashEncryptionAlgorithm;
-                winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.EnforcePolicy, i);
+                winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.EnforcePolicy, i, getSecondarySignatureCount: i == 0);
 
                 cryptoError = (CryptoError)Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
+
+                if (i == 0)
+                {
+                    Native.WINTRUST_SIGNATURE_SETTINGS signatureSettings = Marshal.PtrToStructure<Native.WINTRUST_SIGNATURE_SETTINGS>(winTrustData.pSignatureSettings);
+                    signatureCount = signatureSettings.cSecondarySigs + 1; // Total count primary + cSecondary
+                }
 
                 switch (cryptoError)
                 {
@@ -159,8 +154,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
                     case CryptoError.TRUST_E_CERT_SIGNATURE:
                     {
+                        this.InvokeCloseAction(winTrustData);
+
                         winTrustData = this.InitializeWinTrustDataStruct(filePath, WinTrustDataKind.EnforcePolicy, pszOID: Native.szOID_CERT_STRONG_KEY_OS_1);
-                        Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
                         cryptoError = (CryptoError)Native.WinVerifyTrustWrapper(Native.INVALID_HANDLE_VALUE, ref action, ref winTrustData);
 
                         if (cryptoError != CryptoError.ERROR_SUCCESS)
@@ -393,7 +389,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             return cryptoError;
         }
 
-        private Native.WINTRUST_DATA InitializeWinTrustDataStruct(string filePath, WinTrustDataKind kind, uint signatureIndex = 0, string pszOID = Native.szOID_CERT_STRONG_SIGN_OS_1)
+        private Native.WINTRUST_DATA InitializeWinTrustDataStruct(string filePath, WinTrustDataKind kind, uint signatureIndex = 0, string pszOID = Native.szOID_CERT_STRONG_SIGN_OS_1, bool getSecondarySignatureCount = false)
         {
             // See https://msdn.microsoft.com/en-us/library/windows/desktop/aa382384(v=vs.85).aspx
             // which was used to drive data initialization, API use and comments in this code.
@@ -427,9 +423,12 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             winTrustData.StateAction = Native.StateAction.WTD_STATEACTION_VERIFY;
             winTrustData.hWVTStateData = IntPtr.Zero; // This value set by API call
 
-            Native.SignatureSettingsFlags flags = kind == WinTrustDataKind.SignatureCount
-                ? Native.SignatureSettingsFlags.WSS_GET_SECONDARY_SIG_COUNT
-                : Native.SignatureSettingsFlags.WSS_VERIFY_SPECIFIC;
+            Native.SignatureSettingsFlags flags = Native.SignatureSettingsFlags.WSS_VERIFY_SPECIFIC;
+
+            if (getSecondarySignatureCount)
+            {
+                flags |= Native.SignatureSettingsFlags.WSS_GET_SECONDARY_SIG_COUNT;
+            }
 
             var signatureSettings = new Native.WINTRUST_SIGNATURE_SETTINGS
             {
@@ -462,7 +461,6 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         private enum WinTrustDataKind
         {
             Normal,
-            SignatureCount,
             EnforcePolicy
         }
     }

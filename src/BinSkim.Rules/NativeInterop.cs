@@ -375,6 +375,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             WTD_UICONTEXT_INSTALL = 1,
         }
 
+        [Flags]
         public enum SignatureSettingsFlags : uint
         {
             WSS_VERIFY_SPECIFIC = 1,         // Indicates dwIndex is specified in WINTRUST_SIGNATURE_SETTINGS

@@ -1343,17 +1343,20 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             }
         }
 
-        [Fact]
-        public void BA2022_SignSecurely_Sha1AndSha256_Pass()
+        [Theory]
+        [InlineData(@"BA2022.SignSecurely\Pass\Sha1AndSha256SignedUntrustedRoot.exe", ResultKind.Pass, "Pass",
+            "Cryptographically weak signatures: [digest algorithm: 'sha1NoSign' + digest encryption algorithm: 'RSA'] Cryptographically strong signatures: [digest algorithm: 'sha256NoSign' + digest encryption algorithm: 'RSA']")]
+        [InlineData(@"BA2022.SignSecurely\Pass\Xamarin.Android.Arch.Core.Common.dll", ResultKind.Pass, "Pass",
+            "Cryptographically strong signatures: [digest algorithm: 'sha256NoSign' + digest encryption algorithm: 'RSA']")]
+        [InlineData(@"BA2022.SignSecurely\Fail\Sha1SignedUntrustedRoot.exe", ResultKind.Fail, "Error_BadSigningAlgorithm",
+            "Cryptographically weak signatures: [digest algorithm: 'sha1NoSign' + digest encryption algorithm: 'RSA']")]
+        [InlineData(@"BA2001.LoadImageAboveFourGigabyteAddress\Pass\vs2012.exe", ResultKind.NotApplicable, "NotApplicable_InvalidMetadata",
+            "SignSecurely|image is not signed")]
+        public void BA2022_SignSecurely_ReportsEachSignature(string relativePath, ResultKind kind, string messageId, string details)
         {
             if (!BinaryParsers.PlatformSpecificHelpers.RunningOnWindows()) { return; }
 
-            string targetPath = Path.Combine(
-                Environment.CurrentDirectory,
-                "FunctionalTestData",
-                "BA2022.SignSecurely",
-                "Pass",
-                "Sha1AndSha256SignedUntrustedRoot.exe");
+            string targetPath = Path.Combine(Environment.CurrentDirectory, "FunctionalTestData", relativePath);
             var logger = new TestMessageLogger();
             using BinaryAnalyzerContext context = CreateContext(logger, null, targetPath);
             var skimmer = new SignSecurely();
@@ -1366,15 +1369,9 @@ namespace Microsoft.CodeAnalysis.IL.Rules
             skimmer.Analyze(context);
 
             Result result = Assert.Single(logger.Results);
-            Assert.Equal(ResultKind.Pass, result.Kind);
-            Assert.Equal("Pass", result.Message.Id);
-            Assert.Equal(2, result.Message.Arguments.Count);
-            Assert.Contains(
-                "Cryptographically weak signatures: [digest algorithm: 'sha1NoSign'",
-                result.Message.Arguments[1]);
-            Assert.Contains(
-                "Cryptographically strong signatures: [digest algorithm: 'sha256NoSign'",
-                result.Message.Arguments[1]);
+            Assert.Equal(kind, result.Kind);
+            Assert.Equal(messageId, result.Message.Id);
+            Assert.Equal(details, string.Join("|", result.Message.Arguments.Skip(1)).Trim());
         }
 
         [Fact]
