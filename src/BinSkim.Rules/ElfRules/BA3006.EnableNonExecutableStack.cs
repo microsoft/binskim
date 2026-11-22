@@ -22,6 +22,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableNonExecutableStack;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA3006_Title
+        };
+
         /// <summary>
         /// This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow.
         /// An application receives, from an attacker, more data than it is prepared for and stores this information on its stack,

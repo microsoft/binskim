@@ -21,6 +21,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableShadowStack;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2025_Title
+        };
+
         /// <summary>
         /// Control-flow Enforcement Technology (CET) Shadow Stack is a computer processor feature
         /// that provides capabilities to defend against return-oriented programming (ROP) based

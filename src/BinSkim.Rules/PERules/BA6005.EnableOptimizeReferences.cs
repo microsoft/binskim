@@ -26,6 +26,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableOptimizeReferences;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA6005_Title
+        };
+
         /// <summary>
         /// Optimize References can significantly reduce binary size because it instructs the linker to remove
         /// unreferenced functions and data from the final binary.

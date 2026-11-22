@@ -28,6 +28,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableCriticalCompilerWarnings;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2007_Title
+        };
+
         /// <summary>
         /// Binaries should be compiled with a warning level that enables all critical
         /// security-relevant checks. Enabling at least warning level 3 enables

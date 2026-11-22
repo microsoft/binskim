@@ -91,6 +91,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load 64-bit images above the 4 GB boundary.
+        /// </summary>
+        internal static string BA2001_Title {
+            get {
+                return ResourceManager.GetString("BA2001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Binaries should not take dependencies on code with known security vulnerabilities..
         /// </summary>
         internal static string BA2002_DoNotIncorporateVulnerableBinaries_Description {
@@ -114,6 +123,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2002_Pass {
             get {
                 return ResourceManager.GetString("BA2002_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid dependencies with known vulnerabilities.
+        /// </summary>
+        internal static string BA2002_Title {
+            get {
+                return ResourceManager.GetString("BA2002_Title", resourceCulture);
             }
         }
         
@@ -157,6 +175,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2004_Pass {
             get {
                 return ResourceManager.GetString("BA2004_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use secure source code hashing.
+        /// </summary>
+        internal static string BA2004_Title {
+            get {
+                return ResourceManager.GetString("BA2004_Title", resourceCulture);
             }
         }
         
@@ -220,6 +247,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do not ship vulnerable libraries.
+        /// </summary>
+        internal static string BA2005_Title {
+            get {
+                return ResourceManager.GetString("BA2005_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application code should be compiled with the most up-to-date tool sets possible to take advantage of the most current compile-time security features. 
         ///Among other things, these features provide address space layout randomization, help prevent arbitrary code execution, and enable code generation that can help prevent speculative execution side-channel attacks. Enforces advanced mitigations such as Spectre mitigations, if required by policy..
         /// </summary>
@@ -272,6 +308,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2006_Pass_Csc {
             get {
                 return ResourceManager.GetString("BA2006_Pass_Csc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build with secure toolchains.
+        /// </summary>
+        internal static string BA2006_Title {
+            get {
+                return ResourceManager.GetString("BA2006_Title", resourceCulture);
             }
         }
         
@@ -329,6 +374,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable security-critical compiler warnings.
+        /// </summary>
+        internal static string BA2007_Title {
+            get {
+                return ResourceManager.GetString("BA2007_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Binaries should enable the compiler control guard feature (CFG) at build time to prevent attackers from redirecting execution to unexpected, unsafe locations. CFG analyzes and discovers all indirect-call instructions at compilation and link time. It also injects a check that precedes every indirect call in code that ensures the target is an expected, safe location.  If that check fails at runtime, the operating system will close the program..
         /// </summary>
         internal static string BA2008_EnableControlFlowGuard_Description {
@@ -363,6 +417,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2008_Pass {
             get {
                 return ResourceManager.GetString("BA2008_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable control flow guard.
+        /// </summary>
+        internal static string BA2008_Title {
+            get {
+                return ResourceManager.GetString("BA2008_Title", resourceCulture);
             }
         }
         
@@ -414,6 +477,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable address space layout randomization.
+        /// </summary>
+        internal static string BA2009_Title {
+            get {
+                return ResourceManager.GetString("BA2009_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PE sections should not be marked as both writable and executable. This condition makes it easier for an attacker to exploit memory corruption vulnerabilities, as it may provide an attacker executable location(s) to inject shellcode. Because the loader will always mark the imports section as writable, it is therefore important to mark this section as non-executable.
         ///To resolve this issue, ensure that your program does not mark the imports section executable. Look for uses of /SECTION or /MERGE on the linker [rest of string was truncated]&quot;;.
         /// </summary>
@@ -439,6 +511,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2010_Pass {
             get {
                 return ResourceManager.GetString("BA2010_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keep import sections non-executable.
+        /// </summary>
+        internal static string BA2010_Title {
+            get {
+                return ResourceManager.GetString("BA2010_Title", resourceCulture);
             }
         }
         
@@ -483,6 +564,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable stack protection.
+        /// </summary>
+        internal static string BA2011_Title {
+            get {
+                return ResourceManager.GetString("BA2011_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application code should not interfere with the stack protector. The stack protector (/GS) is a security feature of the compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities. 
         ///The stack protector relies on a random number, called the &quot;security cookie&quot;, to detect these buffer overflows. This &apos;cookie&apos; is statically linked with your binary from a Visual C++ library in the form of the symbol __security_cookie.
         ///On recent Windows versions, the loader looks for  [rest of string was truncated]&quot;;.
@@ -521,7 +611,7 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
                 return ResourceManager.GetString("BA2012_NotApplicable_SecurityCookieUnused", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is a C or C++ binary built with the buffer security feature that properly preserves the stack protecter cookie. This has the effect of enabling a significant increase in entropy provided by the operating system over that produced by the C runtime start-up code..
         /// </summary>
@@ -537,6 +627,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2012_Pass_NoLoadConfig {
             get {
                 return ResourceManager.GetString("BA2012_Pass_NoLoadConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preserve the stack protection cookie.
+        /// </summary>
+        internal static string BA2012_Title {
+            get {
+                return ResourceManager.GetString("BA2012_Title", resourceCulture);
             }
         }
         
@@ -607,6 +706,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Initialize stack protection.
+        /// </summary>
+        internal static string BA2013_Title {
+            get {
+                return ResourceManager.GetString("BA2013_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application code should not disable stack protection for individual functions. The stack protector (/GS) is a security feature of the Windows native compiler which makes it more difficult to exploit stack buffer overflow memory corruption vulnerabilities.
         ///Disabling the stack protector, even on a function-by-function basis, can compromise the security of code.
         ///To resolve this issue, remove occurrences of __declspec(safebuffers) from your code.
@@ -640,8 +748,18 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep stack protection enabled for every function.
+        /// </summary>
+        internal static string BA2014_Title {
+            get {
+                return ResourceManager.GetString("BA2014_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Binaries should be marked as high entropy Address Space Layout Randomization (ASLR) compatible. High entropy allows ASLR to be more effective in mitigating memory corruption vulnerabilities.
-        ///To resolve this issue, don&apos;t set /HIGHENTROPYV:NO on link.exe command line and allow it to be enabled by default. .
+        ///To resolve this issue, don&apos;t set /HIGHENTROPYVA:NO on link.exe command line and allow it to be enabled by default.
+        ///For C# .NET Framework executables, set &lt;HighEntropyVA&gt;true&lt;/HighEntropyVA&gt; in a &lt;PropertyGroup&gt; in the .csproj file..
         /// </summary>
         internal static string BA2015_EnableHighEntropyVirtualAddresses_Description {
             get {
@@ -651,7 +769,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
-        ///To resolve this issue, don&apos;t set /HIGHENTROPYVA:NO and /LARGEADDRESSAWARE:NO on link.exe command line and allow then to be enabled by default..
+        ///To resolve this issue, don&apos;t set /HIGHENTROPYVA:NO and /LARGEADDRESSAWARE:NO on link.exe command line and allow then to be enabled by default.
+        ///For C# .NET Framework executables, set &lt;HighEntropyVA&gt;true&lt;/HighEntropyVA&gt; in a &lt;PropertyGroup&gt; in the .csproj file. The binary must also be marked as LargeAddressAware..
         /// </summary>
         internal static string BA2015_Error_NeitherHighEntropyVANorLargeAddressAware {
             get {
@@ -661,7 +780,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; does not declare itself as high entropy ASLR compatible. High entropy makes Address Space Layout Randomization more effective in mitigating memory corruption vulnerabilities.
-        ///To resolve this issue, don&apos;t set /HIGHENTROPYVA:NO on link.exe command line and allow it to be enabled by default. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.).
+        ///To resolve this issue, don&apos;t set /HIGHENTROPYVA:NO on link.exe command line and allow it to be enabled by default. (This image was determined to have been properly compiled as /LARGEADDRESSAWARE.)
+        ///For C# .NET Framework executables, set &lt;HighEntropyVA&gt;true&lt;/HighEntropyVA&gt; in a &lt;PropertyGroup&gt; in the .csproj file..
         /// </summary>
         internal static string BA2015_Error_NoHighEntropyVA {
             get {
@@ -685,6 +805,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2015_Pass {
             get {
                 return ResourceManager.GetString("BA2015_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable high-entropy address space randomization.
+        /// </summary>
+        internal static string BA2015_Title {
+            get {
+                return ResourceManager.GetString("BA2015_Title", resourceCulture);
             }
         }
         
@@ -715,6 +844,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2016_Pass {
             get {
                 return ResourceManager.GetString("BA2016_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable data execution prevention.
+        /// </summary>
+        internal static string BA2016_Title {
+            get {
+                return ResourceManager.GetString("BA2016_Title", resourceCulture);
             }
         }
         
@@ -795,6 +933,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable safe exception handling.
+        /// </summary>
+        internal static string BA2018_Title {
+            get {
+                return ResourceManager.GetString("BA2018_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Code or data sections should not be marked as both shared and writable. Because these sections are shared across processes, this condition might permit a process with low privilege to alter memory in a higher privilege process.
         ///If you do not actually require that a section be both writable and shared, remove one or both of these attributes (by modifying your .DEF file, the appropriate linker /section switch arguments, etc.).
         ///If you must share common data across processes (for inter-process communication ( [rest of string was truncated]&quot;;.
@@ -822,6 +969,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2019_Pass {
             get {
                 return ResourceManager.GetString("BA2019_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not share writable sections across processes.
+        /// </summary>
+        internal static string BA2019_Title {
+            get {
+                return ResourceManager.GetString("BA2019_Title", resourceCulture);
             }
         }
         
@@ -860,6 +1016,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2021_Pass {
             get {
                 return ResourceManager.GetString("BA2021_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keep writable sections non-executable.
+        /// </summary>
+        internal static string BA2021_Title {
+            get {
+                return ResourceManager.GetString("BA2021_Title", resourceCulture);
             }
         }
         
@@ -909,6 +1074,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sign binaries with secure algorithms.
+        /// </summary>
+        internal static string BA2022_Title {
+            get {
+                return ResourceManager.GetString("BA2022_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application code which stores sensitive data in memory should be compiled with the Spectre mitigations switch (/Qspectre cl.exe command-line argument or &lt;SpectreMitigation&gt;Spectre&lt;/SpectreMitigation&gt; build property).
         ///Spectre attacks can compromise hardware-based isolation, allowing non-privileged users to retrieve potentially sensitive data from the CPU cache.
         ///To resolve this issue, ensure that all modules compiled into the binary are compiled with /Qspectre switch on cl.exe command-line.
@@ -935,6 +1109,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2024_Pass {
             get {
                 return ResourceManager.GetString("BA2024_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Spectre mitigations.
+        /// </summary>
+        internal static string BA2024_Title {
+            get {
+                return ResourceManager.GetString("BA2024_Title", resourceCulture);
             }
         }
         
@@ -1039,6 +1222,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable shadow stack protection.
+        /// </summary>
+        internal static string BA2025_Title {
+            get {
+                return ResourceManager.GetString("BA2025_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; does not enable the Control-flow Enforcement Technology (CET) Shadow Stack mitigation.
         ///To resolve this issue, pass /CETCOMPAT on the linker command lines.
         ///For VC projects use ItemDefinitionGroup - Link - CETCompat property with &apos;true&apos; value.
@@ -1078,6 +1270,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable Microsoft compiler SDL checks.
+        /// </summary>
+        internal static string BA2026_Title {
+            get {
+                return ResourceManager.GetString("BA2026_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is a Windows PE that wasn&apos;t compiled with recommended Security Development Lifecycle (SDL) checks. As a result some critical compile-time and runtime checks may be disabled, increasing the possibility of an exploitable runtime issue.
         ///To resolve this problem, pass &apos;/sdl&apos; on the cl.exe command-line.
         ///For VC projects use ItemDefinitionGroup - ClCompile - SDLCheck property with &apos;true&apos; value..
@@ -1104,6 +1305,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA2027_Pass {
             get {
                 return ResourceManager.GetString("BA2027_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include Source Link information in PDBs.
+        /// </summary>
+        internal static string BA2027_Title {
+            get {
+                return ResourceManager.GetString("BA2027_Title", resourceCulture);
             }
         }
         
@@ -1150,6 +1360,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable load-time signature validation.
+        /// </summary>
+        internal static string BA2029_Title {
+            get {
+                return ResourceManager.GetString("BA2029_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A Position Independent Executable (PIE) relocates all of its sections at load time, including the code section, if ASLR is enabled in the Linux kernel (instead of just the stack/heap). This makes ROP-style attacks more difficult. This can be enabled by passing &apos;-f pie&apos; to clang/gcc..
         /// </summary>
         internal static string BA3001_EnablePositionIndependentExecutable_Description {
@@ -1182,6 +1401,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA3001_Pass_Library {
             get {
                 return ResourceManager.GetString("BA3001_Pass_Library", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build position-independent executables.
+        /// </summary>
+        internal static string BA3001_Title {
+            get {
+                return ResourceManager.GetString("BA3001_Title", resourceCulture);
             }
         }
         
@@ -1222,6 +1450,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep the stack non-executable.
+        /// </summary>
+        internal static string BA3002_Title {
+            get {
+                return ResourceManager.GetString("BA3002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The stack protector ensures that all functions that use buffers over a certain size will use a stack cookie (and check it) to prevent stack based buffer overflows, exiting if stack smashing is detected. Use &apos;--fstack-protector-strong&apos; (all buffers of 4 bytes or more) or &apos;--fstack-protector-all&apos; (all functions) to enable this..
         /// </summary>
         internal static string BA3003_EnableStackProtector_Description {
@@ -1250,6 +1487,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable stack protection.
+        /// </summary>
+        internal static string BA3003_Title {
+            get {
+                return ResourceManager.GetString("BA3003_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is using debugging dwarf version &apos;{1}&apos;. The dwarf version 5 contains more information and should be used. To enable the debugging version 5 use &apos;-gdwarf-5&apos;..
         /// </summary>
         internal static string BA3004_Error {
@@ -1273,6 +1519,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA3004_Pass {
             get {
                 return ResourceManager.GetString("BA3004_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate DWARF 5 debug information.
+        /// </summary>
+        internal static string BA3004_Title {
+            get {
+                return ResourceManager.GetString("BA3004_Title", resourceCulture);
             }
         }
         
@@ -1305,6 +1560,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable stack clash protection.
+        /// </summary>
+        internal static string BA3005_Title {
+            get {
+                return ResourceManager.GetString("BA3005_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This check ensures that non-executable stack is enabled. A common type of exploit is the stack buffer overflow. An application receives, from an attacker, more data than it is prepared for and stores this information on its stack, writing beyond the space reserved for it. This can be designed to cause execution of the data written on the stack. One mechanism to mitigate this vulnerability is for the system to not allow the execution of instructions in sections of memory identified as part of the stack. Use  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BA3006_EnableNonExecutableStack_Description {
@@ -1328,6 +1592,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA3006_Pass {
             get {
                 return ResourceManager.GetString("BA3006_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable a non-executable stack.
+        /// </summary>
+        internal static string BA3006_Title {
+            get {
+                return ResourceManager.GetString("BA3006_Title", resourceCulture);
             }
         }
         
@@ -1359,6 +1632,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable read-only relocations.
+        /// </summary>
+        internal static string BA3010_Title {
+            get {
+                return ResourceManager.GetString("BA3010_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This check ensures that some relocation data is marked as read only after the executable is loaded, and moved below the &apos;.data&apos; section in memory. This prevents them from being overwritten, which can redirect control flow. Use the compiler flags &apos;-Wl,-z,now&apos; to enable this..
         /// </summary>
         internal static string BA3011_EnableBindNow_Description {
@@ -1382,6 +1664,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA3011_Pass {
             get {
                 return ResourceManager.GetString("BA3011_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resolve dynamic symbols at load time.
+        /// </summary>
+        internal static string BA3011_Title {
+            get {
+                return ResourceManager.GetString("BA3011_Title", resourceCulture);
             }
         }
         
@@ -1418,6 +1709,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA3030_Pass_SomeFunctionsChecked {
             get {
                 return ResourceManager.GetString("BA3030_Pass_SomeFunctionsChecked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use GCC checked functions.
+        /// </summary>
+        internal static string BA3030_Title {
+            get {
+                return ResourceManager.GetString("BA3030_Title", resourceCulture);
             }
         }
         
@@ -1467,7 +1767,16 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This rule emits CSV data to the console for every compiler/language/version combination that&apos;s observed in any PDB-linked compiland..
+        ///   Looks up a localized string similar to Enable Clang SafeStack.
+        /// </summary>
+        internal static string BA3031_Title {
+            get {
+                return ResourceManager.GetString("BA3031_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This rule reports data to Application Insights for every compiler/language/version combination that&apos;s observed in any PDB-linked compiland..
         /// </summary>
         internal static string BA4001_ReportPECompilerData_Description {
             get {
@@ -1476,11 +1785,29 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This rule emits CSV data to the console for every compiler/language/version combination that&apos;s observed..
+        ///   Looks up a localized string similar to Report PE compiler data.
+        /// </summary>
+        internal static string BA4001_Title {
+            get {
+                return ResourceManager.GetString("BA4001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This rule reports data to Application Insights for every compiler/language/version combination that&apos;s observed..
         /// </summary>
         internal static string BA4002_ReportELFCompilerData_Description {
             get {
                 return ResourceManager.GetString("BA4002_ReportELFCompilerData_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Report ELF and Mach-O compiler data.
+        /// </summary>
+        internal static string BA4002_Title {
+            get {
+                return ResourceManager.GetString("BA4002_Title", resourceCulture);
             }
         }
         
@@ -1512,6 +1839,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Build position-independent executables.
+        /// </summary>
+        internal static string BA5001_Title {
+            get {
+                return ResourceManager.GetString("BA5001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This checks if a binary has an executable stack; an executable stack allows attackers to redirect code flow into stack memory, which is an easy place for an attacker to store shellcode. Ensure do not enable flag &quot;--allow_stack_execute&quot;..
         /// </summary>
         internal static string BA5002_DoNotAllowExecutableStack_Description {
@@ -1539,6 +1875,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep the stack non-executable.
+        /// </summary>
+        internal static string BA5002_Title {
+            get {
+                return ResourceManager.GetString("BA5002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incremental linking support increases binary size and can reduce runtime performance. The support for incremental linking adds padding and other overhead to support the ability to modify a binary without a full link.
         ///The use of incrementally linked binaries may reduce the level of determinism because previous compilations will have lingering effects on subsequent compilations.  Fully optimized release builds should not specify incremental linking..
         /// </summary>
@@ -1554,6 +1899,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA6001_Pass {
             get {
                 return ResourceManager.GetString("BA6001_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable incremental linking in release builds.
+        /// </summary>
+        internal static string BA6001_Title {
+            get {
+                return ResourceManager.GetString("BA6001_Title", resourceCulture);
             }
         }
         
@@ -1585,6 +1939,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pool duplicate strings.
+        /// </summary>
+        internal static string BA6002_Title {
+            get {
+                return ResourceManager.GetString("BA6002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was compiled without Eliminate Duplicate Strings (/GF) enabled, increasing binary size.
         ///For VC projects use ItemDefinitionGroup - ClCompile - StringPooling property with &apos;true&apos; value.
         ///The following modules do not specify that policy: {1}..
@@ -1610,6 +1973,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA6004_Pass {
             get {
                 return ResourceManager.GetString("BA6004_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable COMDAT folding.
+        /// </summary>
+        internal static string BA6004_Title {
+            get {
+                return ResourceManager.GetString("BA6004_Title", resourceCulture);
             }
         }
         
@@ -1652,6 +2024,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove unreferenced code and data.
+        /// </summary>
+        internal static string BA6005_Title {
+            get {
+                return ResourceManager.GetString("BA6005_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; was compiled with Optimize References (/OPT:REF) disabled, increasing binary size.
         ///For VC projects use ItemDefinitionGroup - Link - OptimizeReferences property with &apos;true&apos; value..
         /// </summary>
@@ -1676,6 +2057,15 @@ namespace Microsoft.CodeAnalysis.IL.Rules {
         internal static string BA6006_Pass {
             get {
                 return ResourceManager.GetString("BA6006_Pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable link-time code generation.
+        /// </summary>
+        internal static string BA6006_Title {
+            get {
+                return ResourceManager.GetString("BA6006_Title", resourceCulture);
             }
         }
         

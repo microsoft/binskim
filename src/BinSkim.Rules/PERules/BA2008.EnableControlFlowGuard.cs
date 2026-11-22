@@ -23,6 +23,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableControlFlowGuard;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2008_Title
+        };
+
         /// <summary>
         /// Binaries should enable the compiler control guard feature (CFG) at build
         /// time in order to prevent attackers from redirecting execution to

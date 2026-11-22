@@ -23,6 +23,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableReadOnlyRelocations;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA3010_Title
+        };
+
         /// <summary>
         /// This check ensures that some relocation data is marked as read only after
         /// the executable is loaded, and moved below the .data section in memory.

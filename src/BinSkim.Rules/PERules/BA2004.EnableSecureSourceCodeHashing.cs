@@ -33,6 +33,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
 
         public override string Id => RuleIds.EnableSecureSourceCodeHashing;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2004_Title
+        };
+
         public override bool LogPdbLoadException => false;
 
         public override MultiformatMessageString FullDescription => new MultiformatMessageString

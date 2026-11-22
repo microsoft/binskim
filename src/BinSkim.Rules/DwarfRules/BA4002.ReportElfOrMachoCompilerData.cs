@@ -22,13 +22,21 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.ReportElfOrMachoCompilerData;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA4002_Title
+        };
+
         /// <summary>
         /// This rule reports data to AppInsights
         /// for every compiler/language/version combination that's observed.
         /// </summary>
         public override MultiformatMessageString FullDescription => new MultiformatMessageString { Text = RuleResources.BA4002_ReportELFCompilerData_Description };
 
-        protected override ICollection<string> MessageResourceNames => Array.Empty<string>();
+        protected override ICollection<string> MessageResourceNames => new string[]
+        {
+            nameof(RuleResources.NotApplicable_InvalidMetadata)
+        };
 
         public override AnalysisApplicability CanAnalyzeDwarf(IDwarfBinary target, Sarif.PropertiesDictionary policy, out string reasonForNotAnalyzing)
         {

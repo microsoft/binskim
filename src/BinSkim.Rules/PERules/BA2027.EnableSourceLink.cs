@@ -22,6 +22,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.EnableSourceLink;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2027_Title
+        };
+
         public override bool LogPdbLoadException => false;
 
         /// <summary>
@@ -32,7 +37,8 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         protected override ICollection<string> MessageResourceNames => new string[]
         {
             nameof(RuleResources.BA2027_Pass),
-            nameof(RuleResources.BA2027_Warning)
+            nameof(RuleResources.BA2027_Warning),
+            nameof(RuleResources.NotApplicable_InvalidMetadata)
         };
 
         public override void Initialize(BinaryAnalyzerContext context)

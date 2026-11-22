@@ -21,6 +21,11 @@ namespace Microsoft.CodeAnalysis.IL.Rules
         /// </summary>
         public override string Id => RuleIds.DoNotDisableStackProtectionForFunctions;
 
+        public override MultiformatMessageString ShortDescription => new MultiformatMessageString
+        {
+            Text = RuleResources.BA2014_Title
+        };
+
         /// <summary>
         /// Application code should not disable stack protection for individual functions.
         /// The stack protector (/GS) is a security feature of the Windows native compiler
