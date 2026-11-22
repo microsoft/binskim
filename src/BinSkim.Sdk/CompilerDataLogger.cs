@@ -217,9 +217,9 @@ namespace Microsoft.CodeAnalysis.IL.Sdk
         {
             string fileHash = context.Hashes?.Sha256;
 
-            string filePath = RootPathToElide == null
-                ? context.CurrentTarget.Uri?.LocalPath.Replace(RootPathToElide, string.Empty)
-                : context.CurrentTarget.Uri?.LocalPath;
+            string filePath = string.IsNullOrWhiteSpace(RootPathToElide)
+                ? context.CurrentTarget.Uri?.LocalPath
+                : context.CurrentTarget.Uri?.LocalPath.Replace(RootPathToElide, string.Empty);
 
             if (this.telemetryClient == null)
             {
